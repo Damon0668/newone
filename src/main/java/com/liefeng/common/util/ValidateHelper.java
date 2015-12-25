@@ -51,7 +51,7 @@ public class ValidateHelper {
 	
 	/**
 	 * 校验Map是否为空
-	 * @param collection 待校验的Map
+	 * @param map 待校验的Map
 	 * @return true:空；false：非空
 	 */
 	public static boolean isEmptyMap(Map<?, ?> map) {
@@ -61,7 +61,7 @@ public class ValidateHelper {
 	
 	/**
 	 * 校验Map是否为非空
-	 * @param collection 待校验的Map
+	 * @param map 待校验的Map
 	 * @return true:非空；false：空
 	 */
 	public static boolean isNotEmptyMap(Map<?, ?> map) {
