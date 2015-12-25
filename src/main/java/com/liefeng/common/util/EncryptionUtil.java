@@ -98,7 +98,6 @@ public class EncryptionUtil {
 	 * 解密
 	 * @param ciphertext 密文
 	 * @param password 生成密钥的口令(需要与加密时使用的一致)
-	 * @param salt 盐值(与加密时使用的一致，长度必须为8位)
 	 * @return 明文
 	 */
 	public static String decrypt(String ciphertext, String password) {
