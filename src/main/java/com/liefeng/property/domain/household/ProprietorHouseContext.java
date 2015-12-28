@@ -95,12 +95,24 @@ public class ProprietorHouseContext {
 	/**
 	 * 保存业主房产信息
 	 */
-	public void create() {
+	public ProprietorHouseVo create() {
 		if(proprietorHouse != null) {
 			proprietorHouse.setId(UUIDGenerator.generate());
 			proprietorHouse.setOemCode(""); // TODO 待确定后补齐
 			proprietorHouse.setRegisterTime(new Date());
 			
+			ProprietorHousePo proprietorHousePo = MyBeanUtil.createBean(proprietorHouse, ProprietorHousePo.class);
+			proprietorHouseRepository.save(proprietorHousePo);
+		}
+		
+		return proprietorHouse;
+	}
+	
+	/**
+	 * 更新业主房产信息
+	 */
+	public void update() {
+		if(proprietorHouse != null) {
 			ProprietorHousePo proprietorHousePo = MyBeanUtil.createBean(proprietorHouse, ProprietorHousePo.class);
 			proprietorHouseRepository.save(proprietorHousePo);
 		}

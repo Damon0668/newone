@@ -26,18 +26,24 @@ public class ProprietorHousePo extends BaseValue {
 	 */
 	@Id
 	private String id;
+	
+	/**
+	 * 所属项目ID
+	 */
+	@Column(name = "project_id")
+	private String projectId;
 
 	/**
 	 * 业主ID
 	 */
 	@Column(name = "proprietor_id")
 	private String proprietorId;
-
+	
 	/**
-	 * 房产ID
+	 * 房产编码
 	 */
-	@Column(name = "house_id")
-	private String houseId;
+	@Column(name = "house_num")
+	private String houseNum;
 
 	/**
 	 * 合同编号
@@ -203,6 +209,14 @@ public class ProprietorHousePo extends BaseValue {
 		this.id = id;
 	}
 
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
 	public String getProprietorId() {
 		return proprietorId;
 	}
@@ -211,12 +225,12 @@ public class ProprietorHousePo extends BaseValue {
 		this.proprietorId = proprietorId;
 	}
 
-	public String getHouseId() {
-		return houseId;
+	public String getHouseNum() {
+		return houseNum;
 	}
 
-	public void setHouseId(String houseId) {
-		this.houseId = houseId;
+	public void setHouseNum(String houseNum) {
+		this.houseNum = houseNum;
 	}
 
 	public String getContractCode() {

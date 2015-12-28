@@ -95,12 +95,25 @@ public class ProprietorContext {
 	/**
 	 * 保存业主信息
 	 */
-	public void create() {
+	public ProprietorVo create() {
+		
 		if(proprietor != null) {
 			proprietor.setId(UUIDGenerator.generate());
 			proprietor.setOemCode(""); // TODO 待确定后补齐 
 			proprietor.setRegisterTime(new Date());
 			
+			ProprietorPo proprietorPo = MyBeanUtil.createBean(proprietor, ProprietorPo.class);
+			proprietorRepository.save(proprietorPo);
+		}
+		
+		return proprietor;
+	}
+	
+	/**
+	 * 更新业主信息
+	 */
+	public void update() {
+		if(proprietor != null) {
 			ProprietorPo proprietorPo = MyBeanUtil.createBean(proprietor, ProprietorPo.class);
 			proprietorRepository.save(proprietorPo);
 		}

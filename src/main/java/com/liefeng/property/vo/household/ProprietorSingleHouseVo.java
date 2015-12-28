@@ -5,45 +5,109 @@ import java.util.Date;
 import com.liefeng.core.entity.BaseValue;
 
 /**
- * 业主房产信息值对象
+ * 业主某个房产信息值对象
  * 
  * @author ZhenTingJun
- * @date 2015-12-23
+ * @date 2015-12-28
  */
-public class ProprietorHouseVo extends BaseValue {
+public class ProprietorSingleHouseVo extends BaseValue {
 
-	private static final long serialVersionUID = 1902475636156866068L;
+	private static final long serialVersionUID = -8954670665706939873L;
 
-	/**
-	 * 主键
-	 */
-	private String id;
+	/********************************* 业主相关字段 *********************************/
 	
 	/**
-	 * 所属项目ID
-	 */
-	private String projectId;
-
-	/**
-	 * 业主ID
+	 * 业主信息ID
 	 */
 	private String proprietorId;
-
+	
+	/**
+	 * 项目ID
+	 */
+	private String projectId;
+	
+	/**
+	 * 项目名称
+	 */
+	private String projectName;
+	
+	/**
+	 * 业主姓名
+	 */
+	private String name;
+	
+	/**
+	 * 手机号码
+	 */
+	private String phone;
+	
+	/**
+	 * 电子邮件
+	 */
+	private String email;
+	
+	/**
+	 * 工作单位
+	 */
+	private String workUnit;
+	
+	/**
+	 * 通讯地址
+	 */
+	private String address;
+	
+	/**
+	 * 邮政编码
+	 */
+	private String zipCode;
+	
+	/**
+	 * 紧急联系人
+	 */
+	private String emergencyContact;
+	
+	/**
+	 * 紧急联系电话
+	 */
+	private String emergencyPhone;
+	
+	/**
+	 * 业主照片URL
+	 */
+	private String picUrl;
+	
+	/**
+	 * 备注
+	 */
+	private String remark;
+	
+	/********************************* 业主房产相关字段 *********************************/
+	
+	/**
+	 * 业主房产信息ID
+	 */
+	private String proprietorHouseId;
+	
+	/**
+	 * 房产ID
+	 */
+	private String houseId;
+	
 	/**
 	 * 房产编码
 	 */
 	private String houseNum;
-
+	
 	/**
 	 * 合同编号
 	 */
 	private String contractCode;
-
+	
 	/**
 	 * 购房合同书URL
 	 */
 	private String contractPic;
-
+	
 	/**
 	 * 房屋使用性质
 	 */
@@ -60,7 +124,7 @@ public class ProprietorHouseVo extends BaseValue {
 	private String checkinMode;
 
 	/**
-	 * 身份证复印件
+	 * 身份证复印件URL
 	 */
 	private String idCardPic;
 
@@ -75,37 +139,37 @@ public class ProprietorHouseVo extends BaseValue {
 	private String checkinNoticePic;
 
 	/**
-	 * 房屋交付验收表
+	 * 房屋交付验收表URL
 	 */
 	private String deliveryCheckPic;
 
 	/**
-	 * 业主公约
+	 * 业主公约URL
 	 */
 	private String conventionPic;
 
 	/**
-	 * 物业管理服务协议
+	 * 物业管理服务协议URL
 	 */
 	private String serviceAgreementPic;
 
 	/**
-	 * 装修许可证
+	 * 装修许可证URL
 	 */
 	private String decorationLicensePic;
 
 	/**
-	 * 卫生间厨房防水试验记录表
+	 * 卫生间厨房防水试验记录表URL
 	 */
 	private String waterproofRecordPic;
 
 	/**
-	 * 水电燃气底单
+	 * 水电燃气底单URL
 	 */
 	private String hydropowerGasPic;
 
 	/**
-	 * 业主办理入住书面委托书
+	 * 业主办理入住书面委托书URL
 	 */
 	private String checkinProxyPic;
 
@@ -115,7 +179,7 @@ public class ProprietorHouseVo extends BaseValue {
 	private String mandataryRelation;
 
 	/**
-	 * 被委托人身份证复印件
+	 * 被委托人身份证复印件URL
 	 */
 	private String mandataryIdCardPic;
 
@@ -149,27 +213,55 @@ public class ProprietorHouseVo extends BaseValue {
 	 */
 	private String mandataryAddress;
 
+	
+	/********************************* 客户相关字段 *********************************/
+	
 	/**
-	 * 录入员工ID
+	 * 客户ID
 	 */
-	private String staffId;
-
+	private String customerId;
+	
 	/**
-	 * 登记时间
+	 * 身份证号码
 	 */
-	private Date registerTime;
-
+	private String idNum;
+	
 	/**
-	 * OEM编码
+	 * 手机号码
 	 */
-	private String oemCode;
+	private String mobile;
+	
+	/**
+	 * 真实姓名
+	 */
+	private String realName;
+	
+	/**
+	 * 性别。0：未知；1：男；2：女
+	 */
+	private String sex;
+	
+	/**
+	 * 出生日期
+	 */
+	private Date birthday;
+	
+	/**
+	 * 婚姻状况。0：未知；1：未婚；2：已婚。
+	 */
+	private String maritalStatus;
+	
+	/**
+	 * 客户状态
+	 */
+	private String status;
 
-	public String getId() {
-		return id;
+	public String getProprietorId() {
+		return proprietorId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setProprietorId(String proprietorId) {
+		this.proprietorId = proprietorId;
 	}
 
 	public String getProjectId() {
@@ -180,12 +272,108 @@ public class ProprietorHouseVo extends BaseValue {
 		this.projectId = projectId;
 	}
 
-	public String getProprietorId() {
-		return proprietorId;
+	public String getProjectName() {
+		return projectName;
 	}
 
-	public void setProprietorId(String proprietorId) {
-		this.proprietorId = proprietorId;
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getWorkUnit() {
+		return workUnit;
+	}
+
+	public void setWorkUnit(String workUnit) {
+		this.workUnit = workUnit;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
+
+	public String getEmergencyContact() {
+		return emergencyContact;
+	}
+
+	public void setEmergencyContact(String emergencyContact) {
+		this.emergencyContact = emergencyContact;
+	}
+
+	public String getEmergencyPhone() {
+		return emergencyPhone;
+	}
+
+	public void setEmergencyPhone(String emergencyPhone) {
+		this.emergencyPhone = emergencyPhone;
+	}
+
+	public String getPicUrl() {
+		return picUrl;
+	}
+
+	public void setPicUrl(String picUrl) {
+		this.picUrl = picUrl;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getProprietorHouseId() {
+		return proprietorHouseId;
+	}
+
+	public void setProprietorHouseId(String proprietorHouseId) {
+		this.proprietorHouseId = proprietorHouseId;
+	}
+
+	public String getHouseId() {
+		return houseId;
+	}
+
+	public void setHouseId(String houseId) {
+		this.houseId = houseId;
 	}
 
 	public String getHouseNum() {
@@ -380,28 +568,67 @@ public class ProprietorHouseVo extends BaseValue {
 		this.mandataryAddress = mandataryAddress;
 	}
 
-	public String getStaffId() {
-		return staffId;
+	public String getCustomerId() {
+		return customerId;
 	}
 
-	public void setStaffId(String staffId) {
-		this.staffId = staffId;
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 
-	public Date getRegisterTime() {
-		return registerTime;
+	public String getIdNum() {
+		return idNum;
 	}
 
-	public void setRegisterTime(Date registerTime) {
-		this.registerTime = registerTime;
+	public void setIdNum(String idNum) {
+		this.idNum = idNum;
 	}
 
-	public String getOemCode() {
-		return oemCode;
+	public String getMobile() {
+		return mobile;
 	}
 
-	public void setOemCode(String oemCode) {
-		this.oemCode = oemCode;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
+	public String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getMaritalStatus() {
+		return maritalStatus;
+	}
+
+	public void setMaritalStatus(String maritalStatus) {
+		this.maritalStatus = maritalStatus;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }

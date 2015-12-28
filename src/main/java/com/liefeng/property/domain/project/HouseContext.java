@@ -35,6 +35,16 @@ public class HouseContext {
 	 * 房产信息ID
 	 */
 	private String houseId;
+
+	/**
+	 * 房产所属项目ID
+	 */
+	private String projectId;
+	
+	/**
+	 * 房产编码
+	 */
+	private String houseNum;
 	
 	/**
 	 * 房产信息值对象
@@ -74,14 +84,33 @@ public class HouseContext {
 	}
 	
 	/**
+	 * 根据房产编码加载上下文
+	 * @param projectId 房产所属项目ID
+	 * @param houseNum 房产编码
+	 * @return 房产信息上下文
+	 */
+	public static HouseContext loadByProjectIdAndHouseCode(String projectId, String houseNum) {
+		HouseContext houseContext = getInstance();
+		houseContext.projectId = projectId;
+		houseContext.houseNum = houseNum;
+		
+		return houseContext;
+	}
+	
+	/**
 	 * 获取房产信息
 	 * @return 房产信息值对象
 	 */
 	public HouseVo getHouse() {
 		if(house == null) {
 			HousePo housePo = null;
+			// 根据房产ID查询
 			if(ValidateHelper.isNotEmptyString(houseId)) {
 				housePo = houseRepository.findOne(houseId);
+			} 
+			// 根据所属项目ID和房产编码查询
+			else if(ValidateHelper.isNotEmptyString(projectId) && ValidateHelper.isNotEmptyString(houseNum)) {
+				housePo = houseRepository.findByProjectIdAndHouseNum(projectId, houseNum);
 			}
 			
 			if(housePo != null) {
@@ -95,7 +124,7 @@ public class HouseContext {
 	/**
 	 * 保存房产信息
 	 */
-	public void create() {
+	public HouseVo create() {
 		if(house != null) {
 			house.setId(UUIDGenerator.generate());
 			house.setOemCode(""); // TODO 待确定后补齐
@@ -104,5 +133,7 @@ public class HouseContext {
 			HousePo housePo = MyBeanUtil.createBean(house, HousePo.class);
 			houseRepository.save(housePo);
 		}
+		
+		return house;
 	}
 }
