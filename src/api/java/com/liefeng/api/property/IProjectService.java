@@ -1,5 +1,6 @@
 package com.liefeng.api.property;
 
+import com.liefeng.property.vo.project.HouseVo;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
 import com.liefeng.property.vo.project.ProjectVo;
 
@@ -11,7 +12,7 @@ import com.liefeng.property.vo.project.ProjectVo;
  */
 public interface IProjectService {
     /*
-     * project
+     * project 项目
      */
     public void createProject(ProjectVo projectVo);
 
@@ -20,7 +21,7 @@ public interface IProjectService {
     public void deleteProject(String projectId);
 
     /*
-     * projectBuilding
+     * projectBuilding 楼栋与楼层
      */
     void createProjectBuilding(ProjectBuildingVo projectBuildingVo);
 
@@ -28,4 +29,10 @@ public interface IProjectService {
 
     void deleteProjectBuilding(String ProjectBuildingId);
 
+    /*
+     * house 房产资料
+     */
+    void createHouse(HouseVo houseVo);
+
+    void updateHouse(HouseVo houseVo);
 }

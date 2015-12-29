@@ -1,10 +1,12 @@
 package com.liefeng.property.service;
 
 import com.liefeng.api.property.IProjectService;
+import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.domain.project.ProjectBuildingContext;
 import com.liefeng.property.domain.project.ProjectContext;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
+import com.liefeng.property.vo.project.HouseVo;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
 import com.liefeng.property.vo.project.ProjectVo;
 import org.springframework.stereotype.Service;
@@ -61,5 +63,20 @@ public class ProjectService implements IProjectService {
     public void deleteProjectBuilding(String projectBuildingId) {
         ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.loadById(projectBuildingId);
         projectBuildingContext.delete();
+    }
+
+    @Override
+    @Transactional
+    public void createHouse(HouseVo houseVo) {
+        HouseContext houseContext = HouseContext.build(houseVo);
+        houseContext.create();
+    }
+
+    @Override
+    @Transactional
+    public void updateHouse(HouseVo houseVo) {
+        HouseContext houseContext = HouseContext.build(houseVo);
+        houseContext.update();
+
     }
 }
