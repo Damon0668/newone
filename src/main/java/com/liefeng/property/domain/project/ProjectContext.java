@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.project;
 
+import com.liefeng.common.util.UUIDGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,7 @@ public class ProjectContext {
 		return projectContext;
 	}
 	
-	public ProjectVo getCustomer() {
+	public ProjectVo getProject() {
 		if (project == null) {
 			ProjectPo projectPo = null;
 			if (ValidateHelper.isNotEmptyString(projectId)) {
@@ -74,9 +75,28 @@ public class ProjectContext {
 				project = MyBeanUtil.createBean(projectPo, ProjectVo.class);
 			}
 		}
-		
 		return project;
 	}
-	
-	
+
+
+	public ProjectVo create() {
+		if(project != null){
+			project.setId(UUIDGenerator.generate());
+            project.setOemCode(""); // TODO 待确定后补齐
+
+            ProjectPo projectPo = MyBeanUtil.createBean(project, ProjectPo.class);
+            projectRepository.save(projectPo);
+		}
+		return project;
+	}
+
+	public ProjectVo update() {
+		ProjectPo projectPo = MyBeanUtil.createBean(project, ProjectPo.class);
+		projectRepository.save(projectPo);
+		return project;
+	}
+
+	public void delete() {
+		projectRepository.delete(projectId);
+	}
 }
