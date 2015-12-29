@@ -91,12 +91,15 @@ public class ProjectContext {
 	}
 
 	public ProjectVo update() {
-		ProjectPo projectPo = MyBeanUtil.createBean(project, ProjectPo.class);
-		projectRepository.save(projectPo);
+		if(project != null){
+			ProjectPo projectPo = MyBeanUtil.createBean(project, ProjectPo.class);
+			projectRepository.save(projectPo);
+		}
 		return project;
 	}
 
 	public void delete() {
-		projectRepository.delete(projectId);
+		if(projectId != null)
+            projectRepository.delete(projectId);
 	}
 }

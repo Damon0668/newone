@@ -1,5 +1,6 @@
 package com.liefeng.api.property;
 
+import com.liefeng.property.vo.project.ProjectBuildingVo;
 import com.liefeng.property.vo.project.ProjectVo;
 
 /**
@@ -9,9 +10,22 @@ import com.liefeng.property.vo.project.ProjectVo;
  * @date 2015-12-22
  */
 public interface IProjectService {
-    public ProjectVo saveProject(ProjectVo projectVo);
+    /*
+     * project
+     */
+    public void createProject(ProjectVo projectVo);
 
-    public ProjectVo updateProject(ProjectVo projectVo);
+    public void updateProject(ProjectVo projectVo);
 
     public void deleteProject(String projectId);
+
+    /*
+     * projectBuilding
+     */
+    void createProjectBuilding(ProjectBuildingVo projectBuildingVo);
+
+    void updateProjectBuilding(ProjectBuildingVo projectBuildingVo);
+
+    void deleteProjectBuilding(String ProjectBuildingId);
+
 }
