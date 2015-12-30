@@ -21,7 +21,7 @@ import com.liefeng.common.util.ValidateHelper;
  * @date 2015-12-11
  */
 @Configuration
-@MapperScan(basePackages = {"com.liefeng.base.repository.mybatis" }, 
+@MapperScan(basePackages = {"com.liefeng.property.repository.mybatis" }, 
 			sqlSessionFactoryRef = "sqlSessionFactory")
 public class MybatisConfig {
     

@@ -113,9 +113,13 @@ public class ProprietorContext {
 	 * 更新业主信息
 	 */
 	public void update() {
-		if(proprietor != null) {
-			ProprietorPo proprietorPo = MyBeanUtil.createBean(proprietor, ProprietorPo.class);
-			proprietorRepository.save(proprietorPo);
+		if(proprietor != null && ValidateHelper.isNotEmptyString(proprietor.getId())) {
+			ProprietorPo proprietorPo = proprietorRepository.findOne(proprietor.getId());
+			
+			if(proprietorPo != null) {
+				MyBeanUtil.copyBeanNotNull2Bean(proprietor, proprietorPo);
+				proprietorRepository.save(proprietorPo);
+			}
 		}
 	}
 }

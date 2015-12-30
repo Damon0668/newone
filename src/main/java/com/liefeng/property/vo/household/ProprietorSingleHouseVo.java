@@ -88,15 +88,6 @@ public class ProprietorSingleHouseVo extends BaseValue {
 	 */
 	private String proprietorHouseId;
 	
-	/**
-	 * 房产ID
-	 */
-	private String houseId;
-	
-	/**
-	 * 房产编码
-	 */
-	private String houseNum;
 	
 	/**
 	 * 合同编号
@@ -255,6 +246,71 @@ public class ProprietorSingleHouseVo extends BaseValue {
 	 * 客户状态
 	 */
 	private String status;
+	
+	/********************************* 房产相关字段 *********************************/
+	
+	/**
+	 * 房产ID
+	 */
+	private String houseId;
+	
+	/**
+	 * 房产编码
+	 */
+	private String houseNum;
+
+	/**
+	 * 楼栋ID
+	 */
+	private String buildingId;
+
+	/**
+	 * 楼层ID
+	 */
+	private String floorId;
+
+	/**
+	 * 户型
+	 */
+	private String houseType;
+
+	/**
+	 * 实际面积
+	 */
+	private Double actualArea;
+
+	/**
+	 * 建筑面积
+	 */
+	private Double grossArea;
+
+	/**
+	 * 使用面积
+	 */
+	private Double usableArea;
+
+	/**
+	 * 分摊面积
+	 */
+	private Double apportionArea;
+
+	/**
+	 * 物业管理费单价
+	 */
+	private Double propertyFee;
+
+	/**
+	 * 销售状态
+	 * 0：未出售 1：待售 2：已售
+	 */
+	private String saleStatus;
+
+	/**
+	 * 产权归属
+	 * 1：商品房；2：小产权；3：大产权；4：集资房；5：安居房。
+	 */
+	private String ownership;
+
 
 	public String getProprietorId() {
 		return proprietorId;
@@ -366,22 +422,6 @@ public class ProprietorSingleHouseVo extends BaseValue {
 
 	public void setProprietorHouseId(String proprietorHouseId) {
 		this.proprietorHouseId = proprietorHouseId;
-	}
-
-	public String getHouseId() {
-		return houseId;
-	}
-
-	public void setHouseId(String houseId) {
-		this.houseId = houseId;
-	}
-
-	public String getHouseNum() {
-		return houseNum;
-	}
-
-	public void setHouseNum(String houseNum) {
-		this.houseNum = houseNum;
 	}
 
 	public String getContractCode() {
@@ -630,5 +670,101 @@ public class ProprietorSingleHouseVo extends BaseValue {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getHouseId() {
+		return houseId;
+	}
+
+	public void setHouseId(String houseId) {
+		this.houseId = houseId;
+	}
+
+	public String getHouseNum() {
+		return houseNum;
+	}
+
+	public void setHouseNum(String houseNum) {
+		this.houseNum = houseNum;
+	}
+
+	public String getBuildingId() {
+		return buildingId;
+	}
+
+	public void setBuildingId(String buildingId) {
+		this.buildingId = buildingId;
+	}
+
+	public String getFloorId() {
+		return floorId;
+	}
+
+	public void setFloorId(String floorId) {
+		this.floorId = floorId;
+	}
+
+	public String getHouseType() {
+		return houseType;
+	}
+
+	public void setHouseType(String houseType) {
+		this.houseType = houseType;
+	}
+
+	public Double getActualArea() {
+		return actualArea;
+	}
+
+	public void setActualArea(Double actualArea) {
+		this.actualArea = actualArea;
+	}
+
+	public Double getGrossArea() {
+		return grossArea;
+	}
+
+	public void setGrossArea(Double grossArea) {
+		this.grossArea = grossArea;
+	}
+
+	public Double getUsableArea() {
+		return usableArea;
+	}
+
+	public void setUsableArea(Double usableArea) {
+		this.usableArea = usableArea;
+	}
+
+	public Double getApportionArea() {
+		return apportionArea;
+	}
+
+	public void setApportionArea(Double apportionArea) {
+		this.apportionArea = apportionArea;
+	}
+
+	public Double getPropertyFee() {
+		return propertyFee;
+	}
+
+	public void setPropertyFee(Double propertyFee) {
+		this.propertyFee = propertyFee;
+	}
+
+	public String getSaleStatus() {
+		return saleStatus;
+	}
+
+	public void setSaleStatus(String saleStatus) {
+		this.saleStatus = saleStatus;
+	}
+
+	public String getOwnership() {
+		return ownership;
+	}
+
+	public void setOwnership(String ownership) {
+		this.ownership = ownership;
 	}
 }

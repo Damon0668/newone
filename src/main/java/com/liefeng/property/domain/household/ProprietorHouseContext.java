@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.liefeng.base.po.DevicePo;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
@@ -112,9 +113,13 @@ public class ProprietorHouseContext {
 	 * 更新业主房产信息
 	 */
 	public void update() {
-		if(proprietorHouse != null) {
-			ProprietorHousePo proprietorHousePo = MyBeanUtil.createBean(proprietorHouse, ProprietorHousePo.class);
-			proprietorHouseRepository.save(proprietorHousePo);
+		if(proprietorHouse != null  && ValidateHelper.isNotEmptyString(proprietorHouse.getId())) {
+			
+			ProprietorHousePo proprietorHousePo = proprietorHouseRepository.findOne(proprietorHouse.getId());
+			if(proprietorHousePo != null) {
+				MyBeanUtil.copyBeanNotNull2Bean(proprietorHouse, proprietorHousePo);
+				proprietorHouseRepository.save(proprietorHousePo);
+			}
 		}
 	}
 	

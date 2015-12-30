@@ -22,7 +22,7 @@ public class HouseVo extends BaseValue {
 	/**
 	 * 房产编码：楼栋编码+楼层编码+房号后缀
 	 */
-	private String houseCode;
+	private String houseNum;
 
 	/**
 	 * 项目ID
@@ -43,11 +43,6 @@ public class HouseVo extends BaseValue {
 	 * 户型
 	 */
 	private String houseType;
-
-	/**
-	 * 房号
-	 */
-	private String houseNum;
 
 	/**
 	 * 实际面积
@@ -109,12 +104,12 @@ public class HouseVo extends BaseValue {
 		this.id = id;
 	}
 
-	public String getHouseCode() {
-		return houseCode;
+	public String getHouseNum() {
+		return houseNum;
 	}
 
-	public void setHouseCode(String houseCode) {
-		this.houseCode = houseCode;
+	public void setHouseNum(String houseNum) {
+		this.houseNum = houseNum;
 	}
 
 	public String getProjectId() {
@@ -147,14 +142,6 @@ public class HouseVo extends BaseValue {
 
 	public void setHouseType(String houseType) {
 		this.houseType = houseType;
-	}
-
-	public String getHouseNum() {
-		return houseNum;
-	}
-
-	public void setHouseNum(String houseNum) {
-		this.houseNum = houseNum;
 	}
 
 	public Double getActualArea() {

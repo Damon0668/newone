@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.ProprietorQueryRepository" > 
+
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.household.ProprietorSingleHouseVo" >
+	<result column="proprietorId" property="proprietorId"/>
+	<result column="projectId" property="projectId"/>
+	<result column="projectName" property="projectName"/>
+	<result column="name" property="name"/>
+	<result column="phone" property="phone"/>
+	<result column="email" property="email"/>
+	<result column="workUnit" property="workUnit"/>
+	<result column="address" property="address"/>		
+	<result column="zipCode" property="zipCode"/>
+	<result column="emergencyContact" property="emergencyContact"/>
+	<result column="emergencyPhone" property="emergencyPhone"/>
+	<result column="picUrl" property="picUrl"/>
+	<result column="remark" property="remark"/>
+	
+	<result column="proprietorHouseId" property="proprietorHouseId"/>
+	<result column="contractCode" property="contractCode"/>
+	<result column="contractPic" property="contractPic"/>
+	<result column="useType" property="useType"/>
+	<result column="payType" property="payType"/>
+	<result column="checkinMode" property="checkinMode"/>
+	<result column="idCardPic" property="idCardPic"/>
+	<result column="checkinDate" property="checkinDate"/>
+	<result column="checkinNoticePic" property="checkinNoticePic"/>
+	<result column="deliveryCheckPic" property="deliveryCheckPic"/>
+	<result column="conventionPic" property="conventionPic"/>
+	<result column="serviceAgreementPic" property="serviceAgreementPic"/>
+	<result column="decorationLicensePic" property="decorationLicensePic"/>
+	<result column="waterproofRecordPic" property="waterproofRecordPic"/>
+	<result column="hydropowerGasPic" property="hydropowerGasPic"/>
+	<result column="checkinProxyPic" property="checkinProxyPic"/>
+	<result column="mandataryRelation" property="mandataryRelation"/>
+	<result column="mandataryIdCardPic" property="mandataryIdCardPic"/>
+	<result column="mandataryName" property="mandataryName"/>
+	<result column="mandatarySex" property="mandatarySex"/>
+	<result column="mandataryPhone" property="mandataryPhone"/>
+	<result column="mandataryIdNum" property="mandataryIdNum"/>
+	<result column="mandataryWorkUnit" property="mandataryWorkUnit"/>
+	<result column="mandataryAddress" property="mandataryAddress"/>
+	
+	<result column="customerId" property="customerId"/>
+	<result column="idNum" property="idNum"/>
+	<result column="mobile" property="mobile"/>
+	<result column="realName" property="realName"/>
+	<result column="sex" property="sex"/>
+	<result column="birthday" property="birthday"/>
+	<result column="maritalStatus" property="maritalStatus"/>
+	<result column="status" property="status"/>
+	
+	<result column="houseId" property="houseId"/>
+	<result column="houseNum" property="houseNum"/>
+	<result column="buildingId" property="buildingId"/>
+	<result column="floorId" property="floorId"/>
+	<result column="houseType" property="houseType"/>
+	<result column="actualArea" property="actualArea"/>
+	<result column="grossArea" property="grossArea"/>
+	<result column="usableArea" property="usableArea"/>
+	<result column="apportionArea" property="apportionArea"/>
+	<result column="propertyFee" property="propertyFee"/>
+	<result column="saleStatus" property="saleStatus"/>
+	<result column="ownership" property="ownership"/>	
+	
+</resultMap>
+
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+	WHERE 1=1 
+<trim  suffixOverrides="," >
+	<if test="extra.proprietorId != null and extra.proprietorId != ''" >
+	    AND a.proprietor_id =  #{extra.proprietorId}
+	</if>
+
+	<if test="extra.proprietorHouseId != null and extra.proprietorHouseId != ''" >
+	    AND a.id =  #{extra.proprietorHouseId}
+	</if>
+	
+	<if test="extra.projectId != null and projectId != ''" >
+	    AND a.project_id =  #{extra.projectId}
+	</if>
+	
+	<if test="extra.projectName != null and extra.projectName != ''" >
+	    AND c.short_name =  #{extra.projectName}
+	</if>
+	
+	<if test="extra.floorId != null and extra.floorId != ''" >
+	    AND c.floor_id =  #{extra.floorId}
+	</if>
+	
+	<if test="extra.buildingId != null and extra.buildingId != ''" >
+	    AND c.building_id = #{extra.buildingId}
+	</if>
+	
+	<if test="extra.houseNum != null and extra.houseNum != ''" >
+	    AND a.house_num = #{extra.houseNum}
+	</if>
+	
+	<if test="extra.phone != null and extra.phone != ''" >
+	    AND b.phone = #{extra.phone}
+	</if>
+</trim>
+</sql>
+
+<select id="queryByPage"  resultMap="BaseResultMap">
+	  SELECT 
+		b.project_id AS projectId,
+		e.short_name AS projectName,
+		b.nam AS name,
+		b.phone AS phone,
+		a.id AS proprietorHouseId,
+		a.use_type AS useType,
+		a.pay_type AS payType,
+		a.checkin_date AS checkinDate,
+		c.house_num AS houseNum,
+		d.id_num AS idNum,
+	  FROM 
+	  	property.t_proprietor_house a 
+	  	LEFT JOIN property.t_proprietor b 
+	  	ON a.proprietor_id = b.id 
+	  	LEFT JOIN property.t_house c 
+	  	ON a.project_id = c.project_id AND a.house_num = c.house_num
+	  	LEFT JOIN property.t_project e ON e.id = a.project_id
+	  <include refid="Example_Where_Clause"/>
+	  ORDER BY 
+	    a.register_time DESC
+	 <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+       ${pager.mysqlQueryCondition}
+     </if>
+</select>
+
+<select id="queryByCount"  resultType="java.lang.Integer">
+SELECT 
+	  COUNT(1) 
+FROM
+	( SELECT 
+		a.id
+	  FROM 
+	  	property.t_proprietor_house a 
+	  	LEFT JOIN property.t_proprietor b 
+	  	ON a.proprietor_id = b.id 
+	  	LEFT JOIN property.t_house c 
+	  	ON a.project_id = c.project_id AND a.house_num = c.house_num
+	  	LEFT JOIN property.t_project e 
+	  	ON e.id = a.project_id
+	  <include refid="Example_Where_Clause"/>) AS ttt
+</select>
+
+<select id="getProprietorSingleHouse" resultMap="BaseResultMap">
+	  SELECT 
+		b.id AS proprietorId,
+		b.project_id AS projectId,
+		e.short_name AS projectName,
+		b.nam AS name,
+		b.phone AS phone,
+		b.email AS email,
+		b.work_unit AS workUnit,
+		b.address AS address,
+		b.zip_code AS zipCode,
+		b.emergency_contact AS emergencyContact,
+		b.emergency_phone AS emergencyPhone,
+		b.pic_url AS picUrl,
+		b.remark AS remark,
+		
+		a.id AS proprietorHouseId,
+		a.contract_code AS contractCode,
+		a.contract_pic AS contractPic,
+		a.use_type AS useType,
+		a.pay_type AS payType,
+		a.checkin_mode AS checkinMode,
+		a.id_card_pic AS idCardPic,
+		a.checkin_date AS checkinDate,
+		a.checkin_notice_pic AS checkinNoticePic,
+		a.delivery_check_pic AS deliveryCheckPic,
+		a.convention_pic AS conventionPic,
+		a.service_agreement_pic AS serviceAgreementPic,
+		a.decoration_license_pic AS decorationLicensePic,
+		a.waterproof_record_pic AS waterproofRecordPic,
+		a.hydropower_gas_pic AS hydropowerGasPic,
+		a.checkin_proxy_pic AS checkinProxyPic,
+		a.mandatary_relation AS mandataryRelation,
+		a.mandatary_id_card_pic AS mandataryIdCardPic,
+		a.mandatary_name AS mandataryName,
+		a.mandatary_sex AS mandatarySex,
+		a.mandatary_phone AS mandataryPhone,
+		a.mandatary_id_num AS mandataryIdNum,
+		a.mandatary_work_unit AS mandataryWorkUnit,
+		a.mandatary_address AS mandataryAddress,
+		
+		c.id AS houseId,
+		c.house_num AS houseNum,
+		c.building_id AS buildingId,
+		c.floor_id AS floorId,
+		c.house_type AS houseType,
+		c.actual_area AS actualArea,
+		c.gross_area AS grossArea,
+		c.usable_area AS usableArea,
+		c.apportion_area AS apportionArea,
+		c.property_fee AS propertyFee,
+		c.sale_status AS saleStatus,
+		c.ownership AS ownership,
+		
+		d.id AS customerId,
+		d.id_num AS idNum,
+		d.mobile AS mobile,
+		d.real_name AS realName,
+		d.sex AS sex,
+		d.birthday AS birthday,
+		d.marital_status AS maritalStatus,
+		d.status AS status
+	  FROM 
+	  	property.t_proprietor_house a 
+	  	LEFT JOIN property.t_proprietor b 
+	  	ON a.proprietor_id = b.id 
+	  	LEFT JOIN property.t_house c 
+	  	ON a.project_id = c.project_id AND a.house_num = c.house_num
+	  	LEFT JOIN basic.t_customer d 
+	  	ON b.cust_global_id = d.global_id
+	  	LEFT JOIN property.t_project e 
+	  	ON e.id = a.project_id
+	  <include refid="Example_Where_Clause"/>
+</select>
+</mapper>   
