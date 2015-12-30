@@ -7,10 +7,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
 import com.liefeng.property.domain.project.ProjectBuildingContext;
-import com.liefeng.property.domain.project.ProjectContext;
-import com.liefeng.property.po.project.ProjectBuildingPo;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
-import com.liefeng.property.vo.project.ProjectVo;
 
 /**
  * 楼栋楼层领域测试
