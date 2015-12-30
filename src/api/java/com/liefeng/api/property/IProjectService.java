@@ -1,5 +1,8 @@
 package com.liefeng.api.property;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.liefeng.property.vo.project.HouseVo;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
 import com.liefeng.property.vo.project.ProjectVo;
@@ -19,6 +22,8 @@ public interface IProjectService {
     public void updateProject(ProjectVo projectVo);
 
     public void deleteProject(String projectId);
+    
+    public Page<ProjectVo> findProjectByOemCode(ProjectVo projectVo, Pageable pageable);
 
     /*
      * projectBuilding 楼栋与楼层
@@ -29,6 +34,13 @@ public interface IProjectService {
 
     void deleteProjectBuilding(String ProjectBuildingId);
 
+    public Page<ProjectBuildingVo> findBuildingsByOemCodeAndProjectId(
+    		ProjectBuildingVo projectBuildingVo,Pageable pageable);
+    
+    public Page<ProjectBuildingVo> findFloorsByOemCodeAndProjectIdAndParentId(
+    		ProjectBuildingVo projectBuildingVo,Pageable pageable);
+    
+    
     /*
      * house 房产资料
      */

@@ -14,10 +14,8 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.property.po.project.ProjectBuildingPo;
-import com.liefeng.property.po.project.ProjectPo;
 import com.liefeng.property.repository.ProjectBuildingRepository;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
-import com.liefeng.property.vo.project.ProjectVo;
 
 /**
  * 项目楼栋楼层领域模型

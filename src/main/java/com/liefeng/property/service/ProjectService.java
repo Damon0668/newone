@@ -9,6 +9,10 @@ import com.liefeng.property.vo.household.ProprietorVo;
 import com.liefeng.property.vo.project.HouseVo;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
 import com.liefeng.property.vo.project.ProjectVo;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -46,6 +50,13 @@ public class ProjectService implements IProjectService {
 
     @Override
     @Transactional
+    public Page<ProjectVo> findProjectByOemCode(ProjectVo projectVo, Pageable pageable){
+    	ProjectContext projectContext = ProjectContext.build(projectVo);
+    	return projectContext.findByOemCode(pageable);
+    }
+    
+    @Override
+    @Transactional
     public void createProjectBuilding(ProjectBuildingVo projectBuildingVo) {
         ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.build(projectBuildingVo);
         projectBuildingContext.create();
@@ -65,6 +76,19 @@ public class ProjectService implements IProjectService {
         projectBuildingContext.delete();
     }
 
+	@Override
+	public Page<ProjectBuildingVo> findBuildingsByOemCodeAndProjectId(ProjectBuildingVo projectBuildingVo,
+			Pageable pageable) {
+        ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.build(projectBuildingVo);
+        return projectBuildingContext.findBuildingsByOemCodeAndProjectId(pageable);
+	}
+
+	@Override
+	public Page<ProjectBuildingVo> findFloorsByOemCodeAndProjectIdAndParentId(ProjectBuildingVo projectBuildingVo,
+			Pageable pageable) {
+        ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.build(projectBuildingVo);
+        return projectBuildingContext.findFloorsByOemCodeAndProjectIdAndParentId(pageable);
+	}
 
     @Override
     @Transactional
