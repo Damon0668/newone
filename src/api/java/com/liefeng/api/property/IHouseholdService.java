@@ -9,7 +9,7 @@ import com.liefeng.property.vo.household.ProprietorVo;
 import com.liefeng.property.vo.household.ResidentVo;
 
 /**
- * household包相关表接口
+ * household包相关表接口类
  * 
  * @author ZhenTingJun
  * @date 2015-12-28

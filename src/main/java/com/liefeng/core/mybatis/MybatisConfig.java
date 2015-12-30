@@ -101,7 +101,7 @@ public class MybatisConfig {
     		PathMatchingResourcePatternResolver resolver = 
     				new PathMatchingResourcePatternResolver();
     		sessionFactoryBean.setMapperLocations(
-    				resolver.getResources("classpath:com/liefeng/*/mapper/*Mapper.xml"));
+    				resolver.getResources("classpath:com/liefeng/*/mapper/*/*Mapper.xml"));
     		
     		sessionFactory = sessionFactoryBean.getObject();
 		} catch (Exception e) {

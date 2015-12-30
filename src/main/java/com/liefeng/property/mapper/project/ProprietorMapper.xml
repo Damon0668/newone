@@ -112,21 +112,24 @@
 	  SELECT 
 		b.project_id AS projectId,
 		e.short_name AS projectName,
-		b.nam AS name,
+		b.name AS name,
 		b.phone AS phone,
 		a.id AS proprietorHouseId,
 		a.use_type AS useType,
 		a.pay_type AS payType,
 		a.checkin_date AS checkinDate,
 		c.house_num AS houseNum,
-		d.id_num AS idNum,
+		d.id_num AS idNum
 	  FROM 
 	  	property.t_proprietor_house a 
 	  	LEFT JOIN property.t_proprietor b 
 	  	ON a.proprietor_id = b.id 
 	  	LEFT JOIN property.t_house c 
 	  	ON a.project_id = c.project_id AND a.house_num = c.house_num
-	  	LEFT JOIN property.t_project e ON e.id = a.project_id
+	  	LEFT JOIN basic.t_customer d 
+	  	ON b.cust_global_id = d.global_id
+	  	LEFT JOIN property.t_project e 
+	  	ON e.id = a.project_id
 	  <include refid="Example_Where_Clause"/>
 	  ORDER BY 
 	    a.register_time DESC
@@ -147,6 +150,8 @@ FROM
 	  	ON a.proprietor_id = b.id 
 	  	LEFT JOIN property.t_house c 
 	  	ON a.project_id = c.project_id AND a.house_num = c.house_num
+	  	LEFT JOIN basic.t_customer d 
+	  	ON b.cust_global_id = d.global_id
 	  	LEFT JOIN property.t_project e 
 	  	ON e.id = a.project_id
 	  <include refid="Example_Where_Clause"/>) AS ttt
@@ -157,7 +162,7 @@ FROM
 		b.id AS proprietorId,
 		b.project_id AS projectId,
 		e.short_name AS projectName,
-		b.nam AS name,
+		b.name AS name,
 		b.phone AS phone,
 		b.email AS email,
 		b.work_unit AS workUnit,

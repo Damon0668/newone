@@ -100,6 +100,7 @@ public class HouseholdService implements IHouseholdService {
 		paramVo.setPage(currentPage);
 
 		Integer count = proprietorQueryRepository.queryByCount(paramVo);
+		logger.info("总数量：count="+count);
 		List<ProprietorSingleHouseVo> proprietorList = proprietorQueryRepository.queryByPage(paramVo);
 
 		DataPageValue<ProprietorSingleHouseVo> proprietorPage = new DataPageValue<ProprietorSingleHouseVo>(
