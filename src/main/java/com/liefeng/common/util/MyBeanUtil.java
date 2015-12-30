@@ -436,7 +436,6 @@ public class MyBeanUtil extends BeanUtils {
 	 * 普通复制，变量名称相同，且数据类型相同
 	 * @param map 被复制的对象
 	 * @param destCls  复制的类
-	 * @param cls 泛型类
 	 * @return
 	 */
 	public static <T> Map<String, T> copyMap(Map map, Class<T> destCls){

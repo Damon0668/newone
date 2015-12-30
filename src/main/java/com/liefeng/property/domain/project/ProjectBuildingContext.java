@@ -92,7 +92,7 @@ public class ProjectBuildingContext {
 	/**
 	 * 保存楼栋楼层信息
 	 */
-	public void create() {
+	public ProjectBuildingVo create() {
 		if(projectBuilding != null) {
 			projectBuilding.setId(UUIDGenerator.generate());
 			projectBuilding.setOemCode(""); // TODO 待确定后补齐
@@ -100,6 +100,20 @@ public class ProjectBuildingContext {
 			ProjectBuildingPo projectBuildingPo = MyBeanUtil.createBean(projectBuilding, ProjectBuildingPo.class);
 			projectBuildingRepository.save(projectBuildingPo);
 		}
+		return projectBuilding;
 	}
-	
+
+	public ProjectBuildingVo update() {
+		if(projectBuilding != null){
+			ProjectBuildingPo projectBuildingPo = MyBeanUtil.createBean(projectBuilding, ProjectBuildingPo.class);
+			projectBuildingRepository.save(projectBuildingPo);
+		}
+
+		return projectBuilding;
+	}
+
+	public void delete() {
+		if(projectBuildingId != null)
+            projectBuildingRepository.delete(projectBuildingId);
+	}
 }

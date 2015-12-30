@@ -133,7 +133,14 @@ public class HouseContext {
 			HousePo housePo = MyBeanUtil.createBean(house, HousePo.class);
 			houseRepository.save(housePo);
 		}
-		
+		return house;
+	}
+
+	public HouseVo update(){
+		if(house != null){
+			HousePo housePo = MyBeanUtil.createBean(house, HousePo.class);
+			houseRepository.save(housePo);
+		}
 		return house;
 	}
 }
