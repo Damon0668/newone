@@ -52,7 +52,7 @@ public class MyBeanUtil extends BeanUtils {
 	public static <T> List<T> createList(List<?> origList, Class<T> destClazz){
 		List<T> destObjList = null;
 		if(ValidateHelper.isNotEmptyCollection(origList)){
-			destObjList = new ArrayList<T>();
+			destObjList = new ArrayList<T>(origList.size());
 			for (Object origObj : origList) {
 				T destObj = createBean(origObj, destClazz);
 				if(destObj != null) {
