@@ -2,12 +2,19 @@ package com.liefeng.property;
 
 import com.liefeng.property.domain.project.ProjectContext;
 import com.liefeng.property.vo.project.ProjectVo;
+
+import java.util.List;
+
+import javax.validation.constraints.AssertTrue;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
+import com.liefeng.common.util.ValidateHelper;
 
 /**
  * 项目领域测试类
@@ -46,5 +53,17 @@ public class ProjectContextTest {
 	public void delete(){
 		ProjectContext context = ProjectContext.loadById("4028810351f1a3120151f1a312520000");
 		context.delete();
+	}
+	
+	@Test
+	public void findByOemCode(){
+		ProjectVo projectVo = new ProjectVo();
+		projectVo.setOemCode("");
+		
+		ProjectContext context = ProjectContext.build(projectVo);
+		context.findByOemCode(new PageRequest(0, 5));
+//		if(ValidateHelper.isNotEmptyCollection(list)){
+//			System.out.println("true");
+//		}
 	}
 }

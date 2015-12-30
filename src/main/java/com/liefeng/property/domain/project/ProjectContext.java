@@ -1,11 +1,16 @@
 package com.liefeng.property.domain.project;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
@@ -104,5 +109,15 @@ public class ProjectContext {
 	public void delete() {
 		if(projectId != null)
             projectRepository.delete(projectId);
+	}
+	
+	public Page<ProjectVo> findByOemCode(Pageable pageable){
+		Page<ProjectVo> voPage = null;
+		if(project != null){
+			Page<ProjectPo> poPage = projectRepository.findByOemCode(project.getOemCode(), pageable);
+			voPage = poPage.map(new Po2VoConverter(ProjectVo.class));
+				
+		}
+		return voPage;
 	}
 }

@@ -2,6 +2,8 @@ package com.liefeng.property.repository;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.liefeng.property.po.project.ProjectPo;
@@ -15,4 +17,5 @@ import com.liefeng.property.po.project.ProjectPo;
 @Transactional
 public interface ProjectRepository extends JpaRepository<ProjectPo, String> {
 
+		Page<ProjectPo> findByOemCode(String oemCode, Pageable pageable);
 }
