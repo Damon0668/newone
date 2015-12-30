@@ -3,6 +3,7 @@ package com.liefeng.property;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
@@ -56,4 +57,33 @@ public class ProjectBuildingContextTest {
 		ProjectBuildingContext context = ProjectBuildingContext.loadById("id");
 		context.delete();
 	}
+	
+	/**
+	 * 查询楼栋
+	 */
+	@Test
+	public void findBuildingsByOemCodeAndProjectId(){
+		ProjectBuildingVo vo  = new ProjectBuildingVo();
+		vo.setOemCode("levy");
+		vo.setProjectId("projectId");
+		
+		ProjectBuildingContext context = ProjectBuildingContext.build(vo);
+		context.findBuildingsByOemCodeAndProjectId(new PageRequest(0, 5));
+	}
+	
+	/**
+	 * 查询楼层
+	 */
+	@Test
+	public void findFloorsByOemCodeAndProjectIdAndParentId(){
+		ProjectBuildingVo vo  = new ProjectBuildingVo();
+		vo.setOemCode("levy");
+		vo.setProjectId("projectId");
+		vo.setParentId("parentId");
+		
+		ProjectBuildingContext context = ProjectBuildingContext.build(vo);
+		context.findFloorsByOemCodeAndProjectIdAndParentId(new PageRequest(0, 5));
+		
+	}
+	
 }

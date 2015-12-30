@@ -4,15 +4,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.property.po.project.ProjectBuildingPo;
+import com.liefeng.property.po.project.ProjectPo;
 import com.liefeng.property.repository.ProjectBuildingRepository;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
+import com.liefeng.property.vo.project.ProjectVo;
 
 /**
  * 项目楼栋楼层领域模型
@@ -115,5 +120,27 @@ public class ProjectBuildingContext {
 	public void delete() {
 		if(projectBuildingId != null)
             projectBuildingRepository.delete(projectBuildingId);
+	}
+	
+	public Page<ProjectBuildingVo> findBuildingsByOemCodeAndProjectId(Pageable pageable){
+		Page<ProjectBuildingVo> voPage = null;
+		
+		if(projectBuilding != null){
+			Page<ProjectBuildingPo> poPage = projectBuildingRepository.findBuildingsByOemCodeAndProjectId(
+					projectBuilding.getOemCode(), projectBuilding.getProjectId(), pageable);
+			voPage = poPage.map(new Po2VoConverter(ProjectBuildingVo.class));
+		}
+		return voPage;
+	}
+	
+	public Page<ProjectBuildingVo> findFloorsByOemCodeAndProjectIdAndParentId(Pageable pageable){
+		Page<ProjectBuildingVo> voPage = null;
+		
+		if(projectBuilding != null){
+			Page<ProjectBuildingPo> poPage = projectBuildingRepository.findFloorsByOemCodeAndProjectIdAndParentId(
+					projectBuilding.getOemCode(), projectBuilding.getProjectId(), projectBuilding.getParentId(),pageable);
+			voPage = poPage.map(new Po2VoConverter(ProjectBuildingVo.class));
+		}
+		return voPage;
 	}
 }
