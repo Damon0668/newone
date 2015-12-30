@@ -1,6 +1,7 @@
 package com.liefeng.property.domain.project;
 
-import com.liefeng.common.util.UUIDGenerator;
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
+import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.property.po.project.ProjectPo;
 import com.liefeng.property.repository.ProjectRepository;
@@ -83,6 +85,7 @@ public class ProjectContext {
 		if(project != null){
 			project.setId(UUIDGenerator.generate());
             project.setOemCode(""); // TODO 待确定后补齐
+            project.setCreateTime(new Date());
 
             ProjectPo projectPo = MyBeanUtil.createBean(project, ProjectPo.class);
             projectRepository.save(projectPo);

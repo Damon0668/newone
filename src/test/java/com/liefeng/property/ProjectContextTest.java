@@ -27,4 +27,24 @@ public class ProjectContextTest {
 		ProjectContext context = ProjectContext.build(projectVo);
 		context.create();
 	}
+	
+	@Test
+	public void update(){
+		ProjectVo projectVo = new ProjectVo();
+		projectVo.setCity("guangzhou");
+		projectVo.setShortName("levy shot name");
+		projectVo.setFullName("levy full name");
+		projectVo.setId("4028810351f1a3120151f1a312520000");
+		projectVo.setOemCode("oemCode");
+		
+		ProjectContext context = ProjectContext.build(projectVo);
+		context.update();
+		
+	}
+	
+	@Test
+	public void delete(){
+		ProjectContext context = ProjectContext.loadById("4028810351f1a3120151f1a312520000");
+		context.delete();
+	}
 }
