@@ -126,7 +126,7 @@ public class ProjectContext {
 				ContextManager.getInstance().getOemCode(), new PageRequest(page, size));
 		voPage = poPage.map(new Po2VoConverter<ProjectPo, ProjectVo>(ProjectVo.class));
 		
-		return new DataPageValue<ProjectVo>(voPage.getContent(), Integer.valueOf(voPage.getTotalElements()+""),
+		return new DataPageValue<ProjectVo>(voPage.getContent(), voPage.getTotalElements(),
 				size, page+1);
 		
 	}

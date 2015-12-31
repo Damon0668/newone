@@ -156,7 +156,7 @@ public class ProprietorContext {
 		pagingParamVo.setRows(pageSize);
 		pagingParamVo.setPage(currentPage);
 
-		Integer count = proprietorQueryRepository.queryByCount(pagingParamVo);
+		Long count = proprietorQueryRepository.queryByCount(pagingParamVo);
 		count = (count == null ? 0 : count);
 		logger.info("总数量：count=" + count);
 		

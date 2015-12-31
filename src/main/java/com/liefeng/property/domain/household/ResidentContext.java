@@ -135,7 +135,7 @@ public class ResidentContext {
 		pagingParamVo.setRows(pageSize);
 		pagingParamVo.setPage(currentPage);
 
-		Integer count = residentQueryRepository.queryByCount(pagingParamVo);
+		Long count = residentQueryRepository.queryByCount(pagingParamVo);
 		count = (count == null ? 0 : count);
 		logger.info("总数量：count=" + count);
 		

@@ -31,7 +31,7 @@ public class DataPageValue<T> extends BaseValue {
 	/**
 	 * 数据总条数
 	 */
-	private Integer maxCount;
+	private Long maxCount;
 	
 	/**
 	 * 当前页
@@ -53,26 +53,26 @@ public class DataPageValue<T> extends BaseValue {
 	}
 	
 	public DataPageValue(Enum<?> en) {
-		this(null, 0, 0, 0);
+		this(null, 0L, 0, 0);
 		this.code = en.name();
 		this.desc = en.toString();
 	}
 
-	public DataPageValue(Enum<?> en, List<T> dataList, Integer maxCount, 
+	public DataPageValue(Enum<?> en, List<T> dataList, Long maxCount, 
 			Integer pageSize, Integer currentPage) {
 		this(dataList, maxCount, pageSize, currentPage);
 		this.code = en.name();
 		this.desc = en.toString();
 	}
 	
-	public DataPageValue(String code, String desc, List<T> dataList, Integer maxCount, 
+	public DataPageValue(String code, String desc, List<T> dataList, Long maxCount, 
 			Integer pageSize, Integer currentPage) {
 		this(dataList, maxCount, pageSize, currentPage);
 		this.code = code;
 		this.desc = desc;
 	}
 	
-	public DataPageValue(List<T> dataList, Integer maxCount, Integer pageSize, 
+	public DataPageValue(List<T> dataList, Long maxCount, Integer pageSize, 
 			Integer currentPage) {
 		super();
 		this.setCode(IErrorCode.SUCCESS);
@@ -82,10 +82,10 @@ public class DataPageValue<T> extends BaseValue {
 		this.currentPage = currentPage;
 		this.pageSize = pageSize;
 		if (maxCount % pageSize == 0) {
-			this.maxPage = maxCount / pageSize;
+			this.maxPage = (int) (maxCount / pageSize);
 		}
 		else {
-			this.maxPage = maxCount / pageSize + 1;
+			this.maxPage = (int) (maxCount / pageSize + 1);
 		}
 	}
 
@@ -113,11 +113,11 @@ public class DataPageValue<T> extends BaseValue {
 		this.dataList = dataList;
 	}
 
-	public Integer getMaxCount() {
+	public Long getMaxCount() {
 		return maxCount;
 	}
 
-	public void setMaxCount(Integer maxCount) {
+	public void setMaxCount(Long maxCount) {
 		this.maxCount = maxCount;
 	}
 

@@ -136,7 +136,7 @@ public class ProjectBuildingContext {
 				projectId, new PageRequest(page, size));
 		voPage = poPage.map(new Po2VoConverter<ProjectBuildingPo,ProjectBuildingVo>(ProjectBuildingVo.class));
 		
-		return new DataPageValue<ProjectBuildingVo>(voPage.getContent(), Integer.valueOf(voPage.getTotalElements()+""),
+		return new DataPageValue<ProjectBuildingVo>(voPage.getContent(), voPage.getTotalElements(),
 				size, page+1);
 	}
 	
@@ -154,8 +154,7 @@ public class ProjectBuildingContext {
 				buildingId, new PageRequest(page, size));
 		voPage = poPage.map(new Po2VoConverter<ProjectBuildingPo,ProjectBuildingVo>(
 				ProjectBuildingVo.class));
-
-		return new DataPageValue<ProjectBuildingVo>(voPage.getContent(), Integer.valueOf(voPage.getTotalElements()+""),
+		return new DataPageValue<ProjectBuildingVo>(voPage.getContent(), voPage.getTotalElements(),
 				size, page+1);
 	}
 }

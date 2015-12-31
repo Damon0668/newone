@@ -1,8 +1,6 @@
 package com.liefeng.api.property;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
+import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.vo.project.HouseVo;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
 import com.liefeng.property.vo.project.ProjectVo;
@@ -42,7 +40,7 @@ public interface IProjectService {
      * @param size 页面大小，最小为1
      * @return
      */
-    public Page<ProjectVo> findProjects(int page, int size);
+    public DataPageValue<ProjectVo> findProjects(int page, int size);
 
     /*
      * projectBuilding 楼栋与楼层 ******
@@ -74,7 +72,7 @@ public interface IProjectService {
      * @param size 页面大小，最小为1
      * @return
      */
-    public Page<ProjectBuildingVo> findBuildingsByProjectId(
+    public DataPageValue<ProjectBuildingVo> findBuildingsByProjectId(
     		String projectId, int page, int size);
     
     /**
@@ -84,7 +82,7 @@ public interface IProjectService {
      * @param size 页面大小，最小为1
      * @return
      */
-    public Page<ProjectBuildingVo> findFloorsByBuildingId(
+    public DataPageValue<ProjectBuildingVo> findFloorsByBuildingId(
     		String buildingId, int page, int size);
     
     

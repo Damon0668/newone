@@ -139,7 +139,7 @@
      </if>
 </select>
 
-<select id="queryByCount"  resultType="java.lang.Integer">
+<select id="queryByCount"  resultType="java.lang.Long">
 SELECT 
 	  COUNT(1) 
 FROM
