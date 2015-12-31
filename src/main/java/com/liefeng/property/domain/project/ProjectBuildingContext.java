@@ -124,8 +124,8 @@ public class ProjectBuildingContext {
 		Page<ProjectBuildingVo> voPage = null;
 		
 		if(projectBuilding != null){
-			Page<ProjectBuildingPo> poPage = projectBuildingRepository.findBuildingsByOemCodeAndProjectId(
-					projectBuilding.getOemCode(), projectBuilding.getProjectId(), pageable);
+			Page<ProjectBuildingPo> poPage = projectBuildingRepository.findByOemCodeAndProjectIdAndParentId(
+					projectBuilding.getOemCode(), projectBuilding.getProjectId(), null, pageable);
 			voPage = poPage.map(new Po2VoConverter(ProjectBuildingVo.class));
 		}
 		return voPage;
@@ -134,8 +134,8 @@ public class ProjectBuildingContext {
 	public Page<ProjectBuildingVo> findFloorsByOemCodeAndProjectIdAndParentId(Pageable pageable){
 		Page<ProjectBuildingVo> voPage = null;
 		
-		if(projectBuilding != null){
-			Page<ProjectBuildingPo> poPage = projectBuildingRepository.findFloorsByOemCodeAndProjectIdAndParentId(
+		if(projectBuilding != null && projectBuilding.getParentId() != null){
+			Page<ProjectBuildingPo> poPage = projectBuildingRepository.findByOemCodeAndProjectIdAndParentId(
 					projectBuilding.getOemCode(), projectBuilding.getProjectId(), projectBuilding.getParentId(),pageable);
 			voPage = poPage.map(new Po2VoConverter(ProjectBuildingVo.class));
 		}

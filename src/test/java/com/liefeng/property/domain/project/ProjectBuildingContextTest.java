@@ -3,6 +3,7 @@ package com.liefeng.property.domain.project;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -66,9 +67,12 @@ public class ProjectBuildingContextTest {
 		ProjectBuildingVo vo  = new ProjectBuildingVo();
 		vo.setOemCode("levy");
 		vo.setProjectId("projectId");
+		//parentId should be null
+		vo.setParentId(null);
 		
 		ProjectBuildingContext context = ProjectBuildingContext.build(vo);
-		context.findBuildingsByOemCodeAndProjectId(new PageRequest(0, 5));
+		Page page = context.findBuildingsByOemCodeAndProjectId(new PageRequest(0, 5));
+		
 	}
 	
 	/**
@@ -79,10 +83,11 @@ public class ProjectBuildingContextTest {
 		ProjectBuildingVo vo  = new ProjectBuildingVo();
 		vo.setOemCode("levy");
 		vo.setProjectId("projectId");
-		vo.setParentId("parentId");
+		vo.setParentId("parentId"); // query floors
+//		vo.setParentId(null);  query buildings
 		
-		ProjectBuildingContext context = ProjectBuildingContext.build(vo);
-		context.findFloorsByOemCodeAndProjectIdAndParentId(new PageRequest(0, 5));
+				ProjectBuildingContext context = ProjectBuildingContext.build(vo);
+		Page page = context.findFloorsByOemCodeAndProjectIdAndParentId(new PageRequest(0, 5));
 		
 	}
 	

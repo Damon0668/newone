@@ -17,9 +17,13 @@ import com.liefeng.property.po.project.ProjectBuildingPo;
 @Transactional
 public interface ProjectBuildingRepository extends JpaRepository<ProjectBuildingPo, String> {
 
-	Page<ProjectBuildingPo> findBuildingsByOemCodeAndProjectId(String oemCode, String projectId,
-			Pageable pageable);
-	
-	Page<ProjectBuildingPo> findFloorsByOemCodeAndProjectIdAndParentId(String oemCode, String projectId, 
+	/**
+	 * @param oemCode
+	 * @param projectId
+	 * @param parentId 传null表示查询楼栋(buiding); 否则查询楼层(floor)
+	 * @param pageable
+	 * @return
+	 */
+	Page<ProjectBuildingPo> findByOemCodeAndProjectIdAndParentId(String oemCode, String projectId, 
 			String parentId, Pageable pageable);
 }
