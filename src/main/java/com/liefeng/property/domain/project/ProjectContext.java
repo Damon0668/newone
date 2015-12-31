@@ -1,15 +1,12 @@
 package com.liefeng.property.domain.project;
 
 import java.util.Date;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +30,7 @@ import com.liefeng.property.vo.project.ProjectVo;
 @Scope("prototype")
 public class ProjectContext {
 	
+	@SuppressWarnings("unused")
 	private static Logger logger = LoggerFactory.getLogger(ProjectContext.class);
 
 	@Autowired
@@ -116,12 +114,11 @@ public class ProjectContext {
 	
 	public Page<ProjectVo> findProjects(Pageable pageable){
 		Page<ProjectVo> voPage = null;
-		if(project != null){
-			Page<ProjectPo> poPage = projectRepository.findByOemCode(
-					ContextManager.getInstance().getOemCode(), pageable);
-			voPage = poPage.map(new Po2VoConverter(ProjectVo.class));
-				
-		}
+		
+		Page<ProjectPo> poPage = projectRepository.findByOemCode(
+				ContextManager.getInstance().getOemCode(), pageable);
+		voPage = poPage.map(new Po2VoConverter<ProjectPo, ProjectVo>(ProjectVo.class));
+		
 		return voPage;
 	}
 }
