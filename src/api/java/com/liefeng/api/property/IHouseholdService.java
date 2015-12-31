@@ -38,6 +38,12 @@ public interface IHouseholdService {
 	public void saveResident(ResidentVo resident);
 	
 	/**
+	 * 更新住户信息
+	 * @param resident 住户信息值对象
+	 */
+	public void updateResident(ResidentVo resident);
+	
+	/**
 	 * 分页查询业主综合信息
 	 * 
 	 * @param params 查询参数封装类对象
