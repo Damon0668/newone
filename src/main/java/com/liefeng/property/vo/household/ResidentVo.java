@@ -2,6 +2,7 @@ package com.liefeng.property.vo.household;
 
 import java.util.Date;
 
+import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.core.entity.BaseValue;
 
 /**
@@ -35,14 +36,12 @@ public class ResidentVo extends BaseValue {
 	private String proprietorId;
 
 	/**
-	 * 是否为业主
-	 * 0：否；1：是。
+	 * 是否为业主 0：否；1：是。
 	 */
 	private String isProprietor;
 
 	/**
-	 * 住户类型
-	 * 1：常住；2：暂住
+	 * 住户类型 1：常住；2：暂住
 	 */
 	private String residentType;
 
@@ -69,7 +68,12 @@ public class ResidentVo extends BaseValue {
 	/**
 	 * 手机号码
 	 */
-	private String phone;
+	private String mobile;
+
+	/**
+	 * 电话
+	 */
+	private String tel;
 
 	/**
 	 * 工作单位
@@ -100,6 +104,11 @@ public class ResidentVo extends BaseValue {
 	 * OEM编码
 	 */
 	private String oemCode;
+
+	/**
+	 * 客户信息
+	 */
+	private CustomerVo customer;
 
 	public String getId() {
 		return id;
@@ -181,12 +190,20 @@ public class ResidentVo extends BaseValue {
 		this.name = name;
 	}
 
-	public String getPhone() {
-		return phone;
+	public String getMobile() {
+		return mobile;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
 	}
 
 	public String getWorkUnit() {
@@ -235,6 +252,14 @@ public class ResidentVo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public CustomerVo getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(CustomerVo customer) {
+		this.customer = customer;
 	}
 
 }

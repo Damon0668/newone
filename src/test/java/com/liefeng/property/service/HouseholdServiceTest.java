@@ -13,6 +13,7 @@ import com.liefeng.Application;
 import com.liefeng.api.property.IHouseholdService;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
+import com.liefeng.property.vo.household.ResidentVo;
 
 /**
  * household包相关表接口测试类
@@ -30,6 +31,7 @@ public class HouseholdServiceTest {
 	@Test
 	public void listProprietor4Page() {
 		Map<String, String> params = new HashMap<String, String>();
+		params.put("projectId", "123456789");
 		
 		DataPageValue<ProprietorSingleHouseVo> proprietorPage = householdService.listProprietor4Page(params, 10, 1);
 		
@@ -42,6 +44,24 @@ public class HouseholdServiceTest {
 		ProprietorSingleHouseVo ProprietorSingleHouse = householdService.getProprietorSingleHouse("123456789");
 		
 		System.out.println(ProprietorSingleHouse);
+	}
+	
+	@Test
+	public void listResident4Page() {
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("proprietorId", "123456789");
+		params.put("houseId", "123456789");
+		
+		DataPageValue<ResidentVo> residentPage = householdService.listResident4Page(params, 10, 1);
+		
+		System.out.println(residentPage);
+	}
+	
+	@Test
+	public void getResident() {
+		
+		ResidentVo resident = householdService.getResident("1");
+		System.out.println(resident);
 	}
 
 }

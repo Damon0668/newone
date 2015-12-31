@@ -54,4 +54,20 @@ public interface IHouseholdService {
 	 * @return 业主房产信息
 	 */
 	public ProprietorSingleHouseVo getProprietorSingleHouse(String proprietorHouseId);
+	
+	/**
+	 * 分页查询住户信息
+	 * @param params 查询过滤参数
+	 * @param pageSize 分页大小
+	 * @param currentPage 分页当前页
+	 * @return 住户分页信息
+	 */
+	public DataPageValue<ResidentVo> listResident4Page(Map<String, String> params, Integer pageSize, Integer currentPage);
+	
+	/**
+	 * 查询住户信息
+	 * @param residentId 住户ID
+	 * @return 住户信息
+	 */
+	public ResidentVo getResident(String residentId);
 }

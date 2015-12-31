@@ -1,6 +1,7 @@
 package com.liefeng.property.domain.household;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +13,11 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.po.household.ProprietorPo;
 import com.liefeng.property.repository.ProprietorRepository;
+import com.liefeng.property.repository.mybatis.ProprietorQueryRepository;
+import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
 
 /**
@@ -30,6 +34,9 @@ public class ProprietorContext {
 	
 	@Autowired
 	private ProprietorRepository proprietorRepository;
+	
+	@Autowired
+	private ProprietorQueryRepository proprietorQueryRepository;
 	
 	/**
 	 * 业主信息ID
@@ -112,14 +119,45 @@ public class ProprietorContext {
 	/**
 	 * 更新业主信息
 	 */
-	public void update() {
+	public ProprietorVo update() {
 		if(proprietor != null && ValidateHelper.isNotEmptyString(proprietor.getId())) {
 			ProprietorPo proprietorPo = proprietorRepository.findOne(proprietor.getId());
 			
 			if(proprietorPo != null) {
 				MyBeanUtil.copyBeanNotNull2Bean(proprietor, proprietorPo);
 				proprietorRepository.save(proprietorPo);
+				
+				proprietor = MyBeanUtil.createBean(proprietorPo, ProprietorVo.class);
 			}
 		}
+		
+		return proprietor;
+	}
+	
+	/**
+	 * 分页查询
+	 * @param params 查询参数
+	 * @return 分页后数据
+	 */
+	public List<ProprietorSingleHouseVo> queryByPage(PagingParamVo params) {
+		return proprietorQueryRepository.queryByPage(params);
+	}
+	
+	/**
+	 * 查询数据总数
+	 * @param params 查询参数
+	 * @return 数据总数
+	 */
+	public Integer queryByCount(PagingParamVo params) {
+		return proprietorQueryRepository.queryByCount(params);
+	}
+	
+	/**
+	 * 获取业主某房产信息
+	 * @param params 查询参数
+	 * @return 业主某房产信息
+	 */
+	public ProprietorSingleHouseVo getProprietorSingleHouse(PagingParamVo params) {
+		return proprietorQueryRepository.getProprietorSingleHouse(params);
 	}
 }

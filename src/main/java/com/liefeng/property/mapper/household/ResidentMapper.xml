@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.ResidentQueryRepository" > 
+
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.household.ResidentVo" >
+	<result column="id" property="id"/>
+	<result column="custGlobalId" property="custGlobalId"/>
+	<result column="houseId" property="houseId"/>
+	<result column="proprietorId" property="proprietorId"/>
+	<result column="isProprietor" property="isProprietor"/>
+	<result column="residentType" property="residentType"/>
+	<result column="residentRelation" property="residentRelation"/>
+	<result column="checkinDate" property="checkinDate"/>
+	<result column="checkupDate" property="checkupDate"/>
+	<result column="name" property="name"/>
+	<result column="mobile" property="mobile"/>
+	<result column="tel" property="tel"/>
+	<result column="workUnit" property="workUnit"/>
+	<result column="hobbies" property="hobbies"/>
+	<result column="specialty" property="specialty"/>
+	<result column="pic" property="pic"/>
+	<result column="remark" property="remark"/>
+	<result column="oemCode" property="oemCode"/>
+	
+	<result column="idNum" property="customer.idNum"/>
+	<result column="sex" property="customer.sex"/>
+	<result column="birthday" property="customer.birthday"/>	
+	<result column="nativePlace" property="customer.nativePlace"/>
+	<result column="national" property="customer.national"/>	
+	<result column="maritalStatus" property="customer.maritalStatus"/>
+	<result column="eduDegree" property="customer.eduDegree"/>	
+</resultMap>
+
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+	WHERE 1=1 
+<trim  suffixOverrides="," >
+	<if test="extra.proprietorId != null and extra.proprietorId != ''" >
+	    AND a.proprietor_id =  #{extra.proprietorId}
+	</if>
+
+	<if test="extra.houseId != null and extra.houseId != ''" >
+	    AND a.house_id =  #{extra.houseId}
+	</if>
+	
+	<if test="extra.residentId != null and extra.residentId != ''" >
+	    AND a.id =  #{extra.residentId}
+	</if>
+</trim>
+</sql>
+
+<select id="queryByPage"  resultMap="BaseResultMap">
+	  SELECT
+	      a.id AS id,
+	      a.resident_type AS residentType,
+	      a.resident_relation AS residentRelation,
+	      a.name AS name,
+	      a.mobile AS mobile,
+	      a.tel AS tel,
+	      b.id_num AS idNum,
+	      b.sex AS sex
+	  FROM
+	      property.t_resident a 
+	      LEFT JOIN basic.t_customer b 
+	      ON a.cust_global_id = b.global_id
+	  <include refid="Example_Where_Clause"/>
+	  <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+          ${pager.mysqlQueryCondition}
+      </if>
+</select>
+
+<select id="queryByCount"  resultType="java.lang.Integer">
+SELECT 
+	  COUNT(1) 
+FROM
+	( SELECT
+	      a.id
+	  FROM
+	      property.t_resident a 
+	      LEFT JOIN basic.t_customer b 
+	      ON a.cust_global_id = b.global_id
+	      <include refid="Example_Where_Clause"/>
+	  ) AS ttt
+</select>
+
+<select id="queryById" parameterType="java.lang.String" resultMap="BaseResultMap">
+	  SELECT
+	      a.id AS id,
+	      a.cust_global_id as custGlobalId,
+	      a.house_id as houseId,
+	      a.proprietor_id as  proprietorId,
+	      a.is_proprietor as isProprietor,
+	      a.resident_type as residentType,
+	      a.resident_relation as residentRelation,
+	      a.checkin_date as checkinDate,
+	      a.checkup_date as checkupDate,
+	      a.name as name,
+	      a.mobile as mobile,
+	      a.tel as tel,
+	      a.work_unit as workUnit,
+	      a.hobbies as hobbies,
+	      a.specialty as specialty,
+	      a.pic as pic,
+	      a.remark as remark,
+	      a.oem_code as oemCode,
+	      
+	      b.id_num AS idNum,
+	      b.sex AS sex,
+	      b.birthday as birthday,
+	      b.native_place as nativePlace,
+	      b.national as national,
+	      b.marital_status as maritalStatus,
+	      b.edu_degree as eduDegree
+	  FROM
+	      property.t_resident a 
+	      LEFT JOIN basic.t_customer b 
+	      ON a.cust_global_id = b.global_id
+	  WHERE
+	      a.id = #{residentId}
+</select>
+
+</mapper>   

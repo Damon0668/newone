@@ -82,7 +82,7 @@
 	    AND a.id =  #{extra.proprietorHouseId}
 	</if>
 	
-	<if test="extra.projectId != null and projectId != ''" >
+	<if test="extra.projectId != null and extra.projectId != ''" >
 	    AND a.project_id =  #{extra.projectId}
 	</if>
 	
@@ -118,6 +118,7 @@
 		a.use_type AS useType,
 		a.pay_type AS payType,
 		a.checkin_date AS checkinDate,
+		c.id As houseId,
 		c.house_num AS houseNum,
 		d.id_num AS idNum
 	  FROM 

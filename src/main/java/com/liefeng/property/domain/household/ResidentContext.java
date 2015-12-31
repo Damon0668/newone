@@ -1,5 +1,7 @@
 package com.liefeng.property.domain.household;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +12,10 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.po.household.ResidentPo;
 import com.liefeng.property.repository.ResidentRepository;
+import com.liefeng.property.repository.mybatis.ResidentQueryRepository;
 import com.liefeng.property.vo.household.ResidentVo;
 
 /**
@@ -28,6 +32,9 @@ public class ResidentContext {
 	
 	@Autowired
 	private ResidentRepository residentRepository;
+	
+	@Autowired
+	private ResidentQueryRepository residentQueryRepository;
 	
 	/**
 	 * 住户信息ID
@@ -93,7 +100,7 @@ public class ResidentContext {
 	/**
 	 * 保存住户信息
 	 */
-	public void create() {
+	public ResidentVo create() {
 		if(resident != null) {
 			resident.setId(UUIDGenerator.generate());
 			resident.setOemCode(""); // TODO 待确定后补齐
@@ -101,6 +108,38 @@ public class ResidentContext {
 			ResidentPo residentPo = MyBeanUtil.createBean(resident, ResidentPo.class);
 			residentRepository.save(residentPo);
 		}
+		
+		return resident;
+	}
+	
+	/**
+	 * 分页查询
+	 * @param params 查询参数
+	 * @return 分页后数据
+	 */
+	public List<ResidentVo> queryByPage(PagingParamVo params) {
+		return residentQueryRepository.queryByPage(params);
+	}
+	
+	/**
+	 * 查询数据总数
+	 * @param params 查询参数
+	 * @return 数据总数
+	 */
+	public Integer queryByCount(PagingParamVo params) {
+		return residentQueryRepository.queryByCount(params);
+	}
+	
+	/**
+	 * 根据主键查询住户信息
+	 * @return 住户信息
+	 */
+	public ResidentVo queryResidentById() {
+		if(ValidateHelper.isNotEmptyString(residentId)) {
+			resident = residentQueryRepository.queryById(residentId);
+		}
+		
+		return resident;
 	}
 
 }

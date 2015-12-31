@@ -46,15 +46,13 @@ public class ResidentPo extends BaseValue {
 	private String proprietorId;
 
 	/**
-	 * 是否为业主
-	 * 0：否；1：是。
+	 * 是否为业主 0：否；1：是。
 	 */
 	@Column(name = "is_proprietor")
 	private String isProprietor;
 
 	/**
-	 * 住户类型
-	 * 1：常住；2：暂住
+	 * 住户类型 1：常住；2：暂住
 	 */
 	@Column(name = "resident_type")
 	private String residentType;
@@ -86,8 +84,14 @@ public class ResidentPo extends BaseValue {
 	/**
 	 * 手机号码
 	 */
-	@Column(name = "phone")
-	private String phone;
+	@Column(name = "mobile")
+	private String mobile;
+
+	/**
+	 * 电话
+	 */
+	@Column(name = "tel")
+	private String tel;
 
 	/**
 	 * 工作单位
@@ -205,12 +209,20 @@ public class ResidentPo extends BaseValue {
 		this.name = name;
 	}
 
-	public String getPhone() {
-		return phone;
+	public String getMobile() {
+		return mobile;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
 	}
 
 	public String getWorkUnit() {
