@@ -1,8 +1,5 @@
 package com.liefeng.property.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +9,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.liefeng.Application;
 import com.liefeng.api.property.IHouseholdService;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.property.bo.household.ProprietorBo;
+import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
 
@@ -30,10 +29,10 @@ public class HouseholdServiceTest {
 	
 	@Test
 	public void listProprietor4Page() {
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("projectId", "123456789");
+		ProprietorBo proprietorBo = new ProprietorBo();
+		proprietorBo.setProjectId("12345678");
 		
-		DataPageValue<ProprietorSingleHouseVo> proprietorPage = householdService.listProprietor4Page(params, 10, 1);
+		DataPageValue<ProprietorSingleHouseVo> proprietorPage = householdService.listProprietorSingleHouse4Page(proprietorBo, 10, 1);
 		
 		System.out.println(proprietorPage);
 	}
@@ -48,11 +47,11 @@ public class HouseholdServiceTest {
 	
 	@Test
 	public void listResident4Page() {
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("proprietorId", "123456789");
-		params.put("houseId", "123456789");
+		ResidentBo residentBo = new ResidentBo();
+		residentBo.setProprietorId("123456789");
+		residentBo.setHouseId("123456789");
 		
-		DataPageValue<ResidentVo> residentPage = householdService.listResident4Page(params, 10, 1);
+		DataPageValue<ResidentVo> residentPage = householdService.listResident4Page(residentBo, 2, 1);
 		
 		System.out.println(residentPage);
 	}

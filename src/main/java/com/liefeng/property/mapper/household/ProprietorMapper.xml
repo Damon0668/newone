@@ -158,7 +158,7 @@ FROM
 	  <include refid="Example_Where_Clause"/>) AS ttt
 </select>
 
-<select id="getProprietorSingleHouse" resultMap="BaseResultMap">
+<select id="queryProprietorSingleHouse" parameterType="java.lang.String" resultMap="BaseResultMap">
 	  SELECT 
 		b.id AS proprietorId,
 		b.project_id AS projectId,
@@ -230,6 +230,7 @@ FROM
 	  	ON b.cust_global_id = d.global_id
 	  	LEFT JOIN property.t_project e 
 	  	ON e.id = a.project_id
-	  <include refid="Example_Where_Clause"/>
+	 WHERE
+	    a.id = #{proprietorHouseId}
 </select>
 </mapper>   

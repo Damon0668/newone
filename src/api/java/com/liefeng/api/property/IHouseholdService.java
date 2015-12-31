@@ -1,8 +1,8 @@
 package com.liefeng.api.property;
 
-import java.util.Map;
-
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.property.bo.household.ProprietorBo;
+import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
@@ -38,14 +38,14 @@ public interface IHouseholdService {
 	public void saveResident(ResidentVo resident);
 	
 	/**
-	 * 分页查询业主信息
+	 * 分页查询业主综合信息
 	 * 
-	 * @param params 查询过滤参数
+	 * @param params 查询参数封装类对象
 	 * @param pageSize 分页大小
 	 * @param currentPage 分页当前页
 	 * @return 业主分页数据
 	 */
-	public DataPageValue<ProprietorSingleHouseVo> listProprietor4Page(Map<String, String> params, Integer pageSize,
+	public DataPageValue<ProprietorSingleHouseVo> listProprietorSingleHouse4Page(ProprietorBo params, Integer pageSize,
 			Integer currentPage);
 	
 	/**
@@ -57,12 +57,12 @@ public interface IHouseholdService {
 	
 	/**
 	 * 分页查询住户信息
-	 * @param params 查询过滤参数
+	 * @param params 查询参数封装类对象
 	 * @param pageSize 分页大小
 	 * @param currentPage 分页当前页
 	 * @return 住户分页信息
 	 */
-	public DataPageValue<ResidentVo> listResident4Page(Map<String, String> params, Integer pageSize, Integer currentPage);
+	public DataPageValue<ResidentVo> listResident4Page(ResidentBo params, Integer pageSize, Integer currentPage);
 	
 	/**
 	 * 查询住户信息

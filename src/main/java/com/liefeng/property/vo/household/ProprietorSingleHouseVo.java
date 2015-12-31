@@ -5,7 +5,7 @@ import java.util.Date;
 import com.liefeng.core.entity.BaseValue;
 
 /**
- * 业主某个房产信息值对象
+ * 业主综合信息值对象
  * 
  * @author ZhenTingJun
  * @date 2015-12-28
