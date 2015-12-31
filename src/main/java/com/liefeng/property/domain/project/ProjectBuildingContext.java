@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
@@ -122,17 +122,18 @@ public class ProjectBuildingContext {
 	}
 	
 	/**
-	 * 查询楼栋
-	 * @param projectId 
-	 * @param pageable
+	 *  查询楼栋
+	 * @param projectId
+     * @param page 第几页，最小为0
+     * @param size 页面大小，最小为1
 	 * @return
 	 */
-	public Page<ProjectBuildingVo> findBuildingsByProjectId(String projectId, Pageable pageable){
+	public Page<ProjectBuildingVo> findBuildingsByProjectId(String projectId, int page, int size){
 		Page<ProjectBuildingVo> voPage = null;
 		
 		Page<ProjectBuildingPo> poPage = projectBuildingRepository.findBuildingsByProjectIdAndParentIdIsNull(
-				projectId, pageable);
-		voPage = poPage.map(new Po2VoConverter(ProjectBuildingVo.class));
+				projectId, new PageRequest(page, size));
+		voPage = poPage.map(new Po2VoConverter<ProjectBuildingPo,ProjectBuildingVo>(ProjectBuildingVo.class));
 		
 		return voPage;
 	}
@@ -140,15 +141,17 @@ public class ProjectBuildingContext {
 	/**
 	 * 查询楼层
 	 * @param buildingId 
-	 * @param pageable
+     * @param page 第几页，最小为0
+     * @param size 页面大小，最小为1
 	 * @return
 	 */
-	public Page<ProjectBuildingVo> findFloorsByBuildingId(String buildingId, Pageable pageable){
+	public Page<ProjectBuildingVo> findFloorsByBuildingId(String buildingId, int page, int size){
 		Page<ProjectBuildingVo> voPage = null;
 		
 		Page<ProjectBuildingPo> poPage = projectBuildingRepository.findFloorsByParentId(
-				buildingId, pageable);
-		voPage = poPage.map(new Po2VoConverter(ProjectBuildingVo.class));
+				buildingId, new PageRequest(page, size));
+		voPage = poPage.map(new Po2VoConverter<ProjectBuildingPo,ProjectBuildingVo>(
+				ProjectBuildingVo.class));
 
 		return voPage;
 	}

@@ -4,11 +4,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
-import com.liefeng.property.domain.project.ProjectBuildingContext;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
 
 /**
@@ -67,7 +65,7 @@ public class ProjectBuildingContextTest {
 		String projectId = "projectId";
 		
 		ProjectBuildingContext context = ProjectBuildingContext.getInstance();
-		Page page = context.findBuildingsByProjectId(projectId, new PageRequest(0, 5));
+		Page page = context.findBuildingsByProjectId(projectId, 0, 5);
 		System.out.println(page.getNumberOfElements() + " building");
 	}
 	
@@ -80,7 +78,7 @@ public class ProjectBuildingContextTest {
 		
 		ProjectBuildingContext context = ProjectBuildingContext.getInstance();
 		
-		Page page = context.findFloorsByBuildingId(buildingId, new PageRequest(0, 5));
+		Page page = context.findFloorsByBuildingId(buildingId, 0, 5);
 		
 	}
 	

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -112,11 +113,11 @@ public class ProjectContext {
             projectRepository.delete(projectId);
 	}
 	
-	public Page<ProjectVo> findProjects(Pageable pageable){
+	public Page<ProjectVo> findProjects(int page, int size){
 		Page<ProjectVo> voPage = null;
 		
 		Page<ProjectPo> poPage = projectRepository.findByOemCode(
-				ContextManager.getInstance().getOemCode(), pageable);
+				ContextManager.getInstance().getOemCode(), new PageRequest(page, size));
 		voPage = poPage.map(new Po2VoConverter<ProjectPo, ProjectVo>(ProjectVo.class));
 		
 		return voPage;

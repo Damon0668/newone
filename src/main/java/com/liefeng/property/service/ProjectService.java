@@ -43,7 +43,7 @@ public class ProjectService implements IProjectService {
 	@Override
 	public Page<ProjectVo> findProjects(int page, int size) {
 		ProjectContext projectContext = ProjectContext.getInstance();
-		return projectContext.findProjects(new PageRequest(page, size));
+		return projectContext.findProjects(page, size);
 	}
     
     @Override
@@ -67,13 +67,13 @@ public class ProjectService implements IProjectService {
 	@Override
 	public Page<ProjectBuildingVo> findBuildingsByProjectId(String projectId, int page, int size) {
 		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.getInstance();
-        return projectBuildingContext.findBuildingsByProjectId(projectId, new PageRequest(page, size));
+        return projectBuildingContext.findBuildingsByProjectId(projectId, page, size);
 	}
 
 	@Override
 	public Page<ProjectBuildingVo> findFloorsByBuildingId(String buildingId, int page, int size) {
 		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.getInstance();
-        return projectBuildingContext.findFloorsByBuildingId(buildingId, new PageRequest(page, size));
+        return projectBuildingContext.findFloorsByBuildingId(buildingId, page, size);
 	}
     @Override
     public void createHouse(HouseVo houseVo) {
