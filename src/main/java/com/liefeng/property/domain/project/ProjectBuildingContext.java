@@ -132,8 +132,9 @@ public class ProjectBuildingContext {
 	public DataPageValue<ProjectBuildingVo> findBuildingsByProjectId(String projectId, int page, int size){
 		Page<ProjectBuildingVo> voPage = null;
 		
+//		spring-data 的page从0开始
 		Page<ProjectBuildingPo> poPage = projectBuildingRepository.findBuildingsByProjectIdAndParentIdIsNull(
-				projectId, new PageRequest(page, size));
+				projectId, new PageRequest(page-1, size));
 		voPage = poPage.map(new Po2VoConverter<ProjectBuildingPo,ProjectBuildingVo>(ProjectBuildingVo.class));
 		
 		return new DataPageValue<ProjectBuildingVo>(voPage.getContent(), voPage.getTotalElements(),
@@ -150,11 +151,12 @@ public class ProjectBuildingContext {
 	public DataPageValue<ProjectBuildingVo> findFloorsByBuildingId(String buildingId, int page, int size){
 		Page<ProjectBuildingVo> voPage = null;
 		
+//		spring-data 的page从0开始
 		Page<ProjectBuildingPo> poPage = projectBuildingRepository.findFloorsByParentId(
-				buildingId, new PageRequest(page, size));
+				buildingId, new PageRequest(page-1, size));
 		voPage = poPage.map(new Po2VoConverter<ProjectBuildingPo,ProjectBuildingVo>(
 				ProjectBuildingVo.class));
 		return new DataPageValue<ProjectBuildingVo>(voPage.getContent(), voPage.getTotalElements(),
-				size, page+1);
+				size, page);
 	}
 }

@@ -114,20 +114,18 @@ public class ProjectContext {
 	}
 	
 	/**
-	 * 
-     * @param page 第几页，最小为0
-     * @param size 页面大小，最小为1
 	 * @return
 	 */
 	public DataPageValue<ProjectVo> findProjects(int page, int size){
 		Page<ProjectVo> voPage = null;
 		
+//		spring-data 的page从0开始
 		Page<ProjectPo> poPage = projectRepository.findByOemCode(
-				ContextManager.getInstance().getOemCode(), new PageRequest(page, size));
+				ContextManager.getInstance().getOemCode(), new PageRequest(page-1, size));
 		voPage = poPage.map(new Po2VoConverter<ProjectPo, ProjectVo>(ProjectVo.class));
 		
 		return new DataPageValue<ProjectVo>(voPage.getContent(), voPage.getTotalElements(),
-				size, page+1);
+				size, page);
 		
 	}
 }
