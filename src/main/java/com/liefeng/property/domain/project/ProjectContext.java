@@ -18,6 +18,7 @@ import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.project.ProjectPo;
 import com.liefeng.property.repository.ProjectRepository;
 import com.liefeng.property.vo.project.ProjectVo;
@@ -25,6 +26,7 @@ import com.liefeng.property.vo.project.ProjectVo;
 /**
  * 项目领域上下文对象
  * @author Huangama
+ * @author levy
  * @date 2015-12-22
  */
 @Service
@@ -112,10 +114,11 @@ public class ProjectContext {
             projectRepository.delete(projectId);
 	}
 	
-	public Page<ProjectVo> findByOemCode(Pageable pageable){
+	public Page<ProjectVo> findProjects(Pageable pageable){
 		Page<ProjectVo> voPage = null;
 		if(project != null){
-			Page<ProjectPo> poPage = projectRepository.findByOemCode(project.getOemCode(), pageable);
+			Page<ProjectPo> poPage = projectRepository.findByOemCode(
+					ContextManager.getInstance().getOemCode(), pageable);
 			voPage = poPage.map(new Po2VoConverter(ProjectVo.class));
 				
 		}
