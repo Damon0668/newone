@@ -57,7 +57,7 @@ public class ProjectContextTest {
 		ProjectContext context = ProjectContext.getInstance();
 		ContextManager.getInstance().setOemCode("levy");
 		//从0开始
-		Page page = context.findProjects(new PageRequest(0, 5));
+		Page page = context.findProjects(0,5);
 //		if(ValidateHelper.isNotEmptyCollection(list)){
 //			System.out.println("true");
 //		}
