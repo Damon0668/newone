@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
+import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
 
 /**
@@ -65,8 +66,7 @@ public class ProjectBuildingContextTest {
 		String projectId = "projectId";
 		
 		ProjectBuildingContext context = ProjectBuildingContext.getInstance();
-		Page page = context.findBuildingsByProjectId(projectId, 0, 5);
-		System.out.println(page.getNumberOfElements() + " building");
+		DataPageValue page = context.findBuildingsByProjectId(projectId, 0, 5);
 	}
 	
 	/**
@@ -78,7 +78,7 @@ public class ProjectBuildingContextTest {
 		
 		ProjectBuildingContext context = ProjectBuildingContext.getInstance();
 		
-		Page page = context.findFloorsByBuildingId(buildingId, 0, 5);
+		DataPageValue page = context.findFloorsByBuildingId(buildingId, 0, 5);
 		
 	}
 	

@@ -3,12 +3,11 @@ package com.liefeng.property.domain.project;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.vo.project.ProjectVo;
 
 /**
@@ -57,7 +56,7 @@ public class ProjectContextTest {
 		ProjectContext context = ProjectContext.getInstance();
 		ContextManager.getInstance().setOemCode("levy");
 		//从0开始
-		Page page = context.findProjects(0,5);
+		DataPageValue page = context.findProjects(0,5);
 //		if(ValidateHelper.isNotEmptyCollection(list)){
 //			System.out.println("true");
 //		}

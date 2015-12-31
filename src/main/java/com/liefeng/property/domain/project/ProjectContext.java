@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
@@ -17,6 +16,7 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.po.project.ProjectPo;
 import com.liefeng.property.repository.ProjectRepository;
 import com.liefeng.property.vo.project.ProjectVo;
@@ -113,13 +113,21 @@ public class ProjectContext {
             projectRepository.delete(projectId);
 	}
 	
-	public Page<ProjectVo> findProjects(int page, int size){
+	/**
+	 * 
+     * @param page 第几页，最小为0
+     * @param size 页面大小，最小为1
+	 * @return
+	 */
+	public DataPageValue<ProjectVo> findProjects(int page, int size){
 		Page<ProjectVo> voPage = null;
 		
 		Page<ProjectPo> poPage = projectRepository.findByOemCode(
 				ContextManager.getInstance().getOemCode(), new PageRequest(page, size));
 		voPage = poPage.map(new Po2VoConverter<ProjectPo, ProjectVo>(ProjectVo.class));
 		
-		return voPage;
+		return new DataPageValue<ProjectVo>(voPage.getContent(), Integer.valueOf(voPage.getTotalElements()+""),
+				size, page+1);
+		
 	}
 }

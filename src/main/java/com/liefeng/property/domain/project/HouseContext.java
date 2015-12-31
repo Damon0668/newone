@@ -26,6 +26,7 @@ import com.liefeng.property.vo.project.HouseVo;
 @Scope("prototype")
 public class HouseContext {
 
+	@SuppressWarnings("unused")
 	private static Logger logger = LoggerFactory.getLogger(HouseContext.class);
 	
 	@Autowired

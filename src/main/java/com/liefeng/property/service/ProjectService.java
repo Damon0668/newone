@@ -1,9 +1,9 @@
 package com.liefeng.property.service;
 
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.api.property.IProjectService;
+import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.domain.project.ProjectBuildingContext;
 import com.liefeng.property.domain.project.ProjectContext;
@@ -40,7 +40,7 @@ public class ProjectService implements IProjectService {
     }
 
 	@Override
-	public Page<ProjectVo> findProjects(int page, int size) {
+	public DataPageValue<ProjectVo> findProjects(int page, int size) {
 		ProjectContext projectContext = ProjectContext.getInstance();
 		return projectContext.findProjects(page, size);
 	}
@@ -64,13 +64,13 @@ public class ProjectService implements IProjectService {
     }
 
 	@Override
-	public Page<ProjectBuildingVo> findBuildingsByProjectId(String projectId, int page, int size) {
+	public DataPageValue<ProjectBuildingVo> findBuildingsByProjectId(String projectId, int page, int size) {
 		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.getInstance();
         return projectBuildingContext.findBuildingsByProjectId(projectId, page, size);
 	}
 
 	@Override
-	public Page<ProjectBuildingVo> findFloorsByBuildingId(String buildingId, int page, int size) {
+	public DataPageValue<ProjectBuildingVo> findFloorsByBuildingId(String buildingId, int page, int size) {
 		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.getInstance();
         return projectBuildingContext.findFloorsByBuildingId(buildingId, page, size);
 	}

@@ -13,6 +13,7 @@ import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.po.project.ProjectBuildingPo;
 import com.liefeng.property.repository.ProjectBuildingRepository;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
@@ -128,14 +129,15 @@ public class ProjectBuildingContext {
      * @param size 页面大小，最小为1
 	 * @return
 	 */
-	public Page<ProjectBuildingVo> findBuildingsByProjectId(String projectId, int page, int size){
+	public DataPageValue<ProjectBuildingVo> findBuildingsByProjectId(String projectId, int page, int size){
 		Page<ProjectBuildingVo> voPage = null;
 		
 		Page<ProjectBuildingPo> poPage = projectBuildingRepository.findBuildingsByProjectIdAndParentIdIsNull(
 				projectId, new PageRequest(page, size));
 		voPage = poPage.map(new Po2VoConverter<ProjectBuildingPo,ProjectBuildingVo>(ProjectBuildingVo.class));
 		
-		return voPage;
+		return new DataPageValue<ProjectBuildingVo>(voPage.getContent(), Integer.valueOf(voPage.getTotalElements()+""),
+				size, page+1);
 	}
 	
 	/**
@@ -145,7 +147,7 @@ public class ProjectBuildingContext {
      * @param size 页面大小，最小为1
 	 * @return
 	 */
-	public Page<ProjectBuildingVo> findFloorsByBuildingId(String buildingId, int page, int size){
+	public DataPageValue<ProjectBuildingVo> findFloorsByBuildingId(String buildingId, int page, int size){
 		Page<ProjectBuildingVo> voPage = null;
 		
 		Page<ProjectBuildingPo> poPage = projectBuildingRepository.findFloorsByParentId(
@@ -153,6 +155,7 @@ public class ProjectBuildingContext {
 		voPage = poPage.map(new Po2VoConverter<ProjectBuildingPo,ProjectBuildingVo>(
 				ProjectBuildingVo.class));
 
-		return voPage;
+		return new DataPageValue<ProjectBuildingVo>(voPage.getContent(), Integer.valueOf(voPage.getTotalElements()+""),
+				size, page+1);
 	}
 }
