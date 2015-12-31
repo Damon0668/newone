@@ -67,13 +67,13 @@ public class ProjectService implements IProjectService {
 	@Override
 	public Page<ProjectBuildingVo> findBuildingsByProjectId(String projectId, int page, int size) {
 		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.getInstance();
-        return projectBuildingContext.findBuildingsByProjectId(new PageRequest(page, size));
+        return projectBuildingContext.findBuildingsByProjectId(projectId, new PageRequest(page, size));
 	}
 
 	@Override
 	public Page<ProjectBuildingVo> findFloorsByBuildingId(String buildingId, int page, int size) {
 		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.getInstance();
-        return projectBuildingContext.findFloorsByBuildingId(new PageRequest(page, size));
+        return projectBuildingContext.findFloorsByBuildingId(buildingId, new PageRequest(page, size));
 	}
     @Override
     public void createHouse(HouseVo houseVo) {

@@ -121,23 +121,35 @@ public class ProjectBuildingContext {
             projectBuildingRepository.delete(projectBuildingId);
 	}
 	
-	public Page<ProjectBuildingVo> findBuildingsByProjectId(Pageable pageable){
+	/**
+	 * 查询楼栋
+	 * @param projectId 
+	 * @param pageable
+	 * @return
+	 */
+	public Page<ProjectBuildingVo> findBuildingsByProjectId(String projectId, Pageable pageable){
 		Page<ProjectBuildingVo> voPage = null;
 		
 		if(projectBuilding != null){
-			Page<ProjectBuildingPo> poPage = projectBuildingRepository.findByOemCodeAndProjectIdAndParentId(
-					projectBuilding.getOemCode(), projectBuilding.getProjectId(), null, pageable);
+			Page<ProjectBuildingPo> poPage = projectBuildingRepository.findBuildingsByProjectId(
+					projectId, pageable);
 			voPage = poPage.map(new Po2VoConverter(ProjectBuildingVo.class));
 		}
 		return voPage;
 	}
 	
-	public Page<ProjectBuildingVo> findFloorsByBuildingId(Pageable pageable){
+	/**
+	 * 查询楼层
+	 * @param buildingId 
+	 * @param pageable
+	 * @return
+	 */
+	public Page<ProjectBuildingVo> findFloorsByBuildingId(String buildingId, Pageable pageable){
 		Page<ProjectBuildingVo> voPage = null;
 		
 		if(projectBuilding != null && projectBuilding.getParentId() != null){
-			Page<ProjectBuildingPo> poPage = projectBuildingRepository.findByOemCodeAndProjectIdAndParentId(
-					projectBuilding.getOemCode(), projectBuilding.getProjectId(), projectBuilding.getParentId(),pageable);
+			Page<ProjectBuildingPo> poPage = projectBuildingRepository.findFloorsByBuildingId(
+					buildingId, pageable);
 			voPage = poPage.map(new Po2VoConverter(ProjectBuildingVo.class));
 		}
 		return voPage;
