@@ -1,20 +1,15 @@
 package com.liefeng.property.domain.project;
 
-import com.liefeng.property.domain.project.ProjectContext;
-import com.liefeng.property.vo.project.ProjectVo;
-
-import java.util.List;
-
-import javax.validation.constraints.AssertTrue;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
-import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.property.vo.project.ProjectVo;
 
 /**
  * 项目领域测试类
@@ -58,12 +53,11 @@ public class ProjectContextTest {
 	
 	@Test
 	public void findProjects(){
-		ProjectVo projectVo = new ProjectVo();
-		projectVo.setOemCode("");
 		
-		ProjectContext context = ProjectContext.build(projectVo);
+		ProjectContext context = ProjectContext.getInstance();
+		ContextManager.getInstance().setOemCode("levy");
 		//从0开始
-		context.findProjects(new PageRequest(0, 5));
+		Page page = context.findProjects(new PageRequest(0, 5));
 //		if(ValidateHelper.isNotEmptyCollection(list)){
 //			System.out.println("true");
 //		}

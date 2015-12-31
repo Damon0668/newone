@@ -24,12 +24,12 @@ public interface ProjectBuildingRepository extends JpaRepository<ProjectBuilding
      * @param projectId 项目id
      * @return
      */
-	Page<ProjectBuildingPo> findBuildingsByProjectId(String projectId, Pageable pageable);
+	Page<ProjectBuildingPo> findBuildingsByProjectIdAndParentIdIsNull(String projectId, Pageable pageable);
 	
     /**
      * 分页查询楼栋下的楼层
-     * @param buildingId 楼栋id，楼栋id是唯一的，故不用再指定项目id
+     * @param parentId 楼栋id，楼层记录才有parentId
      * @return
      */
-    public Page<ProjectBuildingPo> findFloorsByBuildingId(String buildingId, Pageable pageable);
+    public Page<ProjectBuildingPo> findFloorsByParentId(String parentId, Pageable pageable);
 }

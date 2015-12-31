@@ -14,7 +14,7 @@ import com.liefeng.property.vo.project.ProjectBuildingVo;
 /**
  * 楼栋楼层领域测试
  * @author levy
- *
+ * @date 2015年12月31日
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -63,31 +63,24 @@ public class ProjectBuildingContextTest {
 	 * 查询楼栋
 	 */
 	@Test
-	public void findBuildingsByOemCodeAndProjectId(){
-		ProjectBuildingVo vo  = new ProjectBuildingVo();
-		vo.setOemCode("levy");
-		vo.setProjectId("projectId");
-		//parentId should be null
-		vo.setParentId(null);
+	public void findBuildingsByProjectId(){
+		String projectId = "projectId";
 		
-		ProjectBuildingContext context = ProjectBuildingContext.build(vo);
-		Page page = context.findBuildingsByOemCodeAndProjectId(new PageRequest(0, 5));
-		
+		ProjectBuildingContext context = ProjectBuildingContext.getInstance();
+		Page page = context.findBuildingsByProjectId(projectId, new PageRequest(0, 5));
+		System.out.println(page.getNumberOfElements() + " building");
 	}
 	
 	/**
 	 * 查询楼层
 	 */
 	@Test
-	public void findFloorsByOemCodeAndProjectIdAndParentId(){
-		ProjectBuildingVo vo  = new ProjectBuildingVo();
-		vo.setOemCode("levy");
-		vo.setProjectId("projectId");
-		vo.setParentId("parentId"); // query floors
-//		vo.setParentId(null);  query buildings
+	public void findFloorsByBuildingId(){
+		String buildingId = "parentId";
 		
-				ProjectBuildingContext context = ProjectBuildingContext.build(vo);
-		Page page = context.findFloorsByOemCodeAndProjectIdAndParentId(new PageRequest(0, 5));
+		ProjectBuildingContext context = ProjectBuildingContext.getInstance();
+		
+		Page page = context.findFloorsByBuildingId(buildingId, new PageRequest(0, 5));
 		
 	}
 	
