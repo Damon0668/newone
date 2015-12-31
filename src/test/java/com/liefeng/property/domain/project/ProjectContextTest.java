@@ -19,6 +19,7 @@ import com.liefeng.common.util.ValidateHelper;
 /**
  * 项目领域测试类
  * @author Huangama
+ * @author levy
  * @date 2015-12-22
  */
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -56,13 +57,13 @@ public class ProjectContextTest {
 	}
 	
 	@Test
-	public void findByOemCode(){
+	public void findProjects(){
 		ProjectVo projectVo = new ProjectVo();
 		projectVo.setOemCode("");
 		
 		ProjectContext context = ProjectContext.build(projectVo);
 		//从0开始
-		context.findByOemCode(new PageRequest(0, 5));
+		context.findProjects(new PageRequest(0, 5));
 //		if(ValidateHelper.isNotEmptyCollection(list)){
 //			System.out.println("true");
 //		}

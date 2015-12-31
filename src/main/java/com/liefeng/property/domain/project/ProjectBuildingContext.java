@@ -27,6 +27,7 @@ import com.liefeng.property.vo.project.ProjectBuildingVo;
 @Scope("prototype")
 public class ProjectBuildingContext {
 
+	@SuppressWarnings("unused")
 	private static Logger logger = LoggerFactory.getLogger(ProjectBuildingContext.class);
 	
 	@Autowired
@@ -120,7 +121,7 @@ public class ProjectBuildingContext {
             projectBuildingRepository.delete(projectBuildingId);
 	}
 	
-	public Page<ProjectBuildingVo> findBuildingsByOemCodeAndProjectId(Pageable pageable){
+	public Page<ProjectBuildingVo> findBuildingsByProjectId(Pageable pageable){
 		Page<ProjectBuildingVo> voPage = null;
 		
 		if(projectBuilding != null){
@@ -131,7 +132,7 @@ public class ProjectBuildingContext {
 		return voPage;
 	}
 	
-	public Page<ProjectBuildingVo> findFloorsByOemCodeAndProjectIdAndParentId(Pageable pageable){
+	public Page<ProjectBuildingVo> findFloorsByBuildingId(Pageable pageable){
 		Page<ProjectBuildingVo> voPage = null;
 		
 		if(projectBuilding != null && projectBuilding.getParentId() != null){

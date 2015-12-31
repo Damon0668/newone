@@ -36,7 +36,13 @@ public interface IProjectService {
 	 */
     public void deleteProject(String projectId);
     
-    public Page<ProjectVo> findProjectByOemCode(ProjectVo projectVo, Pageable pageable);
+    /**
+     * 分页查询项目
+     * @param page 第几页，最小为0
+     * @param size 页面大小，最小为1
+     * @return
+     */
+    public Page<ProjectVo> findProjects(int page, int size);
 
     /*
      * projectBuilding 楼栋与楼层 ******
@@ -59,13 +65,27 @@ public interface IProjectService {
      * 删除楼栋或楼层
      * @param ProjectBuildingId
      */
-    void deleteProjectBuilding(String ProjectBuildingId);
+    void deleteProjectBuilding(String projectBuildingId);
 
-    public Page<ProjectBuildingVo> findBuildingsByOemCodeAndProjectId(
-    		ProjectBuildingVo projectBuildingVo,Pageable pageable);
+    /**
+     * 分页查询项目下的楼栋
+     * @param projectId 项目id
+     * @param page 第几页，最小为0
+     * @param size 页面大小，最小为1
+     * @return
+     */
+    public Page<ProjectBuildingVo> findBuildingsByProjectId(
+    		String projectId, int page, int size);
     
-    public Page<ProjectBuildingVo> findFloorsByOemCodeAndProjectIdAndParentId(
-    		ProjectBuildingVo projectBuildingVo,Pageable pageable);
+    /**
+     * 分页查询楼栋下的楼层
+     * @param buildingId 楼栋id，指定楼栋id是唯一的，故不用再指定项目id
+     * @param page 第几页，最小为0
+     * @param size 页面大小，最小为1
+     * @return
+     */
+    public Page<ProjectBuildingVo> findFloorsByBuildingId(
+    		String buildingId, int page, int size);
     
     
     /*

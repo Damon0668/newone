@@ -1,7 +1,7 @@
 package com.liefeng.property.service;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.api.property.IProjectService;
@@ -40,11 +40,11 @@ public class ProjectService implements IProjectService {
         projectContext.delete();
     }
 
-    @Override
-    public Page<ProjectVo> findProjectByOemCode(ProjectVo projectVo, Pageable pageable){
-    	ProjectContext projectContext = ProjectContext.build(projectVo);
-    	return projectContext.findByOemCode(pageable);
-    }
+	@Override
+	public Page<ProjectVo> findProjects(int page, int size) {
+		ProjectContext projectContext = ProjectContext.getInstance();
+		return projectContext.findProjects(new PageRequest(page, size));
+	}
     
     @Override
     public void createProjectBuilding(ProjectBuildingVo projectBuildingVo) {
@@ -65,19 +65,16 @@ public class ProjectService implements IProjectService {
     }
 
 	@Override
-	public Page<ProjectBuildingVo> findBuildingsByOemCodeAndProjectId(ProjectBuildingVo projectBuildingVo,
-			Pageable pageable) {
-        ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.build(projectBuildingVo);
-        return projectBuildingContext.findBuildingsByOemCodeAndProjectId(pageable);
+	public Page<ProjectBuildingVo> findBuildingsByProjectId(String projectId, int page, int size) {
+		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.getInstance();
+        return projectBuildingContext.findBuildingsByProjectId(new PageRequest(page, size));
 	}
 
 	@Override
-	public Page<ProjectBuildingVo> findFloorsByOemCodeAndProjectIdAndParentId(ProjectBuildingVo projectBuildingVo,
-			Pageable pageable) {
-        ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.build(projectBuildingVo);
-        return projectBuildingContext.findFloorsByOemCodeAndProjectIdAndParentId(pageable);
+	public Page<ProjectBuildingVo> findFloorsByBuildingId(String buildingId, int page, int size) {
+		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.getInstance();
+        return projectBuildingContext.findFloorsByBuildingId(new PageRequest(page, size));
 	}
-
     @Override
     public void createHouse(HouseVo houseVo) {
         HouseContext houseContext = HouseContext.build(houseVo);
@@ -89,4 +86,5 @@ public class ProjectService implements IProjectService {
         HouseContext houseContext = HouseContext.build(houseVo);
         houseContext.update();
     }
+
 }
