@@ -1,7 +1,6 @@
 package com.liefeng.property.repository.mybatis;
 
 import com.liefeng.core.mybatis.repository.BaseRepository;
-import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 
 /**
@@ -14,9 +13,9 @@ public interface ProprietorQueryRepository extends BaseRepository<ProprietorSing
 	
 	/**
 	 * 获取业主某个房产的信息
-	 * @param params 参数
+	 * @param proprietorHouseId 业主房产ID
 	 * @return 业主某个房产信息
 	 */
-	public ProprietorSingleHouseVo getProprietorSingleHouse(PagingParamVo params);
+	public ProprietorSingleHouseVo queryProprietorSingleHouse(String proprietorHouseId);
 	
 }

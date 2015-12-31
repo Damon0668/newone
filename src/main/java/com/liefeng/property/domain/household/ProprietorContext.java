@@ -1,7 +1,10 @@
 package com.liefeng.property.domain.household;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +16,9 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
+import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.po.household.ProprietorPo;
 import com.liefeng.property.repository.ProprietorRepository;
 import com.liefeng.property.repository.mybatis.ProprietorQueryRepository;
@@ -135,21 +140,36 @@ public class ProprietorContext {
 	}
 	
 	/**
-	 * 分页查询
-	 * @param params 查询参数
-	 * @return 分页后数据
+	 * 分页查询业主综合信息
+	 * @param params 查询参数封装类对象
+	 * @param pageSize 分页大小
+	 * @param currentPage 分页当前页
+	 * @return 业主综合信息分页数据
 	 */
-	public List<ProprietorSingleHouseVo> queryByPage(PagingParamVo params) {
-		return proprietorQueryRepository.queryByPage(params);
-	}
-	
-	/**
-	 * 查询数据总数
-	 * @param params 查询参数
-	 * @return 数据总数
-	 */
-	public Integer queryByCount(PagingParamVo params) {
-		return proprietorQueryRepository.queryByCount(params);
+	public DataPageValue<ProprietorSingleHouseVo> listProprietorSingleHouse4Page(ProprietorBo params, Integer pageSize, Integer currentPage) {
+		// 查询参数拷贝
+		Map<String, String> extra = new HashMap<String, String>();
+		MyBeanUtil.copyBean2Map(extra, params);
+		
+		PagingParamVo pagingParamVo = new PagingParamVo();
+		pagingParamVo.setExtra(extra);
+		pagingParamVo.setRows(pageSize);
+		pagingParamVo.setPage(currentPage);
+
+		Integer count = proprietorQueryRepository.queryByCount(pagingParamVo);
+		count = (count == null ? 0 : count);
+		logger.info("总数量：count=" + count);
+		
+		// 设置数据总行数，用于计算偏移量
+		pagingParamVo.getPager().setRowCount(count);
+		List<ProprietorSingleHouseVo> proprietorList = proprietorQueryRepository.queryByPage(pagingParamVo);
+		proprietorList = (ValidateHelper.isEmptyCollection(proprietorList) ? 
+				new ArrayList<ProprietorSingleHouseVo>() : proprietorList);
+
+		DataPageValue<ProprietorSingleHouseVo> proprietorPage = new DataPageValue<ProprietorSingleHouseVo>(
+				proprietorList, count, pageSize, currentPage);
+		
+		return proprietorPage;
 	}
 	
 	/**
@@ -157,7 +177,7 @@ public class ProprietorContext {
 	 * @param params 查询参数
 	 * @return 业主某房产信息
 	 */
-	public ProprietorSingleHouseVo getProprietorSingleHouse(PagingParamVo params) {
-		return proprietorQueryRepository.getProprietorSingleHouse(params);
+	public ProprietorSingleHouseVo getProprietorSingleHouse(String proprietorHouseId) {
+		return proprietorQueryRepository.queryProprietorSingleHouse(proprietorHouseId);
 	}
 }

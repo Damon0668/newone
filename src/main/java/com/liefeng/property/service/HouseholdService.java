@@ -1,10 +1,5 @@
 package com.liefeng.property.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
@@ -12,9 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.api.property.IHouseholdService;
-import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.core.mybatis.vo.PagingParamVo;
+import com.liefeng.property.bo.household.ProprietorBo;
+import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.domain.household.ProprietorContext;
 import com.liefeng.property.domain.household.ProprietorHouseContext;
 import com.liefeng.property.domain.household.ResidentContext;
@@ -77,41 +72,22 @@ public class HouseholdService implements IHouseholdService {
 	 * 保存住户信息
 	 */
 	@Override
-	@Transactional
 	public void saveResident(ResidentVo resident) {
 		ResidentContext residentContext = ResidentContext.build(resident);
 		resident = residentContext.create();
 	}
 
 	/**
-	 * 分页查询业主信息
+	 * 分页查询业主综合信息
 	 */
 	@Override
-	public DataPageValue<ProprietorSingleHouseVo> listProprietor4Page(Map<String, String> params, Integer pageSize,
+	public DataPageValue<ProprietorSingleHouseVo> listProprietorSingleHouse4Page(ProprietorBo params, Integer pageSize,
 			Integer currentPage) {
 		logger.info("查询过滤条件 params=" + params + ", pageSize=" + pageSize + ", currentPage=" + currentPage);
 
-		PagingParamVo pagingParamVo = new PagingParamVo();
-		pagingParamVo.setExtra(params);
-		pagingParamVo.setRows(pageSize);
-		pagingParamVo.setPage(currentPage);
+		ProprietorContext proprietorContext = ProprietorContext.getInstance();
 
-		ProprietorContext proprietorContext = ProprietorContext.build(new ProprietorVo());
-
-		Integer count = proprietorContext.queryByCount(pagingParamVo);
-		count = (count == null ? 0 : count);
-		logger.info("总数量：count=" + count);
-		
-		// 设置数据总行数，用于计算偏移量
-		pagingParamVo.getPager().setRowCount(count);
-		List<ProprietorSingleHouseVo> proprietorList = proprietorContext.queryByPage(pagingParamVo);
-		proprietorList = (ValidateHelper.isEmptyCollection(proprietorList) ? 
-				new ArrayList<ProprietorSingleHouseVo>() : proprietorList);
-
-		DataPageValue<ProprietorSingleHouseVo> proprietorPage = new DataPageValue<ProprietorSingleHouseVo>(
-				proprietorList, count, pageSize, currentPage);
-
-		return proprietorPage;
+		return proprietorContext.listProprietorSingleHouse4Page(params, pageSize, currentPage);
 	}
 
 	/**
@@ -121,46 +97,22 @@ public class HouseholdService implements IHouseholdService {
 	public ProprietorSingleHouseVo getProprietorSingleHouse(String proprietorHouseId) {
 		logger.info("业主房产ID：proprietorHouseId=" + proprietorHouseId);
 
-		PagingParamVo pagingParamVo = new PagingParamVo();
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("proprietorHouseId", proprietorHouseId);
-		pagingParamVo.setExtra(params);
+		ProprietorContext proprietorContext = ProprietorContext.getInstance();
 
-		ProprietorContext proprietorContext = ProprietorContext.build(new ProprietorVo());
-		ProprietorSingleHouseVo proprietorSingleHouse = proprietorContext.getProprietorSingleHouse(pagingParamVo);
-
-		return proprietorSingleHouse;
+		return proprietorContext.getProprietorSingleHouse(proprietorHouseId);
 	}
 
 	/**
 	 * 分页查询住户信息
 	 */
 	@Override
-	public DataPageValue<ResidentVo> listResident4Page(Map<String, String> params, Integer pageSize,
+	public DataPageValue<ResidentVo> listResident4Page(ResidentBo params, Integer pageSize,
 			Integer currentPage) {
 		logger.info("查询过滤条件 params=" + params + ", pageSize=" + pageSize + ", currentPage=" + currentPage);
 
-		PagingParamVo pagingParamVo = new PagingParamVo();
-		pagingParamVo.setExtra(params);
-		pagingParamVo.setRows(pageSize);
-		pagingParamVo.setPage(currentPage);
-
-		ResidentContext residentContext = ResidentContext.build(new ResidentVo());
-
-		Integer count = residentContext.queryByCount(pagingParamVo);
-		count = (count == null ? 0 : count);
-		logger.info("总数量：count=" + count);
+		ResidentContext residentContext = ResidentContext.getInstance();
 		
-		// 设置数据总行数，用于计算偏移量
-		pagingParamVo.getPager().setRowCount(count);
-		List<ResidentVo> residentVoList = residentContext.queryByPage(pagingParamVo);
-		residentVoList = (ValidateHelper.isEmptyCollection(residentVoList) ? 
-				new ArrayList<ResidentVo>() : residentVoList);
-
-		DataPageValue<ResidentVo> residentPage = new DataPageValue<ResidentVo>(
-				residentVoList, count, pageSize, currentPage);
-
-		return residentPage;
+		return residentContext.listResident4Page(params, pageSize, currentPage);
 	}
 
 	/**

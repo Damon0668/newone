@@ -1,6 +1,9 @@
 package com.liefeng.property.domain.household;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +15,9 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
+import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.po.household.ResidentPo;
 import com.liefeng.property.repository.ResidentRepository;
 import com.liefeng.property.repository.mybatis.ResidentQueryRepository;
@@ -113,21 +118,37 @@ public class ResidentContext {
 	}
 	
 	/**
-	 * 分页查询
-	 * @param params 查询参数
-	 * @return 分页后数据
+	 * 分页查询住户信息
+	 * @param params 查询参数封装类对象
+	 * @param pageSize 分页大小
+	 * @param currentPage 分页当前页
+	 * @return
 	 */
-	public List<ResidentVo> queryByPage(PagingParamVo params) {
-		return residentQueryRepository.queryByPage(params);
-	}
-	
-	/**
-	 * 查询数据总数
-	 * @param params 查询参数
-	 * @return 数据总数
-	 */
-	public Integer queryByCount(PagingParamVo params) {
-		return residentQueryRepository.queryByCount(params);
+	public DataPageValue<ResidentVo> listResident4Page(ResidentBo params, Integer pageSize,
+			Integer currentPage) {
+		// 参数拷贝
+		Map<String, String> extra = new HashMap<String, String>();
+		MyBeanUtil.copyBean2Map(extra, params);
+		
+		PagingParamVo pagingParamVo = new PagingParamVo();
+		pagingParamVo.setExtra(extra);
+		pagingParamVo.setRows(pageSize);
+		pagingParamVo.setPage(currentPage);
+
+		Integer count = residentQueryRepository.queryByCount(pagingParamVo);
+		count = (count == null ? 0 : count);
+		logger.info("总数量：count=" + count);
+		
+		// 设置数据总行数，用于计算偏移量
+		pagingParamVo.getPager().setRowCount(count);
+		List<ResidentVo> residentVoList = residentQueryRepository.queryByPage(pagingParamVo);
+		residentVoList = (ValidateHelper.isEmptyCollection(residentVoList) ? 
+				new ArrayList<ResidentVo>() : residentVoList);
+
+		DataPageValue<ResidentVo> residentPage = new DataPageValue<ResidentVo>(
+				residentVoList, count, pageSize, currentPage);
+
+		return residentPage;
 	}
 	
 	/**
@@ -135,11 +156,7 @@ public class ResidentContext {
 	 * @return 住户信息
 	 */
 	public ResidentVo queryResidentById() {
-		if(ValidateHelper.isNotEmptyString(residentId)) {
-			resident = residentQueryRepository.queryById(residentId);
-		}
-		
-		return resident;
+		return residentQueryRepository.queryById(residentId);
 	}
 
 }
