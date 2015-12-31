@@ -76,6 +76,15 @@ public class HouseholdService implements IHouseholdService {
 		ResidentContext residentContext = ResidentContext.build(resident);
 		resident = residentContext.create();
 	}
+	
+	/**
+	 * 更新住户信息
+	 */
+	@Override
+	public void updateResident(ResidentVo resident) {
+		ResidentContext residentContext = ResidentContext.build(resident);
+		resident = residentContext.update();
+	}
 
 	/**
 	 * 分页查询业主综合信息
@@ -121,7 +130,6 @@ public class HouseholdService implements IHouseholdService {
 	@Override
 	public ResidentVo getResident(String residentId) {
 		ResidentContext residentContext = ResidentContext.loadById(residentId);
-		return residentContext.queryResidentById();
+		return residentContext.getResident();
 	}
-
 }

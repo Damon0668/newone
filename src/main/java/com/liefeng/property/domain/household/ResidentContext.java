@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.liefeng.common.util.EncryptionUtil;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
@@ -89,13 +90,12 @@ public class ResidentContext {
 	 */
 	public ResidentVo getResident() {
 		if(resident == null) {
-			ResidentPo residentPo = null;
 			if(ValidateHelper.isNotEmptyString(residentId)) {
-				residentPo = residentRepository.findOne(residentId);
-			}
-			
-			if(residentPo != null) {
-				resident = MyBeanUtil.createBean(residentPo, ResidentVo.class);
+				resident = residentQueryRepository.queryById(residentId);
+				
+				// 对身份证号进行解密
+				String idnum = resident.getCustomer().getIdNum();
+				resident.getCustomer().setIdNum(EncryptionUtil.decryptCustIdNum(idnum));
 			}
 		}
 		
@@ -112,6 +112,26 @@ public class ResidentContext {
 			
 			ResidentPo residentPo = MyBeanUtil.createBean(resident, ResidentPo.class);
 			residentRepository.save(residentPo);
+		}
+		
+		return resident;
+	}
+	
+	/**
+	 * 更新住户信息
+	 */
+	public ResidentVo update() {
+		if(resident != null && ValidateHelper.isNotEmptyString(resident.getId())) {
+			ResidentPo residentPo = residentRepository.findOne(resident.getId());
+			
+			if(residentPo != null) {
+				MyBeanUtil.copyBeanNotNull2Bean(resident, residentPo);
+				residentRepository.save(residentPo);
+				
+				resident = MyBeanUtil.createBean(residentPo, ResidentVo.class);
+			}
+			
+			
 		}
 		
 		return resident;
@@ -150,13 +170,4 @@ public class ResidentContext {
 
 		return residentPage;
 	}
-	
-	/**
-	 * 根据主键查询住户信息
-	 * @return 住户信息
-	 */
-	public ResidentVo queryResidentById() {
-		return residentQueryRepository.queryById(residentId);
-	}
-
 }
