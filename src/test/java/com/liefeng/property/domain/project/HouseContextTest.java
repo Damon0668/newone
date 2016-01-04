@@ -45,7 +45,7 @@ public class HouseContextTest {
 		HouseContext context = HouseContext.getInstance();
 		HouseBo houseBo = new HouseBo();
 		houseBo.setProjectId("projectId");
-		houseBo.setOemCode("oemCode");
+		houseBo.setOemCode("levy");
 		
 		DataPageValue page = context.listHouse4Page(houseBo, 1, 100);
 		System.out.println(page.getDataList());
