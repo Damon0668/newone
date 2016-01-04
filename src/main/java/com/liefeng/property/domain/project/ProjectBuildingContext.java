@@ -124,9 +124,9 @@ public class ProjectBuildingContext {
 	
 	/**
 	 *  查询楼栋
-	 * @param projectId
-     * @param page 第几页，最小为0
-     * @param size 页面大小，最小为1
+	 * @param projectId t_project_building 的 project_id
+     * @param page 第几页，最小为1
+     * @param size 页面大小 
 	 * @return
 	 */
 	public DataPageValue<ProjectBuildingVo> findBuildingsByProjectId(String projectId, int page, int size){
@@ -138,14 +138,14 @@ public class ProjectBuildingContext {
 		voPage = poPage.map(new Po2VoConverter<ProjectBuildingPo,ProjectBuildingVo>(ProjectBuildingVo.class));
 		
 		return new DataPageValue<ProjectBuildingVo>(voPage.getContent(), voPage.getTotalElements(),
-				size, page+1);
+				size, page);
 	}
 	
 	/**
 	 * 查询楼层
-	 * @param buildingId 
-     * @param page 第几页，最小为0
-     * @param size 页面大小，最小为1
+	 * @param buildingId t_project_building 的 id
+     * @param page 第几页，最小为1
+     * @param size 页面大小 
 	 * @return
 	 */
 	public DataPageValue<ProjectBuildingVo> findFloorsByBuildingId(String buildingId, int page, int size){

@@ -113,9 +113,12 @@ public class ProjectContext {
             projectRepository.delete(projectId);
 	}
 	
-	/**
-	 * @return
-	 */
+    /**
+     * 分页查询项目
+     * @param page 第几页，最小为1
+     * @param size 页面大小 
+     * @return
+     */
 	public DataPageValue<ProjectVo> findProjects(int page, int size){
 		Page<ProjectVo> voPage = null;
 		

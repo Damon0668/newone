@@ -36,8 +36,8 @@ public interface IProjectService {
     
     /**
      * 分页查询项目
-     * @param page 第几页，最小为0
-     * @param size 页面大小，最小为1
+     * @param page 第几页，最小为1
+     * @param size 页面大小 
      * @return
      */
     public DataPageValue<ProjectVo> findProjects(int page, int size);
@@ -68,8 +68,8 @@ public interface IProjectService {
     /**
      * 分页查询项目下的楼栋
      * @param projectId 项目id
-     * @param page 第几页，最小为0
-     * @param size 页面大小，最小为1
+     * @param page 第几页，最小为1
+     * @param size 页面大小 
      * @return
      */
     public DataPageValue<ProjectBuildingVo> findBuildingsByProjectId(
@@ -77,9 +77,9 @@ public interface IProjectService {
     
     /**
      * 分页查询楼栋下的楼层
-     * @param buildingId 楼栋id，指定楼栋id是唯一的，故不用再指定项目id
-     * @param page 第几页，最小为0
-     * @param size 页面大小，最小为1
+     * @param buildingId 楼栋id
+     * @param page 第几页，最小为1
+     * @param size 页面大小 
      * @return
      */
     public DataPageValue<ProjectBuildingVo> findFloorsByBuildingId(
