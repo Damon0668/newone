@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.api.property.IProjectService;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.domain.project.ProjectBuildingContext;
 import com.liefeng.property.domain.project.ProjectContext;
@@ -85,5 +86,11 @@ public class ProjectService implements IProjectService {
         HouseContext houseContext = HouseContext.build(houseVo);
         houseContext.update();
     }
+
+	@Override
+	public DataPageValue<HouseVo> listHouse4Page(HouseBo houseBo, Integer page, Integer size) {
+		HouseContext context = HouseContext.getInstance();
+		return context.listHouse4Page(houseBo, page, size);
+	}
 
 }

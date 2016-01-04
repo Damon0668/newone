@@ -1,6 +1,9 @@
 package com.liefeng.property.domain.project;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +15,12 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.mybatis.vo.PagingParamVo;
+import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.po.project.HousePo;
 import com.liefeng.property.repository.HouseRepository;
+import com.liefeng.property.repository.mybatis.HouseQueryRepository;
 import com.liefeng.property.vo.project.HouseVo;
 
 /**
@@ -31,6 +38,9 @@ public class HouseContext {
 	
 	@Autowired
 	private HouseRepository houseRepository;
+	
+	@Autowired
+	private HouseQueryRepository houseQueryRepository;
 	
 	/**
 	 * 房产信息ID
@@ -143,5 +153,28 @@ public class HouseContext {
 			houseRepository.save(housePo);
 		}
 		return house;
+	}
+
+	public DataPageValue<HouseVo> listHouse4Page(HouseBo houseBo, Integer page, Integer size) {
+		// 参数拷贝
+		Map<String, String> extra = new HashMap<String, String>();
+		MyBeanUtil.copyBean2Map(extra, houseBo);
+		
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		param.setPage(page);
+		param.setPageSize(size);
+		
+		long count = 666;
+		
+		// 设置数据总行数，用于计算偏移量
+		param.getPager().setRowCount(count);
+		
+		List<HouseVo> list = houseQueryRepository.queryByPage(param);
+
+		DataPageValue<HouseVo> returnPage = new DataPageValue<HouseVo>(
+				list, count, size, page);
+		
+		return returnPage;
 	}
 }

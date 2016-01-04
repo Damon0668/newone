@@ -1,6 +1,8 @@
 package com.liefeng.api.property;
 
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.property.bo.household.ProprietorBo;
+import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.vo.project.HouseVo;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
 import com.liefeng.property.vo.project.ProjectVo;
@@ -101,4 +103,14 @@ public interface IProjectService {
      * @param houseVo
      */
     void updateHouse(HouseVo houseVo);
+    
+    /**
+     * 分页查询房产信息
+     * @param params 查询参数封装类对象
+     * @param page 当前页
+     * @param size 页面大小
+     * @return
+     */
+    public DataPageValue<HouseVo> listHouse4Page(HouseBo houseBo, Integer page,
+			Integer size);
 }

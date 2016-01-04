@@ -7,20 +7,20 @@
 <!-- Result Map-->
 <resultMap id="BaseResultMap" type="com.liefeng.property.vo.project.HouseVo" >
 	<result column="id" property="id"/>
-	<result column="code" property="code"/>
-	<result column="short_name" property="shortName"/>
-	<result column="full_name" property="fullName"/>
-	<result column="province" property="province"/>
-	<result column="city" property="city"/>
-	<result column="zone" property="zone"/>
-	<result column="address" property="address"/>		
-	<result column="tel" property="tel"/>
-	<result column="introduce" property="introduce"/>
-	<result column="total_households" property="totalHouseholds"/>
-	<result column="opening_date" property="openingDate"/>
-	<result column="coordinate" property="coordinate"/>
-	<result column="remark" property="remark"/>
-	<result column="create_time" property="createTime"/>
+	<result column="house_num" property="houseNum"/>
+	<result column="project_id" property="projectId"/>
+	<result column="building_id" property="buildingId"/>
+	<result column="floor_id" property="floorId"/>
+	<result column="house_type" property="houseType"/>
+	<result column="actual_area" property="actualArea"/>
+	<result column="gross_area" property="grossArea"/>		
+	<result column="usable_area" property="usableArea"/>
+	<result column="apportion_area" property="apportionArea"/>
+	<result column="property_fee" property="propertyFee"/>
+	<result column="sale_status" property="saleStatus"/>
+	<result column="ownership" property="ownership"/>
+	<result column="staff_id" property="staffId"/>
+	<result column="register_time" property="registerTime"/>
 	<result column="oem_code" property="oemCode"/>
 </resultMap>
 
@@ -31,33 +31,20 @@ where 1=1
 	<if test="id != null and id != ''" >
 	    and id =  #{id}
 	</if>
-	<if test="code != null and code != ''" >
-	    and code =  #{code}
-	</if>	
-	<if test="shortName != null and shortName != ''" >
-	    and short_name =  #{shortName}
-	</if>
-	<if test="fullName != null and fullName != ''" >
-	    and full_name =  #{fullName}
-	</if>
-	<if test="province != null and province != ''" >
-	    and province = #{province}
-	</if>
-	<if test="city != null and city != ''" >
-	    and city = #{city}
-	</if>
-	<if test="zone != null and zone != ''" >
-	    and zone = #{zone}
-	</if>
-	<if test="address != null and address != ''" >
-	    and address = #{address}
-	</if>
 	<if test="oemCode != null and oemCode != ''" >
 	    and oem_code = #{oemCode}
 	</if>
 </trim>
 </sql>
 
-
+<select id="queryByPage" resultMap="BaseResultMap">
+	  SELECT
+	      *
+	  FROM
+	      property.t_house
+      <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+          ${pager.mysqlQueryCondition}
+      </if>
+</select>
 
 </mapper>   
