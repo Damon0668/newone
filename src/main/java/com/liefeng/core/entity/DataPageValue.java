@@ -9,20 +9,10 @@ import com.liefeng.core.error.IErrorCode;
  * @author Huangama
  * @date 2015-11-15
  */
-public class DataPageValue<T> extends BaseValue {
+public class DataPageValue<T> extends ReturnValue {
 
 	private static final long serialVersionUID = -8237109320765271196L;
 
-	/**
-	 * 返回码
-	 */
-	private String code;
-	
-	/**
-	 * 返回描述
-	 */
-	private String desc;
-	
 	/**
 	 * 返回的数据对象列表
 	 */
@@ -48,35 +38,29 @@ public class DataPageValue<T> extends BaseValue {
 	 */
 	private Integer maxPage;
 
-	public DataPageValue() {
-		super();
-	}
-	
 	public DataPageValue(Enum<?> en) {
 		this(null, 0L, 0, 0);
-		this.code = en.name();
-		this.desc = en.toString();
+		super.setCode(en.name());
+		super.setDesc(en.toString());
 	}
 
 	public DataPageValue(Enum<?> en, List<T> dataList, Long maxCount, 
 			Integer pageSize, Integer currentPage) {
 		this(dataList, maxCount, pageSize, currentPage);
-		this.code = en.name();
-		this.desc = en.toString();
+		super.setCode(en.name());
+		super.setDesc(en.toString());
 	}
 	
 	public DataPageValue(String code, String desc, List<T> dataList, Long maxCount, 
 			Integer pageSize, Integer currentPage) {
 		this(dataList, maxCount, pageSize, currentPage);
-		this.code = code;
-		this.desc = desc;
+		super.setCode(code);
+		super.setDesc(desc);
 	}
 	
 	public DataPageValue(List<T> dataList, Long maxCount, Integer pageSize, 
 			Integer currentPage) {
-		super();
-		this.setCode(IErrorCode.SUCCESS);
-		this.setDesc(IErrorCode.SUCCESS_DESC);
+		super(IErrorCode.SUCCESS, IErrorCode.SUCCESS_DESC);
 		this.dataList = dataList;
 		this.maxCount = maxCount;
 		this.currentPage = currentPage;
@@ -87,22 +71,6 @@ public class DataPageValue<T> extends BaseValue {
 		else {
 			this.maxPage = (int) (maxCount / pageSize + 1);
 		}
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getDesc() {
-		return desc;
-	}
-
-	public void setDesc(String desc) {
-		this.desc = desc;
 	}
 
 	public List<T> getDataList() {

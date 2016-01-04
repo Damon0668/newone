@@ -9,46 +9,26 @@ import com.liefeng.core.error.IErrorCode;
  * @author Huangama
  * @date 2015-11-15
  */
-public class DataListValue<T> extends BaseValue {
+public class DataListValue<T> extends ReturnValue {
 
 	private static final long serialVersionUID = -533092849666145420L;
 
-	/**
-	 * 返回码
-	 */
-	private String code;
-	
-	/**
-	 * 返回描述
-	 */
-	private String desc;
-	
 	/**
 	 * 返回的数据对象列表
 	 */
 	private List<T> dataList;
 
-	public DataListValue() {
-		super();
-	}
-
 	public DataListValue(String code, String desc) {
-		super();
-		this.code = code;
-		this.desc = desc;
+		super(code, desc);
 	}
 
 	public DataListValue(String code, String desc, List<T> dataList) {
-		super();
-		this.code = code;
-		this.desc = desc;
+		super(code, desc);
 		this.dataList = dataList;
 	}
 	
 	public DataListValue(Enum<?> en, List<T> dataList) {
-		super();
-		this.code = en.name();
-		this.desc = en.toString();
+		super(en.name(), en.toString());
 		this.dataList = dataList;
 	}
 
@@ -58,28 +38,11 @@ public class DataListValue<T> extends BaseValue {
 	 * @return 数据列表值对象
 	 */
 	public static DataListValue<Object> success(List<Object> dataList) {
-		DataListValue<Object> returnData = new DataListValue<Object>();
-		returnData.setCode(IErrorCode.SUCCESS);
-		returnData.setDesc(IErrorCode.SUCCESS_DESC);
+		DataListValue<Object> returnData = 
+				new DataListValue<Object>(IErrorCode.SUCCESS, IErrorCode.SUCCESS_DESC);
 		returnData.setDataList(dataList);
 		
 		return returnData;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getDesc() {
-		return desc;
-	}
-
-	public void setDesc(String desc) {
-		this.desc = desc;
 	}
 
 	public List<T> getDataList() {
