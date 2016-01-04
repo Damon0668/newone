@@ -21,6 +21,7 @@ import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.po.project.HousePo;
 import com.liefeng.property.repository.HouseRepository;
 import com.liefeng.property.repository.mybatis.HouseQueryRepository;
+import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.project.HouseVo;
 
 /**
@@ -154,7 +155,7 @@ public class HouseContext {
 		return house;
 	}
 
-	public DataPageValue<HouseVo> listHouse4Page(HouseBo houseBo, Integer page, Integer size) {
+	public DataPageValue<ProprietorSingleHouseVo> listHouse4Page(HouseBo houseBo, Integer page, Integer size) {
 		// 参数拷贝
 		Map<String, String> extra = new HashMap<String, String>();
 		MyBeanUtil.copyBean2Map(extra, houseBo);
@@ -171,9 +172,9 @@ public class HouseContext {
 		// 设置数据总行数，用于计算偏移量
 		param.getPager().setRowCount(count);
 		
-		List<HouseVo> list = houseQueryRepository.queryByPage(param);
+		List<ProprietorSingleHouseVo> list = houseQueryRepository.queryByPage(param);
 
-		DataPageValue<HouseVo> returnPage = new DataPageValue<HouseVo>(
+		DataPageValue<ProprietorSingleHouseVo> returnPage = new DataPageValue<ProprietorSingleHouseVo>(
 				list, count, size, page);
 		
 		return returnPage;
