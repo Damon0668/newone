@@ -17,7 +17,10 @@ public class HouseBo extends BaseValue{
 	
 	private String houseNum;
 	
-	private String proprietorName;
+	/**
+	 * 业主名字，产权人
+	 */
+	private String name;
 	
 	private String payType;
 
@@ -53,20 +56,20 @@ public class HouseBo extends BaseValue{
 		this.houseNum = houseNum;
 	}
 
-	public String getProprietorName() {
-		return proprietorName;
-	}
-
-	public void setProprietorName(String proprietorName) {
-		this.proprietorName = proprietorName;
-	}
-
 	public String getPayType() {
 		return payType;
 	}
 
 	public void setPayType(String payType) {
 		this.payType = payType;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 }

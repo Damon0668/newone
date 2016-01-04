@@ -33,7 +33,6 @@ import com.liefeng.property.vo.project.HouseVo;
 @Scope("prototype")
 public class HouseContext {
 
-	@SuppressWarnings("unused")
 	private static Logger logger = LoggerFactory.getLogger(HouseContext.class);
 	
 	@Autowired
@@ -165,7 +164,9 @@ public class HouseContext {
 		param.setPage(page);
 		param.setPageSize(size);
 		
-		long count = 666;
+		Long count = houseQueryRepository.queryByCount(param);
+		count = (count == null ? 0 : count);
+		logger.info("总数量：count=" + count);
 		
 		// 设置数据总行数，用于计算偏移量
 		param.getPager().setRowCount(count);

@@ -32,7 +32,7 @@ public class ProprietorSingleHouseVo extends BaseValue {
 	private String projectName;
 	
 	/**
-	 * 业主姓名
+	 * 业主姓名，产权人
 	 */
 	private String name;
 	
