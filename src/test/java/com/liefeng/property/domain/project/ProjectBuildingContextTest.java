@@ -65,7 +65,7 @@ public class ProjectBuildingContextTest {
 		String projectId = "projectId";
 		
 		ProjectBuildingContext context = ProjectBuildingContext.build();
-		DataPageValue page = context.findBuildingsByProjectId(projectId, 0, 5);
+		DataPageValue page = context.findBuildingsByProjectId(1, 5);
 	}
 	
 	/**
@@ -77,7 +77,7 @@ public class ProjectBuildingContextTest {
 		
 		ProjectBuildingContext context = ProjectBuildingContext.build();
 		
-		DataPageValue page = context.findFloorsByBuildingId(buildingId, 0, 5);
+		DataPageValue page = context.findFloorsByBuildingId(1, 5);
 		
 	}
 	

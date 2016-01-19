@@ -20,6 +20,7 @@ import com.liefeng.property.vo.project.ProjectBuildingVo;
 
 /**
  * 项目楼栋楼层领域模型
+ * 
  * @author ZhenTingJun
  * @author levy
  * @date 2015-12-23
@@ -30,89 +31,112 @@ public class ProjectBuildingContext {
 
 	@SuppressWarnings("unused")
 	private static Logger logger = LoggerFactory.getLogger(ProjectBuildingContext.class);
-	
+
 	@Autowired
 	private ProjectBuildingRepository projectBuildingRepository;
-	
+
 	/**
 	 * 项目楼栋楼层ID
 	 */
 	private String projectBuildingId;
-	
+
 	/**
 	 * 项目楼栋楼层值对象
 	 */
 	private ProjectBuildingVo projectBuilding;
-	
+
+	/**
+	 * 项目楼栋楼层所属项目ID
+	 */
+	private String projectId;
+
 	/**
 	 * 获取本类实例，每次返回一个新的对象
+	 * 
 	 * @return 本类实例
 	 */
 	private static ProjectBuildingContext getInstance() {
 		return SpringBeanUtil.getBean(ProjectBuildingContext.class);
 	}
-	
+
 	/**
 	 * 根据项目楼栋楼层值对象构建上下文
+	 * 
 	 * @param projectBuilding 项目楼栋楼层值对象
 	 * @return 项目楼栋楼层上下文
 	 */
 	public static ProjectBuildingContext build(ProjectBuildingVo projectBuilding) {
 		ProjectBuildingContext projectBuildingContext = getInstance();
 		projectBuildingContext.projectBuilding = projectBuilding;
-		
+
 		return projectBuildingContext;
 	}
-	
+
 	/**
 	 * 构建上下文（无参）
+	 * 
 	 * @return 项目楼栋楼层上下文
 	 */
 	public static ProjectBuildingContext build() {
 		ProjectBuildingContext projectBuildingContext = getInstance();
-		
+
 		return projectBuildingContext;
 	}
-	
+
 	/**
 	 * 根据项目楼栋楼层ID加载上下文
-	 * @param projectBuildingId
+	 * 
+	 * @param projectBuildingId 项目楼栋楼层ID
 	 * @return 项目楼栋楼层上下文
 	 */
 	public static ProjectBuildingContext loadById(String projectBuildingId) {
 		ProjectBuildingContext projectBuildingContext = getInstance();
 		projectBuildingContext.projectBuildingId = projectBuildingId;
-		
+
 		return projectBuildingContext;
 	}
-	
+
+	/**
+	 * 根据项目ID加载上下文
+	 * 
+	 * @param projectId 项目ID
+	 * @return 项目楼栋楼层上下文
+	 */
+	public static ProjectBuildingContext loadByProjectId(String projectId) {
+		ProjectBuildingContext projectBuildingContext = getInstance();
+		projectBuildingContext.projectId = projectId;
+
+		return projectBuildingContext;
+	}
+
 	/**
 	 * 获取楼栋楼层信息
+	 * 
 	 * @return 楼栋楼层信息
 	 */
 	public ProjectBuildingVo getProjectBuilding() {
-		if(projectBuilding == null) {
+		if (projectBuilding == null) {
 			ProjectBuildingPo projectBuildingPo = null;
-			if(ValidateHelper.isNotEmptyString(projectBuildingId)) {
+			if (ValidateHelper.isNotEmptyString(projectBuildingId)) {
 				projectBuildingPo = projectBuildingRepository.findOne(projectBuildingId);
 			}
-			
-			if(projectBuildingPo != null) {
+
+			if (projectBuildingPo != null) {
 				projectBuilding = MyBeanUtil.createBean(projectBuildingPo, ProjectBuildingVo.class);
 			}
 		}
-		
+
 		return projectBuilding;
 	}
-	
+
 	/**
 	 * 保存楼栋楼层信息
 	 */
 	public ProjectBuildingVo create() {
-		if(projectBuilding != null) {
+		if (projectBuilding != null) {
 			projectBuilding.setId(UUIDGenerator.generate());
 			projectBuilding.setOemCode(""); // TODO 待确定后补齐
-			
+
 			ProjectBuildingPo projectBuildingPo = MyBeanUtil.createBean(projectBuilding, ProjectBuildingPo.class);
 			projectBuildingRepository.save(projectBuildingPo);
 		}
@@ -120,7 +144,7 @@ public class ProjectBuildingContext {
 	}
 
 	public ProjectBuildingVo update() {
-		if(projectBuilding != null){
+		if (projectBuilding != null) {
 			ProjectBuildingPo projectBuildingPo = MyBeanUtil.createBean(projectBuilding, ProjectBuildingPo.class);
 			projectBuildingRepository.save(projectBuildingPo);
 		}
@@ -129,45 +153,43 @@ public class ProjectBuildingContext {
 	}
 
 	public void delete() {
-		if(projectBuildingId != null)
-            projectBuildingRepository.delete(projectBuildingId);
+		if (projectBuildingId != null)
+			projectBuildingRepository.delete(projectBuildingId);
 	}
-	
+
 	/**
-	 *  查询楼栋
-	 * @param projectId t_project_building 的 project_id
-     * @param page 第几页，最小为1
-     * @param size 页面大小 
+	 * 查询楼栋
+	 * 
+	 * @param page 第几页，最小为1
+	 * @param size 页面大小
 	 * @return
 	 */
-	public DataPageValue<ProjectBuildingVo> findBuildingsByProjectId(String projectId, int page, int size){
+	public DataPageValue<ProjectBuildingVo> findBuildingsByProjectId(int page, int size) {
 		Page<ProjectBuildingVo> voPage = null;
-		
-//		spring-data 的page从0开始
-		Page<ProjectBuildingPo> poPage = projectBuildingRepository.findBuildingsByProjectIdAndParentIdIsNull(
-				projectId, new PageRequest(page-1, size));
-		voPage = poPage.map(new Po2VoConverter<ProjectBuildingPo,ProjectBuildingVo>(ProjectBuildingVo.class));
-		
-		return new DataPageValue<ProjectBuildingVo>(voPage.getContent(), voPage.getTotalElements(),
-				size, page);
+
+		// spring-data 的page从0开始
+		Page<ProjectBuildingPo> poPage = projectBuildingRepository.findBuildingsByProjectIdAndParentIdIsNull(projectId,
+				new PageRequest(page - 1, size));
+		voPage = poPage.map(new Po2VoConverter<ProjectBuildingPo, ProjectBuildingVo>(ProjectBuildingVo.class));
+
+		return new DataPageValue<ProjectBuildingVo>(voPage.getContent(), voPage.getTotalElements(), size, page);
 	}
-	
+
 	/**
 	 * 查询楼层
-	 * @param buildingId t_project_building 的 id
-     * @param page 第几页，最小为1
-     * @param size 页面大小 
+	 * 
+	 * @param page 第几页，最小为1
+	 * @param size 页面大小
 	 * @return
 	 */
-	public DataPageValue<ProjectBuildingVo> findFloorsByBuildingId(String buildingId, int page, int size){
+	public DataPageValue<ProjectBuildingVo> findFloorsByBuildingId(int page, int size) {
 		Page<ProjectBuildingVo> voPage = null;
+
+		// spring-data 的page从0开始
+		Page<ProjectBuildingPo> poPage = projectBuildingRepository.findFloorsByParentId(projectBuildingId,
+				new PageRequest(page - 1, size));
+		voPage = poPage.map(new Po2VoConverter<ProjectBuildingPo, ProjectBuildingVo>(ProjectBuildingVo.class));
 		
-//		spring-data 的page从0开始
-		Page<ProjectBuildingPo> poPage = projectBuildingRepository.findFloorsByParentId(
-				buildingId, new PageRequest(page-1, size));
-		voPage = poPage.map(new Po2VoConverter<ProjectBuildingPo,ProjectBuildingVo>(
-				ProjectBuildingVo.class));
-		return new DataPageValue<ProjectBuildingVo>(voPage.getContent(), voPage.getTotalElements(),
-				size, page);
+		return new DataPageValue<ProjectBuildingVo>(voPage.getContent(), voPage.getTotalElements(), size, page);
 	}
 }

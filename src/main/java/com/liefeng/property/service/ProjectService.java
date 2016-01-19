@@ -15,6 +15,7 @@ import com.liefeng.property.vo.project.ProjectVo;
 
 /**
  * 项目服务实现类
+ * 
  * @author Huangama
  * @author levy
  * @date 2015-12-22
@@ -22,71 +23,72 @@ import com.liefeng.property.vo.project.ProjectVo;
 @Service
 public class ProjectService implements IProjectService {
 
-    @Override
-    public void createProject(ProjectVo projectVo) {
-        ProjectContext projectContext = ProjectContext.build(projectVo);
-        projectContext.create();
-    }
+	@Override
+	public void createProject(ProjectVo projectVo) {
+		ProjectContext projectContext = ProjectContext.build(projectVo);
+		projectContext.create();
+	}
 
-    @Override
-    public void updateProject(ProjectVo projectVo) {
-        ProjectContext projectContext = ProjectContext.build(projectVo);
-        projectContext.update();
+	@Override
+	public void updateProject(ProjectVo projectVo) {
+		ProjectContext projectContext = ProjectContext.build(projectVo);
+		projectContext.update();
 
-    }
+	}
 
-    @Override
-    public void deleteProject(String projectId) {
-        ProjectContext projectContext = ProjectContext.loadById(projectId);
-        projectContext.delete();
-    }
+	@Override
+	public void deleteProject(String projectId) {
+		ProjectContext projectContext = ProjectContext.loadById(projectId);
+		projectContext.delete();
+	}
 
 	@Override
 	public DataPageValue<ProjectVo> findProjects(int page, int size) {
 		ProjectContext projectContext = ProjectContext.build();
 		return projectContext.findProjects(page, size);
 	}
-    
-    @Override
-    public void createProjectBuilding(ProjectBuildingVo projectBuildingVo) {
-        ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.build(projectBuildingVo);
-        projectBuildingContext.create();
-    }
 
-    @Override
-    public void updateProjectBuilding(ProjectBuildingVo projectBuildingVo) {
-        ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.build(projectBuildingVo);
-        projectBuildingContext.update();
-    }
+	@Override
+	public void createProjectBuilding(ProjectBuildingVo projectBuildingVo) {
+		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.build(projectBuildingVo);
+		projectBuildingContext.create();
+	}
 
-    @Override
-    public void deleteProjectBuilding(String projectBuildingId) {
-        ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.loadById(projectBuildingId);
-        projectBuildingContext.delete();
-    }
+	@Override
+	public void updateProjectBuilding(ProjectBuildingVo projectBuildingVo) {
+		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.build(projectBuildingVo);
+		projectBuildingContext.update();
+	}
+
+	@Override
+	public void deleteProjectBuilding(String projectBuildingId) {
+		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.loadById(projectBuildingId);
+		projectBuildingContext.delete();
+	}
 
 	@Override
 	public DataPageValue<ProjectBuildingVo> findBuildingsByProjectId(String projectId, int page, int size) {
-		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.build();
-        return projectBuildingContext.findBuildingsByProjectId(projectId, page, size);
+		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.loadByProjectId(projectId);
+		return projectBuildingContext.findBuildingsByProjectId(page, size);
 	}
 
 	@Override
-	public DataPageValue<ProjectBuildingVo> findFloorsByBuildingId(String buildingId, int page, int size) {
-		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.build();
-        return projectBuildingContext.findFloorsByBuildingId(buildingId, page, size);
+	public DataPageValue<ProjectBuildingVo> findFloorsByBuildingId(String projectBuildingId, int page, int size) {
+		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.loadById(projectBuildingId);
+		return projectBuildingContext.findFloorsByBuildingId(page, size);
 	}
-    @Override
-    public void createHouse(HouseVo houseVo) {
-        HouseContext houseContext = HouseContext.build(houseVo);
-        houseContext.create();
-    }
 
-    @Override
-    public void updateHouse(HouseVo houseVo) {
-        HouseContext houseContext = HouseContext.build(houseVo);
-        houseContext.update();
-    }
+	@Override
+	public void createHouse(HouseVo houseVo) {
+		HouseContext houseContext = HouseContext.build(houseVo);
+		houseContext.create();
+	}
+
+	@Override
+	public void updateHouse(HouseVo houseVo) {
+		HouseContext houseContext = HouseContext.build(houseVo);
+		houseContext.update();
+	}
 
 	@Override
 	public DataPageValue<ProprietorSingleHouseVo> listHouse4Page(HouseBo houseBo, Integer page, Integer size) {
