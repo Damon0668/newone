@@ -3,7 +3,6 @@ package com.liefeng.property.domain.project;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
@@ -65,7 +64,7 @@ public class ProjectBuildingContextTest {
 	public void findBuildingsByProjectId(){
 		String projectId = "projectId";
 		
-		ProjectBuildingContext context = ProjectBuildingContext.getInstance();
+		ProjectBuildingContext context = ProjectBuildingContext.build();
 		DataPageValue page = context.findBuildingsByProjectId(projectId, 0, 5);
 	}
 	
@@ -76,7 +75,7 @@ public class ProjectBuildingContextTest {
 	public void findFloorsByBuildingId(){
 		String buildingId = "parentId";
 		
-		ProjectBuildingContext context = ProjectBuildingContext.getInstance();
+		ProjectBuildingContext context = ProjectBuildingContext.build();
 		
 		DataPageValue page = context.findFloorsByBuildingId(buildingId, 0, 5);
 		

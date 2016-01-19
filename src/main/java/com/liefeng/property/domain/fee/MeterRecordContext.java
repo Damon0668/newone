@@ -45,7 +45,7 @@ public class MeterRecordContext {
 	 * 获取本类实例，每次返回一个新对象
 	 * @return 本类实例
 	 */
-	public static MeterRecordContext getInstance() {
+	private static MeterRecordContext getInstance() {
 		return SpringBeanUtil.getBean(MeterRecordContext.class);
 	}
 	
@@ -57,6 +57,16 @@ public class MeterRecordContext {
 	public static MeterRecordContext build(MeterRecordVo meterRecord) {
 		MeterRecordContext meterRecordContext = getInstance();
 		meterRecordContext.meterRecord = meterRecord;
+		
+		return meterRecordContext;
+	}
+	
+	/**
+	 * 构建上下文（无参）
+	 * @return 抄表记录上下文
+	 */
+	public static MeterRecordContext build() {
+		MeterRecordContext meterRecordContext = getInstance();
 		
 		return meterRecordContext;
 	}

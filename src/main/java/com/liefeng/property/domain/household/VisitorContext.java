@@ -43,7 +43,7 @@ public class VisitorContext {
 	 * 获取本类实例，每次返回一个新的对象
 	 * @return 本类实例
 	 */
-	public static VisitorContext getInstance() {
+	private static VisitorContext getInstance() {
 		return SpringBeanUtil.getBean(VisitorContext.class);
 	}
 	
@@ -55,6 +55,16 @@ public class VisitorContext {
 	public static VisitorContext build(VisitorVo visitor) {
 		VisitorContext visitorContext = getInstance();
 		visitorContext.visitor = visitor;
+		
+		return visitorContext;
+	}
+	
+	/**
+	 * 构建上下文（无参）
+	 * @return 访客信息上下文
+	 */
+	public static VisitorContext build() {
+		VisitorContext visitorContext = getInstance();
 		
 		return visitorContext;
 	}

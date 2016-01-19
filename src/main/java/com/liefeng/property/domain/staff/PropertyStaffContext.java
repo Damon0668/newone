@@ -45,7 +45,7 @@ public class PropertyStaffContext {
 	 * 获取本类实例，每次返回一个新的对象
 	 * @return 本类实例
 	 */
-	public static PropertyStaffContext getInstance() {
+	private static PropertyStaffContext getInstance() {
 		return SpringBeanUtil.getBean(PropertyStaffContext.class);
 	}
 	

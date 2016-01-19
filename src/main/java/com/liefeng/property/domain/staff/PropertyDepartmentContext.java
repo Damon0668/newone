@@ -43,7 +43,7 @@ public class PropertyDepartmentContext {
 	 * 获取本类实例，每次返回一个新的对象
 	 * @return 本类实例
 	 */
-	public static PropertyDepartmentContext getInstance() {
+	private static PropertyDepartmentContext getInstance() {
 		return SpringBeanUtil.getBean(PropertyDepartmentContext.class);
 	}
 	
@@ -55,6 +55,16 @@ public class PropertyDepartmentContext {
 	public static PropertyDepartmentContext build(PropertyDepartmentVo propertyDepartment) {
 		PropertyDepartmentContext propertyDepartmentContext = getInstance();
 		propertyDepartmentContext.propertyDepartment = propertyDepartment;
+		
+		return propertyDepartmentContext;
+	}
+	
+	/**
+	 * 构建上下文（无参）
+	 * @return 部门信息上下文
+	 */
+	public static PropertyDepartmentContext build() {
+		PropertyDepartmentContext propertyDepartmentContext = getInstance();
 		
 		return propertyDepartmentContext;
 	}

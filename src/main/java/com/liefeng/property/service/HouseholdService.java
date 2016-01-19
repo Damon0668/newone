@@ -94,7 +94,7 @@ public class HouseholdService implements IHouseholdService {
 			Integer currentPage) {
 		logger.info("查询过滤条件 params=" + params + ", pageSize=" + pageSize + ", currentPage=" + currentPage);
 
-		ProprietorContext proprietorContext = ProprietorContext.getInstance();
+		ProprietorContext proprietorContext = ProprietorContext.build();
 
 		return proprietorContext.listProprietorSingleHouse4Page(params, pageSize, currentPage);
 	}
@@ -106,7 +106,7 @@ public class HouseholdService implements IHouseholdService {
 	public ProprietorSingleHouseVo getProprietorSingleHouse(String proprietorHouseId) {
 		logger.info("业主房产ID：proprietorHouseId=" + proprietorHouseId);
 
-		ProprietorContext proprietorContext = ProprietorContext.getInstance();
+		ProprietorContext proprietorContext = ProprietorContext.build();
 
 		return proprietorContext.getProprietorSingleHouse(proprietorHouseId);
 	}
@@ -119,7 +119,7 @@ public class HouseholdService implements IHouseholdService {
 			Integer currentPage) {
 		logger.info("查询过滤条件 params=" + params + ", pageSize=" + pageSize + ", currentPage=" + currentPage);
 
-		ResidentContext residentContext = ResidentContext.getInstance();
+		ResidentContext residentContext = ResidentContext.build();
 		
 		return residentContext.listResident4Page(params, pageSize, currentPage);
 	}

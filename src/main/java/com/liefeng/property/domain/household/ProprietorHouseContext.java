@@ -45,7 +45,7 @@ public class ProprietorHouseContext {
 	 * 获取本类实例，每次返回一个新对象
 	 * @return 本类实例
 	 */
-	public static ProprietorHouseContext getInstance() {
+	private static ProprietorHouseContext getInstance() {
 		return SpringBeanUtil.getBean(ProprietorHouseContext.class);
 	}
 
@@ -57,6 +57,16 @@ public class ProprietorHouseContext {
 	public static ProprietorHouseContext build(ProprietorHouseVo proprietorHouse) {
 		ProprietorHouseContext proprietorHouseContext = getInstance();
 		proprietorHouseContext.proprietorHouse = proprietorHouse;
+		
+		return proprietorHouseContext;
+	}
+	
+	/**
+	 * 构建上下文（无参）
+	 * @return 业主房产信息上下文
+	 */
+	public static ProprietorHouseContext build() {
+		ProprietorHouseContext proprietorHouseContext = getInstance();
 		
 		return proprietorHouseContext;
 	}

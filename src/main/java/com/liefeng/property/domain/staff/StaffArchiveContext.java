@@ -43,7 +43,7 @@ public class StaffArchiveContext {
 	 * 获取本类实例，每次返回一个新的对象
 	 * @return 本类实例
 	 */
-	public static StaffArchiveContext getInstance() {
+	private static StaffArchiveContext getInstance() {
 		return SpringBeanUtil.getBean(StaffArchiveContext.class);
 	}
 	
@@ -55,6 +55,16 @@ public class StaffArchiveContext {
 	public static StaffArchiveContext build(StaffArchiveVo staffArchive) {
 		StaffArchiveContext staffArchiveContext = getInstance();
 		staffArchiveContext.staffArchive = staffArchive;
+		
+		return staffArchiveContext;
+	}
+	
+	/**
+	 * 构建上下文（无参）
+	 * @return 员工档案上下文
+	 */
+	public static StaffArchiveContext build() {
+		StaffArchiveContext staffArchiveContext = getInstance();
 		
 		return staffArchiveContext;
 	}

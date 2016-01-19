@@ -51,13 +51,28 @@ public class ProjectContext {
 	 * 获取本类实例，每次返回一个新对象
 	 * @return 本类实例
 	 */
-	public static ProjectContext getInstance() {
+	private static ProjectContext getInstance() {
 		return SpringBeanUtil.getBean(ProjectContext.class);
 	}
 	
+	/**
+	 * 根据项目值对象构建上下文
+	 * @param project 项目值对象
+	 * @return 项目上下文
+	 */
 	public static ProjectContext build(ProjectVo project) {
 		ProjectContext projectContext = getInstance();
 		projectContext.project = project;
+		
+		return projectContext;
+	}
+	
+	/**
+	 * 构建上下文（无参）
+	 * @return 项目上下文
+	 */
+	public static ProjectContext build() {
+		ProjectContext projectContext = getInstance();
 		
 		return projectContext;
 	}

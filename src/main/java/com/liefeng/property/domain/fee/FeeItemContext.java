@@ -45,7 +45,7 @@ public class FeeItemContext {
 	 * 获取本类实例，每次返回一个新对象
 	 * @return 本类实例
 	 */
-	public static FeeItemContext getInstance() {
+	private static FeeItemContext getInstance() {
 		return SpringBeanUtil.getBean(FeeItemContext.class);
 	}
 	
@@ -57,6 +57,16 @@ public class FeeItemContext {
 	public static FeeItemContext build(FeeItemVo feeItem) {
 		FeeItemContext feeItemContext = getInstance();
 		feeItemContext.feeItem = feeItem;
+		
+		return feeItemContext;
+	}
+	
+	/**
+	 * 构建上下文（无参）
+	 * @return 费用项上下文
+	 */
+	public static FeeItemContext build() {
+		FeeItemContext feeItemContext = getInstance();
 		
 		return feeItemContext;
 	}

@@ -48,17 +48,28 @@ public class ProjectBuildingContext {
 	 * 获取本类实例，每次返回一个新的对象
 	 * @return 本类实例
 	 */
-	public static ProjectBuildingContext getInstance() {
+	private static ProjectBuildingContext getInstance() {
 		return SpringBeanUtil.getBean(ProjectBuildingContext.class);
 	}
 	
 	/**
 	 * 根据项目楼栋楼层值对象构建上下文
+	 * @param projectBuilding 项目楼栋楼层值对象
 	 * @return 项目楼栋楼层上下文
 	 */
 	public static ProjectBuildingContext build(ProjectBuildingVo projectBuilding) {
 		ProjectBuildingContext projectBuildingContext = getInstance();
 		projectBuildingContext.projectBuilding = projectBuilding;
+		
+		return projectBuildingContext;
+	}
+	
+	/**
+	 * 构建上下文（无参）
+	 * @return 项目楼栋楼层上下文
+	 */
+	public static ProjectBuildingContext build() {
+		ProjectBuildingContext projectBuildingContext = getInstance();
 		
 		return projectBuildingContext;
 	}

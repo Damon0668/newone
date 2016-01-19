@@ -42,7 +42,7 @@ public class HouseContextTest {
 	
 	@Test
 	public void query(){
-		HouseContext context = HouseContext.getInstance();
+		HouseContext context = HouseContext.build();
 		HouseBo houseBo = new HouseBo();
 		houseBo.setProjectId("projectId");
 		houseBo.setOemCode("levy");

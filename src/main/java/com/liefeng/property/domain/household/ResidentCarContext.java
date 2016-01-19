@@ -44,7 +44,7 @@ public class ResidentCarContext {
 	 * 
 	 * @return 本类实例
 	 */
-	public static ResidentCarContext getInstance() {
+	private static ResidentCarContext getInstance() {
 		return SpringBeanUtil.getBean(ResidentCarContext.class);
 	}
 
@@ -57,6 +57,17 @@ public class ResidentCarContext {
 	public static ResidentCarContext build(ResidentCarVo residentCar) {
 		ResidentCarContext residentCarContext = getInstance();
 		residentCarContext.residentCar = residentCar;
+
+		return residentCarContext;
+	}
+	
+	/**
+	 * 构建上下文（无参）
+	 * 
+	 * @return 住户车辆信息上下文
+	 */
+	public static ResidentCarContext build() {
+		ResidentCarContext residentCarContext = getInstance();
 
 		return residentCarContext;
 	}

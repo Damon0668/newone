@@ -43,7 +43,7 @@ public class ParkingRentalContext {
 	 * 获取本类实例，每次返回一个新对象
 	 * @return 本类实例
 	 */
-	public static ParkingRentalContext getInstance(){
+	private static ParkingRentalContext getInstance(){
 		return SpringBeanUtil.getBean(ParkingRentalContext.class);
 	}
 	
@@ -55,6 +55,16 @@ public class ParkingRentalContext {
 	public static ParkingRentalContext build(ParkingRentalVo parkingRental) {
 		ParkingRentalContext parkingRentalContext = getInstance();
 		parkingRentalContext.parkingRental = parkingRental;
+		
+		return parkingRentalContext;
+	}
+	
+	/**
+	 * 构建上下文（无参）
+	 * @return 车位租售信息上下文
+	 */
+	public static ParkingRentalContext build() {
+		ParkingRentalContext parkingRentalContext = getInstance();
 		
 		return parkingRentalContext;
 	}

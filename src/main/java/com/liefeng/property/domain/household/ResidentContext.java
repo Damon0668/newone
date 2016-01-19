@@ -56,7 +56,7 @@ public class ResidentContext {
 	 * 获取本类实例，每次返回一个新对象
 	 * @return 本类实例
 	 */
-	public static ResidentContext getInstance() {
+	private static ResidentContext getInstance() {
 		return SpringBeanUtil.getBean(ResidentContext.class);
 	}
 	
@@ -68,6 +68,16 @@ public class ResidentContext {
 	public static ResidentContext build(ResidentVo resident) {
 		 ResidentContext residentContext = getInstance();
 		 residentContext.resident = resident;
+		 
+		 return residentContext;
+	}
+	
+	/**
+	 * 构建上下文（无参）
+	 * @return 住户信息上下文
+	 */
+	public static ResidentContext build() {
+		 ResidentContext residentContext = getInstance();
 		 
 		 return residentContext;
 	}

@@ -45,7 +45,7 @@ public class FeeRecordContext {
 	 * 获取本类实例，每次返回一个新对象
 	 * @return 本类实例
 	 */
-	public static FeeRecordContext getInstance() {
+	private static FeeRecordContext getInstance() {
 		return SpringBeanUtil.getBean(FeeRecordContext.class);
 	}
 	
@@ -57,6 +57,16 @@ public class FeeRecordContext {
 	public static FeeRecordContext build(FeeRecordVo feeRecord) {
 		FeeRecordContext feeRecordContext = getInstance();
 		feeRecordContext.feeRecord = feeRecord;
+		
+		return feeRecordContext;
+	}
+	
+	/**
+	 * 构建上下文（无参）
+	 * @return 缴费记录上下文
+	 */
+	public static FeeRecordContext build() {
+		FeeRecordContext feeRecordContext = getInstance();
 		
 		return feeRecordContext;
 	}

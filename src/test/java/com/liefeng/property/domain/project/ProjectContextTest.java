@@ -53,7 +53,7 @@ public class ProjectContextTest {
 	@Test
 	public void findProjects(){
 		
-		ProjectContext context = ProjectContext.getInstance();
+		ProjectContext context = ProjectContext.build();
 		ContextManager.getInstance().setOemCode("levy");
 		//从0开始
 		DataPageValue page = context.findProjects(0,5);
