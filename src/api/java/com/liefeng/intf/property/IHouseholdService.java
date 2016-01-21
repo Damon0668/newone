@@ -1,4 +1,4 @@
-package com.liefeng.api.property;
+package com.liefeng.intf.property;
 
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.bo.household.ProprietorBo;

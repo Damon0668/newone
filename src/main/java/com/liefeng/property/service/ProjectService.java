@@ -2,8 +2,8 @@ package com.liefeng.property.service;
 
 import org.springframework.stereotype.Service;
 
-import com.liefeng.api.property.IProjectService;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.intf.property.IProjectService;
 import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.domain.project.ProjectBuildingContext;
