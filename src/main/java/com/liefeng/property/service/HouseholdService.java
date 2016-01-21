@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.liefeng.api.property.IHouseholdService;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.domain.household.ProprietorContext;
