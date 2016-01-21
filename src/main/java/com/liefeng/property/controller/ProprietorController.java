@@ -5,6 +5,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.liefeng.base.vo.UserVo;
+import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.mq.type.TccBasicEvent;
+import com.liefeng.property.domain.household.ProprietorContext;
+import com.liefeng.property.service.ProprietorService;
+import com.liefeng.property.vo.household.ProprietorVo;
+
 /**
  * 
  * @author 蔡少东
@@ -14,10 +21,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/proprietor")
 public class ProprietorController {
 	
+	@Autowired
+	private ProprietorService proprietorService;
 	
 	@RequestMapping("/create")
 	@ResponseBody
-	public Object create(){
-		return null;
+	public Object create(ProprietorVo proprietor) throws Exception{
+		for(int i=1;i<10000;i++){
+			proprietorService.createProprietor(proprietor);
+		}
+		return Boolean.TRUE;
 	}
 }
