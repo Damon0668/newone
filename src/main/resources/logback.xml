@@ -15,9 +15,9 @@
 	<appender name="IFILE"
 			  class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<!-- <Encoding>UTF-8</Encoding> -->
-		<file>${LOG_HOME}/basic.log</file>
+		<file>${LOG_HOME}/property.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>${LOG_HOME}/backup/basic.%d{yyyy-MM-dd}.%i.log.zip
+			<FileNamePattern>${LOG_HOME}/backup/property.%d{yyyy-MM-dd}.%i.log.zip
 			</FileNamePattern>
 			<MaxHistory>30</MaxHistory>
 			<timeBasedFileNamingAndTriggeringPolicy
