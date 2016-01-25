@@ -23,7 +23,7 @@ public class ProprietorController {
 	@RequestMapping("/create")
 	@ResponseBody
 	public Object create(ProprietorVo proprietor) throws Exception{
-		for(int i=1;i<10000;i++){
+		for(int i=0;i<1;i++){
 			proprietorService.createProprietor(proprietor);
 		}
 		return Boolean.TRUE;
