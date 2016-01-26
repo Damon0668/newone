@@ -155,7 +155,7 @@ FROM
 	  	ON b.cust_global_id = d.global_id
 	  	LEFT JOIN property.t_project e 
 	  	ON e.id = a.project_id
-	  <include refid="Example_Where_Clause"/>) AS ttt
+	  <include refid="Example_Where_Clause"/>) AS t
 </select>
 
 <select id="queryProprietorSingleHouse" parameterType="java.lang.String" resultMap="BaseResultMap">
