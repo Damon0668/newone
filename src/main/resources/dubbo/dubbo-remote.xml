@@ -11,4 +11,16 @@
       http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd 
       http://code.alibabatech.com/schema/dubbo
       http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+      
+      <!-- 系统菜单 -->
+      <dubbo:service interface="com.liefeng.intf.property.ISysMenuService" ref="sysMenuService" />
+      
+      <!-- 系统角色 -->
+      <dubbo:service interface="com.liefeng.intf.property.ISysRoleService" ref="sysRoleService" />
+      
+      <!-- 角色对菜单 -->
+      <dubbo:service interface="com.liefeng.intf.property.ISysRoleMenuService" ref="sysRoleMenuService" />
+      
+      <!-- 角色对用户 -->
+      <dubbo:service interface="com.liefeng.intf.property.ISysRoleUserService" ref="sysRoleUserService" />
 </beans>

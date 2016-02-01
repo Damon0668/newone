@@ -1,7 +1,6 @@
 package com.liefeng.intf.property;
 
 import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.project.HouseVo;

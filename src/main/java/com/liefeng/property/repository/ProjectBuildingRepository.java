@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.liefeng.property.po.project.ProjectBuildingPo;
-import com.liefeng.property.vo.project.ProjectBuildingVo;
 
 /**
  * 项目楼栋楼层仓储层
