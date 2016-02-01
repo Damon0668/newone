@@ -1,7 +1,6 @@
 package com.liefeng.property.domain.project;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -167,8 +166,7 @@ public class HouseContext {
 
 	public DataPageValue<ProprietorSingleHouseVo> listHouse4Page(HouseBo houseBo, Integer page, Integer size) {
 		// 参数拷贝
-		Map<String, String> extra = new HashMap<String, String>();
-		MyBeanUtil.copyBean2Map(extra, houseBo);
+		Map<String, String> extra = MyBeanUtil.bean2Map(houseBo);
 		
 		PagingParamVo param = new PagingParamVo();
 		param.setExtra(extra);
