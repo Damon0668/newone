@@ -23,4 +23,10 @@
       
       <!-- 角色对用户 -->
       <dubbo:service interface="com.liefeng.intf.property.ISysRoleUserService" ref="sysRoleUserService" />
+      
+      <!-- 项目相关 -->
+      <dubbo:service interface="com.liefeng.intf.property.IProjectService" ref="projectService" />
+      
+      <!-- 家庭相关 -->
+      <dubbo:service interface="com.liefeng.intf.property.IHouseholdService" ref="householdService" />
 </beans>
