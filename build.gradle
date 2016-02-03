@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'spring-boot'
 
-version = '1.0'
+version = '1.0.1'
 
 buildscript {
     repositories {  maven{ url 'http://120.25.163.118/nexus/content/groups/public/'} }

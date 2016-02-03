@@ -30,8 +30,8 @@ public class SysRolePo extends BaseValue{
 	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "desc")
-	private String desc;
+	@Column(name = "description")
+	private String description;
 	
 	/**
 	 * 001	 超级管理员角色
@@ -61,12 +61,12 @@ public class SysRolePo extends BaseValue{
 		this.name = name;
 	}
 
-	public String getDesc() {
-		return desc;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getType() {

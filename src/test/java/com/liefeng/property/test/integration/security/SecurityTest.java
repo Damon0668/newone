@@ -10,6 +10,7 @@ import com.liefeng.Application;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.intf.property.ISysSecurityService;
+import com.liefeng.property.domain.sys.SysRoleContext;
 import com.liefeng.property.vo.sys.SysRoleVo;
 
 /**
@@ -28,5 +29,15 @@ public class SecurityTest {
 	public void listRolesTest(){
 		DataPageValue<SysRoleVo> dataPageValue = sysSecurityService.listRoles4page(null,null,1,10);
 		System.out.println(dataPageValue.toString());
+	}
+	
+	@Test
+	public void addRole(){
+		SysRoleVo sysRole = new SysRoleVo();
+		sysRole.setName("中文");
+		sysRole.setType("001");
+		sysRole.setOemCode("test");
+		sysRole.setDescription("test");
+		SysRoleContext.build(sysRole).create();
 	}
 }
