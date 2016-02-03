@@ -33,6 +33,12 @@ public class SysRolePo extends BaseValue{
 	@Column(name = "desc")
 	private String desc;
 	
+	/**
+	 * 001	 超级管理员角色
+	 * 002	系统管理员角色
+	 * 003	全局角色
+	 * 004	普通角色
+	 */
 	@Column(name = "type")
 	private String type;
 	

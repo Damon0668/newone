@@ -25,7 +25,8 @@
     <dubbo:registry address="zookeeper://120.25.163.118:2181" file="property.cache"/>
     <!-- 用dubbo协议在20880端口暴露服务 -->
     <!-- <dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" /> -->
-    <dubbo:protocol name="dubbo" port="20002" host="120.25.163.118"/>
+    <!-- host="120.25.163.118" -->
+    <dubbo:protocol name="dubbo" port="20002" />
     
     <import resource="dubbo-remote.xml"/>
     
