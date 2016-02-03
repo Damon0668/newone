@@ -14,9 +14,13 @@ import com.liefeng.property.vo.project.ProjectVo;
  * @date 2015-12-22
  */
 public interface IProjectService {
-    /*
-     * project 项目 ******
-     */
+	
+	/**
+	 * 通过ID查找具体项目
+	 * @param projectId 项目ID
+	 * @return
+	 */
+	public ProjectVo findProjectById(String projectId);
 	
 	/**
 	 * 创建项目
