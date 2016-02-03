@@ -106,7 +106,7 @@ public class ProjectContext {
 	public ProjectVo create() {
 		if(project != null){
 			project.setId(UUIDGenerator.generate());
-            project.setOemCode(""); // TODO 待确定后补齐
+            project.setOemCode(ContextManager.getInstance().getOemCode()); 
             project.setCreateTime(new Date());
 
             ProjectPo projectPo = MyBeanUtil.createBean(project, ProjectPo.class);
