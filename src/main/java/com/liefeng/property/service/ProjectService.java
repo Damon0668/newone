@@ -22,6 +22,13 @@ import com.liefeng.property.vo.project.ProjectVo;
  */
 @Service
 public class ProjectService implements IProjectService {
+	
+	@Override
+	public ProjectVo findProjectById(String projectId) {
+		ProjectContext projectContext = ProjectContext.loadById(projectId);
+		ProjectVo projectVo = projectContext.getProject();
+		return projectVo;
+	}
 
 	@Override
 	public void createProject(ProjectVo projectVo) {

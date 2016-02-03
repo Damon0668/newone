@@ -14,5 +14,11 @@
       
       <!-- 系统权限服务  -->
       <dubbo:service interface="com.liefeng.intf.property.ISysSecurityService" ref="sysSecurityService" />
+      
+      <!-- 项目相关服务  -->
+      <dubbo:service interface="com.liefeng.intf.property.IProjectService" ref="projectService" />
+      
+      <!-- 家庭相关服务  -->
+      <dubbo:service interface="com.liefeng.intf.property.IHouseholdService" ref="householdService" />
 
 </beans>
