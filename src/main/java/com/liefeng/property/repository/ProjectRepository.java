@@ -18,4 +18,12 @@ import com.liefeng.property.po.project.ProjectPo;
 public interface ProjectRepository extends JpaRepository<ProjectPo, String> {
 
 		Page<ProjectPo> findByOemCode(String oemCode, Pageable pageable);
+		
+		/**
+		 * 根据项目全名查找项目
+		 * @param fullName 项目全名
+		 * @param oemCode 系统标识
+		 * @return 具体项目
+		 */
+		ProjectPo findByFullNameAndOemCode(String fullName, String oemCode);
 }

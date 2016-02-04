@@ -18,9 +18,16 @@ public interface IProjectService {
 	/**
 	 * 通过ID查找具体项目
 	 * @param projectId 项目ID
-	 * @return
+	 * @return 具体项目对象
 	 */
 	public ProjectVo findProjectById(String projectId);
+	
+	/**
+	 * 根据项目全名查找具体项目
+	 * @param fullName 项目全名
+	 * @return 具体项目对象
+	 */
+	public ProjectVo findProjectByFullName(String fullName);
 	
 	/**
 	 * 创建项目

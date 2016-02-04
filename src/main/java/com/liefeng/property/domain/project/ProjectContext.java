@@ -43,6 +43,11 @@ public class ProjectContext {
 	private String projectId;
 	
 	/**
+	 * 项目全名
+	 */
+	private String fullName;
+	
+	/**
 	 * 客户值对象
 	 */
 	private ProjectVo project;
@@ -89,12 +94,28 @@ public class ProjectContext {
 		return projectContext;
 	}
 	
+	/**
+	 * 根据项目全名加载项目上下文
+	 * @param fullName 项目全名
+	 * @return 项目上下文
+	 */
+	public static ProjectContext loadByFullName(String fullName) {
+		ProjectContext projectContext = getInstance();
+		projectContext.fullName = fullName;
+		
+		return projectContext;
+	}
+	
 	public ProjectVo getProject() {
 		if (project == null) {
 			ProjectPo projectPo = null;
 			if (ValidateHelper.isNotEmptyString(projectId)) {
 				projectPo = projectRepository.findOne(projectId);
+			} else if(ValidateHelper.isEmptyString(fullName)) {
+				projectPo = projectRepository.findByFullNameAndOemCode(fullName, ContextManager.getInstance().getOemCode());
 			}
+			
+			
 			if (projectPo != null) {
 				project = MyBeanUtil.createBean(projectPo, ProjectVo.class);
 			}

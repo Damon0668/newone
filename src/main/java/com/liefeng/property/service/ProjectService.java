@@ -29,6 +29,13 @@ public class ProjectService implements IProjectService {
 		ProjectVo projectVo = projectContext.getProject();
 		return projectVo;
 	}
+	
+	@Override
+	public ProjectVo findProjectByFullName(String fullName) {
+		ProjectContext projectContext = ProjectContext.loadByFullName(fullName);
+		ProjectVo projectVo = projectContext.getProject();
+		return projectVo;
+	}
 
 	@Override
 	public void createProject(ProjectVo projectVo) {
