@@ -3,6 +3,7 @@ package com.liefeng.property.service;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IProjectService;
 import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.domain.project.HouseContext;
@@ -38,7 +39,7 @@ public class ProjectService implements IProjectService {
 	}
 
 	@Override
-	public void createProject(ProjectVo projectVo) {
+	public void createProject(ProjectVo projectVo)  throws LiefengException {
 		ProjectContext projectContext = ProjectContext.build(projectVo);
 		projectContext.create();
 	}

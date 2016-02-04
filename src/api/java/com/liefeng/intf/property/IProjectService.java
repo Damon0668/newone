@@ -1,6 +1,7 @@
 package com.liefeng.intf.property;
 
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.project.HouseVo;
@@ -33,7 +34,7 @@ public interface IProjectService {
 	 * 创建项目
 	 * @param projectVo
 	 */
-    public void createProject(ProjectVo projectVo);
+    public void createProject(ProjectVo projectVo) throws LiefengException;
 
 	/**
 	 * 更新项目
