@@ -1,5 +1,7 @@
 package com.liefeng.property.vo.sys;
 
+import java.util.List;
+
 import com.liefeng.core.entity.BaseVoValue;
 
 /**
@@ -31,6 +33,10 @@ public class SysMenuVo extends BaseVoValue{
 	private Long order;
 	
 	private String desc;
+	
+	private int isSelect;
+	
+	private List<SysMenuVo> sonMenus;
 	
 	public Long getId() {
 		return id;
@@ -102,5 +108,21 @@ public class SysMenuVo extends BaseVoValue{
 
 	public void setDesc(String desc) {
 		this.desc = desc;
+	}
+
+	public int getIsSelect() {
+		return isSelect;
+	}
+
+	public void setIsSelect(int isSelect) {
+		this.isSelect = isSelect;
+	}
+
+	public List<SysMenuVo> getSonMenus() {
+		return sonMenus;
+	}
+
+	public void setSonMenus(List<SysMenuVo> sonMenus) {
+		this.sonMenus = sonMenus;
 	}
 }

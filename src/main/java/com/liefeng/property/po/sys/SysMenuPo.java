@@ -31,6 +31,11 @@ public class SysMenuPo extends BaseValue{
 	@Column(name = "parent_id")
 	private Long parentId;
 	
+	/**
+	 * 0	模块
+	 * 1	菜单
+	 * 2	按钮
+	 */
 	@Column(name = "type")
 	private Integer type;
 	
@@ -46,10 +51,10 @@ public class SysMenuPo extends BaseValue{
 	@Column(name = "icon")
 	private String icon;
 	
-	@Column(name = "order")
+	@Column(name = "ord")
 	private Long order;
 	
-	@Column(name = "desc")
+	@Column(name = "description")
 	private String desc;
 	
 	@Column(name = "oem_code")

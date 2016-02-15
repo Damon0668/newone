@@ -53,6 +53,12 @@ public class SysRoleContext {
 		return sysRoleContext;
 	}
 	
+	public SysRoleVo getRole(){
+		SysRolePo sysRolePo = sysRoleRepository.findOne(id);
+		role = MyBeanUtil.createBean(sysRolePo, SysRoleVo.class);
+		return role;
+	}
+	
 	public void create() {
 		SysRolePo sysRolePo = MyBeanUtil.createBean(role, SysRolePo.class);
 		sysRoleRepository.save(sysRolePo);

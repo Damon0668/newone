@@ -16,9 +16,9 @@ public class SysRoleUserVo extends BaseVoValue{
 	
 	private Long id;
 	
-	private Integer roleId;
+	private Long roleId;
 	
-	private Integer userId;
+	private Long userId;
 
 	public Long getId() {
 		return id;
@@ -28,19 +28,19 @@ public class SysRoleUserVo extends BaseVoValue{
 		this.id = id;
 	}
 
-	public Integer getRoleId() {
+	public Long getRoleId() {
 		return roleId;
 	}
 
-	public void setRoleId(Integer roleId) {
+	public void setRoleId(Long roleId) {
 		this.roleId = roleId;
 	}
 
-	public Integer getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Integer userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 }

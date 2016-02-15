@@ -8,9 +8,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
 import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.core.entity.DataValue;
 import com.liefeng.intf.property.ISysSecurityService;
+import com.liefeng.property.domain.sys.SysMenuContext;
 import com.liefeng.property.domain.sys.SysRoleContext;
+import com.liefeng.property.vo.sys.SysMenuVo;
 import com.liefeng.property.vo.sys.SysRoleVo;
 
 /**
@@ -39,5 +40,14 @@ public class SecurityTest {
 		sysRole.setOemCode("test");
 		sysRole.setDescription("test");
 		SysRoleContext.build(sysRole).create();
+	}
+	
+	@Test
+	public void addMenu(){
+		SysMenuVo sysMenu = new SysMenuVo();
+		sysMenu.setOemCode("test");
+		sysMenu.setName("test");
+		sysMenu.setUrl("123");
+		SysMenuContext.build(sysMenu).create();		
 	}
 }

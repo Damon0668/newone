@@ -16,9 +16,9 @@ public class SysRoleMenuVo extends BaseVoValue{
 
 	private Long id;
 	
-	private Integer roleId;
+	private Long roleId;
 
-	private Integer menuId;
+	private Long menuId;
 
 	public Long getId() {
 		return id;
@@ -28,19 +28,19 @@ public class SysRoleMenuVo extends BaseVoValue{
 		this.id = id;
 	}
 
-	public Integer getRoleId() {
+	public Long getRoleId() {
 		return roleId;
 	}
 
-	public void setRoleId(Integer roleId) {
+	public void setRoleId(Long roleId) {
 		this.roleId = roleId;
 	}
 
-	public Integer getMenuId() {
+	public Long getMenuId() {
 		return menuId;
 	}
 
-	public void setMenuId(Integer menuId) {
+	public void setMenuId(Long menuId) {
 		this.menuId = menuId;
 	}
 }
