@@ -17,6 +17,8 @@ import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.property.error.ProjectErrorCode;
+import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.project.ProjectPo;
 import com.liefeng.property.repository.ProjectRepository;
 import com.liefeng.property.vo.project.ProjectVo;
@@ -124,8 +126,15 @@ public class ProjectContext {
 	}
 
 
-	public ProjectVo create() {
-		if(project != null){
+	public ProjectVo create() throws PropertyException {
+		if(project != null) {
+			if(ValidateHelper.isNotEmptyString(project.getFullName())) {
+				if(projectRepository.findByFullNameAndOemCode(project.getFullName(), 
+						ContextManager.getInstance().getOemCode()) != null) {
+					throw new PropertyException(ProjectErrorCode.PROJECT_ALREADY_EXIST);
+				}
+			}
+			
 			project.setId(UUIDGenerator.generate());
             project.setOemCode(ContextManager.getInstance().getOemCode()); 
             project.setCreateTime(new Date());
@@ -133,14 +142,18 @@ public class ProjectContext {
             ProjectPo projectPo = MyBeanUtil.createBean(project, ProjectPo.class);
             projectRepository.save(projectPo);
 		}
+		
 		return project;
 	}
 
 	public ProjectVo update() {
-		if(project != null){
-			ProjectPo projectPo = MyBeanUtil.createBean(project, ProjectPo.class);
+		if(project != null && ValidateHelper.isNotEmptyString(project.getId())) {
+			ProjectPo projectPo = projectRepository.findOne(project.getId());
+			
+			MyBeanUtil.copyBeanNotNull2Bean(project, projectPo);
 			projectRepository.save(projectPo);
 		}
+		
 		return project;
 	}
 
@@ -159,7 +172,7 @@ public class ProjectContext {
 		Page<ProjectVo> voPage = null;
 		
 //		spring-data 的page从0开始
-		Page<ProjectPo> poPage = projectRepository.findByOemCode(
+		Page<ProjectPo> poPage = projectRepository.findByOemCodeOrderByCreateTimeDesc(
 				ContextManager.getInstance().getOemCode(), new PageRequest(page-1, size));
 		voPage = poPage.map(new Po2VoConverter<ProjectPo, ProjectVo>(ProjectVo.class));
 		

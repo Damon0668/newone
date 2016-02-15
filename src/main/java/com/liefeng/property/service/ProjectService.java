@@ -3,6 +3,7 @@ package com.liefeng.property.service;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IProjectService;
 import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.domain.project.HouseContext;
@@ -38,7 +39,7 @@ public class ProjectService implements IProjectService {
 	}
 
 	@Override
-	public void createProject(ProjectVo projectVo) {
+	public void createProject(ProjectVo projectVo)  throws LiefengException {
 		ProjectContext projectContext = ProjectContext.build(projectVo);
 		projectContext.create();
 	}
@@ -63,7 +64,7 @@ public class ProjectService implements IProjectService {
 	}
 
 	@Override
-	public void createProjectBuilding(ProjectBuildingVo projectBuildingVo) {
+	public void createProjectBuilding(ProjectBuildingVo projectBuildingVo) throws LiefengException {
 		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.build(projectBuildingVo);
 		projectBuildingContext.create();
 	}
@@ -108,6 +109,13 @@ public class ProjectService implements IProjectService {
 	public DataPageValue<ProprietorSingleHouseVo> listHouse4Page(HouseBo houseBo, Integer page, Integer size) {
 		HouseContext context = HouseContext.build();
 		return context.listHouse4Page(houseBo, page, size);
+	}
+
+	@Override
+	public ProjectBuildingVo findProjectBuildingById(String projectBuildingId) {
+		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.loadById(projectBuildingId);
+		ProjectBuildingVo projectBuildingVo = projectBuildingContext.getProjectBuilding();
+		return projectBuildingVo;
 	}
 
 }
