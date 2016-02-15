@@ -18,6 +18,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.error.ProjectErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.project.ProjectBuildingPo;
+import com.liefeng.property.po.project.ProjectPo;
 import com.liefeng.property.repository.ProjectBuildingRepository;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
 
@@ -154,8 +155,11 @@ public class ProjectBuildingContext {
 	}
 
 	public ProjectBuildingVo update() {
-		if (projectBuilding != null) {
-			ProjectBuildingPo projectBuildingPo = MyBeanUtil.createBean(projectBuilding, ProjectBuildingPo.class);
+		if (projectBuilding != null && ValidateHelper.isNotEmptyString(projectBuilding.getId())) {
+			
+			ProjectBuildingPo projectBuildingPo = projectBuildingRepository.findOne(projectBuilding.getId());
+			
+			MyBeanUtil.copyBeanNotNull2Bean(projectBuilding, projectBuildingPo);
 			projectBuildingRepository.save(projectBuildingPo);
 		}
 
