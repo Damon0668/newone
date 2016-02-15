@@ -17,7 +17,7 @@ import com.liefeng.property.po.project.ProjectPo;
 @Transactional
 public interface ProjectRepository extends JpaRepository<ProjectPo, String> {
 
-		Page<ProjectPo> findByOemCode(String oemCode, Pageable pageable);
+		Page<ProjectPo> findByOemCodeOrderByCreateTimeDesc(String oemCode, Pageable pageable);
 		
 		/**
 		 * 根据项目全名查找项目

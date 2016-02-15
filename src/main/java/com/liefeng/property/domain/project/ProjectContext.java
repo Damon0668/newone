@@ -147,10 +147,13 @@ public class ProjectContext {
 	}
 
 	public ProjectVo update() {
-		if(project != null){
-			ProjectPo projectPo = MyBeanUtil.createBean(project, ProjectPo.class);
+		if(project != null && ValidateHelper.isNotEmptyString(project.getId())) {
+			ProjectPo projectPo = projectRepository.findOne(project.getId());
+			
+			MyBeanUtil.copyBeanNotNull2Bean(project, projectPo);
 			projectRepository.save(projectPo);
 		}
+		
 		return project;
 	}
 
@@ -169,7 +172,7 @@ public class ProjectContext {
 		Page<ProjectVo> voPage = null;
 		
 //		spring-data 的page从0开始
-		Page<ProjectPo> poPage = projectRepository.findByOemCode(
+		Page<ProjectPo> poPage = projectRepository.findByOemCodeOrderByCreateTimeDesc(
 				ContextManager.getInstance().getOemCode(), new PageRequest(page-1, size));
 		voPage = poPage.map(new Po2VoConverter<ProjectPo, ProjectVo>(ProjectVo.class));
 		

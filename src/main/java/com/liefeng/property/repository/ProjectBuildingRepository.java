@@ -17,6 +17,14 @@ import com.liefeng.property.po.project.ProjectBuildingPo;
  */
 @Transactional
 public interface ProjectBuildingRepository extends JpaRepository<ProjectBuildingPo, String> {
+	
+	/**
+	 * 根据名字和系统标识查找楼栋
+	 * @param name 名称
+	 * @param oemCode 系统标识
+	 * @return
+	 */
+	public ProjectBuildingPo findByNameAndOemCode(String name, String oemCode);
 
     /**
      * 分页查询项目下的楼栋

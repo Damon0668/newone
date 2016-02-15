@@ -13,7 +13,10 @@ import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.property.error.ProjectErrorCode;
+import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.project.ProjectBuildingPo;
 import com.liefeng.property.repository.ProjectBuildingRepository;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
@@ -132,10 +135,17 @@ public class ProjectBuildingContext {
 	/**
 	 * 保存楼栋楼层信息
 	 */
-	public ProjectBuildingVo create() {
+	public ProjectBuildingVo create() throws PropertyException {
 		if (projectBuilding != null) {
+			if(ValidateHelper.isNotEmptyString(projectBuilding.getName())) {
+				if(projectBuildingRepository.findByNameAndOemCode(projectBuilding.getName(), 
+						ContextManager.getInstance().getOemCode()) != null) {
+					throw new PropertyException(ProjectErrorCode.BUILDING_ALREADY_EXIST);
+				}
+			}
+			
 			projectBuilding.setId(UUIDGenerator.generate());
-			projectBuilding.setOemCode(""); // TODO 待确定后补齐
+			projectBuilding.setOemCode(ContextManager.getInstance().getOemCode()); 
 
 			ProjectBuildingPo projectBuildingPo = MyBeanUtil.createBean(projectBuilding, ProjectBuildingPo.class);
 			projectBuildingRepository.save(projectBuildingPo);

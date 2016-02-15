@@ -64,7 +64,7 @@ public class ProjectService implements IProjectService {
 	}
 
 	@Override
-	public void createProjectBuilding(ProjectBuildingVo projectBuildingVo) {
+	public void createProjectBuilding(ProjectBuildingVo projectBuildingVo) throws LiefengException {
 		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.build(projectBuildingVo);
 		projectBuildingContext.create();
 	}

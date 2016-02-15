@@ -64,7 +64,7 @@ public interface IProjectService {
      * 创建楼栋或楼层， parentId=null 为楼栋
      * @param projectBuildingVo
      */
-    void createProjectBuilding(ProjectBuildingVo projectBuildingVo);
+    void createProjectBuilding(ProjectBuildingVo projectBuildingVo) throws LiefengException;
 
     
     /**

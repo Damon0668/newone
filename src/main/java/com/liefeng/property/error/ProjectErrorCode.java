@@ -14,6 +14,15 @@ public enum ProjectErrorCode implements IErrorCode {
 	 */
 	PROJECT_ALREADY_EXIST("项目已存在"),
 	
+	/**
+	 * 楼栋已存在
+	 */
+	BUILDING_ALREADY_EXIST("楼栋已存在"),
+	
+	/**
+	 * 楼层已存在
+	 */
+	FLOOR_ALREADY_EXIST("楼层已存在"),
 	
 	;
 	private String desc;
