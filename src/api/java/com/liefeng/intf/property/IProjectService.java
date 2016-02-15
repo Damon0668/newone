@@ -60,6 +60,14 @@ public interface IProjectService {
      * projectBuilding 楼栋与楼层 ******
      */
     
+    
+	/**
+	 * 通过ID查找具体楼栋楼层
+	 * @param projectBuildingId 楼栋楼层ID
+	 * @return 具体楼栋楼层对象
+	 */
+	public ProjectBuildingVo findProjectBuildingById(String projectBuildingId);
+    
     /**
      * 创建楼栋或楼层， parentId=null 为楼栋
      * @param projectBuildingVo

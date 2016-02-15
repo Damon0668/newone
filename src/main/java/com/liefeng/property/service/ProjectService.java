@@ -111,4 +111,11 @@ public class ProjectService implements IProjectService {
 		return context.listHouse4Page(houseBo, page, size);
 	}
 
+	@Override
+	public ProjectBuildingVo findProjectBuildingById(String projectBuildingId) {
+		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.loadById(projectBuildingId);
+		ProjectBuildingVo projectBuildingVo = projectBuildingContext.getProjectBuilding();
+		return projectBuildingVo;
+	}
+
 }
