@@ -1,5 +1,6 @@
 package com.liefeng.property.vo.sys;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.liefeng.core.entity.BaseVoValue;
@@ -39,7 +40,7 @@ public class SysMenuVo extends BaseVoValue{
 	/**
 	 * 子菜单
 	 */
-	private List<SysMenuVo> subMenus;
+	private List<SysMenuVo> subMenus = new ArrayList<SysMenuVo>();
 	
 	public Long getId() {
 		return id;

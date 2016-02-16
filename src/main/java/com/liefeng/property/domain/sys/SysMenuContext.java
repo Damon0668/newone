@@ -16,10 +16,8 @@ import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.po.sys.SysMenuPo;
-import com.liefeng.property.po.sys.SysRolePo;
 import com.liefeng.property.repository.sys.SysMenuRepository;
 import com.liefeng.property.vo.sys.SysMenuVo;
-import com.liefeng.property.vo.sys.SysRoleVo;
 
 /**
  * 系统角色
@@ -53,9 +51,7 @@ public class SysMenuContext {
 	}
 	
 	public static SysMenuContext build() {
-		SysMenuContext sysMenuContext = getInstance();
-		
-		return sysMenuContext;
+		return getInstance();
 	}
 	
 	public static SysMenuContext build(SysMenuVo sysMenuVo) {
@@ -71,8 +67,12 @@ public class SysMenuContext {
 	}
 	
 	public SysMenuVo getMenu(){
-		SysMenuPo sysMenuPo = sysMenuRepository.findOne(id);
-		sysMenu = MyBeanUtil.createBean(sysMenuPo, SysMenuVo.class);
+		
+		if(id != null && sysMenu == null){
+			SysMenuPo sysMenuPo = sysMenuRepository.findOne(id);
+			sysMenu = MyBeanUtil.createBean(sysMenuPo, SysMenuVo.class);
+		}
+		
 		return sysMenu;
 	}
 	/**
@@ -88,7 +88,6 @@ public class SysMenuContext {
 	 * 批量删除菜单
 	 * @param ids 菜单ID值数组
 	 */
-	@Transactional(rollbackOn = Exception.class)
 	public void delMenus(String[] ids){
 		if(ids != null){
 			
@@ -225,17 +224,17 @@ public class SysMenuContext {
 		
 		if(menuTree == null){
 			
-			List<SysMenuPo> SysMenuPoList = sysMenuRepository.findAll();
+			List<SysMenuPo> AllMenuList = sysMenuRepository.findMenusIgnoreButton();
 			
-			if(SysMenuPoList != null){
+			if(AllMenuList != null){
 				menuTree = new ArrayList<SysMenuVo>();
 			
-				for (SysMenuPo sysMenuPo : SysMenuPoList) {
+				for (SysMenuPo sysMenu : AllMenuList) {
 					
-					if(sysMenuPo.getParentId() == 0){
-						menuTree.add(MyBeanUtil.createBean(sysMenuPo, SysMenuVo.class));
+					if(sysMenu.getParentId() == 0){
+						menuTree.add(MyBeanUtil.createBean(sysMenu, SysMenuVo.class));
 					}else{
-						buildSubMenu(sysMenuPo);
+						buildSubMenu(menuTree, sysMenu);
 					}
 					
 				}
@@ -247,7 +246,19 @@ public class SysMenuContext {
 		return menuTree;
 	}
 
-	private void buildSubMenu(SysMenuPo sysMenuPo){
-		//TODO 设计-二级菜单获取
+	/**
+	 * 构建子菜单
+	 * @param SysMenuList
+	 * @param sysMenuPo
+	 */
+	private void buildSubMenu(List<SysMenuVo> SysMenuList, SysMenuPo sysMenuPo){
+		for (SysMenuVo sysMenuVo : SysMenuList) {
+			if(sysMenuVo.getId() == sysMenuPo.getParentId()){
+				sysMenuVo.getSubMenus().add(MyBeanUtil.createBean(sysMenuPo, SysMenuVo.class));
+				break;
+			}else{
+				buildSubMenu(sysMenuVo.getSubMenus(), sysMenuPo);
+			}
+		}
 	}
 }
