@@ -36,7 +36,10 @@ public class SysMenuVo extends BaseVoValue{
 	
 	private int isSelect;
 	
-	private List<SysMenuVo> sonMenus;
+	/**
+	 * 子菜单
+	 */
+	private List<SysMenuVo> subMenus;
 	
 	public Long getId() {
 		return id;
@@ -118,11 +121,11 @@ public class SysMenuVo extends BaseVoValue{
 		this.isSelect = isSelect;
 	}
 
-	public List<SysMenuVo> getSonMenus() {
-		return sonMenus;
+	public List<SysMenuVo> getSubMenus() {
+		return subMenus;
 	}
 
-	public void setSonMenus(List<SysMenuVo> sonMenus) {
-		this.sonMenus = sonMenus;
+	public void setSubMenus(List<SysMenuVo> subMenus) {
+		this.subMenus = subMenus;
 	}
 }

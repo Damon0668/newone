@@ -50,4 +50,11 @@ public class SecurityTest {
 		sysMenu.setUrl("123");
 		SysMenuContext.build(sysMenu).create();		
 	}
+	
+	@Test
+	public void delMenus(){
+		String[] ids = new String[]{"10"};
+		SysMenuContext.build().delMenus(ids);
+		
+	}
 }

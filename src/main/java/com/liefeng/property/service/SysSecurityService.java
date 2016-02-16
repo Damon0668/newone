@@ -2,6 +2,8 @@ package com.liefeng.property.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import com.liefeng.core.entity.DataPageValue;
@@ -13,6 +15,11 @@ import com.liefeng.property.domain.sys.SysRoleMenuContext;
 import com.liefeng.property.vo.sys.SysMenuVo;
 import com.liefeng.property.vo.sys.SysRoleVo;
 
+/**
+ * 系统权限服务
+ * @author 蔡少东
+ * @date 2016年2月16日
+ */
 @Service
 public class SysSecurityService implements ISysSecurityService{
 
@@ -56,7 +63,14 @@ public class SysSecurityService implements ISysSecurityService{
 
 	@Override
 	public ReturnValue createMenu(SysMenuVo sysMenu) {
-		SysMenuContext.build(sysMenu).create();
+		SysMenuContext sysMenuContext = SysMenuContext.build(sysMenu);
+		sysMenuContext.create();
+		return ReturnValue.success();
+	}
+	
+	@Override
+	public ReturnValue deleteMenus(String[] ids) {
+		SysMenuContext.build().delMenus(ids);
 		return ReturnValue.success();
 	}
 	

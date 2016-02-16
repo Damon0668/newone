@@ -56,7 +56,7 @@ public interface ISysSecurityService {
 	public List<SysMenuVo> listMenuTree();
 	
 	/**
-	 * 查询菜单
+	 * 查询菜单（不包含按钮）
 	 * @param parentId 父ID
 	 * @param type 类型
 	 * @param page
@@ -71,4 +71,11 @@ public interface ISysSecurityService {
 	 * @return
 	 */
 	public ReturnValue createMenu(SysMenuVo sysMenu);
+	
+	/**
+	 * 批量删除菜单
+	 * @param ids 菜单ID数组
+	 * @return
+	 */
+	public ReturnValue deleteMenus(String[] ids);
 }

@@ -53,12 +53,19 @@ public class SysRoleContext {
 		return sysRoleContext;
 	}
 	
+	/**
+	 * 查找角色
+	 * @return
+	 */
 	public SysRoleVo getRole(){
 		SysRolePo sysRolePo = sysRoleRepository.findOne(id);
 		role = MyBeanUtil.createBean(sysRolePo, SysRoleVo.class);
 		return role;
 	}
 	
+	/**
+	 * 创建
+	 */
 	public void create() {
 		SysRolePo sysRolePo = MyBeanUtil.createBean(role, SysRolePo.class);
 		sysRoleRepository.save(sysRolePo);
@@ -68,6 +75,12 @@ public class SysRoleContext {
 		sysRoleRepository.delete(id);
 	}
 	
+	/**
+	 * 查找角色列表
+	 * @param page
+	 * @param size
+	 * @return
+	 */
 	public DataPageValue<SysRoleVo> findRoles(int page, int size) {
 		
 		Page<SysRoleVo> voPage = null;

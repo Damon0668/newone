@@ -48,7 +48,7 @@ public class SysRoleMenuContext {
 	/**
 	 * 删除所有菜单
 	 */
-	public void deleteAllMenu(){
+	public void deleteAll(){
 		sysRoleMenuRepository.deleteAllInBatch();
 	}
 	
@@ -57,7 +57,7 @@ public class SysRoleMenuContext {
 	 * ids以,分割
 	 */
 	public void createMenus(String menuIds){
-		deleteAllMenu();
+		deleteAll();
 		String oemCode = SysRoleContext.loadById(roleId).getRole().getOemCode();
 		String[] menusArray = menuIds.split(",");
 		List<SysRoleMenuPo> roleMenus = new ArrayList<SysRoleMenuPo>();
@@ -94,6 +94,13 @@ public class SysRoleMenuContext {
 		}
 		
 		return menuIds;
+	}
+	
+	/**
+	 * 删除角色--菜单关系
+	 */
+	public void deleteRoleMenu(Long menuId){
+		sysRoleMenuRepository.deleteByMenuId(menuId);
 	}
 	
 	public SysRoleMenuVo getSysRoleMenu() {
