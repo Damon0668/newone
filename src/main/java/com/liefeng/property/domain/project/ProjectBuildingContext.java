@@ -18,7 +18,6 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.error.ProjectErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.project.ProjectBuildingPo;
-import com.liefeng.property.po.project.ProjectPo;
 import com.liefeng.property.repository.ProjectBuildingRepository;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
 
@@ -40,7 +39,7 @@ public class ProjectBuildingContext {
 	private ProjectBuildingRepository projectBuildingRepository;
 
 	/**
-	 * 项目楼栋楼层ID
+	 * 项目楼栋楼层ID 或 以“,”分隔的项目楼栋楼层ID串
 	 */
 	private String projectBuildingId;
 
@@ -138,9 +137,17 @@ public class ProjectBuildingContext {
 	 */
 	public ProjectBuildingVo create() throws PropertyException {
 		if (projectBuilding != null) {
-			if(ValidateHelper.isNotEmptyString(projectBuilding.getName())) {
-				if(projectBuildingRepository.findByNameAndOemCode(projectBuilding.getName(), 
-						ContextManager.getInstance().getOemCode()) != null) {
+			
+			if(ValidateHelper.isNotEmptyString(projectBuilding.getParentId())) { // 校验楼层是否已存在
+				
+				if(projectBuildingRepository.findByParentIdAndName(projectBuilding.getParentId(), 
+						projectBuilding.getName()) != null) {
+					throw new PropertyException(ProjectErrorCode.FLOOR_ALREADY_EXIST);
+				}
+			} else if(ValidateHelper.isNotEmptyString(projectBuilding.getProjectId())) { // 校验楼栋是否已存在
+				
+				if(projectBuildingRepository.findByProjectIdAndName(projectBuilding.getProjectId(), 
+						projectBuilding.getName()) != null) {
 					throw new PropertyException(ProjectErrorCode.BUILDING_ALREADY_EXIST);
 				}
 			}
@@ -166,9 +173,18 @@ public class ProjectBuildingContext {
 		return projectBuilding;
 	}
 
+	/**
+	 * 删除楼栋楼层
+	 */
 	public void delete() {
-		if (projectBuildingId != null)
-			projectBuildingRepository.delete(projectBuildingId);
+		if (projectBuildingId != null) {
+			String[] ids = projectBuildingId.split(",");
+			if(ids != null && ids.length > 0) {
+				for(int i = 0; i< ids.length; i++) {
+					projectBuildingRepository.delete(ids[i]);
+				}
+			}
+		}
 	}
 
 	/**

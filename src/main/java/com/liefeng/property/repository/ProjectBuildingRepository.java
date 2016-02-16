@@ -19,23 +19,31 @@ import com.liefeng.property.po.project.ProjectBuildingPo;
 public interface ProjectBuildingRepository extends JpaRepository<ProjectBuildingPo, String> {
 	
 	/**
-	 * 根据名字和系统标识查找楼栋
-	 * @param name 名称
-	 * @param oemCode 系统标识
+	 * 根据项目ID和楼栋名称查找楼栋
+	 * @param projectId 项目ID
+	 * @param name 楼栋名称
 	 * @return
 	 */
-	public ProjectBuildingPo findByNameAndOemCode(String name, String oemCode);
+	public ProjectBuildingPo findByProjectIdAndName(String projectId, String name);
+	
+	/**
+	 * 根据所属楼栋ID和楼层名称查找楼层
+	 * @param parentId 所属楼栋ID
+	 * @param name 楼层名称
+	 * @return
+	 */
+	public ProjectBuildingPo findByParentIdAndName(String parentId, String name);
 
     /**
      * 分页查询项目下的楼栋
-     * @param projectId 项目id
+     * @param projectId 项目ID
      * @return
      */
 	Page<ProjectBuildingPo> findBuildingsByProjectIdAndParentIdIsNull(String projectId, Pageable pageable);
 	
     /**
      * 分页查询楼栋下的楼层
-     * @param parentId 楼栋id，楼层记录才有parentId
+     * @param parentId 楼栋ID，楼层记录才有parentId
      * @return
      */
     public Page<ProjectBuildingPo> findFloorsByParentId(String parentId, Pageable pageable);
