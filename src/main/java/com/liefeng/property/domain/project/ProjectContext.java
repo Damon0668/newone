@@ -40,7 +40,7 @@ public class ProjectContext {
 	private ProjectRepository projectRepository;
 	
 	/**
-	 * 项目ID
+	 * 项目ID或以“,”分隔的ID串
 	 */
 	private String projectId;
 	
@@ -158,8 +158,14 @@ public class ProjectContext {
 	}
 
 	public void delete() {
-		if(projectId != null)
-            projectRepository.delete(projectId);
+		if(projectId != null) {
+			String[] ids = projectId.split(",");
+			if(ids != null && ids.length > 0) {
+				for(int i=0; i<ids.length; i++) {
+					projectRepository.delete(ids[i]);
+				}
+			}
+		}
 	}
 	
     /**
