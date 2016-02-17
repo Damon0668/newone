@@ -140,22 +140,22 @@
 </select>
 
 <select id="queryByCount"  resultType="java.lang.Long">
-SELECT 
-	  COUNT(1) 
-FROM
-	( SELECT 
-		a.id
-	  FROM 
-	  	property.t_proprietor_house a 
-	  	LEFT JOIN property.t_proprietor b 
-	  	ON a.proprietor_id = b.id 
-	  	LEFT JOIN property.t_house c 
-	  	ON a.project_id = c.project_id AND a.house_num = c.house_num
-	  	LEFT JOIN basic.t_customer d 
-	  	ON b.cust_global_id = d.global_id
-	  	LEFT JOIN property.t_project e 
-	  	ON e.id = a.project_id
-	  <include refid="Example_Where_Clause"/>) AS t
+	SELECT 
+		  COUNT(1) 
+	FROM
+		( SELECT 
+			a.id
+		  FROM 
+		  	property.t_proprietor_house a 
+		  	LEFT JOIN property.t_proprietor b 
+		  	ON a.proprietor_id = b.id 
+		  	LEFT JOIN property.t_house c 
+		  	ON a.project_id = c.project_id AND a.house_num = c.house_num
+		  	LEFT JOIN basic.t_customer d 
+		  	ON b.cust_global_id = d.global_id
+		  	LEFT JOIN property.t_project e 
+		  	ON e.id = a.project_id
+		  <include refid="Example_Where_Clause"/>) AS t
 </select>
 
 <select id="queryProprietorSingleHouse" parameterType="java.lang.String" resultMap="BaseResultMap">
