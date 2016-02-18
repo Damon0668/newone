@@ -1,23 +1,25 @@
 package com.liefeng.property.domain.project;
 
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
-import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.project.HouseSpecBo;
 import com.liefeng.property.po.project.HouseSpecPo;
 import com.liefeng.property.repository.HouseSpecRepository;
+import com.liefeng.property.repository.mybatis.HouseSpecQueryRepository;
 import com.liefeng.property.vo.project.HouseSpecVo;
 
 /**
@@ -33,6 +35,9 @@ public class HouseSpecContext {
 	
 	@Autowired
 	private HouseSpecRepository houseSpecRepository;
+	
+	@Autowired
+	private HouseSpecQueryRepository houseSpecQueryRepository;
 	
 	/**
 	 * 房产规格ID
@@ -143,19 +148,23 @@ public class HouseSpecContext {
 	 * @return
 	 */
 	public DataPageValue<HouseSpecVo> findHouseSpecs4Page(HouseSpecBo params, Integer page, Integer size) {
-		Page<HouseSpecVo> voPage = null;
-		Page<HouseSpecPo> poPage = null;
-
-		if(ValidateHelper.isNotEmptyString(params.getProjectId()) && ValidateHelper.isNotEmptyString(params.getBuildingId())) {
-			// spring-data 的page从0开始
-			poPage = houseSpecRepository.findByProjectIdAndBuildingId(params.getProjectId(), params.getBuildingId(), new PageRequest(page-1, size));
-		} else if(ValidateHelper.isNotEmptyString(params.getProjectId())) {
-			// spring-data 的page从0开始
-			poPage = houseSpecRepository.findByProjectId(params.getProjectId(), new PageRequest(page-1, size));
-		}
+		// 参数拷贝
+		Map<String, String> extra = MyBeanUtil.bean2Map(params);
 		
-		voPage = poPage.map(new Po2VoConverter<HouseSpecPo, HouseSpecVo>(HouseSpecVo.class));
-
-		return new DataPageValue<HouseSpecVo>(voPage.getContent(), voPage.getTotalElements(), size, page);
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		param.setPage(page);
+		param.setPageSize(size);
+		
+		Long count = houseSpecQueryRepository.queryByCount(param);
+		count = (count == null ? 0 : count);
+		logger.info("总数量：count=" + count);
+		
+		// 设置数据总行数，用于计算偏移量
+		param.getPager().setRowCount(count);
+		List<HouseSpecVo> list = houseSpecQueryRepository.queryByPage(param);
+		DataPageValue<HouseSpecVo> returnPage = new DataPageValue<HouseSpecVo>(list, count, size, page);
+		
+		return returnPage;
 	}
 }

@@ -21,11 +21,21 @@ public class HouseSpecVo extends BaseValue {
 	 * 项目ID
 	 */
 	private String projectId;
+	
+	/**
+	 * 项目名称
+	 */
+	private String projectName;
 
 	/**
 	 * 楼栋ID
 	 */
 	private String buildingId;
+	
+	/**
+	 * 楼栋名称
+	 */
+	private String buildingName;
 	
 	/**
 	 * 房号（后两位）
@@ -89,12 +99,28 @@ public class HouseSpecVo extends BaseValue {
 		this.projectId = projectId;
 	}
 
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
 	public String getBuildingId() {
 		return buildingId;
 	}
 
 	public void setBuildingId(String buildingId) {
 		this.buildingId = buildingId;
+	}
+
+	public String getBuildingName() {
+		return buildingName;
+	}
+
+	public void setBuildingName(String buildingName) {
+		this.buildingName = buildingName;
 	}
 
 	public String getNum() {
