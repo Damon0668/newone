@@ -17,6 +17,8 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.project.HouseSpecBo;
+import com.liefeng.property.error.ProjectErrorCode;
+import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.project.HouseSpecPo;
 import com.liefeng.property.repository.HouseSpecRepository;
 import com.liefeng.property.repository.mybatis.HouseSpecQueryRepository;
@@ -114,8 +116,14 @@ public class HouseSpecContext {
 	/**
 	 * 保存房产规格
 	 */
-	public HouseSpecVo create() {
+	public HouseSpecVo create() throws PropertyException {
 		if(houseSpec != null) {
+			
+			if(houseSpecRepository.findByProjectIdAndBuildingIdAndNum(
+			   houseSpec.getProjectId(), houseSpec.getBuildingId(), houseSpec.getNum()) != null) {
+				throw new PropertyException(ProjectErrorCode.HOUSESPEC_ALREADY_EXIST);
+			}
+			
 			houseSpec.setId(UUIDGenerator.generate());
 			houseSpec.setOemCode(ContextManager.getInstance().getOemCode()); 
 			

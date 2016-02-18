@@ -24,6 +24,11 @@ public enum ProjectErrorCode implements IErrorCode {
 	 */
 	FLOOR_ALREADY_EXIST("楼层已存在"),
 	
+	/**
+	 * 房产型已存在
+	 */
+	HOUSESPEC_ALREADY_EXIST("房型已存在"),
+	
 	;
 	private String desc;
 	

@@ -2,8 +2,6 @@ package com.liefeng.property.repository;
 
 import javax.transaction.Transactional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.liefeng.property.po.project.HouseSpecPo;
@@ -18,19 +16,11 @@ import com.liefeng.property.po.project.HouseSpecPo;
 public interface HouseSpecRepository extends JpaRepository<HouseSpecPo, String> {
 	
 	/**
-     * 分页查询项目下的房产规格
-     * @param projectId 项目ID
-     * @return
-     */
-	Page<HouseSpecPo> findByProjectId(String projectId, Pageable pageable);
-	
-	
-	/**
-     * 分页查询项目下的房产规格
-     * @param projectId 项目ID
-     * @param buildingId 楼栋ID
-     * @return
-     */
-	Page<HouseSpecPo> findByProjectIdAndBuildingId(String projectId, String buildingId, Pageable pageable);
-	
+	 * 根据项目ID，楼栋ID和房号尾数查询房产规格
+	 * @param projectId 项目ID
+	 * @param buildingId 楼栋ID
+	 * @param num 房号尾数
+	 * @return
+	 */
+	public HouseSpecPo findByProjectIdAndBuildingIdAndNum(String projectId, String buildingId, String num);
 }

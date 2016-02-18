@@ -65,7 +65,7 @@ where 1=1
 	    hs.building_id as buildingId,
 	    pb.name as buildingName,
 	    hs.num as num,
-	    hs.house_tyoe as houseType,
+	    hs.house_type as houseType,
 	    hs.actual_area as actualArea,
 	    hs.gross_area as grossArea,
 	    hs.usable_area as usableArea,

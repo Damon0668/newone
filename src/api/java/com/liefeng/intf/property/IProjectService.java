@@ -150,7 +150,7 @@ public interface IProjectService {
 	 * 
 	 * @param houseSpec 房产规格值对象
 	 */
-	public void createHouseSpec(HouseSpecVo houseSpec);
+	public void createHouseSpec(HouseSpecVo houseSpec) throws LiefengException;
 
 	/**
 	 * 更新房产规格

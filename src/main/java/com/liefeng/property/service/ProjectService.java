@@ -122,7 +122,7 @@ public class ProjectService implements IProjectService {
 	}
 
 	@Override
-	public void createHouseSpec(HouseSpecVo houseSpec) {
+	public void createHouseSpec(HouseSpecVo houseSpec) throws LiefengException{
 		HouseSpecContext houseSpecContext = HouseSpecContext.build(houseSpec);
 		houseSpecContext.create();
 	}
