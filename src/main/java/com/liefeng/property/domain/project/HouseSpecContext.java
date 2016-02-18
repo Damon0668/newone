@@ -42,7 +42,7 @@ public class HouseSpecContext {
 	private HouseSpecQueryRepository houseSpecQueryRepository;
 	
 	/**
-	 * 房产规格ID
+	 * 房产规格ID 或 以“,”分隔的ID串
 	 */
 	private String houseSpecId;
 
@@ -146,6 +146,20 @@ public class HouseSpecContext {
 		}
 		
 		return houseSpec;
+	}
+	
+	/**
+	 * 更新房产规格
+	 */
+	public void delete() {
+		if(ValidateHelper.isNotEmptyString(houseSpecId)) {
+			String[] ids = houseSpecId.split(",");
+			if(ids != null && ids.length > 0) {
+				for(int i=0; i<ids.length; i++) {
+					houseSpecRepository.delete(ids[i]);
+				}
+			}
+		}
 	}
 	
 	/**

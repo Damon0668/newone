@@ -158,6 +158,13 @@ public interface IProjectService {
 	 * @param houseSpec 房产规格值对象
 	 */
 	public void upateHouseSpec(HouseSpecVo houseSpec);
+	
+	/**
+	 * 更新房产规格
+	 * 
+	 * @param houseSpecId 房产规格ID 或 以“,”分隔的ID串
+	 */
+	public void deleteHouseSpec(String houseSpecId);
 
 	/**
 	 * 分页查询房产规格
