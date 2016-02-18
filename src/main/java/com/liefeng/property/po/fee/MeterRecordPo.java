@@ -123,7 +123,7 @@ public class MeterRecordPo extends BaseValue {
 	 * 数据来源
 	 * 1：WEB；2：Android；3：IOS
 	 */
-	@Column(name = "from")
+	@Column(name = "`from`")
 	private String from;
 
 	/**

@@ -1,5 +1,8 @@
 package com.liefeng.property.domain.fee;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -12,6 +15,7 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.fee.MeterRecordPo;
 import com.liefeng.property.repository.MeterRecordRepository;
 import com.liefeng.property.vo.fee.MeterRecordVo;
@@ -25,94 +29,126 @@ import com.liefeng.property.vo.fee.MeterRecordVo;
 @Service
 @Scope("prototype")
 public class MeterRecordContext {
-	
-	private static Logger logger = LoggerFactory.getLogger(MeterRecordContext.class);
-	
+
+	private static Logger logger = LoggerFactory
+			.getLogger(MeterRecordContext.class);
+
 	@Autowired
 	private MeterRecordRepository meterRecordRepository;
-	
+
 	/**
 	 * 抄表记录ID
 	 */
 	private String meterRecordId;
-	
+
 	/**
 	 * 抄表记录值对象
 	 */
 	private MeterRecordVo meterRecord;
-	
+
 	/**
 	 * 获取本类实例，每次返回一个新对象
+	 * 
 	 * @return 本类实例
 	 */
 	private static MeterRecordContext getInstance() {
 		return SpringBeanUtil.getBean(MeterRecordContext.class);
 	}
-	
+
 	/**
 	 * 根据抄表记录值对象构建上下文
-	 * @param meterRecord 抄表记录值对象
+	 * 
+	 * @param meterRecord
+	 *            抄表记录值对象
 	 * @return 抄表记录上下文
 	 */
 	public static MeterRecordContext build(MeterRecordVo meterRecord) {
 		MeterRecordContext meterRecordContext = getInstance();
 		meterRecordContext.meterRecord = meterRecord;
-		
+
 		return meterRecordContext;
 	}
-	
+
 	/**
 	 * 构建上下文（无参）
+	 * 
 	 * @return 抄表记录上下文
 	 */
 	public static MeterRecordContext build() {
 		MeterRecordContext meterRecordContext = getInstance();
-		
+
 		return meterRecordContext;
 	}
-	
+
 	/**
 	 * 根据抄表记录ID加载上下文
-	 * @param meterRecordId 抄表记录ID
+	 * 
+	 * @param meterRecordId
+	 *            抄表记录ID
 	 * @return 抄表记录上下文
 	 */
 	public static MeterRecordContext loadById(String meterRecordId) {
 		MeterRecordContext meterRecordContext = getInstance();
 		meterRecordContext.meterRecordId = meterRecordId;
-		
+
 		return meterRecordContext;
 	}
-	
+
 	/**
 	 * 查询抄表记录
+	 * 
 	 * @return 抄表记录值对象
 	 */
 	public MeterRecordVo getMeterRecord() {
-		if(meterRecord == null) {
+		if (meterRecord == null) {
 			MeterRecordPo meterRecordPo = null;
-			if(ValidateHelper.isEmptyString(meterRecordId)) {
+			if (ValidateHelper.isEmptyString(meterRecordId)) {
 				meterRecordPo = meterRecordRepository.findOne(meterRecordId);
 			}
-			
-			if(meterRecordPo != null) {
-				meterRecord = MyBeanUtil.createBean(meterRecordPo, MeterRecordVo.class);
+
+			if (meterRecordPo != null) {
+				meterRecord = MyBeanUtil.createBean(meterRecordPo,
+						MeterRecordVo.class);
 			}
 		}
-		
+
 		return meterRecord;
 	}
-	
+
 	/**
 	 * 保存抄表记录
 	 */
 	public void create() {
-		if(meterRecord != null) {
+		if (meterRecord != null) {
+			//获取上个月读数操作
+			if (meterRecord.getPreNum() == null) {
+				  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  
+				Calendar calendar=Calendar.getInstance();
+				calendar.add(calendar.MONTH, -1);
+				
+				MeterRecordPo pre_meterRecordPo;
+				try {
+					pre_meterRecordPo = meterRecordRepository
+							.getPreMeterRecord(meterRecord.getProjectId(),
+									meterRecord.getHouseNum(),sdf.parse(sdf.format(calendar.getTime())));
+
+					if (pre_meterRecordPo != null) {
+						meterRecord.setPreNum(pre_meterRecordPo.getCurrNum());
+					} else {
+						meterRecord.setPreNum(0.00);
+					}
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				
+			}
 			meterRecord.setId(UUIDGenerator.generate());
 			meterRecord.setCreateTime(new Date());
-			
-			MeterRecordPo meterRecordPo = MyBeanUtil.createBean(meterRecord, MeterRecordPo.class);
+            meterRecord.setOemCode("1");
+			MeterRecordPo meterRecordPo = MyBeanUtil.createBean(meterRecord,
+					MeterRecordPo.class);
 			meterRecordRepository.save(meterRecordPo);
 		}
 	}
-	
+
 }
