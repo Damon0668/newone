@@ -28,4 +28,10 @@ public interface SysRoleMenuRepository extends JpaRepository<SysRoleMenuPo, Long
 	 * @param menuId 菜单ID
 	 */
 	public void deleteByMenuId(Long menuId);
+	
+	/**
+	 * 根据角色ID,删除对应关系
+	 * @param roleId
+	 */
+	public void deleteByRoleId(Long roleId);
 }

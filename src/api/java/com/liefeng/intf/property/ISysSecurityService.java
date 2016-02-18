@@ -3,6 +3,7 @@ package com.liefeng.intf.property;
 import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.property.vo.sys.SysMenuVo;
 import com.liefeng.property.vo.sys.SysRoleVo;
@@ -23,11 +24,24 @@ public interface ISysSecurityService {
 	public DataPageValue<SysRoleVo> listRoles4page(String name, String type, int page, int size);
 	
 	/**
+	 * 查询系统角色
+	 * @return
+	 */
+	public List<SysRoleVo> listAllRoles();
+	
+	/**
 	 * 添加系统角色
 	 * @param sysRole
 	 * @return
 	 */
 	public ReturnValue createRole(SysRoleVo sysRole);
+	
+	/**
+	 * 更新系统角色
+	 * @param sysRole
+	 * @return
+	 */
+	public ReturnValue updateRole(SysRoleVo sysRole);
 	
 	/**
 	 * 删除系统角色
@@ -66,6 +80,28 @@ public interface ISysSecurityService {
 	public DataPageValue<SysMenuVo> listMenusIgnoreButton(Long parentId, int page, int size);
 	
 	/**
+	 * 查询菜单（只包含按钮）
+	 * @param parentId 父ID
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public DataPageValue<SysMenuVo> listButtons(Long parentId, int page, int size);
+	
+	/**
+	 * 根据 menuId 查询菜单
+	 * @param menuId 菜单ID
+	 * @return
+	 */
+	public SysMenuVo findMenu(Long menuId);
+	
+	/**
+	 * 根据code 查询菜单
+	 * @param code
+	 * @return
+	 */
+	public SysMenuVo findMenuByCode(String code);
+	/**
 	 * 创建菜单
 	 * @param sysMenu
 	 * @return
@@ -73,9 +109,25 @@ public interface ISysSecurityService {
 	public ReturnValue createMenu(SysMenuVo sysMenu);
 	
 	/**
+	 * 更新菜单
+	 * @param sysMenu
+	 * @return
+	 */
+	public ReturnValue updateMenu(SysMenuVo sysMenu);
+	
+	/**
 	 * 批量删除菜单
 	 * @param ids 菜单ID数组
 	 * @return
 	 */
 	public ReturnValue deleteMenus(String[] ids);
+	
+	
+	/**
+	 * 授权用户角色
+	 * @param userId 用户ID
+	 * @param roleIds 角色ID
+	 * @return
+	 */
+	public ReturnValue gruntRoleUser(String userId, Long[] roleIds);
 }

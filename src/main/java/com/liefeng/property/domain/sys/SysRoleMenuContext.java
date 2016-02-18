@@ -28,6 +28,10 @@ public class SysRoleMenuContext {
 	private Long roleId;
 	
 	private SysRoleMenuVo sysRoleMenu;
+	
+	protected void setRoleId(Long roleId) {
+		this.roleId = roleId;
+	}
 
 	private static SysRoleMenuContext getInstance() {
 		return SpringBeanUtil.getBean(SysRoleMenuContext.class);
@@ -41,15 +45,15 @@ public class SysRoleMenuContext {
 	
 	public static SysRoleMenuContext loadByRoleId(Long roleId){
 		SysRoleMenuContext sysRoleMenuContext = getInstance();
-		sysRoleMenuContext.roleId = roleId;
+		sysRoleMenuContext.setRoleId(roleId);
 		return sysRoleMenuContext;
 	}
 	
 	/**
 	 * 删除所有菜单
 	 */
-	public void deleteAll(){
-		sysRoleMenuRepository.deleteAllInBatch();
+	public void deleteByRoleId(){
+		sysRoleMenuRepository.deleteByRoleId(roleId);
 	}
 	
 	/**
@@ -57,18 +61,26 @@ public class SysRoleMenuContext {
 	 * ids以,分割
 	 */
 	public void createMenus(String menuIds){
-		deleteAll();
-		String oemCode = SysRoleContext.loadById(roleId).getRole().getOemCode();
-		String[] menusArray = menuIds.split(",");
-		List<SysRoleMenuPo> roleMenus = new ArrayList<SysRoleMenuPo>();
-		for (int i = 0; i < menusArray.length; i++) {
-			SysRoleMenuPo sysRoleMenuPo= new SysRoleMenuPo();
-			sysRoleMenuPo.setRoleId(roleId);
-			sysRoleMenuPo.setMenuId(Long.parseLong(menusArray[i]));
-			sysRoleMenuPo.setOemCode(oemCode);
-			roleMenus.add(sysRoleMenuPo);
+		if(roleId != null && menuIds != null && !"".equals(menuIds)){
+			
+			deleteByRoleId();
+			
+			String oemCode = SysRoleContext.loadById(roleId).findRole().getOemCode();
+			
+			String[] menusArray = menuIds.split(",");
+			
+			List<SysRoleMenuPo> roleMenus = new ArrayList<SysRoleMenuPo>();
+			
+			for (int i = 0; i < menusArray.length; i++) {
+				SysRoleMenuPo sysRoleMenuPo= new SysRoleMenuPo();
+				sysRoleMenuPo.setRoleId(roleId);
+				sysRoleMenuPo.setMenuId(Long.parseLong(menusArray[i]));
+				sysRoleMenuPo.setOemCode(oemCode);
+				roleMenus.add(sysRoleMenuPo);
+			}
+			
+			sysRoleMenuRepository.save(roleMenus);
 		}
-		sysRoleMenuRepository.save(roleMenus);
 	}
 	
 	/**
@@ -101,13 +113,5 @@ public class SysRoleMenuContext {
 	 */
 	public void deleteRoleMenu(Long menuId){
 		sysRoleMenuRepository.deleteByMenuId(menuId);
-	}
-	
-	public SysRoleMenuVo getSysRoleMenu() {
-		return sysRoleMenu;
-	}
-
-	public void setSysRoleMenu(SysRoleMenuVo sysRoleMenu) {
-		this.sysRoleMenu = sysRoleMenu;
 	}
 }

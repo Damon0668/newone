@@ -21,6 +21,8 @@ public class SysMenuVo extends BaseVoValue{
 	
 	private Long parentId;
 	
+	private String parentName;
+	
 	private Integer type;
 	
 	private String name;
@@ -128,5 +130,13 @@ public class SysMenuVo extends BaseVoValue{
 
 	public void setSubMenus(List<SysMenuVo> subMenus) {
 		this.subMenus = subMenus;
+	}
+
+	public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
 	}
 }

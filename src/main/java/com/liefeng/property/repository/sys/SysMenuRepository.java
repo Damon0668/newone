@@ -30,6 +30,15 @@ public interface SysMenuRepository extends JpaRepository<SysMenuPo, Long>{
 	public Page<SysMenuPo> findMenusIgnoreButton(@Param("parentId")Long parentId, Pageable pageable);
 	
 	/**
+	 * 查询菜单（只是按钮类型）
+	 * @param parentId 父ID
+	 * @param pageable 分页对象
+	 * @return
+	 */
+	@Query("select m from SysMenuPo m where m.parentId=:parentId and m.type = 2 order by m.id asc")
+	public Page<SysMenuPo> findButtons(@Param("parentId")Long parentId, Pageable pageable);
+	
+	/**
 	 * 查询菜单（不包含按钮）
 	 * @return
 	 */
@@ -42,4 +51,11 @@ public interface SysMenuRepository extends JpaRepository<SysMenuPo, Long>{
 	 * @return 子菜单列表
 	 */
 	public List<SysMenuPo> findByParentId(Long parentId);
+	
+	/**
+	 * 查询菜单
+	 * @param code 编码字段
+	 * @return
+	 */
+	public SysMenuPo findByCode(String code);
 }

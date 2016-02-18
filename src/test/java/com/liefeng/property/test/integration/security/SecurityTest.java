@@ -48,13 +48,15 @@ public class SecurityTest {
 		sysMenu.setOemCode("test");
 		sysMenu.setName("test");
 		sysMenu.setUrl("123");
-		SysMenuContext.build(sysMenu).create();		
+		SysMenuContext sysMenuContext = SysMenuContext.build(sysMenu);
+		sysMenuContext.create();		
 	}
 	
 	@Test
 	public void delMenus(){
 		String[] ids = new String[]{"10"};
-		SysMenuContext.build().delMenus(ids);
+		SysMenuContext sysMenuContext = SysMenuContext.build();
+		sysMenuContext.delMenus(ids);
 		
 	}
 }

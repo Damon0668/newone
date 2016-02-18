@@ -7,11 +7,13 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.ISysSecurityService;
 import com.liefeng.property.domain.sys.SysMenuContext;
 import com.liefeng.property.domain.sys.SysRoleContext;
 import com.liefeng.property.domain.sys.SysRoleMenuContext;
+import com.liefeng.property.domain.sys.SysRoleUserContext;
 import com.liefeng.property.vo.sys.SysMenuVo;
 import com.liefeng.property.vo.sys.SysRoleVo;
 
@@ -25,7 +27,7 @@ public class SysSecurityService implements ISysSecurityService{
 
 	@Override
 	public DataPageValue<SysRoleVo> listRoles4page(String name, String type, int page, int size) {
-		return SysRoleContext.build().findRoles(page, size);
+		return SysRoleContext.build().findRolesByName4page(name, page, size);
 	}
 
 	@Override
@@ -71,6 +73,44 @@ public class SysSecurityService implements ISysSecurityService{
 	@Override
 	public ReturnValue deleteMenus(String[] ids) {
 		SysMenuContext.build().delMenus(ids);
+		return ReturnValue.success();
+	}
+
+	@Override
+	public SysMenuVo findMenu(Long menuId) {
+		return SysMenuContext.loadById(menuId).getMenu();
+	}
+
+	@Override
+	public SysMenuVo findMenuByCode(String code) {
+		return SysMenuContext.loadByCode(code).getMenu();
+	}
+
+	@Override
+	public DataPageValue<SysMenuVo> listButtons(Long parentId, int page, int size) {
+		return SysMenuContext.build().findButtons(parentId, page, size);
+	}
+
+	@Override
+	public ReturnValue updateMenu(SysMenuVo sysMenu) {
+		SysMenuContext.build(sysMenu).update();
+		return ReturnValue.success();
+	}
+
+	@Override
+	public List<SysRoleVo> listAllRoles() {
+		return SysRoleContext.build().findAll();
+	}
+
+	@Override
+	public ReturnValue gruntRoleUser(String userId, Long[] roleIds) {
+		SysRoleUserContext.loadByUserId(userId).gruntRoles(roleIds);
+		return ReturnValue.success();
+	}
+
+	@Override
+	public ReturnValue updateRole(SysRoleVo sysRole) {
+		SysRoleContext.build(sysRole).update();
 		return ReturnValue.success();
 	}
 	
