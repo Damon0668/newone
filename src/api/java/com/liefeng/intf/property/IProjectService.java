@@ -167,4 +167,11 @@ public interface IProjectService {
 	 * @return
 	 */
 	public DataPageValue<HouseSpecVo> listHouseSpec4Page(HouseSpecBo params, Integer page, Integer size);
+	
+	/**
+	 * 根据ID查询房产规格
+	 * @param houseSpecId 房产规格ID
+	 * @return
+	 */
+	public HouseSpecVo findHouseSpecById(String houseSpecId);
 }

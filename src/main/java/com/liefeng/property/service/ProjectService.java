@@ -139,5 +139,18 @@ public class ProjectService implements IProjectService {
 		DataPageValue<HouseSpecVo> dataPage = houseSpecContext.findHouseSpecs4Page(params, page, size);
 		return dataPage;
 	}
+	
+	@Override
+	public HouseSpecVo findHouseSpecById(String houseSpecId) {
+		HouseSpecContext houseSpecContext = HouseSpecContext.loadById(houseSpecId);
+		HouseSpecVo houseSpecVo = houseSpecContext.getHouseSpec();
+		
+		ProjectContext projectContext = ProjectContext.loadById(houseSpecVo.getProjectId());
+		ProjectVo projectVo = projectContext.getProject();
+		
+		houseSpecVo.setProjectName(projectVo.getFullName());
+		
+		return houseSpecVo;
+	}
 
 }
