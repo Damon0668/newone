@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.HouseSpecQueryRepository" > 
+
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.project.HouseSpecVo" >
+	<result column="id" property="id"/>
+	<result column="projectId" property="projectId"/>
+	<result column="projectName" property="projectName"/>
+	<result column="buildingId" property="buildingId"/>
+	<result column="buildingName" property="buildingName"/>
+	<result column="num" property="num"/>
+	<result column="houseType" property="houseType"/>
+	<result column="actualArea" property="actualArea"/>		
+	<result column="grossArea" property="grossArea"/>
+	<result column="usableArea" property="usableArea"/>
+	<result column="apportionArea" property="apportionArea"/>
+	<result column="propertyFee" property="propertyFee"/>
+	<result column="ownership" property="ownership"/>
+	<result column="oemCode" property="oemCode"/>
+</resultMap>
+
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1 
+<trim  suffixOverrides="," >
+	<if test="extra.oemCode != null and extra.oemCode != ''" >
+	    and hs.oem_code = #{extra.oemCode}
+	</if>
+	
+	<if test="extra.projectId != null and extra.projectId != ''" >
+	    AND hs.project_id =  #{extra.projectId}
+	</if>
+	
+	<if test="extra.buildingId != null and extra.buildingId != ''" >
+	    AND hs.building_id = #{extra.buildingId}
+	</if>
+</trim>
+</sql>
+
+<select id="queryByCount"  resultType="java.lang.Long">
+	select
+	  count(1)
+	from (
+		select
+		    hs.id
+		from
+		    property.t_house_spec hs 
+			left join property.t_project p 
+			on hs.project_id = p.id 
+			left join property.t_project_building pb 
+			on hs.building_id = pb.id
+			<include refid="Example_Where_Clause"/>
+	) as ttt
+</select>
+
+<select id="queryByPage" resultMap="BaseResultMap">
+	  select
+	    hs.id as id,
+	    hs.project_id as projectId,
+	    p.full_name as projectName,
+	    hs.building_id as buildingId,
+	    pb.name as buildingName,
+	    hs.num as num,
+	    hs.house_type as houseType,
+	    hs.actual_area as actualArea,
+	    hs.gross_area as grossArea,
+	    hs.usable_area as usableArea,
+	    hs.apportion_area as apportionArea,
+	    hs.property_fee as propertyFee,
+	    hs.ownership as ownership,
+	    hs.oem_code as oemCode 
+	  from
+	    property.t_house_spec hs 
+		left join property.t_project p 
+		on hs.project_id = p.id 
+		left join property.t_project_building pb 
+		on hs.building_id = pb.id
+	  <include refid="Example_Where_Clause"/>
+      <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+         ${pager.mysqlQueryCondition}
+      </if>
+</select>
+
+</mapper>   

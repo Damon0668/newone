@@ -6,10 +6,13 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IProjectService;
 import com.liefeng.property.bo.project.HouseBo;
+import com.liefeng.property.bo.project.HouseSpecBo;
 import com.liefeng.property.domain.project.HouseContext;
+import com.liefeng.property.domain.project.HouseSpecContext;
 import com.liefeng.property.domain.project.ProjectBuildingContext;
 import com.liefeng.property.domain.project.ProjectContext;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
+import com.liefeng.property.vo.project.HouseSpecVo;
 import com.liefeng.property.vo.project.HouseVo;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
 import com.liefeng.property.vo.project.ProjectVo;
@@ -116,6 +119,44 @@ public class ProjectService implements IProjectService {
 		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.loadById(projectBuildingId);
 		ProjectBuildingVo projectBuildingVo = projectBuildingContext.getProjectBuilding();
 		return projectBuildingVo;
+	}
+
+	@Override
+	public void createHouseSpec(HouseSpecVo houseSpec) throws LiefengException{
+		HouseSpecContext houseSpecContext = HouseSpecContext.build(houseSpec);
+		houseSpecContext.create();
+	}
+
+	@Override
+	public void upateHouseSpec(HouseSpecVo houseSpec) {
+		HouseSpecContext houseSpecContext = HouseSpecContext.build(houseSpec);
+		houseSpecContext.update();
+	}
+
+	@Override
+	public DataPageValue<HouseSpecVo> listHouseSpec4Page(HouseSpecBo params, Integer page, Integer size) {
+		HouseSpecContext houseSpecContext = HouseSpecContext.build();
+		DataPageValue<HouseSpecVo> dataPage = houseSpecContext.findHouseSpecs4Page(params, page, size);
+		return dataPage;
+	}
+	
+	@Override
+	public HouseSpecVo findHouseSpecById(String houseSpecId) {
+		HouseSpecContext houseSpecContext = HouseSpecContext.loadById(houseSpecId);
+		HouseSpecVo houseSpecVo = houseSpecContext.getHouseSpec();
+		
+		ProjectContext projectContext = ProjectContext.loadById(houseSpecVo.getProjectId());
+		ProjectVo projectVo = projectContext.getProject();
+		
+		houseSpecVo.setProjectName(projectVo.getFullName());
+		
+		return houseSpecVo;
+	}
+
+	@Override
+	public void deleteHouseSpec(String houseSpecId) {
+		HouseSpecContext houseSpecContext = HouseSpecContext.loadById(houseSpecId);
+		houseSpecContext.delete();
 	}
 
 }
