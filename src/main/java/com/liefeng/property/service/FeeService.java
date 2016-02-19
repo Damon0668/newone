@@ -2,14 +2,12 @@ package com.liefeng.property.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IFeeService;
 import com.liefeng.property.domain.fee.MeterRecordContext;
 import com.liefeng.property.domain.fee.MeterSettingContext;
-import com.liefeng.property.po.fee.MeterSettingPo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
 import com.liefeng.property.vo.fee.MeterSettingVo;
 
@@ -50,9 +48,13 @@ public class FeeService implements IFeeService{
 	}
 
 	@Override
-	public DataPageValue<MeterSettingPo> findMeterSetting4Page(String projectId,Integer pageSize,Integer currentPage){
+	public DataPageValue<MeterSettingVo> findMeterSetting4Page(String projectId,Integer pageSize,Integer currentPage){
 		MeterSettingContext meterSettingContext=MeterSettingContext.loadByProjectId(projectId);
 		return meterSettingContext.findByProjectId(pageSize, currentPage);
+		
+		
+		
+		
 	}
 
 	@Override

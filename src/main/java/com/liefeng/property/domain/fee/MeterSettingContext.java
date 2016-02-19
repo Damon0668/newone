@@ -1,10 +1,5 @@
 package com.liefeng.property.domain.fee;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +10,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
-import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.core.mybatis.vo.PagingParamVo;
-import com.liefeng.property.po.fee.FeeRecordPo;
 import com.liefeng.property.po.fee.MeterSettingPo;
+import com.liefeng.property.po.project.ProjectBuildingPo;
 import com.liefeng.property.repository.MeterSettingRepository;
 import com.liefeng.property.vo.fee.MeterRecordVo;
 import com.liefeng.property.vo.fee.MeterSettingVo;
-import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
 
 /**
@@ -125,12 +118,15 @@ public class MeterSettingContext {
 	/**
 	 * 根据项目获取所以仪表
 	 */
-	public  DataPageValue<MeterSettingPo> findByProjectId(Integer pageSize, Integer currentPage){
-		
+	public  DataPageValue<MeterSettingVo> findByProjectId(Integer pageSize, Integer currentPage){
+		Page<MeterSettingVo> voPage = null;
+
+		// spring-data 的page从0开始
 		Pageable pageable=new PageRequest(currentPage - 1, pageSize);
 		Page<MeterSettingPo> meterSettingPage = meterSettingRepository.findByProjectId(projectId,pageable);
+		voPage = meterSettingPage.map(new Po2VoConverter<MeterSettingPo, MeterSettingVo>(MeterSettingVo.class));
 		
-		return new DataPageValue<MeterSettingPo>(meterSettingPage.getContent(),meterSettingPage.getTotalElements(), pageSize, currentPage);
+		return new DataPageValue<MeterSettingVo>(voPage.getContent(), voPage.getTotalElements(), pageSize, currentPage);
 	}
 
 	/**

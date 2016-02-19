@@ -145,6 +145,7 @@ public class ProjectService implements IProjectService {
 		HouseSpecContext houseSpecContext = HouseSpecContext.loadById(houseSpecId);
 		HouseSpecVo houseSpecVo = houseSpecContext.getHouseSpec();
 		
+		// 设置项目名称
 		ProjectContext projectContext = ProjectContext.loadById(houseSpecVo.getProjectId());
 		ProjectVo projectVo = projectContext.getProject();
 		

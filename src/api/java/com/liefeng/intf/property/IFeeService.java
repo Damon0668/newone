@@ -1,9 +1,6 @@
 package com.liefeng.intf.property;
 
-import org.springframework.data.domain.Page;
-
 import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.property.po.fee.MeterSettingPo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
 import com.liefeng.property.vo.fee.MeterSettingVo;
 
@@ -44,7 +41,7 @@ public interface IFeeService {
 	 * @param i
 	 * @param j
 	 */
-	public DataPageValue<MeterSettingPo> findMeterSetting4Page(String string,Integer pageSize,Integer currentPage);
+	public DataPageValue<MeterSettingVo> findMeterSetting4Page(String string,Integer pageSize,Integer currentPage);
 
 	/**
 	 * 根据id获取仪表设置

@@ -48,7 +48,8 @@ where 1=1
 	</if>
 	
 	<if test="extra.name != null and extra.name  != ''" >
-	    AND p.name = #{extra.name }
+	    AND p.name like CONCAT('%', #{extra.name },'%')
+	   
 	</if>
 </trim>
 </sql>
