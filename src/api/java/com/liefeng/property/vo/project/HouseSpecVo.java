@@ -38,6 +38,11 @@ public class HouseSpecVo extends BaseValue {
 	private String buildingName;
 	
 	/**
+	 * 楼栋编码
+	 */
+	private String buildingCode;
+	
+	/**
 	 * 房号（后两位）
 	 */
 	private String num;
@@ -121,6 +126,14 @@ public class HouseSpecVo extends BaseValue {
 
 	public void setBuildingName(String buildingName) {
 		this.buildingName = buildingName;
+	}
+
+	public String getBuildingCode() {
+		return buildingCode;
+	}
+
+	public void setBuildingCode(String buildingCode) {
+		this.buildingCode = buildingCode;
 	}
 
 	public String getNum() {

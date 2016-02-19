@@ -21,6 +21,7 @@
 	<result column="ownership" property="ownership"/>
 	<result column="pay_type" property="payType"/>
 	<result column="name" property="name"/>
+	<result column="proprietorId" property="proprietorId"/>
 </resultMap>
 
 <!-- 查询条件 -->
@@ -60,7 +61,6 @@ SELECT
 FROM
 	  (
 	  SELECT
-	  
 	  	  h.id,h.house_num,h.project_id,building_id,floor_id,house_type,
 	      actual_area,gross_area,usable_area,apportion_area,
 	      property_fee,sale_status,ownership,
@@ -82,7 +82,8 @@ FROM
 	      actual_area,gross_area,usable_area,apportion_area,
 	      property_fee,sale_status,ownership,
 	      pay_type,
-	      name
+	      name,
+	      p.id as proprietorId
 	  FROM
 	      property.t_house h
 	      left join property.t_proprietor_house ph

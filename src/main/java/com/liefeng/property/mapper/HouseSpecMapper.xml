@@ -12,6 +12,7 @@
 	<result column="projectName" property="projectName"/>
 	<result column="buildingId" property="buildingId"/>
 	<result column="buildingName" property="buildingName"/>
+	<result column="buildingCode" property="buildingCode"/>
 	<result column="num" property="num"/>
 	<result column="houseType" property="houseType"/>
 	<result column="actualArea" property="actualArea"/>		
@@ -64,6 +65,7 @@ where 1=1
 	    p.full_name as projectName,
 	    hs.building_id as buildingId,
 	    pb.name as buildingName,
+	    pb.code as buildingCode,
 	    hs.num as num,
 	    hs.house_type as houseType,
 	    hs.actual_area as actualArea,
