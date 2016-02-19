@@ -102,7 +102,7 @@ public class FeeServiceTest {
 	 */
 	@Test
 	public void findAllByProjectId(){
-		DataPageValue<MeterSettingPo> page=feeService.findMeterSetting4Page("1",1,1);
+		DataPageValue<MeterSettingVo> page=feeService.findMeterSetting4Page("1",1,1);
 		System.out.println(page);
 	}
 	

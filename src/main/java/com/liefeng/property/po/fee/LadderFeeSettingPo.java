@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.liefeng.core.entity.BaseValue;
@@ -29,7 +30,7 @@ public class LadderFeeSettingPo extends BaseValue {
 	/**
 	 * 主键
 	 */
-	@Column(name = "id")
+	@Id
 	private String id;
 
 	/**
