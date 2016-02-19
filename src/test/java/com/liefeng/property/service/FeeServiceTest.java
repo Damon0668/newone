@@ -29,7 +29,7 @@ import com.liefeng.property.vo.fee.MeterSettingVo;
  * Description:费用抄表服务测试类
  * Company:广州列丰科技有限公司
  * Copyright: Copyright (c) 2015
- * @author  吴志敬        
+ * @author  wuzhijing
  * @version 1.0      
  * @created 2016年2月18日上午9:09:06
  * </pre>
@@ -143,5 +143,14 @@ public class FeeServiceTest {
 	@Test
 	public void deleteMeterSetting() {
 		feeService.deleteMeterSetting("4028895e52f3ed7c0152f3ed7cf80000");
+	}
+
+	@Autowired
+	private ProjectService projectService;
+	
+	@Test
+	public void listProjects(){
+		ContextManager.getInstance().setOemCode("liefeng");
+		System.out.println(projectService.listProjects());
 	}
 }

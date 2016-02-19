@@ -1,5 +1,7 @@
 package com.liefeng.property.repository;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
@@ -26,4 +28,10 @@ public interface ProjectRepository extends JpaRepository<ProjectPo, String> {
 		 * @return 具体项目
 		 */
 		ProjectPo findByFullNameAndOemCode(String fullName, String oemCode);
+
+		/**
+		 * 查询某个oem下的所有项目列表
+		 * @param oemCode
+		 */
+		List<ProjectPo> findByOemCode(String oemCode);
 }

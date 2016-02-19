@@ -1,5 +1,7 @@
 package com.liefeng.property.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.liefeng.core.entity.DataPageValue;
@@ -58,6 +60,12 @@ public class ProjectService implements IProjectService {
 	public void deleteProject(String projectId) {
 		ProjectContext projectContext = ProjectContext.loadById(projectId);
 		projectContext.delete();
+	}
+	
+	@Override
+	public List<ProjectVo> listProjects(){
+		ProjectContext projectContext = ProjectContext.build();
+		return projectContext.listProjects();
 	}
 
 	@Override
@@ -160,4 +168,5 @@ public class ProjectService implements IProjectService {
 		houseSpecContext.delete();
 	}
 
+	
 }

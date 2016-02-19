@@ -1,5 +1,7 @@
 package com.liefeng.intf.property;
 
+import java.util.List;
+
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.project.HouseBo;
@@ -54,6 +56,12 @@ public interface IProjectService {
 	 * @param projectVo
 	 */
 	public void deleteProject(String projectId);
+
+	/**
+	 * 获取oem下所有的项目列表
+	 * @return
+	 */
+	public List<ProjectVo> listProjects();
 
 	/**
 	 * 分页查询项目
@@ -181,4 +189,6 @@ public interface IProjectService {
 	 * @return
 	 */
 	public HouseSpecVo findHouseSpecById(String houseSpecId);
+
+	
 }

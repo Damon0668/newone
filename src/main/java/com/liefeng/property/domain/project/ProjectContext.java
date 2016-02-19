@@ -1,6 +1,7 @@
 package com.liefeng.property.domain.project;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.error.ProjectErrorCode;
 import com.liefeng.property.exception.PropertyException;
@@ -185,5 +187,14 @@ public class ProjectContext {
 		return new DataPageValue<ProjectVo>(voPage.getContent(), voPage.getTotalElements(),
 				size, page);
 		
+	}
+	
+	/**
+	 * 查询某个oem下的所有项目列表
+	 */
+	public List<ProjectVo> listProjects(){
+		String oemCode = ContextManager.getInstance().getOemCode();
+		List<ProjectPo> projectPoList = projectRepository.findByOemCode(oemCode);
+		return MyBeanUtil.createList(projectPoList, ProjectVo.class);
 	}
 }
