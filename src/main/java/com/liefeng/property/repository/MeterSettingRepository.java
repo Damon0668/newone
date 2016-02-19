@@ -33,4 +33,12 @@ public interface MeterSettingRepository extends JpaRepository<MeterSettingPo, St
 	public Page<MeterSettingPo> findByProjectId(String projectId,
 			Pageable pageable);
 
+	/**
+	 * 根据项目id仪表类型查询仪表设置
+	 * @param projectId
+	 * @param type
+	 * @return
+	 */
+	public Object findByProjectIdAndType(String projectId, String type);
+
 }

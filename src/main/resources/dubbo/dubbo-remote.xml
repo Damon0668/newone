@@ -20,5 +20,8 @@
       
       <!-- 家庭相关服务  -->
       <dubbo:service interface="com.liefeng.intf.property.IHouseholdService" ref="householdService" />
-
+	
+	  <!-- 费用抄表服务  -->
+      <dubbo:service interface="com.liefeng.intf.property.IFeeService" ref="feeService" />
+	  
 </beans>

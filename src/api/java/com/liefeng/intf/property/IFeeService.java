@@ -48,10 +48,16 @@ public interface IFeeService {
 	 * @param id
 	 * @return
 	 */
-	public MeterRecordVo findMeterRecordById(String id);
+	public MeterSettingVo findMeterSettingById(String id);
 
 	/**
 	 * 修改仪表设置
 	 */
-	public void updateMeterRecord(MeterSettingVo meterSettingVo);
+	public void updateMeterSetting(MeterSettingVo meterSettingVo);
+
+	/**
+	 * 删除仪表设置
+	 * @param id
+	 */
+	public void deleteMeterSetting(String id);
 }

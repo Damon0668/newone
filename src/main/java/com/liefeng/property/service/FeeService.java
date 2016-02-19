@@ -46,29 +46,29 @@ public class FeeService implements IFeeService{
 		MeterSettingContext meterSettingContext=MeterSettingContext.build(meterSettingVo);
 		meterSettingContext.save();
 	}
+	
+	@Override
+	public void deleteMeterSetting(String id){
+		MeterSettingContext meterSettingContext=MeterSettingContext.loadById(id);
+		meterSettingContext.delete();
+	}
 
 	@Override
 	public DataPageValue<MeterSettingVo> findMeterSetting4Page(String projectId,Integer pageSize,Integer currentPage){
 		MeterSettingContext meterSettingContext=MeterSettingContext.loadByProjectId(projectId);
 		return meterSettingContext.findByProjectId(pageSize, currentPage);
-		
-		
-		
-		
 	}
 
 	@Override
-	public MeterRecordVo findMeterRecordById(String id) {
+	public MeterSettingVo findMeterSettingById(String id) {
 		MeterSettingContext meterSettingContext=MeterSettingContext.loadById(id);
 		return meterSettingContext.findById();
 	}
 
 	@Override
-	public void updateMeterRecord(MeterSettingVo meterSettingVo) {
+	public void updateMeterSetting(MeterSettingVo meterSettingVo) {
 		MeterSettingContext meterSettingContext=MeterSettingContext.build(meterSettingVo);
 		meterSettingContext.update();
 	}
-
-	
 
 }

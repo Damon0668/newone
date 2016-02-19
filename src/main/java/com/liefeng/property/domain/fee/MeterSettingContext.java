@@ -15,6 +15,8 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.property.error.FeeErrorCode;
+import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.MeterSettingPo;
 import com.liefeng.property.po.project.ProjectBuildingPo;
 import com.liefeng.property.repository.MeterSettingRepository;
@@ -24,7 +26,7 @@ import com.liefeng.property.vo.project.ProjectBuildingVo;
 
 /**
  * 
- * <pre>      
+ * <pre>
  * Title 仪表设置领域模型:
  * Description:
  * Company:广州列丰科技有限公司
@@ -38,36 +40,39 @@ import com.liefeng.property.vo.project.ProjectBuildingVo;
 @Scope("prototype")
 public class MeterSettingContext {
 
-	private static Logger logger = LoggerFactory.getLogger(MeterSettingContext.class);
+	private static Logger logger = LoggerFactory
+			.getLogger(MeterSettingContext.class);
 
 	@Autowired
 	private MeterSettingRepository meterSettingRepository;
-	
+
 	/**
 	 * 仪表设置对象
 	 */
 	private MeterSettingVo meterSetting;
-	
+
 	/**
 	 * 项目id
 	 */
 	private String projectId;
-	
+
 	/**
 	 * ID
 	 */
 	private String id;
-	
+
 	/**
 	 * 获取本类实例，每次返回一个新对象
+	 * 
 	 * @return 本类实例
 	 */
 	private static MeterSettingContext getInstance() {
 		return SpringBeanUtil.getBean(MeterSettingContext.class);
 	}
-	
+
 	/**
 	 * 构建上下文
+	 * 
 	 * @return 仪表设置上下文
 	 */
 	public static MeterSettingContext build(MeterSettingVo meterSetting) {
@@ -75,21 +80,25 @@ public class MeterSettingContext {
 		meterSettingContext.setMeterSetting(meterSetting);
 		return meterSettingContext;
 	}
+
 	/**
 	 * 构建上下文(无参数)
+	 * 
 	 * @return 仪表设置上下文
 	 */
 	public static MeterSettingContext build() {
 		MeterSettingContext meterSettingContext = getInstance();
 		return meterSettingContext;
 	}
-	
+
 	/**
 	 * 构建上下文 加载项目id
-	 * @param projectId 项目id
+	 * 
+	 * @param projectId
+	 *            项目id
 	 * @return
 	 */
-	public static MeterSettingContext loadByProjectId(String projectId){
+	public static MeterSettingContext loadByProjectId(String projectId) {
 		MeterSettingContext meterSettingContext = getInstance();
 		meterSettingContext.setProjectId(projectId);
 		return meterSettingContext;
@@ -101,50 +110,82 @@ public class MeterSettingContext {
 		return meterSettingContext;
 	}
 
-	
-
 	/**
 	 * 创建仪表设置
 	 */
 	public void save() {
-		if(meterSetting != null) {
+
+		if (meterSetting != null) {
+
+			// 判断仪表是否存在
+			if (meterSettingRepository.findByProjectIdAndType(
+					meterSetting.getProjectId(), meterSetting.getType()) != null) {
+				throw new FeeException(FeeErrorCode.METERSETTING_EXISTS);
+			}
 			meterSetting.setId(UUIDGenerator.generate());
 			meterSetting.setOemCode(ContextManager.getInstance().getOemCode());
 
-			MeterSettingPo meterSettingPo = MyBeanUtil.createBean(meterSetting, MeterSettingPo.class);
+			MeterSettingPo meterSettingPo = MyBeanUtil.createBean(meterSetting,
+					MeterSettingPo.class);
 			meterSettingRepository.save(meterSettingPo);
-    	}
+		}
 	}
+
 	/**
 	 * 根据项目获取所以仪表
 	 */
-	public  DataPageValue<MeterSettingVo> findByProjectId(Integer pageSize, Integer currentPage){
+	public DataPageValue<MeterSettingVo> findByProjectId(Integer pageSize,
+			Integer currentPage) {
 		Page<MeterSettingVo> voPage = null;
 
 		// spring-data 的page从0开始
-		Pageable pageable=new PageRequest(currentPage - 1, pageSize);
-		Page<MeterSettingPo> meterSettingPage = meterSettingRepository.findByProjectId(projectId,pageable);
-		voPage = meterSettingPage.map(new Po2VoConverter<MeterSettingPo, MeterSettingVo>(MeterSettingVo.class));
-		
-		return new DataPageValue<MeterSettingVo>(voPage.getContent(), voPage.getTotalElements(), pageSize, currentPage);
+		Pageable pageable = new PageRequest(currentPage - 1, pageSize);
+		Page<MeterSettingPo> meterSettingPage = meterSettingRepository
+				.findByProjectId(projectId, pageable);
+		voPage = meterSettingPage
+				.map(new Po2VoConverter<MeterSettingPo, MeterSettingVo>(
+						MeterSettingVo.class));
+
+		return new DataPageValue<MeterSettingVo>(voPage.getContent(),
+				voPage.getTotalElements(), pageSize, currentPage);
 	}
 
 	/**
 	 * 获取单仪表设置详情
+	 * 
 	 * @param id
 	 * @return
 	 */
-	public MeterRecordVo findById() {
-		return MyBeanUtil.createBean(meterSettingRepository.findOne(id), MeterRecordVo.class);
+	public MeterSettingVo findById() {
+		return MyBeanUtil.createBean(meterSettingRepository.findOne(id),
+				MeterSettingVo.class);
 	}
-	
+
+	/**
+	 * 删除仪表设置
+	 */
+	public void delete() {
+		// 判断仪表是否存在
+		if (meterSettingRepository.findOne(meterSetting.getId()) == null) {
+			throw new FeeException(FeeErrorCode.METERSETTING_NOT_EXISTS);
+		}
+
+		meterSettingRepository.delete(id);
+		
+	}
+
 	/**
 	 * 更新费用设置
 	 */
-	public void update(){
+	public void update() {
+		// 判断仪表是否存在
+		if (meterSettingRepository.findOne(meterSetting.getId()) == null) {
+			throw new FeeException(FeeErrorCode.METERSETTING_NOT_EXISTS);
+		}
 		meterSetting.setOemCode(ContextManager.getInstance().getOemCode());
-		MeterSettingPo meterSettingPo = MyBeanUtil.createBean(meterSetting, MeterSettingPo.class);
-		 meterSettingRepository.save(meterSettingPo);
+		MeterSettingPo meterSettingPo = MyBeanUtil.createBean(meterSetting,
+				MeterSettingPo.class);
+		meterSettingRepository.save(meterSettingPo);
 	}
 
 	protected void setMeterSetting(MeterSettingVo meterSetting) {
@@ -156,6 +197,6 @@ public class MeterSettingContext {
 	}
 
 	protected void setId(String id) {
-		this.id=id;
+		this.id = id;
 	}
 }

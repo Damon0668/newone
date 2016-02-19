@@ -24,7 +24,7 @@ import com.liefeng.property.vo.fee.MeterSettingVo;
 
 /**
  * 
- * <pre>      
+ * <pre>
  * Title:
  * Description:费用抄表服务测试类
  * Company:广州列丰科技有限公司
@@ -37,7 +37,7 @@ import com.liefeng.property.vo.fee.MeterSettingVo;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 public class FeeServiceTest {
-	
+
 	@Autowired
 	private IFeeService feeService;
 
@@ -45,23 +45,26 @@ public class FeeServiceTest {
 	 * 保存抄表
 	 */
 	@Test
-	public void saveMeterRecord(){
+	public void saveMeterRecord() {
 
-		MeterRecordVo meterRecordVo=new MeterRecordVo();
-    
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  
+		MeterRecordVo meterRecordVo = new MeterRecordVo();
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String oemCode = ContextManager.getInstance().getOemCode();
 		meterRecordVo.setBuildingId("1");
 		meterRecordVo.setCurrNum(12.00);
 		try {
-			meterRecordVo.setStartDate(sdf.parse(sdf.format(new Date(System.currentTimeMillis()))));
-			meterRecordVo.setEndDate(sdf.parse(sdf.format(new Date(System.currentTimeMillis()))));
-			meterRecordVo.setReadDate(sdf.parse(sdf.format(new Date(System.currentTimeMillis()))));
+			meterRecordVo.setStartDate(sdf.parse(sdf.format(new Date(System
+					.currentTimeMillis()))));
+			meterRecordVo.setEndDate(sdf.parse(sdf.format(new Date(System
+					.currentTimeMillis()))));
+			meterRecordVo.setReadDate(sdf.parse(sdf.format(new Date(System
+					.currentTimeMillis()))));
 		} catch (ParseException e) {
 
 			e.printStackTrace();
 		}
-		
+
 		meterRecordVo.setFloorId("2");
 		meterRecordVo.setFrom("1");
 		meterRecordVo.setHouseNum("A0101");
@@ -73,19 +76,19 @@ public class FeeServiceTest {
 		meterRecordVo.setProjectId("1");
 		meterRecordVo.setPropertyId("1");
 		meterRecordVo.setProprietorName("张三");
-	
+
 		meterRecordVo.setStaffId("1123");
-		
+
 		feeService.saveMeterRecord(meterRecordVo);
 	}
-	
+
 	/**
 	 * 保存抄表设置
 	 */
 	@Test
-	public void saveMeterSetting(){
+	public void saveMeterSetting() {
 		ContextManager.getInstance().setOemCode("1");
-		MeterSettingVo meterSettingVo=new MeterSettingVo();
+		MeterSettingVo meterSettingVo = new MeterSettingVo();
 		meterSettingVo.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		meterSettingVo.setChargeable("1");
 		meterSettingVo.setLastingDay(3);
@@ -96,32 +99,34 @@ public class FeeServiceTest {
 		meterSettingVo.setType("1");
 		feeService.saveMeterSetting(meterSettingVo);
 	}
-	
+
 	/**
 	 * 获取抄表列表
 	 */
 	@Test
-	public void findAllByProjectId(){
-		DataPageValue<MeterSettingVo> page=feeService.findMeterSetting4Page("1",1,1);
+	public void findAllByProjectId() {
+		DataPageValue<MeterSettingVo> page = feeService.findMeterSetting4Page(
+				"1", 1, 1);
 		System.out.println(page);
 	}
-	
+
 	/**
 	 * 获取单个仪表设置
 	 */
 	@Test
-	public void findMeterRecordById(){
-		
-		System.out.println(feeService.findMeterRecordById("4028895e52f3acb80152f3acb8520000"));
+	public void findMeterSettingById() {
+
+		System.out.println(feeService
+				.findMeterSettingById("4028895e52f3acb80152f3acb8520000"));
 	}
-	
+
 	/**
 	 * 修改仪表设置
 	 */
 	@Test
-	public void updateMeterRecord(){
+	public void updateMeterSetting() {
 		ContextManager.getInstance().setOemCode("1");
-		MeterSettingVo meterSettingVo=new MeterSettingVo();
+		MeterSettingVo meterSettingVo = new MeterSettingVo();
 		meterSettingVo.setId("4028895e52f3acb80152f3acb8520000");
 		meterSettingVo.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		meterSettingVo.setChargeable("2");
@@ -131,8 +136,12 @@ public class FeeServiceTest {
 		meterSettingVo.setStaffId("2");
 		meterSettingVo.setStartDay(2);
 		meterSettingVo.setType("2");
-		
-		
-		feeService.updateMeterRecord(meterSettingVo);
+
+		feeService.updateMeterSetting(meterSettingVo);
+	}
+
+	@Test
+	public void deleteMeterSetting() {
+		feeService.deleteMeterSetting("4028895e52f3ed7c0152f3ed7cf80000");
 	}
 }

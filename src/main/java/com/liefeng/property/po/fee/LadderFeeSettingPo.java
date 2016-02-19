@@ -76,12 +76,6 @@ public class LadderFeeSettingPo extends BaseValue {
 	private Double ladder2Price;
 
 	/**
-	 * 第三阶梯
-	 */
-	@Column(name = "ladder3")
-	private Integer ladder3;
-
-	/**
 	 * 第三阶梯单价
 	 */
 	@Column(name = "ladder3_price")
@@ -167,14 +161,6 @@ public class LadderFeeSettingPo extends BaseValue {
 
 	public void setLadder2Price(Double ladder2Price) {
 		this.ladder2Price = ladder2Price;
-	}
-
-	public Integer getLadder3() {
-		return this.ladder3;
-	}
-
-	public void setLadder3(Integer ladder3) {
-		this.ladder3 = ladder3;
 	}
 
 	public Double getLadder3Price() {
