@@ -36,7 +36,7 @@ import com.liefeng.property.vo.project.ProjectBuildingVo;
  * Description:
  * Company:广州列丰科技有限公司
  * Copyright: Copyright (c) 2015
- * @author  吴志敬        
+ * @author  wuzhijing     
  * @version 1.0      
  * @created 2016年2月18日下午4:05:56
  * </pre>
@@ -54,9 +54,16 @@ public class MeterSettingContext {
 	 * 仪表设置对象
 	 */
 	private MeterSettingVo meterSetting;
-	protected void setMeterSetting(MeterSettingVo meterSetting) {
-		this.meterSetting = meterSetting;
-	}
+	
+	/**
+	 * 项目id
+	 */
+	private String projectId;
+	
+	/**
+	 * ID
+	 */
+	private String id;
 	
 	/**
 	 * 获取本类实例，每次返回一个新对象
@@ -83,6 +90,26 @@ public class MeterSettingContext {
 		MeterSettingContext meterSettingContext = getInstance();
 		return meterSettingContext;
 	}
+	
+	/**
+	 * 构建上下文 加载项目id
+	 * @param projectId 项目id
+	 * @return
+	 */
+	public static MeterSettingContext loadByProjectId(String projectId){
+		MeterSettingContext meterSettingContext = getInstance();
+		meterSettingContext.setProjectId(projectId);
+		return meterSettingContext;
+	}
+
+	public static MeterSettingContext loadById(String id) {
+		MeterSettingContext meterSettingContext = getInstance();
+		meterSettingContext.setId(id);
+		return meterSettingContext;
+	}
+
+	
+
 	/**
 	 * 创建仪表设置
 	 */
@@ -98,7 +125,7 @@ public class MeterSettingContext {
 	/**
 	 * 根据项目获取所以仪表
 	 */
-	public  DataPageValue<MeterSettingPo> findByProjectId(String projectId, Integer pageSize, Integer currentPage){
+	public  DataPageValue<MeterSettingPo> findByProjectId(Integer pageSize, Integer currentPage){
 		
 		Pageable pageable=new PageRequest(currentPage - 1, pageSize);
 		Page<MeterSettingPo> meterSettingPage = meterSettingRepository.findByProjectId(projectId,pageable);
@@ -111,14 +138,28 @@ public class MeterSettingContext {
 	 * @param id
 	 * @return
 	 */
-	public MeterRecordVo findMeterSettingById(String id) {
+	public MeterRecordVo findById() {
 		return MyBeanUtil.createBean(meterSettingRepository.findOne(id), MeterRecordVo.class);
 	}
-
-	public void updateMeterSetting(MeterSettingVo meterSettingVo){
-		meterSettingVo.setOemCode(ContextManager.getInstance().getOemCode());
+	
+	/**
+	 * 更新费用设置
+	 */
+	public void update(){
+		meterSetting.setOemCode(ContextManager.getInstance().getOemCode());
 		MeterSettingPo meterSettingPo = MyBeanUtil.createBean(meterSetting, MeterSettingPo.class);
 		 meterSettingRepository.save(meterSettingPo);
 	}
 
+	protected void setMeterSetting(MeterSettingVo meterSetting) {
+		this.meterSetting = meterSetting;
+	}
+
+	protected void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	protected void setId(String id) {
+		this.id=id;
+	}
 }

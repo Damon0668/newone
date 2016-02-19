@@ -40,6 +40,9 @@ public class FeeRecordContext {
 	 * 缴费记录值对象
 	 */
 	private FeeRecordVo feeRecord;
+	protected void setFeeRecord(FeeRecordVo feeRecord) {
+		this.feeRecord = feeRecord;
+	}
 	
 	/**
 	 * 获取本类实例，每次返回一个新对象
@@ -56,7 +59,7 @@ public class FeeRecordContext {
 	 */
 	public static FeeRecordContext build(FeeRecordVo feeRecord) {
 		FeeRecordContext feeRecordContext = getInstance();
-		feeRecordContext.feeRecord = feeRecord;
+		feeRecordContext.setFeeRecord(feeRecord);
 		
 		return feeRecordContext;
 	}

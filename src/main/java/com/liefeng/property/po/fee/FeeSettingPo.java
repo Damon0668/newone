@@ -8,26 +8,109 @@ import javax.persistence.Table;
 
 import com.liefeng.core.entity.BaseValue;
 
+/**
+ * 
+ * <pre>      
+ * Title:费用设置持久化对象 
+ * Description:
+ * Company:广州列丰科技有限公司
+ * Copyright: Copyright (c) 2015
+ * @author  wuzhijing      
+ * @version 1.0      
+ * @created 2016年2月19日上午10:22:45
+ * </pre>
+ */
 @Entity
 @Table(name = "t_fee_setting")
 public class FeeSettingPo extends BaseValue {
 
+	private static final long serialVersionUID = -6624807587019413516L;
+
+	/**
+	 * 主键
+	 */
+	@Column(name = "id")
 	private String id;
+
+	/**
+	 * 项目ID
+	 */
+	@Column(name = "project_id")
 	private String projectId;
+
+	/**
+	 * 费用类型。1：水费；2：电费；3：燃气费；4：物业管理费；5：维修基金；6：车位管理费；7：排污费；8：垃圾费；21：公摊水费；22：公摊电费；23：公摊燃气费。
+	 */
+	@Column(name = "fee_type")
 	private String feeType;
+
+	/**
+	 * 使用类型。1：家居；2：家居出租；3：商用；4：商用出租。
+	 */
+	@Column(name = "use_type")
 	private String useType;
+
+	/**
+	 * 是否收费。0：不收取；1：收取
+	 */
+	@Column(name = "chargeable")
 	private String chargeable;
+
+	/**
+	 * 单价
+	 */
+	@Column(name = "price")
 	private Double price;
+
+	/**
+	 * 收费单位
+	 */
+	@Column(name = "unit")
 	private String unit;
+
+	/**
+	 * 收费周期
+	 */
+	@Column(name = "period")
 	private String period;
+	
+	/**
+	 * 收费开始时间（每月几号，默认为每月1号）
+	 */
+	@Column(name = "start_day")
 	private Integer startDay;
+
+	/**
+	 * 收费开始月份
+	 */
+	@Column(name = "start_month")
 	private Integer startMonth;
+
+	/**
+	 * 缴费期限
+	 */
+	@Column(name = "payment_period")
 	private Integer paymentPeriod;
+
+	/**
+	 * 操作员工ID
+	 */
+	@Column(name = "staff_id")
 	private String staffId;
+
+	/**
+	 * 创建时间
+	 */
+	@Column(name = "create_time")	
 	private Timestamp createTime;
+
+	/**
+	 * OEM编码
+	 */
+	@Column(name = "oem_code")
 	private String oemCode;
 
-	@Column(name = "id", nullable = false, length = 50)
+	
 	public String getId() {
 		return this.id;
 	}
@@ -36,7 +119,7 @@ public class FeeSettingPo extends BaseValue {
 		this.id = id;
 	}
 
-	@Column(name = "project_id", nullable = false, length = 50)
+	
 	public String getProjectId() {
 		return this.projectId;
 	}
@@ -45,7 +128,7 @@ public class FeeSettingPo extends BaseValue {
 		this.projectId = projectId;
 	}
 
-	@Column(name = "fee_type", length = 2)
+	
 	public String getFeeType() {
 		return this.feeType;
 	}
@@ -54,7 +137,7 @@ public class FeeSettingPo extends BaseValue {
 		this.feeType = feeType;
 	}
 
-	@Column(name = "use_type", length = 2)
+	
 	public String getUseType() {
 		return this.useType;
 	}
@@ -63,7 +146,7 @@ public class FeeSettingPo extends BaseValue {
 		this.useType = useType;
 	}
 
-	@Column(name = "chargeable", length = 1)
+	
 	public String getChargeable() {
 		return this.chargeable;
 	}
@@ -72,7 +155,7 @@ public class FeeSettingPo extends BaseValue {
 		this.chargeable = chargeable;
 	}
 
-	@Column(name = "price", precision = 22, scale = 0)
+	
 	public Double getPrice() {
 		return this.price;
 	}
@@ -81,7 +164,7 @@ public class FeeSettingPo extends BaseValue {
 		this.price = price;
 	}
 
-	@Column(name = "unit", length = 10)
+	
 	public String getUnit() {
 		return this.unit;
 	}
@@ -90,7 +173,7 @@ public class FeeSettingPo extends BaseValue {
 		this.unit = unit;
 	}
 
-	@Column(name = "period", length = 10)
+	
 	public String getPeriod() {
 		return this.period;
 	}
@@ -99,7 +182,7 @@ public class FeeSettingPo extends BaseValue {
 		this.period = period;
 	}
 
-	@Column(name = "start_day")
+	
 	public Integer getStartDay() {
 		return this.startDay;
 	}
@@ -108,7 +191,7 @@ public class FeeSettingPo extends BaseValue {
 		this.startDay = startDay;
 	}
 
-	@Column(name = "start_month")
+	
 	public Integer getStartMonth() {
 		return this.startMonth;
 	}
@@ -117,7 +200,7 @@ public class FeeSettingPo extends BaseValue {
 		this.startMonth = startMonth;
 	}
 
-	@Column(name = "payment_period")
+	
 	public Integer getPaymentPeriod() {
 		return this.paymentPeriod;
 	}
@@ -126,7 +209,7 @@ public class FeeSettingPo extends BaseValue {
 		this.paymentPeriod = paymentPeriod;
 	}
 
-	@Column(name = "staff_id", length = 50)
+	
 	public String getStaffId() {
 		return this.staffId;
 	}
@@ -135,7 +218,7 @@ public class FeeSettingPo extends BaseValue {
 		this.staffId = staffId;
 	}
 
-	@Column(name = "create_time", length = 19)
+	
 	public Timestamp getCreateTime() {
 		return this.createTime;
 	}
@@ -144,7 +227,7 @@ public class FeeSettingPo extends BaseValue {
 		this.createTime = createTime;
 	}
 
-	@Column(name = "oem_code", nullable = false, length = 20)
+	
 	public String getOemCode() {
 		return this.oemCode;
 	}

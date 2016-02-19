@@ -12,6 +12,7 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.fee.FeeItemPo;
 import com.liefeng.property.repository.FeeItemRepository;
 import com.liefeng.property.vo.fee.FeeItemVo;
@@ -40,6 +41,9 @@ public class FeeItemContext {
 	 * 费用项值对象
 	 */
 	private FeeItemVo feeItem;
+	protected void setFeeItem(FeeItemVo feeItem) {
+		this.feeItem = feeItem;
+	}
 	
 	/**
 	 * 获取本类实例，每次返回一个新对象
@@ -56,7 +60,7 @@ public class FeeItemContext {
 	 */
 	public static FeeItemContext build(FeeItemVo feeItem) {
 		FeeItemContext feeItemContext = getInstance();
-		feeItemContext.feeItem = feeItem;
+		feeItemContext.setFeeItem(feeItem);
 		
 		return feeItemContext;
 	}
@@ -109,7 +113,7 @@ public class FeeItemContext {
 		if(feeItem != null) {
 			feeItem.setId(UUIDGenerator.generate());
 			feeItem.setCreateTime(new Date());
-			feeItem.setOemCode(""); // TODO 待确定后补齐
+			feeItem.setOemCode(ContextManager.getInstance().getOemCode()); // TODO 待确定后补齐
 			
 			FeeItemPo feeItemPo = MyBeanUtil.createBean(feeItem, FeeItemPo.class);
 			feeItemRepository.save(feeItemPo);

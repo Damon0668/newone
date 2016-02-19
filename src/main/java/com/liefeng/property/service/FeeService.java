@@ -20,7 +20,7 @@ import com.liefeng.property.vo.fee.MeterSettingVo;
  * Description:
  * Company:广州列丰科技有限公司
  * Copyright: Copyright (c) 2015
- * @author  吴志敬        
+ * @author  wuzhijing
  * @version 1.0      
  * @created 2016年2月17日下午6:50:00
  * </pre>
@@ -51,20 +51,20 @@ public class FeeService implements IFeeService{
 
 	@Override
 	public DataPageValue<MeterSettingPo> findMeterSetting4Page(String projectId,Integer pageSize,Integer currentPage){
-		MeterSettingContext meterSettingContext=MeterSettingContext.build();
-		return meterSettingContext.findByProjectId(projectId, pageSize, currentPage);
+		MeterSettingContext meterSettingContext=MeterSettingContext.loadByProjectId(projectId);
+		return meterSettingContext.findByProjectId(pageSize, currentPage);
 	}
 
 	@Override
 	public MeterRecordVo findMeterRecordById(String id) {
-		MeterSettingContext meterSettingContext=MeterSettingContext.build();
-		return meterSettingContext.findMeterSettingById(id);
+		MeterSettingContext meterSettingContext=MeterSettingContext.loadById(id);
+		return meterSettingContext.findById();
 	}
 
 	@Override
 	public void updateMeterRecord(MeterSettingVo meterSettingVo) {
 		MeterSettingContext meterSettingContext=MeterSettingContext.build(meterSettingVo);
-		meterSettingContext.updateMeterSetting(meterSettingVo);
+		meterSettingContext.update();
 	}
 
 	

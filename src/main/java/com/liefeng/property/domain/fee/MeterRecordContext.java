@@ -45,6 +45,9 @@ public class MeterRecordContext {
 	 * 抄表记录值对象
 	 */
 	private MeterRecordVo meterRecord;
+	protected void setMeterRecord(MeterRecordVo meterRecord) {
+		this.meterRecord = meterRecord;
+	}
 
 	/**
 	 * 获取本类实例，每次返回一个新对象
@@ -64,7 +67,7 @@ public class MeterRecordContext {
 	 */
 	public static MeterRecordContext build(MeterRecordVo meterRecord) {
 		MeterRecordContext meterRecordContext = getInstance();
-		meterRecordContext.meterRecord = meterRecord;
+		meterRecordContext.setMeterRecord(meterRecord);
 
 		return meterRecordContext;
 	}

@@ -8,25 +8,102 @@ import javax.persistence.Table;
 
 import com.liefeng.core.entity.BaseValue;
 
+/**
+ * 
+ * <pre>      
+ * Title:阶梯费用设置持久化对象
+ * Description:
+ * Company:广州列丰科技有限公司
+ * Copyright: Copyright (c) 2015
+ * @author  wuzhijing
+ * @version 1.0      
+ * @created 2016年2月19日上午10:23:12
+ * </pre>
+ */
 @Entity
 @Table(name = "t_ladder_fee_setting")
 public class LadderFeeSettingPo extends BaseValue {
 
+	private static final long serialVersionUID = -5630913108073864979L;
+
+	/**
+	 * 主键
+	 */
+	@Column(name = "id")
 	private String id;
+
+	/**
+	 * 项目ID
+	 */
+	@Column(name = "project_id")
 	private String projectId;
+
+	/**
+	 * 费用类型。1：水费；2：电费；3：燃气费；4：物业管理费；5：维修基金；6：车位管理费；7：排污费；8：垃圾费；21：公摊水费；22：公摊电费；23：公摊燃气费。
+	 */
+	@Column(name = "fee_type")
 	private String feeType;
+
+	/**
+	 * 使用类型。1：家居；2：家居出租；3：商用；4：商用出租。
+	 */
+	@Column(name = "use_type")
 	private String useType;
+
+	/**
+	 * 第一阶梯
+	 */
+	@Column(name = "ladder1")
 	private Integer ladder1;
+
+	/**
+	 * 第一阶梯单价
+	 */
+	@Column(name = "ladder1_price")
 	private Double ladder1Price;
+
+	/**
+	 * 第二阶梯
+	 */
+	@Column(name = "ladder2")
 	private Integer ladder2;
+
+	/**
+	 * 第二阶梯单价
+	 */
+	@Column(name = "ladder2_price")
 	private Double ladder2Price;
+
+	/**
+	 * 第三阶梯
+	 */
+	@Column(name = "ladder3")
 	private Integer ladder3;
+
+	/**
+	 * 第三阶梯单价
+	 */
+	@Column(name = "ladder3_price")
 	private Double ladder3Price;
+
+	/**
+	 * 操作员工ID
+	 */
+	@Column(name = "staff_id")
 	private String staffId;
+
+	/**
+	 * 创建时间
+	 */
+	@Column(name = "create_time")
 	private Timestamp createTime;
+
+	/**
+	 * OEM编码
+	 */
+	@Column(name = "oem_code")
 	private String oemCode;
 
-	@Column(name = "id", nullable = false, length = 50)
 	public String getId() {
 		return this.id;
 	}
@@ -35,7 +112,6 @@ public class LadderFeeSettingPo extends BaseValue {
 		this.id = id;
 	}
 
-	@Column(name = "project_id", nullable = false, length = 50)
 	public String getProjectId() {
 		return this.projectId;
 	}
@@ -44,7 +120,6 @@ public class LadderFeeSettingPo extends BaseValue {
 		this.projectId = projectId;
 	}
 
-	@Column(name = "fee_type", length = 2)
 	public String getFeeType() {
 		return this.feeType;
 	}
@@ -53,7 +128,6 @@ public class LadderFeeSettingPo extends BaseValue {
 		this.feeType = feeType;
 	}
 
-	@Column(name = "use_type", length = 2)
 	public String getUseType() {
 		return this.useType;
 	}
@@ -62,7 +136,6 @@ public class LadderFeeSettingPo extends BaseValue {
 		this.useType = useType;
 	}
 
-	@Column(name = "ladder1")
 	public Integer getLadder1() {
 		return this.ladder1;
 	}
@@ -71,7 +144,6 @@ public class LadderFeeSettingPo extends BaseValue {
 		this.ladder1 = ladder1;
 	}
 
-	@Column(name = "ladder1_price", precision = 22, scale = 0)
 	public Double getLadder1Price() {
 		return this.ladder1Price;
 	}
@@ -80,7 +152,6 @@ public class LadderFeeSettingPo extends BaseValue {
 		this.ladder1Price = ladder1Price;
 	}
 
-	@Column(name = "ladder2")
 	public Integer getLadder2() {
 		return this.ladder2;
 	}
@@ -89,7 +160,6 @@ public class LadderFeeSettingPo extends BaseValue {
 		this.ladder2 = ladder2;
 	}
 
-	@Column(name = "ladder2_price", precision = 22, scale = 0)
 	public Double getLadder2Price() {
 		return this.ladder2Price;
 	}
@@ -98,7 +168,6 @@ public class LadderFeeSettingPo extends BaseValue {
 		this.ladder2Price = ladder2Price;
 	}
 
-	@Column(name = "ladder3")
 	public Integer getLadder3() {
 		return this.ladder3;
 	}
@@ -107,7 +176,6 @@ public class LadderFeeSettingPo extends BaseValue {
 		this.ladder3 = ladder3;
 	}
 
-	@Column(name = "ladder3_price", precision = 22, scale = 0)
 	public Double getLadder3Price() {
 		return this.ladder3Price;
 	}
@@ -116,7 +184,6 @@ public class LadderFeeSettingPo extends BaseValue {
 		this.ladder3Price = ladder3Price;
 	}
 
-	@Column(name = "staff_id", length = 50)
 	public String getStaffId() {
 		return this.staffId;
 	}
@@ -125,7 +192,6 @@ public class LadderFeeSettingPo extends BaseValue {
 		this.staffId = staffId;
 	}
 
-	@Column(name = "create_time", length = 19)
 	public Timestamp getCreateTime() {
 		return this.createTime;
 	}
@@ -134,7 +200,6 @@ public class LadderFeeSettingPo extends BaseValue {
 		this.createTime = createTime;
 	}
 
-	@Column(name = "oem_code", nullable = false, length = 20)
 	public String getOemCode() {
 		return this.oemCode;
 	}
