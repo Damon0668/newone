@@ -15,5 +15,9 @@
     <!-- tcc 消息  -->
     <dubbo:reference id="tccMsgService"
         interface="com.liefeng.intf.service.tcc.ITccMsgService" check="false" />
+        
+    <!-- 缓存服务  -->
+    <dubbo:reference id="redisService"
+        interface="com.liefeng.intf.service.cache.IRedisService" check="false" />
 
 </beans>
