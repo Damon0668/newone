@@ -18,7 +18,10 @@ import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IFeeService;
+import com.liefeng.property.domain.fee.FeeSettingContext;
+import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.MeterSettingPo;
+import com.liefeng.property.vo.fee.FeeSettingVo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
 import com.liefeng.property.vo.fee.MeterSettingVo;
 
@@ -143,6 +146,60 @@ public class FeeServiceTest {
 	@Test
 	public void deleteMeterSetting() {
 		feeService.deleteMeterSetting("4028895e52f3ed7c0152f3ed7cf80000");
+	}
+//TODO 费用设置测试
+	@Test
+	public void saveFeeSetting() {
+		ContextManager.getInstance().setOemCode("1");
+		FeeSettingVo feeSettingVo = new FeeSettingVo();
+		feeSettingVo.setChargeable("1");
+		feeSettingVo.setCreateTime(new Timestamp(System.currentTimeMillis()));
+		feeSettingVo.setFeeType("1");
+		feeSettingVo.setPaymentPeriod(3);
+		feeSettingVo.setPeriod("3");
+		feeSettingVo.setPrice(10.00);
+		feeSettingVo.setProjectId("1");
+		feeSettingVo.setStaffId("1");
+		feeSettingVo.setStartDay(1);
+		feeSettingVo.setStartMonth(1);
+		feeSettingVo.setUnit("度");
+		feeSettingVo.setUseType("1");
+		feeService.saveFeeSetting(feeSettingVo);
+	}
+
+	@Test
+	public void deleteFeeSetting() {
+		feeService.deleteFeeSetting("4028895e52fd95fe0152fd95fe7c0000");
+	}
+
+	@Test
+	public void findFeeSetting4Page() {
+		System.out.println(feeService.findFeeSetting4Page("1", 30, 1));
+	}
+
+	@Test
+	public void findFeeSettingById() {
+		System.out.println(feeService.findFeeSettingById("4028895e52fda38d0152fda38d350000"));
+	}
+
+	@Test
+	public void updateFeeSetting() {
+		ContextManager.getInstance().setOemCode("1");
+		FeeSettingVo feeSettingVo = new FeeSettingVo();
+		feeSettingVo.setId("4028895e52fda38d0152fda38d350000");
+		feeSettingVo.setChargeable("2");
+		feeSettingVo.setCreateTime(new Timestamp(System.currentTimeMillis()));
+		feeSettingVo.setFeeType("2");
+		feeSettingVo.setPaymentPeriod(3);
+		feeSettingVo.setPeriod("2");
+		feeSettingVo.setPrice(10.00);
+		feeSettingVo.setProjectId("2");
+		feeSettingVo.setStaffId("2");
+		feeSettingVo.setStartDay(1);
+		feeSettingVo.setStartMonth(2);
+		feeSettingVo.setUnit("度");
+		feeSettingVo.setUseType("1");
+		feeService.updateFeeSetting(feeSettingVo);
 	}
 
 	@Autowired

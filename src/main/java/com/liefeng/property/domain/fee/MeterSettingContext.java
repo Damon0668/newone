@@ -1,5 +1,7 @@
 package com.liefeng.property.domain.fee;
 
+import java.sql.Timestamp;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +20,8 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.error.FeeErrorCode;
 import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.MeterSettingPo;
-import com.liefeng.property.po.project.ProjectBuildingPo;
 import com.liefeng.property.repository.MeterSettingRepository;
-import com.liefeng.property.vo.fee.MeterRecordVo;
 import com.liefeng.property.vo.fee.MeterSettingVo;
-import com.liefeng.property.vo.project.ProjectBuildingVo;
 
 /**
  * 
@@ -124,7 +123,7 @@ public class MeterSettingContext {
 			}
 			meterSetting.setId(UUIDGenerator.generate());
 			meterSetting.setOemCode(ContextManager.getInstance().getOemCode());
-
+			meterSetting.setCreateTime(new Timestamp(System.currentTimeMillis()));
 			MeterSettingPo meterSettingPo = MyBeanUtil.createBean(meterSetting,
 					MeterSettingPo.class);
 			meterSettingRepository.save(meterSettingPo);
@@ -166,7 +165,7 @@ public class MeterSettingContext {
 	 */
 	public void delete() {
 		// 判断仪表是否存在
-		if (meterSettingRepository.findOne(meterSetting.getId()) == null) {
+		if (meterSettingRepository.findOne(id) == null) {
 			throw new FeeException(FeeErrorCode.METERSETTING_NOT_EXISTS);
 		}
 
@@ -177,11 +176,23 @@ public class MeterSettingContext {
 	/**
 	 * 更新费用设置
 	 */
-	public void update() {
+	public void update() throws FeeException {
 		// 判断仪表是否存在
-		if (meterSettingRepository.findOne(meterSetting.getId()) == null) {
+		MeterSettingPo meterSettingPoIsExists=meterSettingRepository.findById(meterSetting.getId());
+		if (meterSettingPoIsExists == null) {
 			throw new FeeException(FeeErrorCode.METERSETTING_NOT_EXISTS);
 		}
+
+		// 判断是否存在相同仪表
+		MeterSettingPo meterSettingPoTypeIsExists = meterSettingRepository.findByProjectIdAndType(
+				meterSetting.getProjectId(), meterSetting.getType());
+		if (meterSettingPoTypeIsExists!= null
+			&&!meterSettingPoTypeIsExists.getId().equals(meterSetting.getId())) {
+			throw new FeeException(FeeErrorCode.METERSETTING_EXISTS);
+		}
+
+		meterSetting.setCreateTime(meterSettingPoIsExists.getCreateTime());
+		meterSetting.setStaffId(meterSettingPoIsExists.getStaffId());
 		meterSetting.setOemCode(ContextManager.getInstance().getOemCode());
 		MeterSettingPo meterSettingPo = MyBeanUtil.createBean(meterSetting,
 				MeterSettingPo.class);

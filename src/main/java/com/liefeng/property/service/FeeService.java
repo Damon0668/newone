@@ -5,15 +5,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IFeeService;
+import com.liefeng.property.domain.fee.FeeSettingContext;
 import com.liefeng.property.domain.fee.MeterRecordContext;
 import com.liefeng.property.domain.fee.MeterSettingContext;
+import com.liefeng.property.vo.fee.FeeSettingVo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
 import com.liefeng.property.vo.fee.MeterSettingVo;
 
 /**
  * 
- * <pre>      
+ * <pre>
  * Title:抄表费用相关表接口类
  * Description:
  * Company:广州列丰科技有限公司
@@ -24,51 +27,97 @@ import com.liefeng.property.vo.fee.MeterSettingVo;
  * </pre>
  */
 @Service
-public class FeeService implements IFeeService{
+public class FeeService implements IFeeService {
 
 	private static Logger logger = LoggerFactory.getLogger(FeeService.class);
 
 	@Override
-	public void saveMeterRecord(MeterRecordVo meterRecordVo){
+	public void saveMeterRecord(MeterRecordVo meterRecordVo) {
 
-		MeterRecordContext meterRecordContext = MeterRecordContext.build(meterRecordVo);
+		MeterRecordContext meterRecordContext = MeterRecordContext
+				.build(meterRecordVo);
 		meterRecordContext.create();
 	}
 
 	@Override
 	public void listMeterRecord(MeterRecordVo meterRecordVo) {
-		// TODO Auto-generated method stub
 		
+
+	}
+	// TODO 仪表设置
+	@Override
+	public void saveMeterSetting(MeterSettingVo meterSettingVo)
+			throws LiefengException {
+		MeterSettingContext meterSettingContext = MeterSettingContext
+				.build(meterSettingVo);
+		meterSettingContext.save();
 	}
 
 	@Override
-	public void saveMeterSetting(MeterSettingVo meterSettingVo) {
-		MeterSettingContext meterSettingContext=MeterSettingContext.build(meterSettingVo);
-		meterSettingContext.save();
-	}
-	
-	@Override
-	public void deleteMeterSetting(String id){
-		MeterSettingContext meterSettingContext=MeterSettingContext.loadById(id);
+	public void deleteMeterSetting(String id) throws LiefengException {
+		MeterSettingContext meterSettingContext = MeterSettingContext
+				.loadById(id);
 		meterSettingContext.delete();
 	}
 
 	@Override
-	public DataPageValue<MeterSettingVo> findMeterSetting4Page(String projectId,Integer pageSize,Integer currentPage){
-		MeterSettingContext meterSettingContext=MeterSettingContext.loadByProjectId(projectId);
+	public DataPageValue<MeterSettingVo> findMeterSetting4Page(
+			String projectId, Integer pageSize, Integer currentPage) {
+		MeterSettingContext meterSettingContext = MeterSettingContext
+				.loadByProjectId(projectId);
 		return meterSettingContext.findByProjectId(pageSize, currentPage);
 	}
 
 	@Override
 	public MeterSettingVo findMeterSettingById(String id) {
-		MeterSettingContext meterSettingContext=MeterSettingContext.loadById(id);
+		MeterSettingContext meterSettingContext = MeterSettingContext
+				.loadById(id);
 		return meterSettingContext.findById();
 	}
 
 	@Override
-	public void updateMeterSetting(MeterSettingVo meterSettingVo) {
-		MeterSettingContext meterSettingContext=MeterSettingContext.build(meterSettingVo);
+	public void updateMeterSetting(MeterSettingVo meterSettingVo)
+			throws LiefengException {
+		MeterSettingContext meterSettingContext = MeterSettingContext
+				.build(meterSettingVo);
 		meterSettingContext.update();
 	}
 
+	//TODO 费用设置
+	@Override
+	public void saveFeeSetting(FeeSettingVo feeSettingVo)
+			throws LiefengException {
+		FeeSettingContext feeSettingContext =FeeSettingContext
+				.build(feeSettingVo);
+		feeSettingContext.save();
+	}
+
+	@Override
+	public void deleteFeeSetting(String id) throws LiefengException {
+		FeeSettingContext feeSettingContext = FeeSettingContext
+				.loadById(id);
+		feeSettingContext.delete();
+	}
+
+	@Override
+	public DataPageValue<FeeSettingVo> findFeeSetting4Page(
+			String projectId, Integer pageSize, Integer currentPage) {
+		FeeSettingContext feeSettingContext = FeeSettingContext
+				.loadByProjectId(projectId);
+		return feeSettingContext.findByProjectId4Page(pageSize, currentPage);
+	}
+
+	@Override
+	public FeeSettingVo findFeeSettingById(String id) {
+		FeeSettingContext eeSettingContext = FeeSettingContext.loadById(id);
+		return eeSettingContext.findById();
+	}
+
+	@Override
+	public void updateFeeSetting(FeeSettingVo feeSettingVo)
+			throws LiefengException {
+		FeeSettingContext feeSettingContext = FeeSettingContext
+				.build(feeSettingVo);
+		feeSettingContext.update();
+	}
 }
