@@ -181,6 +181,18 @@ public class HouseContext {
 	}
 	
 	/**
+	 * 获取业主单套房产的信息
+	 */
+	public ProprietorSingleHouseVo getSingleHouse() {
+		ProprietorSingleHouseVo singleHouse = new ProprietorSingleHouseVo();
+		if(ValidateHelper.isNotEmptyString(houseId)) {
+			singleHouse = houseQueryRepository.queryById(houseId);
+		}
+		
+		return singleHouse;
+	}
+	
+	/**
 	 * 保存房产信息
 	 */
 	public HouseVo create() {
@@ -195,11 +207,14 @@ public class HouseContext {
 		return house;
 	}
 
-	public HouseVo update(){
-		if(house != null){
-			HousePo housePo = MyBeanUtil.createBean(house, HousePo.class);
+	public HouseVo update() {
+		if(house != null && ValidateHelper.isNotEmptyString(house.getId())) {
+			HousePo housePo = houseRepository.findOne(house.getId());
+			
+			MyBeanUtil.copyBeanNotNull2Bean(house, housePo);
 			houseRepository.save(housePo);
 		}
+		
 		return house;
 	}
 

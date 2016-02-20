@@ -50,4 +50,11 @@ public class HouseContextTest {
 		DataPageValue page = context.listHouse4Page(houseBo, 1, 100);
 		System.out.println(page.getDataList());
 	}
+	
+	@Test
+	public void querySingleHouse(){
+		HouseContext context = HouseContext.loadById("402889f952fd79a60152fd79a6820000");
+		
+		System.out.println(context.getSingleHouse());
+	}
 }

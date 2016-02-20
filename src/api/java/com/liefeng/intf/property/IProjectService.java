@@ -205,5 +205,11 @@ public interface IProjectService {
 	 */
 	public HouseSpecVo findHouseSpecById(String houseSpecId);
 
+	/**
+	 * 获取业主单套房产的信息
+	 * @param houseId 房产ID
+	 * @return 
+	 */
+	public ProprietorSingleHouseVo getSingleHouse(String houseId);
 	
 }

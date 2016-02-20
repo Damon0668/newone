@@ -119,7 +119,17 @@ public class ProjectService implements IProjectService {
 	@Override
 	public HouseVo findHouseById(String houseId) {
 		HouseContext houseContext = HouseContext.loadById(houseId);
-		return houseContext.getHouse();
+		HouseVo house = houseContext.getHouse();
+		
+		ProjectBuildingContext buildingContext = ProjectBuildingContext.loadById(house.getBuildingId());
+		ProjectBuildingVo building = buildingContext.getProjectBuilding();
+		
+		ProjectBuildingContext floorContext = ProjectBuildingContext.loadById(house.getFloorId());
+		ProjectBuildingVo floor = floorContext.getProjectBuilding();
+		
+		house.setBuildingName(building.getName());
+		house.setFloorName(floor.getName());
+		return house;
 	}
 
 	@Override
@@ -178,5 +188,11 @@ public class ProjectService implements IProjectService {
 	public void deleteHouseSpec(String houseSpecId) {
 		HouseSpecContext houseSpecContext = HouseSpecContext.loadById(houseSpecId);
 		houseSpecContext.delete();
+	}
+
+	@Override
+	public ProprietorSingleHouseVo getSingleHouse(String houseId) {
+		HouseContext houseContext = HouseContext.loadById(houseId);
+		return houseContext.getSingleHouse();
 	}
 }

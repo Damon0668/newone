@@ -17,7 +17,6 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
-import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.error.ProjectErrorCode;
 import com.liefeng.property.exception.PropertyException;

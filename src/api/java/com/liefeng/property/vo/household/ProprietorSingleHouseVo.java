@@ -263,11 +263,21 @@ public class ProprietorSingleHouseVo extends BaseValue {
 	 * 楼栋ID
 	 */
 	private String buildingId;
+	
+	/**
+	 * 楼栋名称
+	 */
+	private String buildingName;
 
 	/**
 	 * 楼层ID
 	 */
 	private String floorId;
+	
+	/**
+	 * 楼层名称
+	 */
+	private String floorName;
 
 	/**
 	 * 户型
@@ -766,5 +776,21 @@ public class ProprietorSingleHouseVo extends BaseValue {
 
 	public void setOwnership(String ownership) {
 		this.ownership = ownership;
+	}
+
+	public String getBuildingName() {
+		return buildingName;
+	}
+
+	public void setBuildingName(String buildingName) {
+		this.buildingName = buildingName;
+	}
+
+	public String getFloorName() {
+		return floorName;
+	}
+
+	public void setFloorName(String floorName) {
+		this.floorName = floorName;
 	}
 }

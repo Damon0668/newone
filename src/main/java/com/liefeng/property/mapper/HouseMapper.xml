@@ -22,6 +22,30 @@
 	<result column="pay_type" property="payType"/>
 	<result column="name" property="name"/>
 	<result column="proprietorId" property="proprietorId"/>
+	<result column="useType" property="useType"/>
+</resultMap>
+
+<resultMap id="HouseDetailMap" type="com.liefeng.property.vo.household.ProprietorSingleHouseVo" >
+	<result column="id" property="houseId"/>
+	<result column="house_num" property="houseNum"/>
+	<result column="project_id" property="projectId"/>
+	<result column="building_id" property="buildingId"/>
+	<result column="floor_id" property="floorId"/>
+	<result column="house_type" property="houseType"/>
+	<result column="actual_area" property="actualArea"/>
+	<result column="gross_area" property="grossArea"/>		
+	<result column="usable_area" property="usableArea"/>
+	<result column="apportion_area" property="apportionArea"/>
+	<result column="property_fee" property="propertyFee"/>
+	<result column="sale_status" property="saleStatus"/>
+	<result column="ownership" property="ownership"/>
+	<result column="pay_type" property="payType"/>
+	<result column="name" property="name"/>
+	<result column="proprietorId" property="proprietorId"/>
+	<result column="useType" property="useType"/>
+	<result column="projectName" property="projectName"/>
+	<result column="buildingName" property="buildingName"/>
+	<result column="floorName" property="floorName"/>
 </resultMap>
 
 <!-- 查询条件 -->
@@ -83,7 +107,8 @@ FROM
 	      property_fee,sale_status,ownership,
 	      pay_type,
 	      name,
-	      p.id as proprietorId
+	      p.id as proprietorId,
+	      ph.use_type as useType
 	  FROM
 	      property.t_house h
 	      left join property.t_proprietor_house ph
@@ -94,6 +119,46 @@ FROM
       <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
           ${pager.mysqlQueryCondition}
       </if>
+</select>
+
+<select id="queryById" resultMap="HouseDetailMap">
+	  SELECT
+	      h.id,
+	      h.house_num,
+	      h.project_id,
+	      building_id,
+	      floor_id,
+	      house_type,
+	      actual_area,
+	      gross_area,
+	      usable_area,
+	      apportion_area,
+	      property_fee,
+	      sale_status,
+	      ownership,
+	      pay_type,
+	      p.name as name,
+	      p.id as proprietorId,
+	      ph.use_type as useType,
+	      pj.full_name as projectName,
+	      pb.name as buildingName,
+	      pf.name as floorName
+	  FROM
+	      property.t_house h
+	      left join property.t_proprietor_house ph
+		  on h.house_num = ph.house_num
+		  left join property.t_proprietor p
+		  on ph.proprietor_id = p.id 
+		  left join property.t_project pj
+		  on h.project_id = pj.id
+		  left join property.t_project_building pb
+		  on h.building_id = pb.id
+		  left join property.t_project_building pf
+		  on h.floor_id = pf.id
+	Where 
+	     h.id = #{id}
+		  
+	  
 </select>
 
 </mapper>   
