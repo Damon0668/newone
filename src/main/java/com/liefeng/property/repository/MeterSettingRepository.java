@@ -39,6 +39,13 @@ public interface MeterSettingRepository extends JpaRepository<MeterSettingPo, St
 	 * @param type
 	 * @return
 	 */
-	public Object findByProjectIdAndType(String projectId, String type);
+	public MeterSettingPo findByProjectIdAndType(String projectId, String type);
+
+	/**
+	 *  根据id查询仪表设置
+	 * @param id
+	 * @return
+	 */
+	public MeterSettingPo findById(String id);
 
 }

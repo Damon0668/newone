@@ -1,26 +1,13 @@
 package com.liefeng.property.service;
 
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
-import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.core.dubbo.filter.ContextManager;
-import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.intf.property.IFeeService;
-import com.liefeng.property.po.fee.MeterSettingPo;
-import com.liefeng.property.vo.fee.MeterRecordVo;
-import com.liefeng.property.vo.fee.MeterSettingVo;
 
 /**
  * 

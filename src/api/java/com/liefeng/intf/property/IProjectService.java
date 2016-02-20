@@ -134,14 +134,29 @@ public interface IProjectService {
 	 * 
 	 * @param houseVo
 	 */
-	void createHouse(HouseVo houseVo);
+	public void createHouse(HouseVo houseVo) throws LiefengException;
 
 	/**
 	 * 更新房产资料
 	 * 
 	 * @param houseVo
 	 */
-	void updateHouse(HouseVo houseVo);
+	public void updateHouse(HouseVo houseVo);
+	
+	/**
+	 * 根据ID查找房产资料
+	 * @param houseId 房产资料ID
+	 * @return 房产资料
+	 */
+	public HouseVo findHouseById(String houseId);
+	
+	/**
+	 * 根据项目ID和楼栋ID查找房产资料
+	 * @param projectId 项目ID
+	 * @param buildingId 楼栋ID
+	 * @return 房产资料列表
+	 */
+	public List<HouseVo> findHouseList(String projectId, String buildingId);
 
 	/**
 	 * 分页查询房产信息

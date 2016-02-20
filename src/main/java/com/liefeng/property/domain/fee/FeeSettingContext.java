@@ -1,10 +1,29 @@
 package com.liefeng.property.domain.fee;
 
+import java.sql.Timestamp;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
+import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
+import com.liefeng.common.util.UUIDGenerator;
+import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.property.error.FeeErrorCode;
+import com.liefeng.property.exception.FeeException;
+import com.liefeng.property.po.fee.FeeSettingPo;
+import com.liefeng.property.po.fee.MeterSettingPo;
+import com.liefeng.property.repository.FeeSettingRepository;
 import com.liefeng.property.vo.fee.FeeSettingVo;
+import com.liefeng.property.vo.fee.MeterSettingVo;
 
 /**
  * <pre>      
@@ -17,12 +36,21 @@ import com.liefeng.property.vo.fee.FeeSettingVo;
  * @created 2016年2月18日下午9:12:15
  * </pre>
  */
+@Service
+@Scope("prototype")
 public class FeeSettingContext {
 
 	private static Logger logger = LoggerFactory.getLogger(FeeSettingContext.class);
 
+	@Autowired
+	private FeeSettingRepository feeSettingRepository;
+	
 	private FeeSettingVo feeSetting;
 	
+	private String feeSettingId;
+
+	private String projectId;
+
 	/**
 	 * 获取本类实例，每次返回一个新对象
 	 * 
@@ -43,7 +71,107 @@ public class FeeSettingContext {
 		return feeSettingContext;
 	}
 
+	/**
+	 * 获取本类实例，每次返回一个新对象
+	 * @param id
+	 * @return
+	 */
+	public static FeeSettingContext loadById(String id) {
+		FeeSettingContext feeSettingContext = getInstance();
+		feeSettingContext.setFeeSettingId(id);
+		return feeSettingContext;
+	}
+
+	/**
+	 * 获取本类实例，每次返回一个新对象
+	 * @param projectId
+	 * @return
+	 */
+	public static FeeSettingContext loadByProjectId(String projectId) {
+		FeeSettingContext feeSettingContext = getInstance();
+		feeSettingContext.setProjectId(projectId);
+		return feeSettingContext;
+	}
+
+	public void update(){
+		FeeSettingPo feeSettingPo=feeSettingRepository.findOne(feeSetting.getId());
+		if(feeSetting==null){
+			throw new FeeException(FeeErrorCode.FEESETTING_NOT_EXISTS);
+		}
+
+		// 判断是否存在相同仪表
+		FeeSettingPo feeSettingPoTypeIsExists = feeSettingRepository.findByProjectIdAndFeeType(
+				feeSetting.getProjectId(), feeSetting.getFeeType());
+		if (feeSettingPoTypeIsExists!= null
+			&&!feeSettingPoTypeIsExists.getId().equals(feeSetting.getId())) {
+			throw new FeeException(FeeErrorCode.METERSETTING_EXISTS);
+		}
+		
+		feeSetting.setCreateTime(feeSettingPo.getCreateTime());
+		feeSetting.setStaffId(feeSettingPo.getStaffId());
+		feeSetting.setOemCode(feeSettingPo.getOemCode());
+		feeSettingRepository.save(MyBeanUtil.createBean(feeSetting,FeeSettingPo.class));
+	}
+
+	public void delete() throws FeeException {
+		logger.info("执行费用设置删除id:"+feeSettingId);
+		
+		FeeSettingPo feeSettingPo=feeSettingRepository.findOne(feeSettingId);
+		if(feeSettingPo==null){
+			throw new FeeException(FeeErrorCode.FEESETTING_NOT_EXISTS);
+		}
+		feeSettingRepository.delete(feeSettingPo);
+	}
+
+	public FeeSettingVo findById(){
+		FeeSettingPo feeSettingPo=feeSettingRepository.findOne(feeSettingId);
+		return MyBeanUtil.createBean(feeSettingPo,FeeSettingVo.class);
+	}
+
+	public void save() throws FeeException {
+		if(feeSetting!=null){
+			FeeSettingPo feeSettingPo=feeSettingRepository.findByProjectIdAndFeeType(feeSetting.getProjectId(),feeSetting.getFeeType());
+			if(feeSettingPo!=null){
+				throw new FeeException(FeeErrorCode.FEESETTING_EXISTS);
+			}
+			feeSetting.setOemCode(ContextManager.getInstance().getOemCode());
+			feeSetting.setId(UUIDGenerator.generate());
+			feeSetting.setCreateTime(new Timestamp(System.currentTimeMillis()));
+			feeSettingRepository.save(MyBeanUtil.createBean(feeSetting,FeeSettingPo.class));
+		}
+	}
+
+	public DataPageValue<FeeSettingVo> findByProjectId4Page(Integer pageSize,
+			Integer currentPage){
+		Page<FeeSettingVo> voPage = null;
+
+		//分页查询
+		Pageable pageable = new PageRequest(currentPage - 1, pageSize);
+		Page<FeeSettingPo> feeSettingPage = feeSettingRepository
+				.findByProjectId(projectId, pageable);
+
+		//转换
+		voPage = feeSettingPage
+				.map(new Po2VoConverter<FeeSettingPo, FeeSettingVo>(
+						FeeSettingVo.class));
+
+		return new DataPageValue<FeeSettingVo>(voPage.getContent(),
+				voPage.getTotalElements(), pageSize, currentPage);
+	}
+
+	
+	
 	protected void setFeeSetting(FeeSettingVo feeSetting) {
 		this.feeSetting = feeSetting;
 	}
+
+	protected void setFeeSettingId(String feeSettingId) {
+		this.feeSettingId = feeSettingId;
+	}
+
+	protected void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	
 }

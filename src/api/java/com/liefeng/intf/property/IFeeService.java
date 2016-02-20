@@ -1,6 +1,8 @@
 package com.liefeng.intf.property;
 
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
+import com.liefeng.property.vo.fee.FeeSettingVo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
 import com.liefeng.property.vo.fee.MeterSettingVo;
 
@@ -33,13 +35,13 @@ public interface IFeeService {
 	 * 创建仪表设置
 	 * @param meterSettingPo
 	 */
-	public void saveMeterSetting(MeterSettingVo meterSettingVo);
+	public void saveMeterSetting(MeterSettingVo meterSettingVo) throws LiefengException;
 
 	/**
 	 * 获取仪表设置列表
 	 * @param string
-	 * @param i
-	 * @param j
+	 * @param pageSize
+	 * @param currentPage
 	 */
 	public DataPageValue<MeterSettingVo> findMeterSetting4Page(String string,Integer pageSize,Integer currentPage);
 
@@ -53,11 +55,51 @@ public interface IFeeService {
 	/**
 	 * 修改仪表设置
 	 */
-	public void updateMeterSetting(MeterSettingVo meterSettingVo);
+	public void updateMeterSetting(MeterSettingVo meterSettingVo) throws LiefengException;
 
 	/**
 	 * 删除仪表设置
 	 * @param id
 	 */
-	public void deleteMeterSetting(String id);
+	public void deleteMeterSetting(String id) throws LiefengException;
+
+	/**
+	 * 保存费用设置
+	 * @param feeSettingVo
+	 * @throws LiefengException
+	 */
+	public void saveFeeSetting(FeeSettingVo feeSettingVo);
+
+	/**
+	 * 删除费设置
+	 * @param id
+	 * @throws LiefengException
+	 */
+	public void deleteFeeSetting(String id) throws LiefengException;
+
+	/**
+	 * 根据项目id查询费用设置 分页
+	 * @param projectId
+	 * @param pageSize
+	 * @param currentPage
+	 * @return
+	 */
+	public DataPageValue<FeeSettingVo> findFeeSetting4Page(String projectId,
+			Integer pageSize, Integer currentPage);
+
+	/**
+	 * 根据id 获取费用设置
+	 * @param id
+	 * @return
+	 */
+	public FeeSettingVo findFeeSettingById(String id);
+
+	/**
+	 * 更新费用设置
+	 * @param feeSettingVo
+	 * @throws LiefengException
+	 */
+	public void updateFeeSetting(FeeSettingVo feeSettingVo) throws LiefengException;
+
+	
 }

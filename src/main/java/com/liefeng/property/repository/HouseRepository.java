@@ -1,5 +1,7 @@
 package com.liefeng.property.repository;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +24,12 @@ public interface HouseRepository extends JpaRepository<HousePo, String> {
 	 * @return 房产信息
 	 */
 	public HousePo findByProjectIdAndHouseNum(String projectId, String houseNum);
+	
+	/**
+	 * 根据项目ID和楼栋ID查询房产资料
+	 * @param projectId 项目ID
+	 * @param buildingId 楼栋ID
+	 * @return 房产资料列表
+	 */
+	public List<HousePo> findByProjectIdAndBuildingId(String projectId, String buildingId);
 }

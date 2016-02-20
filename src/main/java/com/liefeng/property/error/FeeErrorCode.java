@@ -18,7 +18,17 @@ public enum FeeErrorCode implements IErrorCode {
 	 * 该仪表设置不存在
 	 */
 	METERSETTING_NOT_EXISTS("该仪表设置不存在"),
+
+	/**
+	 * 该费用设置存在
+	 */
+	FEESETTING_EXISTS("该费用设置已存在"),
 	
+	/**
+	 * 该费用设置不存在
+	 */
+	FEESETTING_NOT_EXISTS("该费用设置不存在"),
+
 	;
 	private String desc;
 	
