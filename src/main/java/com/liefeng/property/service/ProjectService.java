@@ -105,7 +105,7 @@ public class ProjectService implements IProjectService {
 	}
 
 	@Override
-	public void createHouse(HouseVo houseVo) {
+	public void createHouse(HouseVo houseVo) throws LiefengException {
 		HouseContext houseContext = HouseContext.build(houseVo);
 		houseContext.create();
 	}
@@ -114,6 +114,18 @@ public class ProjectService implements IProjectService {
 	public void updateHouse(HouseVo houseVo) {
 		HouseContext houseContext = HouseContext.build(houseVo);
 		houseContext.update();
+	}
+	
+	@Override
+	public HouseVo findHouseById(String houseId) {
+		HouseContext houseContext = HouseContext.loadById(houseId);
+		return houseContext.getHouse();
+	}
+
+	@Override
+	public List<HouseVo> findHouseList(String projectId, String buildingId) {
+		HouseContext houseContext = HouseContext.loadByProjectIdAndBuildingId(projectId, buildingId);
+		return houseContext.getHouseList();
 	}
 
 	@Override
@@ -167,6 +179,4 @@ public class ProjectService implements IProjectService {
 		HouseSpecContext houseSpecContext = HouseSpecContext.loadById(houseSpecId);
 		houseSpecContext.delete();
 	}
-
-	
 }

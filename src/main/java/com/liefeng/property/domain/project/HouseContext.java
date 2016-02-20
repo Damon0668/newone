@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.project;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.project.HouseBo;
@@ -49,7 +51,12 @@ public class HouseContext {
 	/**
 	 * 房产所属项目ID
 	 */
-	private String projectId;
+	protected String projectId;
+	
+	/**
+	 * 房产所属楼栋ID
+	 */
+	protected String buildingId;
 	
 	/**
 	 * 房产编码
@@ -109,10 +116,24 @@ public class HouseContext {
 	 * @param houseNum 房产编码
 	 * @return 房产信息上下文
 	 */
-	public static HouseContext loadByProjectIdAndHouseCode(String projectId, String houseNum) {
+	public static HouseContext loadByProjectIdAndHouseNum(String projectId, String houseNum) {
 		HouseContext houseContext = getInstance();
 		houseContext.projectId = projectId;
 		houseContext.houseNum = houseNum;
+		
+		return houseContext;
+	}
+	
+	/**
+	 * 根据房产编码加载上下文
+	 * @param projectId 房产所属项目ID
+	 * @param buildingId 房产所属楼栋ID
+	 * @return 房产信息上下文
+	 */
+	public static HouseContext loadByProjectIdAndBuildingId(String projectId, String buildingId) {
+		HouseContext houseContext = getInstance();
+		houseContext.setProjectId(projectId);
+		houseContext.setBuildingId(buildingId);
 		
 		return houseContext;
 	}
@@ -142,12 +163,30 @@ public class HouseContext {
 	}
 	
 	/**
+	 * 获取房产资料列表
+	 */
+	public List<HouseVo> getHouseList() {
+		List<HouseVo> hosueList = null;
+		
+		if(ValidateHelper.isNotEmptyString(projectId) 
+				&& ValidateHelper.isNotEmptyString(buildingId)) {
+			List<HousePo> housePoList = houseRepository.findByProjectIdAndBuildingId(projectId, buildingId);
+			
+			hosueList = MyBeanUtil.createList(housePoList, HouseVo.class);
+		} else {
+			hosueList = new ArrayList<HouseVo>();
+		}
+		
+		return hosueList;
+	}
+	
+	/**
 	 * 保存房产信息
 	 */
 	public HouseVo create() {
 		if(house != null) {
 			house.setId(UUIDGenerator.generate());
-			house.setOemCode(""); // TODO 待确定后补齐
+			house.setOemCode(ContextManager.getInstance().getOemCode());
 			house.setRegisterTime(new Date());
 			
 			HousePo housePo = MyBeanUtil.createBean(house, HousePo.class);
@@ -187,4 +226,21 @@ public class HouseContext {
 		
 		return returnPage;
 	}
+
+	protected String getProjectId() {
+		return projectId;
+	}
+
+	protected void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	protected String getBuildingId() {
+		return buildingId;
+	}
+
+	protected void setBuildingId(String buildingId) {
+		this.buildingId = buildingId;
+	}
+	
 }
