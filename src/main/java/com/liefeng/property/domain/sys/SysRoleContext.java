@@ -12,10 +12,8 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.property.po.sys.SysMenuPo;
 import com.liefeng.property.po.sys.SysRolePo;
 import com.liefeng.property.repository.sys.SysRoleRepository;
-import com.liefeng.property.vo.sys.SysMenuVo;
 import com.liefeng.property.vo.sys.SysRoleVo;
 
 /**

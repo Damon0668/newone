@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.liefeng.property.constant.SecurityConstants;
 import com.liefeng.property.po.sys.SysMenuPo;
 
 /**
@@ -26,7 +27,7 @@ public interface SysMenuRepository extends JpaRepository<SysMenuPo, Long>{
 	 * @param pageable 分页对象
 	 * @return
 	 */
-	@Query("select m from SysMenuPo m where m.parentId=:parentId and m.type <> 2 ")
+	@Query("select m from SysMenuPo m where m.parentId=:parentId and m.type <> " + SecurityConstants.Menu.BUTTON + " order by m.parentId,m.order")
 	public Page<SysMenuPo> findMenusIgnoreButton(@Param("parentId")Long parentId, Pageable pageable);
 	
 	/**
@@ -35,14 +36,14 @@ public interface SysMenuRepository extends JpaRepository<SysMenuPo, Long>{
 	 * @param pageable 分页对象
 	 * @return
 	 */
-	@Query("select m from SysMenuPo m where m.parentId=:parentId and m.type = 2 order by m.id asc")
+	@Query("select m from SysMenuPo m where m.parentId=:parentId and m.type = " + SecurityConstants.Menu.BUTTON + " order by m.id asc")
 	public Page<SysMenuPo> findButtons(@Param("parentId")Long parentId, Pageable pageable);
 	
 	/**
 	 * 查询菜单（不包含按钮）
 	 * @return
 	 */
-	@Query("select m from SysMenuPo m where m.type <> 2 order by m.parentId,m.order")
+	@Query("select m from SysMenuPo m where m.type <> "+ SecurityConstants.Menu.BUTTON +" order by m.parentId,m.order")
 	public List<SysMenuPo> findMenusIgnoreButton();
 	
 	/**
@@ -51,6 +52,14 @@ public interface SysMenuRepository extends JpaRepository<SysMenuPo, Long>{
 	 * @return 子菜单列表
 	 */
 	public List<SysMenuPo> findByParentId(Long parentId);
+	
+	/**
+	 * 查找子菜单
+	 * @param parentId 父ID
+	 * @param pageable 分页
+	 * @return
+	 */
+	public Page<SysMenuPo> findByParentId(Long parentId, Pageable pageable);
 	
 	/**
 	 * 查询菜单

@@ -1,6 +1,7 @@
 package com.liefeng.property.domain.sys;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -17,6 +18,7 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.po.sys.SysMenuPo;
+import com.liefeng.property.repository.mybatis.SysMenuQueryRepository;
 import com.liefeng.property.repository.sys.SysMenuRepository;
 import com.liefeng.property.vo.sys.SysMenuVo;
 
@@ -32,6 +34,9 @@ public class SysMenuContext {
 
 	@Autowired
 	private SysMenuRepository sysMenuRepository;
+	
+	@Autowired
+	private SysMenuQueryRepository sysMenuQueryRepository;
 	
 	/**
 	 * 菜单值对象
@@ -61,8 +66,6 @@ public class SysMenuContext {
 		this.code = code;
 	}
 
-
-
 	private static SysMenuContext getInstance() {
 		SysMenuContext sysMenuContext =  SpringBeanUtil.getBean(SysMenuContext.class);
 		return sysMenuContext;
@@ -90,6 +93,11 @@ public class SysMenuContext {
 		return sysMenuContext;
 	}
 	
+	/**
+	 * 获取菜单
+	 * id 优先  > code
+	 * @return
+	 */
 	public SysMenuVo getMenu(){
 		
 		SysMenuPo sysMenuPo = null;
@@ -244,11 +252,35 @@ public class SysMenuContext {
 		return new DataPageValue<SysMenuVo>(voPage.getContent(), voPage.getTotalElements(), size, page);
 	}
 	
+	/**
+	 * 查询菜单
+	 * @param page
+	 * @param size
+	 * @return
+	 */
 	public DataPageValue<SysMenuVo> findMenus(int page, int size) {
 		
 		Page<SysMenuVo> voPage = null;
 		
 		Page<SysMenuPo> poPage = sysMenuRepository.findAll(new PageRequest(page - 1, size));
+		
+		voPage = poPage.map(new Po2VoConverter<SysMenuPo, SysMenuVo>(SysMenuVo.class));
+		
+		return new DataPageValue<SysMenuVo>(voPage.getContent(), voPage.getTotalElements(), size, page);
+	}
+	
+	/**
+	 * 查询菜单
+	 * @param parentId
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public DataPageValue<SysMenuVo> findMenus(Long parentId, int page, int size){
+		
+		Page<SysMenuVo> voPage = null;
+		
+		Page<SysMenuPo> poPage = sysMenuRepository.findByParentId(parentId, new PageRequest(page - 1, size));
 		
 		voPage = poPage.map(new Po2VoConverter<SysMenuPo, SysMenuVo>(SysMenuVo.class));
 		
@@ -283,6 +315,55 @@ public class SysMenuContext {
 	}
 	
 	/**
+	 * 查找菜单树
+	 */
+	public List<SysMenuVo> findMenuTree(){
+		
+		if(menuTree == null){
+			
+			List<SysMenuPo> allMenuList = sysMenuRepository.findMenusIgnoreButton();
+			
+			if(ValidateHelper.isNotEmptyCollection(allMenuList)){
+
+				menuTree = buildSubMenu(MyBeanUtil.createList(allMenuList, SysMenuVo.class));
+			}
+			
+		}
+		
+		return menuTree;
+	}
+
+	/**
+	 * 根据用户ID查询此用户拥有的按钮的code值
+	 * @param userId 用户Id
+	 * @return
+	 */
+	public List<String> findButtonsCodeByUserId(String userId){
+		return sysMenuQueryRepository.queryButtonsCodeByUserId(userId);
+	}
+	
+	/**
+	 * 根据用户ID查找此用户拥有的菜单
+	 * 不包含按钮级别菜单
+	 * 
+	 * @param userId 用户ID
+	 * @return
+	 */
+	public List<SysMenuVo> findMenusByUserId(String userId){
+		
+		List<SysMenuVo> menuList = null;
+		
+		List<SysMenuVo> userMenuList = sysMenuQueryRepository.queryMenusByUserId(userId);
+		
+		if(ValidateHelper.isNotEmptyCollection(userMenuList)){
+			
+			menuList = buildSubMenu(MyBeanUtil.createList(userMenuList, SysMenuVo.class));			
+			
+		}
+		return menuList;
+	}
+	
+	/**
 	 * 查找子菜单
 	 * @param sysMenuList
 	 * @param parentId 父菜单ID
@@ -304,49 +385,42 @@ public class SysMenuContext {
 		return sysMenuList;
 	}
 	
-	
-	/**
-	 * 查找菜单树
-	 */
-	public List<SysMenuVo> findMenuTree(){
-		
-		if(menuTree == null){
-			
-			List<SysMenuPo> AllMenuList = sysMenuRepository.findMenusIgnoreButton();
-			
-			if(AllMenuList != null){
-				menuTree = new ArrayList<SysMenuVo>();
-			
-				for (SysMenuPo sysMenu : AllMenuList) {
-					
-					if(sysMenu.getParentId() == 0){
-						menuTree.add(MyBeanUtil.createBean(sysMenu, SysMenuVo.class));
-					}else{
-						buildSubMenu(menuTree, sysMenu);
-					}
-					
-				}
-			
-			}
-			
-		}
-		
-		return menuTree;
-	}
-
 	/**
 	 * 构建子菜单
 	 * @param SysMenuList
 	 * @param sysMenuPo
 	 */
-	private void buildSubMenu(List<SysMenuVo> SysMenuList, SysMenuPo sysMenuPo){
+	private List<SysMenuVo> buildSubMenu(List<SysMenuVo> sysMenuList){
+		
+		List<SysMenuVo> menuList = new ArrayList<SysMenuVo>();
+		
+		if(ValidateHelper.isNotEmptyCollection(sysMenuList)){
+			
+			for (SysMenuVo sysMenu : sysMenuList) {
+				
+				if(sysMenu.getParentId() == 0){
+					menuList.add(sysMenu);
+				}else{
+					buildSubMenu(menuList, sysMenu);
+				}
+				
+			}
+			
+		}
+		
+		return menuList;
+	}
+	
+	private void buildSubMenu(List<SysMenuVo> SysMenuList, SysMenuVo sysMenu){
 		for (SysMenuVo sysMenuVo : SysMenuList) {
-			if(sysMenuVo.getId() == sysMenuPo.getParentId()){
-				sysMenuVo.getSubMenus().add(MyBeanUtil.createBean(sysMenuPo, SysMenuVo.class));
+			if(sysMenuVo.getId().longValue() == sysMenu.getParentId().longValue()){
+				sysMenuVo.getSubMenus().add(MyBeanUtil.createBean(sysMenu, SysMenuVo.class));
 				break;
 			}else{
-				buildSubMenu(sysMenuVo.getSubMenus(), sysMenuPo);
+				buildSubMenu(sysMenuVo.getSubMenus(), sysMenu);
 			}
 		}
 	}
+	
+
 }

@@ -52,7 +52,7 @@ public class SysMenuPo extends BaseValue{
 	private String icon;
 	
 	@Column(name = "ord")
-	private Long order;
+	private Integer order;
 	
 	@Column(name = "description")
 	private String desc;
@@ -116,11 +116,11 @@ public class SysMenuPo extends BaseValue{
 		this.icon = icon;
 	}
 
-	public Long getOrder() {
+	public Integer getOrder() {
 		return order;
 	}
 
-	public void setOrder(Long order) {
+	public void setOrder(Integer order) {
 		this.order = order;
 	}
 

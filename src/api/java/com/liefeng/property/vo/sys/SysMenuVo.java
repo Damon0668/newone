@@ -33,7 +33,7 @@ public class SysMenuVo extends BaseVoValue{
 	
 	private String icon;
 	
-	private Long order;
+	private Integer order;
 	
 	private String desc;
 	
@@ -100,11 +100,11 @@ public class SysMenuVo extends BaseVoValue{
 		this.icon = icon;
 	}
 
-	public Long getOrder() {
+	public Integer getOrder() {
 		return order;
 	}
 
-	public void setOrder(Long order) {
+	public void setOrder(Integer order) {
 		this.order = order;
 	}
 

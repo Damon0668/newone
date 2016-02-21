@@ -1,4 +1,6 @@
-package com.liefeng.property.test.integration.security;
+package com.liefeng.property.service;
+
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +13,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.ISysSecurityService;
 import com.liefeng.property.domain.sys.SysMenuContext;
 import com.liefeng.property.domain.sys.SysRoleContext;
+import com.liefeng.property.repository.mybatis.SysMenuQueryRepository;
 import com.liefeng.property.vo.sys.SysMenuVo;
 import com.liefeng.property.vo.sys.SysRoleVo;
 
@@ -21,10 +24,13 @@ import com.liefeng.property.vo.sys.SysRoleVo;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-public class SecurityTest {
+public class SecurityServiceTest {
 
 	@Autowired
 	private ISysSecurityService sysSecurityService;
+	
+	@Autowired
+	private SysMenuQueryRepository sysMenuQueryRepository;
 	
 	@Test
 	public void listRolesTest(){
@@ -57,6 +63,10 @@ public class SecurityTest {
 		String[] ids = new String[]{"10"};
 		SysMenuContext sysMenuContext = SysMenuContext.build();
 		sysMenuContext.delMenus(ids);
-		
+	}
+	
+	@Test
+	public void queryButtonsCode(){
+		List<String> list = sysMenuQueryRepository.queryButtonsCodeByUserId("62");
 	}
 }

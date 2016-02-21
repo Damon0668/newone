@@ -59,8 +59,16 @@ public class SysSecurityService implements ISysSecurityService{
 	}
 	
 	@Override
-	public DataPageValue<SysMenuVo> listMenusIgnoreButton(Long parentId, int page, int size){
-		return SysMenuContext.build().findMenusIgnoreButton(parentId, page, size);
+	public DataPageValue<SysMenuVo> listMenus(Long parentId, boolean isIgnoreButton, int page, int size){
+		DataPageValue<SysMenuVo> menus = null;
+		
+		if(isIgnoreButton){
+			menus = SysMenuContext.build().findMenusIgnoreButton(parentId, page, size);
+		}else{
+			menus = SysMenuContext.build().findMenus(parentId, page, size);
+		}
+		
+		return menus;
 	}
 
 	@Override
@@ -112,6 +120,16 @@ public class SysSecurityService implements ISysSecurityService{
 	public ReturnValue updateRole(SysRoleVo sysRole) {
 		SysRoleContext.build(sysRole).update();
 		return ReturnValue.success();
+	}
+
+	@Override
+	public List<String> listButtonsCodeByUserId(String userId) {
+		return SysMenuContext.build().findButtonsCodeByUserId(userId);
+	}
+
+	@Override
+	public List<SysMenuVo> listMenusByUserId(String userId) {
+		return SysMenuContext.build().findMenusByUserId(userId);
 	}
 	
 
