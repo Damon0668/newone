@@ -6,25 +6,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
-import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
-import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.property.domain.project.ProjectContext;
-import com.liefeng.property.error.ProjectErrorCode;
+import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.exception.PropertyException;
-import com.liefeng.property.po.project.ProjectPo;
 import com.liefeng.property.po.workbench.TaskPo;
-import com.liefeng.property.repository.ProjectRepository;
 import com.liefeng.property.repository.workbench.TaskRepository;
-import com.liefeng.property.vo.project.ProjectVo;
 import com.liefeng.property.vo.workbench.TaskVo;
 
 
@@ -126,8 +118,9 @@ public class TaskContext {
 	public TaskVo create() {
 		if(task != null) {
 			task.setId(UUIDGenerator.generate());
-            task.setOem_code(ContextManager.getInstance().getOemCode()); 
-            task.setCreate_time(new Date());
+            task.setOemCode(ContextManager.getInstance().getOemCode()); 
+            task.setCreateTime(new Date());
+            task.setStatus(WorkbenchConstants.TaskStatus.PENDING);
             
             TaskPo taskPo = MyBeanUtil.createBean(task, TaskPo.class);
             taskRepository.save(taskPo);

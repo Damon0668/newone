@@ -1,6 +1,7 @@
 package com.liefeng.property.domain.workbench;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.vo.workbench.TaskPrivilegeVo;
 import com.liefeng.property.vo.workbench.TaskVo;
 
 
@@ -49,9 +51,10 @@ public class WorkbenchContextTest {
 		tv.setContent("测试内容");
 		tv.setStatus("1");
 		tv.setPriority("11");
-		tv.setStart_time(new Date());
-		tv.setEnd_time(new Date());
-		tv.setCreator_id("1");
+		tv.setStartTime(new Date());
+		tv.setEndTime(new Date());
+		tv.setCreatorId("1");
+		tv.setAffstr("96|2|testall,3|1|0,2|0|0"); //接收人范围
 		workbenchService.createTask(tv);
 	}
 	
@@ -68,9 +71,48 @@ public class WorkbenchContextTest {
 		tv.setTitle("测试2");
 		tv.setContent("测试内容2");
 		tv.setPriority("00");
-		tv.setStart_time(new Date());
-		tv.setEnd_time(new Date());
+		tv.setStartTime(new Date());
+		tv.setEndTime(new Date());
 		
 		workbenchService.updateTask(tv);
+	}
+	
+	/**
+	 * 创建任务权限           
+	 * @author xhw
+	 * @date 2016年2月22日 下午4:43:42
+	 */
+	@Test
+	public void createTaskPrivilege(){
+		TaskPrivilegeVo tv = new TaskPrivilegeVo();
+		tv.setTaskId("402889ba53082b620153082b62060000");
+		tv.setProjectId("2");
+		tv.setDeptId("-1");
+		workbenchService.createTaskPrivilege(tv);
+	}
+	
+	/**
+	 * 根据taskid，获取相应的任务权限                      
+	 * @author xhw
+	 * @date 2016年2月22日 下午4:52:33
+	 */
+	@Test
+	public void getTaskPrivilegeBytaskId(){
+		
+		List<TaskPrivilegeVo> tvlist = workbenchService.findTaskPrivilegeByTaskId("402889ba53082b620153082b62060000");
+		for(TaskPrivilegeVo tv:tvlist){
+			System.out.println(tv);
+		}
+		
+	}
+	
+	/**
+	 * 根据taskid，删除相应的任务权限                      
+	 * @author xhw
+	 * @date 2016年2月22日 下午4:52:33
+	 */
+	@Test
+	public void deleteTaskPrivilegeBytaskId(){
+		workbenchService.deleteTaskPrivilegeByTaskId("402889ba53082b620153082b62060000");
 	}
 }

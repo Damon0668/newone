@@ -1,12 +1,6 @@
 package com.liefeng.property.vo.workbench;
 
-import java.sql.Timestamp;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 import com.liefeng.core.entity.BaseValue;
 
@@ -42,17 +36,17 @@ public class TaskVo extends BaseValue{
 	/**
 	 * 优先级。高位表示紧急程度，低位表示重要程度，如：10表示紧急不重要；11表示紧急重要
 	 */
-	private String priority;
+	private String priority = "00";
 	
 	/**
 	 * 开始时间
 	 */
-	private Date start_time;
+	private Date startTime;
 	
 	/**
 	 * 结束时间
 	 */
-	private Date end_time;
+	private Date endTime;
 	
 	/**
 	 * 办理结果
@@ -67,45 +61,53 @@ public class TaskVo extends BaseValue{
 	/**
 	 * 创建人ID
 	 */
-	private String creator_id;
+	private String creatorId;
 	
 	/**
 	 * 办理人ID
 	 */
-	private String handler_id;
+	private String handlerId;
 	
 	/**
 	 * 归档人ID
 	 */
-	private String archiver_id;
+	private String archiverId;
 	
 	/**
 	 * 审核人ID
 	 */
-	private String reviewer_id;
+	private String reviewerId;
 	
 	/**
 	 * 创建时间
 	 */
-	private Date create_time;
+	private Date createTime;
 	
 	/**
 	 * 办理时间
 	 */
-	private Date handle_time;
+	private Date handleTime;
 	
 	/**
 	 * 归档时间
 	 */
-	private Date archive_time;
+	private Date archiveTime;
 	
 	/**
 	 * 审核时间
 	 */
-	private Date review_time;
+	private Date reviewTime;
 	
-	private String oem_code;
-
+	/**
+	 * OEM编码
+	 */
+	private String oemCode;
+	
+	/**
+	 * 任务的接收人范围
+	 */
+	private String affstr;
+	
 	public String getId() {
 		return id;
 	}
@@ -146,20 +148,20 @@ public class TaskVo extends BaseValue{
 		this.priority = priority;
 	}
 
-	public Date getStart_time() {
-		return start_time;
+	public Date getStartTime() {
+		return startTime;
 	}
 
-	public void setStart_time(Date start_time) {
-		this.start_time = start_time;
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
 	}
 
-	public Date getEnd_time() {
-		return end_time;
+	public Date getEndTime() {
+		return endTime;
 	}
 
-	public void setEnd_time(Date end_time) {
-		this.end_time = end_time;
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
 	}
 
 	public String getResult() {
@@ -178,75 +180,100 @@ public class TaskVo extends BaseValue{
 		this.remark = remark;
 	}
 
-	public String getCreator_id() {
-		return creator_id;
+	public String getCreatorId() {
+		return creatorId;
 	}
 
-	public void setCreator_id(String creator_id) {
-		this.creator_id = creator_id;
+	public void setCreatorId(String creatorId) {
+		this.creatorId = creatorId;
 	}
 
-	public String getHandler_id() {
-		return handler_id;
+	public String getHandlerId() {
+		return handlerId;
 	}
 
-	public void setHandler_id(String handler_id) {
-		this.handler_id = handler_id;
+	public void setHandlerId(String handlerId) {
+		this.handlerId = handlerId;
 	}
 
-	public String getArchiver_id() {
-		return archiver_id;
+	public String getArchiverId() {
+		return archiverId;
 	}
 
-	public void setArchiver_id(String archiver_id) {
-		this.archiver_id = archiver_id;
+	public void setArchiverId(String archiverId) {
+		this.archiverId = archiverId;
 	}
 
-	public String getReviewer_id() {
-		return reviewer_id;
+	public String getReviewerId() {
+		return reviewerId;
 	}
 
-	public void setReviewer_id(String reviewer_id) {
-		this.reviewer_id = reviewer_id;
+	public void setReviewerId(String reviewerId) {
+		this.reviewerId = reviewerId;
 	}
 
-	public Date getCreate_time() {
-		return create_time;
+	public Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setCreate_time(Date create_time) {
-		this.create_time = create_time;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
-	public Date getHandle_time() {
-		return handle_time;
+	public Date getHandleTime() {
+		return handleTime;
 	}
 
-	public void setHandle_time(Date handle_time) {
-		this.handle_time = handle_time;
+	public void setHandleTime(Date handleTime) {
+		this.handleTime = handleTime;
 	}
 
-	public Date getArchive_time() {
-		return archive_time;
+	public Date getArchiveTime() {
+		return archiveTime;
 	}
 
-	public void setArchive_time(Date archive_time) {
-		this.archive_time = archive_time;
+	public void setArchiveTime(Date archiveTime) {
+		this.archiveTime = archiveTime;
 	}
 
-	public Date getReview_time() {
-		return review_time;
+	public Date getReviewTime() {
+		return reviewTime;
 	}
 
-	public void setReview_time(Date review_time) {
-		this.review_time = review_time;
+	public void setReviewTime(Date reviewTime) {
+		this.reviewTime = reviewTime;
 	}
 
-	public String getOem_code() {
-		return oem_code;
+	public String getOemCode() {
+		return oemCode;
 	}
 
-	public void setOem_code(String oem_code) {
-		this.oem_code = oem_code;
+	public void setOemCode(String oemCode) {
+		this.oemCode = oemCode;
 	}
+
+	public Character getImportant() {
+		return priority.charAt(1);
+	}
+
+	public void setImportant(Character important) {
+		priority = Character.valueOf(priority.charAt(0)).toString() + important.toString();
+	}
+
+	public Character getEmergency() {
+		return priority.charAt(0);
+	}
+
+	public void setEmergency(Character emergency) {
+		priority = emergency.toString() + Character.valueOf(priority.charAt(1)).toString();
+	}
+
+	public String getAffstr() {
+		return affstr;
+	}
+
+	public void setAffstr(String affstr) {
+		this.affstr = affstr;
+	}
+
 }

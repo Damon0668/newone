@@ -1,23 +1,14 @@
 package com.liefeng.property.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.core.exception.LiefengException;
-import com.liefeng.intf.property.IProjectService;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.intf.property.IWorkbenchService;
-import com.liefeng.property.bo.project.HouseBo;
-import com.liefeng.property.bo.project.HouseSpecBo;
-import com.liefeng.property.domain.project.HouseContext;
-import com.liefeng.property.domain.project.HouseSpecContext;
-import com.liefeng.property.domain.project.ProjectBuildingContext;
-import com.liefeng.property.domain.project.ProjectContext;
 import com.liefeng.property.domain.workbench.TaskContext;
-import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
-import com.liefeng.property.vo.project.HouseSpecVo;
-import com.liefeng.property.vo.project.HouseVo;
-import com.liefeng.property.vo.project.ProjectBuildingVo;
-import com.liefeng.property.vo.project.ProjectVo;
+import com.liefeng.property.domain.workbench.TaskPrivilegeContext;
+import com.liefeng.property.vo.workbench.TaskPrivilegeVo;
 import com.liefeng.property.vo.workbench.TaskVo;
 
 
@@ -40,7 +31,37 @@ public class WorkbenchService implements IWorkbenchService {
 	@Override
 	public void createTask(TaskVo taskVo){
 		TaskContext taskContext = TaskContext.build(taskVo);
-		taskContext.create();
+		TaskVo tv = taskContext.create();
+		
+		if(tv!=null){   //创建任务的权限
+			if(ValidateHelper.isNotEmptyString(tv.getAffstr())){
+				String[] str1 = tv.getAffstr().split(",");
+				for(int i=0; i<str1.length; i++){
+					String[] str2 = str1[i].split("\\|");
+					TaskPrivilegeVo aff = new TaskPrivilegeVo();
+					aff.setTaskId(tv.getId());
+					
+					if("0".equals(str2[1])){
+						aff.setProjectId(str2[0]);
+						aff.setDeptId("-1");
+						createTaskPrivilege(aff);
+					}else{
+						if("0".equals(str2[2])){
+							aff.setProjectId(str2[0]);
+							aff.setDeptId(str2[1]);
+							aff.setStaffId("-1");
+							createTaskPrivilege(aff);
+						}else{
+							aff.setProjectId(str2[0]);
+							aff.setDeptId(str2[1]);
+							aff.setStaffId(str2[2]);
+							createTaskPrivilege(aff);
+						}
+					}
+				}
+				
+			}
+		}
 	}
 
 	@Override
@@ -49,5 +70,24 @@ public class WorkbenchService implements IWorkbenchService {
 		taskContext.update();
 		
 	}
+
+	@Override
+	public TaskPrivilegeVo createTaskPrivilege(TaskPrivilegeVo taskPrivilegeVo) {
+		TaskPrivilegeContext taskPrivilegeContext = TaskPrivilegeContext.build(taskPrivilegeVo);
+		return taskPrivilegeContext.create();
+	}
+
+	@Override
+	public List<TaskPrivilegeVo> findTaskPrivilegeByTaskId(String taskId) {
+		TaskPrivilegeContext taskPrivilegeContext = TaskPrivilegeContext.loadById(taskId);
+		return taskPrivilegeContext.getTaskPrivilegesByTaskid();
+	}
+
+	@Override
+	public void deleteTaskPrivilegeByTaskId(String taskId) {
+		TaskPrivilegeContext taskPrivilegeContext = TaskPrivilegeContext.loadById(taskId);
+		taskPrivilegeContext.deleteByTaskId();
+	}
+
 
 }
