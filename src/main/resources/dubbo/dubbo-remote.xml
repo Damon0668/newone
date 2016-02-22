@@ -15,6 +15,9 @@
       <!-- 系统权限服务  -->
       <dubbo:service interface="com.liefeng.intf.property.ISysSecurityService" ref="sysSecurityService" />
       
+      <!-- 系统服务  -->
+      <dubbo:service interface="com.liefeng.intf.property.ISysService" ref="sysService" />
+      
       <!-- 项目相关服务  -->
       <dubbo:service interface="com.liefeng.intf.property.IProjectService" ref="projectService" />
       
