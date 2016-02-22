@@ -17,11 +17,14 @@ import com.liefeng.Application;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IFeeService;
 import com.liefeng.property.domain.fee.FeeSettingContext;
+import com.liefeng.property.domain.fee.LadderFeeSettingContext;
 import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.MeterSettingPo;
 import com.liefeng.property.vo.fee.FeeSettingVo;
+import com.liefeng.property.vo.fee.LadderFeeSettingVo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
 import com.liefeng.property.vo.fee.MeterSettingVo;
 
@@ -201,7 +204,59 @@ public class FeeServiceTest {
 		feeSettingVo.setUseType("1");
 		feeService.updateFeeSetting(feeSettingVo);
 	}
+	
+	//TODO 阶梯收费设置
+	@Test
+	public void saveLadderFeeSetting() {
+		ContextManager.getInstance().setOemCode("1");
+		LadderFeeSettingVo ladderFeeSettingVo=new LadderFeeSettingVo();
+		ladderFeeSettingVo.setFeeType("1");
+		ladderFeeSettingVo.setLadder1(1);
+		ladderFeeSettingVo.setLadder1Price(10.00);
+		ladderFeeSettingVo.setLadder2(10);
+		ladderFeeSettingVo.setLadder2Price(20.00);
+		ladderFeeSettingVo.setLadder3(15);
+		ladderFeeSettingVo.setLadder3Price(30.00);
+		ladderFeeSettingVo.setProjectId("1");
+		ladderFeeSettingVo.setStaffId("1");
+		ladderFeeSettingVo.setUseType("1");
+		feeService.saveLadderFeeSetting(ladderFeeSettingVo);
+		
+	}
 
+	@Test
+	public void deleteLadderFeeSetting() {
+		feeService.deleteLadderFeeSetting("4028895e5306c04d015306c04dc80000");
+	}
+
+	@Test
+	public void findLadderFeeSetting4Page() {
+		DataPageValue<LadderFeeSettingVo> dataPageValue = feeService.findLadderFeeSetting4Page("2",1,100);
+		System.out.println(dataPageValue);
+	}
+
+	@Test
+	public void findLadderFeeSettingById() {
+		System.out.println(feeService.findLadderFeeSettingById("4028895e5306c04d015306c04dc80000"));
+	}
+
+	@Test
+	public void updateLadderFeeSetting() {
+		LadderFeeSettingVo ladderFeeSettingVo=new LadderFeeSettingVo();
+		ladderFeeSettingVo.setId("4028895e5306c5f2015306c5f2710000");
+		ladderFeeSettingVo.setFeeType("2");
+		ladderFeeSettingVo.setLadder1(2);
+		ladderFeeSettingVo.setLadder1Price(20.00);
+		ladderFeeSettingVo.setLadder2(30);
+		ladderFeeSettingVo.setLadder2Price(30.00);
+		ladderFeeSettingVo.setLadder3(25);
+		ladderFeeSettingVo.setLadder3Price(40.00);
+		ladderFeeSettingVo.setProjectId("2");
+		ladderFeeSettingVo.setStaffId("2");
+		ladderFeeSettingVo.setUseType("2");
+		feeService.updateLadderFeeSetting(ladderFeeSettingVo);
+	}
+	
 	@Autowired
 	private ProjectService projectService;
 	

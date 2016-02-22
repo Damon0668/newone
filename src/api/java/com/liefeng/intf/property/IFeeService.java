@@ -3,6 +3,7 @@ package com.liefeng.intf.property;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.vo.fee.FeeSettingVo;
+import com.liefeng.property.vo.fee.LadderFeeSettingVo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
 import com.liefeng.property.vo.fee.MeterSettingVo;
 
@@ -100,6 +101,19 @@ public interface IFeeService {
 	 * @throws LiefengException
 	 */
 	public void updateFeeSetting(FeeSettingVo feeSettingVo) throws LiefengException;
+
+	public void saveLadderFeeSetting(LadderFeeSettingVo ladderFeeSettingVo)
+			throws LiefengException;
+
+	public void deleteLadderFeeSetting(String id) throws LiefengException;
+
+	public DataPageValue<LadderFeeSettingVo> findLadderFeeSetting4Page(
+			String projectId,Integer currentPage,Integer pageSize);
+
+	public LadderFeeSettingVo findLadderFeeSettingById(String id);
+
+	public void updateLadderFeeSetting(LadderFeeSettingVo ladderFeeSettingVo)
+			throws LiefengException;
 
 	
 }

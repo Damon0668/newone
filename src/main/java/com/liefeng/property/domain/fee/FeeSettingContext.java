@@ -104,7 +104,7 @@ public class FeeSettingContext {
 				feeSetting.getProjectId(), feeSetting.getFeeType());
 		if (feeSettingPoTypeIsExists!= null
 			&&!feeSettingPoTypeIsExists.getId().equals(feeSetting.getId())) {
-			throw new FeeException(FeeErrorCode.METERSETTING_EXISTS);
+			throw new FeeException(FeeErrorCode.FEESETTING_EXISTS);
 		}
 		
 		feeSetting.setCreateTime(feeSettingPo.getCreateTime());

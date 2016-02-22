@@ -16,7 +16,7 @@ import com.liefeng.property.po.fee.MeterSettingPo;
  * Description:
  * Company:广州列丰科技有限公司
  * Copyright: Copyright (c) 2015
- * @author  吴志敬        
+ * @author  wuzhijing        
  * @version 1.0      
  * @created 2016年2月18日下午4:12:28
  * </pre>

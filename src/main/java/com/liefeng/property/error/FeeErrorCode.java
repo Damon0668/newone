@@ -28,6 +28,16 @@ public enum FeeErrorCode implements IErrorCode {
 	 * 该费用设置不存在
 	 */
 	FEESETTING_NOT_EXISTS("该费用设置不存在"),
+	
+	/**
+	 * 该阶梯收费设置存在
+	 */
+	LADDERFEESETTING_EXISTS("该阶梯收费设置已存在"),
+	
+	/**
+	 * 该阶梯收费设置不存在
+	 */
+	LADDERFEESETTING_NOT_EXISTS("该阶梯收费设置不存在"),
 
 	;
 	private String desc;

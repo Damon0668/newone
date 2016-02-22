@@ -8,9 +8,11 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IFeeService;
 import com.liefeng.property.domain.fee.FeeSettingContext;
+import com.liefeng.property.domain.fee.LadderFeeSettingContext;
 import com.liefeng.property.domain.fee.MeterRecordContext;
 import com.liefeng.property.domain.fee.MeterSettingContext;
 import com.liefeng.property.vo.fee.FeeSettingVo;
+import com.liefeng.property.vo.fee.LadderFeeSettingVo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
 import com.liefeng.property.vo.fee.MeterSettingVo;
 
@@ -29,6 +31,7 @@ import com.liefeng.property.vo.fee.MeterSettingVo;
 @Service
 public class FeeService implements IFeeService {
 
+	@SuppressWarnings("unused")
 	private static Logger logger = LoggerFactory.getLogger(FeeService.class);
 
 	@Override
@@ -109,8 +112,8 @@ public class FeeService implements IFeeService {
 
 	@Override
 	public FeeSettingVo findFeeSettingById(String id) {
-		FeeSettingContext eeSettingContext = FeeSettingContext.loadById(id);
-		return eeSettingContext.findById();
+		FeeSettingContext feeSettingContext = FeeSettingContext.loadById(id);
+		return feeSettingContext.findById();
 	}
 
 	@Override
@@ -120,4 +123,43 @@ public class FeeService implements IFeeService {
 				.build(feeSettingVo);
 		feeSettingContext.update();
 	}
+
+	//TODO 阶梯收费设置
+	@Override
+	public void saveLadderFeeSetting(LadderFeeSettingVo ladderFeeSettingVo)
+			throws LiefengException {
+		LadderFeeSettingContext ladderFeeSettingContext =LadderFeeSettingContext
+				.build(ladderFeeSettingVo);
+		ladderFeeSettingContext.save();
+	}
+
+	@Override
+	public void deleteLadderFeeSetting(String id) throws LiefengException {
+		LadderFeeSettingContext ladderFeeSettingContext = LadderFeeSettingContext
+				.loadById(id);
+		ladderFeeSettingContext.delete();
+	}
+
+	@Override
+	public DataPageValue<LadderFeeSettingVo> findLadderFeeSetting4Page(
+			String projectId, Integer currentPage, Integer pageSize) {
+		LadderFeeSettingContext ladderFeeSettingContext = LadderFeeSettingContext
+				.loadByProjectId(projectId);
+		return ladderFeeSettingContext.findByProjectId4Page(currentPage,pageSize);
+	}
+
+	@Override
+	public LadderFeeSettingVo findLadderFeeSettingById(String id) {
+		LadderFeeSettingContext ladderFeeSettingContext = LadderFeeSettingContext.loadById(id);
+		return ladderFeeSettingContext.findById();
+	}
+
+	@Override
+	public void updateLadderFeeSetting(LadderFeeSettingVo ladderFeeSettingVo)
+			throws LiefengException {
+		LadderFeeSettingContext ladderFeeSettingContext = LadderFeeSettingContext
+				.build(ladderFeeSettingVo);
+		ladderFeeSettingContext.update();
+	}
+	
 }
