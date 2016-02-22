@@ -19,5 +19,9 @@
     <!-- 缓存服务  -->
     <dubbo:reference id="redisService"
         interface="com.liefeng.intf.service.cache.IRedisService" check="false" />
+        
+    <!-- 用户校验服务  -->
+    <dubbo:reference id="userCheckService"
+        interface="com.liefeng.intf.base.user.IUserCheckService" check="false" />
 
 </beans>
