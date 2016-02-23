@@ -26,6 +26,7 @@ import com.liefeng.property.vo.fee.FeeRecordVo;
 @Scope("prototype")
 public class FeeRecordContext {
 	
+	@SuppressWarnings("unused")
 	private static Logger logger = LoggerFactory.getLogger(FeeRecordContext.class);
 	
 	@Autowired

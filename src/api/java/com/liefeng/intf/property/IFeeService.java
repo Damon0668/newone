@@ -24,7 +24,7 @@ public interface IFeeService {
 	/**
 	 * 保存抄表
 	 */
-	public void saveMeterRecord(MeterRecordVo meterRecordVo);
+	public void createMeterRecord(MeterRecordVo meterRecordVo);
 
 	/**
 	 * 抄表列表 所有房产及抄表数据集结合(全部房产为主)
@@ -36,7 +36,7 @@ public interface IFeeService {
 	 * 创建仪表设置
 	 * @param meterSettingPo
 	 */
-	public void saveMeterSetting(MeterSettingVo meterSettingVo) throws LiefengException;
+	public void createMeterSetting(MeterSettingVo meterSettingVo) throws LiefengException;
 
 	/**
 	 * 获取仪表设置列表
@@ -69,7 +69,7 @@ public interface IFeeService {
 	 * @param feeSettingVo
 	 * @throws LiefengException
 	 */
-	public void saveFeeSetting(FeeSettingVo feeSettingVo);
+	public void createFeeSetting(FeeSettingVo feeSettingVo);
 
 	/**
 	 * 删除费设置
@@ -102,7 +102,7 @@ public interface IFeeService {
 	 */
 	public void updateFeeSetting(FeeSettingVo feeSettingVo) throws LiefengException;
 
-	public void saveLadderFeeSetting(LadderFeeSettingVo ladderFeeSettingVo)
+	public void createLadderFeeSetting(LadderFeeSettingVo ladderFeeSettingVo)
 			throws LiefengException;
 
 	public void deleteLadderFeeSetting(String id) throws LiefengException;

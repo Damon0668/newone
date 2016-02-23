@@ -1,11 +1,13 @@
 package com.liefeng.property.po.fee;
 
-import java.sql.Timestamp;
+
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 
 
 
@@ -82,7 +84,7 @@ public class MeterSettingPo extends BaseValue {
 	 * 创建时间
 	 */
 	@Column(name = "create_time")
-	private Timestamp createTime;
+	private Date createTime;
 
 	/**
 	 * oem_code
@@ -154,11 +156,11 @@ public class MeterSettingPo extends BaseValue {
 		this.staffId = staffId;
 	}
 
-	public Timestamp getCreateTime() {
+	public Date getCreateTime() {
 		return this.createTime;
 	}
 
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 
