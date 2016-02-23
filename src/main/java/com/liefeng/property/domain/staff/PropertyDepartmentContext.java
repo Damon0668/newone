@@ -116,7 +116,7 @@ public class PropertyDepartmentContext {
 			PropertyDepartmentPo departmentWithSameName = 
 					propertyDepartmentRepository.findDepartmentByNameAndOemCode(departName, oemCode);
 			if (departmentWithSameName != null) {
-				throw new PropertyException(StaffErrorCode.DEPARTMENT_ALREADY_EXIST);
+				throw new PropertyException(StaffErrorCode.DEPARTMENT_ALREADY_EXIST, departName);
 			}
 			
 			propertyDepartment.setId(UUIDGenerator.generate());
