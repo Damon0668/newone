@@ -1,6 +1,6 @@
 package com.liefeng.property.domain.fee;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,12 +125,16 @@ public class LadderFeeSettingContext {
 						ladderFeeSetting.getId())) {
 			throw new FeeException(FeeErrorCode.LADDERFEESETTING_EXISTS);
 		}
-
-		ladderFeeSetting.setCreateTime(ladderFeeSettingPo.getCreateTime());
-		ladderFeeSetting.setStaffId(ladderFeeSettingPo.getStaffId());
-		ladderFeeSetting.setOemCode(ladderFeeSettingPo.getOemCode());
-		ladderFeeSettingRepository.save(MyBeanUtil.createBean(ladderFeeSetting,
-				LadderFeeSettingPo.class));
+		
+		ladderFeeSettingPo.setFeeType(ladderFeeSetting.getFeeType());
+		ladderFeeSettingPo.setLadder1(ladderFeeSetting.getLadder1());
+		ladderFeeSettingPo.setLadder1Price(ladderFeeSetting.getLadder1Price());
+		ladderFeeSettingPo.setLadder2(ladderFeeSetting.getLadder2());
+		ladderFeeSettingPo.setLadder2Price(ladderFeeSetting.getLadder2Price());
+		ladderFeeSettingPo.setLadder3Price(ladderFeeSetting.getLadder3Price());
+		ladderFeeSettingPo.setProjectId(ladderFeeSetting.getProjectId());
+		ladderFeeSettingPo.setUseType(ladderFeeSetting.getUseType());
+		ladderFeeSettingRepository.save(ladderFeeSettingPo);
 	}
 
 	public LadderFeeSettingVo findById() {
@@ -140,7 +144,7 @@ public class LadderFeeSettingContext {
 				LadderFeeSettingVo.class);
 	}
 
-	public void save() throws LiefengException {
+	public void create() throws LiefengException {
 		if (ladderFeeSetting != null) {
 			LadderFeeSettingPo ladderFeeSettingPo = ladderFeeSettingRepository
 					.findByProjectIdAndFeeType(ladderFeeSetting.getProjectId(),
@@ -151,8 +155,7 @@ public class LadderFeeSettingContext {
 			ladderFeeSetting.setOemCode(ContextManager.getInstance()
 					.getOemCode());
 			ladderFeeSetting.setId(UUIDGenerator.generate());
-			ladderFeeSetting.setCreateTime(new Timestamp(System
-					.currentTimeMillis()));
+			ladderFeeSetting.setCreateTime(new Date());
 			ladderFeeSettingRepository.save(MyBeanUtil.createBean(
 					ladderFeeSetting, LadderFeeSettingPo.class));
 		}

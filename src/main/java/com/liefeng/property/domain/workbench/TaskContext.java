@@ -29,7 +29,6 @@ import com.liefeng.property.vo.workbench.TaskVo;
 @Scope("prototype")
 public class TaskContext {
 	
-	@SuppressWarnings("unused")
 	private static Logger logger = LoggerFactory.getLogger(TaskContext.class);
 	
 	@Autowired
@@ -60,7 +59,7 @@ public class TaskContext {
 	 */
 	public static TaskContext build(TaskVo task) {
 		TaskContext taskContext = getInstance();
-		taskContext.task = task;
+		taskContext.setTask(task);
 		
 		return taskContext;
 	}
@@ -84,7 +83,7 @@ public class TaskContext {
 	 */
 	public static TaskContext loadById(String taskId){
 		TaskContext taskContext = getInstance();
-		taskContext.taskId = taskId;
+		taskContext.setTaskId(taskId);
 		
 		return taskContext;
 	}
@@ -96,7 +95,7 @@ public class TaskContext {
 	 * @date 2016年2月19日
 	 */
 	public TaskVo getTask(){
-		if(task==null){
+		if(task == null){
 			TaskPo taskPo = null;
 			if(ValidateHelper.isNotEmptyString(taskId)){
 				taskPo = taskRepository.findOne(taskId);
@@ -124,6 +123,8 @@ public class TaskContext {
             
             TaskPo taskPo = MyBeanUtil.createBean(task, TaskPo.class);
             taskRepository.save(taskPo);
+            
+            logger.info("Create task : {} success.", taskPo);
 		}
 		
 		return task;
@@ -141,8 +142,19 @@ public class TaskContext {
 			
 			MyBeanUtil.copyBeanNotNull2Bean(task, taskPo);
 			taskRepository.save(taskPo);
+			
+			logger.info("Update task of id: {} success.", task.getId());
 		}
 		
 		return task;
+	}
+
+
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
+	}
+
+	public void setTask(TaskVo task) {
+		this.task = task;
 	}
 }

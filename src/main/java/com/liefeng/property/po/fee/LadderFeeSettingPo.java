@@ -1,6 +1,6 @@
 package com.liefeng.property.po.fee;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -91,7 +91,7 @@ public class LadderFeeSettingPo extends BaseValue {
 	 * 创建时间
 	 */
 	@Column(name = "create_time")
-	private Timestamp createTime;
+	private Date createTime;
 
 	/**
 	 * OEM编码
@@ -179,11 +179,11 @@ public class LadderFeeSettingPo extends BaseValue {
 		this.staffId = staffId;
 	}
 
-	public Timestamp getCreateTime() {
+	public Date getCreateTime() {
 		return this.createTime;
 	}
 
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 

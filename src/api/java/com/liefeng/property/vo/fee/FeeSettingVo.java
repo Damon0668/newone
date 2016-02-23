@@ -1,8 +1,7 @@
 package com.liefeng.property.vo.fee;
 
-import java.sql.Timestamp;
 
-import javax.persistence.Column;
+import java.util.Date;
 
 import com.liefeng.core.entity.BaseValue;
 
@@ -85,7 +84,7 @@ public class FeeSettingVo extends BaseValue{
 	/**
 	 * 创建时间
 	 */
-	private Timestamp createTime;
+	private Date createTime;
 
 	/**
 	 * OEM编码
@@ -201,11 +200,11 @@ public class FeeSettingVo extends BaseValue{
 	}
 
 	
-	public Timestamp getCreateTime() {
+	public Date getCreateTime() {
 		return this.createTime;
 	}
 
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 

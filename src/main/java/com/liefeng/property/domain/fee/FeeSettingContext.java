@@ -1,6 +1,6 @@
 package com.liefeng.property.domain.fee;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +20,8 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.error.FeeErrorCode;
 import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.FeeSettingPo;
-import com.liefeng.property.po.fee.MeterSettingPo;
 import com.liefeng.property.repository.FeeSettingRepository;
 import com.liefeng.property.vo.fee.FeeSettingVo;
-import com.liefeng.property.vo.fee.MeterSettingVo;
 
 /**
  * <pre>      
@@ -106,11 +104,18 @@ public class FeeSettingContext {
 			&&!feeSettingPoTypeIsExists.getId().equals(feeSetting.getId())) {
 			throw new FeeException(FeeErrorCode.FEESETTING_EXISTS);
 		}
+
+		feeSettingPo.setChargeable(feeSetting.getChargeable());
+		feeSettingPo.setFeeType(feeSetting.getFeeType());
+		feeSettingPo.setPaymentPeriod(feeSetting.getPaymentPeriod());
+		feeSettingPo.setPeriod(feeSetting.getPeriod());
+		feeSettingPo.setPrice(feeSetting.getPrice());
+		feeSettingPo.setStartDay(feeSetting.getStartDay());
+		feeSettingPo.setStartMonth(feeSetting.getStartMonth());
+		feeSettingPo.setUnit(feeSetting.getUnit());
+		feeSettingPo.setUseType(feeSetting.getUseType());
 		
-		feeSetting.setCreateTime(feeSettingPo.getCreateTime());
-		feeSetting.setStaffId(feeSettingPo.getStaffId());
-		feeSetting.setOemCode(feeSettingPo.getOemCode());
-		feeSettingRepository.save(MyBeanUtil.createBean(feeSetting,FeeSettingPo.class));
+		feeSettingRepository.save(feeSettingPo);
 	}
 
 	public void delete() throws FeeException {
@@ -128,7 +133,7 @@ public class FeeSettingContext {
 		return MyBeanUtil.createBean(feeSettingPo,FeeSettingVo.class);
 	}
 
-	public void save() throws FeeException {
+	public void create() throws FeeException {
 		if(feeSetting!=null){
 			FeeSettingPo feeSettingPo=feeSettingRepository.findByProjectIdAndFeeTypeAndUseType(feeSetting.getProjectId(),feeSetting.getFeeType(),feeSetting.getUseType());
 			if(feeSettingPo!=null){
@@ -136,7 +141,7 @@ public class FeeSettingContext {
 			}
 			feeSetting.setOemCode(ContextManager.getInstance().getOemCode());
 			feeSetting.setId(UUIDGenerator.generate());
-			feeSetting.setCreateTime(new Timestamp(System.currentTimeMillis()));
+			feeSetting.setCreateTime(new Date());
 			feeSettingRepository.save(MyBeanUtil.createBean(feeSetting,FeeSettingPo.class));
 		}
 	}

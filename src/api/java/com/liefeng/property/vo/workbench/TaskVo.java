@@ -106,7 +106,7 @@ public class TaskVo extends BaseValue{
 	/**
 	 * 任务的接收人范围
 	 */
-	private String affstr;
+	private String privilegeStr;
 	
 	public String getId() {
 		return id;
@@ -268,12 +268,12 @@ public class TaskVo extends BaseValue{
 		priority = emergency.toString() + Character.valueOf(priority.charAt(1)).toString();
 	}
 
-	public String getAffstr() {
-		return affstr;
+	public String getPrivilegeStr() {
+		return privilegeStr;
 	}
 
-	public void setAffstr(String affstr) {
-		this.affstr = affstr;
+	public void setPrivilegeStr(String privilegeStr) {
+		this.privilegeStr = privilegeStr;
 	}
 
 }

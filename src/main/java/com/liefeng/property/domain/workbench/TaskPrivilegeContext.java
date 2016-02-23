@@ -28,7 +28,6 @@ import com.liefeng.property.vo.workbench.TaskPrivilegeVo;
 @Scope("prototype")
 public class TaskPrivilegeContext {
 	
-	@SuppressWarnings("unused")
 	private static Logger logger = LoggerFactory.getLogger(TaskPrivilegeContext.class);
 	
 	@Autowired
@@ -62,7 +61,7 @@ public class TaskPrivilegeContext {
 	 */
 	public static TaskPrivilegeContext build(TaskPrivilegeVo taskPrivilege) {
 		TaskPrivilegeContext taskPrivilegeContext = getInstance();
-		taskPrivilegeContext.taskPrivilege = taskPrivilege;
+		taskPrivilegeContext.setTaskPrivilege(taskPrivilege);
 		
 		return taskPrivilegeContext;
 	}
@@ -88,7 +87,7 @@ public class TaskPrivilegeContext {
 	 */
 	public static TaskPrivilegeContext loadById(String taskId){
 		TaskPrivilegeContext taskPrivilegeContext = getInstance();
-		taskPrivilegeContext.taskId = taskId;
+		taskPrivilegeContext.setTaskId(taskId);
 		
 		return taskPrivilegeContext;
 	}
@@ -100,22 +99,22 @@ public class TaskPrivilegeContext {
 	 * @date 2016年2月19日
 	 */
 	public List<TaskPrivilegeVo> getTaskPrivilegesByTaskid(){
-		List<TaskPrivilegeVo> vos = null;
+		List<TaskPrivilegeVo> privilegeVoList = null;
 			if(ValidateHelper.isNotEmptyString(taskId)){
-				List<TaskPrivilegePo> pos = taskPrivilegeRepository.findByTaskId(taskId);
+				List<TaskPrivilegePo> privilegePoList = taskPrivilegeRepository.findByTaskId(taskId);
 				
-				if(!pos.isEmpty()){
-					vos = new ArrayList<TaskPrivilegeVo>();
+				if(!privilegePoList.isEmpty()){
+					privilegeVoList = new ArrayList<TaskPrivilegeVo>();
 				}
 				
-				for(TaskPrivilegePo po:pos){
-					TaskPrivilegeVo vo = MyBeanUtil.createBean(po,TaskPrivilegeVo.class);
-					vos.add(vo);
+				for(TaskPrivilegePo privilegePo : privilegePoList){
+					TaskPrivilegeVo privilegeVo = MyBeanUtil.createBean(privilegePo,TaskPrivilegeVo.class);
+					privilegeVoList.add(privilegeVo);
 					
 				}
 			}
 			
-		return vos;
+		return privilegeVoList;
 	}
 	
 	/**
@@ -129,8 +128,10 @@ public class TaskPrivilegeContext {
 			taskPrivilege.setId(UUIDGenerator.generate());
 			taskPrivilege.setOemCode(ContextManager.getInstance().getOemCode()); 
             
-            TaskPrivilegePo po = MyBeanUtil.createBean(taskPrivilege, TaskPrivilegePo.class);
-            taskPrivilegeRepository.save(po);
+            TaskPrivilegePo privilegePo = MyBeanUtil.createBean(taskPrivilege, TaskPrivilegePo.class);
+            taskPrivilegeRepository.save(privilegePo);
+            
+            logger.info("Create taskPrivilege : {} success.", privilegePo);
 		}
 		
 		return taskPrivilege;
@@ -145,7 +146,17 @@ public class TaskPrivilegeContext {
 	public void deleteByTaskId() {
 		if(ValidateHelper.isNotEmptyString(taskId)){
 			taskPrivilegeRepository.deleteByTaskId(taskId);
+			
+			logger.info("Delete taskPrivilege of taskId : {} success.", taskId);
 		}
 		
+	}
+
+	public void setTaskPrivilege(TaskPrivilegeVo taskPrivilege) {
+		this.taskPrivilege = taskPrivilege;
+	}
+
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
 	}
 }

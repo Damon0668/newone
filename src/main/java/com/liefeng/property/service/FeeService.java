@@ -35,7 +35,7 @@ public class FeeService implements IFeeService {
 	private static Logger logger = LoggerFactory.getLogger(FeeService.class);
 
 	@Override
-	public void saveMeterRecord(MeterRecordVo meterRecordVo) {
+	public void createMeterRecord(MeterRecordVo meterRecordVo) {
 
 		MeterRecordContext meterRecordContext = MeterRecordContext
 				.build(meterRecordVo);
@@ -49,11 +49,11 @@ public class FeeService implements IFeeService {
 	}
 	// TODO 仪表设置
 	@Override
-	public void saveMeterSetting(MeterSettingVo meterSettingVo)
+	public void createMeterSetting(MeterSettingVo meterSettingVo)
 			throws LiefengException {
 		MeterSettingContext meterSettingContext = MeterSettingContext
 				.build(meterSettingVo);
-		meterSettingContext.save();
+		meterSettingContext.create();
 	}
 
 	@Override
@@ -88,11 +88,11 @@ public class FeeService implements IFeeService {
 
 	//TODO 费用设置
 	@Override
-	public void saveFeeSetting(FeeSettingVo feeSettingVo)
+	public void createFeeSetting(FeeSettingVo feeSettingVo)
 			throws LiefengException {
 		FeeSettingContext feeSettingContext =FeeSettingContext
 				.build(feeSettingVo);
-		feeSettingContext.save();
+		feeSettingContext.create();
 	}
 
 	@Override
@@ -126,11 +126,11 @@ public class FeeService implements IFeeService {
 
 	//TODO 阶梯收费设置
 	@Override
-	public void saveLadderFeeSetting(LadderFeeSettingVo ladderFeeSettingVo)
+	public void createLadderFeeSetting(LadderFeeSettingVo ladderFeeSettingVo)
 			throws LiefengException {
 		LadderFeeSettingContext ladderFeeSettingContext =LadderFeeSettingContext
 				.build(ladderFeeSettingVo);
-		ladderFeeSettingContext.save();
+		ladderFeeSettingContext.create();
 	}
 
 	@Override

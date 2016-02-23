@@ -1,6 +1,6 @@
 package com.liefeng.property.domain.fee;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,7 +112,7 @@ public class MeterSettingContext {
 	/**
 	 * 创建仪表设置
 	 */
-	public void save() {
+	public void create() {
 
 		if (meterSetting != null) {
 
@@ -123,7 +123,7 @@ public class MeterSettingContext {
 			}
 			meterSetting.setId(UUIDGenerator.generate());
 			meterSetting.setOemCode(ContextManager.getInstance().getOemCode());
-			meterSetting.setCreateTime(new Timestamp(System.currentTimeMillis()));
+			meterSetting.setCreateTime(new Date());
 			MeterSettingPo meterSettingPo = MyBeanUtil.createBean(meterSetting,
 					MeterSettingPo.class);
 			meterSettingRepository.save(meterSettingPo);
@@ -164,6 +164,7 @@ public class MeterSettingContext {
 	 * 删除仪表设置
 	 */
 	public void delete() {
+		logger.info("删除id:"+id);
 		// 判断仪表是否存在
 		if (meterSettingRepository.findOne(id) == null) {
 			throw new FeeException(FeeErrorCode.METERSETTING_NOT_EXISTS);
@@ -178,8 +179,8 @@ public class MeterSettingContext {
 	 */
 	public void update() throws FeeException {
 		// 判断仪表是否存在
-		MeterSettingPo meterSettingPoIsExists=meterSettingRepository.findById(meterSetting.getId());
-		if (meterSettingPoIsExists == null) {
+		MeterSettingPo meterSettingPo=meterSettingRepository.findById(meterSetting.getId());
+		if (meterSettingPo == null) {
 			throw new FeeException(FeeErrorCode.METERSETTING_NOT_EXISTS);
 		}
 
@@ -191,11 +192,13 @@ public class MeterSettingContext {
 			throw new FeeException(FeeErrorCode.METERSETTING_EXISTS);
 		}
 
-		meterSetting.setCreateTime(meterSettingPoIsExists.getCreateTime());
-		meterSetting.setStaffId(meterSettingPoIsExists.getStaffId());
-		meterSetting.setOemCode(ContextManager.getInstance().getOemCode());
-		MeterSettingPo meterSettingPo = MyBeanUtil.createBean(meterSetting,
-				MeterSettingPo.class);
+		meterSettingPo.setChargeable(meterSetting.getChargeable());
+		meterSettingPo.setLastingDay(meterSetting.getLastingDay());
+		meterSettingPo.setModNum(meterSetting.getLastingDay());
+		meterSettingPo.setProjectId(meterSetting.getProjectId());
+		meterSettingPo.setStartDay(meterSetting.getStartDay());
+		meterSettingPo.setType(meterSetting.getType());
+		
 		meterSettingRepository.save(meterSettingPo);
 	}
 

@@ -27,6 +27,7 @@ import com.liefeng.property.vo.fee.FeeItemVo;
 @Scope("prototype")
 public class FeeItemContext {
 	
+	@SuppressWarnings("unused")
 	private static Logger logger = LoggerFactory.getLogger(FeeItemContext.class);
 	
 	@Autowired

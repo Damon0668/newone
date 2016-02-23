@@ -29,33 +29,33 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
-	public void createTask(TaskVo taskVo){
-		TaskContext taskContext = TaskContext.build(taskVo);
-		TaskVo tv = taskContext.create();
+	public void createTask(TaskVo task){
+		TaskContext taskContext = TaskContext.build(task);
+		TaskVo taskVo = taskContext.create();
 		
-		if(tv!=null){   //创建任务的权限
-			if(ValidateHelper.isNotEmptyString(tv.getAffstr())){
-				String[] str1 = tv.getAffstr().split(",");
-				for(int i=0; i<str1.length; i++){
-					String[] str2 = str1[i].split("\\|");
-					TaskPrivilegeVo aff = new TaskPrivilegeVo();
-					aff.setTaskId(tv.getId());
+		if(taskVo != null){   //创建任务的权限
+			if(ValidateHelper.isNotEmptyString(taskVo.getPrivilegeStr())){
+				String[] privilegesArray = taskVo.getPrivilegeStr().split(",");
+				for(int i=0; i < privilegesArray.length; i++){
+					String[] privilegeArray = privilegesArray[i].split("\\|");
+					TaskPrivilegeVo privilegeVo = new TaskPrivilegeVo();
+					privilegeVo.setTaskId(taskVo.getId());
 					
-					if("0".equals(str2[1])){
-						aff.setProjectId(str2[0]);
-						aff.setDeptId("-1");
-						createTaskPrivilege(aff);
+					if("0".equals(privilegeArray[1])){ //项目的所有人
+						privilegeVo.setProjectId(privilegeArray[0]);
+						privilegeVo.setDeptId("-1");
+						createTaskPrivilege(privilegeVo);
 					}else{
-						if("0".equals(str2[2])){
-							aff.setProjectId(str2[0]);
-							aff.setDeptId(str2[1]);
-							aff.setStaffId("-1");
-							createTaskPrivilege(aff);
-						}else{
-							aff.setProjectId(str2[0]);
-							aff.setDeptId(str2[1]);
-							aff.setStaffId(str2[2]);
-							createTaskPrivilege(aff);
+						if("0".equals(privilegeArray[2])){   //部门的所有人
+							privilegeVo.setProjectId(privilegeArray[0]);
+							privilegeVo.setDeptId(privilegeArray[1]);
+							privilegeVo.setStaffId("-1");
+							createTaskPrivilege(privilegeVo);
+						}else{                      //某个人
+							privilegeVo.setProjectId(privilegeArray[0]);
+							privilegeVo.setDeptId(privilegeArray[1]);
+							privilegeVo.setStaffId(privilegeArray[2]);
+							createTaskPrivilege(privilegeVo);
 						}
 					}
 				}
