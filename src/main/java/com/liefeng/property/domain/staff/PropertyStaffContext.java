@@ -12,6 +12,7 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.staff.PropertyStaffPo;
 import com.liefeng.property.repository.PropertyStaffRepository;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
@@ -20,6 +21,7 @@ import com.liefeng.property.vo.staff.PropertyStaffVo;
  * 物业员工领域模型
  * 
  * @author ZhenTingJun
+ * @author 蔡少东
  * @date 2015-12-23
  */
 @Service
@@ -95,14 +97,25 @@ public class PropertyStaffContext {
 	/**
 	 * 保存物业员工信息
 	 */
-	public void create() {
+	public PropertyStaffVo create() {
 		if(propertyStaff != null) {
 			propertyStaff.setId(UUIDGenerator.generate());
-			propertyStaff.setOemCode(""); // TODO 待确定后补齐
+			propertyStaff.setOemCode(ContextManager.getInstance().getOemCode()); // TODO 待确定后补齐
 			propertyStaff.setCreateTime(new Date());
 			
 			PropertyStaffPo propertyStaffPo = MyBeanUtil.createBean(propertyStaff, PropertyStaffPo.class);
 			propertyStaffRepository.save(propertyStaffPo);
+		}
+		return propertyStaff;
+	}
+	
+	public void update() {
+		if(propertyStaff != null && ValidateHelper.isNotEmptyString(propertyStaff.getId())){
+			PropertyStaffPo propertyStaffPo = propertyStaffRepository.findOne(propertyStaff.getId());
+			if(propertyStaffPo != null){
+				MyBeanUtil.copyBeanNotNull2Bean(propertyStaff, propertyStaffPo);
+				propertyStaffRepository.save(propertyStaffPo);
+			}
 		}
 	}
 

@@ -75,13 +75,7 @@ public class PropertyStaffPo extends BaseValue {
 	 */
 	@Column(name = "department_id")
 	private String departmentId;
-	
-	/**
-	 * 上级领导
-	 */
-	@Column(name = "director")
-	private String director;
-	
+
 	/**
 	 * 职位
 	 */
@@ -183,14 +177,6 @@ public class PropertyStaffPo extends BaseValue {
 
 	public void setDepartmentId(String departmentId) {
 		this.departmentId = departmentId;
-	}
-
-	public String getDirector() {
-		return director;
-	}
-
-	public void setDirector(String director) {
-		this.director = director;
 	}
 
 	public String getPosition() {

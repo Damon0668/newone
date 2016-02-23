@@ -2,12 +2,9 @@ package com.liefeng.property.service;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
 
 import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.ISysSecurityService;
 import com.liefeng.property.domain.sys.SysMenuContext;
@@ -65,7 +62,7 @@ public class SysSecurityService implements ISysSecurityService{
 		if(isIgnoreButton){
 			menus = SysMenuContext.build().findMenusIgnoreButton(parentId, page, size);
 		}else{
-			menus = SysMenuContext.build().findMenus(parentId, page, size);
+			menus = SysMenuContext.build().findSubMenu(parentId, page, size);
 		}
 		
 		return menus;

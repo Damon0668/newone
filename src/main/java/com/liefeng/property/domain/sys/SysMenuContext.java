@@ -1,7 +1,6 @@
 package com.liefeng.property.domain.sys;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -276,7 +275,7 @@ public class SysMenuContext {
 	 * @param size
 	 * @return
 	 */
-	public DataPageValue<SysMenuVo> findMenus(Long parentId, int page, int size){
+	public DataPageValue<SysMenuVo> findSubMenu(Long parentId, int page, int size){
 		
 		Page<SysMenuVo> voPage = null;
 		
