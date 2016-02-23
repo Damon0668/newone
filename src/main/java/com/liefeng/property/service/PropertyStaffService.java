@@ -7,13 +7,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.common.util.IDGenerator;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.exception.LiefengException;
+import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IPropertyStaffService;
+import com.liefeng.intf.property.ISysSecurityService;
 import com.liefeng.property.domain.staff.PropertyStaffContext;
 import com.liefeng.property.domain.staff.StaffArchiveContext;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
@@ -30,7 +33,11 @@ public class PropertyStaffService implements IPropertyStaffService {
 	private static final Logger logger = LoggerFactory.getLogger(PropertyStaffService.class);
 	
 	@Autowired
-	private IUserService userService;
+	private ISysSecurityService sysSecurityService;
+	
+	@Autowired
+	private ICheckService checkService;
+
 	
 	@Override
 	public DataPageValue<PropertyStaffVo> findPropertyStaff(int page, int size) {
@@ -48,15 +55,18 @@ public class PropertyStaffService implements IPropertyStaffService {
 		
 		logger.info("createStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
 		
-		//userService.createCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
+		//CustomerVo customerVo = checkService.createCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
 		
-		PropertyStaffVo propertyStaff = PropertyStaffContext.build(propertyStaffDetailInfo.getPropertyStaffVo()).create();
+		PropertyStaffVo propertyStaffVo = PropertyStaffContext.build(propertyStaffDetailInfo.getPropertyStaffVo()).create();
 		
-		propertyStaffDetailInfo.getStaffArchiveVo().setStaffId(propertyStaff.getId());
+		propertyStaffDetailInfo.getStaffArchiveVo().setStaffId(propertyStaffVo.getId());
 		
 		propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(UUIDGenerator.generate());
+		//propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(customerVo.getGlobalId());
 
 		StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).create();
+		
+		sysSecurityService.gruntRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
 				
 		return ReturnValue.success();
 	}

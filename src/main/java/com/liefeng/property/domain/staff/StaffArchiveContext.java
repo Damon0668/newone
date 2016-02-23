@@ -10,6 +10,7 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.staff.StaffArchivePo;
 import com.liefeng.property.repository.StaffArchiveRepository;
 import com.liefeng.property.vo.staff.StaffArchiveVo;
@@ -18,6 +19,7 @@ import com.liefeng.property.vo.staff.StaffArchiveVo;
  * 员工档案领域模型
  * 
  * @author ZhenTingJun
+ * @author 蔡少东
  * @date 2015-12-23
  */
 @Service
@@ -39,6 +41,14 @@ public class StaffArchiveContext {
 	 */
 	private StaffArchiveVo staffArchive;
 	
+	protected void setStaffArchiveId(String staffArchiveId) {
+		this.staffArchiveId = staffArchiveId;
+	}
+
+	protected void setStaffArchive(StaffArchiveVo staffArchive) {
+		this.staffArchive = staffArchive;
+	}
+	
 	/**
 	 * 获取本类实例，每次返回一个新的对象
 	 * @return 本类实例
@@ -54,7 +64,7 @@ public class StaffArchiveContext {
 	 */
 	public static StaffArchiveContext build(StaffArchiveVo staffArchive) {
 		StaffArchiveContext staffArchiveContext = getInstance();
-		staffArchiveContext.staffArchive = staffArchive;
+		staffArchiveContext.setStaffArchive(staffArchive);
 		
 		return staffArchiveContext;
 	}
@@ -76,7 +86,7 @@ public class StaffArchiveContext {
 	 */
 	public static StaffArchiveContext loadById(String staffArchiveId) {
 		StaffArchiveContext staffArchiveContext = getInstance();
-		staffArchiveContext.staffArchiveId = staffArchiveId;
+		staffArchiveContext.setStaffArchiveId(staffArchiveId);
 		
 		return staffArchiveContext;
 	}
@@ -106,10 +116,11 @@ public class StaffArchiveContext {
 	public void create() {
 		if(staffArchive != null) {
 			staffArchive.setId(UUIDGenerator.generate());
-			staffArchive.setOemCode(""); // TODO 待确定后补齐
-			
+			staffArchive.setOemCode(ContextManager.getInstance().getOemCode());
 			StaffArchivePo staffArchivePo = MyBeanUtil.createBean(staffArchive, StaffArchivePo.class);
 			staffArchiveRepository.save(staffArchivePo);
 		}
 	}
+
+	
 }

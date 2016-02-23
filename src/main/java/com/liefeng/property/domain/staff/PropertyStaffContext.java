@@ -43,6 +43,13 @@ public class PropertyStaffContext {
 	 */
 	private PropertyStaffVo propertyStaff;
 	
+	protected void setPropertyStaffId(String propertyStaffId) {
+		this.propertyStaffId = propertyStaffId;
+	}
+
+	protected void setPropertyStaff(PropertyStaffVo propertyStaff) {
+		this.propertyStaff = propertyStaff;
+	}
 	/**
 	 * 获取本类实例，每次返回一个新的对象
 	 * @return 本类实例
@@ -58,7 +65,7 @@ public class PropertyStaffContext {
 	 */
 	public static PropertyStaffContext build(PropertyStaffVo propertyStaff) {
 		PropertyStaffContext propertyStaffContext = getInstance();
-		propertyStaffContext.propertyStaff = propertyStaff;
+		propertyStaffContext.setPropertyStaff(propertyStaff);
 		
 		return propertyStaffContext;
 	}
@@ -70,8 +77,7 @@ public class PropertyStaffContext {
 	 */
 	public static PropertyStaffContext loadById(String propertyStaffId) {
 		PropertyStaffContext propertyStaffContext = getInstance();
-		propertyStaffContext.propertyStaffId = propertyStaffId;
-		
+		propertyStaffContext.setPropertyStaffId(propertyStaffId);
 		return propertyStaffContext;
 	}
 	

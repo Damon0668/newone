@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.po.sys.SysRolePo;
 import com.liefeng.property.repository.sys.SysRoleRepository;
@@ -124,6 +125,7 @@ public class SysRoleContext {
 	}
 	
 	public List<SysRoleVo> findAll(){
-		return MyBeanUtil.createList(sysRoleRepository.findAll(),SysRoleVo.class);
+		String oemCode = ContextManager.getInstance().getOemCode();
+		return MyBeanUtil.createList(sysRoleRepository.findByOemCode(oemCode),SysRoleVo.class);
 	}
 }

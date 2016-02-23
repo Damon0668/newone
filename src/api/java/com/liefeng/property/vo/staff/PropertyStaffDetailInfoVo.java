@@ -29,6 +29,11 @@ public class PropertyStaffDetailInfoVo extends BaseValue{
 	 * 用户信息
 	 */
 	public CustomerVo customerVo;
+	
+	/**
+	 * 角色ID数组
+	 */
+	public Long[] roleIds;
 
 	public PropertyStaffVo getPropertyStaffVo() {
 		return propertyStaffVo;
@@ -52,5 +57,13 @@ public class PropertyStaffDetailInfoVo extends BaseValue{
 
 	public void setCustomerVo(CustomerVo customerVo) {
 		this.customerVo = customerVo;
+	}
+
+	public Long[] getRoleIds() {
+		return roleIds;
+	}
+
+	public void setRoleIds(Long[] roleIds) {
+		this.roleIds = roleIds;
 	}
 }
