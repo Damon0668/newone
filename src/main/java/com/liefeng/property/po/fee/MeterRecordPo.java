@@ -102,6 +102,12 @@ public class MeterRecordPo extends BaseValue {
 	private Double currNum;
 
 	/**
+	 * 本期用量
+	 */
+	@Column(name ="use_amount")
+	private Double useAmount;
+
+	/**
 	 * 抄表日期
 	 */
 	@Column(name = "read_date")
@@ -234,6 +240,14 @@ public class MeterRecordPo extends BaseValue {
 
 	public void setCurrNum(Double currNum) {
 		this.currNum = currNum;
+	}
+
+	public Double getUseAmount() {
+		return useAmount;
+	}
+
+	public void setUseAmount(Double useAmount) {
+		this.useAmount = useAmount;
 	}
 
 	public Date getReadDate() {

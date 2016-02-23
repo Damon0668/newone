@@ -27,10 +27,10 @@ public interface IFeeService {
 	public void createMeterRecord(MeterRecordVo meterRecordVo);
 
 	/**
-	 * 抄表列表 所有房产及抄表数据集结合(全部房产为主)
+	 * 抄表列表 所有房产及抄表数据集结合(业主房产为主表)
 	 * @param meterRecordVo
 	 */
-	public void listMeterRecord(MeterRecordVo meterRecordVo);
+	public DataPageValue<MeterRecordVo> findMeterRecord4Page(MeterRecordVo meterRecordVo,Integer currentPage,Integer pageSize);
 
 	/**
 	 * 创建仪表设置
@@ -102,14 +102,36 @@ public interface IFeeService {
 	 */
 	public void updateFeeSetting(FeeSettingVo feeSettingVo) throws LiefengException;
 
+	/**
+	 * 创建阶梯收费
+	 * @param ladderFeeSettingVo
+	 * @throws LiefengException
+	 */
 	public void createLadderFeeSetting(LadderFeeSettingVo ladderFeeSettingVo)
 			throws LiefengException;
 
+	/**
+	 * 删除阶梯收费
+	 * @param id
+	 * @throws LiefengException
+	 */
 	public void deleteLadderFeeSetting(String id) throws LiefengException;
 
+	/**
+	 * 阶梯收费列表分页
+	 * @param projectId
+	 * @param currentPage
+	 * @param pageSize
+	 * @return
+	 */
 	public DataPageValue<LadderFeeSettingVo> findLadderFeeSetting4Page(
 			String projectId,Integer currentPage,Integer pageSize);
 
+	/**
+	 * 通过Id获取阶梯收费
+	 * @param id
+	 * @return
+	 */
 	public LadderFeeSettingVo findLadderFeeSettingById(String id);
 
 	public void updateLadderFeeSetting(LadderFeeSettingVo ladderFeeSettingVo)

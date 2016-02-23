@@ -118,8 +118,8 @@ public class LadderFeeSettingContext {
 
 		// 判断是否存在相同仪表
 		LadderFeeSettingPo ladderFeeSettingTypeIsExists = ladderFeeSettingRepository
-				.findByProjectIdAndFeeType(ladderFeeSetting.getProjectId(),
-						ladderFeeSetting.getFeeType());
+				.findByProjectIdAndFeeTypeAndUseType(ladderFeeSetting.getProjectId(),
+						ladderFeeSetting.getFeeType(),ladderFeeSetting.getUseType());
 		if (ladderFeeSettingTypeIsExists != null
 				&& !ladderFeeSettingTypeIsExists.getId().equals(
 						ladderFeeSetting.getId())) {
@@ -147,8 +147,8 @@ public class LadderFeeSettingContext {
 	public void create() throws LiefengException {
 		if (ladderFeeSetting != null) {
 			LadderFeeSettingPo ladderFeeSettingPo = ladderFeeSettingRepository
-					.findByProjectIdAndFeeType(ladderFeeSetting.getProjectId(),
-							ladderFeeSetting.getFeeType());
+					.findByProjectIdAndFeeTypeAndUseType(ladderFeeSetting.getProjectId(),
+							ladderFeeSetting.getFeeType(),ladderFeeSetting.getUseType());
 			if (ladderFeeSettingPo != null) {
 				throw new FeeException(FeeErrorCode.LADDERFEESETTING_EXISTS);
 			}

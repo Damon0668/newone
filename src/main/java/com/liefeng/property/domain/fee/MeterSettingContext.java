@@ -164,14 +164,13 @@ public class MeterSettingContext {
 	 * 删除仪表设置
 	 */
 	public void delete() {
-		logger.info("删除id:"+id);
+		logger.info("Delete meter setting of id: '{}'", id);
 		// 判断仪表是否存在
 		if (meterSettingRepository.findOne(id) == null) {
 			throw new FeeException(FeeErrorCode.METERSETTING_NOT_EXISTS);
 		}
 
 		meterSettingRepository.delete(id);
-		
 	}
 
 	/**

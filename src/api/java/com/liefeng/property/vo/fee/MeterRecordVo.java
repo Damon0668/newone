@@ -80,6 +80,11 @@ public class MeterRecordVo extends BaseValue {
 	 * 本期表数
 	 */
 	private Double currNum;
+	
+	/**
+	 * 本期用量
+	 */
+	private Double useAmount;
 
 	/**
 	 * 抄表日期
@@ -96,6 +101,11 @@ public class MeterRecordVo extends BaseValue {
 	 */
 	private Date createTime;
 
+	/**
+	 * 是否已读
+	 */
+	private Integer idRead;
+	
 	/**
 	 * 数据来源
 	 * 1：WEB；2：Android；3：IOS
@@ -211,6 +221,14 @@ public class MeterRecordVo extends BaseValue {
 		this.currNum = currNum;
 	}
 
+	public Double getUseAmount() {
+		return useAmount;
+	}
+
+	public void setUseAmount(Double useAmount) {
+		this.useAmount = useAmount;
+	}
+
 	public Date getReadDate() {
 		return readDate;
 	}
@@ -249,6 +267,14 @@ public class MeterRecordVo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public Integer getIdRead() {
+		return idRead;
+	}
+
+	public void setIdRead(Integer idRead) {
+		this.idRead = idRead;
 	}
 
 }

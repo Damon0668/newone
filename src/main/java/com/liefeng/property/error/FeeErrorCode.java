@@ -38,6 +38,26 @@ public enum FeeErrorCode implements IErrorCode {
 	 * 该阶梯收费设置不存在
 	 */
 	LADDERFEESETTING_NOT_EXISTS("该阶梯收费设置不存在"),
+	
+	/**
+	 * 本月已抄表
+	 */
+	METERRECORD_CURRENT_MONTH_EXIST("本月已抄表"), 
+	
+	/**
+	 * 当前日期不能抄表
+	 */
+	METERRECORD_CURRENT_DATE_CANNOT_CREATE("当前日期不能抄表"), 
+	
+	/**
+	 * 仪表设置为空
+	 */
+	METERSETTING_ISNULL("不存在改仪表设置"), 
+	
+	/**
+	 * 当前读数错误
+	 */
+	METERRECORD_CURRENT_NUMBER_ERRER("当前读数错误"),
 
 	;
 	private String desc;

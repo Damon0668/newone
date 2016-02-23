@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.liefeng.property.repository.mybatis.MeterRecordQueryRepository">
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.liefeng.property.vo.fee.MeterRecordVo">
+		<result column="id" property="id" />
+		<result column="property_id" property="propertyId" />
+		<result column="project_id" property="projectId" />
+		<result column="building_id" property="buildingId" />
+		<result column="floor_id" property="floorId" />
+		<result column="house_num" property="houseNum"/>
+		<result column="meter_type" property="meterType" />
+		<result column="meter_owner" property="meterOwner" />
+		<result column="proprietor_name" property="proprietorName" />
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
+		<result column="pre_num" property="preNum" />
+		<result column="curr_num" property="currNum" />
+		<result column="use_amount" property="useAmount" />
+		<result column="read_date" property="readDate" />
+		<result column="staff_id" property="staffId" />
+		<result column="create_time" property="createTime" />
+		<result column="from" property="from" />
+		<result column="idRead" property="idRead" />
+		<result column="oem_code" property="oemCode" />
+	</resultMap>
+
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="extra.projectId != null and extra.projectId != ''">
+				AND ph.project_id = #{extra.projectId}
+			</if>
+
+			<if test="extra.buildingId != null and extra.buildingId != ''">
+				AND h.building_id = #{extra.buildingId}
+			</if>
+
+			<if test="extra.houseNum != null and extra.houseNum != ''">
+				AND ph.house_num = #{extra.houseNum}
+			</if>
+
+			<if test="extra.form != null and extra.form != ''">
+				AND mr.form = #{extra.form}
+			</if>
+
+			<if test="extra.proprietorName != null and extra.proprietorName  != ''">
+				AND p.proprietor_name like #{extra.proprietorName }
+			</if>
+		</trim>
+	</sql>
+
+
+	<select id="queryByPage" resultMap="BaseResultMap">
+		select
+		mr.id as id,
+		ph.proprietor_id as propertyId,
+		ph.house_num as houseNum,
+		p.`name` as proprietorName,
+		mr.start_date as startDate,
+		mr.end_date as endDate,
+		mr.use_amount as useAmount,
+		mr.read_date as readDate,
+		(select
+			count(tmr.id)
+			from
+			t_meter_record tmr
+			where
+			tmr.project_id = mr.project_id
+			and tmr.house_num = mr.house_num
+			and tmr.start_date =
+			mr.start_date
+			and tmr.end_date = mr.end_date
+		)as isRead
+		from
+		t_proprietor_house ph
+		left join t_meter_record mr on ph.project_id = mr.project_id
+		and ph.house_num = mr.house_num
+		left join t_proprietor p on p.id = mr.property_id
+		left join t_house h on h.project_id = ph.project_id
+		and h.house_num = ph.house_num
+		<include refid="Example_Where_Clause" />
+		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+          ${pager.mysqlQueryCondition}
+        </if>
+	</select>
+
+	<select id="queryByCount"  resultType="java.lang.Long">
+	select 
+	  count(1) 
+	from(
+		select
+		ph.proprietor_id
+		from
+		t_proprietor_house ph
+		left join t_meter_record mr on ph.project_id = mr.project_id
+		and ph.house_num = mr.house_num
+		left join t_proprietor p on p.id = mr.property_id
+		left join t_house h on h.project_id = ph.project_id
+		and h.house_num = ph.house_num
+		<include refid="Example_Where_Clause" />
+		) t
+	</select>
+
+</mapper>   

@@ -43,9 +43,10 @@ public class FeeService implements IFeeService {
 	}
 
 	@Override
-	public void listMeterRecord(MeterRecordVo meterRecordVo) {
-		
-
+	public DataPageValue<MeterRecordVo> findMeterRecord4Page(MeterRecordVo meterRecordVo,Integer currentPage,Integer pageSize) {
+		MeterRecordContext meterRecordContext = MeterRecordContext
+				.build(meterRecordVo);
+		return meterRecordContext.listMeterRecordVo4Page(currentPage, pageSize);
 	}
 	// TODO 仪表设置
 	@Override
