@@ -2,9 +2,13 @@ package com.liefeng.property.service;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.liefeng.common.util.IDGenerator;
+import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.exception.LiefengException;
@@ -23,6 +27,8 @@ import com.liefeng.property.vo.staff.PropertyStaffVo;
 @Service
 public class PropertyStaffService implements IPropertyStaffService {
 	
+	private static final Logger logger = LoggerFactory.getLogger(PropertyStaffService.class);
+	
 	@Autowired
 	private IUserService userService;
 	
@@ -40,14 +46,16 @@ public class PropertyStaffService implements IPropertyStaffService {
 	@Override
 	public ReturnValue createStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws Exception {
 		
+		logger.info("createStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
+		
+		//userService.createCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
+		
 		PropertyStaffVo propertyStaff = PropertyStaffContext.build(propertyStaffDetailInfo.getPropertyStaffVo()).create();
 		
 		propertyStaffDetailInfo.getStaffArchiveVo().setStaffId(propertyStaff.getId());
 		
-		userService.createCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
-		
-		propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(propertyStaffDetailInfo.getCustomerVo().getGlobalId());
-		
+		propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(UUIDGenerator.generate());
+
 		StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).create();
 				
 		return ReturnValue.success();
