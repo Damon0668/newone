@@ -51,7 +51,7 @@ public class FeeServiceTest {
 	 * 保存抄表
 	 */
 	@Test
-	public void saveMeterRecord() {
+	public void createMeterRecord() {
 
 		MeterRecordVo meterRecordVo = new MeterRecordVo();
 
@@ -85,14 +85,14 @@ public class FeeServiceTest {
 
 		meterRecordVo.setStaffId("1123");
 
-		feeService.saveMeterRecord(meterRecordVo);
+		feeService.createMeterRecord(meterRecordVo);
 	}
 
 	/**
 	 * 保存抄表设置
 	 */
 	@Test
-	public void saveMeterSetting() {
+	public void createMeterSetting() {
 		ContextManager.getInstance().setOemCode("1");
 		MeterSettingVo meterSettingVo = new MeterSettingVo();
 		meterSettingVo.setCreateTime(new Timestamp(System.currentTimeMillis()));
@@ -103,7 +103,7 @@ public class FeeServiceTest {
 		meterSettingVo.setStaffId("1");
 		meterSettingVo.setStartDay(1);
 		meterSettingVo.setType("1");
-		feeService.saveMeterSetting(meterSettingVo);
+		feeService.createMeterSetting(meterSettingVo);
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class FeeServiceTest {
 	}
 //TODO 费用设置测试
 	@Test
-	public void saveFeeSetting() {
+	public void createFeeSetting() {
 		ContextManager.getInstance().setOemCode("1");
 		FeeSettingVo feeSettingVo = new FeeSettingVo();
 		feeSettingVo.setChargeable("1");
@@ -167,7 +167,7 @@ public class FeeServiceTest {
 		feeSettingVo.setStartMonth(1);
 		feeSettingVo.setUnit("度");
 		feeSettingVo.setUseType("1");
-		feeService.saveFeeSetting(feeSettingVo);
+		feeService.createFeeSetting(feeSettingVo);
 	}
 
 	@Test
@@ -207,7 +207,7 @@ public class FeeServiceTest {
 	
 	//TODO 阶梯收费设置
 	@Test
-	public void saveLadderFeeSetting() {
+	public void createLadderFeeSetting() {
 		ContextManager.getInstance().setOemCode("1");
 		LadderFeeSettingVo ladderFeeSettingVo=new LadderFeeSettingVo();
 		ladderFeeSettingVo.setFeeType("1");
@@ -220,7 +220,7 @@ public class FeeServiceTest {
 		ladderFeeSettingVo.setProjectId("1");
 		ladderFeeSettingVo.setStaffId("1");
 		ladderFeeSettingVo.setUseType("1");
-		feeService.saveLadderFeeSetting(ladderFeeSettingVo);
+		feeService.createLadderFeeSetting(ladderFeeSettingVo);
 		
 	}
 
