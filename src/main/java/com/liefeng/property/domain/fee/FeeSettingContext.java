@@ -100,8 +100,8 @@ public class FeeSettingContext {
 		}
 
 		// 判断是否存在相同仪表
-		FeeSettingPo feeSettingPoTypeIsExists = feeSettingRepository.findByProjectIdAndFeeType(
-				feeSetting.getProjectId(), feeSetting.getFeeType());
+		FeeSettingPo feeSettingPoTypeIsExists = feeSettingRepository.findByProjectIdAndFeeTypeAndUseType(
+				feeSetting.getProjectId(), feeSetting.getFeeType(),feeSetting.getUseType());
 		if (feeSettingPoTypeIsExists!= null
 			&&!feeSettingPoTypeIsExists.getId().equals(feeSetting.getId())) {
 			throw new FeeException(FeeErrorCode.FEESETTING_EXISTS);
@@ -130,7 +130,7 @@ public class FeeSettingContext {
 
 	public void save() throws FeeException {
 		if(feeSetting!=null){
-			FeeSettingPo feeSettingPo=feeSettingRepository.findByProjectIdAndFeeType(feeSetting.getProjectId(),feeSetting.getFeeType());
+			FeeSettingPo feeSettingPo=feeSettingRepository.findByProjectIdAndFeeTypeAndUseType(feeSetting.getProjectId(),feeSetting.getFeeType(),feeSetting.getUseType());
 			if(feeSettingPo!=null){
 				throw new FeeException(FeeErrorCode.FEESETTING_EXISTS);
 			}
@@ -141,14 +141,13 @@ public class FeeSettingContext {
 		}
 	}
 
-	public DataPageValue<FeeSettingVo> findByProjectId4Page(Integer pageSize,
-			Integer currentPage){
+	public DataPageValue<FeeSettingVo> findByProjectId4Page(Integer currentPage,Integer pageSize){
 		Page<FeeSettingVo> voPage = null;
 
 		//分页查询
 		Pageable pageable = new PageRequest(currentPage - 1, pageSize);
 		Page<FeeSettingPo> feeSettingPage = feeSettingRepository
-				.findByProjectId(projectId, pageable);
+				.findByProjectIdOrderByFeeTypeDesc(projectId, pageable);
 
 		//转换
 		voPage = feeSettingPage

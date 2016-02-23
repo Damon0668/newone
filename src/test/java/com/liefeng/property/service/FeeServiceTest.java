@@ -177,7 +177,7 @@ public class FeeServiceTest {
 
 	@Test
 	public void findFeeSetting4Page() {
-		System.out.println(feeService.findFeeSetting4Page("1", 30, 1));
+		System.out.println(feeService.findFeeSetting4Page("1", 1, 30));
 	}
 
 	@Test

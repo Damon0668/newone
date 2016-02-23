@@ -86,7 +86,7 @@ public interface IFeeService {
 	 * @return
 	 */
 	public DataPageValue<FeeSettingVo> findFeeSetting4Page(String projectId,
-			Integer pageSize, Integer currentPage);
+			Integer currentPage,Integer pageSize);
 
 	/**
 	 * 根据id 获取费用设置

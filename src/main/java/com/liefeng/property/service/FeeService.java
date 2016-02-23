@@ -104,10 +104,10 @@ public class FeeService implements IFeeService {
 
 	@Override
 	public DataPageValue<FeeSettingVo> findFeeSetting4Page(
-			String projectId, Integer pageSize, Integer currentPage) {
+			String projectId, Integer currentPage,Integer pageSize) {
 		FeeSettingContext feeSettingContext = FeeSettingContext
 				.loadByProjectId(projectId);
-		return feeSettingContext.findByProjectId4Page(pageSize, currentPage);
+		return feeSettingContext.findByProjectId4Page(currentPage,pageSize);
 	}
 
 	@Override
