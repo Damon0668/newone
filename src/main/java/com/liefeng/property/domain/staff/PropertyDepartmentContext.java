@@ -1,5 +1,7 @@
 package com.liefeng.property.domain.staff;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +12,15 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.staff.PropertyDepartmentPo;
 import com.liefeng.property.repository.PropertyDepartmentRepository;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 
 /**
  * 部门信息领域模型
- * 
  * @author ZhenTingJun
+ * @author Huangama
  * @date 2015-12-23
  */
 @Service
@@ -48,24 +51,22 @@ public class PropertyDepartmentContext {
 	}
 	
 	/**
+	 * 构建上下文（无参）
+	 * @return 部门信息上下文
+	 */
+	public static PropertyDepartmentContext build() {
+		PropertyDepartmentContext propertyDepartmentContext = getInstance();
+		return propertyDepartmentContext;
+	}
+	
+	/**
 	 * 根据部门信息值对象构建上下文
 	 * @param propertyDepartment 部门信息值对象
 	 * @return 部门信息上下文
 	 */
 	public static PropertyDepartmentContext build(PropertyDepartmentVo propertyDepartment) {
 		PropertyDepartmentContext propertyDepartmentContext = getInstance();
-		propertyDepartmentContext.propertyDepartment = propertyDepartment;
-		
-		return propertyDepartmentContext;
-	}
-	
-	/**
-	 * 构建上下文（无参）
-	 * @return 部门信息上下文
-	 */
-	public static PropertyDepartmentContext build() {
-		PropertyDepartmentContext propertyDepartmentContext = getInstance();
-		
+		propertyDepartmentContext.setPropertyDepartment(propertyDepartment);
 		return propertyDepartmentContext;
 	}
 	
@@ -76,8 +77,7 @@ public class PropertyDepartmentContext {
 	 */
 	public static PropertyDepartmentContext loadById(String propertyDepartmentId) {
 		PropertyDepartmentContext propertyDepartmentContext = getInstance();
-		propertyDepartmentContext.propertyDepartmentId = propertyDepartmentId;
-		
+		propertyDepartmentContext.setPropertyDepartmentId(propertyDepartmentId);
 		return propertyDepartmentContext;
 	}
 	
@@ -85,7 +85,7 @@ public class PropertyDepartmentContext {
 	 * 查询部门信息
 	 * @return 部门信息值对象
 	 */
-	public PropertyDepartmentVo getPropertyDepartment() {
+	public PropertyDepartmentVo get() {
 		if(propertyDepartment == null) {
 			PropertyDepartmentPo propertyDepartmentPo = null;
 			if(ValidateHelper.isNotEmptyString(propertyDepartmentId)) {
@@ -106,11 +106,64 @@ public class PropertyDepartmentContext {
 	public void create() {
 		if(propertyDepartment != null) {
 			propertyDepartment.setId(UUIDGenerator.generate());
-			propertyDepartment.setOemCode(""); // TODO 待确定后补齐
+			propertyDepartment.setOemCode(ContextManager.getInstance().getOemCode());
 			
 			PropertyDepartmentPo propertyDepartmentPo = MyBeanUtil.createBean(propertyDepartment, PropertyDepartmentPo.class);
 			propertyDepartmentRepository.save(propertyDepartmentPo);
+			
+			logger.info("Create department: '{}' successfully!", propertyDepartment);
 		}
 	}
 	
+	/**
+	 * 更新部门信息
+	 */
+	public void update() {
+		if(propertyDepartment != null) {
+			PropertyDepartmentPo propertyDepartmentPo = 
+					propertyDepartmentRepository.findOne(propertyDepartment.getId());
+			
+			if (ValidateHelper.isNotEmptyString(propertyDepartment.getDirectorId())) {
+				propertyDepartmentPo.setDirectorId(propertyDepartment.getDirectorId());
+			}
+			if (ValidateHelper.isNotEmptyString(propertyDepartment.getName())) {
+				propertyDepartmentPo.setName(propertyDepartment.getName());
+			}
+			if (ValidateHelper.isNotEmptyString(propertyDepartment.getTel())) {
+				propertyDepartmentPo.setTel(propertyDepartment.getTel());
+			}
+			propertyDepartmentRepository.save(propertyDepartmentPo);
+			
+			logger.info("Update department: '{}' successfully!", propertyDepartment);
+		}
+	}
+	
+	/**
+	 * 删除部门信息
+	 */
+	public void delete() {
+		if(ValidateHelper.isNotEmptyString(propertyDepartmentId)) {
+			propertyDepartmentRepository.delete(propertyDepartmentId);
+			logger.info("Delete department: '{}' successfully!", propertyDepartmentId);
+		}
+	}
+	
+	/**
+	 * 获取某个OEM下所有部门列表
+	 * @return 所有部门列表
+	 */
+	public List<PropertyDepartmentVo> getDepartments() {
+		String oemCode = ContextManager.getInstance().getOemCode();
+		List<PropertyDepartmentPo> departmentPoList = 
+				propertyDepartmentRepository.findDepartmentsByOemCode(oemCode);
+		return MyBeanUtil.createList(departmentPoList, PropertyDepartmentVo.class);
+	}
+	
+	protected void setPropertyDepartmentId(String propertyDepartmentId) {
+		this.propertyDepartmentId = propertyDepartmentId;
+	}
+	
+	protected void setPropertyDepartment(PropertyDepartmentVo propertyDepartment) {
+		this.propertyDepartment = propertyDepartment;
+	}
 }

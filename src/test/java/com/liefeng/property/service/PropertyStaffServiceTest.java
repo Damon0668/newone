@@ -1,5 +1,7 @@
 package com.liefeng.property.service;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +14,7 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.error.IErrorCode;
 import com.liefeng.intf.property.IPropertyStaffService;
+import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 
 /**
@@ -45,5 +48,30 @@ public class PropertyStaffServiceTest {
 		propertyStaff.setNumber("test2");
 		ReturnValue returnValue = propertyStaffService.updateStaff(propertyStaff);
 		Assert.assertTrue(IErrorCode.SUCCESS.equals(returnValue.getCode()));
+	}
+	
+	@Test
+	public void createDepartment() {
+		ContextManager.getInstance().setOemCode("PROPERTY");
+		
+		PropertyDepartmentVo department = new PropertyDepartmentVo();
+		department.setName("客服部");
+		department.setTel("114");
+		department.setDirectorId("123456");
+		
+		PropertyDepartmentVo department2 = new PropertyDepartmentVo();
+		department2.setName("保安部");
+		department2.setTel("110");
+		department2.setDirectorId("654321");
+		
+		propertyStaffService.createDepartment(department);
+		propertyStaffService.createDepartment(department2);
+	}
+	
+	@Test
+	public void getDepartments() {
+		ContextManager.getInstance().setOemCode("PROPERTY");
+		List<PropertyDepartmentVo> deparmentList = propertyStaffService.getDepartments();
+		System.out.println(deparmentList);
 	}
 }
