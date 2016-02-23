@@ -13,6 +13,8 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.property.error.StaffErrorCode;
+import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.staff.PropertyDepartmentPo;
 import com.liefeng.property.repository.PropertyDepartmentRepository;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
@@ -105,8 +107,20 @@ public class PropertyDepartmentContext {
 	 */
 	public void create() {
 		if(propertyDepartment != null) {
+			String departName = propertyDepartment.getName();
+			String oemCode = ContextManager.getInstance().getOemCode();
+			if (ValidateHelper.isEmptyString(departName)) {
+				throw new PropertyException(StaffErrorCode.DEPARTMENT_NAME_NULL);
+			}
+			
+			PropertyDepartmentPo departmentWithSameName = 
+					propertyDepartmentRepository.findDepartmentByNameAndOemCode(departName, oemCode);
+			if (departmentWithSameName != null) {
+				throw new PropertyException(StaffErrorCode.DEPARTMENT_ALREADY_EXIST);
+			}
+			
 			propertyDepartment.setId(UUIDGenerator.generate());
-			propertyDepartment.setOemCode(ContextManager.getInstance().getOemCode());
+			propertyDepartment.setOemCode(oemCode);
 			
 			PropertyDepartmentPo propertyDepartmentPo = MyBeanUtil.createBean(propertyDepartment, PropertyDepartmentPo.class);
 			propertyDepartmentRepository.save(propertyDepartmentPo);

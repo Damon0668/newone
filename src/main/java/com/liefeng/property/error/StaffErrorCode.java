@@ -14,6 +14,16 @@ public enum StaffErrorCode implements IErrorCode {
 	 */
 	DEPARTMENT_NOT_EXIST("部门不存在"),
 	
+	/**
+	 * 部门已存在
+	 */
+	DEPARTMENT_ALREADY_EXIST("部门{}已存在"),
+	
+	/**
+	 * 部门名字为空
+	 */
+	DEPARTMENT_NAME_NULL("部门名字为空"),
+	
 	;
 	private String desc;
 	
