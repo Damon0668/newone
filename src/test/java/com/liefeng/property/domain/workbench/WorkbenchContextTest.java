@@ -54,7 +54,7 @@ public class WorkbenchContextTest {
 		tv.setStartTime(new Date());
 		tv.setEndTime(new Date());
 		tv.setCreatorId("1");
-		tv.setAffstr("96|2|testall,3|1|0,2|0|0"); //接收人范围
+		tv.setPrivilegeStr("96|2|testall,3|1|0,2|0|0"); //接收人范围
 		workbenchService.createTask(tv);
 	}
 	
@@ -67,7 +67,7 @@ public class WorkbenchContextTest {
 	@Test
 	public void updateTask(){
 		TaskVo tv = new TaskVo();
-		tv.setId("402889ba52f9b5ca0152f9b5caf90000");
+		tv.setId("402889ba530be06f01530be06fb70000");
 		tv.setTitle("测试2");
 		tv.setContent("测试内容2");
 		tv.setPriority("00");
@@ -99,7 +99,7 @@ public class WorkbenchContextTest {
 	@Test
 	public void getTaskPrivilegeBytaskId(){
 		
-		List<TaskPrivilegeVo> tvlist = workbenchService.findTaskPrivilegeByTaskId("402889ba53082b620153082b62060000");
+		List<TaskPrivilegeVo> tvlist = workbenchService.findTaskPrivilegeByTaskId("402889ba530be06f01530be06fb70000");
 		for(TaskPrivilegeVo tv:tvlist){
 			System.out.println(tv);
 		}
