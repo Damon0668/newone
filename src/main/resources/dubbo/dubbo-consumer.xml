@@ -24,4 +24,7 @@
     <dubbo:reference id="userService"
         interface="com.liefeng.intf.base.user.IUserService" check="false" />
 
+	<!-- 校验服务  -->
+    <dubbo:reference id="checkService"
+        interface="com.liefeng.intf.base.ICheckService" check="false" />
 </beans>
