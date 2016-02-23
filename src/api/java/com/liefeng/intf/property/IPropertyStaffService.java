@@ -7,6 +7,7 @@ import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
+import com.liefeng.property.vo.staff.PropertyStaffListVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 
 /**
@@ -24,7 +25,7 @@ public interface IPropertyStaffService {
 	 * @param size 页面数据大小
 	 * @return
 	 */
-	public DataPageValue<PropertyStaffVo> findPropertyStaff(int page, int size);
+	public DataPageValue<PropertyStaffListVo> listPropertyStaff4Page(int page, int size);
 	
 	/**
 	 * 创建物业员工
@@ -50,6 +51,15 @@ public interface IPropertyStaffService {
 	 * @throws LiefengException
 	 */
 	public ReturnValue updateStaff(PropertyStaffVo propertyStaff) throws LiefengException;
+
+	/**
+	 * 查询物业员工
+	 * @param departmentId 部门ID
+	 * @param projectId 项目ID
+	 * @return
+	 * @throws LiefengException
+	 */
+	public List<PropertyStaffVo> findPropertyStaff(String departmentId, String projectId) throws LiefengException;
 	
 	/*********************** 部门相关接口 **********************/
 	

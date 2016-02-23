@@ -1,6 +1,9 @@
 package com.liefeng.property.domain.staff;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +16,12 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.po.staff.PropertyStaffPo;
 import com.liefeng.property.repository.PropertyStaffRepository;
+import com.liefeng.property.repository.mybatis.PropertyStaffQueryRepository;
+import com.liefeng.property.vo.staff.PropertyStaffListVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 
 /**
@@ -32,6 +39,9 @@ public class PropertyStaffContext {
 	
 	@Autowired
 	private PropertyStaffRepository propertyStaffRepository;
+	
+	@Autowired
+	private PropertyStaffQueryRepository propertyStaffQueryRepository;
 	
 	/**
 	 * 物业员工ID
@@ -56,6 +66,15 @@ public class PropertyStaffContext {
 	 */
 	private static PropertyStaffContext getInstance() {
 		return SpringBeanUtil.getBean(PropertyStaffContext.class);
+	}
+	
+	/**
+	 * 根据物业员工值对象构建上下文
+	 * @return 物业员工上下文
+	 */
+	public static PropertyStaffContext build() {
+		PropertyStaffContext propertyStaffContext = getInstance();
+		return propertyStaffContext;
 	}
 	
 	/**
@@ -115,6 +134,9 @@ public class PropertyStaffContext {
 		return propertyStaff;
 	}
 	
+	/**
+	 * 更新物业员工信息
+	 */
 	public void update() {
 		if(propertyStaff != null && ValidateHelper.isNotEmptyString(propertyStaff.getId())){
 			PropertyStaffPo propertyStaffPo = propertyStaffRepository.findOne(propertyStaff.getId());
@@ -124,5 +146,40 @@ public class PropertyStaffContext {
 			}
 		}
 	}
+	
+	/**
+	 * 分页查询物业员工信息
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public DataPageValue<PropertyStaffListVo> listPropertyStaff4Page(Integer page, Integer size) {
+		
+		Long count = 10L;
+		
+		count = (count == null ? 0 : count);
+		logger.info("总数量：count=" + count);
 
+		List<PropertyStaffListVo> list = propertyStaffQueryRepository.queryPropertyStaffByPage();
+
+		DataPageValue<PropertyStaffListVo> returnPage = new DataPageValue<PropertyStaffListVo>(list, count, size, page);
+		
+		return returnPage;
+	}
+
+	/**
+	 * 根据部门ID和项目ID
+	 * 查询员工
+	 * @param departmentId 部门ID
+	 * @param projectId 项目ID
+	 * @return
+	 */
+	public List<PropertyStaffVo> listPropertyStaffByDeptIdAndProjectId(String departmentId, String projectId){
+		Map<String, String> extra = new HashMap<String, String>();
+		extra.put("departmentId", departmentId);
+		extra.put("projectId", projectId);
+		PagingParamVo pagingParamVo = new PagingParamVo();
+		pagingParamVo.setExtra(extra);
+		return propertyStaffQueryRepository.queryByDeptIdAndProjectId(pagingParamVo);
+	}
 }

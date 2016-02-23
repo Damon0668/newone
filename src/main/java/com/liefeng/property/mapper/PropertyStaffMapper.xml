@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.PropertyStaffQueryRepository" > 
+    
+<resultMap id="PropertyStaffListVo" type="com.liefeng.property.vo.staff.PropertyStaffListVo" >
+    <result column="id" property="id"/>
+    <result column="number" property="number"/>
+    <result column="name" property="name"/>
+    <result column="id_num" property="idNum"/>
+    <result column="entry_time" property="entryTime"/>
+    <result column="phone" property="phone"/>
+    <result column="department" property="department"/>
+    <result column="position" property="position"/>
+    <result column="work_status" property="workStatus"/>
+    <result column="account" property="account"/>
+</resultMap>
+
+<resultMap id="PropertyStaffVo" type="com.liefeng.property.vo.staff.PropertyStaffVo" >
+
+</resultMap>
+
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+    WHERE 1=1 
+	<trim  suffixOverrides="," >
+        
+        
+        
+        
+	</trim>
+</sql>
+
+<select id="queryPropertyStaffByPage" resultMap="PropertyStaffListVo" >
+    SELECT
+    stf.id,
+    stf.number,
+    stf.`name`,
+    cst.id_num,
+    stf.entry_time,
+    stfarc.phone,
+    stf.department_id department,
+    stf.position,
+    stf.work_status,
+    stf.account
+	FROM
+	    t_property_staff stf
+	LEFT JOIN t_staff_archive stfarc ON stf.id = stfarc.staff_id
+	LEFT JOIN basic.t_customer cst ON stfarc.cust_global_id = cst.global_id
+</select>
+
+<select id="queryByDeptIdAndProjectId" resultMap="PropertyStaffVo" >
+    select 
+        stf.* 
+    from
+        t_property_staff stf
+    left join t_manage_project mp on stf.id = mp.staff_id
+    where 1=1 
+    <if test="extra.projectId != null and extra.projectId != ''" >
+        AND mp.project_id =  #{extra.projectId}
+    </if>
+    <if test="extra.departmentId != null and extra.departmentId != ''" >
+        AND stf.department_id =  #{extra.departmentId}
+    </if>
+    
+</select>
+
+</mapper>

@@ -21,8 +21,10 @@ import com.liefeng.property.domain.staff.PropertyStaffContext;
 import com.liefeng.property.domain.staff.StaffArchiveContext;
 import com.liefeng.property.error.StaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
+import com.liefeng.property.repository.mybatis.PropertyStaffQueryRepository;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
+import com.liefeng.property.vo.staff.PropertyStaffListVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 
 /**
@@ -40,11 +42,13 @@ public class PropertyStaffService implements IPropertyStaffService {
 	
 	@Autowired
 	private ICheckService checkService;
-
 	
+	@Autowired
+	private PropertyStaffQueryRepository propertyStaffQueryRepository;
+
 	@Override
-	public DataPageValue<PropertyStaffVo> findPropertyStaff(int page, int size) {
-		return null;
+	public DataPageValue<PropertyStaffListVo> listPropertyStaff4Page(int page, int size) {
+		return PropertyStaffContext.build().listPropertyStaff4Page(page, size);
 	}
 
 	@Override
@@ -78,6 +82,11 @@ public class PropertyStaffService implements IPropertyStaffService {
 	public ReturnValue updateStaff(PropertyStaffVo propertyStaff) throws LiefengException {
 		PropertyStaffContext.build(propertyStaff).update();
 		return ReturnValue.success();
+	}
+	
+	@Override
+	public List<PropertyStaffVo> findPropertyStaff(String departmentId, String projectId) throws LiefengException {
+		return PropertyStaffContext.build().listPropertyStaffByDeptIdAndProjectId(departmentId, projectId);
 	}
 
 	/*********************** 部门相关接口 **********************/

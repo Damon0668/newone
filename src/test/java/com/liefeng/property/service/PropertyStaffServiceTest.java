@@ -74,4 +74,10 @@ public class PropertyStaffServiceTest {
 		List<PropertyDepartmentVo> deparmentList = propertyStaffService.getDepartments();
 		System.out.println(deparmentList);
 	}
+	
+	@Test
+	public void findPropertyStaff(){
+		List<PropertyStaffVo> propertyStaffList =  propertyStaffService.findPropertyStaff("0", "0000000052a7943f0152a7943fc00000");
+		System.out.println(propertyStaffList);
+	}
 }
