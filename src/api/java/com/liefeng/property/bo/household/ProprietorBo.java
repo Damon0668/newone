@@ -18,6 +18,11 @@ public class ProprietorBo extends BaseValue {
 	private String proprietorId;
 	
 	/**
+	 * 业主名称
+	 */
+	private String proprietorName;
+	
+	/**
 	 * 业主房产ID
 	 */
 	private String proprietorHouseId;
@@ -58,6 +63,14 @@ public class ProprietorBo extends BaseValue {
 
 	public void setProprietorId(String proprietorId) {
 		this.proprietorId = proprietorId;
+	}
+
+	public String getProprietorName() {
+		return proprietorName;
+	}
+
+	public void setProprietorName(String proprietorName) {
+		this.proprietorName = proprietorName;
 	}
 
 	public String getProprietorHouseId() {

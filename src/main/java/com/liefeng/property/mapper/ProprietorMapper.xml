@@ -77,6 +77,10 @@
 	<if test="extra.proprietorId != null and extra.proprietorId != ''" >
 	    AND a.proprietor_id =  #{extra.proprietorId}
 	</if>
+	
+	<if test="extra.proprietorName != null and extra.proprietorName != ''" >
+	    AND b.name like concat('%', #{extra.proprietorName}, '%')
+	</if>
 
 	<if test="extra.proprietorHouseId != null and extra.proprietorHouseId != ''" >
 	    AND a.id =  #{extra.proprietorHouseId}
@@ -99,11 +103,11 @@
 	</if>
 	
 	<if test="extra.houseNum != null and extra.houseNum != ''" >
-	    AND a.house_num = #{extra.houseNum}
+	    AND a.house_num like  concat('%', #{extra.houseNum},'%')
 	</if>
 	
 	<if test="extra.phone != null and extra.phone != ''" >
-	    AND b.phone = #{extra.phone}
+	    AND b.phone like concat('%', #{extra.phone}, '%')
 	</if>
 </trim>
 </sql>
