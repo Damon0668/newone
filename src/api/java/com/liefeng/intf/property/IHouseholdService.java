@@ -76,4 +76,12 @@ public interface IHouseholdService {
 	 * @return 住户信息
 	 */
 	public ResidentVo getResident(String residentId);
+	
+	/**
+	 * 根据项目ID和房号查询业主房产信息
+	 * @param projectId 项目ID
+	 * @param houseNum 房号
+	 * @return 业主房产信息
+	 */
+	public ProprietorHouseVo getProprietorHouse(String projectId, String houseNum);
 }

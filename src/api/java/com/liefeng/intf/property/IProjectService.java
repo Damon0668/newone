@@ -151,6 +151,14 @@ public interface IProjectService {
 	public HouseVo findHouseById(String houseId);
 	
 	/**
+	 * 根据项目ID和房号查询房产
+	 * @param projectId 项目ID
+	 * @param houseNum 房号
+	 * @return 房产资料
+	 */
+	public HouseVo findHouse(String projectId, String houseNum);
+	
+	/**
 	 * 根据项目ID和楼栋ID查找房产资料
 	 * @param projectId 项目ID
 	 * @param buildingId 楼栋ID

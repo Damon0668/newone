@@ -115,7 +115,8 @@
 <select id="queryByPage"  resultMap="BaseResultMap">
 	  SELECT 
 		b.project_id AS projectId,
-		e.short_name AS projectName,
+		b.id AS proprietorId,
+		e.full_name AS projectName,
 		b.name AS name,
 		b.phone AS phone,
 		a.id AS proprietorHouseId,

@@ -131,6 +131,14 @@ public class ProjectService implements IProjectService {
 		house.setFloorName(floor.getName());
 		return house;
 	}
+	
+	@Override
+	public HouseVo findHouse(String projectId, String houseNum){
+		HouseContext houseContext = HouseContext.loadByProjectIdAndHouseNum(projectId, houseNum);
+		HouseVo house = houseContext.getHouse();
+		
+		return house;
+	}
 
 	@Override
 	public List<HouseVo> findHouseList(String projectId, String buildingId) {

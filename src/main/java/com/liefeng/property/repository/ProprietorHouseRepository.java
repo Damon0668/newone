@@ -14,5 +14,13 @@ import com.liefeng.property.po.household.ProprietorHousePo;
  */
 @Transactional
 public interface ProprietorHouseRepository extends JpaRepository<ProprietorHousePo, String> {
+	
+	/**
+	 * 根据项目ID和房号查询房产
+	 * @param projectId 项目ID
+	 * @param houseNum 房号
+	 * @return
+	 */
+	public ProprietorHousePo findByProjectIdAndHouseNum(String projectId, String houseNum);
 
 }

@@ -132,4 +132,14 @@ public class HouseholdService implements IHouseholdService {
 		ResidentContext residentContext = ResidentContext.loadById(residentId);
 		return residentContext.getResident();
 	}
+
+	/**
+	 * 根据项目ID和房号查询业主房产
+	 */
+	@Override
+	public ProprietorHouseVo getProprietorHouse(String projectId, String houseNum) {
+		ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.loadByProjectIdAndHouseNum(projectId, houseNum);
+		
+		return proprietorHouseContext.getProprietorHouse();
+	}
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.liefeng.common.util.EncryptionUtil;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
@@ -173,6 +174,12 @@ public class ProprietorContext {
 		List<ProprietorSingleHouseVo> proprietorList = proprietorQueryRepository.queryByPage(pagingParamVo);
 		proprietorList = (ValidateHelper.isEmptyCollection(proprietorList) ? 
 				new ArrayList<ProprietorSingleHouseVo>() : proprietorList);
+		
+		// 身份证号解密
+		for(ProprietorSingleHouseVo singleHouse : proprietorList) {
+			String decryptIdNum = EncryptionUtil.decryptCustIdNum(singleHouse.getIdNum());
+			singleHouse.setIdNum(decryptIdNum);
+		}
 
 		DataPageValue<ProprietorSingleHouseVo> proprietorPage = new DataPageValue<ProprietorSingleHouseVo>(
 				proprietorList, count, pageSize, currentPage);
@@ -186,6 +193,14 @@ public class ProprietorContext {
 	 * @return 业主某房产信息
 	 */
 	public ProprietorSingleHouseVo getProprietorSingleHouse(String proprietorHouseId) {
-		return proprietorQueryRepository.queryProprietorSingleHouse(proprietorHouseId);
+		ProprietorSingleHouseVo singleHouse = proprietorQueryRepository.queryProprietorSingleHouse(proprietorHouseId);
+		
+		// 身份证号解密
+		if(singleHouse != null && ValidateHelper.isNotEmptyString(singleHouse.getIdNum())) {
+			String decryptIdNum = EncryptionUtil.decryptCustIdNum(singleHouse.getIdNum());
+			singleHouse.setIdNum(decryptIdNum);
+		}
+		
+		return singleHouse;
 	}
 }

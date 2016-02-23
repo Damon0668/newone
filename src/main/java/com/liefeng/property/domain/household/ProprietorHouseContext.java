@@ -12,6 +12,7 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.household.ProprietorHousePo;
 import com.liefeng.property.repository.ProprietorHouseRepository;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
@@ -35,6 +36,16 @@ public class ProprietorHouseContext {
 	 * 业主房产信息ID
 	 */
 	private String proprietorHouseId;
+	
+	/**
+	 * 所属项目ID
+	 */
+	protected String projectId;
+	
+	/**
+	 * 房产房号
+	 */
+	protected String houseNum;
 	
 	/**
 	 * 业主房产信息值对象
@@ -84,6 +95,20 @@ public class ProprietorHouseContext {
 	}
 	
 	/**
+	 * 根据业主房产信息ID加载上下文
+	 * @param projectId 项目ID
+	 * @param houseNum 房号
+	 * @return 业主房产信息上下文
+	 */
+	public static ProprietorHouseContext loadByProjectIdAndHouseNum(String projectId, String houseNum) {
+		ProprietorHouseContext proprietorHouseContext = getInstance();
+		proprietorHouseContext.setProjectId(projectId);
+		proprietorHouseContext.setHouseNum(houseNum);
+		
+		return proprietorHouseContext;
+	}
+	
+	/**
 	 * 查询业主房产信息
 	 * @return 业主房产信息值对象
 	 */
@@ -92,6 +117,8 @@ public class ProprietorHouseContext {
 			ProprietorHousePo proprietorHousePo = null;
 			if(ValidateHelper.isNotEmptyString(proprietorHouseId)) {
 				proprietorHousePo = proprietorHouseRepository.findOne(proprietorHouseId);
+			} else if(ValidateHelper.isNotEmptyString(projectId) && ValidateHelper.isNotEmptyString(houseNum)) {
+				proprietorHousePo = proprietorHouseRepository.findByProjectIdAndHouseNum(projectId, houseNum);
 			}
 			
 			if(proprietorHousePo != null) {
@@ -108,7 +135,7 @@ public class ProprietorHouseContext {
 	public ProprietorHouseVo create() {
 		if(proprietorHouse != null) {
 			proprietorHouse.setId(UUIDGenerator.generate());
-			proprietorHouse.setOemCode(""); // TODO 待确定后补齐
+			proprietorHouse.setOemCode(ContextManager.getInstance().getOemCode()); 
 			proprietorHouse.setRegisterTime(new Date());
 			
 			ProprietorHousePo proprietorHousePo = MyBeanUtil.createBean(proprietorHouse, ProprietorHousePo.class);
@@ -128,8 +155,33 @@ public class ProprietorHouseContext {
 			if(proprietorHousePo != null) {
 				MyBeanUtil.copyBeanNotNull2Bean(proprietorHouse, proprietorHousePo);
 				proprietorHouseRepository.save(proprietorHousePo);
+				logger.info("更新业主房产信息成功，业主房产ID({})", proprietorHouse.getId());
 			}
 		}
+	}
+
+	protected String getProprietorHouseId() {
+		return proprietorHouseId;
+	}
+
+	protected void setProprietorHouseId(String proprietorHouseId) {
+		this.proprietorHouseId = proprietorHouseId;
+	}
+
+	protected String getProjectId() {
+		return projectId;
+	}
+
+	protected void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	protected String getHouseNum() {
+		return houseNum;
+	}
+
+	protected void setHouseNum(String houseNum) {
+		this.houseNum = houseNum;
 	}
 	
 }
