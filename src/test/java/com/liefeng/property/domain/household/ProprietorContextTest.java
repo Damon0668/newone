@@ -19,7 +19,7 @@ import com.liefeng.property.vo.household.ProprietorVo;
 public class ProprietorContextTest {
 	
 	@Test
-	public void updateProprietor() {
+	public void updateProprietor() throws Exception {
 		ProprietorVo proprietor = new ProprietorVo();
 		proprietor.setId("123456789");
 		proprietor.setEmail("876396352@qq.com");

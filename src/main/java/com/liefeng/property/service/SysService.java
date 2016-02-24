@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.liefeng.common.util.MyBeanUtil;
+import com.alibaba.fastjson.JSON;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.intf.property.ISysService;
 import com.liefeng.intf.service.cache.IRedisService;
@@ -41,8 +41,11 @@ public class SysService implements ISysService {
 			//First, get dictionary from cache
 			try {
 				dictStrList = redisService.listView(groupCodeKey);
-				dictList = MyBeanUtil.createList(dictStrList, SysDictVo.class);
-				return dictList;
+				for (Serializable dictStr : dictStrList) {
+					SysDictVo sysDict = JSON.parseObject(dictStr.toString(), SysDictVo.class);
+					dictList.add(sysDict);
+				}
+//				return dictList;
 			} catch (Exception e) {
 				logger.error("Get dictionary '{}' from redis failed: ", groupCode, e);
 			}
