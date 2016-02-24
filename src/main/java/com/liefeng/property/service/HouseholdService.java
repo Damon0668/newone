@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.property.bo.household.ProprietorBo;
@@ -33,20 +34,26 @@ public class HouseholdService implements IHouseholdService {
 	 * 保存业主信息
 	 */
 	@Override
-	@Transactional
-	public void saveProprietor(ProprietorVo proprietor, ProprietorHouseVo proprietorHouse) {
+	public void saveProprietor(ProprietorSingleHouseVo singleHouse) throws Exception {
+		
 		/**
 		 * 业主信息保存
 		 */
+		ProprietorVo proprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
+		
 		ProprietorContext proprietorContext = ProprietorContext.build(proprietor);
 		proprietor = proprietorContext.create();
+		
 
 		/**
 		 * 业主房产信息保存
 		 */
+		ProprietorHouseVo proprietorHouse = MyBeanUtil.createBean(singleHouse, ProprietorHouseVo.class);
+		
 		proprietorHouse.setProprietorId(proprietor.getId());
 		ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.build(proprietorHouse);
 		proprietorHouseContext.create();
+		
 	}
 
 	/**
@@ -54,16 +61,20 @@ public class HouseholdService implements IHouseholdService {
 	 */
 	@Override
 	@Transactional
-	public void updatePropritor(ProprietorVo proprietor, ProprietorHouseVo proprietorHouse) {
+	public void updatePropritor(ProprietorSingleHouseVo singleHouse) throws Exception  {
 		/**
 		 * 业主信息更新
 		 */
+		ProprietorVo proprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
+		
 		ProprietorContext proprietorContext = ProprietorContext.build(proprietor);
 		proprietorContext.update();
 
 		/**
 		 * 业主房产信息更新
 		 */
+		ProprietorHouseVo proprietorHouse = MyBeanUtil.createBean(singleHouse, ProprietorHouseVo.class);
+		
 		ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.build(proprietorHouse);
 		proprietorHouseContext.update();
 	}

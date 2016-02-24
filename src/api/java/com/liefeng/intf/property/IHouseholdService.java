@@ -5,7 +5,6 @@ import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
-import com.liefeng.property.vo.household.ProprietorVo;
 import com.liefeng.property.vo.household.ResidentVo;
 
 /**
@@ -18,18 +17,16 @@ public interface IHouseholdService {
 	/**
 	 * 保存业主信息
 	 * 
-	 * @param proprietor 业主信息值对象
-	 * @param proprietorHouse 业主房产值对象
+	 * @param singleHouse 业主单个房产信息对象
 	 */
-	public void saveProprietor(ProprietorVo proprietor, ProprietorHouseVo proprietorHouse);
+	public void saveProprietor(ProprietorSingleHouseVo singleHouse) throws Exception;
 	
 	/**
 	 * 更新业主信息
 	 * 
-	 * @param proprietor 业主信息值对象
-	 * @param proprietorHouse 业主房产值对象
+	 * @param singleHouse 业主单个房产信息对象
 	 */
-	public void updatePropritor(ProprietorVo proprietor, ProprietorHouseVo proprietorHouse);
+	public void updatePropritor(ProprietorSingleHouseVo singleHouse) throws Exception;
 	
 	/**
 	 * 保存住户信息
