@@ -63,13 +63,7 @@ public class PropertyStaffPo extends BaseValue {
 	 */
 	@Column(name = "work_status")
 	private String workStatus;
-	
-	/**
-	 * 所属项目ID
-	 */
-	@Column(name = "project_id")
-	private String projectId;
-	
+
 	/**
 	 * 所属部门ID
 	 */
@@ -161,14 +155,6 @@ public class PropertyStaffPo extends BaseValue {
 
 	public void setWorkStatus(String workStatus) {
 		this.workStatus = workStatus;
-	}
-
-	public String getProjectId() {
-		return projectId;
-	}
-
-	public void setProjectId(String projectId) {
-		this.projectId = projectId;
 	}
 
 	public String getDepartmentId() {

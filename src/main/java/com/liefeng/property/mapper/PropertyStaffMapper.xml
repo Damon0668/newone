@@ -26,29 +26,66 @@
 <sql id="Example_Where_Clause">
     WHERE 1=1 
 	<trim  suffixOverrides="," >
+        <if test="extra.oemCode != null and extra.oemCode != ''" >
+            and stf.oem_code = #{extra.oemCode}
+        </if>
         
+        <if test="extra.departmentId != null and extra.departmentId != ''" >
+            and stf.department_id = #{extra.departmentId}
+        </if>
         
+        <if test="extra.workStatus != null and extra.workStatus != ''" >
+            and stf.work_status = #{extra.workStatus}
+        </if>
+        
+        <if test="extra.idOrName != null and extra.idOrName != ''" >
+            and ( stf.number = #{extra.idOrName} or stf.name like concat('%',#{extra.idOrName},'%') )
+        </if>
         
         
 	</trim>
 </sql>
 
-<select id="queryPropertyStaffByPage" resultMap="PropertyStaffListVo" >
+<select id="queryByCount"  resultType="java.lang.Long">
     SELECT
-    stf.id,
-    stf.number,
-    stf.`name`,
-    cst.id_num,
-    stf.entry_time,
-    stfarc.phone,
-    stf.department_id department,
-    stf.position,
-    stf.work_status,
-    stf.account
+        count(1)
+    FROM
+        t_property_staff stf
+    LEFT JOIN t_staff_archive stfarc ON stf.id = stfarc.staff_id
+    LEFT JOIN basic.t_customer cst ON stfarc.cust_global_id = cst.global_id
+    LEFT JOIN t_property_department dept on stf.department_id = dept.id
+    LEFT JOIN t_sys_dict dict on stf.position = dict.`value` and dict.group_code = 'POSITION'
+    <if test="extra.projectId != null and extra.projectId != ''" >
+         LEFT JOIN t_manage_project mp on stf.id = mp.staff_id and mp.project_id = #{extra.projectId}
+    </if>
+    <include refid="Example_Where_Clause"/>
+</select>
+
+<select id="queryByPage" resultMap="PropertyStaffListVo" >
+	SELECT
+	    stf.id,
+	    stf.number,
+	    stf.`name`,
+	    cst.id_num,
+	    stf.entry_time,
+	    stfarc.phone,
+	    dept.`name` department,
+	    dict.`name` position,
+	    stf.work_status,
+	    stf.account
 	FROM
 	    t_property_staff stf
 	LEFT JOIN t_staff_archive stfarc ON stf.id = stfarc.staff_id
 	LEFT JOIN basic.t_customer cst ON stfarc.cust_global_id = cst.global_id
+	LEFT JOIN t_property_department dept on stf.department_id = dept.id
+	LEFT JOIN t_sys_dict dict on stf.position = dict.`value` and dict.group_code = 'POSITION'
+	<if test="extra.projectId != null and extra.projectId != ''" >
+         LEFT JOIN t_manage_project mp on stf.id = mp.staff_id and mp.project_id = #{extra.projectId}
+    </if>
+	<include refid="Example_Where_Clause"/>
+	<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+          ${pager.mysqlQueryCondition}
+    </if>
 </select>
 
 <select id="queryByDeptIdAndProjectId" resultMap="PropertyStaffVo" >

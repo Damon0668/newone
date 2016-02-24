@@ -51,11 +51,6 @@ public class PropertyStaffVo extends BaseValue {
 	private String workStatus;
 	
 	/**
-	 * 所属项目ID
-	 */
-	private String projectId;
-	
-	/**
 	 * 所属部门ID
 	 */
 	private String departmentId;
@@ -145,14 +140,6 @@ public class PropertyStaffVo extends BaseValue {
 
 	public void setWorkStatus(String workStatus) {
 		this.workStatus = workStatus;
-	}
-
-	public String getProjectId() {
-		return projectId;
-	}
-
-	public void setProjectId(String projectId) {
-		this.projectId = projectId;
 	}
 
 	public String getDepartmentId() {

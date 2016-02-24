@@ -79,6 +79,7 @@ public class SysRoleContext {
 	 */
 	public void create() {
 		SysRolePo sysRolePo = MyBeanUtil.createBean(role, SysRolePo.class);
+		sysRolePo.setOemCode(ContextManager.getInstance().getOemCode());
 		sysRoleRepository.save(sysRolePo);
 	}
 	

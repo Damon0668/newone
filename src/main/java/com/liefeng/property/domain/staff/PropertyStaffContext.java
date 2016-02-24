@@ -18,6 +18,9 @@ import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
+import com.liefeng.property.bo.property.PropertyStaffBo;
+import com.liefeng.property.error.PropertyStaffErrorCode;
+import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.staff.PropertyStaffPo;
 import com.liefeng.property.repository.PropertyStaffRepository;
 import com.liefeng.property.repository.mybatis.PropertyStaffQueryRepository;
@@ -49,6 +52,11 @@ public class PropertyStaffContext {
 	private String propertyStaffId;
 	
 	/**
+	 * 员工账号
+	 */
+	private String account;
+	
+	/**
 	 * 物业员工值对象
 	 */
 	private PropertyStaffVo propertyStaff;
@@ -60,6 +68,12 @@ public class PropertyStaffContext {
 	protected void setPropertyStaff(PropertyStaffVo propertyStaff) {
 		this.propertyStaff = propertyStaff;
 	}
+	
+	
+	protected void setAccount(String account) {
+		this.account = account;
+	}
+
 	/**
 	 * 获取本类实例，每次返回一个新的对象
 	 * @return 本类实例
@@ -101,14 +115,30 @@ public class PropertyStaffContext {
 	}
 	
 	/**
+	 * 根据物业员工登陆账号加载上下文
+	 * @param propertyStaffId 物业员工ID
+	 * @return 物业员工上下文
+	 */
+	public static PropertyStaffContext loadByAccount(String account) {
+		PropertyStaffContext propertyStaffContext = getInstance();
+		propertyStaffContext.setAccount(account);
+		return propertyStaffContext;
+	}
+	
+	/**
 	 * 查询物业员工信息
 	 * @return 物业员工值对象
 	 */
 	public PropertyStaffVo getPropertyStaff() {
 		if(propertyStaff == null) {
 			PropertyStaffPo propertyStaffPo = null;
+			
 			if(ValidateHelper.isNotEmptyString(propertyStaffId)) {
 				propertyStaffPo = propertyStaffRepository.findOne(propertyStaffId);
+			}
+			
+			if(ValidateHelper.isEmptyString(propertyStaffId) && ValidateHelper.isNotEmptyString(account)){
+				propertyStaffPo = propertyStaffRepository.findByAccount(account);
 			}
 			
 			if(propertyStaffPo != null) {
@@ -124,8 +154,16 @@ public class PropertyStaffContext {
 	 */
 	public PropertyStaffVo create() {
 		if(propertyStaff != null) {
+			
+			//已存在的物业员工
+			PropertyStaffPo existPropertyStaff = propertyStaffRepository.findByAccount(propertyStaff.getAccount());
+			
+			if(existPropertyStaff != null){
+				throw new PropertyException(PropertyStaffErrorCode.STAFF_ALREADY_EXIST,PropertyStaffErrorCode.STAFF_ALREADY_EXIST.getDesc());
+			}
+			
 			propertyStaff.setId(UUIDGenerator.generate());
-			propertyStaff.setOemCode(ContextManager.getInstance().getOemCode()); // TODO 待确定后补齐
+			propertyStaff.setOemCode(ContextManager.getInstance().getOemCode());
 			propertyStaff.setCreateTime(new Date());
 			
 			PropertyStaffPo propertyStaffPo = MyBeanUtil.createBean(propertyStaff, PropertyStaffPo.class);
@@ -149,18 +187,29 @@ public class PropertyStaffContext {
 	
 	/**
 	 * 分页查询物业员工信息
-	 * @param page
+	 * @param page 第几页
 	 * @param size
 	 * @return
 	 */
-	public DataPageValue<PropertyStaffListVo> listPropertyStaff4Page(Integer page, Integer size) {
+	public DataPageValue<PropertyStaffListVo> listPropertyStaff4Page(PropertyStaffBo propertyStaffBo, Integer page, Integer size) {
+		// 参数拷贝
+		propertyStaffBo.setOemCode(ContextManager.getInstance().getOemCode());
 		
-		Long count = 10L;
+		Map<String, String> extra = MyBeanUtil.bean2Map(propertyStaffBo);
+		
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		param.setPage(page);
+		param.setPageSize(size);
+		
+		
+		Long count = propertyStaffQueryRepository.queryByCount(param);
 		
 		count = (count == null ? 0 : count);
+		
 		logger.info("总数量：count=" + count);
 
-		List<PropertyStaffListVo> list = propertyStaffQueryRepository.queryPropertyStaffByPage();
+		List<PropertyStaffListVo> list = propertyStaffQueryRepository.queryByPage(param);
 
 		DataPageValue<PropertyStaffListVo> returnPage = new DataPageValue<PropertyStaffListVo>(list, count, size, page);
 		

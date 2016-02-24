@@ -16,12 +16,14 @@ import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.property.ISysSecurityService;
+import com.liefeng.intf.service.tcc.ITccMsgService;
+import com.liefeng.property.bo.property.PropertyStaffBo;
+import com.liefeng.property.domain.staff.ManageProjectContext;
 import com.liefeng.property.domain.staff.PropertyDepartmentContext;
 import com.liefeng.property.domain.staff.PropertyStaffContext;
 import com.liefeng.property.domain.staff.StaffArchiveContext;
 import com.liefeng.property.error.StaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
-import com.liefeng.property.repository.mybatis.PropertyStaffQueryRepository;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
@@ -44,11 +46,11 @@ public class PropertyStaffService implements IPropertyStaffService {
 	private ICheckService checkService;
 	
 	@Autowired
-	private PropertyStaffQueryRepository propertyStaffQueryRepository;
-
+	private ITccMsgService tccMsgService;
+	
 	@Override
-	public DataPageValue<PropertyStaffListVo> listPropertyStaff4Page(int page, int size) {
-		return PropertyStaffContext.build().listPropertyStaff4Page(page, size);
+	public DataPageValue<PropertyStaffListVo> listPropertyStaff4Page(PropertyStaffBo propertyStaffBo, int page, int size) {
+		return PropertyStaffContext.build().listPropertyStaff4Page(propertyStaffBo, page, size);
 	}
 
 	@Override
@@ -61,7 +63,6 @@ public class PropertyStaffService implements IPropertyStaffService {
 	public ReturnValue createStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws Exception {
 		
 		logger.info("createStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
-		
 		//CustomerVo customerVo = checkService.createCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
 		
 		PropertyStaffVo propertyStaffVo = PropertyStaffContext.build(propertyStaffDetailInfo.getPropertyStaffVo()).create();
@@ -69,12 +70,17 @@ public class PropertyStaffService implements IPropertyStaffService {
 		propertyStaffDetailInfo.getStaffArchiveVo().setStaffId(propertyStaffVo.getId());
 		
 		propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(UUIDGenerator.generate());
+		
 		//propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(customerVo.getGlobalId());
 
 		StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).create();
 		
 		sysSecurityService.gruntRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
-				
+		
+		ManageProjectContext.build(propertyStaffVo.getId()).create(propertyStaffDetailInfo.getManageProjects());
+		
+		//tccMsgService.sendTccMsg(TccBasicEvent.CREATE_CUSTOMER, customerVo.toString());
+		
 		return ReturnValue.success();
 	}
 
@@ -89,6 +95,18 @@ public class PropertyStaffService implements IPropertyStaffService {
 		return PropertyStaffContext.build().listPropertyStaffByDeptIdAndProjectId(departmentId, projectId);
 	}
 
+
+	@Override
+	public PropertyStaffVo findPropertyStaffById(String staffId) {
+		return PropertyStaffContext.loadById(staffId).getPropertyStaff();
+	}
+
+	@Override
+	public PropertyStaffVo findPropertyStaffByAccount(String account) {
+		return PropertyStaffContext.loadByAccount(account).getPropertyStaff();
+	}
+	
+	
 	/*********************** 部门相关接口 **********************/
 	
 	@Override
@@ -128,5 +146,4 @@ public class PropertyStaffService implements IPropertyStaffService {
 		PropertyStaffContext staffContext = PropertyStaffContext.loadById(directorId);
 		return staffContext.getPropertyStaff();
 	}
-
 }

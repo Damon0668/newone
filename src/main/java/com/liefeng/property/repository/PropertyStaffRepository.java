@@ -14,5 +14,10 @@ import com.liefeng.property.po.staff.PropertyStaffPo;
  */
 @Transactional
 public interface PropertyStaffRepository extends JpaRepository<PropertyStaffPo, String> {
-
+	/**
+	 * 根据登陆账号查找物业员工
+	 * @param account
+	 * @return
+	 */
+	public PropertyStaffPo findByAccount(String account);
 }

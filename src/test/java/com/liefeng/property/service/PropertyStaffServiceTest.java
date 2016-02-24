@@ -36,7 +36,6 @@ public class PropertyStaffServiceTest {
 		propertyStaff.setPassword("test");
 		propertyStaff.setNumber("test");
 		propertyStaff.setWorkStatus("1");
-		propertyStaff.setProjectId("1");
 		ReturnValue returnValue = propertyStaffService.createStaff(propertyStaff);
 		Assert.assertTrue(IErrorCode.SUCCESS.equals(returnValue.getCode()));
 	}

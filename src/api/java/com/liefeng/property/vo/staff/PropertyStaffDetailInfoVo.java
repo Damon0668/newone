@@ -34,6 +34,11 @@ public class PropertyStaffDetailInfoVo extends BaseValue{
 	 * 角色ID数组
 	 */
 	public Long[] roleIds;
+	
+	/**
+	 * 员工管理相关项目ID
+	 */
+	public String[] manageProjects;
 
 	public PropertyStaffVo getPropertyStaffVo() {
 		return propertyStaffVo;
@@ -65,5 +70,13 @@ public class PropertyStaffDetailInfoVo extends BaseValue{
 
 	public void setRoleIds(Long[] roleIds) {
 		this.roleIds = roleIds;
+	}
+
+	public String[] getManageProjects() {
+		return manageProjects;
+	}
+
+	public void setManageProjects(String[] manageProjects) {
+		this.manageProjects = manageProjects;
 	}
 }

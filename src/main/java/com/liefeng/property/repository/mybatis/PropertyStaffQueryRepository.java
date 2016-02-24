@@ -12,9 +12,6 @@ import com.liefeng.property.vo.staff.PropertyStaffVo;
  * @author 蔡少东
  * @date 2016年2月23日
  */
-public interface PropertyStaffQueryRepository extends BaseRepository<PropertyStaffVo>{
-	
-	public List<PropertyStaffListVo> queryPropertyStaffByPage();
-	
+public interface PropertyStaffQueryRepository extends BaseRepository<PropertyStaffListVo>{
 	public List<PropertyStaffVo> queryByDeptIdAndProjectId(PagingParamVo param);
 }
