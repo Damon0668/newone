@@ -1,5 +1,7 @@
 package com.liefeng.property.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IFeeService;
+import com.liefeng.property.bo.fee.MeterRecordBo;
 import com.liefeng.property.domain.fee.FeeSettingContext;
 import com.liefeng.property.domain.fee.LadderFeeSettingContext;
 import com.liefeng.property.domain.fee.MeterRecordContext;
@@ -43,10 +46,9 @@ public class FeeService implements IFeeService {
 	}
 
 	@Override
-	public DataPageValue<MeterRecordVo> findMeterRecord4Page(MeterRecordVo meterRecordVo,Integer currentPage,Integer pageSize) {
-		MeterRecordContext meterRecordContext = MeterRecordContext
-				.build(meterRecordVo);
-		return meterRecordContext.listMeterRecordVo4Page(currentPage, pageSize);
+	public DataPageValue<MeterRecordVo> findMeterRecord4Page(MeterRecordBo meterRecordBo,Integer currentPage,Integer pageSize) {
+		MeterRecordContext meterRecordContext = MeterRecordContext.build();
+		return meterRecordContext.listMeterRecordVo4Page(meterRecordBo,currentPage, pageSize);
 	}
 	// TODO 仪表设置
 	@Override
@@ -87,6 +89,11 @@ public class FeeService implements IFeeService {
 		meterSettingContext.update();
 	}
 
+	@Override
+	public List<MeterSettingVo> findByProjectIdAndChargeableYes(){
+		MeterSettingContext meterSettingContext = MeterSettingContext.build();
+		return meterSettingContext.findByProjectIdAndChargeableYes();
+	}
 	//TODO 费用设置
 	@Override
 	public void createFeeSetting(FeeSettingVo feeSettingVo)

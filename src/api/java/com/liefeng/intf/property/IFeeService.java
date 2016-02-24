@@ -1,7 +1,10 @@
 package com.liefeng.intf.property;
 
+import java.util.List;
+
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
+import com.liefeng.property.bo.fee.MeterRecordBo;
 import com.liefeng.property.vo.fee.FeeSettingVo;
 import com.liefeng.property.vo.fee.LadderFeeSettingVo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
@@ -30,7 +33,7 @@ public interface IFeeService {
 	 * 抄表列表 所有房产及抄表数据集结合(业主房产为主表)
 	 * @param meterRecordVo
 	 */
-	public DataPageValue<MeterRecordVo> findMeterRecord4Page(MeterRecordVo meterRecordVo,Integer currentPage,Integer pageSize);
+	public DataPageValue<MeterRecordVo> findMeterRecord4Page(MeterRecordBo meterRecordBo,Integer currentPage,Integer pageSize);
 
 	/**
 	 * 创建仪表设置
@@ -111,6 +114,12 @@ public interface IFeeService {
 			throws LiefengException;
 
 	/**
+	 * 获取项目下所有要抄的表
+	 * @return
+	 */
+	public List<MeterSettingVo> findByProjectIdAndChargeableYes();
+	
+	/**
 	 * 删除阶梯收费
 	 * @param id
 	 * @throws LiefengException
@@ -136,6 +145,8 @@ public interface IFeeService {
 
 	public void updateLadderFeeSetting(LadderFeeSettingVo ladderFeeSettingVo)
 			throws LiefengException;
+
+
 
 	
 }

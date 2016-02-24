@@ -104,7 +104,7 @@ public class MeterRecordVo extends BaseValue {
 	/**
 	 * 是否已读
 	 */
-	private Integer idRead;
+	private Integer isRead;
 	
 	/**
 	 * 数据来源
@@ -269,12 +269,12 @@ public class MeterRecordVo extends BaseValue {
 		this.oemCode = oemCode;
 	}
 
-	public Integer getIdRead() {
-		return idRead;
+	public Integer getIsRead() {
+		return isRead;
 	}
 
-	public void setIdRead(Integer idRead) {
-		this.idRead = idRead;
+	public void setIsRead(Integer isRead) {
+		this.isRead = isRead;
 	}
 
 }

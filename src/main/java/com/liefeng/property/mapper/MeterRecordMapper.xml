@@ -25,7 +25,7 @@
 		<result column="staff_id" property="staffId" />
 		<result column="create_time" property="createTime" />
 		<result column="from" property="from" />
-		<result column="idRead" property="idRead" />
+		<result column="isRead" property="isRead" />
 		<result column="oem_code" property="oemCode" />
 	</resultMap>
 
@@ -46,27 +46,38 @@
 				AND ph.house_num = #{extra.houseNum}
 			</if>
 
-			<if test="extra.form != null and extra.form != ''">
-				AND mr.form = #{extra.form}
+			<if test="extra.from != null and extra.from != ''">
+				AND mr.from = #{extra.form}
 			</if>
-
+			
+			
+			
 			<if test="extra.proprietorName != null and extra.proprietorName  != ''">
 				AND p.proprietor_name like #{extra.proprietorName }
 			</if>
 		</trim>
 	</sql>
-
+	<!-- 链接查询条件 -->
+	<sql id="Example_Join_Clause">
+		<if test="extra.startDate != null and extra.startDate != ''">
+				AND  #{extra.startDate} between mr.start_date and mr.end_date
+		</if>
+	</sql>
 
 	<select id="queryByPage" resultMap="BaseResultMap">
 		select
 		mr.id as id,
 		ph.proprietor_id as propertyId,
+		ph.project_id as projectId,
+		h.building_id as buildingId,
 		ph.house_num as houseNum,
 		p.`name` as proprietorName,
 		mr.start_date as startDate,
 		mr.end_date as endDate,
 		mr.use_amount as useAmount,
 		mr.read_date as readDate,
+		mr.pre_num,
+		mr.curr_num,
 		(select
 			count(tmr.id)
 			from
@@ -80,9 +91,9 @@
 		)as isRead
 		from
 		t_proprietor_house ph
-		left join t_meter_record mr on ph.project_id = mr.project_id
-		and ph.house_num = mr.house_num
-		left join t_proprietor p on p.id = mr.property_id
+		left join t_meter_record mr on ph.project_id = mr.project_id 
+		and ph.house_num = mr.house_num <include refid="Example_Join_Clause" />
+		left join t_proprietor p on p.id = ph.proprietor_id
 		left join t_house h on h.project_id = ph.project_id
 		and h.house_num = ph.house_num
 		<include refid="Example_Where_Clause" />
@@ -99,9 +110,9 @@
 		ph.proprietor_id
 		from
 		t_proprietor_house ph
-		left join t_meter_record mr on ph.project_id = mr.project_id
-		and ph.house_num = mr.house_num
-		left join t_proprietor p on p.id = mr.property_id
+		left join t_meter_record mr on ph.project_id = mr.project_id 
+		and ph.house_num = mr.house_num <include refid="Example_Join_Clause" />
+		left join t_proprietor p on p.id = ph.proprietor_id
 		left join t_house h on h.project_id = ph.project_id
 		and h.house_num = ph.house_num
 		<include refid="Example_Where_Clause" />

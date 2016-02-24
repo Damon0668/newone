@@ -1,6 +1,7 @@
 package com.liefeng.property.domain.fee;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.property.constant.FeeConstants;
 import com.liefeng.property.error.FeeErrorCode;
 import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.MeterSettingPo;
@@ -149,6 +151,13 @@ public class MeterSettingContext {
 				voPage.getTotalElements(), pageSize, currentPage);
 	}
 
+	/**
+	 * 获取项目下要抄仪表
+	 */
+	public List<MeterSettingVo> findByProjectIdAndChargeableYes(){
+		return meterSettingRepository.findByProjectIdAndChargeable(projectId,FeeConstants.MeterSetting.CHARGEABLE_YES);
+	}
+	
 	/**
 	 * 获取单仪表设置详情
 	 * 

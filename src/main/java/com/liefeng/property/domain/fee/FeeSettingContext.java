@@ -17,10 +17,12 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.property.constant.FeeConstants;
 import com.liefeng.property.error.FeeErrorCode;
 import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.FeeSettingPo;
 import com.liefeng.property.repository.FeeSettingRepository;
+import com.liefeng.property.repository.LadderFeeSettingRepository;
 import com.liefeng.property.vo.fee.FeeSettingVo;
 
 /**
@@ -42,12 +44,27 @@ public class FeeSettingContext {
 
 	@Autowired
 	private FeeSettingRepository feeSettingRepository;
-	
+		
 	private FeeSettingVo feeSetting;
 	
 	private String feeSettingId;
 
+	/**
+	 * 项目id
+	 */
 	private String projectId;
+
+	/**
+	 * 使用性质
+	 */
+	private String useType;
+	
+	/**
+	 * 费用类型
+	 */
+	private String feeType;
+	
+	
 
 	/**
 	 * 获取本类实例，每次返回一个新对象
@@ -88,6 +105,19 @@ public class FeeSettingContext {
 	public static FeeSettingContext loadByProjectId(String projectId) {
 		FeeSettingContext feeSettingContext = getInstance();
 		feeSettingContext.setProjectId(projectId);
+		return feeSettingContext;
+	}
+	
+	/**
+	 * 获取本类实例，每次返回一个新对象
+	 * @param projectId
+	 * @return
+	 */
+	public static FeeSettingContext loadByProjectIdAndUseTypeAndFeeType(String projectId,String useType,String feeType) {
+		FeeSettingContext feeSettingContext = getInstance();
+		feeSettingContext.setProjectId(projectId);
+		feeSettingContext.setFeeType(feeType);
+		feeSettingContext.setUseType(useType);
 		return feeSettingContext;
 	}
 
@@ -163,7 +193,10 @@ public class FeeSettingContext {
 				voPage.getTotalElements(), pageSize, currentPage);
 	}
 
-	
+	public FeeSettingVo findFeeSettingOrLadder(){
+		FeeSettingPo feeSettingPo = feeSettingRepository.findByProjectIdAndFeeTypeAndChargeable(projectId, feeType,useType,FeeConstants.FeeSetting.CHARGEABLE_YES);
+		return MyBeanUtil.createBean(feeSettingPo, FeeSettingVo.class);
+	}
 	
 	protected void setFeeSetting(FeeSettingVo feeSetting) {
 		this.feeSetting = feeSetting;
@@ -175,6 +208,14 @@ public class FeeSettingContext {
 
 	protected void setProjectId(String projectId) {
 		this.projectId = projectId;
+	}
+	
+	protected void setUseType(String useType) {
+		this.useType = useType;
+	}
+	
+	protected void setFeeType(String feeType) {
+		this.feeType = feeType;
 	}
 
 	

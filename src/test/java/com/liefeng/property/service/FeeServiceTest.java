@@ -15,6 +15,7 @@ import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IFeeService;
+import com.liefeng.property.bo.fee.MeterRecordBo;
 import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.vo.fee.FeeSettingVo;
 import com.liefeng.property.vo.fee.LadderFeeSettingVo;
@@ -77,7 +78,10 @@ public class FeeServiceTest {
 	
 	@Test
 	public void listMeterRecord(){
-		System.out.println(feeService.findMeterRecord4Page(new MeterRecordVo(), 1, 30));
+		MeterRecordBo meterRecordBo= new MeterRecordBo();
+		meterRecordBo.setStartDate(TimeUtil.getNowTime("yyyy-MM-dd"));
+		meterRecordBo.setFrom("1");
+		System.out.println(feeService.findMeterRecord4Page(meterRecordBo, 1, 30));
 	}
 
 	/**

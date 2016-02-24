@@ -61,4 +61,15 @@ public interface FeeSettingRepository extends JpaRepository<FeeSettingPo, String
 	public Page<FeeSettingPo> findByProjectIdOrderByFeeTypeDesc(
 			String projectId, Pageable pageable);
 
+	/**
+	 * 获取费用设置
+	 * @param projectId 项目id
+	 * @param useType 使用性质
+	 * @param feeType 费用类型
+	 * @param chargeableYes 1收取,2不收取
+	 * @return 
+	 */
+	public FeeSettingPo findByProjectIdAndFeeTypeAndChargeable(String projectId,String useType,
+			String feeType, String chargeableYes);
+
 }

@@ -20,6 +20,7 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
+import com.liefeng.property.bo.fee.MeterRecordBo;
 import com.liefeng.property.error.FeeErrorCode;
 import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.MeterRecordPo;
@@ -82,7 +83,6 @@ public class MeterRecordContext {
 	public static MeterRecordContext build(MeterRecordVo meterRecord) {
 		MeterRecordContext meterRecordContext = getInstance();
 		meterRecordContext.setMeterRecord(meterRecord);
-
 		return meterRecordContext;
 	}
 
@@ -183,8 +183,8 @@ public class MeterRecordContext {
 				meterRecord.setUseAmount(meterRecord.getCurrNum()-meterRecord.getPreNum());
 			}
 			
-			meterRecord.setStartDate(TimeUtil.getFirstDayOfCurrMonth());
-			meterRecord.setEndDate(TimeUtil.getLastDayOfCurrMonth());
+			meterRecord.setStartDate(TimeUtil.format(TimeUtil.format(TimeUtil.getFirstDayOfCurrMonth(),"yyyy-MM-dd"),"yyyy-MM-dd"));
+			meterRecord.setEndDate(TimeUtil.format(TimeUtil.format(TimeUtil.getLastDayOfCurrMonth(),"yyyy-MM-dd"),"yyyy-MM-dd"));
 			meterRecord.setId(UUIDGenerator.generate());
 			meterRecord.setCreateTime(new Date());
             meterRecord.setOemCode(ContextManager.getInstance().getOemCode());
@@ -198,9 +198,9 @@ public class MeterRecordContext {
 	 * 抄表列表
 	 * @return
 	 */
-	public DataPageValue<MeterRecordVo> listMeterRecordVo4Page(Integer currentPage,Integer pageSize){
+	public DataPageValue<MeterRecordVo> listMeterRecordVo4Page(MeterRecordBo meterRecordBo, Integer currentPage,Integer pageSize){
 		
-		Map<String, String> extra = MyBeanUtil.bean2Map(meterRecord);
+		Map<String, String> extra = MyBeanUtil.bean2Map(meterRecordBo);
 		
 		PagingParamVo param = new PagingParamVo();
 		param.setExtra(extra);
@@ -210,6 +210,8 @@ public class MeterRecordContext {
 		Long total = meterRecordQueryRepository.queryByCount(param);
 		total = (total == null ? 0 : total);
 		logger.info("总数量：total=" + total);
+	
+	//	param.getPager().setRowCount(total);
 		
 		List<MeterRecordVo> meterRecordVos = meterRecordQueryRepository.queryByPage(param);
 		return new DataPageValue<MeterRecordVo>(meterRecordVos, total, pageSize, currentPage);

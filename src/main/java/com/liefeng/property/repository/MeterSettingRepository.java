@@ -1,6 +1,8 @@
 package com.liefeng.property.repository;
 
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
@@ -8,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.liefeng.property.po.fee.MeterSettingPo;
+import com.liefeng.property.vo.fee.MeterSettingVo;
 
 /**
  * 
@@ -47,5 +50,14 @@ public interface MeterSettingRepository extends JpaRepository<MeterSettingPo, St
 	 * @return
 	 */
 	public MeterSettingPo findById(String id);
+
+	/**
+	 * 获取项目下要抄的表
+	 * @param projectId
+	 * @param chargeableYes
+	 * @return
+	 */
+	public List<MeterSettingVo> findByProjectIdAndChargeable(String projectId,
+			String chargeableYes);
 
 }
