@@ -35,29 +35,12 @@ public class WorkbenchService implements IWorkbenchService {
 		
 		if(taskVo != null){   //创建任务的权限
 			if(ValidateHelper.isNotEmptyString(taskVo.getPrivilegeStr())){
-				String[] privilegesArray = taskVo.getPrivilegeStr().split(",");
-				for(int i=0; i < privilegesArray.length; i++){
-					String[] privilegeArray = privilegesArray[i].split("\\|");
+				String[] privilegeArray = taskVo.getPrivilegeStr().split(",");
+				for(int i=0; i < privilegeArray.length; i++){
 					TaskPrivilegeVo privilegeVo = new TaskPrivilegeVo();
 					privilegeVo.setTaskId(taskVo.getId());
-					
-					if("0".equals(privilegeArray[1])){ //项目的所有人
-						privilegeVo.setProjectId(privilegeArray[0]);
-						privilegeVo.setDeptId("-1");
-						createTaskPrivilege(privilegeVo);
-					}else{
-						if("0".equals(privilegeArray[2])){   //部门的所有人
-							privilegeVo.setProjectId(privilegeArray[0]);
-							privilegeVo.setDeptId(privilegeArray[1]);
-							privilegeVo.setStaffId("-1");
-							createTaskPrivilege(privilegeVo);
-						}else{                      //某个人
-							privilegeVo.setProjectId(privilegeArray[0]);
-							privilegeVo.setDeptId(privilegeArray[1]);
-							privilegeVo.setStaffId(privilegeArray[2]);
-							createTaskPrivilege(privilegeVo);
-						}
-					}
+					privilegeVo.setStaffId(privilegeArray[i]);
+					createTaskPrivilege(privilegeVo);
 				}
 				
 			}

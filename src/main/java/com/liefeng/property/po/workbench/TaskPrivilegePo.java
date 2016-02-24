@@ -33,20 +33,9 @@ public class TaskPrivilegePo extends BaseValue{
 	@Column(name="task_id")
 	private String taskId;
 	
-	/**
-	 * 项目ID。-1表示所有项目都可见
-	 */
-	@Column(name="project_id")
-	private String projectId;
 	
 	/**
-	 * 部门ID。-1表示所有该项目下所有部门都可见
-	 */
-	@Column(name="dept_id")
-	private String deptId;
-	
-	/**
-	 * 员工ID。-1表示所有该部门下所有员工都可见
+	 * 员工ID
 	 */
 	@Column(name="staff_id")
 	private String staffId;
@@ -71,22 +60,6 @@ public class TaskPrivilegePo extends BaseValue{
 
 	public void setTaskId(String taskId) {
 		this.taskId = taskId;
-	}
-
-	public String getProjectId() {
-		return projectId;
-	}
-
-	public void setProjectId(String projectId) {
-		this.projectId = projectId;
-	}
-
-	public String getDeptId() {
-		return deptId;
-	}
-
-	public void setDeptId(String deptId) {
-		this.deptId = deptId;
 	}
 
 	public String getStaffId() {

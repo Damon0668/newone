@@ -1,6 +1,8 @@
 package com.liefeng.property.domain.workbench;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.workbench.TaskPo;
+import com.liefeng.property.repository.mybatis.TaskQueryRepository;
 import com.liefeng.property.repository.workbench.TaskRepository;
 import com.liefeng.property.vo.workbench.TaskVo;
 
@@ -33,6 +36,9 @@ public class TaskContext {
 	
 	@Autowired
 	private TaskRepository taskRepository;
+	
+	@Autowired
+	private TaskQueryRepository taskQueryRepository;
 	
 	/**
 	 * 客户值对象
@@ -147,6 +153,14 @@ public class TaskContext {
 		}
 		
 		return task;
+	}
+	
+	public List<TaskVo> listMyAllTasks(String creatorId, String staffId) {
+		HashMap<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("creatorId", creatorId);
+		paramMap.put("staffId", staffId);
+		
+		return taskQueryRepository.listMyTasks(paramMap);
 	}
 
 

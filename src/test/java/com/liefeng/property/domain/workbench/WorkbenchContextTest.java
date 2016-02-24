@@ -86,8 +86,6 @@ public class WorkbenchContextTest {
 	public void createTaskPrivilege(){
 		TaskPrivilegeVo tv = new TaskPrivilegeVo();
 		tv.setTaskId("402889ba53082b620153082b62060000");
-		tv.setProjectId("2");
-		tv.setDeptId("-1");
 		workbenchService.createTaskPrivilege(tv);
 	}
 	
@@ -114,5 +112,12 @@ public class WorkbenchContextTest {
 	@Test
 	public void deleteTaskPrivilegeBytaskId(){
 		workbenchService.deleteTaskPrivilegeByTaskId("402889ba53082b620153082b62060000");
+	}
+	
+	@Test
+	public void listMyTasks(){
+		TaskContext taskContext = TaskContext.build();
+		List<TaskVo> myTaskList = taskContext.listMyAllTasks("40288901530c1a1d01530c1a1db40000", "40288901530c1a1d01530c1a1db40000");
+		System.out.println(myTaskList);
 	}
 }

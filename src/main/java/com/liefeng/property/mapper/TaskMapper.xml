@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.TaskQueryRepository" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.workbench.TaskVo" >
+	<result column="id" property="id"/>
+	<result column="title" property="title"/>
+	<result column="content" property="content"/>
+	<result column="status" property="status"/>
+	<result column="priority" property="priority"/>
+	<result column="start_time" property="startTime"/>
+	<result column="end_time" property="endTime"/>
+	<result column="result" property="result"/>		
+	<result column="creator_id" property="creatorId"/>
+</resultMap>
+
+<select id="listMyTasks" resultMap="BaseResultMap">
+    SELECT t.id, t.title, t.content, t.status, t.priority, t.start_time, t.end_time, t.result, t.creator_id
+	  FROM t_task t, t_task_privilege p
+	 WHERE t.id = p.task_id 
+      <if test="status != null and status != ''" >
+	   and status =  #{status}
+	 </if>	
+	   and (t.creator_id = #{creatorId}
+	    or p.staff_id =  #{staffId})
+	 order by t.create_time desc
+	 limit 0, 10
+</select>
+
+</mapper>   
