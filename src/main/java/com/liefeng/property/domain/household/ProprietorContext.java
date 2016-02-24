@@ -16,6 +16,7 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.household.ProprietorBo;
@@ -117,11 +118,10 @@ public class ProprietorContext {
 	/**
 	 * 保存业主信息
 	 */
-	public ProprietorVo create() {
-		
+	public ProprietorVo create() throws Exception {
 		if(proprietor != null) {
 			proprietor.setId(UUIDGenerator.generate());
-			proprietor.setOemCode(""); // TODO 待确定后补齐 
+			proprietor.setOemCode(ContextManager.getInstance().getOemCode()); 
 			proprietor.setRegisterTime(new Date());
 			
 			ProprietorPo proprietorPo = MyBeanUtil.createBean(proprietor, ProprietorPo.class);
@@ -134,7 +134,7 @@ public class ProprietorContext {
 	/**
 	 * 更新业主信息
 	 */
-	public ProprietorVo update() {
+	public ProprietorVo update() throws Exception {
 		if(proprietor != null && ValidateHelper.isNotEmptyString(proprietor.getId())) {
 			ProprietorPo proprietorPo = proprietorRepository.findOne(proprietor.getId());
 			

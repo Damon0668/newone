@@ -132,7 +132,7 @@ public class ProprietorHouseContext {
 	/**
 	 * 保存业主房产信息
 	 */
-	public ProprietorHouseVo create() {
+	public ProprietorHouseVo create() throws Exception {
 		if(proprietorHouse != null) {
 			proprietorHouse.setId(UUIDGenerator.generate());
 			proprietorHouse.setOemCode(ContextManager.getInstance().getOemCode()); 
@@ -148,7 +148,7 @@ public class ProprietorHouseContext {
 	/**
 	 * 更新业主房产信息
 	 */
-	public void update() {
+	public void update() throws Exception {
 		if(proprietorHouse != null  && ValidateHelper.isNotEmptyString(proprietorHouse.getId())) {
 			
 			ProprietorHousePo proprietorHousePo = proprietorHouseRepository.findOne(proprietorHouse.getId());
