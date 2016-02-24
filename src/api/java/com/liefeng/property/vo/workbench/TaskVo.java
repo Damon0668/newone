@@ -108,6 +108,50 @@ public class TaskVo extends BaseValue{
 	 */
 	private String privilegeStr;
 	
+	/**
+	 * 创建人姓名
+	 */
+	private String creatorName;
+	
+	/**
+	 * 办理人姓名
+	 */
+	private String handlerName;
+	
+	/**
+	 * 审核人姓名
+	 */
+	private String reviewerName;
+	
+	/**
+	 * 归档姓名
+	 */
+	private String archiverName;
+	
+	public String getHandlerName() {
+		return handlerName;
+	}
+
+	public void setHandlerName(String handlerName) {
+		this.handlerName = handlerName;
+	}
+
+	public String getReviewerName() {
+		return reviewerName;
+	}
+
+	public void setReviewerName(String reviewerName) {
+		this.reviewerName = reviewerName;
+	}
+
+	public String getArchiverName() {
+		return archiverName;
+	}
+
+	public void setArchiverName(String archiverName) {
+		this.archiverName = archiverName;
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -274,6 +318,14 @@ public class TaskVo extends BaseValue{
 
 	public void setPrivilegeStr(String privilegeStr) {
 		this.privilegeStr = privilegeStr;
+	}
+
+	public String getCreatorName() {
+		return creatorName;
+	}
+
+	public void setCreatorName(String creatorName) {
+		this.creatorName = creatorName;
 	}
 
 }

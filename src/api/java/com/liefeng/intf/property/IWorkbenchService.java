@@ -2,7 +2,10 @@ package com.liefeng.intf.property;
 
 import java.util.List;
 
+import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
+import com.liefeng.property.bo.project.HouseBo;
+import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.workbench.TaskPrivilegeVo;
 import com.liefeng.property.vo.workbench.TaskVo;
 
@@ -66,5 +69,27 @@ public interface IWorkbenchService {
 	 * @date 2016年2月22日 下午4:35:43
 	 */
 	public void deleteTaskPrivilegeByTaskId(String taskId);
+	
+	/**
+	 * 根据状态，员工Id获取任务的数量
+	 * @param status 状态
+	 * @param staffId 员工Id
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年2月24日 上午10:45:00
+	 */
+	public Long findCountByStatusAndStaffId(String status, String staffId);
+	
+	/**
+	 * 分页查询任务信息
+	 * @param status 任务状态
+	 * @param staffId 员工Id
+	 * @param page 当前页
+	 * @param size 每页数量
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年2月24日 上午10:47:17
+	 */
+	public DataPageValue<TaskVo> findTask4Page(String status, String staffId,Integer page, Integer size);
 	
 }

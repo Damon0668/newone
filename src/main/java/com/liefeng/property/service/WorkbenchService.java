@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.property.domain.workbench.TaskContext;
 import com.liefeng.property.domain.workbench.TaskPrivilegeContext;
@@ -70,6 +71,19 @@ public class WorkbenchService implements IWorkbenchService {
 	public void deleteTaskPrivilegeByTaskId(String taskId) {
 		TaskPrivilegeContext taskPrivilegeContext = TaskPrivilegeContext.loadById(taskId);
 		taskPrivilegeContext.deleteByTaskId();
+	}
+
+	@Override
+	public Long findCountByStatusAndStaffId(String status, String staffId) {
+		TaskContext taskContext = TaskContext.build();
+		
+		return taskContext.findCountByStatusAndStaffId(status, staffId);
+	}
+
+	@Override
+	public DataPageValue<TaskVo> findTask4Page(String status, String staffId, Integer page, Integer size) {
+		TaskContext taskContext = TaskContext.build();
+		return taskContext.findTask4Page(status, staffId, page, size);
 	}
 
 

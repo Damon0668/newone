@@ -10,6 +10,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
+import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.property.vo.workbench.TaskPrivilegeVo;
 import com.liefeng.property.vo.workbench.TaskVo;
@@ -114,10 +115,27 @@ public class WorkbenchContextTest {
 		workbenchService.deleteTaskPrivilegeByTaskId("402889ba53082b620153082b62060000");
 	}
 	
+	/**
+	 * 我的任务、分页查询
+	 *                       
+	 * @author xhw
+	 * @date 2016年2月24日 上午9:28:29
+	 */
 	@Test
-	public void listMyTasks(){
-		TaskContext taskContext = TaskContext.build();
-		List<TaskVo> myTaskList = taskContext.listMyAllTasks("40288901530c1a1d01530c1a1db40000", "40288901530c1a1d01530c1a1db40000");
-		System.out.println(myTaskList);
+	public void findTask4Page(){
+		DataPageValue page  = workbenchService.findTask4Page("", "40288901530c1a1d01530c1a1db40000", 1, 10);
+		System.out.println(page);
+	}
+	
+	/**
+	 * 根据状态，员工id查询任务数量
+	 *                       
+	 * @author xhw
+	 * @date 2016年2月24日 上午11:21:52
+	 */
+	@Test
+	public void findCountByStautsAndStaffId(){
+		Long count = workbenchService.findCountByStatusAndStaffId("", "40288901530c1a1d01530c1a1db40000");
+		System.out.println(count);
 	}
 }

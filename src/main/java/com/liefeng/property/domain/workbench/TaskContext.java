@@ -15,6 +15,8 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.workbench.TaskPo;
@@ -160,9 +162,65 @@ public class TaskContext {
 		paramMap.put("creatorId", creatorId);
 		paramMap.put("staffId", staffId);
 		
-		return taskQueryRepository.listMyTasks(paramMap);
+		return taskQueryRepository.queryByPage(paramMap);
 	}
 
+	/**
+	 * 根据状态、员工id获取任务的数量
+	 * @param status  状态
+	 * @param staffId 员工id
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年2月24日 上午10:42:58
+	 */
+	public Long findCountByStatusAndStaffId(String status, String staffId){
+		HashMap<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("creatorId", staffId);
+		paramMap.put("staffId", staffId);
+		paramMap.put("status", status);
+		
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(paramMap);
+		
+		Long count = taskQueryRepository.queryByCount(param);
+		count = (count == null ? 0 : count);
+		logger.info("总数量：count=" + count);
+		
+		return count;
+	}
+
+	/**
+	 * 根据状态，员工id，查询任务
+	 * @param status  状态
+	 * @param staffId 员工id
+	 * @param page 第几页，最小为1
+	 * @param size 页面大小
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年2月24日 上午10:26:47
+	 */
+	public DataPageValue<TaskVo> findTask4Page(String status, String staffId, Integer page, Integer size) {
+		HashMap<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("creatorId", staffId);
+		paramMap.put("staffId", staffId);
+		paramMap.put("status", status);
+		
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(paramMap);
+		param.setPage(page);
+		param.setPageSize(size);
+		
+		Long count = taskQueryRepository.queryByCount(param);
+		count = (count == null ? 0 : count);
+		logger.info("总数量：count=" + count);
+		
+		// 设置数据总行数，用于计算偏移量
+		param.getPager().setRowCount(count);
+		List<TaskVo> list = taskQueryRepository.queryByPage(param);
+		DataPageValue<TaskVo> returnPage = new DataPageValue<TaskVo>(list, count, size, page);
+		
+		return returnPage;
+	}
 
 	public void setTaskId(String taskId) {
 		this.taskId = taskId;

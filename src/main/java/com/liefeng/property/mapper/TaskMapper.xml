@@ -15,19 +15,58 @@
 	<result column="end_time" property="endTime"/>
 	<result column="result" property="result"/>		
 	<result column="creator_id" property="creatorId"/>
+	<result column="name" property="creatorName"/>
 </resultMap>
 
-<select id="listMyTasks" resultMap="BaseResultMap">
-    SELECT t.id, t.title, t.content, t.status, t.priority, t.start_time, t.end_time, t.result, t.creator_id
-	  FROM t_task t, t_task_privilege p
-	 WHERE t.id = p.task_id 
-      <if test="status != null and status != ''" >
-	   and status =  #{status}
-	 </if>	
-	   and (t.creator_id = #{creatorId}
-	    or p.staff_id =  #{staffId})
-	 order by t.create_time desc
-	 limit 0, 10
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where t.id = p.task_id and t.creator_id = s.id
+<trim  suffixOverrides="," >
+	<if test="extra.creatorId != null and extra.creatorId != '' and extra.staffId != null and extra.staffId != ''" >
+	    and (t.creator_id = #{extra.creatorId} or p.staff_id =  #{extra.staffId})
+	</if>
+	<if test="extra.status != null and extra.status != ''">
+		and t.status = #{extra.status}
+	</if>
+        order by t.create_time desc
+</trim>
+</sql>
+
+<select id="queryByPage" resultMap="BaseResultMap">
+    select 
+	    t.id, 
+	    t.title, 
+	    t.content, 
+	    t.status, 
+	    t.priority, 
+	    t.start_time, 
+	    t.end_time, 
+	    t.result, 
+	    t.creator_id,
+	    s.name
+	from 
+		t_task t, 
+		t_task_privilege p,
+		t_property_staff s
+		<include refid="Example_Where_Clause" />
+		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	          ${pager.mysqlQueryCondition}
+	    </if>
 </select>
 
+
+	<select id="queryByCount"  resultType="java.lang.Long">
+	select 
+		count(1) 
+	from(
+			select 
+				t.id
+		    from 
+		    	t_task t, 
+		    	t_task_privilege p,
+		    	t_property_staff s
+		    <include refid="Example_Where_Clause" />
+		) t
+	</select>
+	
 </mapper>   
