@@ -66,10 +66,18 @@ public interface IPropertyStaffService {
 	 * 查询物业员工
 	 * @param staffId 员工ID
 	 * @return
-	 * @throws LiefengException
 	 */
 	public PropertyStaffVo findPropertyStaffById(String staffId);
 	
+	/**
+	 * 查询物业员工
+	 * 详细信息
+	 * @param staffId 员工ID
+	 * @return
+	 */
+	public PropertyStaffDetailInfoVo findStaffDetailInfo(String staffId);
+	
+
 	/**
 	 * 查询物业员工
 	 * @param account 员工登陆账号
@@ -110,4 +118,11 @@ public interface IPropertyStaffService {
 	 * @return 部门负责人信息
 	 */
 	public PropertyStaffVo getDepartmentDirector(String departmentId);
+	
+	/**
+	 * 根据部门ID获取部门
+	 * @param departmentId 部门ID
+	 * @return 部门信息
+	 */
+	public PropertyDepartmentVo getDepartment(String departmentId);
 }

@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.liefeng.common.util.UUIDGenerator;
+import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.exception.LiefengException;
@@ -17,6 +17,7 @@ import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.property.ISysSecurityService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
+import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.property.PropertyStaffBo;
 import com.liefeng.property.domain.staff.ManageProjectContext;
 import com.liefeng.property.domain.staff.PropertyDepartmentContext;
@@ -63,16 +64,16 @@ public class PropertyStaffService implements IPropertyStaffService {
 	public ReturnValue createStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws Exception {
 		
 		logger.info("createStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
-		//CustomerVo customerVo = checkService.createCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
+		CustomerVo customerVo = checkService.createCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
 		
 		//创建物业员
 		PropertyStaffVo propertyStaffVo = PropertyStaffContext.build(propertyStaffDetailInfo.getPropertyStaffVo()).create();
 		
 		propertyStaffDetailInfo.getStaffArchiveVo().setStaffId(propertyStaffVo.getId());
 		
-		propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(UUIDGenerator.generate());
+		//propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(UUIDGenerator.generate());
 		
-		//propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(customerVo.getGlobalId());
+		propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(customerVo.getGlobalId());
 		
 		//创建员工档案
 		StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).create();
@@ -83,7 +84,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 		//员工管理相关项目
 		ManageProjectContext.build(propertyStaffVo.getId()).create(propertyStaffDetailInfo.getManageProjects());
 		
-		//tccMsgService.sendTccMsg(TccBasicEvent.CREATE_CUSTOMER, customerVo.toString());
+		tccMsgService.sendTccMsg(TccBasicEvent.CREATE_CUSTOMER, customerVo.toString());
 		
 		return ReturnValue.success();
 	}
@@ -103,10 +104,21 @@ public class PropertyStaffService implements IPropertyStaffService {
 	@Override
 	public PropertyStaffVo findPropertyStaffById(String staffId) {
 		PropertyStaffVo propertyStaffVo = PropertyStaffContext.loadById(staffId).getPropertyStaff();
-		propertyStaffVo.setPropertyDepartment(PropertyDepartmentContext.loadById(propertyStaffVo.getDepartmentId()).get());
 		return propertyStaffVo;
 	}
 
+	@Override
+	public PropertyStaffDetailInfoVo findStaffDetailInfo(String staffId) {
+		PropertyStaffDetailInfoVo propertyStaffDetailInfo = new PropertyStaffDetailInfoVo();
+		
+		PropertyStaffVo propertyStaffVo = PropertyStaffContext.loadById(staffId).getPropertyStaff();
+		
+		
+		propertyStaffDetailInfo.setPropertyStaffVo(propertyStaffVo);
+		
+		return propertyStaffDetailInfo;
+	}
+	
 	@Override
 	public PropertyStaffVo findPropertyStaffByAccount(String account) {
 		return PropertyStaffContext.loadByAccount(account).getPropertyStaff();
@@ -151,4 +163,10 @@ public class PropertyStaffService implements IPropertyStaffService {
 		PropertyStaffContext staffContext = PropertyStaffContext.loadById(directorId);
 		return staffContext.getPropertyStaff();
 	}
+
+	@Override
+	public PropertyDepartmentVo getDepartment(String departmentId) {
+		return PropertyDepartmentContext.loadById(departmentId).get();
+	}
+
 }

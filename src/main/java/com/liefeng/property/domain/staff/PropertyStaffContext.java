@@ -159,7 +159,7 @@ public class PropertyStaffContext {
 			PropertyStaffPo existPropertyStaff = propertyStaffRepository.findByAccount(propertyStaff.getAccount());
 			
 			if(existPropertyStaff != null){
-				throw new PropertyException(PropertyStaffErrorCode.STAFF_ALREADY_EXIST,PropertyStaffErrorCode.STAFF_ALREADY_EXIST.getDesc());
+				throw new PropertyException(PropertyStaffErrorCode.STAFF_ALREADY_EXIST.name(),PropertyStaffErrorCode.STAFF_ALREADY_EXIST.getDesc());
 			}
 			
 			propertyStaff.setId(UUIDGenerator.generate());
