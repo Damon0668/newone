@@ -203,4 +203,9 @@ public class ProjectService implements IProjectService {
 		HouseContext houseContext = HouseContext.loadById(houseId);
 		return houseContext.getSingleHouse();
 	}
+
+	@Override
+	public List<ProjectVo> findProjectByStaffId(String staffId) {
+		return ProjectContext.build().findProjectsByStaffId(staffId);
+	}
 }

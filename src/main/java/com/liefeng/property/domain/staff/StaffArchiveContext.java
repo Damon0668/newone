@@ -37,6 +37,11 @@ public class StaffArchiveContext {
 	private String staffArchiveId;
 	
 	/**
+	 * 员工ID
+	 */
+	private String staffId;
+	
+	/**
 	 * 员工档案值对象
 	 */
 	private StaffArchiveVo staffArchive;
@@ -49,6 +54,10 @@ public class StaffArchiveContext {
 		this.staffArchive = staffArchive;
 	}
 	
+	protected void setStaffId(String staffId) {
+		this.staffId = staffId;
+	}
+
 	/**
 	 * 获取本类实例，每次返回一个新的对象
 	 * @return 本类实例
@@ -92,6 +101,16 @@ public class StaffArchiveContext {
 	}
 	
 	/**
+	 * 根据员工ID加载上下文
+	 * @return
+	 */
+	public static StaffArchiveContext loadByStaffId(String staffId){
+		StaffArchiveContext staffArchiveContext = getInstance();
+		staffArchiveContext.setStaffId(staffId);
+		return staffArchiveContext;
+	}
+	
+	/**
 	 * 查询员工档案信息
 	 * @return 员工档案值对象
 	 */
@@ -100,6 +119,10 @@ public class StaffArchiveContext {
 			StaffArchivePo staffArchivePo = null;
 			if(ValidateHelper.isNotEmptyString(staffArchiveId)) {
 				staffArchivePo = staffArchiveRepository.findOne(staffArchiveId);
+			}
+			
+			if(ValidateHelper.isNotEmptyString(staffId)) {
+				staffArchivePo = staffArchiveRepository.findByStaffId(staffId);
 			}
 			
 			if(staffArchivePo != null) {

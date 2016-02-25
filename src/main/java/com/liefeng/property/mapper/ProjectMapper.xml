@@ -65,5 +65,15 @@ where 1=1
 	     AND t.id = #{id}
 </select>
 
+<select id="findByStaffId"  resultMap="BaseResultMap">
+    SELECT
+        prj.*
+	FROM
+	    t_manage_project mprj
+	LEFT JOIN t_project prj ON mprj.project_id = prj.id
+	WHERE
+    mprj.staff_id = # {staffId}
+</select>
+
 
 </mapper>   

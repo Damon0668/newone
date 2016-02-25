@@ -14,5 +14,10 @@ import com.liefeng.property.po.staff.StaffArchivePo;
  */
 @Transactional
 public interface StaffArchiveRepository extends JpaRepository<StaffArchivePo, String> {
-
+	/**
+	 * 根据员工ID查找档案
+	 * @param staffId
+	 * @return
+	 */
+	public StaffArchivePo findByStaffId(String staffId);
 }
