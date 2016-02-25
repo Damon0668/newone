@@ -16,6 +16,7 @@
 	<result column="result" property="result"/>		
 	<result column="creator_id" property="creatorId"/>
 	<result column="name" property="creatorName"/>
+	<result column="create_time" property="createTime"/>
 </resultMap>
 
 <!-- 查询条件 -->
@@ -55,18 +56,52 @@ where t.id = p.task_id and t.creator_id = s.id
 </select>
 
 
-	<select id="queryByCount"  resultType="java.lang.Long">
-	select 
-		count(1) 
-	from(
-			select 
-				t.id
-		    from 
-		    	t_task t, 
-		    	t_task_privilege p,
-		    	t_property_staff s
-		    <include refid="Example_Where_Clause" />
-		) t
-	</select>
-	
+<select id="queryByCount"  resultType="java.lang.Long">
+select 
+	count(1) 
+from(
+		select 
+			t.id
+	    from 
+	    	t_task t, 
+	    	t_task_privilege p,
+	    	t_property_staff s
+	    <include refid="Example_Where_Clause" />
+	) t
+</select>
+
+<select id="queryTask4ByStaffId" resultMap="BaseResultMap" >
+    SELECT 
+	    t.id, 
+	    t.title, 
+	    t.content, 
+	    t.status, 
+	    t.priority, 
+	    t.start_time, 
+	    t.end_time, 
+	    t.result, 
+	    t.creator_id,
+	    t.create_time,
+	    s.name
+	FROM
+		t_task t, 
+		t_task_privilege p,
+		t_property_staff s
+	WHERE
+		t.id = p.task_id
+	AND t.creator_id = s.id
+	AND(
+		(
+			t.status = 1
+			AND p.staff_id =  #{staffId}
+		)
+		OR(
+			t.status = 2
+			AND t.creator_id = #{staffId}
+		)
+	)
+	ORDER BY
+		t.create_time DESC
+	LIMIT 0,4
+</select>
 </mapper>   
