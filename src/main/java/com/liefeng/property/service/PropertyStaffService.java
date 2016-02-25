@@ -65,6 +65,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 		logger.info("createStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
 		//CustomerVo customerVo = checkService.createCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
 		
+		//创建物业员
 		PropertyStaffVo propertyStaffVo = PropertyStaffContext.build(propertyStaffDetailInfo.getPropertyStaffVo()).create();
 		
 		propertyStaffDetailInfo.getStaffArchiveVo().setStaffId(propertyStaffVo.getId());
@@ -72,11 +73,14 @@ public class PropertyStaffService implements IPropertyStaffService {
 		propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(UUIDGenerator.generate());
 		
 		//propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(customerVo.getGlobalId());
-
+		
+		//创建员工档案
 		StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).create();
 		
+		//员工授权
 		sysSecurityService.gruntRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
 		
+		//员工管理相关项目
 		ManageProjectContext.build(propertyStaffVo.getId()).create(propertyStaffDetailInfo.getManageProjects());
 		
 		//tccMsgService.sendTccMsg(TccBasicEvent.CREATE_CUSTOMER, customerVo.toString());
@@ -98,14 +102,15 @@ public class PropertyStaffService implements IPropertyStaffService {
 
 	@Override
 	public PropertyStaffVo findPropertyStaffById(String staffId) {
-		return PropertyStaffContext.loadById(staffId).getPropertyStaff();
+		PropertyStaffVo propertyStaffVo = PropertyStaffContext.loadById(staffId).getPropertyStaff();
+		propertyStaffVo.setPropertyDepartment(PropertyDepartmentContext.loadById(propertyStaffVo.getDepartmentId()).get());
+		return propertyStaffVo;
 	}
 
 	@Override
 	public PropertyStaffVo findPropertyStaffByAccount(String account) {
 		return PropertyStaffContext.loadByAccount(account).getPropertyStaff();
 	}
-	
 	
 	/*********************** 部门相关接口 **********************/
 	
