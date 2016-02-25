@@ -136,14 +136,27 @@ public class CheckinMaterialContext {
 	}
 	
 	/**
+	 * 保存入住资料信息
+	 */
+	public void create(List<CheckinMaterialVo> checkinMaterialList) throws Exception {
+		if (checkinMaterialList != null && checkinMaterialList.size() > 0) {
+			for(CheckinMaterialVo checkinMaterial : checkinMaterialList) {
+				checkinMaterial.setId(UUIDGenerator.generate());
+				checkinMaterial.setOemCode(ContextManager.getInstance().getOemCode());
+			}
+			
+			List<CheckinMaterialPo> checkinMaterialPoList = MyBeanUtil.createList(checkinMaterialList, CheckinMaterialPo.class);
+			checkinMaterialRepository.save(checkinMaterialPoList);
+		}
+	}
+	
+	/**
 	 * 删除入住资料信息
 	 */
 	public void delete() {
 		if(ValidateHelper.isNotEmptyString(proprietorHouseId)) {
-			CheckinMaterialPo checkinMaterialPo = new CheckinMaterialPo();
-			checkinMaterialPo.setProprietorHouseId(proprietorHouseId);
-			checkinMaterialRepository.delete(checkinMaterialPo);
-		}
+			checkinMaterialRepository.deleteByProprietorHouseId(proprietorHouseId);
+		} 
 	}
 	
 	/**

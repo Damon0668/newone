@@ -24,4 +24,10 @@ public interface CheckinMaterialRepository extends JpaRepository<CheckinMaterial
 	 */
 	public List<CheckinMaterialPo> findByProprietorHouseId(String proprietorHouseId);
 	
+	/**
+	 * 根据业主房产ID删除入住资料
+	 * @param proprietorHouseId 业主房产ID 
+	 */
+	public void deleteByProprietorHouseId(String proprietorHouseId);
+	
 }

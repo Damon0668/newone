@@ -93,8 +93,14 @@ public interface IHouseholdService {
 	public List<CheckinMaterialVo> getCheckinMaterialByProprietorHouseId(String proprietorHouseId);
 	
 	/**
+	 * 
+	 * @param checkinMaterialList
+	 */
+	public void createCheckinMaterials(List<CheckinMaterialVo> checkinMaterialList) throws Exception;
+	
+	/**
 	 * 根据业主房产ID删除入住资料信息
 	 * @param proprietorHouseId 业主房产ID
 	 */
-	public void deleteByProprietorHouseId(String proprietorHouseId);
+	public void deleteByProprietorHouseId(String proprietorHouseId) throws Exception;
 }
