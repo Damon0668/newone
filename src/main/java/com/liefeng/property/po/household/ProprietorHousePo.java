@@ -51,11 +51,6 @@ public class ProprietorHousePo extends BaseValue {
 	@Column(name = "contract_code")
 	private String contractCode;
 
-	/**
-	 * 购房合同书URL
-	 */
-	@Column(name = "contract_pic")
-	private String contractPic;
 
 	/**
 	 * 房屋使用性质
@@ -76,76 +71,16 @@ public class ProprietorHousePo extends BaseValue {
 	private String checkinMode;
 
 	/**
-	 * 身份证复印件
-	 */
-	@Column(name = "id_card_pic")
-	private String idCardPic;
-
-	/**
 	 * 办理入住时间
 	 */
 	@Column(name = "checkin_date")
 	private Date checkinDate;
 
 	/**
-	 * 入住通知书URL
-	 */
-	@Column(name = "checkin_notice_pic")
-	private String checkinNoticePic;
-
-	/**
-	 * 房屋交付验收表
-	 */
-	@Column(name = "delivery_check_pic")
-	private String deliveryCheckPic;
-
-	/**
-	 * 业主公约
-	 */
-	@Column(name = "convention_pic")
-	private String conventionPic;
-
-	/**
-	 * 物业管理服务协议
-	 */
-	@Column(name = "service_agreement_pic")
-	private String serviceAgreementPic;
-
-	/**
-	 * 装修许可证
-	 */
-	@Column(name = "decoration_license_pic")
-	private String decorationLicensePic;
-
-	/**
-	 * 卫生间厨房防水试验记录表
-	 */
-	@Column(name = "waterproof_record_pic")
-	private String waterproofRecordPic;
-
-	/**
-	 * 水电燃气底单
-	 */
-	@Column(name = "hydropower_gas_pic")
-	private String hydropowerGasPic;
-
-	/**
-	 * 业主办理入住书面委托书
-	 */
-	@Column(name = "checkin_proxy_pic")
-	private String checkinProxyPic;
-
-	/**
 	 * 委托人与业主关系
 	 */
 	@Column(name = "mandatary_relation")
 	private String mandataryRelation;
-
-	/**
-	 * 被委托人身份证复印件
-	 */
-	@Column(name = "mandatary_id_card_pic")
-	private String mandataryIdCardPic;
 
 	/**
 	 * 委托人姓名
@@ -241,14 +176,6 @@ public class ProprietorHousePo extends BaseValue {
 		this.contractCode = contractCode;
 	}
 
-	public String getContractPic() {
-		return contractPic;
-	}
-
-	public void setContractPic(String contractPic) {
-		this.contractPic = contractPic;
-	}
-
 	public String getUseType() {
 		return useType;
 	}
@@ -273,14 +200,6 @@ public class ProprietorHousePo extends BaseValue {
 		this.checkinMode = checkinMode;
 	}
 
-	public String getIdCardPic() {
-		return idCardPic;
-	}
-
-	public void setIdCardPic(String idCardPic) {
-		this.idCardPic = idCardPic;
-	}
-
 	public Date getCheckinDate() {
 		return checkinDate;
 	}
@@ -289,84 +208,12 @@ public class ProprietorHousePo extends BaseValue {
 		this.checkinDate = checkinDate;
 	}
 
-	public String getCheckinNoticePic() {
-		return checkinNoticePic;
-	}
-
-	public void setCheckinNoticePic(String checkinNoticePic) {
-		this.checkinNoticePic = checkinNoticePic;
-	}
-
-	public String getDeliveryCheckPic() {
-		return deliveryCheckPic;
-	}
-
-	public void setDeliveryCheckPic(String deliveryCheckPic) {
-		this.deliveryCheckPic = deliveryCheckPic;
-	}
-
-	public String getConventionPic() {
-		return conventionPic;
-	}
-
-	public void setConventionPic(String conventionPic) {
-		this.conventionPic = conventionPic;
-	}
-
-	public String getServiceAgreementPic() {
-		return serviceAgreementPic;
-	}
-
-	public void setServiceAgreementPic(String serviceAgreementPic) {
-		this.serviceAgreementPic = serviceAgreementPic;
-	}
-
-	public String getDecorationLicensePic() {
-		return decorationLicensePic;
-	}
-
-	public void setDecorationLicensePic(String decorationLicensePic) {
-		this.decorationLicensePic = decorationLicensePic;
-	}
-
-	public String getWaterproofRecordPic() {
-		return waterproofRecordPic;
-	}
-
-	public void setWaterproofRecordPic(String waterproofRecordPic) {
-		this.waterproofRecordPic = waterproofRecordPic;
-	}
-
-	public String getHydropowerGasPic() {
-		return hydropowerGasPic;
-	}
-
-	public void setHydropowerGasPic(String hydropowerGasPic) {
-		this.hydropowerGasPic = hydropowerGasPic;
-	}
-
-	public String getCheckinProxyPic() {
-		return checkinProxyPic;
-	}
-
-	public void setCheckinProxyPic(String checkinProxyPic) {
-		this.checkinProxyPic = checkinProxyPic;
-	}
-
 	public String getMandataryRelation() {
 		return mandataryRelation;
 	}
 
 	public void setMandataryRelation(String mandataryRelation) {
 		this.mandataryRelation = mandataryRelation;
-	}
-
-	public String getMandataryIdCardPic() {
-		return mandataryIdCardPic;
-	}
-
-	public void setMandataryIdCardPic(String mandataryIdCardPic) {
-		this.mandataryIdCardPic = mandataryIdCardPic;
 	}
 
 	public String getMandataryName() {

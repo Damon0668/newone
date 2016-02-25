@@ -1,8 +1,11 @@
 package com.liefeng.intf.property;
 
+import java.util.List;
+
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
+import com.liefeng.property.vo.household.CheckinMaterialVo;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
@@ -81,4 +84,17 @@ public interface IHouseholdService {
 	 * @return 业主房产信息
 	 */
 	public ProprietorHouseVo getProprietorHouse(String projectId, String houseNum);
+	
+	/**
+	 * 根据业主房产ID查询入住资料信息
+	 * @param proprietorHouseId 业主房产ID
+	 * @return 入住资料列表
+	 */
+	public List<CheckinMaterialVo> getCheckinMaterialByProprietorHouseId(String proprietorHouseId);
+	
+	/**
+	 * 根据业主房产ID删除入住资料信息
+	 * @param proprietorHouseId 业主房产ID
+	 */
+	public void deleteByProprietorHouseId(String proprietorHouseId);
 }

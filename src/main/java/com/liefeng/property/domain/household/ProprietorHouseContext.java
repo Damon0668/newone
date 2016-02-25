@@ -35,7 +35,7 @@ public class ProprietorHouseContext {
 	/**
 	 * 业主房产信息ID
 	 */
-	private String proprietorHouseId;
+	protected String proprietorHouseId;
 	
 	/**
 	 * 所属项目ID
@@ -50,7 +50,7 @@ public class ProprietorHouseContext {
 	/**
 	 * 业主房产信息值对象
 	 */
-	private ProprietorHouseVo proprietorHouse;
+	protected ProprietorHouseVo proprietorHouse;
 	
 	/**
 	 * 获取本类实例，每次返回一个新对象
@@ -67,7 +67,7 @@ public class ProprietorHouseContext {
 	 */
 	public static ProprietorHouseContext build(ProprietorHouseVo proprietorHouse) {
 		ProprietorHouseContext proprietorHouseContext = getInstance();
-		proprietorHouseContext.proprietorHouse = proprietorHouse;
+		proprietorHouseContext.setProprietorHouse(proprietorHouse);
 		
 		return proprietorHouseContext;
 	}
@@ -89,7 +89,7 @@ public class ProprietorHouseContext {
 	 */
 	public static ProprietorHouseContext loadById(String proprietorHouseId) {
 		ProprietorHouseContext proprietorHouseContext = getInstance();
-		proprietorHouseContext.proprietorHouseId = proprietorHouseId;
+		proprietorHouseContext.setProprietorHouseId(proprietorHouseId);
 		
 		return proprietorHouseContext;
 	}
@@ -160,28 +160,24 @@ public class ProprietorHouseContext {
 		}
 	}
 
-	protected String getProprietorHouseId() {
-		return proprietorHouseId;
-	}
 
 	protected void setProprietorHouseId(String proprietorHouseId) {
 		this.proprietorHouseId = proprietorHouseId;
 	}
 
-	protected String getProjectId() {
-		return projectId;
-	}
 
 	protected void setProjectId(String projectId) {
 		this.projectId = projectId;
 	}
 
-	protected String getHouseNum() {
-		return houseNum;
-	}
 
 	protected void setHouseNum(String houseNum) {
 		this.houseNum = houseNum;
 	}
+
+	protected void setProprietorHouse(ProprietorHouseVo proprietorHouse) {
+		this.proprietorHouse = proprietorHouse;
+	}
+	
 	
 }

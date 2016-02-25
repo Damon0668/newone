@@ -22,6 +22,11 @@ public class ProprietorSingleHouseVo extends BaseValue {
 	private String proprietorId;
 	
 	/**
+	 * 客户全局ID
+	 */
+	private String custGlobalId;
+	
+	/**
 	 * 项目ID
 	 */
 	private String projectId;
@@ -81,6 +86,11 @@ public class ProprietorSingleHouseVo extends BaseValue {
 	 */
 	private String remark;
 	
+	/**
+	 * 录入员工ID
+	 */
+	private String staffId;
+	
 	/********************************* 业主房产相关字段 *********************************/
 	
 	/**
@@ -93,11 +103,6 @@ public class ProprietorSingleHouseVo extends BaseValue {
 	 * 合同编号
 	 */
 	private String contractCode;
-	
-	/**
-	 * 购房合同书URL
-	 */
-	private String contractPic;
 	
 	/**
 	 * 房屋使用性质
@@ -115,64 +120,14 @@ public class ProprietorSingleHouseVo extends BaseValue {
 	private String checkinMode;
 
 	/**
-	 * 身份证复印件URL
-	 */
-	private String idCardPic;
-
-	/**
 	 * 办理入住时间
 	 */
 	private Date checkinDate;
 
 	/**
-	 * 入住通知书URL
-	 */
-	private String checkinNoticePic;
-
-	/**
-	 * 房屋交付验收表URL
-	 */
-	private String deliveryCheckPic;
-
-	/**
-	 * 业主公约URL
-	 */
-	private String conventionPic;
-
-	/**
-	 * 物业管理服务协议URL
-	 */
-	private String serviceAgreementPic;
-
-	/**
-	 * 装修许可证URL
-	 */
-	private String decorationLicensePic;
-
-	/**
-	 * 卫生间厨房防水试验记录表URL
-	 */
-	private String waterproofRecordPic;
-
-	/**
-	 * 水电燃气底单URL
-	 */
-	private String hydropowerGasPic;
-
-	/**
-	 * 业主办理入住书面委托书URL
-	 */
-	private String checkinProxyPic;
-
-	/**
 	 * 委托人与业主关系
 	 */
 	private String mandataryRelation;
-
-	/**
-	 * 被委托人身份证复印件URL
-	 */
-	private String mandataryIdCardPic;
 
 	/**
 	 * 委托人姓名
@@ -330,6 +285,14 @@ public class ProprietorSingleHouseVo extends BaseValue {
 		this.proprietorId = proprietorId;
 	}
 
+	public String getCustGlobalId() {
+		return custGlobalId;
+	}
+
+	public void setCustGlobalId(String custGlobalId) {
+		this.custGlobalId = custGlobalId;
+	}
+
 	public String getProjectId() {
 		return projectId;
 	}
@@ -426,6 +389,14 @@ public class ProprietorSingleHouseVo extends BaseValue {
 		this.remark = remark;
 	}
 
+	public String getStaffId() {
+		return staffId;
+	}
+
+	public void setStaffId(String staffId) {
+		this.staffId = staffId;
+	}
+
 	public String getProprietorHouseId() {
 		return proprietorHouseId;
 	}
@@ -440,14 +411,6 @@ public class ProprietorSingleHouseVo extends BaseValue {
 
 	public void setContractCode(String contractCode) {
 		this.contractCode = contractCode;
-	}
-
-	public String getContractPic() {
-		return contractPic;
-	}
-
-	public void setContractPic(String contractPic) {
-		this.contractPic = contractPic;
 	}
 
 	public String getUseType() {
@@ -474,14 +437,6 @@ public class ProprietorSingleHouseVo extends BaseValue {
 		this.checkinMode = checkinMode;
 	}
 
-	public String getIdCardPic() {
-		return idCardPic;
-	}
-
-	public void setIdCardPic(String idCardPic) {
-		this.idCardPic = idCardPic;
-	}
-
 	public Date getCheckinDate() {
 		return checkinDate;
 	}
@@ -490,84 +445,12 @@ public class ProprietorSingleHouseVo extends BaseValue {
 		this.checkinDate = checkinDate;
 	}
 
-	public String getCheckinNoticePic() {
-		return checkinNoticePic;
-	}
-
-	public void setCheckinNoticePic(String checkinNoticePic) {
-		this.checkinNoticePic = checkinNoticePic;
-	}
-
-	public String getDeliveryCheckPic() {
-		return deliveryCheckPic;
-	}
-
-	public void setDeliveryCheckPic(String deliveryCheckPic) {
-		this.deliveryCheckPic = deliveryCheckPic;
-	}
-
-	public String getConventionPic() {
-		return conventionPic;
-	}
-
-	public void setConventionPic(String conventionPic) {
-		this.conventionPic = conventionPic;
-	}
-
-	public String getServiceAgreementPic() {
-		return serviceAgreementPic;
-	}
-
-	public void setServiceAgreementPic(String serviceAgreementPic) {
-		this.serviceAgreementPic = serviceAgreementPic;
-	}
-
-	public String getDecorationLicensePic() {
-		return decorationLicensePic;
-	}
-
-	public void setDecorationLicensePic(String decorationLicensePic) {
-		this.decorationLicensePic = decorationLicensePic;
-	}
-
-	public String getWaterproofRecordPic() {
-		return waterproofRecordPic;
-	}
-
-	public void setWaterproofRecordPic(String waterproofRecordPic) {
-		this.waterproofRecordPic = waterproofRecordPic;
-	}
-
-	public String getHydropowerGasPic() {
-		return hydropowerGasPic;
-	}
-
-	public void setHydropowerGasPic(String hydropowerGasPic) {
-		this.hydropowerGasPic = hydropowerGasPic;
-	}
-
-	public String getCheckinProxyPic() {
-		return checkinProxyPic;
-	}
-
-	public void setCheckinProxyPic(String checkinProxyPic) {
-		this.checkinProxyPic = checkinProxyPic;
-	}
-
 	public String getMandataryRelation() {
 		return mandataryRelation;
 	}
 
 	public void setMandataryRelation(String mandataryRelation) {
 		this.mandataryRelation = mandataryRelation;
-	}
-
-	public String getMandataryIdCardPic() {
-		return mandataryIdCardPic;
-	}
-
-	public void setMandataryIdCardPic(String mandataryIdCardPic) {
-		this.mandataryIdCardPic = mandataryIdCardPic;
 	}
 
 	public String getMandataryName() {

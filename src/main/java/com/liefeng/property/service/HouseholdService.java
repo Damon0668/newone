@@ -1,19 +1,28 @@
 package com.liefeng.property.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.property.IHouseholdService;
+import com.liefeng.intf.service.tcc.ITccMsgService;
+import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
+import com.liefeng.property.domain.household.CheckinMaterialContext;
 import com.liefeng.property.domain.household.ProprietorContext;
 import com.liefeng.property.domain.household.ProprietorHouseContext;
 import com.liefeng.property.domain.household.ResidentContext;
+import com.liefeng.property.vo.household.CheckinMaterialVo;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
@@ -29,12 +38,24 @@ import com.liefeng.property.vo.household.ResidentVo;
 public class HouseholdService implements IHouseholdService {
 
 	private static Logger logger = LoggerFactory.getLogger(HouseholdService.class);
+	
+	@Autowired
+	private ICheckService checkService;
+	
+	@Autowired
+	private ITccMsgService tccMsgService;
 
 	/**
 	 * 保存业主信息
 	 */
 	@Override
+	@Transactional(rollbackOn=Exception.class)
 	public void saveProprietor(ProprietorSingleHouseVo singleHouse) throws Exception {
+		
+		CustomerVo customer = initCustomer(singleHouse);
+		customer = checkService.createCustomerCheck(customer);
+		singleHouse.setCustGlobalId(customer.getGlobalId());
+		
 		
 		/**
 		 * 业主信息保存
@@ -54,18 +75,26 @@ public class HouseholdService implements IHouseholdService {
 		ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.build(proprietorHouse);
 		proprietorHouseContext.create();
 		
+		// 发送Tcc消息，保存客户信息
+		tccMsgService.sendTccMsg(TccBasicEvent.CREATE_CUSTOMER, customer.toString());
+		
 	}
-
+	
 	/**
 	 * 更新业主信息
 	 */
 	@Override
-	@Transactional
+	@Transactional(rollbackOn=Exception.class)
 	public void updatePropritor(ProprietorSingleHouseVo singleHouse) throws Exception  {
+		
+		CustomerVo customer = initCustomer(singleHouse);
+		customer = checkService.updateCustomerCheck(customer);
+		
 		/**
 		 * 业主信息更新
 		 */
 		ProprietorVo proprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
+		proprietor.setId(singleHouse.getProprietorId());
 		
 		ProprietorContext proprietorContext = ProprietorContext.build(proprietor);
 		proprietorContext.update();
@@ -74,9 +103,26 @@ public class HouseholdService implements IHouseholdService {
 		 * 业主房产信息更新
 		 */
 		ProprietorHouseVo proprietorHouse = MyBeanUtil.createBean(singleHouse, ProprietorHouseVo.class);
+		proprietorHouse.setId(singleHouse.getProprietorHouseId());
 		
 		ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.build(proprietorHouse);
 		proprietorHouseContext.update();
+		
+		// 发送Tcc消息，保存客户信息
+		tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_CUSTOMER, customer.toString());
+	}
+	
+	/**
+	 * 初始化客户信息
+	 */
+	private CustomerVo initCustomer(ProprietorSingleHouseVo singleHouse) {
+		CustomerVo customer = new CustomerVo();
+		customer = MyBeanUtil.createBean(singleHouse, CustomerVo.class);
+		customer.setRealName(singleHouse.getName());
+		customer.setMobile(singleHouse.getPhone());
+		customer.setGlobalId(singleHouse.getCustGlobalId());
+		
+		return customer;
 	}
 
 	/**
@@ -152,5 +198,25 @@ public class HouseholdService implements IHouseholdService {
 		ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.loadByProjectIdAndHouseNum(projectId, houseNum);
 		
 		return proprietorHouseContext.getProprietorHouse();
+	}
+
+	/**
+	 * 根据业主房产ID查询入住资料信息
+	 */
+	@Override
+	public List<CheckinMaterialVo> getCheckinMaterialByProprietorHouseId(String proprietorHouseId) {
+		CheckinMaterialContext checkinMaterialContext = CheckinMaterialContext.loadByProprietorHouseId(proprietorHouseId);
+		
+		return checkinMaterialContext.getList();
+	}
+
+	/**
+	 * 根据业主房产ID删除入住资料信息
+	 */
+	@Override
+	public void deleteByProprietorHouseId(String proprietorHouseId) {
+		CheckinMaterialContext checkinMaterialContext = CheckinMaterialContext.loadByProprietorHouseId(proprietorHouseId);
+		
+		checkinMaterialContext.delete();
 	}
 }

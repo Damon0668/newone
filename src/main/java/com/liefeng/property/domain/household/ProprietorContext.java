@@ -47,12 +47,12 @@ public class ProprietorContext {
 	/**
 	 * 业主信息ID
 	 */
-	private String proprietorId;
+	protected String proprietorId;
 	
 	/**
 	 * 业主信息值对象
 	 */
-	private ProprietorVo proprietor;
+	protected ProprietorVo proprietor;
 	
 	/**
 	 * 获取本类实例，每次返回一个新对象
@@ -69,7 +69,7 @@ public class ProprietorContext {
 	 */
 	public static ProprietorContext build(ProprietorVo proprietor) {
 		ProprietorContext proprietorContext = getInstance();
-		proprietorContext.proprietor = proprietor;
+		proprietorContext.setProprietor(proprietor);
 		
 		return proprietorContext;
 	}
@@ -91,7 +91,7 @@ public class ProprietorContext {
 	 */
 	public static ProprietorContext loadById(String proprietorId) {
 		ProprietorContext proprietorContext = getInstance();
-		proprietorContext.proprietorId = proprietorId;
+		proprietorContext.setProprietorId(proprietorId);
 		
 		return proprietorContext;
 	}
@@ -136,11 +136,13 @@ public class ProprietorContext {
 	 */
 	public ProprietorVo update() throws Exception {
 		if(proprietor != null && ValidateHelper.isNotEmptyString(proprietor.getId())) {
+			logger.info("更新业主信息，业主ID（{}）,proprietor={}", proprietor.getId(), proprietor);
 			ProprietorPo proprietorPo = proprietorRepository.findOne(proprietor.getId());
 			
 			if(proprietorPo != null) {
 				MyBeanUtil.copyBeanNotNull2Bean(proprietor, proprietorPo);
 				proprietorRepository.save(proprietorPo);
+				logger.info("更新业主信息成功，业主ID（{}", proprietor.getId());
 				
 				proprietor = MyBeanUtil.createBean(proprietorPo, ProprietorVo.class);
 			}
@@ -177,8 +179,10 @@ public class ProprietorContext {
 		
 		// 身份证号解密
 		for(ProprietorSingleHouseVo singleHouse : proprietorList) {
-			String decryptIdNum = EncryptionUtil.decryptCustIdNum(singleHouse.getIdNum());
-			singleHouse.setIdNum(decryptIdNum);
+			if(ValidateHelper.isNotEmptyString(singleHouse.getIdNum())) {
+				String decryptIdNum = EncryptionUtil.decryptCustIdNum(singleHouse.getIdNum());
+				singleHouse.setIdNum(decryptIdNum);
+			}
 		}
 
 		DataPageValue<ProprietorSingleHouseVo> proprietorPage = new DataPageValue<ProprietorSingleHouseVo>(
@@ -202,5 +206,13 @@ public class ProprietorContext {
 		}
 		
 		return singleHouse;
+	}
+
+	protected void setProprietorId(String proprietorId) {
+		this.proprietorId = proprietorId;
+	}
+
+	protected void setProprietor(ProprietorVo proprietor) {
+		this.proprietor = proprietor;
 	}
 }

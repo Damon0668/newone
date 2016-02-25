@@ -56,6 +56,11 @@ public class ProprietorBo extends BaseValue {
 	 * 手机号码
 	 */
 	private String phone;
+	
+	/**
+	 * 系统标识
+	 */
+	private String oemCode;
 
 	public String getProprietorId() {
 		return proprietorId;
@@ -127,6 +132,14 @@ public class ProprietorBo extends BaseValue {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public String getOemCode() {
+		return oemCode;
+	}
+
+	public void setOemCode(String oemCode) {
+		this.oemCode = oemCode;
 	}
 
 }
