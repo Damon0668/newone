@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
+import com.liefeng.common.util.TimeUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
@@ -155,7 +156,8 @@ public class MeterSettingContext {
 	 * 获取项目下要抄仪表
 	 */
 	public List<MeterSettingVo> findByProjectIdAndChargeableYes(){
-		return meterSettingRepository.findByProjectIdAndChargeable(projectId,FeeConstants.MeterSetting.CHARGEABLE_YES);
+		List<MeterSettingPo> meterSettingPos = meterSettingRepository.findByProjectIdAndChargeable(projectId,FeeConstants.MeterSetting.CHARGEABLE_YES);
+		return MyBeanUtil.createList(meterSettingPos, MeterSettingVo.class);
 	}
 	
 	/**
@@ -202,7 +204,7 @@ public class MeterSettingContext {
 
 		meterSettingPo.setChargeable(meterSetting.getChargeable());
 		meterSettingPo.setLastingDay(meterSetting.getLastingDay());
-		meterSettingPo.setModNum(meterSetting.getLastingDay());
+		meterSettingPo.setModNum(meterSetting.getModNum());
 		meterSettingPo.setProjectId(meterSetting.getProjectId());
 		meterSettingPo.setStartDay(meterSetting.getStartDay());
 		meterSettingPo.setType(meterSetting.getType());
@@ -210,6 +212,24 @@ public class MeterSettingContext {
 		meterSettingRepository.save(meterSettingPo);
 	}
 
+	public List<MeterSettingVo> getMeterAuth(String meterOwner){
+		
+		List<MeterSettingPo> meterSettingPos = meterSettingRepository.findByProjectIdAndChargeable(projectId, FeeConstants.MeterSetting.CHARGEABLE_YES);
+		List<MeterSettingVo> meterSettingVos = MyBeanUtil.createList(meterSettingPos, MeterSettingVo.class);
+	
+		for (MeterSettingVo meterSettingVo : meterSettingVos) {
+			if(meterSettingVo.getStartDay()>TimeUtil.getCurrentDay()
+					||meterSettingVo.getStartDay()+meterSettingVo.getLastingDay()-1<TimeUtil.getCurrentDay()){
+				meterSettingVo.setIsRead(0);
+			}else{
+				meterSettingVo.setIsRead(1);
+			}
+		}
+		
+		
+		return meterSettingVos;
+	}
+	
 	protected void setMeterSetting(MeterSettingVo meterSetting) {
 		this.meterSetting = meterSetting;
 	}

@@ -24,7 +24,8 @@ public interface MeterRecordRepository extends JpaRepository<MeterRecordPo, Stri
 	 * @param houseNum
 	 * @return
 	 */
-	@Query("select mr from MeterRecordPo mr where mr.projectId=?1 and  mr.houseNum=?2  and ?3 between mr.startDate and  mr.endDate")
-	public MeterRecordPo getPreMeterRecord(String projectId, String houseNum,Date preDate);
+	@Query("select mr from MeterRecordPo mr where mr.projectId=?1 and  mr.houseNum=?2 and mr.meterType=?3 and mr.meterOwner=?4 and ?5 between mr.startDate and  mr.endDate")
+	public MeterRecordPo getPreMeterRecordAndTypeAndMeterOwner(String projectId, String houseNum,String meterType,String meterOwner,Date preDate);
+
 
 }

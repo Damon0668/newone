@@ -29,7 +29,7 @@ public class MeterSettingVo extends BaseValue {
 	 * 项目ID
 	 */
 	private String projectId;
-
+	
 	/**
 	 * 表类型
 	 */
@@ -55,6 +55,11 @@ public class MeterSettingVo extends BaseValue {
 	 */
 	private Integer lastingDay;
 
+	/**
+	 * 是否可以抄表
+	 */
+	public Integer isRead;
+	
 	/**
 	 * 操作员工ID
 	 */
@@ -132,6 +137,14 @@ public class MeterSettingVo extends BaseValue {
 
 	public void setStaffId(String staffId) {
 		this.staffId = staffId;
+	}
+
+	public Integer getIsRead() {
+		return isRead;
+	}
+
+	public void setIsRead(Integer isRead) {
+		this.isRead = isRead;
 	}
 
 	public Date getCreateTime() {

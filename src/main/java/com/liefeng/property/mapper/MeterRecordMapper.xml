@@ -50,17 +50,22 @@
 				AND mr.from = #{extra.form}
 			</if>
 			
-			
-			
 			<if test="extra.proprietorName != null and extra.proprietorName  != ''">
-				AND p.proprietor_name like #{extra.proprietorName }
+				AND p.name  like CONCAT('%','${extra.proprietorName}','%' )
 			</if>
+			
 		</trim>
 	</sql>
 	<!-- 链接查询条件 -->
 	<sql id="Example_Join_Clause">
 		<if test="extra.startDate != null and extra.startDate != ''">
 				AND  #{extra.startDate} between mr.start_date and mr.end_date
+		</if>
+		<if test="extra.meterType != null and extra.meterType != ''">
+				AND mr.meter_type = #{extra.meterType}
+		</if>
+		<if test="extra.meterOwner != null and extra.meterOwner  != ''">
+				AND mr.meter_owner = #{extra.meterOwner}
 		</if>
 	</sql>
 

@@ -1,9 +1,11 @@
 package com.liefeng.intf.property;
 
+import java.util.Date;
 import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
+import com.liefeng.property.bo.fee.MeterSettingBo;
 import com.liefeng.property.bo.fee.MeterRecordBo;
 import com.liefeng.property.vo.fee.FeeSettingVo;
 import com.liefeng.property.vo.fee.LadderFeeSettingVo;
@@ -35,6 +37,18 @@ public interface IFeeService {
 	 */
 	public DataPageValue<MeterRecordVo> findMeterRecord4Page(MeterRecordBo meterRecordBo,Integer currentPage,Integer pageSize);
 
+	/**
+	 * 根据Id获取抄表记录
+	 * @param id
+	 * @return
+	 */
+	public MeterRecordVo findMeterRecordById(String id);
+	
+	/**
+	 * 更新抄表记录
+	 */
+	public void updateMeterRecord(MeterRecordVo meterRecordVo);
+	
 	/**
 	 * 创建仪表设置
 	 * @param meterSettingPo
@@ -145,6 +159,27 @@ public interface IFeeService {
 
 	public void updateLadderFeeSetting(LadderFeeSettingVo ladderFeeSettingVo)
 			throws LiefengException;
+
+	/**
+	 * 获取上期读数
+	 * @param date 本期日期(根据这时间来获取上期日期)
+	 * @return
+	 */
+	public MeterRecordVo getPreMeterRecord(MeterRecordVo meterRecordVo,Date date);
+
+	/**
+	 * 获取项目下要收取的仪表
+	 * @param projecId 项目id
+	 * @return
+	 */
+	public List<MeterSettingVo> findByProjectIdAndChargeableYes(String projecId);
+
+	/**
+	 * 获取项目下有权限的仪表及
+	 * @param meterSettingVo
+	 * @return
+	 */
+	public List<MeterSettingVo> getMeterAuth(String projectId,String meterOwner);
 
 
 
