@@ -92,4 +92,13 @@ public interface IWorkbenchService {
 	 */
 	public DataPageValue<TaskVo> findTask4Page(String status, String staffId,Integer page, Integer size);
 	
+	/**
+	 * 获取与员工有关的最近4条待处理、待审核的任务
+	 * @param staffId  员工id
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年2月25日 上午11:23:46
+	 */
+	public List<TaskVo> findTasks4ByStaffId(String staffId);
+	
 }

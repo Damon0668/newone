@@ -17,6 +17,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IFeeService;
 import com.liefeng.property.bo.fee.MeterRecordBo;
 import com.liefeng.property.exception.FeeException;
+import com.liefeng.property.po.fee.MeterRecordPo;
 import com.liefeng.property.vo.fee.FeeSettingVo;
 import com.liefeng.property.vo.fee.LadderFeeSettingVo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
@@ -84,6 +85,12 @@ public class FeeServiceTest {
 		System.out.println(feeService.findMeterRecord4Page(meterRecordBo, 1, 30));
 	}
 
+	@Test
+	public void findMeterRecordById(){
+		MeterRecordVo meterRecordVo = feeService.findMeterRecordById("4028895e531356950153137769220010");
+		System.out.println(meterRecordVo);
+	}
+	
 	/**
 	 * 保存抄表设置
 	 */
@@ -105,6 +112,11 @@ public class FeeServiceTest {
 			System.out.println(e.getMessage());
 		}
 		
+	}
+	
+	@Test
+	public void getMeterAuth(){
+		System.out.println(feeService.getMeterAuth("0000000052a7943f0152a7943fc00000","1"));
 	}
 
 	/**

@@ -56,6 +56,10 @@ public class PropertyStaffVo extends BaseValue {
 	private String departmentId;
 	
 	/**
+	 * 部门信息
+	 */
+	private PropertyDepartmentVo propertyDepartment;
+	/**
 	 * 上级领导
 	 */
 	private String director;
@@ -197,5 +201,12 @@ public class PropertyStaffVo extends BaseValue {
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
 	}
-	
+
+	public PropertyDepartmentVo getPropertyDepartment() {
+		return propertyDepartment;
+	}
+
+	public void setPropertyDepartment(PropertyDepartmentVo propertyDepartment) {
+		this.propertyDepartment = propertyDepartment;
+	}
 }

@@ -1,5 +1,6 @@
 package com.liefeng.property.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IFeeService;
+import com.liefeng.property.bo.fee.MeterSettingBo;
 import com.liefeng.property.bo.fee.MeterRecordBo;
 import com.liefeng.property.domain.fee.FeeSettingContext;
 import com.liefeng.property.domain.fee.LadderFeeSettingContext;
@@ -50,6 +52,25 @@ public class FeeService implements IFeeService {
 		MeterRecordContext meterRecordContext = MeterRecordContext.build();
 		return meterRecordContext.listMeterRecordVo4Page(meterRecordBo,currentPage, pageSize);
 	}
+	
+	@Override
+	public MeterRecordVo getPreMeterRecord(MeterRecordVo meterRecordVo,Date date){
+		MeterRecordContext meterRecordContext = MeterRecordContext.build(meterRecordVo);
+		return meterRecordContext.getPreMeterRecord(date);
+	}
+	
+	@Override
+	public MeterRecordVo findMeterRecordById(String id) {
+		MeterRecordContext meterRecordContext = MeterRecordContext.loadById(id);
+		return meterRecordContext.findById();
+	}
+
+	@Override
+	public void updateMeterRecord(MeterRecordVo meterRecordVo) {
+		MeterRecordContext meterRecordContext = MeterRecordContext.build(meterRecordVo);
+		meterRecordContext.update();
+	}
+	
 	// TODO 仪表设置
 	@Override
 	public void createMeterSetting(MeterSettingVo meterSettingVo)
@@ -94,6 +115,20 @@ public class FeeService implements IFeeService {
 		MeterSettingContext meterSettingContext = MeterSettingContext.build();
 		return meterSettingContext.findByProjectIdAndChargeableYes();
 	}
+
+	@Override
+	public List<MeterSettingVo> findByProjectIdAndChargeableYes(String projecId){
+		MeterSettingContext meterSettingContext = MeterSettingContext.loadByProjectId(projecId);
+		return meterSettingContext.findByProjectIdAndChargeableYes();
+	}
+	
+	@Override
+	public List<MeterSettingVo> getMeterAuth(String projectId,String meterOwner) {
+		MeterSettingContext meterSettingContext = MeterSettingContext
+				.loadByProjectId(projectId);
+		return meterSettingContext.getMeterAuth(meterOwner);
+	}
+	
 	//TODO 费用设置
 	@Override
 	public void createFeeSetting(FeeSettingVo feeSettingVo)
@@ -131,7 +166,7 @@ public class FeeService implements IFeeService {
 				.build(feeSettingVo);
 		feeSettingContext.update();
 	}
-
+	
 	//TODO 阶梯收费设置
 	@Override
 	public void createLadderFeeSetting(LadderFeeSettingVo ladderFeeSettingVo)
@@ -169,5 +204,7 @@ public class FeeService implements IFeeService {
 				.build(ladderFeeSettingVo);
 		ladderFeeSettingContext.update();
 	}
+
+	
 	
 }
