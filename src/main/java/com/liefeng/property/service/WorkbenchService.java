@@ -86,5 +86,11 @@ public class WorkbenchService implements IWorkbenchService {
 		return taskContext.findTask4Page(status, staffId, page, size);
 	}
 
+	@Override
+	public List<TaskVo> findTasks4ByStaffId(String staffId) {
+		TaskContext taskContext = TaskContext.build();
+		return taskContext.findTasks4ByStaffId(staffId);
+	}
+
 
 }

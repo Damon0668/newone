@@ -157,13 +157,6 @@ public class TaskContext {
 		return task;
 	}
 	
-	public List<TaskVo> listMyAllTasks(String creatorId, String staffId) {
-		HashMap<String, String> paramMap = new HashMap<String, String>();
-		paramMap.put("creatorId", creatorId);
-		paramMap.put("staffId", staffId);
-		
-		return taskQueryRepository.queryByPage(paramMap);
-	}
 
 	/**
 	 * 根据状态、员工id获取任务的数量
@@ -220,6 +213,20 @@ public class TaskContext {
 		DataPageValue<TaskVo> returnPage = new DataPageValue<TaskVo>(list, count, size, page);
 		
 		return returnPage;
+	}
+	
+	/**
+	 * 获取与员工有关的最近4条待处理、待审核的任务
+	 * @param staffId  员工id
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年2月25日 上午11:23:46
+	 */
+	public List<TaskVo> findTasks4ByStaffId(String staffId){
+		HashMap<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("staffId", staffId);
+
+		return taskQueryRepository.queryTask4ByStaffId(paramMap);
 	}
 
 	public void setTaskId(String taskId) {

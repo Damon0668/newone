@@ -138,4 +138,15 @@ public class WorkbenchContextTest {
 		Long count = workbenchService.findCountByStatusAndStaffId("", "40288901530c1a1d01530c1a1db40000");
 		System.out.println(count);
 	}
+	
+	/**
+	 * 获取与员工有关的最近4条待处理、待审核的任务                      
+	 * @author xhw
+	 * @date 2016年2月25日 下午12:01:30
+	 */
+	@Test
+	public void findTasks4ByStaffId(){
+		List<TaskVo> taskVoList =  workbenchService.findTasks4ByStaffId("402889015311068e015311068e3a0000");
+		System.out.println(taskVoList);
+	}
 }

@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.liefeng.property.po.fee.MeterSettingPo;
-import com.liefeng.property.vo.fee.MeterSettingVo;
 
 /**
  * 
@@ -57,7 +56,6 @@ public interface MeterSettingRepository extends JpaRepository<MeterSettingPo, St
 	 * @param chargeableYes
 	 * @return
 	 */
-	public List<MeterSettingVo> findByProjectIdAndChargeable(String projectId,
+	public List<MeterSettingPo> findByProjectIdAndChargeable(String projectId,
 			String chargeableYes);
-
 }
