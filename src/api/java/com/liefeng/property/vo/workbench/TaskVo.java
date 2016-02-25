@@ -128,6 +128,16 @@ public class TaskVo extends BaseValue{
 	 */
 	private String archiverName;
 	
+	/**
+	 * 附件信息
+	 */
+	private String attachmentStr;
+	
+	/**
+	 * 附件上传人id
+	 */
+	private String uploadId;
+	
 	public String getHandlerName() {
 		return handlerName;
 	}
@@ -326,6 +336,22 @@ public class TaskVo extends BaseValue{
 
 	public void setCreatorName(String creatorName) {
 		this.creatorName = creatorName;
+	}
+
+	public String getAttachmentStr() {
+		return attachmentStr;
+	}
+
+	public void setAttachmentStr(String attachmentStr) {
+		this.attachmentStr = attachmentStr;
+	}
+
+	public String getUploadId() {
+		return uploadId;
+	}
+
+	public void setUploadId(String uploadId) {
+		this.uploadId = uploadId;
 	}
 
 }

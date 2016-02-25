@@ -1,5 +1,6 @@
 package com.liefeng.property.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.domain.workbench.TaskAttachmentContext;
 import com.liefeng.property.domain.workbench.TaskContext;
 import com.liefeng.property.domain.workbench.TaskPrivilegeContext;
@@ -36,8 +38,8 @@ public class WorkbenchService implements IWorkbenchService {
 		TaskContext taskContext = TaskContext.build(task);
 		TaskVo taskVo = taskContext.create();
 		
-		if(taskVo != null){   //创建任务的权限
-			if(ValidateHelper.isNotEmptyString(taskVo.getPrivilegeStr())){
+		if(taskVo != null){   //创建任务的权限  、附件
+			if(ValidateHelper.isNotEmptyString(taskVo.getPrivilegeStr())){  //权限
 				String[] privilegeArray = taskVo.getPrivilegeStr().split(",");
 				for(int i=0; i < privilegeArray.length; i++){
 					TaskPrivilegeVo privilegeVo = new TaskPrivilegeVo();
@@ -47,6 +49,22 @@ public class WorkbenchService implements IWorkbenchService {
 				}
 				
 			}
+			
+			if(ValidateHelper.isNotEmptyString(taskVo.getAttachmentStr())){  //附件
+					String[] attachmentStrArray = taskVo.getAttachmentStr().substring(0, taskVo.getAttachmentStr().length()-1).split("\\|");
+					for(int k=0;k<attachmentStrArray.length;k++){
+						String[] attachmentArray = attachmentStrArray[k].split(",");
+						TaskAttachmentVo taskAttachmentVo = new TaskAttachmentVo();
+						taskAttachmentVo.setCreatorId(taskVo.getCreatorId());
+						taskAttachmentVo.setTaskId(taskVo.getId());
+						taskAttachmentVo.setFileUrl(attachmentArray[0]);
+						taskAttachmentVo.setFileName(attachmentArray[1]);
+						taskAttachmentVo.setFileSize(Double.valueOf(attachmentArray[2]));
+						
+						createTaskAttachment(taskAttachmentVo);
+						
+					}
+			}
 		}
 	}
 
@@ -55,6 +73,21 @@ public class WorkbenchService implements IWorkbenchService {
 		TaskContext taskContext = TaskContext.build(taskVo);
 		taskContext.update();
 		
+		if(ValidateHelper.isNotEmptyString(taskVo.getAttachmentStr())){  //附件
+			String[] attachmentStrArray = taskVo.getAttachmentStr().substring(0, taskVo.getAttachmentStr().length()-1).split("\\|");
+			for(int k=0;k<attachmentStrArray.length;k++){
+				String[] attachmentArray = attachmentStrArray[k].split(",");
+				TaskAttachmentVo taskAttachmentVo = new TaskAttachmentVo();
+			    taskAttachmentVo.setCreatorId(taskVo.getUploadId());
+				taskAttachmentVo.setTaskId(taskVo.getId());
+				taskAttachmentVo.setFileUrl(attachmentArray[0]);
+				taskAttachmentVo.setFileName(attachmentArray[1]);
+				taskAttachmentVo.setFileSize(Double.valueOf(attachmentArray[2]));
+				
+				createTaskAttachment(taskAttachmentVo);
+				
+			}
+	}
 	}
 
 	@Override
