@@ -69,6 +69,8 @@ dependencies {
    compile 'org.mybatis:mybatis:3.1.1'
    compile 'org.mybatis:mybatis-spring:1.2.2'
    
+   compile 'org.quartz-scheduler:quartz:2.2.1'
+   
    compile sourceSets.api.output
    compile 'com.liefeng:liefeng-core:1.1.3'
    compile 'com.liefeng:liefeng-mq:1.3'
