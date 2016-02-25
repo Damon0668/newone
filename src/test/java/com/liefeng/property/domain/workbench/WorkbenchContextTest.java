@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.liefeng.Application;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.vo.workbench.TaskAttachmentVo;
 import com.liefeng.property.vo.workbench.TaskPrivilegeVo;
 import com.liefeng.property.vo.workbench.TaskVo;
 
@@ -148,5 +149,46 @@ public class WorkbenchContextTest {
 	public void findTasks4ByStaffId(){
 		List<TaskVo> taskVoList =  workbenchService.findTasks4ByStaffId("402889015311068e015311068e3a0000");
 		System.out.println(taskVoList);
+	}
+	
+	/**
+	 * 创建任务附件
+	 *                       
+	 * @author xhw
+	 * @date 2016年2月25日 下午7:28:12
+	 */
+	@Test
+	public void createAttachment(){
+		TaskAttachmentVo attachmentVo = new TaskAttachmentVo();
+		attachmentVo.setCreatorId("402889015311068e015311068e3a0000");
+		attachmentVo.setFileName("xhw.txt");
+		attachmentVo.setFileSize(175.5);
+		attachmentVo.setFileUrl("www.baidu.com");
+		attachmentVo.setTaskId("402889ba530dd9dd01530ddaa5e50002");
+		
+		workbenchService.createTaskAttachment(attachmentVo);
+	}
+	
+	/**
+	 * 根据任务id，获取任务的附件
+	 *                       
+	 * @author xhw
+	 * @date 2016年2月25日 下午7:36:20
+	 */
+	@Test
+	public void findAttachmentByTaskId(){
+		List<TaskAttachmentVo> attachmentVoList = workbenchService.findAttachmentVoListByTaskId("402889ba530dd9dd01530ddaa5e50002");
+		System.out.println(attachmentVoList);
+	}
+	
+	/**
+	 * 根据任务id，删除任务的附件
+	 *                       
+	 * @author xhw
+	 * @date 2016年2月25日 下午7:39:15
+	 */
+	@Test
+	public void deleteAttachmentByTaskId(){
+		workbenchService.deleteAttachmentByTaskId("402889ba530dd9dd01530ddaa5e50002");
 	}
 }

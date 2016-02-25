@@ -6,6 +6,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
+import com.liefeng.property.vo.workbench.TaskAttachmentVo;
 import com.liefeng.property.vo.workbench.TaskPrivilegeVo;
 import com.liefeng.property.vo.workbench.TaskVo;
 
@@ -100,5 +101,31 @@ public interface IWorkbenchService {
 	 * @date 2016年2月25日 上午11:23:46
 	 */
 	public List<TaskVo> findTasks4ByStaffId(String staffId);
+	
+	/**
+	 * 创建任务附件
+	 * @param attachmentVo
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年2月25日 下午7:21:43
+	 */
+	public TaskAttachmentVo createTaskAttachment(TaskAttachmentVo attachmentVo);
+	
+	/**
+	 * 根据任务id，获取任务的附件
+	 * @param taskId
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年2月25日 下午7:23:10
+	 */
+	public List<TaskAttachmentVo> findAttachmentVoListByTaskId(String taskId);
+	
+	/**
+	 * 根据任务id，删除任务的附件
+	 * @param taskId                      
+	 * @author xhw
+	 * @date 2016年2月25日 下午7:24:08
+	 */
+	public void deleteAttachmentByTaskId(String taskId);
 	
 }

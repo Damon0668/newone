@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.domain.workbench.TaskAttachmentContext;
 import com.liefeng.property.domain.workbench.TaskContext;
 import com.liefeng.property.domain.workbench.TaskPrivilegeContext;
+import com.liefeng.property.vo.workbench.TaskAttachmentVo;
 import com.liefeng.property.vo.workbench.TaskPrivilegeVo;
 import com.liefeng.property.vo.workbench.TaskVo;
 
@@ -90,6 +92,25 @@ public class WorkbenchService implements IWorkbenchService {
 	public List<TaskVo> findTasks4ByStaffId(String staffId) {
 		TaskContext taskContext = TaskContext.build();
 		return taskContext.findTasks4ByStaffId(staffId);
+	}
+
+	@Override
+	public TaskAttachmentVo createTaskAttachment(TaskAttachmentVo attachmentVo) {
+		TaskAttachmentContext attachmentContext = TaskAttachmentContext.build(attachmentVo);
+		
+		return attachmentContext.create();
+	}
+
+	@Override
+	public List<TaskAttachmentVo> findAttachmentVoListByTaskId(String taskId) {
+		TaskAttachmentContext attachmentContext = TaskAttachmentContext.loadById(taskId);
+		return attachmentContext.findAttachmentVoListByTaskId();
+	}
+
+	@Override
+	public void deleteAttachmentByTaskId(String taskId) {
+		TaskAttachmentContext attachmentContext = TaskAttachmentContext.loadById(taskId);
+		attachmentContext.deleteByTaskId();
 	}
 
 
