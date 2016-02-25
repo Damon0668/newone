@@ -22,6 +22,7 @@ import com.liefeng.property.error.ProjectErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.project.ProjectPo;
 import com.liefeng.property.repository.ProjectRepository;
+import com.liefeng.property.repository.mybatis.ProjectQueryRepository;
 import com.liefeng.property.vo.project.ProjectVo;
 
 /**
@@ -39,6 +40,9 @@ public class ProjectContext {
 
 	@Autowired
 	private ProjectRepository projectRepository;
+	
+	@Autowired
+	private ProjectQueryRepository projectQueryRepository;
 	
 	/**
 	 * 项目ID或以“,”分隔的ID串
@@ -189,6 +193,15 @@ public class ProjectContext {
 	}
 	
 	/**
+	 * 根据员工ID查找此员工管理的项目列表
+	 * @param staffId 员工ID
+	 * @return
+	 */
+	public List<ProjectVo> findProjectsByStaffId(String staffId){
+		return projectQueryRepository.findByStaffId(staffId);
+	}
+	
+	/**
 	 * 查询某个oem下的所有项目列表
 	 */
 	public List<ProjectVo> listProjects(){
@@ -196,4 +209,5 @@ public class ProjectContext {
 		List<ProjectPo> projectPoList = projectRepository.findByOemCode(oemCode);
 		return MyBeanUtil.createList(projectPoList, ProjectVo.class);
 	}
+	
 }

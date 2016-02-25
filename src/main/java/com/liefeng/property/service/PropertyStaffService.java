@@ -14,6 +14,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.ICheckService;
+import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.property.ISysSecurityService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
@@ -29,6 +30,7 @@ import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.property.vo.staff.StaffArchiveVo;
 
 /**
  * 物业员工服务
@@ -48,6 +50,9 @@ public class PropertyStaffService implements IPropertyStaffService {
 	
 	@Autowired
 	private ITccMsgService tccMsgService;
+	
+	@Autowired
+	private IUserService userService;
 	
 	@Override
 	public DataPageValue<PropertyStaffListVo> listPropertyStaff4Page(PropertyStaffBo propertyStaffBo, int page, int size) {
@@ -113,8 +118,15 @@ public class PropertyStaffService implements IPropertyStaffService {
 		
 		PropertyStaffVo propertyStaffVo = PropertyStaffContext.loadById(staffId).getPropertyStaff();
 		
+		StaffArchiveVo staffArchiveVo = StaffArchiveContext.loadByStaffId(propertyStaffVo.getId()).getStaffArchive();
+		
+		CustomerVo customerVo = userService.getCustomerByGlobalId(staffArchiveVo.getCustGlobalId());
 		
 		propertyStaffDetailInfo.setPropertyStaffVo(propertyStaffVo);
+		
+		propertyStaffDetailInfo.setStaffArchiveVo(staffArchiveVo);
+		
+		propertyStaffDetailInfo.setCustomerVo(customerVo);
 		
 		return propertyStaffDetailInfo;
 	}

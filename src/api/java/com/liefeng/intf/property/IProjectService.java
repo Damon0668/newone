@@ -35,6 +35,13 @@ public interface IProjectService {
 	 * @return 具体项目对象
 	 */
 	public ProjectVo findProjectByFullName(String fullName);
+	
+	/**
+	 * 根据员工ID查找项目
+	 * @param staffId 员工ID
+	 * @return
+	 */
+	public List<ProjectVo> findProjectByStaffId(String staffId);
 
 	/**
 	 * 创建项目

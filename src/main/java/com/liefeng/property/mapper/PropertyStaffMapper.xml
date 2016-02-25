@@ -39,7 +39,7 @@
         </if>
         
         <if test="extra.idOrName != null and extra.idOrName != ''" >
-            and ( stf.number = #{extra.idOrName} or stf.name like concat('%',#{extra.idOrName},'%') )
+            and ( stf.number = #{extra.idOrName} or stf.name like concat('%',#{extra.idOrName},'%') ) 
         </if>
         
         
@@ -83,6 +83,7 @@
          LEFT JOIN t_manage_project mp on stf.id = mp.staff_id and mp.project_id = #{extra.projectId}
     </if>
 	<include refid="Example_Where_Clause"/>
+	order by stf.create_time desc
 	<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
           ${pager.mysqlQueryCondition}
     </if>
