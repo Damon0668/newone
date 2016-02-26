@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
+import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
+import com.liefeng.property.vo.workbench.NoticeVo;
 import com.liefeng.property.vo.workbench.TaskAttachmentVo;
 import com.liefeng.property.vo.workbench.TaskPrivilegeVo;
 import com.liefeng.property.vo.workbench.TaskVo;
@@ -126,4 +128,56 @@ public interface IWorkbenchService {
 	 */
 	public void deleteAttachmentByTaskId(String taskId);
 	
+	/**
+	 * 创建通知
+	 * @param noticeVo
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年2月26日 下午4:47:01
+	 */
+	public NoticeVo createNotice(NoticeVo noticeVo);
+	
+	/**
+	 * 更新通知
+	 * @param noticeVo
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年2月26日 下午4:47:57
+	 */
+	public NoticeVo updateNotice(NoticeVo noticeVo);
+	
+	/**
+	 * 根据通知id，获取id
+	 * @param id
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年2月26日 下午4:48:58
+	 */
+	public NoticeVo getNoticeById(String id);
+	
+	/**
+	 * 创建通知权限对象
+	 * @param noticePrivilegeVo
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年2月26日 下午7:16:26
+	 */
+	public NoticePrivilegeVo createNoticePrivilege(NoticePrivilegeVo noticePrivilegeVo);
+	
+	/**
+	 * 根据通知id，获取相关的通知权限
+	 * @param noticeId
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年2月26日 下午7:22:49
+	 */
+	public List<NoticePrivilegeVo> getNoticePrivilegeByNoticeId(String noticeId);
+	
+	/**
+	 * 根据通知id，删除相关的通知权限
+	 * @param noticeId                      
+	 * @author xhw
+	 * @date 2016年2月26日 下午7:25:14
+	 */
+	public void deleteNoticePrivilegeByNoticeId(String noticeId);
 }
