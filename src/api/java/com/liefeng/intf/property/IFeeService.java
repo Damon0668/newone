@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
-import com.liefeng.property.bo.fee.MeterSettingBo;
 import com.liefeng.property.bo.fee.MeterRecordBo;
 import com.liefeng.property.vo.fee.FeeSettingVo;
 import com.liefeng.property.vo.fee.LadderFeeSettingVo;
@@ -55,6 +54,13 @@ public interface IFeeService {
 	 */
 	public void createMeterSetting(MeterSettingVo meterSettingVo) throws LiefengException;
 
+	/**
+	 * 公摊抄表列表 (楼栋为主表)
+	 * @param meterRecordVo
+	 */
+	public DataPageValue<MeterRecordVo> findPublicMeterRecord4Page(MeterRecordBo meterRecordBo,Integer currentPage,Integer pageSize);
+
+	
 	/**
 	 * 获取仪表设置列表
 	 * @param string
@@ -180,6 +186,12 @@ public interface IFeeService {
 	 * @return
 	 */
 	public List<MeterSettingVo> getMeterAuth(String projectId,String meterOwner);
+
+	/**
+	 * 创建抄表记录(公摊)
+	 * @param meterRecordVo
+	 */
+	public void createPublicMeterRecord(MeterRecordVo meterRecordVo);
 
 
 

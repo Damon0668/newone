@@ -116,6 +116,12 @@ public class MeterRecordVo extends BaseValue {
 	 * OEM编码
 	 */
 	private String oemCode;
+	
+	/**
+	 * 分摊户数
+	 * @return
+	 */
+	private Integer onwerCount;
 
 	public String getId() {
 		return id;
@@ -275,6 +281,14 @@ public class MeterRecordVo extends BaseValue {
 
 	public void setIsRead(Integer isRead) {
 		this.isRead = isRead;
+	}
+
+	public Integer getOnwerCount() {
+		return onwerCount;
+	}
+
+	public void setOnwerCount(Integer onwerCount) {
+		this.onwerCount = onwerCount;
 	}
 
 }

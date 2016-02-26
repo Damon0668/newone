@@ -52,7 +52,7 @@ public enum FeeErrorCode implements IErrorCode {
 	/**
 	 * 仪表设置为空
 	 */
-	METERSETTING_ISNULL("不存在改仪表设置"), 
+	METERSETTING_ISNULL("不存在该仪表设置"), 
 	
 	/**
 	 * 当前读数错误
