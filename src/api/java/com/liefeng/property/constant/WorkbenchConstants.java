@@ -41,4 +41,16 @@ public class WorkbenchConstants {
 		 */
 		public static final String ARCHIVED = "5";
 	} 
+	
+	/**
+	 * “我的主页”默认显示个数
+	 * @author xhw
+	 * @date 2016年2月26日上午10:25:47
+	 */
+	public static interface ObjectSize {
+		/**
+		 * 任务（4条）
+		 */
+		public static final Integer TASKSIZE = 4;
+	}
 }

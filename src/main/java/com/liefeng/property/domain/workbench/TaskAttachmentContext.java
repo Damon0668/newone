@@ -1,8 +1,6 @@
 package com.liefeng.property.domain.workbench;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -15,18 +13,9 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
-import com.liefeng.core.dubbo.filter.ContextManager;
-import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.core.mybatis.vo.PagingParamVo;
-import com.liefeng.property.constant.WorkbenchConstants;
-import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.workbench.TaskAttachmentPo;
-import com.liefeng.property.po.workbench.TaskPo;
-import com.liefeng.property.repository.mybatis.TaskQueryRepository;
 import com.liefeng.property.repository.workbench.TaskAttachmentRepository;
-import com.liefeng.property.repository.workbench.TaskRepository;
 import com.liefeng.property.vo.workbench.TaskAttachmentVo;
-import com.liefeng.property.vo.workbench.TaskVo;
 
 
 /**
@@ -104,19 +93,12 @@ public class TaskAttachmentContext {
 	 * @author xhw
 	 * @date 2016年2月25日 下午5:58:27
 	 */
-	public List<TaskAttachmentVo> findAttachmentVoListByTaskId(){
+	public List<TaskAttachmentVo> findByTaskId(){
 		List<TaskAttachmentVo> attachmentVoList = null;
-			if(ValidateHelper.isNotEmptyString(taskId)){
-				List<TaskAttachmentPo> attachmentPoList = taskAttachmentRepository.findByTaskId(taskId); 
-				
-				if(!attachmentPoList.isEmpty()){
-					attachmentVoList = new ArrayList<TaskAttachmentVo>();
-				}
-				
-				for(TaskAttachmentPo attachmentPo : attachmentPoList){
-					TaskAttachmentVo attachmentVo = MyBeanUtil.createBean(attachmentPo, TaskAttachmentVo.class);
-					attachmentVoList.add(attachmentVo);
-				}
+		if (ValidateHelper.isNotEmptyString(taskId)) {
+			List<TaskAttachmentPo> attachmentPoList = taskAttachmentRepository.findByTaskId(taskId);
+
+			attachmentVoList = MyBeanUtil.createList(attachmentPoList, TaskAttachmentVo.class);
 		}
 		return attachmentVoList;
 	}
@@ -128,16 +110,16 @@ public class TaskAttachmentContext {
 	 * @date 2016年2月25日 下午7:15:57
 	 */
 	public TaskAttachmentVo create() {
-		if(taskAttachmentVo != null) {
+		if (taskAttachmentVo != null) {
 			taskAttachmentVo.setId(UUIDGenerator.generate());
 			taskAttachmentVo.setUploadTime(new Date());
-            
-            TaskAttachmentPo attachmentPo = MyBeanUtil.createBean(taskAttachmentVo, TaskAttachmentPo.class);
-            taskAttachmentRepository.save(attachmentPo);
-            
-            logger.info("Create taskAttachment : {} success.", attachmentPo);
+
+			TaskAttachmentPo attachmentPo = MyBeanUtil.createBean(taskAttachmentVo, TaskAttachmentPo.class);
+			taskAttachmentRepository.save(attachmentPo);
+
+			logger.info("Create taskAttachment : {} success.", attachmentPo);
 		}
-		
+
 		return taskAttachmentVo;
 	}
 	
@@ -154,11 +136,11 @@ public class TaskAttachmentContext {
 	   }
    }
 
-	public void setTaskId(String taskId) {
+	protected void setTaskId(String taskId) {
 		this.taskId = taskId;
 	}
 
-	public void setTaskAttachmentVo(TaskAttachmentVo taskAttachmentVo) {
+	protected void setTaskAttachmentVo(TaskAttachmentVo taskAttachmentVo) {
 		this.taskAttachmentVo = taskAttachmentVo;
 	}
 }

@@ -1,6 +1,5 @@
 package com.liefeng.property.domain.workbench;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -98,22 +97,14 @@ public class TaskPrivilegeContext {
 	 * @author xhw
 	 * @date 2016年2月19日
 	 */
-	public List<TaskPrivilegeVo> getTaskPrivilegesByTaskid(){
+	public List<TaskPrivilegeVo> getByTaskid(){
 		List<TaskPrivilegeVo> privilegeVoList = null;
-			if(ValidateHelper.isNotEmptyString(taskId)){
-				List<TaskPrivilegePo> privilegePoList = taskPrivilegeRepository.findByTaskId(taskId);
-				
-				if(!privilegePoList.isEmpty()){
-					privilegeVoList = new ArrayList<TaskPrivilegeVo>();
-				}
-				
-				for(TaskPrivilegePo privilegePo : privilegePoList){
-					TaskPrivilegeVo privilegeVo = MyBeanUtil.createBean(privilegePo,TaskPrivilegeVo.class);
-					privilegeVoList.add(privilegeVo);
-					
-				}
-			}
-			
+		if (ValidateHelper.isNotEmptyString(taskId)) {
+			List<TaskPrivilegePo> privilegePoList = taskPrivilegeRepository.findByTaskId(taskId);
+
+			privilegeVoList = MyBeanUtil.createList(privilegePoList, TaskPrivilegeVo.class);
+		}
+
 		return privilegeVoList;
 	}
 	
@@ -152,11 +143,11 @@ public class TaskPrivilegeContext {
 		
 	}
 
-	public void setTaskPrivilege(TaskPrivilegeVo taskPrivilege) {
+	protected void setTaskPrivilege(TaskPrivilegeVo taskPrivilege) {
 		this.taskPrivilege = taskPrivilege;
 	}
 
-	public void setTaskId(String taskId) {
+	protected void setTaskId(String taskId) {
 		this.taskId = taskId;
 	}
 }

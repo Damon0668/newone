@@ -123,8 +123,8 @@ public class WorkbenchContextTest {
 	 * @date 2016年2月24日 上午9:28:29
 	 */
 	@Test
-	public void findTask4Page(){
-		DataPageValue page  = workbenchService.findTask4Page("", "40288901530c1a1d01530c1a1db40000", 1, 10);
+	public void findTaskByPage(){
+		DataPageValue page  = workbenchService.findTaskByPage("", "40288901530c1a1d01530c1a1db40000", 1, 10);
 		System.out.println(page);
 	}
 	
@@ -147,7 +147,7 @@ public class WorkbenchContextTest {
 	 */
 	@Test
 	public void findTasks4ByStaffId(){
-		List<TaskVo> taskVoList =  workbenchService.findTasks4ByStaffId("402889015311068e015311068e3a0000");
+		List<TaskVo> taskVoList =  workbenchService.findTaskByStaffIdAndSize("402889015311068e015311068e3a0000", 4);
 		System.out.println(taskVoList);
 	}
 	
@@ -177,7 +177,7 @@ public class WorkbenchContextTest {
 	 */
 	@Test
 	public void findAttachmentByTaskId(){
-		List<TaskAttachmentVo> attachmentVoList = workbenchService.findAttachmentVoListByTaskId("402889ba530dd9dd01530ddaa5e50002");
+		List<TaskAttachmentVo> attachmentVoList = workbenchService.findAttachmentByTaskId("402889ba530dd9dd01530ddaa5e50002");
 		System.out.println(attachmentVoList);
 	}
 	
