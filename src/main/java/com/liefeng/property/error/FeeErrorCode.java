@@ -58,6 +58,11 @@ public enum FeeErrorCode implements IErrorCode {
 	 * 当前读数错误
 	 */
 	METERRECORD_CURRENT_NUMBER_ERRER("当前读数错误"),
+	
+	/**
+	 * 该记录已经交过费
+	 */
+	FEEITEM_ALREADYCOLLECT("该记录已经交过费"),
 
 	;
 	private String desc;

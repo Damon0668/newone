@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.liefeng.property.po.fee.LadderFeeSettingPo;
-import com.liefeng.property.po.fee.LadderFeeSettingPo;
 
 /**
  * 阶梯收费存储层
@@ -53,5 +52,4 @@ public interface LadderFeeSettingRepository extends JpaRepository<LadderFeeSetti
 	 */
 	public LadderFeeSettingPo findByProjectIdAndFeeTypeAndUseType(
 			String projectId, String feeType, String useType);
-
 }

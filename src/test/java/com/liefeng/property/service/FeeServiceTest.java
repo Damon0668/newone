@@ -16,6 +16,7 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IFeeService;
 import com.liefeng.property.bo.fee.MeterRecordBo;
+import com.liefeng.property.constant.FeeConstants;
 import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.vo.fee.FeeSettingVo;
 import com.liefeng.property.vo.fee.LadderFeeSettingVo;
@@ -101,6 +102,8 @@ public class FeeServiceTest {
 		MeterRecordVo meterRecordVo = feeService.findMeterRecordById("4028895e531356950153137769220010");
 		System.out.println(meterRecordVo);
 	}
+	
+
 	
 	/**
 	 * 保存抄表
@@ -343,6 +346,18 @@ public class FeeServiceTest {
 		}
 	}
 	
+	//TODO 费用
+	@Test
+	public void createOwnerMerterFee(){
+		ContextManager.getInstance().setOemCode("2");
+		feeService.createOwnerMerterFee("0000000052a7943f0152a7943fc00000", "2");
+	}
+	
+	@Test
+	public void collect(){
+		feeService.collect("4028895e531cef3a01531cef3a2e0000");
+	}
+	
 	@Autowired
 	private ProjectService projectService;
 	
@@ -350,5 +365,18 @@ public class FeeServiceTest {
 	public void listProjects(){
 		ContextManager.getInstance().setOemCode("liefeng");
 		System.out.println(projectService.listProjects());
+	}
+
+	@Test
+	public void createFee(){
+		ContextManager.getInstance().setOemCode("1");
+		
+		feeService.createPropertyManageFee("0000000052a7943f0152a7943fc00000");
+		feeService.createPolluFee("0000000052a7943f0152a7943fc00000");
+		feeService.createGarbageFee("0000000052a7943f0152a7943fc00000");
+		feeService.createMaintenanceFee("0000000052a7943f0152a7943fc00000");
+		feeService.createOwnerMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_WATER);
+		feeService.createOwnerMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_ELECTRICITY);
+		feeService.createOwnerMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_GAS);
 	}
 }

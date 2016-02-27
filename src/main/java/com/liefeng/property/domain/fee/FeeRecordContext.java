@@ -12,8 +12,11 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.property.error.FeeErrorCode;
+import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.FeeRecordPo;
 import com.liefeng.property.repository.FeeRecordRepository;
+import com.liefeng.property.vo.fee.FeeItemVo;
 import com.liefeng.property.vo.fee.FeeRecordVo;
 
 /**
@@ -38,11 +41,20 @@ public class FeeRecordContext {
 	private String feeRecordId;
 	
 	/**
+	 * 费用id
+	 */
+	private String feeItemId;
+	
+	/**
 	 * 缴费记录值对象
 	 */
 	private FeeRecordVo feeRecord;
-	protected void setFeeRecord(FeeRecordVo feeRecord) {
-		this.feeRecord = feeRecord;
+	
+	
+	public static FeeRecordContext loadByFeeItemId(String feeItemId) {
+		FeeRecordContext feeRecordContext = getInstance();
+		feeRecordContext.setFeeItemId(feeItemId);
+		return feeRecordContext;
 	}
 	
 	/**
@@ -82,7 +94,7 @@ public class FeeRecordContext {
 	 */
 	public static FeeRecordContext loadById(String feeRecordId) {
 		FeeRecordContext feeRecordContext = getInstance();
-		feeRecordContext.feeRecordId = feeRecordId;
+		feeRecordContext.setFeeRecordId(feeRecordId);
 		
 		return feeRecordContext;
 	}
@@ -108,15 +120,36 @@ public class FeeRecordContext {
 	
 	/**
 	 * 保存缴费记录
+	 * @param feeItemVo 
 	 */
-    public void create() {
-    	if(feeRecord != null) {
-    		feeRecord.setId(UUIDGenerator.generate());
-    		feeRecord.setCreateTime(new Date());
-    		
-    		FeeRecordPo feeRecordPo = MyBeanUtil.createBean(feeRecord, FeeRecordPo.class);
-    		feeRecordRepository.save(feeRecordPo);
-    	}
+    public void create(FeeItemVo feeItemVo) {
+    		FeeRecordPo feeRecordPo	= feeRecordRepository.findByFeeItemId(feeItemVo.getId());
+    		if(feeRecordPo != null){
+    			throw new FeeException(FeeErrorCode.FEEITEM_ALREADYCOLLECT);
+    		}
+    			Double discountAmount = feeItemVo.getTotalFee()*feeItemVo.getDiscount();
+    			Double paidAmount = discountAmount+(discountAmount*feeItemVo.getLateFeeRate());
+    			FeeRecordVo feeRecordVo = new FeeRecordVo();
+    			feeRecordVo.setFeeItemId(feeItemVo.getId());
+    			feeRecordVo.setReceivableAmount(feeItemVo.getTotalFee());
+    			feeRecordVo.setLateFee(feeItemVo.getLateFeeRate());
+    			feeRecordVo.setDiscountAmount(discountAmount);
+    			feeRecordVo.setPaidAmount(paidAmount);
+    			feeRecordVo.setLateFee(feeItemVo.getLateFeeRate());
+    			feeRecordVo.setCreateTime(new Date());
+    			feeRecordVo.setId(UUIDGenerator.generate());
+    			feeRecordRepository.save(MyBeanUtil.createBean(feeRecordVo, FeeRecordPo.class));
     }
 
+    protected void setFeeItemId(String feeItemId) {
+		this.feeItemId = feeItemId;
+	}
+    
+    protected void setFeeRecordId(String feeRecordId) {
+		this.feeRecordId = feeRecordId;
+	}
+
+    protected void setFeeRecord(FeeRecordVo feeRecord) {
+		this.feeRecord = feeRecord;
+	}
 }

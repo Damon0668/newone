@@ -54,18 +54,6 @@ public class FeeSettingContext {
 	private String projectId;
 
 	/**
-	 * 使用性质
-	 */
-	private String useType;
-	
-	/**
-	 * 费用类型
-	 */
-	private String feeType;
-	
-	
-
-	/**
 	 * 获取本类实例，每次返回一个新对象
 	 * 
 	 * @return 本类实例
@@ -107,19 +95,6 @@ public class FeeSettingContext {
 		return feeSettingContext;
 	}
 	
-	/**
-	 * 获取本类实例，每次返回一个新对象
-	 * @param projectId
-	 * @return
-	 */
-	public static FeeSettingContext loadByProjectIdAndUseTypeAndFeeType(String projectId,String useType,String feeType) {
-		FeeSettingContext feeSettingContext = getInstance();
-		feeSettingContext.setProjectId(projectId);
-		feeSettingContext.setFeeType(feeType);
-		feeSettingContext.setUseType(useType);
-		return feeSettingContext;
-	}
-
 	public void update(){
 		FeeSettingPo feeSettingPo=feeSettingRepository.findOne(feeSetting.getId());
 		if(feeSetting==null){
@@ -174,7 +149,12 @@ public class FeeSettingContext {
 			feeSettingRepository.save(MyBeanUtil.createBean(feeSetting,FeeSettingPo.class));
 		}
 	}
-
+	
+	public FeeSettingVo findByProjectIdAndFeeTypeAndUseType(String feeType, String useType){
+		FeeSettingPo feeSettingPo=feeSettingRepository.findByProjectIdAndFeeTypeAndUseType(projectId,feeSetting.getFeeType(),feeSetting.getUseType());
+		return MyBeanUtil.createBean(feeSettingPo, FeeSettingVo.class);
+	}
+	
 	public DataPageValue<FeeSettingVo> findByProjectId4Page(Integer currentPage,Integer pageSize){
 		Page<FeeSettingVo> voPage = null;
 
@@ -192,8 +172,19 @@ public class FeeSettingContext {
 				voPage.getTotalElements(), pageSize, currentPage);
 	}
 
-	public FeeSettingVo findFeeSettingOrLadder(){
-		FeeSettingPo feeSettingPo = feeSettingRepository.findByProjectIdAndFeeTypeAndChargeable(projectId, feeType,useType,FeeConstants.FeeSetting.CHARGEABLE_YES);
+	/**
+	 * 获取某个收费的费用项
+	 * @param useType
+	 * @param feePropertymanage
+	 * @return 
+	 */
+	public FeeSettingVo findChargeable(String useType, String feeType) {
+		FeeSettingPo feeSettingPo = feeSettingRepository.findByProjectIdAndUseTypeAndFeeTypeAndChargeable(projectId, useType, feeType, FeeConstants.FeeSetting.CHARGEABLE_YES);
+		return MyBeanUtil.createBean(feeSettingPo, FeeSettingVo.class);
+	}
+	
+	public FeeSettingVo findFeeSettingOrLadder(String feeType,String useType){
+		FeeSettingPo feeSettingPo = feeSettingRepository.findByProjectIdAndUseTypeAndFeeTypeAndChargeable(projectId, feeType,useType,FeeConstants.FeeSetting.CHARGEABLE_YES);
 		return MyBeanUtil.createBean(feeSettingPo, FeeSettingVo.class);
 	}
 	
@@ -207,14 +198,6 @@ public class FeeSettingContext {
 
 	protected void setProjectId(String projectId) {
 		this.projectId = projectId;
-	}
-	
-	protected void setUseType(String useType) {
-		this.useType = useType;
-	}
-	
-	protected void setFeeType(String feeType) {
-		this.feeType = feeType;
 	}
 
 	

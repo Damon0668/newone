@@ -107,6 +107,12 @@ public class FeeItemPo extends BaseValue {
 	private Double lateFeeRate;
 
 	/**
+	 * 总价
+	 */
+	@Column(name = "total_fee")
+	private Double totalFee; 
+	
+	/**
 	 * 单价 
 	 * 从字典表里读取。
 	 */
@@ -308,5 +314,13 @@ public class FeeItemPo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public Double getTotalFee() {
+		return totalFee;
+	}
+
+	public void setTotalFee(Double totalFee) {
+		this.totalFee = totalFee;
 	}
 }

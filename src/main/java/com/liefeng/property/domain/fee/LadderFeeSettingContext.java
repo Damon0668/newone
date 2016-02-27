@@ -160,7 +160,20 @@ public class LadderFeeSettingContext {
 					ladderFeeSetting, LadderFeeSettingPo.class));
 		}
 	}
-
+	
+	
+	/**
+	 * 获取阶梯设置
+	 * @param feeType
+	 * @param useType
+	 * @param chargeableYes
+	 * @return
+	 */
+	public LadderFeeSettingVo get(String feeType,String useType) {
+		LadderFeeSettingPo ladderFeeSettingPo = ladderFeeSettingRepository.findByProjectIdAndFeeTypeAndUseType(projectId, feeType, useType);
+		return MyBeanUtil.createBean(ladderFeeSettingPo, LadderFeeSettingVo.class);
+	}
+	
 	public DataPageValue<LadderFeeSettingVo> findByProjectId4Page(
 			 Integer currentPage,Integer pageSize) {
 		Page<LadderFeeSettingVo> voPage = null;
@@ -179,6 +192,13 @@ public class LadderFeeSettingContext {
 				voPage.getTotalElements(), pageSize, currentPage);
 	}
 
+	public LadderFeeSettingVo findByProjectIdAndFeeTypeAndUseType(){
+		LadderFeeSettingPo ladderFeeSettingPo = ladderFeeSettingRepository
+				.findByProjectIdAndFeeTypeAndUseType(ladderFeeSetting.getProjectId(),
+						ladderFeeSetting.getFeeType(),ladderFeeSetting.getUseType());
+		return MyBeanUtil.createBean(ladderFeeSettingPo, LadderFeeSettingVo.class);
+	}
+	
 	protected void setLadderFeeSetting(LadderFeeSettingVo ladderFeeSetting) {
 		this.ladderFeeSetting = ladderFeeSetting;
 	}
@@ -190,4 +210,7 @@ public class LadderFeeSettingContext {
 	protected void setId(String id) {
 		this.id = id;
 	}
+
+
+	
 }

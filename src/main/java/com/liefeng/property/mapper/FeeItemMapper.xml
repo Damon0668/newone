@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.liefeng.property.repository.mybatis.FeeItemQueryRepository">
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.liefeng.property.vo.fee.FeeItemVo">
+		<result column="id" property="id" />
+		<result column="project_id" property="projectId" />
+		<result column="building_id" property="buildingId"/>
+		<result column="house_num" property="houseNum"/>
+		<result column="fee_type" property="feeType" />
+		<result column="proprietor_name" property="proprietorName" />		
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
+		<result column="usage_amount" property="usageAmount" />
+		<result column="discount" property="discount" />
+		<result column="late_fee_rate" property="lateFeeRate" />
+		<result column="total_fee" property="totalFee" />
+		<result column="unit_price" property="unitPrice" />
+		<result column="deadline" property="deadline" />
+		<result column="status" property="status" />
+		<result column="oem_code" property="oemCode" />
+	</resultMap>
+
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			
+				AND  #{extra.startDate}  &lt;=  extra.start_date 
+				AND  #{extra.endDate}	&gt;= extra.end_date
+				
+			<if test="extra.projectId != null and extra.projectId != ''">
+				AND fi.project_id = #{extra.projectId}
+			</if>
+
+			<if test="extra.buildingId != null and extra.buildingId != ''">
+				AND fi.building_id = #{extra.buildingId}
+			</if>
+
+			<if test="extra.houseNum != null and extra.houseNum != ''">
+				AND fi.house_num = #{extra.houseNum}
+			</if>
+
+			<if test="extra.status != null and extra.status != ''">
+				AND fi.status = #{extra.status}
+			</if>
+			
+			<if test="extra.proprietorName != null and extra.proprietorName  != ''">
+				AND fi.proprietor_name  like CONCAT('%','${extra.proprietorName}','%' )
+			</if>
+			
+		</trim>
+	</sql>
+	
+	<select id="queryByPage" resultMap="BaseResultMap">
+		select
+			fi.house_num,
+			fi.fee_type,
+			fi.start_date,
+			fi.end_date,
+			fi.proprietor_name,
+			fi.usage_amount,
+			fi.unit_price,
+			fi.total_fee,
+			fi.deadline,
+			fi.discount,
+			fi.deadline
+		from t_fee_item fi
+		<include refid="Example_Where_Clause" />
+		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+          ${pager.mysqlQueryCondition}
+        </if>
+	</select>
+
+	<select id="queryByCount"  resultType="java.lang.Long">
+	select 
+	  count(1) 
+	from(
+		select
+		 fi.id
+		from t_fee_item fi
+		<include refid="Example_Where_Clause" />
+		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+          ${pager.mysqlQueryCondition}
+        </if>
+	</select>
+	
+	
+	
+</mapper>   

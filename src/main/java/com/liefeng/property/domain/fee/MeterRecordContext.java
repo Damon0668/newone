@@ -20,6 +20,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.fee.MeterRecordBo;
+import com.liefeng.property.constant.FeeConstants;
 import com.liefeng.property.error.FeeErrorCode;
 import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.MeterRecordPo;
@@ -66,7 +67,8 @@ public class MeterRecordContext {
 	 */
 	private MeterRecordVo meterRecord;
 	
-
+	private String projectId;
+	
 	/**
 	 * 获取本类实例，每次返回一个新对象
 	 * 
@@ -110,6 +112,17 @@ public class MeterRecordContext {
 	public static MeterRecordContext loadById(String meterRecordId) {
 		MeterRecordContext meterRecordContext = getInstance();
 		meterRecordContext.setMeterRecordId(meterRecordId);
+		return meterRecordContext;
+	}
+	
+	/**
+	 * 
+	 * @param projectId
+	 * @return
+	 */
+	public static MeterRecordContext loadByProjectId(String projectId) {
+		MeterRecordContext meterRecordContext = getInstance();
+		meterRecordContext.setProjectId(projectId);
 		return meterRecordContext;
 	}
 
@@ -156,7 +169,7 @@ public class MeterRecordContext {
 			
 			//判断本月是否已抄表
 			MeterRecordPo currentMeterRecordPo = meterRecordRepository
-					.getPreAndTypeAndMeterOwner(meterRecord.getProjectId(),
+					.getPreTypeAndMeterOwner(meterRecord.getProjectId(),
 							meterRecord.getHouseNum(),meterRecord.getMeterType(),meterRecord.getMeterOwner(),new Date());
 			if(currentMeterRecordPo != null){
 				throw new FeeException(FeeErrorCode.METERRECORD_CURRENT_MONTH_EXIST);
@@ -167,7 +180,7 @@ public class MeterRecordContext {
 				Date preDate=TimeUtil.getDayBeforeByMonth(new Date(), 1);
 				
 				MeterRecordPo preMeterRecordPo = meterRecordRepository
-						.getPreAndTypeAndMeterOwner(meterRecord.getProjectId(),
+						.getPreTypeAndMeterOwner(meterRecord.getProjectId(),
 									meterRecord.getHouseNum(),meterRecord.getMeterType(),meterRecord.getMeterOwner(),preDate);
 
 				if (preMeterRecordPo != null) {
@@ -214,7 +227,7 @@ public class MeterRecordContext {
 		total = (total == null ? 0 : total);
 		logger.info("总数量：total=" + total);
 	
-	//	param.getPager().setRowCount(total);
+		param.getPager().setRowCount(total);
 		
 		List<MeterRecordVo> meterRecordVos = meterRecordQueryRepository.queryByPage(param);
 		return new DataPageValue<MeterRecordVo>(meterRecordVos, total, pageSize, currentPage);
@@ -228,14 +241,38 @@ public class MeterRecordContext {
 	public MeterRecordVo getPre(Date date){
 		Date preDate=TimeUtil.getDayBeforeByMonth(date, 1);
 		MeterRecordPo preMeterRecordPo = new MeterRecordPo();
-		if(meterRecord.getMeterOwner().equals("1")){
+		if(meterRecord.getMeterOwner().equals(FeeConstants.MeterRecord.METEROWNER_YSE)){
 			preMeterRecordPo = meterRecordRepository
-				.getPreAndTypeAndMeterOwner(meterRecord.getProjectId(),
+				.getPreTypeAndMeterOwner(meterRecord.getProjectId(),
 							meterRecord.getHouseNum(),meterRecord.getMeterType(),meterRecord.getMeterOwner(),preDate);
-		}else if(meterRecord.getMeterOwner().equals("2")){
+		}else if(meterRecord.getMeterOwner().equals(FeeConstants.MeterRecord.METEROWNER_YSE)){
 			preMeterRecordPo = meterRecordRepository
-					.getPrePublicAndTypeAndMeterOwner(meterRecord.getProjectId(),
+					.getPrePublicTypeAndMeterOwner(meterRecord.getProjectId(),
 								meterRecord.getBuildingId(),meterRecord.getMeterType(),meterRecord.getMeterOwner(),preDate);
+		}
+		return MyBeanUtil.createBean(preMeterRecordPo, MeterRecordVo.class);
+	}
+	
+	/**
+	 * 获取上一期某个月的读数
+	 * @param houseNum 房间号  查询公摊为空
+	 * @param buildingId 楼栋id 查询业主表为空
+	 * @param meterType 表类型
+	 * @param meterOwner 是否是公摊
+	 * @param date 时间
+	 * @return
+	 */
+	public MeterRecordVo get(String houseNum,String buildingId, String meterType,
+			String meterOwner, Date date) {
+		MeterRecordPo preMeterRecordPo = new MeterRecordPo();
+		if(meterOwner.equals(FeeConstants.MeterRecord.METEROWNER_YSE)){
+			preMeterRecordPo = meterRecordRepository
+				.getPreTypeAndMeterOwner(projectId,
+						houseNum,meterType,meterOwner,date);
+		}else if(meterOwner.equals(FeeConstants.MeterRecord.METEROWNER_YSE)){
+			preMeterRecordPo = meterRecordRepository
+					.getPrePublicTypeAndMeterOwner(projectId,
+							buildingId,meterType,meterOwner,date);
 		}
 		return MyBeanUtil.createBean(preMeterRecordPo, MeterRecordVo.class) ;
 	}
@@ -318,7 +355,7 @@ public class MeterRecordContext {
 			
 			//判断本月是否已抄表
 			MeterRecordPo currentMeterRecordPo = meterRecordRepository
-					.getPrePublicAndTypeAndMeterOwner(meterRecord.getProjectId(),
+					.getPrePublicTypeAndMeterOwner(meterRecord.getProjectId(),
 							meterRecord.getBuildingId(),meterRecord.getMeterType(),meterRecord.getMeterOwner(),new Date());
 			if(currentMeterRecordPo != null){
 				throw new FeeException(FeeErrorCode.METERRECORD_CURRENT_MONTH_EXIST);
@@ -329,7 +366,7 @@ public class MeterRecordContext {
 				Date preDate=TimeUtil.getDayBeforeByMonth(new Date(), 1);
 				
 				MeterRecordPo preMeterRecordPo = meterRecordRepository
-						.getPrePublicAndTypeAndMeterOwner(meterRecord.getProjectId(),
+						.getPrePublicTypeAndMeterOwner(meterRecord.getProjectId(),
 									meterRecord.getBuildingId(),meterRecord.getMeterType(),meterRecord.getMeterOwner(),preDate);
 
 				if (preMeterRecordPo != null) {
@@ -370,5 +407,14 @@ public class MeterRecordContext {
 	protected void setMeterRecordId(String meterRecordId) {
 		this.meterRecordId = meterRecordId;
 	}
+
+	protected void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	
+
+
+	
 
 }
