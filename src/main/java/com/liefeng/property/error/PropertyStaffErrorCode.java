@@ -10,6 +10,11 @@ import com.liefeng.core.error.IErrorCode;
 public enum PropertyStaffErrorCode implements IErrorCode{
 	
 	/**
+	 * 员工ID不存在
+	 */
+	STAFF_ID_NOT_EXIST("员工ID不存在"),
+	
+	/**
 	 * 员工已存在
 	 */
 	STAFF_ALREADY_EXIST("员工已存在"),

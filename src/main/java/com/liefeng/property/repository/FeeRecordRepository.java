@@ -15,4 +15,6 @@ import com.liefeng.property.po.fee.FeeRecordPo;
 @Transactional
 public interface FeeRecordRepository extends JpaRepository<FeeRecordPo, String> {
 
+	public FeeRecordPo findByFeeItemId(String feeItemId);
+
 }

@@ -144,6 +144,20 @@ public class StaffArchiveContext {
 			staffArchiveRepository.save(staffArchivePo);
 		}
 	}
-
+	
+	/**
+	 * 保存员工档案
+	 */
+	public void update() {
+		if(staffArchive != null && ValidateHelper.isNotEmptyString(staffArchive.getId())) {
+			logger.info("update id = {}", staffArchive.getId());
+			StaffArchivePo staffArchivePo = staffArchiveRepository.findOne(staffArchive.getId());
+			if(staffArchivePo != null){
+				MyBeanUtil.copyBeanNotNull2Bean(staffArchive, staffArchivePo);
+				staffArchiveRepository.save(staffArchivePo);
+			}
+			
+		}
+	}
 	
 }

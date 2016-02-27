@@ -193,6 +193,43 @@ public interface IFeeService {
 	 */
 	public void createPublicMeterRecord(MeterRecordVo meterRecordVo);
 
+	/**
+	 * 创建业主仪表的费用项
+	 * @param projectId
+	 * @param feeType
+	 */
+	public void createOwnerMerterFee(String projectId, String feeType);
+
+	/**
+	 * 费用收取
+	 * @param feeItemId 费用记录ID
+	 */
+	public void collect(String feeItemId);
+
+	/**
+	 * 物业管理费
+	 * @param projectId
+	 */
+	public void createPropertyManageFee(String projectId);
+
+	/**
+	 * 本体维修基金
+	 * @param projectId
+	 */
+	public void createMaintenanceFee(String projectId);
+
+	/**
+	 * 垃圾处理费
+	 * @param projectId
+	 */
+	public void createGarbageFee(String projectId);
+
+	/**
+	 * 排污费
+	 * @param projectId
+	 */
+	public void createPolluFee(String projectId);
+
 
 
 	

@@ -28,6 +28,14 @@ public interface ISysSecurityService {
 	 */
 	public DataPageValue<SysRoleVo> listRoles4page(String name, String type, int page, int size);
 	
+
+	/**
+	 * 根据用户ID查询用户角色
+	 * @param userId 用户ID
+	 * @return
+	 */
+	public List<SysRoleVo> findRolesByUserId(String userId);
+	
 	/**
 	 * 添加系统角色
 	 * @param sysRole
@@ -66,7 +74,7 @@ public interface ISysSecurityService {
 	 * 角色授权菜单
 	 * @return
 	 */
-	public ReturnValue gruntRoleMenus(Long roleId,String menuIds);
+	public ReturnValue grantRoleMenus(Long roleId,String menuIds);
 	
 	/**
 	 * 查询菜单（只包含按钮）
@@ -142,5 +150,5 @@ public interface ISysSecurityService {
 	 * @param roleIds 角色ID
 	 * @return
 	 */
-	public ReturnValue gruntRoleUser(String userId, Long[] roleIds);
+	public ReturnValue grantRoleUser(String userId, Long[] roleIds);
 }

@@ -12,6 +12,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.liefeng.Application;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
+import com.liefeng.property.vo.workbench.NoticeVo;
 import com.liefeng.property.vo.workbench.TaskAttachmentVo;
 import com.liefeng.property.vo.workbench.TaskPrivilegeVo;
 import com.liefeng.property.vo.workbench.TaskVo;
@@ -190,5 +192,100 @@ public class WorkbenchContextTest {
 	@Test
 	public void deleteAttachmentByTaskId(){
 		workbenchService.deleteAttachmentByTaskId("402889ba530dd9dd01530ddaa5e50002");
+	}
+	
+	/**
+	 * 创建通知
+	 *                       
+	 * @author xhw
+	 * @date 2016年2月26日 下午5:18:23
+	 */
+	@Test
+	public void createNotice(){
+		NoticeVo noticeVo = new NoticeVo();
+		noticeVo.setTitle("系统切割");
+		noticeVo.setContent("通知模块切割");
+		noticeVo.setImportant('1');
+		noticeVo.setEmergency('1');
+		noticeVo.setTerminal("0");
+		noticeVo.setType("1");
+		noticeVo.setStartTime(new Date());
+		noticeVo.setEndTime(new Date());
+		noticeVo.setCreateTime(new Date());
+		noticeVo.setCreatorId("40282081531ca96a01531ca96a5a0000");
+		workbenchService.createNotice(noticeVo);
+	}
+	
+	/**
+	 * 获取通知
+	 * @author xhw
+	 * @date 2016年2月26日 下午5:18:23
+	 */
+	@Test
+	public void getNotice(){
+		NoticeVo noticeVo = workbenchService.getNoticeById("402889d2531ceaec01531ceaec420000");
+		System.out.println(noticeVo);
+	}
+	
+	/**
+	 * 跟新通知
+	 *                       
+	 * @author xhw
+	 * @date 2016年2月26日 下午5:36:32
+	 */
+	@Test
+	public void updateNotice(){
+		NoticeVo noticeVo = new NoticeVo();
+		noticeVo.setId("402889d2531ceaec01531ceaec420000");
+		noticeVo.setTitle("系统切割2");
+		noticeVo.setContent("通知模块切割2");
+		noticeVo.setImportant('0');
+		noticeVo.setEmergency('0');
+		noticeVo.setTerminal("2");
+		noticeVo.setType("3");
+		noticeVo.setStartTime(new Date());
+		noticeVo.setEndTime(new Date());
+		noticeVo.setCreateTime(new Date());
+		noticeVo.setCreatorId("40282081531ca96a01531ca96a5a0000");
+		workbenchService.updateNotice(noticeVo);
+	}
+	
+	/**
+	 * 创建通知权限
+	 *                       
+	 * @author xhw
+	 * @date 2016年2月26日 下午7:43:12
+	 */
+	@Test
+	public void createNoticePrivilege(){
+		NoticePrivilegeVo noticePrivilegeVo = new NoticePrivilegeVo();
+		noticePrivilegeVo.setNoticeId("402889d2531ceaec01531ceaec420000");
+		noticePrivilegeVo.setType("1");
+		noticePrivilegeVo.setProjectId("1");
+		noticePrivilegeVo.setGroupId("-1");
+		workbenchService.createNoticePrivilege(noticePrivilegeVo);
+	}
+	
+	/**
+	 * 根据通知id，获取通知权限
+	 *                       
+	 * @author xhw
+	 * @date 2016年2月26日 下午7:45:53
+	 */
+	@Test
+	public void getNoticePrivilegeByNoticeId(){
+		List<NoticePrivilegeVo> noticePrivilegeVos = workbenchService.getNoticePrivilegeByNoticeId("402889d2531ceaec01531ceaec420000");
+		System.out.println(noticePrivilegeVos);
+	}
+	
+	/**
+	 * 根据通知id，删除相应的通知权限
+	 *                       
+	 * @author xhw
+	 * @date 2016年2月26日 下午7:48:41
+	 */
+	@Test
+	public void deleteNoticePrivilegeByNoticeId(){
+		workbenchService.deleteNoticePrivilegeByNoticeId("402889d2531ceaec01531ceaec420000");
 	}
 }

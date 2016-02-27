@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
-import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.property.po.staff.ManageProjectPo;
 import com.liefeng.property.repository.ManageProjectRepository;
 
@@ -52,7 +51,11 @@ public class ManageProjectContext {
 		return manageProjectContext;
 	}
 	
-	public void create(String[] projectIds){
+	/**
+	 * 授权管理相关项目
+	 * @param projectIds
+	 */
+	public void grantManageProject(String[] projectIds){
 		if(staffId != null){
 			if(projectIds != null && projectIds.length > 0){
 				deleteAll();

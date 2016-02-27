@@ -53,4 +53,36 @@ public class WorkbenchConstants {
 		 */
 		public static final Integer TASKSIZE = 4;
 	}
+	
+	/**
+	 * 通知状态
+	 * @author xhw
+	 * @date 2016年2月26日下午4:27:09
+	 */
+	public static interface NoticeStatus {
+		/**
+		 * 待审核
+		 */
+		public static final String CHECKING = "1";
+		
+		/**
+		 * 审核不通过
+		 */
+		public static final String NOTPASS= "2";
+		
+		/**
+		 * 待发布
+		 */
+		public static final String PUBLISHING = "3";
+		
+		/**
+		 * 待归档
+		 */
+		public static final String ARCHIVING = "4";
+		
+		/**
+		 * 已归档
+		 */
+		public static final String ARCHIVED = "5";
+	}
 }

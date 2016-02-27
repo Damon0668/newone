@@ -65,7 +65,7 @@ public class SysRoleMenuContext {
 			
 			deleteByRoleId();
 			
-			String oemCode = SysRoleContext.loadById(roleId).findRole().getOemCode();
+			String oemCode = SysRoleContext.loadById(roleId).get().getOemCode();
 			
 			String[] menusArray = menuIds.split(",");
 			

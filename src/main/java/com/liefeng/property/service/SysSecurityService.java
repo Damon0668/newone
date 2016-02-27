@@ -45,7 +45,7 @@ public class SysSecurityService implements ISysSecurityService{
 	}
 
 	@Override
-	public ReturnValue gruntRoleMenus(Long roleId, String menuIds) {
+	public ReturnValue grantRoleMenus(Long roleId, String menuIds) {
 		SysRoleMenuContext.loadByRoleId(roleId).createMenus(menuIds);
 		return ReturnValue.success();
 	}
@@ -108,8 +108,8 @@ public class SysSecurityService implements ISysSecurityService{
 	}
 
 	@Override
-	public ReturnValue gruntRoleUser(String userId, Long[] roleIds) {
-		SysRoleUserContext.loadByUserId(userId).gruntRoles(roleIds);
+	public ReturnValue grantRoleUser(String userId, Long[] roleIds) {
+		SysRoleUserContext.loadByUserId(userId).grantRoles(roleIds);
 		return ReturnValue.success();
 	}
 
@@ -127,6 +127,11 @@ public class SysSecurityService implements ISysSecurityService{
 	@Override
 	public List<SysMenuVo> listMenusByUserId(String userId) {
 		return SysMenuContext.build().findMenusByUserId(userId);
+	}
+
+	@Override
+	public List<SysRoleVo> findRolesByUserId(String userId) {
+		return SysRoleContext.build().findRolesByUserId(userId);
 	}
 	
 

@@ -69,7 +69,7 @@ public interface FeeSettingRepository extends JpaRepository<FeeSettingPo, String
 	 * @param chargeableYes 1收取,2不收取
 	 * @return 
 	 */
-	public FeeSettingPo findByProjectIdAndFeeTypeAndChargeable(String projectId,String useType,
+	public FeeSettingPo findByProjectIdAndUseTypeAndFeeTypeAndChargeable(String projectId,String useType,
 			String feeType, String chargeableYes);
 
 }

@@ -1,6 +1,7 @@
 package com.liefeng.property.domain.household;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -160,6 +161,10 @@ public class ProprietorHouseContext {
 		}
 	}
 
+	public List<ProprietorHouseVo> findByProjectId(String projectId) {
+		List<ProprietorHousePo> proprietorHousePos = proprietorHouseRepository.findByProjectId(projectId);
+		return MyBeanUtil.createList(proprietorHousePos, ProprietorHouseVo.class);
+	}
 
 	protected void setProprietorHouseId(String proprietorHouseId) {
 		this.proprietorHouseId = proprietorHouseId;
@@ -178,6 +183,8 @@ public class ProprietorHouseContext {
 	protected void setProprietorHouse(ProprietorHouseVo proprietorHouse) {
 		this.proprietorHouse = proprietorHouse;
 	}
+
+	
 	
 	
 }

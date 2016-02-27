@@ -1,5 +1,7 @@
 package com.liefeng.property.repository.sys;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,5 +21,12 @@ public interface SysRoleUserRepository extends JpaRepository<SysRoleUserPo, Long
 	 * @param menuId 菜单ID
 	 */
 	public void deleteByUserId(String userId);
+	
+	/**
+	 * 根据用户ID,查找角色关系
+	 * @param userId
+	 * @return
+	 */
+	public List<SysRoleUserPo> findByUserId(String userId);
 	
 }

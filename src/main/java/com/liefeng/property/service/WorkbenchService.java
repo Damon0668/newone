@@ -7,9 +7,13 @@ import org.springframework.stereotype.Service;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.domain.workbench.NoticeContext;
+import com.liefeng.property.domain.workbench.NoticePrivilegeContext;
 import com.liefeng.property.domain.workbench.TaskAttachmentContext;
 import com.liefeng.property.domain.workbench.TaskContext;
 import com.liefeng.property.domain.workbench.TaskPrivilegeContext;
+import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
+import com.liefeng.property.vo.workbench.NoticeVo;
 import com.liefeng.property.vo.workbench.TaskAttachmentVo;
 import com.liefeng.property.vo.workbench.TaskPrivilegeVo;
 import com.liefeng.property.vo.workbench.TaskVo;
@@ -142,6 +146,44 @@ public class WorkbenchService implements IWorkbenchService {
 	public void deleteAttachmentByTaskId(String taskId) {
 		TaskAttachmentContext attachmentContext = TaskAttachmentContext.loadById(taskId);
 		attachmentContext.deleteByTaskId();
+	}
+
+	@Override
+	public NoticeVo createNotice(NoticeVo noticeVo) {
+		NoticeContext noticeContext = NoticeContext.build(noticeVo);
+		return noticeContext.create();
+	}
+
+	@Override
+	public NoticeVo updateNotice(NoticeVo noticeVo) {
+		NoticeContext noticeContext = NoticeContext.build(noticeVo);
+		return noticeContext.update();
+	}
+
+	@Override
+	public NoticeVo getNoticeById(String id) {
+		NoticeContext noticeContext = NoticeContext.loadById(id);
+		return noticeContext.getById();
+	}
+
+	@Override
+	public NoticePrivilegeVo createNoticePrivilege(NoticePrivilegeVo noticePrivilegeVo) {
+		NoticePrivilegeContext noticePrivilegeContext = NoticePrivilegeContext.build(noticePrivilegeVo);
+		
+		return noticePrivilegeContext.create();
+	}
+
+	@Override
+	public List<NoticePrivilegeVo> getNoticePrivilegeByNoticeId(String noticeId) {
+		NoticePrivilegeContext noticePrivilegeContext = NoticePrivilegeContext.loadById(noticeId);
+		return noticePrivilegeContext.findByNoticeId();
+	}
+
+	@Override
+	public void deleteNoticePrivilegeByNoticeId(String noticeId) {
+		NoticePrivilegeContext noticePrivilegeContext = NoticePrivilegeContext.loadById(noticeId);
+		
+		 noticePrivilegeContext.deleteByNoticeId();
 	}
 
 

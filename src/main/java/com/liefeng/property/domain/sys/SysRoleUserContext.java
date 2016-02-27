@@ -1,15 +1,19 @@
 
 package com.liefeng.property.domain.sys;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.property.po.sys.SysRoleUserPo;
 import com.liefeng.property.repository.sys.SysRoleUserRepository;
+import com.liefeng.property.vo.sys.SysRoleUserVo;
 
 /**
  * 角色--用户
@@ -63,7 +67,7 @@ public class SysRoleUserContext {
 	 * @param roleIds
 	 */
 	@Transactional(rollbackOn=Exception.class)
-	public void gruntRoles(Long[] roleIds){
+	public void grantRoles(Long[] roleIds){
 		
 		sysRoleUserRepository.deleteByUserId(userId);
 		
@@ -74,5 +78,14 @@ public class SysRoleUserContext {
 			sysRoleUserPo.setOemCode("test");
 			sysRoleUserRepository.save(sysRoleUserPo);
 		}
+	}
+	
+	/**
+	 * 查找用户角色
+	 * @return
+	 */
+	public List<SysRoleUserVo> findRoles(){
+		List<SysRoleUserPo> dataList = sysRoleUserRepository.findByUserId(userId);
+		return MyBeanUtil.createList(dataList, SysRoleUserVo.class);
 	}
 }

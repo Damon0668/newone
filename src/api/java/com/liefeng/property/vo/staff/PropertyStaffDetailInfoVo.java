@@ -39,6 +39,11 @@ public class PropertyStaffDetailInfoVo extends BaseValue{
 	 * 员工管理相关项目ID
 	 */
 	public String[] manageProjects;
+	
+	/**
+	 * 员工通讯录中部门ID
+	 */
+	public String[] contactProjects;
 
 	public PropertyStaffVo getPropertyStaffVo() {
 		return propertyStaffVo;
@@ -79,4 +84,13 @@ public class PropertyStaffDetailInfoVo extends BaseValue{
 	public void setManageProjects(String[] manageProjects) {
 		this.manageProjects = manageProjects;
 	}
+
+	public String[] getContactProjects() {
+		return contactProjects;
+	}
+
+	public void setContactProjects(String[] contactProjects) {
+		this.contactProjects = contactProjects;
+	}
+
 }
