@@ -122,6 +122,7 @@ public class NoticeContext {
 
 			NoticePo noticePo = MyBeanUtil.createBean(noticeVo, NoticePo.class);
 			noticeRepository.save(noticePo);
+				
 		}
 
 		return noticeVo;

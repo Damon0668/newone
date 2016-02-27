@@ -25,42 +25,41 @@ public class TaskAttachmentPo extends BaseValue{
 	 */
 	@Id
 	private String id;
-	
+
 	/**
 	 * 任务ID
 	 */
-	@Column(name="task_id")
+	@Column(name = "task_id")
 	private String taskId;
-	
+
 	/**
 	 * 创建人ID
 	 */
-	@Column(name="creator_id")
+	@Column(name = "creator_id")
 	private String creatorId;
-	
-	
+
 	/**
 	 * 上传时间
 	 */
-	@Column(name="upload_time")
+	@Column(name = "upload_time")
 	private Date uploadTime;
-	
+
 	/**
 	 * 文件URL
 	 */
-	@Column(name="file_url")
+	@Column(name = "file_url")
 	private String fileUrl;
-	
+
 	/**
 	 * 文件大小
 	 */
-	@Column(name="file_size")
+	@Column(name = "file_size")
 	private Double fileSize;
-	
+
 	/**
 	 * 源文件名
 	 */
-	@Column(name="file_name")
+	@Column(name = "file_name")
 	private String fileName;
 
 	public String getId() {
@@ -118,5 +117,5 @@ public class TaskAttachmentPo extends BaseValue{
 	public void setFileUrl(String fileUrl) {
 		this.fileUrl = fileUrl;
 	}
-	
+
 }
