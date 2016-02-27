@@ -30,7 +30,7 @@ public interface IPropertyStaffService {
 	
 	/**
 	 * 创建物业员工
-	 * @param propertyStaff 物业员工
+	 * @param propertyStaffDetailInfo 物业员工
 	 * @return
 	 * @throws LiefengException
 	 * @throws Exception 
@@ -38,20 +38,13 @@ public interface IPropertyStaffService {
 	public ReturnValue createStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException, Exception;
 	
 	/**
-	 * 创建物业员工
-	 * @param propertyStaff 物业员工
-	 * @return
-	 * @throws LiefengException
-	 */
-	public ReturnValue createStaff(PropertyStaffVo propertyStaff) throws LiefengException;
-	
-	/**
 	 * 更新物业员工
-	 * @param propertyStaff
+	 * @param propertyStaffDetailInfo 物业员工
 	 * @return
 	 * @throws LiefengException
+	 * @throws Exception 
 	 */
-	public ReturnValue updateStaff(PropertyStaffVo propertyStaff) throws LiefengException;
+	public ReturnValue updateStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws Exception;
 
 	/**
 	 * 查询物业员工

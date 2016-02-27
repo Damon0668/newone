@@ -128,6 +128,11 @@ public class SysSecurityService implements ISysSecurityService{
 	public List<SysMenuVo> listMenusByUserId(String userId) {
 		return SysMenuContext.build().findMenusByUserId(userId);
 	}
+
+	@Override
+	public List<SysRoleVo> findRolesByUserId(String userId) {
+		return SysRoleContext.build().findRolesByUserId(userId);
+	}
 	
 
 }

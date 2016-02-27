@@ -28,6 +28,14 @@ public interface ISysSecurityService {
 	 */
 	public DataPageValue<SysRoleVo> listRoles4page(String name, String type, int page, int size);
 	
+
+	/**
+	 * 根据用户ID查询用户角色
+	 * @param userId 用户ID
+	 * @return
+	 */
+	public List<SysRoleVo> findRolesByUserId(String userId);
+	
 	/**
 	 * 添加系统角色
 	 * @param sysRole

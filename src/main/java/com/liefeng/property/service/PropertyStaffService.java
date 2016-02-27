@@ -15,6 +15,7 @@ import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.user.IUserService;
+import com.liefeng.intf.property.IProjectService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.property.ISysSecurityService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
@@ -24,6 +25,7 @@ import com.liefeng.property.domain.staff.ManageProjectContext;
 import com.liefeng.property.domain.staff.PropertyDepartmentContext;
 import com.liefeng.property.domain.staff.PropertyStaffContext;
 import com.liefeng.property.domain.staff.StaffArchiveContext;
+import com.liefeng.property.domain.sys.SysRoleContext;
 import com.liefeng.property.error.StaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
@@ -54,49 +56,90 @@ public class PropertyStaffService implements IPropertyStaffService {
 	@Autowired
 	private IUserService userService;
 	
+	@Autowired
+	private IProjectService projectService;
+		
 	@Override
 	public DataPageValue<PropertyStaffListVo> listPropertyStaff4Page(PropertyStaffBo propertyStaffBo, int page, int size) {
 		return PropertyStaffContext.build().listPropertyStaff4Page(propertyStaffBo, page, size);
 	}
 
-	@Override
-	public ReturnValue createStaff(PropertyStaffVo propertyStaff) throws LiefengException {
-		PropertyStaffContext.build(propertyStaff).create();
-		return ReturnValue.success();
-	}
 	@Transactional(rollbackOn=Exception.class)
 	@Override
 	public ReturnValue createStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws Exception {
 		
 		logger.info("createStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
+		
+		//客户创建校验
 		CustomerVo customerVo = checkService.createCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
 		
-		//创建物业员
+		logger.info("createStaff createCustomerCheck customerVo = {}", customerVo);
+		
+		//创建员工
 		PropertyStaffVo propertyStaffVo = PropertyStaffContext.build(propertyStaffDetailInfo.getPropertyStaffVo()).create();
 		
 		propertyStaffDetailInfo.getStaffArchiveVo().setStaffId(propertyStaffVo.getId());
-		
-		//propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(UUIDGenerator.generate());
 		
 		propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(customerVo.getGlobalId());
 		
 		//创建员工档案
 		StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).create();
 		
+		logger.info("createStaff StaffArchive create success");
+
 		//员工授权
 		sysSecurityService.gruntRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
 		
 		//员工管理相关项目
 		ManageProjectContext.build(propertyStaffVo.getId()).create(propertyStaffDetailInfo.getManageProjects());
 		
+		logger.info("createStaff sendTccMsg event = {} , content = {}", TccBasicEvent.CREATE_CUSTOMER, customerVo);
+		
+		//发送tcc消息创建客户
 		tccMsgService.sendTccMsg(TccBasicEvent.CREATE_CUSTOMER, customerVo.toString());
+		
+		logger.info("createStaff sendTccMsg success");
 		
 		return ReturnValue.success();
 	}
 
+	@Transactional(rollbackOn=Exception.class)
 	@Override
-	public ReturnValue updateStaff(PropertyStaffVo propertyStaff) throws LiefengException {
-		PropertyStaffContext.build(propertyStaff).update();
+	public ReturnValue updateStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws Exception {
+		
+		logger.info("updateStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
+		
+		CustomerVo customerVo = checkService.updateCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
+		
+		logger.info("updateStaff createCustomerCheck customerVo = {}", customerVo);
+		
+		PropertyStaffVo propertyStaffVo = propertyStaffDetailInfo.getPropertyStaffVo();
+		
+		//更新员工信息
+		PropertyStaffContext.build(propertyStaffVo).update();
+		
+		logger.info("updateStaff propertyStaff update success");
+				
+		propertyStaffDetailInfo.getStaffArchiveVo().setStaffId(propertyStaffVo.getId());
+				
+		propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(customerVo.getGlobalId());
+				
+		//更新员工档案
+		StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).update();
+				
+		//员工授权
+		sysSecurityService.gruntRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
+				
+		//员工管理相关项目
+		ManageProjectContext.build(propertyStaffVo.getId()).create(propertyStaffDetailInfo.getManageProjects());
+				
+		logger.info("updateStaff sendTccMsg event = {} , content = {}", TccBasicEvent.UPDATE_CUSTOMER, customerVo);
+		
+		//发送tcc消息
+		tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_CUSTOMER, customerVo.toString());
+		
+		logger.info("updateStaff sendTccMsg success");
+				
 		return ReturnValue.success();
 	}
 	
@@ -104,7 +147,6 @@ public class PropertyStaffService implements IPropertyStaffService {
 	public List<PropertyStaffVo> findPropertyStaff(String departmentId, String projectId) throws LiefengException {
 		return PropertyStaffContext.build().listPropertyStaffByDeptIdAndProjectId(departmentId, projectId);
 	}
-
 
 	@Override
 	public PropertyStaffVo findPropertyStaffById(String staffId) {
@@ -116,17 +158,30 @@ public class PropertyStaffService implements IPropertyStaffService {
 	public PropertyStaffDetailInfoVo findStaffDetailInfo(String staffId) {
 		PropertyStaffDetailInfoVo propertyStaffDetailInfo = new PropertyStaffDetailInfoVo();
 		
+		//查找员工信息
 		PropertyStaffVo propertyStaffVo = PropertyStaffContext.loadById(staffId).getPropertyStaff();
 		
+		//查找员工档案信息
 		StaffArchiveVo staffArchiveVo = StaffArchiveContext.loadByStaffId(propertyStaffVo.getId()).getStaffArchive();
 		
+		//查找员工客户信息
 		CustomerVo customerVo = userService.getCustomerByGlobalId(staffArchiveVo.getCustGlobalId());
+		
+		//员工项目列表
+		List<String> projectIdList = projectService.findProjectIdByStaffId(propertyStaffVo.getId());
+		
+		//员工角色列表
+		List<Long> roleIdList = SysRoleContext.build().findRoleIdsByUserId(propertyStaffVo.getId());
 		
 		propertyStaffDetailInfo.setPropertyStaffVo(propertyStaffVo);
 		
 		propertyStaffDetailInfo.setStaffArchiveVo(staffArchiveVo);
 		
 		propertyStaffDetailInfo.setCustomerVo(customerVo);
+		
+		propertyStaffDetailInfo.setManageProjects(projectIdList.toArray(new String[projectIdList.size()]));
+		
+		propertyStaffDetailInfo.setRoleIds(roleIdList.toArray(new Long[roleIdList.size()]));
 		
 		return propertyStaffDetailInfo;
 	}

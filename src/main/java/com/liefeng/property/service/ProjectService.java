@@ -1,5 +1,6 @@
 package com.liefeng.property.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import com.liefeng.property.vo.project.ProjectVo;
  * 
  * @author Huangama
  * @author levy
+ * @author 蔡少东
  * @date 2015-12-22
  */
 @Service
@@ -207,5 +209,15 @@ public class ProjectService implements IProjectService {
 	@Override
 	public List<ProjectVo> findProjectByStaffId(String staffId) {
 		return ProjectContext.build().findProjectsByStaffId(staffId);
+	}
+
+	@Override
+	public List<String> findProjectIdByStaffId(String staffId) {
+		List<ProjectVo> projectList = this.findProjectByStaffId(staffId);
+		List<String> projectIdList = new ArrayList<String>();
+		for (ProjectVo projectVo : projectList) {
+			projectIdList.add(projectVo.getId());
+		}
+		return projectIdList;
 	}
 }

@@ -37,11 +37,18 @@ public interface IProjectService {
 	public ProjectVo findProjectByFullName(String fullName);
 	
 	/**
-	 * 根据员工ID查找项目
+	 * 根据员工ID查找项目列表
 	 * @param staffId 员工ID
 	 * @return
 	 */
 	public List<ProjectVo> findProjectByStaffId(String staffId);
+	
+	/**
+	 * 根据员工ID查找项目ID列表
+	 * @param staffId 员工ID
+	 * @return
+	 */
+	public List<String> findProjectIdByStaffId(String staffId);
 
 	/**
 	 * 创建项目

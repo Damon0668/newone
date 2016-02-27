@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.sys;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.po.sys.SysRolePo;
 import com.liefeng.property.repository.sys.SysRoleRepository;
+import com.liefeng.property.vo.sys.SysRoleUserVo;
 import com.liefeng.property.vo.sys.SysRoleVo;
 
 /**
@@ -68,7 +70,7 @@ public class SysRoleContext {
 	 * 查找角色
 	 * @return
 	 */
-	public SysRoleVo findRole(){
+	public SysRoleVo get(){
 		SysRolePo sysRolePo = sysRoleRepository.findOne(id);
 		role = MyBeanUtil.createBean(sysRolePo, SysRoleVo.class);
 		return role;
@@ -103,6 +105,9 @@ public class SysRoleContext {
 		}
 	}
 	
+	/**
+	 * 删除角色
+	 */
 	public void delete() {
 		sysRoleRepository.delete(id);
 	}
@@ -128,5 +133,38 @@ public class SysRoleContext {
 	public List<SysRoleVo> findAll(){
 		String oemCode = ContextManager.getInstance().getOemCode();
 		return MyBeanUtil.createList(sysRoleRepository.findByOemCode(oemCode),SysRoleVo.class);
+	}
+	
+	/**
+	 * 根据用户ID查询用户角色列表
+	 * @param userId 用户ID
+	 * @return
+	 */
+	public List<SysRoleVo> findRolesByUserId(String userId){
+		
+		List<SysRoleUserVo> roleUserList = SysRoleUserContext.loadByUserId(userId).findRoles();
+		
+		List<SysRoleVo> roleList = new ArrayList<SysRoleVo>();
+		
+		for (SysRoleUserVo sysRoleUserVo : roleUserList) {
+			SysRoleVo role = SysRoleContext.loadById(sysRoleUserVo.getRoleId()).get();
+			roleList.add(role);
+		}
+		
+		return roleList;
+	}
+	
+	/**
+	 * 根据用户ID查询用户角色ID列表
+	 * @param userId
+	 * @return
+	 */
+	public List<Long> findRoleIdsByUserId(String userId){
+		List<SysRoleVo> roleList = this.findRolesByUserId(userId);
+		List<Long> roleIdList = new ArrayList<Long>();
+		for (SysRoleVo sysRoleVo : roleList) {
+			roleIdList.add(sysRoleVo.getId());
+		}
+		return roleIdList;
 	}
 }
