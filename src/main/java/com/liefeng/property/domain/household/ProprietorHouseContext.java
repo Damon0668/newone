@@ -35,22 +35,22 @@ public class ProprietorHouseContext {
 	/**
 	 * 业主房产信息ID
 	 */
-	protected String proprietorHouseId;
+	private String proprietorHouseId;
 	
 	/**
 	 * 所属项目ID
 	 */
-	protected String projectId;
+	private String projectId;
 	
 	/**
 	 * 房产房号
 	 */
-	protected String houseNum;
+	private String houseNum;
 	
 	/**
 	 * 业主房产信息值对象
 	 */
-	protected ProprietorHouseVo proprietorHouse;
+	private ProprietorHouseVo proprietorHouse;
 	
 	/**
 	 * 获取本类实例，每次返回一个新对象
@@ -132,7 +132,7 @@ public class ProprietorHouseContext {
 	/**
 	 * 保存业主房产信息
 	 */
-	public ProprietorHouseVo create() throws Exception {
+	public ProprietorHouseVo create() {
 		if(proprietorHouse != null) {
 			proprietorHouse.setId(UUIDGenerator.generate());
 			proprietorHouse.setOemCode(ContextManager.getInstance().getOemCode()); 
@@ -148,7 +148,7 @@ public class ProprietorHouseContext {
 	/**
 	 * 更新业主房产信息
 	 */
-	public void update() throws Exception {
+	public void update() {
 		if(proprietorHouse != null  && ValidateHelper.isNotEmptyString(proprietorHouse.getId())) {
 			
 			ProprietorHousePo proprietorHousePo = proprietorHouseRepository.findOne(proprietorHouse.getId());

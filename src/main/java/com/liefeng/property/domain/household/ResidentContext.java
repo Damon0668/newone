@@ -15,6 +15,7 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.household.ResidentBo;
@@ -97,7 +98,7 @@ public class ResidentContext {
 	 * 查询住户信息
 	 * @return 住户信息值对象
 	 */
-	public ResidentVo getResident() {
+	public ResidentVo get() {
 		if(resident == null) {
 			if(ValidateHelper.isNotEmptyString(residentId)) {
 				resident = residentQueryRepository.queryById(residentId);
@@ -117,10 +118,11 @@ public class ResidentContext {
 	public ResidentVo create() {
 		if(resident != null) {
 			resident.setId(UUIDGenerator.generate());
-			resident.setOemCode(""); // TODO 待确定后补齐
+			resident.setOemCode(ContextManager.getInstance().getOemCode()); 
 			
 			ResidentPo residentPo = MyBeanUtil.createBean(resident, ResidentPo.class);
 			residentRepository.save(residentPo);
+			logger.info("保存住户信息成功，住户信息：{}", resident);
 		}
 		
 		return resident;
@@ -131,11 +133,13 @@ public class ResidentContext {
 	 */
 	public ResidentVo update() {
 		if(resident != null && ValidateHelper.isNotEmptyString(resident.getId())) {
+			logger.info("更新住户信息，住户ID{}", resident.getId());
 			ResidentPo residentPo = residentRepository.findOne(resident.getId());
 			
 			if(residentPo != null) {
 				MyBeanUtil.copyBeanNotNull2Bean(resident, residentPo);
 				residentRepository.save(residentPo);
+				logger.info("更新住户信息成功，住户信息：{}", resident);
 				
 				resident = MyBeanUtil.createBean(residentPo, ResidentVo.class);
 			}

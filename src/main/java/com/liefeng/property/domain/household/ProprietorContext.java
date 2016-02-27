@@ -47,12 +47,12 @@ public class ProprietorContext {
 	/**
 	 * 业主信息ID
 	 */
-	protected String proprietorId;
+	private String proprietorId;
 	
 	/**
 	 * 业主信息值对象
 	 */
-	protected ProprietorVo proprietor;
+	private ProprietorVo proprietor;
 	
 	/**
 	 * 获取本类实例，每次返回一个新对象
@@ -100,7 +100,7 @@ public class ProprietorContext {
 	 * 查询业主信息
 	 * @return 业主信息值对象
 	 */
-	public ProprietorVo getProprietor() {
+	public ProprietorVo get() {
 		if(proprietor == null) {
 			ProprietorPo proprietorPo = null;
 			if(ValidateHelper.isNotEmptyString(proprietorId)) {
@@ -118,7 +118,7 @@ public class ProprietorContext {
 	/**
 	 * 保存业主信息
 	 */
-	public ProprietorVo create() throws Exception {
+	public ProprietorVo create() {
 		if(proprietor != null) {
 			proprietor.setId(UUIDGenerator.generate());
 			proprietor.setOemCode(ContextManager.getInstance().getOemCode()); 
@@ -134,7 +134,7 @@ public class ProprietorContext {
 	/**
 	 * 更新业主信息
 	 */
-	public ProprietorVo update() throws Exception {
+	public ProprietorVo update() {
 		if(proprietor != null && ValidateHelper.isNotEmptyString(proprietor.getId())) {
 			logger.info("更新业主信息，业主ID（{}）,proprietor={}", proprietor.getId(), proprietor);
 			ProprietorPo proprietorPo = proprietorRepository.findOne(proprietor.getId());
@@ -206,6 +206,22 @@ public class ProprietorContext {
 		}
 		
 		return singleHouse;
+	}
+	
+	/**
+	 * 根据项目ID和客户全局ID查询业主信息
+	 * @param projectId 项目ID
+	 * @param custGlobalId 客户全局ID
+	 * @return
+	 */
+	public ProprietorVo get(String projectId, String custGlobalId) {
+		ProprietorPo proprietorPo = proprietorRepository.findByProjectIdAndCustGlobalId(projectId, custGlobalId);
+		
+		if(proprietorPo != null) {
+			proprietor = MyBeanUtil.createBean(proprietorPo, ProprietorVo.class);
+		}
+		
+		return proprietor;
 	}
 
 	protected void setProprietorId(String proprietorId) {

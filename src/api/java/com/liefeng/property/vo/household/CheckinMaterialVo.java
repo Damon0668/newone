@@ -63,6 +63,11 @@ public class CheckinMaterialVo extends BaseValue {
 	 * 录入员工ID
 	 */
 	private String staffId;
+	
+	/**
+	 * 录取员工名字
+	 */
+	private String staffName;
 
 	/**
 	 * OEM编码
@@ -147,6 +152,14 @@ public class CheckinMaterialVo extends BaseValue {
 
 	public void setStaffId(String staffId) {
 		this.staffId = staffId;
+	}
+
+	public String getStaffName() {
+		return staffName;
+	}
+
+	public void setStaffName(String staffName) {
+		this.staffName = staffName;
 	}
 
 	public String getOemCode() {

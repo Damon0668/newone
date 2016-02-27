@@ -35,13 +35,13 @@ public interface IHouseholdService {
 	 * 保存住户信息
 	 * @param resident 住户信息值对象
 	 */
-	public void saveResident(ResidentVo resident);
+	public void saveResident(ResidentVo resident) throws Exception;
 	
 	/**
 	 * 更新住户信息
 	 * @param resident 住户信息值对象
 	 */
-	public void updateResident(ResidentVo resident);
+	public void updateResident(ResidentVo resident) throws Exception;
 	
 	/**
 	 * 分页查询业主综合信息
@@ -96,7 +96,7 @@ public interface IHouseholdService {
 	 * 
 	 * @param checkinMaterialList
 	 */
-	public void createCheckinMaterials(List<CheckinMaterialVo> checkinMaterialList) throws Exception;
+	public void saveCheckinMaterials(List<CheckinMaterialVo> checkinMaterialList) throws Exception;
 	
 	/**
 	 * 根据业主房产ID删除入住资料信息
