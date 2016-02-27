@@ -27,6 +27,7 @@
 		<result column="from" property="from" />
 		<result column="isRead" property="isRead" />
 		<result column="oem_code" property="oemCode" />
+		<result column="onwerCount" property="onwerCount" />
 	</resultMap>
 
 
@@ -47,7 +48,7 @@
 			</if>
 
 			<if test="extra.from != null and extra.from != ''">
-				AND mr.from = #{extra.form}
+				AND mr.from = #{extra.from}
 			</if>
 			
 			<if test="extra.proprietorName != null and extra.proprietorName  != ''">
@@ -123,5 +124,65 @@
 		<include refid="Example_Where_Clause" />
 		) t
 	</select>
+	
+	
+	<!-- 公摊表查询条件 -->
+	<sql id="Public_Where_Clause">
+		where 1=1 AND pb.parent_id is NULL
+		<trim suffixOverrides=",">
+			<if test="extra.projectId != null and extra.projectId != ''">
+				AND pb.project_id = #{extra.projectId}
+			</if>
 
+			<if test="extra.buildingId != null and extra.buildingId != ''">
+				AND pb.id = #{extra.buildingId}
+			</if>
+
+
+			<if test="extra.from != null and extra.from != ''">
+				AND mr.from = #{extra.from}
+			</if>
+			
+			
+		</trim>
+	</sql>
+
+	<select id="queryPublicMeterRecordByPage"  parameterType="com.liefeng.core.mybatis.vo.PagingParamVo" resultMap="BaseResultMap">
+	SELECT
+		mr.id,
+		pb.id as building_id,
+		pb.name as proprietorName,
+		pb.project_id as projectId,
+		mr.pre_num,
+		mr.curr_num,
+		mr.end_date,
+		mr.start_date,
+		mr.use_amount,
+		mr.read_date,
+		(select COUNT(ph.id) from t_proprietor_house ph,t_house h where  ph.project_id=h.project_id and h.building_id=pb.id ) as onwerCount
+	FROM
+		t_project_building pb
+	LEFT JOIN t_meter_record mr ON pb.id = mr.building_id
+	AND mr.meter_owner = 2 
+		<include refid="Example_Join_Clause" />
+		<include refid="Public_Where_Clause" />
+		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+          ${pager.mysqlQueryCondition}
+        </if>
+	</select> 
+	
+	<select id="queryPublicMeterRecordByCount"  parameterType="com.liefeng.core.mybatis.vo.PagingParamVo" resultMap="BaseResultMap">
+	select 
+	  count(1) 
+	from(
+		SELECT
+			mr.id
+			FROM
+			t_project_building pb
+			LEFT JOIN t_meter_record mr ON pb.id = mr.building_id
+			AND mr.meter_owner = 2
+			<include refid="Public_Where_Clause" />
+	) as t
+	</select> 
+	
 </mapper>   

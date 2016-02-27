@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IFeeService;
-import com.liefeng.property.bo.fee.MeterSettingBo;
 import com.liefeng.property.bo.fee.MeterRecordBo;
 import com.liefeng.property.domain.fee.FeeSettingContext;
 import com.liefeng.property.domain.fee.LadderFeeSettingContext;
@@ -52,17 +51,31 @@ public class FeeService implements IFeeService {
 		MeterRecordContext meterRecordContext = MeterRecordContext.build();
 		return meterRecordContext.listMeterRecordVo4Page(meterRecordBo,currentPage, pageSize);
 	}
+
+	@Override
+	public DataPageValue<MeterRecordVo> findPublicMeterRecord4Page(MeterRecordBo meterRecordBo,Integer currentPage,Integer pageSize) {
+		MeterRecordContext meterRecordContext = MeterRecordContext.build();
+		return meterRecordContext.listPublicMeterRecordVo4Page(meterRecordBo,currentPage, pageSize);
+	}
+	
+	@Override
+	public void createPublicMeterRecord(MeterRecordVo meterRecordVo) {
+
+		MeterRecordContext meterRecordContext = MeterRecordContext
+				.build(meterRecordVo);
+		meterRecordContext.createPublic();
+	}
 	
 	@Override
 	public MeterRecordVo getPreMeterRecord(MeterRecordVo meterRecordVo,Date date){
 		MeterRecordContext meterRecordContext = MeterRecordContext.build(meterRecordVo);
-		return meterRecordContext.getPreMeterRecord(date);
+		return meterRecordContext.getPre(date);
 	}
 	
 	@Override
 	public MeterRecordVo findMeterRecordById(String id) {
 		MeterRecordContext meterRecordContext = MeterRecordContext.loadById(id);
-		return meterRecordContext.findById();
+		return meterRecordContext.get();
 	}
 
 	@Override

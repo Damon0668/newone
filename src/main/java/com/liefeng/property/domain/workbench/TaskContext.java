@@ -102,13 +102,13 @@ public class TaskContext {
 	 * @author xhw
 	 * @date 2016年2月19日
 	 */
-	public TaskVo getTask(){
-		if(task == null){
+	public TaskVo getById() {
+		if (task == null) {
 			TaskPo taskPo = null;
-			if(ValidateHelper.isNotEmptyString(taskId)){
+			if (ValidateHelper.isNotEmptyString(taskId)) {
 				taskPo = taskRepository.findOne(taskId);
 			}
-			
+
 			if (taskPo != null) {
 				task = MyBeanUtil.createBean(taskPo, TaskVo.class);
 			}
@@ -123,37 +123,38 @@ public class TaskContext {
 	 * @date 2016年2月19日
 	 */
 	public TaskVo create() {
-		if(task != null) {
+		if (task != null) {
 			task.setId(UUIDGenerator.generate());
-            task.setOemCode(ContextManager.getInstance().getOemCode()); 
-            task.setCreateTime(new Date());
-            task.setStatus(WorkbenchConstants.TaskStatus.PENDING);
-            
-            TaskPo taskPo = MyBeanUtil.createBean(task, TaskPo.class);
-            taskRepository.save(taskPo);
-            
-            logger.info("Create task : {} success.", taskPo);
+			task.setOemCode(ContextManager.getInstance().getOemCode());
+			task.setCreateTime(new Date());
+			task.setStatus(WorkbenchConstants.TaskStatus.PENDING);
+
+			TaskPo taskPo = MyBeanUtil.createBean(task, TaskPo.class);
+			taskRepository.save(taskPo);
+
+			logger.info("Create task : {} success.", taskPo);
 		}
-		
+
 		return task;
 	}
 	
 	/**
 	 * 更新任务
-	 * @return                      
+	 * 
+	 * @return
 	 * @author xhw
 	 * @date 2016年2月20日
 	 */
 	public TaskVo update() {
-		if(task != null && ValidateHelper.isNotEmptyString(task.getId())) {
+		if (task != null && ValidateHelper.isNotEmptyString(task.getId())) {
 			TaskPo taskPo = taskRepository.findOne(task.getId());
-			
+
 			MyBeanUtil.copyBeanNotNull2Bean(task, taskPo);
 			taskRepository.save(taskPo);
-			
+
 			logger.info("Update task of id: {} success.", task.getId());
 		}
-		
+
 		return task;
 	}
 	
@@ -166,19 +167,19 @@ public class TaskContext {
 	 * @author xhw
 	 * @date 2016年2月24日 上午10:42:58
 	 */
-	public Long findCountByStatusAndStaffId(String status, String staffId){
+	public Long findCountByStatusAndStaffId(String status, String staffId) {
 		HashMap<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("creatorId", staffId);
 		paramMap.put("staffId", staffId);
 		paramMap.put("status", status);
-		
+
 		PagingParamVo param = new PagingParamVo();
 		param.setExtra(paramMap);
-		
+
 		Long count = taskQueryRepository.queryByCount(param);
 		count = (count == null ? 0 : count);
 		logger.info("总数量：count=" + count);
-		
+
 		return count;
 	}
 
@@ -192,26 +193,26 @@ public class TaskContext {
 	 * @author xhw
 	 * @date 2016年2月24日 上午10:26:47
 	 */
-	public DataPageValue<TaskVo> findTask4Page(String status, String staffId, Integer page, Integer size) {
+	public DataPageValue<TaskVo> findByPage(String status, String staffId, Integer page, Integer size) {
 		HashMap<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("creatorId", staffId);
 		paramMap.put("staffId", staffId);
 		paramMap.put("status", status);
-		
+
 		PagingParamVo param = new PagingParamVo();
 		param.setExtra(paramMap);
 		param.setPage(page);
 		param.setPageSize(size);
-		
+
 		Long count = taskQueryRepository.queryByCount(param);
 		count = (count == null ? 0 : count);
 		logger.info("总数量：count=" + count);
-		
+
 		// 设置数据总行数，用于计算偏移量
 		param.getPager().setRowCount(count);
 		List<TaskVo> list = taskQueryRepository.queryByPage(param);
 		DataPageValue<TaskVo> returnPage = new DataPageValue<TaskVo>(list, count, size, page);
-		
+
 		return returnPage;
 	}
 	
@@ -222,18 +223,19 @@ public class TaskContext {
 	 * @author xhw
 	 * @date 2016年2月25日 上午11:23:46
 	 */
-	public List<TaskVo> findTasks4ByStaffId(String staffId){
+	public List<TaskVo> findByStaffIdAndSize(String staffId, Integer size) {
 		HashMap<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("staffId", staffId);
+		paramMap.put("size", String.valueOf(size));
 
-		return taskQueryRepository.queryTask4ByStaffId(paramMap);
+		return taskQueryRepository.queryTaskByStaffIdAndSize(paramMap);
 	}
 
-	public void setTaskId(String taskId) {
+	protected void setTaskId(String taskId) {
 		this.taskId = taskId;
 	}
 
-	public void setTask(TaskVo task) {
+	protected void setTask(TaskVo task) {
 		this.task = task;
 	}
 }

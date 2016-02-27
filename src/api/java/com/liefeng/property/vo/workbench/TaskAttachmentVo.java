@@ -2,9 +2,6 @@ package com.liefeng.property.vo.workbench;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-
 import com.liefeng.core.entity.BaseValue;
 
 /**
@@ -51,6 +48,11 @@ public class TaskAttachmentVo extends BaseValue{
 	 * 源文件名
 	 */
 	private String fileName;
+	
+	/**
+	 * 上传人姓名
+	 */
+	private String creatorName;
 
 	public String getId() {
 		return id;
@@ -107,5 +109,13 @@ public class TaskAttachmentVo extends BaseValue{
 
 	public void setFileUrl(String fileUrl) {
 		this.fileUrl = fileUrl;
+	}
+
+	public String getCreatorName() {
+		return creatorName;
+	}
+
+	public void setCreatorName(String creatorName) {
+		this.creatorName = creatorName;
 	}
 }

@@ -17,7 +17,6 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IFeeService;
 import com.liefeng.property.bo.fee.MeterRecordBo;
 import com.liefeng.property.exception.FeeException;
-import com.liefeng.property.po.fee.MeterRecordPo;
 import com.liefeng.property.vo.fee.FeeSettingVo;
 import com.liefeng.property.vo.fee.LadderFeeSettingVo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
@@ -84,11 +83,58 @@ public class FeeServiceTest {
 		meterRecordBo.setFrom("1");
 		System.out.println(feeService.findMeterRecord4Page(meterRecordBo, 1, 30));
 	}
+	
+	@Test
+	public void listPublicMeterRecord(){
+		try{
+		MeterRecordBo meterRecordBo= new MeterRecordBo();
+		meterRecordBo.setStartDate(TimeUtil.getNowTime("yyyy-MM-dd"));
+		//meterRecordBo.setFrom("1");
+		System.out.println(feeService.findPublicMeterRecord4Page(meterRecordBo, 1, 30));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 
 	@Test
 	public void findMeterRecordById(){
 		MeterRecordVo meterRecordVo = feeService.findMeterRecordById("4028895e531356950153137769220010");
 		System.out.println(meterRecordVo);
+	}
+	
+	/**
+	 * 保存抄表
+	 */
+	@Test
+	public void createPublicMeterRecord() {
+
+		MeterRecordVo meterRecordVo = new MeterRecordVo();
+
+		ContextManager.getInstance().setOemCode("1");
+		meterRecordVo.setBuildingId("1123456789");
+		meterRecordVo.setCurrNum(12.00);
+		
+		meterRecordVo.setStartDate(TimeUtil.getDate(new Date()));
+		meterRecordVo.setEndDate(TimeUtil.getDate(new Date()));
+		meterRecordVo.setReadDate(TimeUtil.getDate(new Date()));
+		
+		meterRecordVo.setFloorId("2");
+		meterRecordVo.setFrom("1");
+		meterRecordVo.setHouseNum("A0101");
+		meterRecordVo.setId(UUIDGenerator.generate());
+		meterRecordVo.setMeterOwner("2");
+		meterRecordVo.setMeterType("4");
+		meterRecordVo.setCurrNum(40.00);
+		meterRecordVo.setProjectId("0000000052a7943f0152a7943fc00000");
+		meterRecordVo.setPropertyId("1");
+		meterRecordVo.setProprietorName("张三");
+
+		meterRecordVo.setStaffId("1123");
+		try {
+			feeService.createPublicMeterRecord(meterRecordVo);
+		} catch (FeeException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	/**

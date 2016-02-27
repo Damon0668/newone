@@ -24,8 +24,10 @@ import com.liefeng.property.error.FeeErrorCode;
 import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.MeterRecordPo;
 import com.liefeng.property.po.fee.MeterSettingPo;
+import com.liefeng.property.po.project.ProjectBuildingPo;
 import com.liefeng.property.repository.MeterRecordRepository;
 import com.liefeng.property.repository.MeterSettingRepository;
+import com.liefeng.property.repository.ProjectBuildingRepository;
 import com.liefeng.property.repository.mybatis.MeterRecordQueryRepository;
 import com.liefeng.property.vo.fee.MeterRecordVo;
 
@@ -50,8 +52,10 @@ public class MeterRecordContext {
 	
 	@Autowired
 	private MeterRecordQueryRepository meterRecordQueryRepository;
-	
 
+	@Autowired 
+	private ProjectBuildingRepository projectBuildingRepository;
+	
 	/**
 	 * 抄表记录ID
 	 */
@@ -152,7 +156,7 @@ public class MeterRecordContext {
 			
 			//判断本月是否已抄表
 			MeterRecordPo currentMeterRecordPo = meterRecordRepository
-					.getPreMeterRecordAndTypeAndMeterOwner(meterRecord.getProjectId(),
+					.getPreAndTypeAndMeterOwner(meterRecord.getProjectId(),
 							meterRecord.getHouseNum(),meterRecord.getMeterType(),meterRecord.getMeterOwner(),new Date());
 			if(currentMeterRecordPo != null){
 				throw new FeeException(FeeErrorCode.METERRECORD_CURRENT_MONTH_EXIST);
@@ -163,7 +167,7 @@ public class MeterRecordContext {
 				Date preDate=TimeUtil.getDayBeforeByMonth(new Date(), 1);
 				
 				MeterRecordPo preMeterRecordPo = meterRecordRepository
-						.getPreMeterRecordAndTypeAndMeterOwner(meterRecord.getProjectId(),
+						.getPreAndTypeAndMeterOwner(meterRecord.getProjectId(),
 									meterRecord.getHouseNum(),meterRecord.getMeterType(),meterRecord.getMeterOwner(),preDate);
 
 				if (preMeterRecordPo != null) {
@@ -221,12 +225,18 @@ public class MeterRecordContext {
 	 * @param date 当前日期
 	 * @return
 	 */
-	public MeterRecordVo getPreMeterRecord(Date date){
+	public MeterRecordVo getPre(Date date){
 		Date preDate=TimeUtil.getDayBeforeByMonth(date, 1);
-		
-		MeterRecordPo preMeterRecordPo = meterRecordRepository
-				.getPreMeterRecordAndTypeAndMeterOwner(meterRecord.getProjectId(),
+		MeterRecordPo preMeterRecordPo = new MeterRecordPo();
+		if(meterRecord.getMeterOwner().equals("1")){
+			preMeterRecordPo = meterRecordRepository
+				.getPreAndTypeAndMeterOwner(meterRecord.getProjectId(),
 							meterRecord.getHouseNum(),meterRecord.getMeterType(),meterRecord.getMeterOwner(),preDate);
+		}else if(meterRecord.getMeterOwner().equals("2")){
+			preMeterRecordPo = meterRecordRepository
+					.getPrePublicAndTypeAndMeterOwner(meterRecord.getProjectId(),
+								meterRecord.getBuildingId(),meterRecord.getMeterType(),meterRecord.getMeterOwner(),preDate);
+		}
 		return MyBeanUtil.createBean(preMeterRecordPo, MeterRecordVo.class) ;
 	}
 	
@@ -234,7 +244,7 @@ public class MeterRecordContext {
 	 * 根据id获取
 	 * @return
 	 */
-	public MeterRecordVo findById(){
+	public MeterRecordVo get(){
 		MeterRecordPo meterRecordPo=meterRecordRepository.findOne(meterRecordId);
 		return MyBeanUtil.createBean(meterRecordPo, MeterRecordVo.class) ;
 	}
@@ -246,7 +256,7 @@ public class MeterRecordContext {
 			throw new FeeException(FeeErrorCode.METERSETTING_ISNULL);
 		}
 		
-		MeterRecordPo meterRecordPo=meterRecordRepository.getOne(meterRecord.getId());
+		MeterRecordPo meterRecordPo=meterRecordRepository.findOne(meterRecord.getId());
 		meterRecordPo.setCurrNum(meterRecord.getCurrNum());
 		meterRecordPo.setReadDate(meterRecord.getReadDate());
 		
@@ -261,7 +271,98 @@ public class MeterRecordContext {
 		
 		meterRecordRepository.save(meterRecordPo);
 	}
+	// TODO 公摊
+	
+	/**
+	 * 公摊抄表列表
+	 * @return
+	 */
+	public DataPageValue<MeterRecordVo> listPublicMeterRecordVo4Page(MeterRecordBo meterRecordBo, Integer currentPage,Integer pageSize){
+		
+		Map<String, String> extra = MyBeanUtil.bean2Map(meterRecordBo);
+		
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		param.setPage(currentPage);
+		param.setPageSize(pageSize);
+		
+		Long total = meterRecordQueryRepository.queryPublicMeterRecordByCount(param);
+		total = (total == null ? 0 : total);
+		logger.info("总数量：total=" + total);
+	
+	//	param.getPager().setRowCount(total);
+		
+		List<MeterRecordVo> meterRecordVos = meterRecordQueryRepository.queryPublicMeterRecordByPage(param);
+		return new DataPageValue<MeterRecordVo>(meterRecordVos, total, pageSize, currentPage);
+	}
+	
+	/**
+	 * 创建公摊抄表记录
+	 */
+	public void createPublic() throws LiefengException {
+		if (meterRecord != null) {
+			//判断当前日期是否可以抄表
+			MeterSettingPo meterSettingPo=meterSettingRepository.findByProjectIdAndType(meterRecord.getProjectId(),meterRecord.getMeterType());
+			if(meterSettingPo == null){
+				throw new FeeException(FeeErrorCode.METERSETTING_ISNULL);
+			}
 
+			if(meterSettingPo.getStartDay()>TimeUtil.getCurrentDay()
+				||meterSettingPo.getStartDay()+meterSettingPo.getLastingDay()-1<TimeUtil.getCurrentDay()){
+				throw new FeeException(FeeErrorCode.METERRECORD_CURRENT_DATE_CANNOT_CREATE);
+			}
+			//读数大于回程判断
+			if(meterRecord.getCurrNum()>meterSettingPo.getModNum()){
+				throw new FeeException(FeeErrorCode.METERRECORD_CURRENT_NUMBER_ERRER);
+			}
+			
+			//判断本月是否已抄表
+			MeterRecordPo currentMeterRecordPo = meterRecordRepository
+					.getPrePublicAndTypeAndMeterOwner(meterRecord.getProjectId(),
+							meterRecord.getBuildingId(),meterRecord.getMeterType(),meterRecord.getMeterOwner(),new Date());
+			if(currentMeterRecordPo != null){
+				throw new FeeException(FeeErrorCode.METERRECORD_CURRENT_MONTH_EXIST);
+			}
+
+			//获取上个月读数操作
+			if (meterRecord.getPreNum() == null) {
+				Date preDate=TimeUtil.getDayBeforeByMonth(new Date(), 1);
+				
+				MeterRecordPo preMeterRecordPo = meterRecordRepository
+						.getPrePublicAndTypeAndMeterOwner(meterRecord.getProjectId(),
+									meterRecord.getBuildingId(),meterRecord.getMeterType(),meterRecord.getMeterOwner(),preDate);
+
+				if (preMeterRecordPo != null) {
+					meterRecord.setPreNum(preMeterRecordPo.getCurrNum());
+				} else {
+					meterRecord.setPreNum(0.00);
+				}		
+			}
+			
+			//用量计算 上次读数大于本期读数将计算回程, 否者按本次读数减上次读数
+			if(meterRecord.getPreNum()>meterRecord.getCurrNum()){
+				//回程-上次读数+本次读数
+				Double useAmount = meterSettingPo.getModNum()-meterRecord.getPreNum()+meterRecord.getCurrNum();
+				meterRecord.setUseAmount(useAmount);
+			}else{ 
+				meterRecord.setUseAmount(meterRecord.getCurrNum()-meterRecord.getPreNum());
+			}
+			
+			ProjectBuildingPo projectBuildingPo = projectBuildingRepository.findOne(meterRecord.getBuildingId());
+			
+			meterRecord.setProprietorName(projectBuildingPo.getName());
+			meterRecord.setStartDate(TimeUtil.format(TimeUtil.format(TimeUtil.getFirstDayOfCurrMonth(),"yyyy-MM-dd"),"yyyy-MM-dd"));
+			meterRecord.setEndDate(TimeUtil.format(TimeUtil.format(TimeUtil.getLastDayOfCurrMonth(),"yyyy-MM-dd"),"yyyy-MM-dd"));
+			meterRecord.setId(UUIDGenerator.generate());
+			meterRecord.setCreateTime(new Date());
+            meterRecord.setOemCode(ContextManager.getInstance().getOemCode());
+			MeterRecordPo meterRecordPo = MyBeanUtil.createBean(meterRecord,
+					MeterRecordPo.class);
+			meterRecordRepository.save(meterRecordPo);
+		}
+	}
+	
+	
 	protected void setMeterRecord(MeterRecordVo meterRecord) {
 		this.meterRecord = meterRecord;
 	}

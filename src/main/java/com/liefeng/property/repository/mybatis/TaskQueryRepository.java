@@ -32,12 +32,12 @@ public interface TaskQueryRepository extends BaseRepository<TaskVo>{
 	public Long queryByCount(Map<String, String> paramMap);
 	
 	/**
-	 * 获取与员工有关的最近4条待处理、待审核的任务
-	 * @param paramMap {staffId：接收人ID}
+	 * 获取与员工有关的最近几条待处理、待审核的任务
+	 * @param paramMap {staffId：接收人ID， size：数量}
 	 * @return                      
 	 * @author xhw
 	 * @date 2016年2月25日 上午11:57:13
 	 */
-	public List<TaskVo> queryTask4ByStaffId(Map<String, String> paramMap);
+	public List<TaskVo> queryTaskByStaffIdAndSize(Map<String, String> paramMap);
 	
 }

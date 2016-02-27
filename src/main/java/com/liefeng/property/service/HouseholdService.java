@@ -209,14 +209,25 @@ public class HouseholdService implements IHouseholdService {
 		
 		return checkinMaterialContext.getList();
 	}
+	
+	/**
+	 * 批量保存入住资料信息
+	 */
+	@Override
+	public void createCheckinMaterials(List<CheckinMaterialVo> checkinMaterialList) throws Exception {
+		CheckinMaterialContext checkinMaterialContext = CheckinMaterialContext.build();
+		
+		checkinMaterialContext.create(checkinMaterialList);
+	}
 
 	/**
 	 * 根据业主房产ID删除入住资料信息
 	 */
 	@Override
-	public void deleteByProprietorHouseId(String proprietorHouseId) {
+	public void deleteByProprietorHouseId(String proprietorHouseId) throws Exception {
 		CheckinMaterialContext checkinMaterialContext = CheckinMaterialContext.loadByProprietorHouseId(proprietorHouseId);
 		
 		checkinMaterialContext.delete();
 	}
+
 }
