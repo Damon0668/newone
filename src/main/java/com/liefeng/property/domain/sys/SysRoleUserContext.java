@@ -67,7 +67,7 @@ public class SysRoleUserContext {
 	 * @param roleIds
 	 */
 	@Transactional(rollbackOn=Exception.class)
-	public void gruntRoles(Long[] roleIds){
+	public void grantRoles(Long[] roleIds){
 		
 		sysRoleUserRepository.deleteByUserId(userId);
 		

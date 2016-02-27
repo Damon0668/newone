@@ -25,6 +25,7 @@ import com.liefeng.property.domain.staff.ManageProjectContext;
 import com.liefeng.property.domain.staff.PropertyDepartmentContext;
 import com.liefeng.property.domain.staff.PropertyStaffContext;
 import com.liefeng.property.domain.staff.StaffArchiveContext;
+import com.liefeng.property.domain.staff.StaffContactPrivilegeContext;
 import com.liefeng.property.domain.sys.SysRoleContext;
 import com.liefeng.property.error.StaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
@@ -88,10 +89,13 @@ public class PropertyStaffService implements IPropertyStaffService {
 		logger.info("createStaff StaffArchive create success");
 
 		//员工授权
-		sysSecurityService.gruntRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
+		sysSecurityService.grantRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
 		
 		//员工管理相关项目
-		ManageProjectContext.build(propertyStaffVo.getId()).create(propertyStaffDetailInfo.getManageProjects());
+		ManageProjectContext.build(propertyStaffVo.getId()).grantManageProject(propertyStaffDetailInfo.getManageProjects());
+		
+		//员工通讯录授权
+		StaffContactPrivilegeContext.loadByStaffId(propertyStaffVo.getId()).grantPrivilege(propertyStaffDetailInfo.getContactProjects());
 		
 		logger.info("createStaff sendTccMsg event = {} , content = {}", TccBasicEvent.CREATE_CUSTOMER, customerVo);
 		
@@ -128,10 +132,13 @@ public class PropertyStaffService implements IPropertyStaffService {
 		StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).update();
 				
 		//员工授权
-		sysSecurityService.gruntRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
+		sysSecurityService.grantRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
 				
 		//员工管理相关项目
-		ManageProjectContext.build(propertyStaffVo.getId()).create(propertyStaffDetailInfo.getManageProjects());
+		ManageProjectContext.build(propertyStaffVo.getId()).grantManageProject(propertyStaffDetailInfo.getManageProjects());
+		
+		//员工通讯录授权
+		StaffContactPrivilegeContext.loadByStaffId(propertyStaffVo.getId()).grantPrivilege(propertyStaffDetailInfo.getContactProjects());
 				
 		logger.info("updateStaff sendTccMsg event = {} , content = {}", TccBasicEvent.UPDATE_CUSTOMER, customerVo);
 		
@@ -173,6 +180,9 @@ public class PropertyStaffService implements IPropertyStaffService {
 		//员工角色列表
 		List<Long> roleIdList = SysRoleContext.build().findRoleIdsByUserId(propertyStaffVo.getId());
 		
+		//通讯录权限
+		List<String> contactPrivilegeDeptIds = StaffContactPrivilegeContext.loadByStaffId(propertyStaffVo.getId()).findContactPrivilegeToDeptIds();
+		
 		propertyStaffDetailInfo.setPropertyStaffVo(propertyStaffVo);
 		
 		propertyStaffDetailInfo.setStaffArchiveVo(staffArchiveVo);
@@ -182,6 +192,8 @@ public class PropertyStaffService implements IPropertyStaffService {
 		propertyStaffDetailInfo.setManageProjects(projectIdList.toArray(new String[projectIdList.size()]));
 		
 		propertyStaffDetailInfo.setRoleIds(roleIdList.toArray(new Long[roleIdList.size()]));
+		
+		propertyStaffDetailInfo.setContactProjects(contactPrivilegeDeptIds.toArray(new String[contactPrivilegeDeptIds.size()]));
 		
 		return propertyStaffDetailInfo;
 	}
