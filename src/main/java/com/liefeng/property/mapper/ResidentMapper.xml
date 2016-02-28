@@ -51,6 +51,19 @@
 	<if test="extra.residentId != null and extra.residentId != ''" >
 	    AND a.id =  #{extra.residentId}
 	</if>
+	
+	<if test="extra.oemCode != null and extra.oemCode != ''" >
+	    AND a.oem_code =  #{extra.oemCode}
+	</if>
+	
+	<if test="extra.oemCode != null and extra.oemCode != ''" >
+	    AND a.oem_code =  #{extra.oemCode}
+	</if>
+	
+	<if test="extra.custGlobalId != null and extra.custGlobalId != ''" >
+	    AND a.custGlobalId =  #{extra.custGlobalId}
+	</if>
+	
 </trim>
 </sql>
 
@@ -123,6 +136,19 @@ FROM
 	      ON a.cust_global_id = b.global_id
 	  WHERE
 	      a.id = #{residentId}
+</select>
+
+
+<select id="queryByCustGlobalIdAndProjectId" resultMap="BaseResultMap">
+	  SELECT
+	      a.id AS id,
+	      a.cust_global_id as custGlobalId
+	  FROM
+	      property.t_resident a 
+	      LEFT JOIN property.t_house b
+	      ON b.id = a.house_id
+	  WHERE
+	      a.custGlobalId = #{extra.custGlobalId} AND b.project_id = #{extra.projectId}
 </select>
 
 </mapper>   

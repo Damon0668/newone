@@ -1,6 +1,7 @@
 package com.liefeng.property.domain.household;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -110,6 +111,23 @@ public class ResidentContext {
 		}
 		
 		return resident;
+	}
+	
+	/**
+	 * 根据项目ID和客户全局ID获取住户信息
+	 * @param projectId 项目ID
+	 * @param custGlobalId 客户全局ID
+	 * @return 住户信息
+	 */
+	public ResidentVo get(String projectId, String custGlobalId) {
+		
+		PagingParamVo pagingParamVo = new PagingParamVo();
+		Map<String, String> extra = new HashMap<String ,String>();
+		extra.put("projectId", projectId);
+		extra.put("custGlobalId", custGlobalId);
+		pagingParamVo.setExtra(extra);
+		
+		return residentQueryRepository.queryByCustGlobalIdAndProjectId(pagingParamVo);
 	}
 	
 	/**

@@ -17,6 +17,7 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
@@ -28,6 +29,7 @@ import com.liefeng.property.domain.household.CheckinMaterialContext;
 import com.liefeng.property.domain.household.ProprietorContext;
 import com.liefeng.property.domain.household.ProprietorHouseContext;
 import com.liefeng.property.domain.household.ResidentContext;
+import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.error.HouseholdErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
@@ -35,6 +37,7 @@ import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
 import com.liefeng.property.vo.household.ResidentVo;
+import com.liefeng.property.vo.project.HouseVo;
 
 /**
  * household包相关表服务类
@@ -61,7 +64,7 @@ public class HouseholdService implements IHouseholdService {
 	 */
 	@Override
 	@Transactional(rollbackOn=Exception.class)
-	public void saveProprietor(ProprietorSingleHouseVo singleHouse) throws Exception {
+	public void saveProprietor(ProprietorSingleHouseVo singleHouse) throws LiefengException {
 		// 校验信息
 		validateProprietor(singleHouse);
 		
@@ -113,7 +116,7 @@ public class HouseholdService implements IHouseholdService {
 	 */
 	@Override
 	@Transactional(rollbackOn=Exception.class)
-	public void updatePropritor(ProprietorSingleHouseVo singleHouse) throws Exception  {
+	public void updatePropritor(ProprietorSingleHouseVo singleHouse) throws LiefengException  {
 		
 		// 校验信息
 		validateProprietor(singleHouse);
@@ -140,7 +143,7 @@ public class HouseholdService implements IHouseholdService {
 		// 校验用户信息
 		UserVo user = checkService.updateUserCheck(newUser);
 		
-		// 发送Tcc消息，更新用户信息
+		// 发送TCC消息，更新用户信息
 		tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_USER, user.toString());
 	}
 	
@@ -148,7 +151,7 @@ public class HouseholdService implements IHouseholdService {
 	 * 保存住户信息
 	 */
 	@Override
-	public void saveResident(ResidentVo resident) throws Exception {
+	public void saveResident(ResidentVo resident) throws LiefengException {
 		
 		// 校验信息
 		validateResident(resident);
@@ -159,9 +162,21 @@ public class HouseholdService implements IHouseholdService {
 		customer.setMobile(resident.getMobile());
 		customer = checkService.createCustomerCheck(customer);
 		
-		// TODO 唯一性校验
-		ResidentContext residentContext = ResidentContext.build(resident);
-		resident = residentContext.create();
+		// 校验住户是否已存在
+		HouseContext houseContext = HouseContext.loadById(resident.getHouseId());
+		HouseVo house = houseContext.get();
+		ResidentContext residentContext = ResidentContext.build();
+		ResidentVo existedResident = residentContext.get(house.getProjectId(), customer.getGlobalId());
+		if(existedResident == null) { // 新建住户
+			resident.setCustGlobalId(customer.getGlobalId());
+			residentContext = ResidentContext.build(resident);
+			residentContext.create();
+		} else { // 更新住户
+			resident.setId(existedResident.getId());
+			resident.setCustGlobalId(customer.getGlobalId());
+			residentContext = ResidentContext.build(resident);
+			residentContext.create();
+		}
 		
 		// 后台默认创建的用户信息
 		UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.RESIDENT);
@@ -182,7 +197,7 @@ public class HouseholdService implements IHouseholdService {
 	 * 更新住户信息
 	 */
 	@Override
-	public void updateResident(ResidentVo resident) throws Exception {
+	public void updateResident(ResidentVo resident) throws LiefengException {
 		// 校验信息
 		validateResident(resident);
 		
@@ -204,7 +219,6 @@ public class HouseholdService implements IHouseholdService {
 		
 		// 发送Tcc消息，更新用户信息
 		tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_USER, user.toString());
-		
 		
 	}
 
@@ -289,7 +303,7 @@ public class HouseholdService implements IHouseholdService {
 	 * 根据业主房产ID删除入住资料信息
 	 */
 	@Override
-	public void deleteByProprietorHouseId(String proprietorHouseId) throws Exception {
+	public void delCheckinMaterialByProprietorHouseId(String proprietorHouseId) throws Exception {
 		CheckinMaterialContext checkinMaterialContext = CheckinMaterialContext.loadByProprietorHouseId(proprietorHouseId);
 		
 		checkinMaterialContext.delete();

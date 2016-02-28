@@ -142,7 +142,7 @@ public class HouseContext {
 	 * 获取房产信息
 	 * @return 房产信息值对象
 	 */
-	public HouseVo getHouse() {
+	public HouseVo get() {
 		if(house == null) {
 			HousePo housePo = null;
 			// 根据房产ID查询

@@ -3,6 +3,7 @@ package com.liefeng.intf.property;
 import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
@@ -22,26 +23,26 @@ public interface IHouseholdService {
 	 * 
 	 * @param singleHouse 业主单个房产信息对象
 	 */
-	public void saveProprietor(ProprietorSingleHouseVo singleHouse) throws Exception;
+	public void saveProprietor(ProprietorSingleHouseVo singleHouse) throws LiefengException;
 	
 	/**
 	 * 更新业主信息
 	 * 
 	 * @param singleHouse 业主单个房产信息对象
 	 */
-	public void updatePropritor(ProprietorSingleHouseVo singleHouse) throws Exception;
+	public void updatePropritor(ProprietorSingleHouseVo singleHouse) throws LiefengException;
 	
 	/**
 	 * 保存住户信息
 	 * @param resident 住户信息值对象
 	 */
-	public void saveResident(ResidentVo resident) throws Exception;
+	public void saveResident(ResidentVo resident) throws LiefengException;
 	
 	/**
 	 * 更新住户信息
 	 * @param resident 住户信息值对象
 	 */
-	public void updateResident(ResidentVo resident) throws Exception;
+	public void updateResident(ResidentVo resident) throws LiefengException;
 	
 	/**
 	 * 分页查询业主综合信息
@@ -93,7 +94,7 @@ public interface IHouseholdService {
 	public List<CheckinMaterialVo> getCheckinMaterialByProprietorHouseId(String proprietorHouseId);
 	
 	/**
-	 * 
+	 * 批量保存入住资料
 	 * @param checkinMaterialList
 	 */
 	public void saveCheckinMaterials(List<CheckinMaterialVo> checkinMaterialList) throws Exception;
@@ -102,5 +103,6 @@ public interface IHouseholdService {
 	 * 根据业主房产ID删除入住资料信息
 	 * @param proprietorHouseId 业主房产ID
 	 */
-	public void deleteByProprietorHouseId(String proprietorHouseId) throws Exception;
+	public void delCheckinMaterialByProprietorHouseId(String proprietorHouseId) throws Exception;
+	
 }
