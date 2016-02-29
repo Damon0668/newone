@@ -121,6 +121,11 @@ public class NoticeVo extends BaseValue{
 	 * 接收通知的业主信息
 	 */
 	private String proprietorMessage;
+	
+	/**
+	 * 创建人名称
+	 */
+	private String creatorName;
 
 	public String getId() {
 		return id;
@@ -304,5 +309,13 @@ public class NoticeVo extends BaseValue{
 
 	public void setProprietorMessage(String proprietorMessage) {
 		this.proprietorMessage = proprietorMessage;
+	}
+
+	public String getCreatorName() {
+		return creatorName;
+	}
+
+	public void setCreatorName(String creatorName) {
+		this.creatorName = creatorName;
 	}
 }

@@ -85,4 +85,32 @@ public class WorkbenchConstants {
 		 */
 		public static final String ARCHIVED = "5";
 	}
+	
+	/**
+	 * 通知排序类型
+	 * @author xhw
+	 * @date 2016年2月29日上午11:56:07
+	 */
+	public static interface NoticeOrderBy {
+		/**
+		 * 创建时间
+		 */
+		public static final String CREATETIME = "t.create_time";
+		
+		/**
+		 * 审核时间
+		 */
+		public static final String CHECKTIME= "t.review_time";
+		
+		/**
+		 * 发布时间
+		 */
+		public static final String PUBLISHTIME = "t.publish_time";
+		
+		/**
+		 * 归档时间
+		 */
+		public static final String ARCHIVETIME = "t.archive_time";
+		
+	}
 }

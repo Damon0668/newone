@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.liefeng.Application;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
 import com.liefeng.property.vo.workbench.TaskAttachmentVo;
@@ -287,5 +288,52 @@ public class WorkbenchContextTest {
 	@Test
 	public void deleteNoticePrivilegeByNoticeId(){
 		workbenchService.deleteNoticePrivilegeByNoticeId("402889d2531ceaec01531ceaec420000");
+	}
+	/**
+	 * 获取通知的总数
+	 *                       
+	 * @author xhw
+	 * @date 2016年2月29日 上午11:39:20
+	 */
+	@Test
+	public void queryNoticeCount(){
+		Long count = workbenchService.findNoticeCount("1", "", "0000000052a7943f0152a7943fc00000");
+		System.out.println(count);
+	}
+	
+	/**
+	 * 查找通知（分页）
+	 *                       
+	 * @author xhw
+	 * @date 2016年2月29日 上午11:48:12
+	 */
+	@Test
+	public void queryNoticeBypage(){
+		DataPageValue page  = workbenchService.findNoticeByPage("1", "", "0000000052a7943f0152a7943fc00000", WorkbenchConstants.NoticeOrderBy.CREATETIME, 1, 10);
+		System.out.println(page);
+	}
+	
+	/**
+	 * 查找已发布通知的总数
+	 *                       
+	 * @author xhw
+	 * @date 2016年2月29日 下午2:43:58
+	 */
+	@Test
+	public void queryNoticeCountPulished(){
+		Long count = workbenchService.findNoticeCountOfPublished("40282081531cf49b01531d3f4e1c0006", "0000000052a7943f0152a7943fc00000", "402881fb530cd2a501530cd2a5580000");
+		System.out.println(count);
+	}
+	
+	/**
+	 * 查找已发布通知(分页)
+	 *                       
+	 * @author xhw
+	 * @date 2016年2月29日 下午2:53:35
+	 */
+	@Test
+	public void queryNoticeBypageOfPublished(){
+		DataPageValue page  = workbenchService.findNoticeByPageOfPublished("40282081531cf49b01531d3f4e1c0006", "0000000052a7943f0152a7943fc00000", "402881fb530cd2a501530cd2a5580000", 1, 30);
+		System.out.println(page);
 	}
 }

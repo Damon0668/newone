@@ -244,5 +244,36 @@ public class WorkbenchService implements IWorkbenchService {
 		 noticePrivilegeContext.deleteByNoticeId();
 	}
 
+	@Override
+	public Long findNoticeCount(String status, String staffId,
+			String manageProject) {
+		NoticeContext noticeContext = NoticeContext.build();
+		
+		return noticeContext.queryByCount(status, staffId, manageProject);
+	}
+
+	@Override
+	public DataPageValue<NoticeVo> findNoticeByPage(String status, String staffId, String manageProject, String orderBy, Integer page, Integer size) {
+		NoticeContext noticeContext = NoticeContext.build();
+		
+		return noticeContext.findByPage(status, staffId, manageProject, orderBy, page, size);
+	}
+
+	@Override
+	public Long findNoticeCountOfPublished(String staffId,
+			String manageProject, String deptId) {
+		NoticeContext noticeContext = NoticeContext.build();
+		
+		return noticeContext.queryByCountOfPublished(staffId, manageProject, deptId);
+	}
+
+	@Override
+	public DataPageValue<NoticeVo> findNoticeByPageOfPublished(String staffId, String manageProject, String deptId, Integer page,
+			Integer size) {
+		NoticeContext noticeContext = NoticeContext.build();
+		
+		return noticeContext.findByPageOfPublished(staffId, manageProject, deptId, page, size);
+	}
+
 
 }
