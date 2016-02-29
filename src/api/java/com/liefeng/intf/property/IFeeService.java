@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
+import com.liefeng.property.bo.fee.FeeItemBo;
 import com.liefeng.property.bo.fee.MeterRecordBo;
+import com.liefeng.property.vo.fee.FeeItemVo;
 import com.liefeng.property.vo.fee.FeeSettingVo;
 import com.liefeng.property.vo.fee.LadderFeeSettingVo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
@@ -229,6 +231,36 @@ public interface IFeeService {
 	 * @param projectId
 	 */
 	public void createPolluFee(String projectId);
+
+	/**
+	 * 根据项目Id获取所有要收费的费用项
+	 * @param projectId
+	 * @return
+	 */
+	public List<FeeSettingVo> findFeeSettingByProjectId(String projectId);
+
+	/**
+	 * 费用列表
+	 * @param feeItemBo
+	 * @param currentPage
+	 * @param pageSize
+	 * @return
+	 */
+	public DataPageValue<FeeItemVo> getFeeItem(FeeItemBo feeItemBo,
+			Integer currentPage, Integer pageSize);
+
+	/**
+	 * 获取当个费用项
+	 * @param feeItemBo
+	 * @return
+	 */
+	public FeeItemVo findFeeItem(FeeItemBo feeItemBo);
+
+	/**
+	 * 费用提醒
+	 */
+	public DataPageValue<FeeItemVo> findAllFeeItem(FeeItemBo feeItemBo,
+			Integer currentPage, Integer pageSize);
 
 
 

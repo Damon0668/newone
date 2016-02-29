@@ -15,9 +15,11 @@ import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IFeeService;
+import com.liefeng.property.bo.fee.FeeItemBo;
 import com.liefeng.property.bo.fee.MeterRecordBo;
 import com.liefeng.property.constant.FeeConstants;
 import com.liefeng.property.exception.FeeException;
+import com.liefeng.property.vo.fee.FeeItemVo;
 import com.liefeng.property.vo.fee.FeeSettingVo;
 import com.liefeng.property.vo.fee.LadderFeeSettingVo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
@@ -378,5 +380,25 @@ public class FeeServiceTest {
 		feeService.createOwnerMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_WATER);
 		feeService.createOwnerMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_ELECTRICITY);
 		feeService.createOwnerMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_GAS);
+	}
+	
+	@Test 
+	public void findFeeItem(){
+		ContextManager.getInstance().setOemCode("1");
+		FeeItemBo feeItemBo = new FeeItemBo();
+		feeItemBo.setProjectId("0000000052a7943f0152a7943fc00000");
+		feeItemBo.setHouseNum("A0188");
+		feeItemBo.setFeeType("1");
+		FeeItemVo feeItemVo = feeService.findFeeItem(feeItemBo);
+	    System.out.println(feeItemVo);	
+	}
+	
+	@Test 
+	public void findAllFeeItem(){
+		ContextManager.getInstance().setOemCode("1");
+		FeeItemBo feeItemBo = new FeeItemBo();
+		feeItemBo.setProjectId("0000000052a7943f0152a7943fc00000");
+		DataPageValue<FeeItemVo> feeItemVo = feeService.findAllFeeItem(feeItemBo,1,30);
+	    System.out.println(feeItemVo);	
 	}
 }

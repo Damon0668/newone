@@ -127,7 +127,8 @@ public class FeeRecordContext {
     		if(feeRecordPo != null){
     			throw new FeeException(FeeErrorCode.FEEITEM_ALREADYCOLLECT);
     		}
-    			Double discountAmount = feeItemVo.getTotalFee()*feeItemVo.getDiscount();
+     		
+				Double discountAmount = feeItemVo.getTotalFee()*feeItemVo.getDiscount();
     			Double paidAmount = discountAmount+(discountAmount*feeItemVo.getLateFeeRate());
     			FeeRecordVo feeRecordVo = new FeeRecordVo();
     			feeRecordVo.setFeeItemId(feeItemVo.getId());

@@ -37,6 +37,11 @@ public class FeeSettingVo extends BaseValue{
 	private String feeType;
 
 	/**
+	 * 类型名称
+	 */
+	private String feeName;
+	
+	/**
 	 * 使用类型。1：家居；2：家居出租；3：商用；4：商用出租。
 	 */
 	private String useType;
@@ -191,6 +196,14 @@ public class FeeSettingVo extends BaseValue{
 	}
 
 	
+	public String getFeeName() {
+		return feeName;
+	}
+
+	public void setFeeName(String feeName) {
+		this.feeName = feeName;
+	}
+
 	public String getStaffId() {
 		return this.staffId;
 	}

@@ -1,5 +1,7 @@
 package com.liefeng.property.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +18,7 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IFeeService;
+import com.liefeng.property.bo.fee.FeeItemBo;
 import com.liefeng.property.bo.fee.MeterRecordBo;
 import com.liefeng.property.constant.FeeConstants;
 import com.liefeng.property.domain.fee.FeeItemContext;
@@ -191,6 +194,13 @@ public class FeeService implements IFeeService {
 		FeeSettingContext feeSettingContext = FeeSettingContext
 				.build(feeSettingVo);
 		feeSettingContext.update();
+	}
+	
+	@Override
+	public List<FeeSettingVo> findFeeSettingByProjectId(String projectId){
+		FeeSettingContext feeSettingContext = FeeSettingContext
+				.loadByProjectId(projectId);
+		return feeSettingContext.findByProjectId();
 	}
 	
 	//TODO 阶梯收费设置
@@ -649,20 +659,101 @@ public class FeeService implements IFeeService {
 		feeRecordContext.create(feeItemVo);
 	}
 	
-	//TODO 移动到core
-		public static Date getFirstDayOfCurrMonth(Date date){
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(date);
-			calendar.set(Calendar.DATE, 1);
-			return TimeUtil.format(TimeUtil.format(calendar.getTime(),TimeUtil.PATTERN_1),TimeUtil.PATTERN_1);
+	@Override
+	public DataPageValue<FeeItemVo> getFeeItem(FeeItemBo feeItemBo,Integer currentPage,Integer pageSize){
+		FeeSettingContext feeSettingContext = FeeSettingContext.loadByProjectId(feeItemBo.getProjectId());
+		List<FeeSettingVo> feeSettingVos = feeSettingContext.findByProjectId();
+		//所有费用项的收费日期一样，所以默认取第一个
+		int cycle = Integer.parseInt(feeSettingVos.get(0).getPeriod());
+		int startMonth = feeSettingVos.get(0).getStartMonth();
+		//计费期设置
+		if(feeItemBo.getStartDate()==null){
+			Date[] dates = FeeService.getCurrentDate(new Date(), cycle, startMonth);
+			feeItemBo.setStartDate(FeeService.getFirstDayOfCurrMonth(dates[0]));
+			feeItemBo.setEndDate(FeeService.getLastDayOfCurrMonth(dates[1]));
+		}else{
+			Date[] dates = FeeService.getCurrentDate(feeItemBo.getStartDate(), cycle, startMonth);
+			feeItemBo.setStartDate(FeeService.getFirstDayOfCurrMonth(dates[0]));
+			feeItemBo.setEndDate(FeeService.getLastDayOfCurrMonth(dates[1]));
 		}
 		
-		public static Date getLastDayOfCurrMonth(Date date){
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(date);
-			calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
-			return TimeUtil.format(TimeUtil.format(calendar.getTime(),TimeUtil.PATTERN_1),TimeUtil.PATTERN_1);
+		FeeItemContext feeItemContext = FeeItemContext.build();
+		return feeItemContext.list(feeItemBo, currentPage, pageSize);
+	}
+	
+	@Override
+	public FeeItemVo findFeeItem(FeeItemBo feeItemBo){
+		FeeSettingContext feeSettingContext = FeeSettingContext.loadByProjectId(feeItemBo.getProjectId());
+		List<FeeSettingVo> feeSettingVos = feeSettingContext.findByProjectId();
+		//所有费用项的收费日期一样，所以默认取第一个
+		int cycle = Integer.parseInt(feeSettingVos.get(0).getPeriod());
+		int startMonth = feeSettingVos.get(0).getStartMonth();
+		//计费期设置
+		if(feeItemBo.getStartDate()==null){
+			Date[] dates = FeeService.getCurrentDate(new Date(), cycle, startMonth);
+			feeItemBo.setStartDate(FeeService.getFirstDayOfCurrMonth(dates[0]));
+			feeItemBo.setEndDate(FeeService.getLastDayOfCurrMonth(dates[1]));
+		}else{
+			Date[] dates = FeeService.getCurrentDate(feeItemBo.getStartDate(), cycle, startMonth);
+			feeItemBo.setStartDate(FeeService.getFirstDayOfCurrMonth(dates[0]));
+			feeItemBo.setEndDate(FeeService.getLastDayOfCurrMonth(dates[1]));
 		}
+		
+		FeeItemContext feeItemContext = FeeItemContext.build();
+		return feeItemContext.getOne(feeItemBo);
+	}
+	
+	public void updateFeeItem(FeeItemVo feeItemVo){
+		FeeItemContext feeItemContext = FeeItemContext.build(feeItemVo);
+		feeItemContext.update();
+	}
+	
+	@Override
+	public DataPageValue<FeeItemVo> findAllFeeItem(FeeItemBo feeItemBo,Integer currentPage,Integer pageSize){
+		FeeSettingContext feeSettingContext = FeeSettingContext.loadByProjectId(feeItemBo.getProjectId());
+		List<FeeSettingVo> feeSettingVos = feeSettingContext.findByProjectId();
+		//所有费用项的收费日期一样，所以默认取第一个
+		int cycle = Integer.parseInt(feeSettingVos.get(0).getPeriod());
+		int startMonth = feeSettingVos.get(0).getStartMonth();
+		//计费期设置
+		if(feeItemBo.getStartDate()==null){
+			Date[] dates = FeeService.getCurrentDate(new Date(), cycle, startMonth);
+			feeItemBo.setStartDate(FeeService.getFirstDayOfCurrMonth(dates[0]));
+			feeItemBo.setEndDate(FeeService.getLastDayOfCurrMonth(dates[1]));
+		}else{
+			Date[] dates = FeeService.getCurrentDate(feeItemBo.getStartDate(), cycle, startMonth);
+			feeItemBo.setStartDate(FeeService.getFirstDayOfCurrMonth(dates[0]));
+			feeItemBo.setEndDate(FeeService.getLastDayOfCurrMonth(dates[1]));
+		}
+		
+		FeeItemContext feeItemContext = FeeItemContext.build();
+		return feeItemContext.findAll(feeItemBo,currentPage,pageSize);
+	}
+	
+	//TODO 移动到core
+	/**
+	 * 获取某月第一天
+	 * @param date
+	 * @return
+	 */
+	public static Date getFirstDayOfCurrMonth(Date date){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.set(Calendar.DATE, 1);
+		return TimeUtil.format(TimeUtil.format(calendar.getTime(),TimeUtil.PATTERN_1),TimeUtil.PATTERN_1);
+	}
+		
+	/**
+	 * 获取某月最后一天
+	 * @param date
+	 * @return
+	 */
+	public static Date getLastDayOfCurrMonth(Date date){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
+		return TimeUtil.format(TimeUtil.format(calendar.getTime(),TimeUtil.PATTERN_1),TimeUtil.PATTERN_1);
+	}
 		
 		/**
 		 * 获取thisdate从属分期的时间段
@@ -677,7 +768,7 @@ public class FeeService implements IFeeService {
 		 * @throws Exception
 		 * @throws NumberFormatException
 		 */
-		public Date[] getCurrentDate(Date thisdate, int cycle, int startMonth) {
+		public static Date[] getCurrentDate(Date thisdate, int cycle, int startMonth) {
 
 			Date[] date = new Date[2];
 			@SuppressWarnings("deprecation")
@@ -718,4 +809,25 @@ public class FeeService implements IFeeService {
 			date[1] = TimeUtil.format(TimeUtil.format(calendar.getTime(), TimeUtil.PATTERN_1),TimeUtil.PATTERN_1);
 			return date;
 		}
+		
+		/**  
+	     * 计算两个日期之间相差的天数  
+	     * @param smdate 较小的时间 
+	     * @param bdate  较大的时间 
+	     * @return 相差天数 
+	     * @throws ParseException  
+	     */    
+	    public static int daysBetween(Date smdate,Date bdate) throws ParseException{    
+	        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");  
+	        smdate=sdf.parse(sdf.format(smdate));  
+	        bdate=sdf.parse(sdf.format(bdate));  
+	        Calendar cal = Calendar.getInstance();    
+	        cal.setTime(smdate);    
+	        long time1 = cal.getTimeInMillis();                 
+	        cal.setTime(bdate);    
+	        long time2 = cal.getTimeInMillis();         
+	        long between_days=(time2-time1)/(1000*3600*24);  
+	            
+	       return Integer.parseInt(String.valueOf(between_days));           
+	    }
 }

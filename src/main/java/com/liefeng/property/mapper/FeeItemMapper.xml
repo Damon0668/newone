@@ -21,6 +21,7 @@
 		<result column="total_fee" property="totalFee" />
 		<result column="unit_price" property="unitPrice" />
 		<result column="deadline" property="deadline" />
+		<result column="receivableAmount" property="receivableAmount" />
 		<result column="status" property="status" />
 		<result column="oem_code" property="oemCode" />
 	</resultMap>
@@ -31,9 +32,11 @@
 		where 1=1
 		<trim suffixOverrides=",">
 			
-				AND  #{extra.startDate}  &lt;=  extra.start_date 
-				AND  #{extra.endDate}	&gt;= extra.end_date
-				
+				AND  #{extra.startDate}  &lt;=  fi.start_date 
+				AND  #{extra.endDate}	&gt;= fi.end_date
+			<if test="extra.feeType != null and extra.feeType != ''">
+				AND  #{extra.feeType}	= fi.fee_type
+			</if>
 			<if test="extra.projectId != null and extra.projectId != ''">
 				AND fi.project_id = #{extra.projectId}
 			</if>
@@ -59,6 +62,7 @@
 	
 	<select id="queryByPage" resultMap="BaseResultMap">
 		select
+			fi.id,
 			fi.house_num,
 			fi.fee_type,
 			fi.start_date,
@@ -69,7 +73,9 @@
 			fi.total_fee,
 			fi.deadline,
 			fi.discount,
-			fi.deadline
+			fi.deadline,
+			fi.late_fee_rate,
+			fi.status
 		from t_fee_item fi
 		<include refid="Example_Where_Clause" />
 		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
@@ -85,11 +91,47 @@
 		 fi.id
 		from t_fee_item fi
 		<include refid="Example_Where_Clause" />
+		) t
+	</select>
+	
+	<!-- 费用提醒 -->
+	<select id="queryAllByPage" resultMap="BaseResultMap">
+		select
+			fi.id,
+			fi.house_num,
+			fi.fee_type,
+			fi.start_date,
+			fi.end_date,
+			fi.proprietor_name,
+			fi.usage_amount,
+			fi.unit_price,
+			fi.total_fee,
+			fi.deadline,
+			fi.discount,
+			fi.deadline,
+			fi.late_fee_rate,
+			fi.status,
+			sum(
+			(total_fee * discount)+
+			(total_fee *(case when datediff(fi.deadline,NOW())>0 then datediff(fi.deadline,NOW()) else 0 end) * fi.late_fee_rate)) as receivableAmount
+		from t_fee_item fi 
+		<include refid="Example_Where_Clause" />
+		GROUP BY fi.project_id,fi.house_num
 		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
           ${pager.mysqlQueryCondition}
         </if>
 	</select>
 	
-	
-	
+	<select id="queryAllByCount"  resultType="java.lang.Long">
+	select 
+	  count(1) 
+	from(
+		select
+		 fi.id
+		from t_fee_item fi
+		<include refid="Example_Where_Clause" />
+		GROUP BY fi.project_id,fi.house_num
+		) t
+	</select>
+	 	 
 </mapper>   

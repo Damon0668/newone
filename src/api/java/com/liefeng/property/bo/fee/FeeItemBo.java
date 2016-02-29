@@ -1,5 +1,7 @@
 package com.liefeng.property.bo.fee;
 
+import java.util.Date;
+
 import com.liefeng.core.entity.BaseValue;
 
 public class FeeItemBo extends BaseValue {
@@ -22,6 +24,11 @@ public class FeeItemBo extends BaseValue {
 	private String houseNum;
 	
 	/**
+	 * 类型
+	 */
+	private String feeType;
+	
+	/**
 	 * 缴费状态 
 	 * 0：未交费；1：已正常缴费；2：过期缴费。
 	 */
@@ -31,6 +38,17 @@ public class FeeItemBo extends BaseValue {
 	 * 业主名称
 	 */
 	private String proprietorName;
+	
+	/**
+	 * 开始时间
+	 * @return
+	 */
+	private Date startDate;
+	
+	/**
+	 * 结束时间
+	 */
+	private Date endDate;
 
 	public String getProjectId() {
 		return projectId;
@@ -70,5 +88,29 @@ public class FeeItemBo extends BaseValue {
 
 	public void setProprietorName(String proprietorName) {
 		this.proprietorName = proprietorName;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public String getFeeType() {
+		return feeType;
+	}
+
+	public void setFeeType(String feeType) {
+		this.feeType = feeType;
 	}
 }

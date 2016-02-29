@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.liefeng.property.repository.mybatis.FeeSettingQueryRepository">
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.liefeng.property.vo.fee.FeeSettingVo">
+		<result column="id" property="id" />
+		<result column="project_id" property="projectId" />
+		<result column="fee_type" property="feeType"/>
+		<result column="feeName" property="feeName"/>
+		<result column="use_type" property="useType" />
+		<result column="chargeable" property="chargeable" />		
+		<result column="price" property="price" />
+		<result column="unit" property="unit" />
+		<result column="period" property="period" />
+		<result column="start_day" property="startDay" />
+		<result column="start_month" property="startMonth" />
+		<result column="payment_period" property="paymentPeriod" />
+		<result column="staffId" property="staffId" />
+		<result column="create_time" property="createTime" />
+		<result column="oem_code" property="oemCode" />
+	</resultMap>
+
+
+	
+	
+
+	<select id="findByProjectIdAndChargeable"  resultMap="BaseResultMap" parameterType="java.lang.String">
+	select 
+		fs.id,
+		sd.name as feeName,
+		fs.fee_type,
+		fs.project_id,
+		fs.chargeable,
+		fs.price,
+		fs.period,
+		fs.start_day,
+		fs.start_month,
+		fs.payment_period,
+		fs.create_time,
+		fs.oem_code
+	 from t_fee_setting fs 
+	left join  t_sys_dict sd on sd.group_code ='FEE_TYPE' and fs.fee_type = sd.value
+	where fs.project_id=#{projectId} AND chargeable=1
+	</select>
+	
+	
+	
+</mapper>   

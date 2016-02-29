@@ -1,6 +1,8 @@
 package com.liefeng.property.repository;
 
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
@@ -71,5 +73,14 @@ public interface FeeSettingRepository extends JpaRepository<FeeSettingPo, String
 	 */
 	public FeeSettingPo findByProjectIdAndUseTypeAndFeeTypeAndChargeable(String projectId,String useType,
 			String feeType, String chargeableYes);
+	
+	/**
+	 * 获取项目下启动的费用项
+	 * @param projectId
+	 * @param chargeableYes
+	 * @return
+	 */
+	public List<FeeSettingPo> findByProjectIdAndChargeable(String projectId,
+			String chargeableYes);
 
 }

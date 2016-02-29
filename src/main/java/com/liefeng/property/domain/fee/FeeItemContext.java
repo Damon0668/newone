@@ -1,9 +1,12 @@
 package com.liefeng.property.domain.fee;
 
+import java.sql.Time;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.mockito.internal.stubbing.answers.DoesNothing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +23,12 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.fee.FeeItemBo;
 import com.liefeng.property.constant.FeeConstants;
+import com.liefeng.property.error.FeeErrorCode;
+import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.FeeItemPo;
 import com.liefeng.property.repository.FeeItemRepository;
 import com.liefeng.property.repository.mybatis.FeeItemQueryRepository;
+import com.liefeng.property.service.FeeService;
 import com.liefeng.property.vo.fee.FeeItemVo;
 
 /**
@@ -146,7 +152,8 @@ public class FeeItemContext {
 	
 	public DataPageValue<FeeItemVo> list (FeeItemBo feeItemBo,Integer currentPage,Integer pageSize){
 		Map<String, String> extra = MyBeanUtil.bean2Map(feeItemBo);
-		
+		extra.put("startDate", TimeUtil.format(feeItemBo.getStartDate(), TimeUtil.PATTERN_1));
+		extra.put("endDate",  TimeUtil.format(feeItemBo.getEndDate(), TimeUtil.PATTERN_1));
 		PagingParamVo param = new PagingParamVo();
 		param.setExtra(extra);
 		param.setPage(currentPage);
@@ -155,12 +162,94 @@ public class FeeItemContext {
 		Long total = feeItemQueryRepository.queryByCount(param);
 		total = (total == null ? 0 : total);
 		logger.info("FeeItem List total：total={}", total);
-	
+		
 		param.getPager().setRowCount(total);
 		List<FeeItemVo> meterRecordVos = feeItemQueryRepository.queryByPage(param);
+		
+		for(FeeItemVo feeItemVo:meterRecordVos){
+			Integer days=0;
+			try {
+				days = FeeService.daysBetween(feeItemVo.getDeadline(), new Date());
+			} catch (ParseException e) {
+				logger.error(e.getMessage());
+			}
+			Integer deadline = days < 0 ? 0 : days;
+			Double receivableAmount = feeItemVo.getTotalFee()*feeItemVo.getDiscount()+(feeItemVo.getTotalFee()*feeItemVo.getLateFeeRate()*deadline);
+			feeItemVo.setReceivableAmount(receivableAmount);
+		}
+		
 		return new DataPageValue<FeeItemVo>(meterRecordVos, total, pageSize, currentPage);
 	}
 	
+	/**
+	 * 获取单个
+	 * @param feeItemBo
+	 * @return
+	 */
+	public FeeItemVo getOne(FeeItemBo feeItemBo) {
+		Map<String, String> extra = MyBeanUtil.bean2Map(feeItemBo);
+		extra.put("startDate", TimeUtil.format(feeItemBo.getStartDate(), TimeUtil.PATTERN_1));
+		extra.put("endDate",  TimeUtil.format(feeItemBo.getEndDate(), TimeUtil.PATTERN_1));
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		FeeItemVo feeItemVo = new FeeItemVo();
+		List<FeeItemVo> meterRecordVos = feeItemQueryRepository.queryByPage(param);
+		if(meterRecordVos !=null && meterRecordVos.size()>0){
+			Integer days=0;
+			feeItemVo = meterRecordVos.get(0);
+			try {
+				days = FeeService.daysBetween(feeItemVo.getDeadline(), new Date());
+			} catch (ParseException e) {
+				logger.error(e.getMessage());
+			}
+			Integer deadline = days < 0 ? 0 : days;
+			Double receivableAmount = feeItemVo.getTotalFee()*feeItemVo.getDiscount()+(feeItemVo.getTotalFee()*feeItemVo.getLateFeeRate()*deadline);
+			feeItemVo.setReceivableAmount(receivableAmount);
+		}
+		return feeItemVo;
+	}
+	
+	/**
+	 * 获取所有未交费的费用
+	 * @param feeItemBo
+	 * @return
+	 */
+	public DataPageValue<FeeItemVo> findAll(FeeItemBo feeItemBo,Integer currentPage,Integer pageSize) {
+		Map<String, String> extra = MyBeanUtil.bean2Map(feeItemBo);
+		extra.put("startDate", TimeUtil.format(feeItemBo.getStartDate(), TimeUtil.PATTERN_1));
+		extra.put("endDate",  TimeUtil.format(feeItemBo.getEndDate(), TimeUtil.PATTERN_1));
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		param.setPage(currentPage);
+		param.setPageSize(pageSize);
+		
+		Long total = feeItemQueryRepository.queryAllByCount(param);
+		total = (total == null ? 0 : total);
+		logger.info("FeeItem List total：total={}", total);
+		
+		List<FeeItemVo> meterRecordVos = feeItemQueryRepository.queryAllByPage(param);
+		
+		return new DataPageValue<FeeItemVo>(meterRecordVos, total, pageSize, currentPage);
+
+	}
+	
+	public void update() {
+		FeeItemPo feeItemPo = feeItemRepository.findOne(feeItem.getId());
+		if(feeItemPo == null){
+			throw new FeeException(FeeErrorCode.FEEITEM_NOT_EXISTS);
+		}
+		if(feeItemPo.getStatus().equals(FeeConstants.FeeItem.STATUS_YES)){
+			throw new FeeException(FeeErrorCode.FEEITEM_CONNT_UPDATE);
+		}
+		
+		feeItemPo.setUpdateTime(new Date());
+		feeItemPo.setDeadline(feeItem.getDeadline());
+	}
+	
+	/**
+	 * 缴费
+	 * @return
+	 */
 	public FeeItemVo collect(){
 		FeeItemPo feeItemPo = feeItemRepository.findOne(feeItemId);
 		feeItemPo.setStatus(FeeConstants.FeeItem.STATUS_YES);
@@ -181,6 +270,7 @@ public class FeeItemContext {
 		return MyBeanUtil.createBean(feeItemPo, FeeItemVo.class);
 	}
 	
+	
 	protected void setFeeItem(FeeItemVo feeItem) {
 		this.feeItem = feeItem;
 	}
@@ -192,6 +282,12 @@ public class FeeItemContext {
 	protected void setProjectId(String projectId) {
 		this.projectId = projectId;
 	}
+
+	
+
+	
+
+	
 
 
 	

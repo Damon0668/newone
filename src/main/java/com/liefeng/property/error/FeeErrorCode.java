@@ -62,8 +62,17 @@ public enum FeeErrorCode implements IErrorCode {
 	/**
 	 * 该记录已经交过费
 	 */
-	FEEITEM_ALREADYCOLLECT("该记录已经交过费"),
+	FEEITEM_ALREADYCOLLECT("该记录已经交过费"), 
+	
+	/**
+	 * 该费用不存在
+	 */
+	FEEITEM_NOT_EXISTS("该费用不存在"),
 
+	/**
+	 * 该费不可以修改
+	 */
+	FEEITEM_CONNT_UPDATE("该费不可以修改"),
 	;
 	private String desc;
 	

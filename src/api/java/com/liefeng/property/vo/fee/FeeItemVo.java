@@ -92,6 +92,10 @@ public class FeeItemVo extends BaseValue {
 	private Double totalFee; 
 	
 	/**
+	 * 计算过后
+	 */
+	private Double receivableAmount;
+	/**
 	 * 单价 
 	 * 从字典表里读取。
 	 */
@@ -294,5 +298,13 @@ public class FeeItemVo extends BaseValue {
 
 	public void setTotalFee(Double totalFee) {
 		this.totalFee = totalFee;
+	}
+
+	public Double getReceivableAmount() {
+		return receivableAmount;
+	}
+
+	public void setReceivableAmount(Double receivableAmount) {
+		this.receivableAmount = receivableAmount;
 	}
 }

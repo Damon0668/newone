@@ -1,6 +1,7 @@
 package com.liefeng.property.domain.fee;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import com.liefeng.property.error.FeeErrorCode;
 import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.FeeSettingPo;
 import com.liefeng.property.repository.FeeSettingRepository;
+import com.liefeng.property.repository.mybatis.FeeSettingQueryRepository;
 import com.liefeng.property.vo.fee.FeeSettingVo;
 
 /**
@@ -43,6 +45,9 @@ public class FeeSettingContext {
 
 	@Autowired
 	private FeeSettingRepository feeSettingRepository;
+	
+	@Autowired 
+	private FeeSettingQueryRepository feeSettingQueryRepository;
 		
 	private FeeSettingVo feeSetting;
 	
@@ -183,9 +188,11 @@ public class FeeSettingContext {
 		return MyBeanUtil.createBean(feeSettingPo, FeeSettingVo.class);
 	}
 	
-	public FeeSettingVo findFeeSettingOrLadder(String feeType,String useType){
-		FeeSettingPo feeSettingPo = feeSettingRepository.findByProjectIdAndUseTypeAndFeeTypeAndChargeable(projectId, feeType,useType,FeeConstants.FeeSetting.CHARGEABLE_YES);
-		return MyBeanUtil.createBean(feeSettingPo, FeeSettingVo.class);
+	
+	
+	public List<FeeSettingVo> findByProjectId() {
+		List<FeeSettingVo> feeSettingVos = feeSettingQueryRepository.findByProjectIdAndChargeable(projectId);
+		return feeSettingVos;
 	}
 	
 	protected void setFeeSetting(FeeSettingVo feeSetting) {
@@ -199,6 +206,8 @@ public class FeeSettingContext {
 	protected void setProjectId(String projectId) {
 		this.projectId = projectId;
 	}
+
+	
 
 	
 }
