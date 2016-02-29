@@ -2,6 +2,8 @@ package com.liefeng.property.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import com.liefeng.core.entity.DataPageValue;
@@ -33,9 +35,12 @@ public class SysSecurityService implements ISysSecurityService{
 		return ReturnValue.success();
 	}
 
+	@Transactional(rollbackOn=Exception.class)
 	@Override
 	public ReturnValue delRole(Long id) {
 		SysRoleContext.loadById(id).delete();
+		SysRoleMenuContext.loadByRoleId(id).deleteAll();
+		SysRoleUserContext.loadByRoleId(id).deleteAll();
 		return ReturnValue.success();
 	}
 

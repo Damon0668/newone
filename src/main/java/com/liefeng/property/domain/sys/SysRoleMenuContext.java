@@ -52,7 +52,7 @@ public class SysRoleMenuContext {
 	/**
 	 * 删除所有菜单
 	 */
-	public void deleteByRoleId(){
+	public void deleteAll(){
 		sysRoleMenuRepository.deleteByRoleId(roleId);
 	}
 	
@@ -63,7 +63,7 @@ public class SysRoleMenuContext {
 	public void createMenus(String menuIds){
 		if(roleId != null && menuIds != null && !"".equals(menuIds)){
 			
-			deleteByRoleId();
+			deleteAll();
 			
 			String oemCode = SysRoleContext.loadById(roleId).get().getOemCode();
 			

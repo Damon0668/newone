@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.base.vo.CustomerVo;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.exception.LiefengException;
@@ -21,6 +22,7 @@ import com.liefeng.intf.property.ISysSecurityService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.property.PropertyStaffBo;
+import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.domain.staff.ManageProjectContext;
 import com.liefeng.property.domain.staff.PropertyDepartmentContext;
 import com.liefeng.property.domain.staff.PropertyStaffContext;
@@ -67,86 +69,94 @@ public class PropertyStaffService implements IPropertyStaffService {
 
 	@Transactional(rollbackOn=Exception.class)
 	@Override
-	public ReturnValue createStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws Exception {
-		
-		logger.info("createStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
-		
-		//客户创建校验
-		CustomerVo customerVo = checkService.createCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
-		
-		logger.info("createStaff createCustomerCheck customerVo = {}", customerVo);
-		
-		//创建员工
-		PropertyStaffVo propertyStaffVo = PropertyStaffContext.build(propertyStaffDetailInfo.getPropertyStaffVo()).create();
-		
-		propertyStaffDetailInfo.getStaffArchiveVo().setStaffId(propertyStaffVo.getId());
-		
-		propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(customerVo.getGlobalId());
-		
-		//创建员工档案
-		StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).create();
-		
-		logger.info("createStaff StaffArchive create success");
-
-		//员工授权
-		sysSecurityService.grantRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
-		
-		//员工管理相关项目
-		ManageProjectContext.build(propertyStaffVo.getId()).grantManageProject(propertyStaffDetailInfo.getManageProjects());
-		
-		//员工通讯录授权
-		StaffContactPrivilegeContext.loadByStaffId(propertyStaffVo.getId()).grantPrivilege(propertyStaffDetailInfo.getContactProjects());
-		
-		logger.info("createStaff sendTccMsg event = {} , content = {}", TccBasicEvent.CREATE_CUSTOMER, customerVo);
-		
-		//发送tcc消息创建客户
-		tccMsgService.sendTccMsg(TccBasicEvent.CREATE_CUSTOMER, customerVo.toString());
-		
-		logger.info("createStaff sendTccMsg success");
+	public ReturnValue createStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException {
+		try{
+			logger.info("createStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
+			
+			//客户创建校验
+			CustomerVo customerVo = checkService.createCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
+			
+			logger.info("createStaff createCustomerCheck customerVo = {}", customerVo);
+			
+			//创建员工
+			PropertyStaffVo propertyStaffVo = PropertyStaffContext.build(propertyStaffDetailInfo.getPropertyStaffVo()).create();
+			
+			propertyStaffDetailInfo.getStaffArchiveVo().setStaffId(propertyStaffVo.getId());
+			
+			propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(customerVo.getGlobalId());
+			
+			//创建员工档案
+			StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).create();
+			
+			logger.info("createStaff StaffArchive create success");
+	
+			//员工授权
+			sysSecurityService.grantRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
+			
+			//员工管理相关项目
+			ManageProjectContext.build(propertyStaffVo.getId()).grantManageProject(propertyStaffDetailInfo.getManageProjects());
+			
+			//员工通讯录授权
+			StaffContactPrivilegeContext.loadByStaffId(propertyStaffVo.getId()).grantPrivilege(propertyStaffDetailInfo.getContactProjects());
+			
+			logger.info("createStaff sendTccMsg event = {} , content = {}", TccBasicEvent.CREATE_CUSTOMER, customerVo);
+			
+			//发送tcc消息创建客户
+			tccMsgService.sendTccMsg(TccBasicEvent.CREATE_CUSTOMER, customerVo.toString());
+			
+			logger.info("createStaff sendTccMsg success");
+			
+		}catch(Exception e){
+			throw new LiefengException(e);
+		}
 		
 		return ReturnValue.success();
 	}
 
 	@Transactional(rollbackOn=Exception.class)
 	@Override
-	public ReturnValue updateStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws Exception {
+	public ReturnValue updateStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException {
+		try{
+			logger.info("updateStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
+			
+			CustomerVo customerVo = checkService.updateCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
+			
+			logger.info("updateStaff createCustomerCheck customerVo = {}", customerVo);
+			
+			PropertyStaffVo propertyStaffVo = propertyStaffDetailInfo.getPropertyStaffVo();
+			
+			//更新员工信息
+			PropertyStaffContext.build(propertyStaffVo).update();
+			
+			logger.info("updateStaff propertyStaff update success");
+					
+			propertyStaffDetailInfo.getStaffArchiveVo().setStaffId(propertyStaffVo.getId());
+					
+			propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(customerVo.getGlobalId());
+					
+			//更新员工档案
+			StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).update();
+					
+			//员工授权
+			sysSecurityService.grantRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
+					
+			//员工管理相关项目
+			ManageProjectContext.build(propertyStaffVo.getId()).grantManageProject(propertyStaffDetailInfo.getManageProjects());
+			
+			//员工通讯录授权
+			StaffContactPrivilegeContext.loadByStaffId(propertyStaffVo.getId()).grantPrivilege(propertyStaffDetailInfo.getContactProjects());
+					
+			logger.info("updateStaff sendTccMsg event = {} , content = {}", TccBasicEvent.UPDATE_CUSTOMER, customerVo);
+			
+			//发送tcc消息
+			tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_CUSTOMER, customerVo.toString());
+			
+			logger.info("updateStaff sendTccMsg success");
+			
+		}catch(Exception e){
+			throw new LiefengException(e);
+		}
 		
-		logger.info("updateStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
-		
-		CustomerVo customerVo = checkService.updateCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
-		
-		logger.info("updateStaff createCustomerCheck customerVo = {}", customerVo);
-		
-		PropertyStaffVo propertyStaffVo = propertyStaffDetailInfo.getPropertyStaffVo();
-		
-		//更新员工信息
-		PropertyStaffContext.build(propertyStaffVo).update();
-		
-		logger.info("updateStaff propertyStaff update success");
-				
-		propertyStaffDetailInfo.getStaffArchiveVo().setStaffId(propertyStaffVo.getId());
-				
-		propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(customerVo.getGlobalId());
-				
-		//更新员工档案
-		StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).update();
-				
-		//员工授权
-		sysSecurityService.grantRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
-				
-		//员工管理相关项目
-		ManageProjectContext.build(propertyStaffVo.getId()).grantManageProject(propertyStaffDetailInfo.getManageProjects());
-		
-		//员工通讯录授权
-		StaffContactPrivilegeContext.loadByStaffId(propertyStaffVo.getId()).grantPrivilege(propertyStaffDetailInfo.getContactProjects());
-				
-		logger.info("updateStaff sendTccMsg event = {} , content = {}", TccBasicEvent.UPDATE_CUSTOMER, customerVo);
-		
-		//发送tcc消息
-		tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_CUSTOMER, customerVo.toString());
-		
-		logger.info("updateStaff sendTccMsg success");
-				
 		return ReturnValue.success();
 	}
 	
@@ -246,6 +256,21 @@ public class PropertyStaffService implements IPropertyStaffService {
 	@Override
 	public PropertyDepartmentVo getDepartment(String departmentId) {
 		return PropertyDepartmentContext.loadById(departmentId).get();
+	}
+
+	@Override
+	public ReturnValue updateStaffStatus(List<String> staffIdList, String status) throws LiefengException {
+		if(ValidateHelper.isNotEmptyCollection(staffIdList)){
+			for (String staffId : staffIdList) {
+				if(StaffConstants.WorkStatus.IN_OFFICE.equals(status)){
+					PropertyStaffContext.loadById(staffId).updateStaffStatus(StaffConstants.WorkStatus.IN_OFFICE);
+				}
+				if(StaffConstants.WorkStatus.LEAVE_OFFICE.equals(status)){
+					PropertyStaffContext.loadById(staffId).updateStaffStatus(StaffConstants.WorkStatus.LEAVE_OFFICE);
+				}
+			}
+		}
+		return ReturnValue.success();
 	}
 
 }

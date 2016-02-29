@@ -19,6 +19,7 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.property.PropertyStaffBo;
+import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.error.PropertyStaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.staff.PropertyStaffPo;
@@ -163,6 +164,7 @@ public class PropertyStaffContext {
 			}
 			
 			propertyStaff.setId(UUIDGenerator.generate());
+			propertyStaff.setStatus(StaffConstants.StaffStatus.ACTIVE);
 			propertyStaff.setOemCode(ContextManager.getInstance().getOemCode());
 			propertyStaff.setCreateTime(new Date());
 			
@@ -183,6 +185,15 @@ public class PropertyStaffContext {
 				propertyStaffRepository.save(propertyStaffPo);
 			}
 		}
+	}
+	
+	/**
+	 * 更新员工状态
+	 */
+	public void updateStaffStatus(String status) {
+		PropertyStaffPo propertyStaffPo = propertyStaffRepository.findOne(propertyStaffId);
+		propertyStaffPo.setStatus(status);
+		propertyStaffRepository.save(propertyStaffPo);
 	}
 	
 	/**

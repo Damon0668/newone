@@ -16,6 +16,7 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.error.StaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.staff.PropertyDepartmentPo;
+import com.liefeng.property.po.staff.PropertyStaffPo;
 import com.liefeng.property.repository.PropertyDepartmentRepository;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 
