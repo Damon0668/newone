@@ -96,7 +96,7 @@ public class HouseholdService implements IHouseholdService {
 		ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.build(proprietorHouse);
 		proprietorHouseContext.create();
 		
-		// 后台默认创建的用户信息
+		// 后台默认创建的手机用户信息
 		UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.PROPRIETOR);
 		
 		try { 
@@ -151,6 +151,7 @@ public class HouseholdService implements IHouseholdService {
 	 * 保存住户信息
 	 */
 	@Override
+	@Transactional(rollbackOn=Exception.class)
 	public void saveResident(ResidentVo resident) throws LiefengException {
 		
 		// 校验信息
@@ -178,7 +179,7 @@ public class HouseholdService implements IHouseholdService {
 			residentContext.create();
 		}
 		
-		// 后台默认创建的用户信息
+		// 后台默认创建的手机用户信息
 		UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.RESIDENT);
 		
 		try { 
@@ -197,6 +198,7 @@ public class HouseholdService implements IHouseholdService {
 	 * 更新住户信息
 	 */
 	@Override
+	@Transactional(rollbackOn=Exception.class)
 	public void updateResident(ResidentVo resident) throws LiefengException {
 		// 校验信息
 		validateResident(resident);
@@ -391,14 +393,14 @@ public class HouseholdService implements IHouseholdService {
 		// 后台默认创建的用户信息
 		UserVo user = new UserVo();
 		String phone = customer.getMobile();
-		String password = phone.substring(phone.length() - 6);
+		String password = phone.substring(phone.length() - 6); // 初始密码，默认手机后六位数字
 		
 		user.setCustomer(customer);
 		user.setCustGlobalId(customer.getGlobalId()); // 客户全局ID
 		user.setName(phone); // 账号
 		user.setPassword(password); // 初始密码
 		user.setMobile(phone); // 设置手机号码
-		user.setRegisterType(UserConstants.RegisterType.MOBILE); // TODO 注册类型，以后再做修改，以传入类型为准
+		user.setRegisterType(UserConstants.RegisterType.PC); // 注册类型
 		user.setHouseholdType(householdType); // 账号类型
 		user.setOemCode(ContextManager.getInstance().getOemCode()); // OEM编码
 		return user;

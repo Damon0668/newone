@@ -78,6 +78,11 @@ public class ProprietorVo extends BaseValue {
 	 * 备注
 	 */
 	private String remark;
+	
+	/**
+	 *  状态。0：未审提交；1：正常；2：已注销
+	 */
+	private String staus;
 
 	/**
 	 * 录入员工ID
@@ -196,6 +201,14 @@ public class ProprietorVo extends BaseValue {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getStaus() {
+		return staus;
+	}
+
+	public void setStaus(String staus) {
+		this.staus = staus;
 	}
 
 	public String getStaffId() {

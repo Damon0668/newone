@@ -94,6 +94,16 @@ public class ResidentVo extends BaseValue {
 	 * 照片
 	 */
 	private String pic;
+	
+	/**
+	 * 状态。0：未审提交；1：正常；2：已注销
+	 */
+	private String status;
+	
+	/**
+	 * 录入员工ID
+	 */
+	private String staffId;
 
 	/**
 	 * 备注
@@ -236,6 +246,22 @@ public class ResidentVo extends BaseValue {
 
 	public void setPic(String pic) {
 		this.pic = pic;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getStaffId() {
+		return staffId;
+	}
+
+	public void setStaffId(String staffId) {
+		this.staffId = staffId;
 	}
 
 	public String getRemark() {

@@ -24,9 +24,11 @@
 	<result column="specialty" property="specialty"/>
 	<result column="pic" property="pic"/>
 	<result column="remark" property="remark"/>
+	<result column="status" property="status"/>
 	<result column="oemCode" property="oemCode"/>
 	
 	<result column="customerId" property="customer.id"/>
+	<result column="globalId" property="customer.globalId"/>
 	<result column="idNum" property="customer.idNum"/>
 	<result column="sex" property="customer.sex"/>
 	<result column="birthday" property="customer.birthday"/>	
@@ -76,7 +78,8 @@
 	      a.mobile AS mobile,
 	      a.tel AS tel,
 	      b.id_num AS idNum,
-	      b.sex AS sex
+	      b.sex AS sex,
+	      a.status AS status
 	  FROM
 	      property.t_resident a 
 	      LEFT JOIN basic.t_customer b 
@@ -123,6 +126,7 @@ FROM
 	      a.oem_code as oemCode,
 	      
 	      b.id as customerId,
+	      b.global_id as globalId,
 	      b.id_num AS idNum,
 	      b.sex AS sex,
 	      b.birthday as birthday,
@@ -148,7 +152,7 @@ FROM
 	      LEFT JOIN property.t_house b
 	      ON b.id = a.house_id
 	  WHERE
-	      a.custGlobalId = #{extra.custGlobalId} AND b.project_id = #{extra.projectId}
+	      a.cust_global_id = #{extra.custGlobalId} AND b.project_id = #{extra.projectId} AND a.status != '2'
 </select>
 
 </mapper>   

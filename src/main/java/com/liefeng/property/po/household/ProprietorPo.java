@@ -98,6 +98,12 @@ public class ProprietorPo extends BaseValue {
 	 */
 	@Column(name = "remark")
 	private String remark;
+	
+	/**
+	 * 状态。0：未审提交；1：正常；2：已注销
+	 */
+	@Column(name = "status")
+	private String status;
 
 	/**
 	 * 录入员工ID
@@ -219,6 +225,14 @@ public class ProprietorPo extends BaseValue {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public String getStaffId() {

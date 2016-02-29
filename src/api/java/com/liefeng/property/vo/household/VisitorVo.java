@@ -82,6 +82,11 @@ public class VisitorVo extends BaseValue {
 	private String type;
 	
 	/**
+	 * 录入员工ID
+	 */
+	private String staffId;
+	
+	/**
 	 * OEM编码
 	 */
 	private String oemCode;
@@ -188,6 +193,14 @@ public class VisitorVo extends BaseValue {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getStaffId() {
+		return staffId;
+	}
+
+	public void setStaffId(String staffId) {
+		this.staffId = staffId;
 	}
 
 	public String getOemCode() {

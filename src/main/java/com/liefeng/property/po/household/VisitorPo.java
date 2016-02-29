@@ -102,6 +102,12 @@ public class VisitorPo extends BaseValue {
 	private String type;
 	
 	/**
+	 * 录入员工ID
+	 */
+	@Column(name = "staff_id")
+	private String staffId;
+	
+	/**
 	 * OEM编码
 	 */
 	@Column(name = "oem_code")
@@ -209,6 +215,14 @@ public class VisitorPo extends BaseValue {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getStaffId() {
+		return staffId;
+	}
+
+	public void setStaffId(String staffId) {
+		this.staffId = staffId;
 	}
 
 	public String getOemCode() {
