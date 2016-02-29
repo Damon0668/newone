@@ -23,7 +23,7 @@ public class NoticePrivilegeVo extends BaseValue{
 	private String noticeId;
 	
 	/**
-	 * 权限类型。1：对员工；2：对业主
+	 * 权限类型。1：对员工；2：对业主/住户
 	 */
 	private String type;
 	
@@ -36,11 +36,6 @@ public class NoticePrivilegeVo extends BaseValue{
 	 * 群ID。如果被通知者是员工，则该字段为部门ID，-1表示该项目下所有部门都可见。如果被通知者是业主，则该字段为楼栋ID，-1表示该项目下所有楼栋都可见
 	 */
 	private String groupId;
-	
-	/**
-	 * 被通知者ID。如果被通知者是员工，则该字段为员工ID，-1表示部门下所有员工都可见。如果被通知者是业主，则该字段为业主ID，-1表示楼栋下所有业主都可见
-	 */
-	private String notifiederId ;
 	
 	/**
 	 * OEM编码
@@ -85,14 +80,6 @@ public class NoticePrivilegeVo extends BaseValue{
 
 	public void setGroupId(String groupId) {
 		this.groupId = groupId;
-	}
-
-	public String getNotifiederId() {
-		return notifiederId;
-	}
-
-	public void setNotifiederId(String notifiederId) {
-		this.notifiederId = notifiederId;
 	}
 
 	public String getOemCode() {

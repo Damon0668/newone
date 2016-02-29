@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.domain.workbench.NoticeContext;
 import com.liefeng.property.domain.workbench.NoticePrivilegeContext;
 import com.liefeng.property.domain.workbench.TaskAttachmentContext;
@@ -158,7 +159,7 @@ public class WorkbenchService implements IWorkbenchService {
 			for(int i=0; i<staffArray.length; i++){
 				String[] staff = staffArray[i].split("\\|");
 				NoticePrivilegeVo noticePrivilegeVo = new NoticePrivilegeVo();
-				noticePrivilegeVo.setType("1");
+				noticePrivilegeVo.setType(WorkbenchConstants.NoticePrivilegeType.STAFF);
 				noticePrivilegeVo.setNoticeId(noticeVo.getId());
 				
 				if("0".equals(staff[1])){
@@ -166,27 +167,19 @@ public class WorkbenchService implements IWorkbenchService {
 					noticePrivilegeVo.setGroupId("-1");
 					createNoticePrivilege(noticePrivilegeVo);
 				}else{
-					if("0".equals(staff[2])){
-						noticePrivilegeVo.setProjectId(staff[0]);
-						noticePrivilegeVo.setGroupId(staff[1]);
-						noticePrivilegeVo.setNotifiederId("-1");
-						createNoticePrivilege(noticePrivilegeVo);
-					}else{
-						noticePrivilegeVo.setProjectId(staff[0]);
-						noticePrivilegeVo.setGroupId(staff[1]);
-						noticePrivilegeVo.setNotifiederId(staff[2]);
-						createNoticePrivilege(noticePrivilegeVo);
-					}
+					noticePrivilegeVo.setProjectId(staff[0]);
+					noticePrivilegeVo.setGroupId(staff[1]);
+					createNoticePrivilege(noticePrivilegeVo);
 				}
 				
 			}
 			}
-			if(noticeVo.getProprietorMessage().trim().length()>0){  //业主
+			if(noticeVo.getProprietorMessage().trim().length()>0){  //业主、住户
 			String[] proprietorArray = noticeVo.getProprietorMessage().split(",");
 			for(int i=0; i<proprietorArray.length; i++){
 				String[] proprietor = proprietorArray[i].split("\\|");
 				NoticePrivilegeVo noticePrivilegeVo = new NoticePrivilegeVo();
-				noticePrivilegeVo.setType("2");
+				noticePrivilegeVo.setType(WorkbenchConstants.NoticePrivilegeType.RESIDENT);
 				noticePrivilegeVo.setNoticeId(noticeVo.getId());
 				
 				if("0".equals(proprietor[1])){
@@ -194,17 +187,9 @@ public class WorkbenchService implements IWorkbenchService {
 					noticePrivilegeVo.setGroupId("-1");
 					createNoticePrivilege(noticePrivilegeVo);
 				}else{
-					if("0".equals(proprietor[2])){
-						noticePrivilegeVo.setProjectId(proprietor[0]);
-						noticePrivilegeVo.setGroupId(proprietor[1]);
-						noticePrivilegeVo.setNotifiederId("-1");
-						createNoticePrivilege(noticePrivilegeVo);
-					}else{
-						noticePrivilegeVo.setProjectId(proprietor[0]);
-						noticePrivilegeVo.setGroupId(proprietor[1]);
-						noticePrivilegeVo.setNotifiederId(proprietor[2]);
-						createNoticePrivilege(noticePrivilegeVo);
-					}
+					noticePrivilegeVo.setProjectId(proprietor[0]);
+					noticePrivilegeVo.setGroupId(proprietor[1]);
+					createNoticePrivilege(noticePrivilegeVo);
 				}
 				
 			}
@@ -213,9 +198,52 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
-	public NoticeVo updateNotice(NoticeVo noticeVo) {
-		NoticeContext noticeContext = NoticeContext.build(noticeVo);
-		return noticeContext.update();
+	public NoticeVo updateNotice(NoticeVo notice) {
+		NoticeContext noticeContext = NoticeContext.build(notice);
+		NoticeVo noticeVo = noticeContext.update();
+		
+		if(noticeVo.getStaffMessage().trim().length()>0){   //员工
+			String[] staffArray = noticeVo.getStaffMessage().split(",");
+			for(int i=0; i<staffArray.length; i++){
+				String[] staff = staffArray[i].split("\\|");
+				NoticePrivilegeVo noticePrivilegeVo = new NoticePrivilegeVo();
+				noticePrivilegeVo.setType(WorkbenchConstants.NoticePrivilegeType.STAFF);
+				noticePrivilegeVo.setNoticeId(noticeVo.getId());
+				
+				if("0".equals(staff[1])){
+					noticePrivilegeVo.setProjectId(staff[0]);
+					noticePrivilegeVo.setGroupId("-1");
+					createNoticePrivilege(noticePrivilegeVo);
+				}else{
+					noticePrivilegeVo.setProjectId(staff[0]);
+					noticePrivilegeVo.setGroupId(staff[1]);
+					createNoticePrivilege(noticePrivilegeVo);
+				}
+				
+			}
+			}
+			if(noticeVo.getProprietorMessage().trim().length()>0){  //业主、住户
+			String[] proprietorArray = noticeVo.getProprietorMessage().split(",");
+			for(int i=0; i<proprietorArray.length; i++){
+				String[] proprietor = proprietorArray[i].split("\\|");
+				NoticePrivilegeVo noticePrivilegeVo = new NoticePrivilegeVo();
+				noticePrivilegeVo.setType(WorkbenchConstants.NoticePrivilegeType.RESIDENT);
+				noticePrivilegeVo.setNoticeId(noticeVo.getId());
+				
+				if("0".equals(proprietor[1])){
+					noticePrivilegeVo.setProjectId(proprietor[0]);
+					noticePrivilegeVo.setGroupId("-1");
+					createNoticePrivilege(noticePrivilegeVo);
+				}else{
+					noticePrivilegeVo.setProjectId(proprietor[0]);
+					noticePrivilegeVo.setGroupId(proprietor[1]);
+					createNoticePrivilege(noticePrivilegeVo);
+				}
+				
+			}
+			}
+			
+		return noticeVo;
 	}
 
 	@Override
