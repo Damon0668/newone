@@ -26,24 +26,23 @@ public class TaskPrivilegePo extends BaseValue{
 	 */
 	@Id
 	private String id;
-	
+
 	/**
 	 * 任务ID
 	 */
-	@Column(name="task_id")
+	@Column(name = "task_id")
 	private String taskId;
-	
-	
+
 	/**
 	 * 员工ID
 	 */
-	@Column(name="staff_id")
+	@Column(name = "staff_id")
 	private String staffId;
-	
+
 	/**
 	 * OEM编码
 	 */
-	@Column(name="oem_code")
+	@Column(name = "oem_code", updatable = false)
 	private String oemCode;
 
 	public String getId() {
@@ -77,5 +76,5 @@ public class TaskPrivilegePo extends BaseValue{
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
 	}
-	
+
 }

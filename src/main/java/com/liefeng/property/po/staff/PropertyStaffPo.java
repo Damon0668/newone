@@ -84,6 +84,14 @@ public class PropertyStaffPo extends BaseValue {
 	private String manageProjects;
 	
 	/**
+	 * 状态
+	 * 1:激活
+	 * 2:注销
+	 */
+	@Column(name = "status")
+	private String status;
+	
+	/**
 	 * 创建时间
 	 */
 	@Column(name = "create_time")
@@ -204,5 +212,12 @@ public class PropertyStaffPo extends BaseValue {
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
 	}
-	
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }

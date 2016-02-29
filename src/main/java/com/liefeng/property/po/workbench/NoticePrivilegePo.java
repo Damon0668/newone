@@ -24,41 +24,43 @@ public class NoticePrivilegePo extends BaseValue{
 	 */
 	@Id
 	private String id;
-	
+
 	/**
 	 * 通知ID
 	 */
-	@Column(name="notice_id")
+	@Column(name = "notice_id")
 	private String noticeId;
-	
+
 	/**
 	 * 权限类型。1：对员工；2：对业主
 	 */
-	@Column(name="type ")
+	@Column(name = "type ")
 	private String type;
-	
+
 	/**
 	 * 项目ID
 	 */
-	@Column(name="project_id")
+	@Column(name = "project_id")
 	private String projectId;
-	
+
 	/**
-	 * 群ID。如果被通知者是员工，则该字段为部门ID，-1表示该项目下所有部门都可见。如果被通知者是业主，则该字段为楼栋ID，-1表示该项目下所有楼栋都可见
+	 * 群ID。如果被通知者是员工，则该字段为部门ID，-1表示该项目下所有部门都可见。如果被通知者是业主，则该字段为楼栋ID，-1
+	 * 表示该项目下所有楼栋都可见
 	 */
-	@Column(name="group_id")
+	@Column(name = "group_id")
 	private String groupId;
-	
+
 	/**
-	 * 被通知者ID。如果被通知者是员工，则该字段为员工ID，-1表示部门下所有员工都可见。如果被通知者是业主，则该字段为业主ID，-1表示楼栋下所有业主都可见
+	 * 被通知者ID。如果被通知者是员工，则该字段为员工ID，-1表示部门下所有员工都可见。如果被通知者是业主，则该字段为业主ID，-1
+	 * 表示楼栋下所有业主都可见
 	 */
-	@Column(name="notifieder_id ")
-	private String notifiederId ;
-	
+	@Column(name = "notifieder_id ")
+	private String notifiederId;
+
 	/**
 	 * OEM编码
 	 */
-	@Column(name="oem_code")
+	@Column(name = "oem_code", updatable = false)
 	private String oemCode;
 
 	public String getId() {
@@ -116,5 +118,5 @@ public class NoticePrivilegePo extends BaseValue{
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
 	}
-	
+
 }

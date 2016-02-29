@@ -111,6 +111,21 @@ public class NoticeVo extends BaseValue{
 	 * OEM编码
 	 */
 	private String oemCode;
+	
+	/**
+	 * 接收通知的员工信息
+	 */
+	private String staffMessage;
+	
+	/**
+	 * 接收通知的业主信息
+	 */
+	private String proprietorMessage;
+	
+	/**
+	 * 创建人名称
+	 */
+	private String creatorName;
 
 	public String getId() {
 		return id;
@@ -278,5 +293,29 @@ public class NoticeVo extends BaseValue{
 
 	public void setEmergency(Character emergency) {
 		priority = emergency.toString() + Character.valueOf(priority.charAt(1)).toString();
+	}
+
+	public String getStaffMessage() {
+		return staffMessage;
+	}
+
+	public void setStaffMessage(String staffMessage) {
+		this.staffMessage = staffMessage;
+	}
+
+	public String getProprietorMessage() {
+		return proprietorMessage;
+	}
+
+	public void setProprietorMessage(String proprietorMessage) {
+		this.proprietorMessage = proprietorMessage;
+	}
+
+	public String getCreatorName() {
+		return creatorName;
+	}
+
+	public void setCreatorName(String creatorName) {
+		this.creatorName = creatorName;
 	}
 }

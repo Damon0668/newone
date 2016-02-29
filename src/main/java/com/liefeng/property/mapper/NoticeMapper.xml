@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.NoticeQueryRepository" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.workbench.NoticeVo" >
+	<result column="id" property="id"/>
+	<result column="title" property="title"/>
+	<result column="content" property="content"/>
+	<result column="status" property="status"/>
+	<result column="priority" property="priority"/>
+	<result column="start_time" property="startTime"/>
+	<result column="end_time" property="endTime"/>
+	<result column="reason" property="reason"/>		
+	<result column="creator_id" property="creatorId"/>
+	<result column="name" property="creatorName"/>
+	<result column="create_time" property="createTime"/>
+</resultMap>
+
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where t.id = p.notice_id and t.creator_id = s.id
+<trim  suffixOverrides="," >
+	<if test=" extra.staffId != null and extra.staffId != ''" >
+	    and t.creator_id = #{extra.staffId}
+	</if>
+	<if test="extra.status != null and extra.status != ''">
+		and t.status = #{extra.status}
+	</if>
+	<if test="extra.manageProject != null and extra.manageProject != ''">
+		and FIND_IN_SET(p.project_id,  #{extra.manageProject})
+	</if>
+	
+	<if test="extra.orderBy != null and extra.orderBy != ''">
+		 order by  #{extra.orderBy} desc
+	</if>
+       
+</trim>
+</sql>
+
+<select id="queryByPage" resultMap="BaseResultMap">
+    select 
+    	DISTINCT
+	    t.id, 
+	    t.title, 
+	    t.content, 
+	    t.status, 
+	    t.priority, 
+	    t.start_time, 
+	    t.end_time, 
+	    t.reason, 
+	    t.creator_id,
+	    s.name
+	from 
+		t_notice t,
+		t_notice_privilege p,
+		t_property_staff s
+		<include refid="Example_Where_Clause" />
+		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	          ${pager.mysqlQueryCondition}
+	    </if>
+</select>
+
+
+<select id="queryByCount"  resultType="java.lang.Long">
+select 
+	count(1) 
+from(
+		SELECT
+			DISTINCT
+			t.id
+	    FROM 
+	    	t_notice t,
+			t_notice_privilege p,
+			t_property_staff s
+	    <include refid="Example_Where_Clause" />
+	) t
+</select>
+
+<select id="queryPublishedByPage" resultMap="BaseResultMap">
+    SELECT
+    	DISTINCT
+	    t.id, 
+	    t.title, 
+	    t.content, 
+	    t.status, 
+	    t.priority, 
+	    t.start_time, 
+	    t.end_time, 
+	    t.reason, 
+	    t.creator_id,
+	    s.name
+	FROM
+		t_notice t,
+		t_notice_privilege p,
+		t_property_staff s
+	WHERE
+		t.id = p.notice_id
+	AND t.creator_id = s.id
+	AND t.status = '4'
+	AND(
+		(
+			p.group_id = '-1'
+			AND FIND_IN_SET(p.project_id, #{extra.manageProject})
+		)
+		OR(
+			p.group_id = #{extra.deptId}
+			AND p.notifieder_id = '-1'
+			AND p.type = '1'
+			AND FIND_IN_SET(p.project_id, #{extra.manageProject})
+		)
+		OR(
+			p.group_id = #{extra.deptId}
+			AND p.notifieder_id = #{extra.staffId}
+			AND p.type = '1'
+			AND FIND_IN_SET(p.project_id, #{extra.manageProject})
+		)
+		OR(
+			t.creator_id = #{extra.staffId}
+		)
+	   )
+		ORDER BY t.publish_time DESC
+		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	          ${pager.mysqlQueryCondition}
+	    </if>
+</select>
+
+<select id="queryPublishedByCount"  resultType="java.lang.Long">
+select 
+	count(1) 
+from(
+		SELECT
+			DISTINCT
+			t.id
+	    FROM 
+	    	t_notice t,
+			t_notice_privilege p,
+			t_property_staff s
+	    WHERE
+		t.id = p.notice_id
+	AND t.creator_id = s.id
+	AND t.status = '4'
+	AND(
+		(
+			p.group_id = '-1'
+			AND FIND_IN_SET(p.project_id, #{extra.manageProject})
+		)
+		OR(
+			p.group_id = #{extra.deptId}
+			AND p.notifieder_id = '-1'
+			AND p.type = '1'
+			AND FIND_IN_SET(p.project_id, #{extra.manageProject})
+		)
+		OR(
+			p.group_id = #{extra.deptId}
+			AND p.notifieder_id = #{extra.staffId}
+			AND p.type = '1'
+			AND FIND_IN_SET(p.project_id, #{extra.manageProject})
+		)
+		OR(
+			t.creator_id = #{extra.staffId}
+		)
+	   )
+	) t
+</select>
+</mapper>   

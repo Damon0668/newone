@@ -26,104 +26,107 @@ public class TaskPo extends BaseValue{
 	 */
 	@Id
 	private String id;
-	
+
 	/**
 	 * 任务主题
 	 */
-	@Column(name="title")
+	@Column(name = "title")
 	private String title;
-	
+
 	/**
 	 * 任务内容
 	 */
-	@Column(name="content")
+	@Column(name = "content")
 	private String content;
-	
+
 	/**
 	 * 任务状态。1：待处理；2：处理中；3：已处理；4：已审核；5：已归档
 	 */
-	@Column(name="status")
+	@Column(name = "status")
 	private String status;
-	
+
 	/**
 	 * 优先级。高位表示紧急程度，低位表示重要程度，如：10表示紧急不重要；11表示紧急重要
 	 */
-	@Column(name="priority")
+	@Column(name = "priority")
 	private String priority;
-	
+
 	/**
 	 * 开始时间
 	 */
-	@Column(name="start_time")
+	@Column(name = "start_time")
 	private Date startTime;
-	
+
 	/**
 	 * 结束时间
 	 */
-	@Column(name="end_time")
+	@Column(name = "end_time")
 	private Date endTime;
-	
+
 	/**
 	 * 办理结果
 	 */
-	@Column(name="result")
+	@Column(name = "result")
 	private String result;
-	
+
 	/**
 	 * 备注
 	 */
-	@Column(name="remark")
+	@Column(name = "remark")
 	private String remark;
-	
+
 	/**
 	 * 创建人ID
 	 */
-	@Column(name="creator_id")
+	@Column(name = "creator_id")
 	private String creatorId;
-	
+
 	/**
 	 * 办理人ID
 	 */
-	@Column(name="handler_id")
+	@Column(name = "handler_id")
 	private String handlerId;
-	
+
 	/**
 	 * 归档人ID
 	 */
-	@Column(name="archiver_id")
+	@Column(name = "archiver_id")
 	private String archiverId;
-	
+
 	/**
 	 * 审核人ID
 	 */
-	@Column(name="reviewer_id")
+	@Column(name = "reviewer_id")
 	private String reviewerId;
-	
+
 	/**
 	 * 创建时间
 	 */
-	@Column(name="create_time")
+	@Column(name = "create_time")
 	private Date createTime;
-	
+
 	/**
 	 * 办理时间
 	 */
-	@Column(name="handle_time")
+	@Column(name = "handle_time")
 	private Date handleTime;
-	
+
 	/**
 	 * 归档时间
 	 */
-	@Column(name="archive_time")
+	@Column(name = "archive_time")
 	private Date archiveTime;
-	
+
 	/**
 	 * 审核时间
 	 */
-	@Column(name="review_time")
+	@Column(name = "review_time")
 	private Date reviewTime;
-	
-	@Column(name="oem_code")
+
+	/**
+	 * oem编码
+	 */
+	@Column(name = "oem_code", updatable = false)
 	private String oemCode;
 
 	public String getId() {
@@ -270,7 +273,4 @@ public class TaskPo extends BaseValue{
 		this.oemCode = oemCode;
 	}
 
-
-	
-	
 }

@@ -90,7 +90,7 @@
 	</if>
 	
 	<if test="extra.oemCode != null and extra.oemCode != ''" >
-	    AND a.oem_code like concat('%', #{extra.oemCode}, '%')
+	    AND a.oem_code =  #{extra.oemCode}
 	</if>
 </trim>
 </sql>
@@ -200,4 +200,5 @@
 	 WHERE
 	    a.id = #{proprietorHouseId}
 </select>
+
 </mapper>   

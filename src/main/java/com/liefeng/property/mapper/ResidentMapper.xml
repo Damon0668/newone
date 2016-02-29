@@ -24,8 +24,11 @@
 	<result column="specialty" property="specialty"/>
 	<result column="pic" property="pic"/>
 	<result column="remark" property="remark"/>
+	<result column="status" property="status"/>
 	<result column="oemCode" property="oemCode"/>
 	
+	<result column="customerId" property="customer.id"/>
+	<result column="globalId" property="customer.globalId"/>
 	<result column="idNum" property="customer.idNum"/>
 	<result column="sex" property="customer.sex"/>
 	<result column="birthday" property="customer.birthday"/>	
@@ -50,6 +53,19 @@
 	<if test="extra.residentId != null and extra.residentId != ''" >
 	    AND a.id =  #{extra.residentId}
 	</if>
+	
+	<if test="extra.oemCode != null and extra.oemCode != ''" >
+	    AND a.oem_code =  #{extra.oemCode}
+	</if>
+	
+	<if test="extra.oemCode != null and extra.oemCode != ''" >
+	    AND a.oem_code =  #{extra.oemCode}
+	</if>
+	
+	<if test="extra.custGlobalId != null and extra.custGlobalId != ''" >
+	    AND a.custGlobalId =  #{extra.custGlobalId}
+	</if>
+	
 </trim>
 </sql>
 
@@ -62,7 +78,8 @@
 	      a.mobile AS mobile,
 	      a.tel AS tel,
 	      b.id_num AS idNum,
-	      b.sex AS sex
+	      b.sex AS sex,
+	      a.status AS status
 	  FROM
 	      property.t_resident a 
 	      LEFT JOIN basic.t_customer b 
@@ -108,6 +125,8 @@ FROM
 	      a.remark as remark,
 	      a.oem_code as oemCode,
 	      
+	      b.id as customerId,
+	      b.global_id as globalId,
 	      b.id_num AS idNum,
 	      b.sex AS sex,
 	      b.birthday as birthday,
@@ -121,6 +140,19 @@ FROM
 	      ON a.cust_global_id = b.global_id
 	  WHERE
 	      a.id = #{residentId}
+</select>
+
+
+<select id="queryByCustGlobalIdAndProjectId" resultMap="BaseResultMap">
+	  SELECT
+	      a.id AS id,
+	      a.cust_global_id as custGlobalId
+	  FROM
+	      property.t_resident a 
+	      LEFT JOIN property.t_house b
+	      ON b.id = a.house_id
+	  WHERE
+	      a.cust_global_id = #{extra.custGlobalId} AND b.project_id = #{extra.projectId} AND a.status != '2'
 </select>
 
 </mapper>   

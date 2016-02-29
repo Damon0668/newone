@@ -149,9 +149,67 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
-	public NoticeVo createNotice(NoticeVo noticeVo) {
-		NoticeContext noticeContext = NoticeContext.build(noticeVo);
-		return noticeContext.create();
+	public NoticeVo createNotice(NoticeVo notice) {
+		NoticeContext noticeContext = NoticeContext.build(notice);
+		NoticeVo noticeVo =  noticeContext.create();
+		
+		if(noticeVo.getStaffMessage().trim().length()>0){   //员工
+			String[] staffArray = noticeVo.getStaffMessage().split(",");
+			for(int i=0; i<staffArray.length; i++){
+				String[] staff = staffArray[i].split("\\|");
+				NoticePrivilegeVo noticePrivilegeVo = new NoticePrivilegeVo();
+				noticePrivilegeVo.setType("1");
+				noticePrivilegeVo.setNoticeId(noticeVo.getId());
+				
+				if("0".equals(staff[1])){
+					noticePrivilegeVo.setProjectId(staff[0]);
+					noticePrivilegeVo.setGroupId("-1");
+					createNoticePrivilege(noticePrivilegeVo);
+				}else{
+					if("0".equals(staff[2])){
+						noticePrivilegeVo.setProjectId(staff[0]);
+						noticePrivilegeVo.setGroupId(staff[1]);
+						noticePrivilegeVo.setNotifiederId("-1");
+						createNoticePrivilege(noticePrivilegeVo);
+					}else{
+						noticePrivilegeVo.setProjectId(staff[0]);
+						noticePrivilegeVo.setGroupId(staff[1]);
+						noticePrivilegeVo.setNotifiederId(staff[2]);
+						createNoticePrivilege(noticePrivilegeVo);
+					}
+				}
+				
+			}
+			}
+			if(noticeVo.getProprietorMessage().trim().length()>0){  //业主
+			String[] proprietorArray = noticeVo.getProprietorMessage().split(",");
+			for(int i=0; i<proprietorArray.length; i++){
+				String[] proprietor = proprietorArray[i].split("\\|");
+				NoticePrivilegeVo noticePrivilegeVo = new NoticePrivilegeVo();
+				noticePrivilegeVo.setType("2");
+				noticePrivilegeVo.setNoticeId(noticeVo.getId());
+				
+				if("0".equals(proprietor[1])){
+					noticePrivilegeVo.setProjectId(proprietor[0]);
+					noticePrivilegeVo.setGroupId("-1");
+					createNoticePrivilege(noticePrivilegeVo);
+				}else{
+					if("0".equals(proprietor[2])){
+						noticePrivilegeVo.setProjectId(proprietor[0]);
+						noticePrivilegeVo.setGroupId(proprietor[1]);
+						noticePrivilegeVo.setNotifiederId("-1");
+						createNoticePrivilege(noticePrivilegeVo);
+					}else{
+						noticePrivilegeVo.setProjectId(proprietor[0]);
+						noticePrivilegeVo.setGroupId(proprietor[1]);
+						noticePrivilegeVo.setNotifiederId(proprietor[2]);
+						createNoticePrivilege(noticePrivilegeVo);
+					}
+				}
+				
+			}
+			}
+		return noticeVo;
 	}
 
 	@Override
@@ -184,6 +242,37 @@ public class WorkbenchService implements IWorkbenchService {
 		NoticePrivilegeContext noticePrivilegeContext = NoticePrivilegeContext.loadById(noticeId);
 		
 		 noticePrivilegeContext.deleteByNoticeId();
+	}
+
+	@Override
+	public Long findNoticeCount(String status, String staffId,
+			String manageProject) {
+		NoticeContext noticeContext = NoticeContext.build();
+		
+		return noticeContext.queryByCount(status, staffId, manageProject);
+	}
+
+	@Override
+	public DataPageValue<NoticeVo> findNoticeByPage(String status, String staffId, String manageProject, String orderBy, Integer page, Integer size) {
+		NoticeContext noticeContext = NoticeContext.build();
+		
+		return noticeContext.findByPage(status, staffId, manageProject, orderBy, page, size);
+	}
+
+	@Override
+	public Long findNoticeCountOfPublished(String staffId,
+			String manageProject, String deptId) {
+		NoticeContext noticeContext = NoticeContext.build();
+		
+		return noticeContext.queryByCountOfPublished(staffId, manageProject, deptId);
+	}
+
+	@Override
+	public DataPageValue<NoticeVo> findNoticeByPageOfPublished(String staffId, String manageProject, String deptId, Integer page,
+			Integer size) {
+		NoticeContext noticeContext = NoticeContext.build();
+		
+		return noticeContext.findByPageOfPublished(staffId, manageProject, deptId, page, size);
 	}
 
 

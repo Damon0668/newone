@@ -180,4 +180,53 @@ public interface IWorkbenchService {
 	 * @date 2016年2月26日 下午7:25:14
 	 */
 	public void deleteNoticePrivilegeByNoticeId(String noticeId);
+	
+	/**
+	 * 根据状态、员工id，管理的项目，获取通知的总数
+	 * @param status
+	 * @param staffId
+	 * @param manageProject
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年2月29日 上午11:26:12
+	 */
+	public Long findNoticeCount(String status, String staffId, String manageProject);
+	
+	/**
+	 * 分页查询通知（分页、非“已发布”）
+	 * @param status
+	 * @param staffId
+	 * @param manageProject
+	 * @param orderBy
+	 * @param page
+	 * @param size
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年2月29日 上午11:28:53
+	 */
+	public DataPageValue<NoticeVo> findNoticeByPage(String status, String staffId, String manageProject, String orderBy, Integer page, Integer size);
+	
+	/**
+	 * 根据状态、员工id，管理的项目，获取已发布通知的总数
+	 * @param staffId
+	 * @param manageProject
+	 * @param deptId
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年2月29日 上午11:26:12
+	 */
+	public Long findNoticeCountOfPublished(String staffId, String manageProject, String deptId);
+	
+	/**
+	 * 分页查询通知（分页、“已发布”）
+	 * @param staffId
+	 * @param manageProject
+	 * @param orderBy
+	 * @param page
+	 * @param size
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年2月29日 上午11:28:53
+	 */
+	public DataPageValue<NoticeVo> findNoticeByPageOfPublished(String staffId, String manageProject, String deptId, Integer page, Integer size);
 }

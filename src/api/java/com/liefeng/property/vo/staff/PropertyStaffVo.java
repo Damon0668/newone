@@ -85,6 +85,11 @@ public class PropertyStaffVo extends BaseValue {
 	 * OEM编码
 	 */
 	private String oemCode;
+	
+	/**
+	 * 状态
+	 */
+	private String status;
 
 	public String getId() {
 		return id;
@@ -196,5 +201,13 @@ public class PropertyStaffVo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

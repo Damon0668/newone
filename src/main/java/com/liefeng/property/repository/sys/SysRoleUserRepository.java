@@ -17,10 +17,16 @@ import com.liefeng.property.po.sys.SysRoleUserPo;
 public interface SysRoleUserRepository extends JpaRepository<SysRoleUserPo, Long>{
 	
 	/**
-	 * 根据菜单ID,删除对应关系
+	 * 根据用户ID,删除对应关系
 	 * @param menuId 菜单ID
 	 */
 	public void deleteByUserId(String userId);
+	
+	/**
+	 * 根据角色ID,删除对应关系
+	 * @param menuId 菜单ID
+	 */
+	public void deleteByRoleId(Long userId);
 	
 	/**
 	 * 根据用户ID,查找角色关系

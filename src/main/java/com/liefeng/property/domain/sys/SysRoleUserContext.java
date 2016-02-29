@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.property.po.sys.SysRoleUserPo;
 import com.liefeng.property.repository.sys.SysRoleUserRepository;
 import com.liefeng.property.vo.sys.SysRoleUserVo;
@@ -69,7 +70,7 @@ public class SysRoleUserContext {
 	@Transactional(rollbackOn=Exception.class)
 	public void grantRoles(Long[] roleIds){
 		
-		sysRoleUserRepository.deleteByUserId(userId);
+		deleteAll();
 		
 		for (Long roleId : roleIds) {
 			SysRoleUserPo sysRoleUserPo = new SysRoleUserPo();
@@ -87,5 +88,18 @@ public class SysRoleUserContext {
 	public List<SysRoleUserVo> findRoles(){
 		List<SysRoleUserPo> dataList = sysRoleUserRepository.findByUserId(userId);
 		return MyBeanUtil.createList(dataList, SysRoleUserVo.class);
+	}
+	
+	/**
+	 * 删除所有
+	 */
+	public void deleteAll(){
+		if(ValidateHelper.isNotEmptyString(userId)){
+			sysRoleUserRepository.deleteByUserId(userId);
+		}
+		
+		if(roleId != null){
+			sysRoleUserRepository.deleteByRoleId(roleId);
+		}
 	}
 }

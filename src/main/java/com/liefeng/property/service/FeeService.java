@@ -274,7 +274,7 @@ public class FeeService implements IFeeService {
 			Date[] dates=getCurrentDate(new Date(),Integer.parseInt(feeSettingVo.getPeriod()),feeSettingVo.getStartMonth());
 		
 			HouseContext houseContext = HouseContext.loadByProjectIdAndHouseNum(proprietorHouseVo.getProjectId(),proprietorHouseVo.getHouseNum());
-			houseContext = HouseContext.loadById(houseContext.getHouse().getId());
+			houseContext = HouseContext.loadById(houseContext.get().getId());
 			ProprietorSingleHouseVo houseVo = houseContext.getSingleHouse();
 
 			Double price = houseVo.getPropertyFee();
@@ -343,7 +343,7 @@ public class FeeService implements IFeeService {
 			Date[] dates=getCurrentDate(new Date(),Integer.parseInt(feeSettingVo.getPeriod()),feeSettingVo.getStartMonth());
 
 			HouseContext houseContext = HouseContext.loadByProjectIdAndHouseNum(proprietorHouseVo.getProjectId(),proprietorHouseVo.getHouseNum());
-			houseContext = HouseContext.loadById(houseContext.getHouse().getId());
+			houseContext = HouseContext.loadById(houseContext.get().getId());
 			ProprietorSingleHouseVo houseVo = houseContext.getSingleHouse();
 
 			Double price = feeSettingVo.getPrice(); //单价
@@ -414,7 +414,7 @@ public class FeeService implements IFeeService {
 			Date[] dates=getCurrentDate(new Date(),Integer.parseInt(feeSettingVo.getPeriod()),feeSettingVo.getStartMonth());
 
 			HouseContext houseContext = HouseContext.loadByProjectIdAndHouseNum(proprietorHouseVo.getProjectId(),proprietorHouseVo.getHouseNum());
-			houseContext = HouseContext.loadById(houseContext.getHouse().getId());
+			houseContext = HouseContext.loadById(houseContext.get().getId());
 			ProprietorSingleHouseVo proprietorSingleHouseVo = houseContext.getSingleHouse();
 
 			Double price = feeSettingVo.getPrice(); //单价
@@ -491,7 +491,7 @@ public class FeeService implements IFeeService {
 			Date[] dates=getCurrentDate(new Date(),Integer.parseInt(feeSettingVo.getPeriod()),feeSettingVo.getStartMonth());
 
 			HouseContext houseContext = HouseContext.loadByProjectIdAndHouseNum(proprietorHouseVo.getProjectId(),proprietorHouseVo.getHouseNum());
-			houseContext = HouseContext.loadById(houseContext.getHouse().getId());
+			houseContext = HouseContext.loadById(houseContext.get().getId());
 			ProprietorSingleHouseVo proprietorSingleHouseVo = houseContext.getSingleHouse();
 
 			Double price = feeSettingVo.getPrice(); //单价
@@ -614,7 +614,7 @@ public class FeeService implements IFeeService {
 			}
 			logger.info("总金额："+sum);
 			HouseContext houseContext = HouseContext.loadByProjectIdAndHouseNum(proprietorHouseVo.getProjectId(),proprietorHouseVo.getHouseNum());
-			houseContext = HouseContext.loadById(houseContext.getHouse().getId());
+			houseContext = HouseContext.loadById(houseContext.get().getId());
 			ProprietorSingleHouseVo proprietorSingleHouseVo = houseContext.getSingleHouse();
 			FeeItemVo feeItemVo = new FeeItemVo();
 			feeItemVo.setCreateTime(new Date());

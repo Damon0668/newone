@@ -25,6 +25,7 @@
 <!-- 查询条件 -->
 <sql id="Example_Where_Clause">
     WHERE 1=1 
+    and stf.status = '1'
 	<trim  suffixOverrides="," >
         <if test="extra.oemCode != null and extra.oemCode != ''" >
             and stf.oem_code = #{extra.oemCode}
@@ -41,8 +42,6 @@
         <if test="extra.idOrName != null and extra.idOrName != ''" >
             and ( stf.number = #{extra.idOrName} or stf.name like concat('%',#{extra.idOrName},'%') ) 
         </if>
-        
-        
 	</trim>
 </sql>
 

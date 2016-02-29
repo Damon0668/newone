@@ -36,17 +36,17 @@ public class CheckinMaterialContext {
 	/**
 	 * 入住资料信息ID
 	 */
-	protected String checkinMaterialId;;
+	private String checkinMaterialId;;
 	
 	/**
 	 * 业主房产ID
 	 */
-	protected String proprietorHouseId;
+	private String proprietorHouseId;
 	
 	/**
 	 * 入住资料值对象
 	 */
-	protected CheckinMaterialVo checkinMaterial;
+	private CheckinMaterialVo checkinMaterial;
 	
 	
 	/**

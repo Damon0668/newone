@@ -121,7 +121,7 @@ public class ProjectService implements IProjectService {
 	@Override
 	public HouseVo findHouseById(String houseId) {
 		HouseContext houseContext = HouseContext.loadById(houseId);
-		HouseVo house = houseContext.getHouse();
+		HouseVo house = houseContext.get();
 		
 		ProjectBuildingContext buildingContext = ProjectBuildingContext.loadById(house.getBuildingId());
 		ProjectBuildingVo building = buildingContext.getProjectBuilding();
@@ -137,7 +137,7 @@ public class ProjectService implements IProjectService {
 	@Override
 	public HouseVo findHouse(String projectId, String houseNum){
 		HouseContext houseContext = HouseContext.loadByProjectIdAndHouseNum(projectId, houseNum);
-		HouseVo house = houseContext.getHouse();
+		HouseVo house = houseContext.get();
 		
 		return house;
 	}
