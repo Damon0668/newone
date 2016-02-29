@@ -26,7 +26,7 @@ public class GuardCardLogContext {
 	private String cardId;
 	
 	/**
-	 * 磁卡权限对象
+	 * 磁卡操作日志对象
 	 */
 	private GuardCardLogVo guardCardLog;
 	
