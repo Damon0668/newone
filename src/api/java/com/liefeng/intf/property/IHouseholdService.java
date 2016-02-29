@@ -9,6 +9,7 @@ import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
+import com.liefeng.property.vo.household.ProprietorVo;
 import com.liefeng.property.vo.household.ResidentVo;
 
 /**
@@ -104,5 +105,12 @@ public interface IHouseholdService {
 	 * @param proprietorHouseId 业主房产ID
 	 */
 	public void delCheckinMaterialByProprietorHouseId(String proprietorHouseId) throws Exception;
+	
+	/**
+	 * 根据业主ID获取业主信息
+	 * @param id 业主ID
+	 * @return 业主信息
+	 */
+	public ProprietorVo getProprietorById(String id);
 	
 }
