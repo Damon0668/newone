@@ -209,6 +209,7 @@ public class HouseContext {
 
 	public HouseVo update() {
 		if(house != null && ValidateHelper.isNotEmptyString(house.getId())) {
+			logger.info("更新房子信息，房子ID（{}）", house.getId());
 			HousePo housePo = houseRepository.findOne(house.getId());
 			
 			MyBeanUtil.copyBeanNotNull2Bean(house, housePo);

@@ -26,6 +26,7 @@ import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.constant.HouseholdConstants;
+import com.liefeng.property.constant.ProjectConstants;
 import com.liefeng.property.domain.household.CheckinMaterialContext;
 import com.liefeng.property.domain.household.ProprietorContext;
 import com.liefeng.property.domain.household.ProprietorHouseContext;
@@ -96,6 +97,14 @@ public class HouseholdService implements IHouseholdService {
 		proprietorHouse.setProprietorId(proprietor.getId());
 		ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.build(proprietorHouse);
 		proprietorHouseContext.create();
+		
+		// 更新房子销售状态
+		HouseVo house = new HouseVo();
+		house.setId(singleHouse.getHouseId());
+		house.setSaleStatus(ProjectConstants.HouseSaleStatus.HAD_SALE);
+		HouseContext houseContext = HouseContext.build(house);
+		houseContext.update();
+		
 		
 		// 后台默认创建的手机用户信息
 		UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.PROPRIETOR);
