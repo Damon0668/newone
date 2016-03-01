@@ -35,12 +35,29 @@
 		<property name="cronExpression" value="0 0 1 1 * ?" /> 
 	</bean>
 	
+	<!-- 通知定时任务 -->
+	<bean id="generateNoticeJob"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" >
+			<bean class="com.liefeng.property.timer.NoticeTask"></bean>
+		</property>
+		<property name="targetMethod" value="generateNotice" />
+		<property name="concurrent" value="true" />
+	</bean>
+		
+	<bean id="generateNoticeTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="generateNoticeJob" />
+		<!-- 自动检测通知，从每天早上8点到晚上11点，每个1分钟检测一遍-->
+		<property name="cronExpression" value="0 0/5 8-23 * * ?" /> 
+	</bean>
+	
 	<!--定时任务调度器 -->
 	<bean id="propertySchedulerFactory" lazy-init="false" autowire="no"
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
 				<ref bean="generateFeeItemTrigger" />
+				<ref bean="generateNoticeTrigger" />
 			</list>
 		</property>
 		<property name="configLocation" value="classpath:quartz.properties" /> 

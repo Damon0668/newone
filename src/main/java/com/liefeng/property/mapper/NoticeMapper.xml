@@ -15,13 +15,18 @@
 	<result column="end_time" property="endTime"/>
 	<result column="reason" property="reason"/>		
 	<result column="creator_id" property="creatorId"/>
-	<result column="name" property="creatorName"/>
 	<result column="create_time" property="createTime"/>
+	<result column="publisher_id" property="publisherId"/>
+	<result column="publish_time" property="publishTime"/>
+	<result column="reviewer_id" property="reviewerId"/>
+	<result column="review_time" property="reviewTime"/>
+	<result column="archiver_id" property="archiverId"/>
+	<result column="archive_time" property="archiveTime"/>
 </resultMap>
 
 <!-- 查询条件 -->
-<sql id="Example_Where_Clause">
-where t.id = p.notice_id and t.creator_id = s.id
+<sql id="Where_Clause">
+where t.id = p.notice_id
 <trim  suffixOverrides="," >
 	<if test=" extra.staffId != null and extra.staffId != ''" >
 	    and t.creator_id = #{extra.staffId}
@@ -32,12 +37,20 @@ where t.id = p.notice_id and t.creator_id = s.id
 	<if test="extra.manageProject != null and extra.manageProject != ''">
 		and FIND_IN_SET(p.project_id,  #{extra.manageProject})
 	</if>
-	
-	<if test="extra.orderBy != null and extra.orderBy != ''">
-		 order by  #{extra.orderBy} desc
-	</if>
-       
 </trim>
+</sql>
+
+<!-- order by -->
+<sql id="Order_Clause">
+	<!-- 如果sort字段炜空，则默认通过create_time字段排序 -->
+	<if test="sort == null" >
+		order by t.create_time desc
+	</if>
+	<!-- sort字段不为空，则以传过来的字段排序 -->
+	<if test="sort != null and sort != ''" >
+		order by t.${sort} desc
+	</if>
+	
 </sql>
 
 <select id="queryByPage" resultMap="BaseResultMap">
@@ -52,12 +65,12 @@ where t.id = p.notice_id and t.creator_id = s.id
 	    t.end_time, 
 	    t.reason, 
 	    t.creator_id,
-	    s.name
+	    t.publisher_id
 	from 
 		t_notice t,
-		t_notice_privilege p,
-		t_property_staff s
-		<include refid="Example_Where_Clause" />
+		t_notice_privilege p
+		<include refid="Where_Clause" />
+		<include refid="Order_Clause"/>
 		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
 	          ${pager.mysqlQueryCondition}
 	    </if>
@@ -73,9 +86,8 @@ from(
 			t.id
 	    FROM 
 	    	t_notice t,
-			t_notice_privilege p,
-			t_property_staff s
-	    <include refid="Example_Where_Clause" />
+			t_notice_privilege p
+	    <include refid="Where_Clause" />
 	) t
 </select>
 
@@ -91,14 +103,12 @@ from(
 	    t.end_time, 
 	    t.reason, 
 	    t.creator_id,
-	    s.name
+	    t.publisher_id
 	FROM
 		t_notice t,
-		t_notice_privilege p,
-		t_property_staff s
+		t_notice_privilege p
 	WHERE
 		t.id = p.notice_id
-	AND t.creator_id = s.id
 	AND t.status = '4'
 	AND(
 		(
@@ -107,13 +117,6 @@ from(
 		)
 		OR(
 			p.group_id = #{extra.deptId}
-			AND p.notifieder_id = '-1'
-			AND p.type = '1'
-			AND FIND_IN_SET(p.project_id, #{extra.manageProject})
-		)
-		OR(
-			p.group_id = #{extra.deptId}
-			AND p.notifieder_id = #{extra.staffId}
 			AND p.type = '1'
 			AND FIND_IN_SET(p.project_id, #{extra.manageProject})
 		)
@@ -136,11 +139,9 @@ from(
 			t.id
 	    FROM 
 	    	t_notice t,
-			t_notice_privilege p,
-			t_property_staff s
+			t_notice_privilege p
 	    WHERE
 		t.id = p.notice_id
-	AND t.creator_id = s.id
 	AND t.status = '4'
 	AND(
 		(
@@ -149,13 +150,6 @@ from(
 		)
 		OR(
 			p.group_id = #{extra.deptId}
-			AND p.notifieder_id = '-1'
-			AND p.type = '1'
-			AND FIND_IN_SET(p.project_id, #{extra.manageProject})
-		)
-		OR(
-			p.group_id = #{extra.deptId}
-			AND p.notifieder_id = #{extra.staffId}
 			AND p.type = '1'
 			AND FIND_IN_SET(p.project_id, #{extra.manageProject})
 		)
