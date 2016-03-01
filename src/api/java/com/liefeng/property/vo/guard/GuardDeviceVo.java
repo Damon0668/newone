@@ -2,14 +2,14 @@ package com.liefeng.property.vo.guard;
 
 import java.util.Date;
 
-import com.liefeng.core.entity.BaseValue;
+import com.liefeng.base.vo.device.DeviceVo;
 
 /**
  * 门禁设备视图对象
  * @author Huangama
  * @date 2016-2-25
  */
-public class GuardDeviceVo extends BaseValue {
+public class GuardDeviceVo extends DeviceVo {
 
 	private static final long serialVersionUID = -3314952455007904877L;
 
@@ -64,6 +64,10 @@ public class GuardDeviceVo extends BaseValue {
 	 * OEM编码
 	 */
 	private String oemCode;
+	
+	public DeviceVo getDevice() {
+		return (DeviceVo)this;
+	}
 
 	public String getId() {
 		return id;
