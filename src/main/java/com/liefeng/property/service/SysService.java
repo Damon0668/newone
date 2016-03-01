@@ -11,9 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.entity.BaseValue;
 import com.liefeng.intf.property.ISysService;
 import com.liefeng.intf.service.cache.IRedisService;
+import com.liefeng.property.annotation.Dict;
 import com.liefeng.property.constant.SysConstants;
+import com.liefeng.property.constant.SysConstants.DictGroup;
 import com.liefeng.property.domain.sys.SysDictContext;
 import com.liefeng.property.vo.sys.SysDictVo;
 
@@ -109,5 +112,4 @@ public class SysService implements ISysService {
 		
 		return null;
 	}
-
 }

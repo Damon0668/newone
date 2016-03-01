@@ -9,6 +9,8 @@ import javax.persistence.Table;
 
 import com.liefeng.core.entity.BaseValue;
 
+import groovy.transform.stc.ClosureParams;
+
 /**
  * 门禁设备持久化对象
  * @author Huangama
@@ -74,8 +76,14 @@ public class GuardDevicePo extends BaseValue {
 	/**
 	 * 创建时间
 	 */
-	@Column(name = "create_time")
+	@Column(name = "create_time", updatable = false )
 	private Date createTime;
+	
+	/**
+	 * 门口机编号
+	 */
+	@Column(name = "guard_num")
+	private String guardNum;
 	
 	/**
 	 * OEM编码
@@ -170,5 +178,12 @@ public class GuardDevicePo extends BaseValue {
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
 	}
-	
+
+	public String getGuardNum() {
+		return guardNum;
+	}
+
+	public void setGuardNum(String guardNum) {
+		this.guardNum = guardNum;
+	}
 }

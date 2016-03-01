@@ -32,6 +32,9 @@ public class PropertyStaffBo extends BaseValue {
 	 */
 	private String projectId;
 	
+	/**
+	 * oemCode租户编码
+	 */
 	private String oemCode;
 
 	public String getIdOrName() {

@@ -3,7 +3,6 @@ package com.liefeng.intf.property;
 import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.property.PropertyStaffBo;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
@@ -35,7 +34,7 @@ public interface IPropertyStaffService {
 	 * @throws LiefengException
 	 * @throws Exception 
 	 */
-	public ReturnValue createStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException;
+	public void createStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException;
 	
 	/**
 	 * 更新物业员工
@@ -44,7 +43,7 @@ public interface IPropertyStaffService {
 	 * @throws LiefengException
 	 * @throws Exception 
 	 */
-	public ReturnValue updateStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException;
+	public void updateStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException;
 	
 	/**
 	 * 批量更新员工状态
@@ -52,7 +51,7 @@ public interface IPropertyStaffService {
 	 * @param status 状态
 	 * @return
 	 */
-	public ReturnValue updateStaffStatus(List<String> staffIdList,String status) throws LiefengException;;
+	public void updateStaffStatus(List<String> staffIdList,String status) throws LiefengException;;
 
 	/**
 	 * 查询物业员工

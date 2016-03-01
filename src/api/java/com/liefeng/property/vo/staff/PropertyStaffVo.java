@@ -3,6 +3,7 @@ package com.liefeng.property.vo.staff;
 import java.util.Date;
 
 import com.liefeng.core.entity.BaseValue;
+import com.liefeng.property.annotation.Dict;
 
 /**
  * 物业员工值对象
@@ -63,6 +64,7 @@ public class PropertyStaffVo extends BaseValue {
 	/**
 	 * 职位
 	 */
+	@Dict(group="POSITION")
 	private String position;
 	
 	/**

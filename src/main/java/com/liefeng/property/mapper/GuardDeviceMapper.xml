@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.liefeng.property.repository.mybatis.GuardDeviceQueryRepository">
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.liefeng.property.vo.guard.GuardDeviceVo">
+		<result column="id" property="id"/>
+		<result column="project_id" property="projectId"/>
+		<result column="install_position" property="installPosition"/>
+		<result column="guard_num" property="guardNum"/>
+		<result column="run_status" property="runStatus"/>
+		<result column="status" property="status"/>
+	</resultMap>
+	
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+    where 1=1
+    <trim  suffixOverrides="," >
+        <if test="extra.oemCode != null and extra.oemCode != ''" >
+            and gd.oem_code = #{extra.oemCode}
+        </if>
+        <if test="extra.projectId != null and extra.projectId != ''" >
+            AND p.project_id =  #{extra.projectId}
+        </if>
+        <if test="extra.installPosition != null and extra.installPosition != ''" >
+            AND d.install_position like CONCAT('%',#{extra.installPosition},'%')
+        </if>
+        <if test="extra.guardNum != null and extra.guardNum != ''" >
+            AND gd.guard_num = #{extra.guardNum}
+        </if>
+        
+        <if test="extra.status != null and extra.status!= ''" >
+            AND d.status = #{extra.status}
+        </if>
+        <if test="extra.runStatus != null and extra.runStatus != ''" >
+            AND d.run_status = #{extra.runStatus}
+        </if>
+    </trim>
+</sql>
+
+<select id="queryByCount"  resultType="java.lang.Long">
+    SELECT
+	    COUNT(1)
+	FROM
+	    t_guard_device gd
+	LEFT JOIN t_project p ON gd.project_id = p.id
+	LEFT JOIN basic.t_device d ON gd.device_global_id = d.global_id
+	<include refid="Example_Where_Clause"/>
+</select>
+
+<select id="queryByPage" resultMap="BaseResultMap">
+        SELECT
+            gd.id,
+		    p.full_name project_id,
+		    d.install_position,
+		    gd.guard_num,
+		    d.run_status,
+		    d.`status`
+		FROM
+		    t_guard_device gd
+		LEFT JOIN t_project p ON gd.project_id = p.id
+		LEFT JOIN basic.t_device d ON gd.device_global_id = d.global_id
+		<include refid="Example_Where_Clause"/>
+		ORDER BY gd.project_id desc,gd.create_time
+		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+		    ${pager.mysqlQueryCondition}
+		</if>
+</select>
+
+</mapper>

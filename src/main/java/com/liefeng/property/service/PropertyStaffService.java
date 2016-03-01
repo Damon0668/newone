@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.user.IUserService;
@@ -69,7 +68,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 
 	@Transactional(rollbackOn=Exception.class)
 	@Override
-	public ReturnValue createStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException {
+	public void createStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException {
 		try{
 			logger.info("createStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
 			
@@ -106,16 +105,16 @@ public class PropertyStaffService implements IPropertyStaffService {
 			
 			logger.info("createStaff sendTccMsg success");
 			
+		}catch(LiefengException e){
+			throw new LiefengException(e.getCode(), e.getMessage());
 		}catch(Exception e){
 			throw new LiefengException(e);
 		}
-		
-		return ReturnValue.success();
 	}
 
 	@Transactional(rollbackOn=Exception.class)
 	@Override
-	public ReturnValue updateStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException {
+	public void updateStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException {
 		try{
 			logger.info("updateStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
 			
@@ -153,11 +152,11 @@ public class PropertyStaffService implements IPropertyStaffService {
 			
 			logger.info("updateStaff sendTccMsg success");
 			
+		}catch(LiefengException e){
+			throw new LiefengException(e.getCode(), e.getMessage());
 		}catch(Exception e){
 			throw new LiefengException(e);
 		}
-		
-		return ReturnValue.success();
 	}
 	
 	@Override
@@ -179,19 +178,22 @@ public class PropertyStaffService implements IPropertyStaffService {
 		PropertyStaffVo propertyStaffVo = PropertyStaffContext.loadById(staffId).getPropertyStaff();
 		
 		//查找员工档案信息
-		StaffArchiveVo staffArchiveVo = StaffArchiveContext.loadByStaffId(propertyStaffVo.getId()).getStaffArchive();
+		StaffArchiveVo staffArchiveVo = StaffArchiveContext.loadByStaffId(staffId).getStaffArchive();
 		
-		//查找员工客户信息
-		CustomerVo customerVo = userService.getCustomerByGlobalId(staffArchiveVo.getCustGlobalId());
+		CustomerVo customerVo = null;
+		if(staffArchiveVo != null){
+			//查找员工客户信息
+			customerVo = userService.getCustomerByGlobalId(staffArchiveVo.getCustGlobalId());
+		}
 		
 		//员工项目列表
-		List<String> projectIdList = projectService.findProjectIdByStaffId(propertyStaffVo.getId());
+		List<String> projectIdList = projectService.findProjectIdByStaffId(staffId);
 		
 		//员工角色列表
-		List<Long> roleIdList = SysRoleContext.build().findRoleIdsByUserId(propertyStaffVo.getId());
+		List<Long> roleIdList = SysRoleContext.build().findRoleIdsByUserId(staffId);
 		
 		//通讯录权限
-		List<String> contactPrivilegeDeptIds = StaffContactPrivilegeContext.loadByStaffId(propertyStaffVo.getId()).findContactPrivilegeToDeptIds();
+		List<String> contactPrivilegeDeptIds = StaffContactPrivilegeContext.loadByStaffId(staffId).findContactPrivilegeToDeptIds();
 		
 		propertyStaffDetailInfo.setPropertyStaffVo(propertyStaffVo);
 		
@@ -259,7 +261,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 	}
 
 	@Override
-	public ReturnValue updateStaffStatus(List<String> staffIdList, String status) throws LiefengException {
+	public void updateStaffStatus(List<String> staffIdList, String status) throws LiefengException {
 		if(ValidateHelper.isNotEmptyCollection(staffIdList)){
 			for (String staffId : staffIdList) {
 				if(StaffConstants.WorkStatus.IN_OFFICE.equals(status)){
@@ -270,7 +272,6 @@ public class PropertyStaffService implements IPropertyStaffService {
 				}
 			}
 		}
-		return ReturnValue.success();
 	}
 
 }

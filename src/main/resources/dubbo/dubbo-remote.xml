@@ -30,10 +30,13 @@
       <!-- 我的工作台服务  -->
       <dubbo:service interface="com.liefeng.intf.property.IWorkbenchService" ref="workbenchService" />
 
-      <!--   -->
+      <!-- 系统服务 -->
       <dubbo:service interface="com.liefeng.intf.property.ISysService" ref="sysService" />
       
       <!-- 物业员工服务 -->
       <dubbo:service interface="com.liefeng.intf.property.IPropertyStaffService" ref="propertyStaffService" />
+      
+      <!-- 门禁服务 -->
+      <dubbo:service interface="com.liefeng.intf.property.IGuardSerivce" ref="guardService"/>
 	  
 </beans>

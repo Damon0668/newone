@@ -61,6 +61,11 @@ public class GuardDeviceVo extends DeviceVo {
 	private Date createTime;
 	
 	/**
+	 * 门口机编号
+	 */
+	private String guardNum;
+	
+	/**
 	 * OEM编码
 	 */
 	private String oemCode;
@@ -156,5 +161,12 @@ public class GuardDeviceVo extends DeviceVo {
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
 	}
-	
+
+	public String getGuardNum() {
+		return guardNum;
+	}
+
+	public void setGuardNum(String guardNum) {
+		this.guardNum = guardNum;
+	}
 }

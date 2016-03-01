@@ -3,7 +3,6 @@ package com.liefeng.intf.property;
 import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.property.vo.sys.SysMenuVo;
 import com.liefeng.property.vo.sys.SysRoleVo;
 
@@ -41,21 +40,21 @@ public interface ISysSecurityService {
 	 * @param sysRole
 	 * @return
 	 */
-	public ReturnValue createRole(SysRoleVo sysRole);
+	public void createRole(SysRoleVo sysRole);
 	
 	/**
 	 * 更新系统角色
 	 * @param sysRole
 	 * @return
 	 */
-	public ReturnValue updateRole(SysRoleVo sysRole);
+	public void updateRole(SysRoleVo sysRole);
 	
 	/**
 	 * 删除系统角色
 	 * @param id 角色ID
 	 * @return
 	 */
-	public ReturnValue delRole(Long id);
+	public void delRole(Long id);
 	
 	/**
 	 * 查询菜单树
@@ -74,7 +73,7 @@ public interface ISysSecurityService {
 	 * 角色授权菜单
 	 * @return
 	 */
-	public ReturnValue grantRoleMenus(Long roleId,String menuIds);
+	public void grantRoleMenus(Long roleId,String menuIds);
 	
 	/**
 	 * 查询菜单（只包含按钮）
@@ -127,21 +126,21 @@ public interface ISysSecurityService {
 	 * @param sysMenu
 	 * @return
 	 */
-	public ReturnValue createMenu(SysMenuVo sysMenu);
+	public void createMenu(SysMenuVo sysMenu);
 	
 	/**
 	 * 更新菜单
 	 * @param sysMenu
 	 * @return
 	 */
-	public ReturnValue updateMenu(SysMenuVo sysMenu);
+	public void updateMenu(SysMenuVo sysMenu);
 	
 	/**
 	 * 批量删除菜单
 	 * @param ids 菜单ID数组
 	 * @return
 	 */
-	public ReturnValue deleteMenus(String[] ids);
+	public void deleteMenus(String[] ids);
 	
 	
 	/**
@@ -150,5 +149,5 @@ public interface ISysSecurityService {
 	 * @param roleIds 角色ID
 	 * @return
 	 */
-	public ReturnValue grantRoleUser(String userId, Long[] roleIds);
+	public void grantRoleUser(String userId, Long[] roleIds);
 }

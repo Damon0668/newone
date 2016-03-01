@@ -33,5 +33,4 @@ public interface ISysService {
 	 * @return 字典名
 	 */
 	public String getDictNameByValue(String groupCode, String value);
-	
 }

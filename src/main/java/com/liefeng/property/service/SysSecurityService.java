@@ -7,7 +7,6 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.ISysSecurityService;
 import com.liefeng.property.domain.sys.SysMenuContext;
 import com.liefeng.property.domain.sys.SysRoleContext;
@@ -30,18 +29,16 @@ public class SysSecurityService implements ISysSecurityService{
 	}
 
 	@Override
-	public ReturnValue createRole(SysRoleVo sysRole) {
+	public void createRole(SysRoleVo sysRole) {
 		SysRoleContext.build(sysRole).create();
-		return ReturnValue.success();
 	}
 
 	@Transactional(rollbackOn=Exception.class)
 	@Override
-	public ReturnValue delRole(Long id) {
+	public void delRole(Long id) {
 		SysRoleContext.loadById(id).delete();
 		SysRoleMenuContext.loadByRoleId(id).deleteAll();
 		SysRoleUserContext.loadByRoleId(id).deleteAll();
-		return ReturnValue.success();
 	}
 
 	@Override
@@ -50,9 +47,8 @@ public class SysSecurityService implements ISysSecurityService{
 	}
 
 	@Override
-	public ReturnValue grantRoleMenus(Long roleId, String menuIds) {
+	public void grantRoleMenus(Long roleId, String menuIds) {
 		SysRoleMenuContext.loadByRoleId(roleId).createMenus(menuIds);
-		return ReturnValue.success();
 	}
 
 	@Override
@@ -74,16 +70,14 @@ public class SysSecurityService implements ISysSecurityService{
 	}
 
 	@Override
-	public ReturnValue createMenu(SysMenuVo sysMenu) {
+	public void createMenu(SysMenuVo sysMenu) {
 		SysMenuContext sysMenuContext = SysMenuContext.build(sysMenu);
 		sysMenuContext.create();
-		return ReturnValue.success();
 	}
 	
 	@Override
-	public ReturnValue deleteMenus(String[] ids) {
+	public void deleteMenus(String[] ids) {
 		SysMenuContext.build().delMenus(ids);
-		return ReturnValue.success();
 	}
 
 	@Override
@@ -102,9 +96,8 @@ public class SysSecurityService implements ISysSecurityService{
 	}
 
 	@Override
-	public ReturnValue updateMenu(SysMenuVo sysMenu) {
+	public void updateMenu(SysMenuVo sysMenu) {
 		SysMenuContext.build(sysMenu).update();
-		return ReturnValue.success();
 	}
 
 	@Override
@@ -113,15 +106,13 @@ public class SysSecurityService implements ISysSecurityService{
 	}
 
 	@Override
-	public ReturnValue grantRoleUser(String userId, Long[] roleIds) {
+	public void grantRoleUser(String userId, Long[] roleIds) {
 		SysRoleUserContext.loadByUserId(userId).grantRoles(roleIds);
-		return ReturnValue.success();
 	}
 
 	@Override
-	public ReturnValue updateRole(SysRoleVo sysRole) {
+	public void updateRole(SysRoleVo sysRole) {
 		SysRoleContext.build(sysRole).update();
-		return ReturnValue.success();
 	}
 
 	@Override
