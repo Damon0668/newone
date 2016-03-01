@@ -67,58 +67,65 @@ public class HouseholdService implements IHouseholdService {
 	@Override
 	@Transactional(rollbackOn=Exception.class)
 	public void saveProprietor(ProprietorSingleHouseVo singleHouse) throws LiefengException {
-		// 校验信息
-		validateProprietor(singleHouse);
-		
-		// 客户信息校验
-		CustomerVo customer = initCustomer(singleHouse);
-		customer = checkService.createCustomerCheck(customer);
-		singleHouse.setCustGlobalId(customer.getGlobalId());
-		
-		// 校验业主是否已存在
-		ProprietorContext proprietorContext = null;
-		proprietorContext = ProprietorContext.build();
-		ProprietorVo proprietor = proprietorContext.get(singleHouse.getProjectId(), customer.getGlobalId());
-		if( proprietor == null) { // 保存业主信息
-			proprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
-			proprietor.setStatus(HouseholdConstants.ProprietorStatus.ACTIVE); // 默认为激活状态
-			proprietorContext = ProprietorContext.build(proprietor);
-			proprietor = proprietorContext.create();
-		} else { // 更新业主信息
+		try {
+			// 校验信息
+			validateProprietor(singleHouse);
 			
-			ProprietorVo newProprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
-			newProprietor.setId(proprietor.getId());
-			proprietorContext = ProprietorContext.build(newProprietor);
-			proprietor = proprietorContext.update();
+			// 客户信息校验
+			CustomerVo customer = initCustomer(singleHouse);
+			customer = checkService.createCustomerCheck(customer);
+			singleHouse.setCustGlobalId(customer.getGlobalId());
+			
+			// 校验业主是否已存在
+			ProprietorContext proprietorContext = null;
+			proprietorContext = ProprietorContext.build();
+			ProprietorVo proprietor = proprietorContext.get(singleHouse.getProjectId(), customer.getGlobalId());
+			if( proprietor == null) { // 保存业主信息
+				proprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
+				proprietor.setStatus(HouseholdConstants.ProprietorStatus.ACTIVE); // 默认为激活状态
+				proprietorContext = ProprietorContext.build(proprietor);
+				proprietor = proprietorContext.create();
+			} else { // 更新业主信息
+				
+				ProprietorVo newProprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
+				newProprietor.setId(proprietor.getId());
+				proprietorContext = ProprietorContext.build(newProprietor);
+				proprietor = proprietorContext.update();
+			}
+			
+			// 业主房产信息保存
+			ProprietorHouseVo proprietorHouse = MyBeanUtil.createBean(singleHouse, ProprietorHouseVo.class);
+			proprietorHouse.setProprietorId(proprietor.getId());
+			ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.build(proprietorHouse);
+			proprietorHouseContext.create();
+			
+			// 更新房子销售状态
+			HouseVo house = new HouseVo();
+			house.setId(singleHouse.getHouseId());
+			house.setSaleStatus(ProjectConstants.HouseSaleStatus.HAD_SALE);
+			HouseContext houseContext = HouseContext.build(house);
+			houseContext.update();
+			
+			
+			// 后台默认创建的手机用户信息
+			UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.PROPRIETOR);
+			
+			try { 
+				// 用户信息校验
+				user = checkService.createUserCheck(user);
+			} catch (UserException e) {
+				logger.error("创建用户出现异常，异常编码为({})，异常信息为({})", e.getCode(), e.getMessage());
+				return;
+			}
+			
+			// 发送TCC消息，创建用户（内含创建客户或更新客户逻辑）
+			tccMsgService.sendTccMsg(TccBasicEvent.CREATE_USER, user.toString());
+		} catch (LiefengException e) {
+			logger.error("保存业主信息出现异常,异常码（{}）,异常信息（{}）。", e.getCode() , e.getMessage());
+			throw new LiefengException(e.getCode(), e.getMessage());
+		} catch (Exception e) {
+			throw new LiefengException(e);
 		}
-		
-		// 业主房产信息保存
-		ProprietorHouseVo proprietorHouse = MyBeanUtil.createBean(singleHouse, ProprietorHouseVo.class);
-		proprietorHouse.setProprietorId(proprietor.getId());
-		ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.build(proprietorHouse);
-		proprietorHouseContext.create();
-		
-		// 更新房子销售状态
-		HouseVo house = new HouseVo();
-		house.setId(singleHouse.getHouseId());
-		house.setSaleStatus(ProjectConstants.HouseSaleStatus.HAD_SALE);
-		HouseContext houseContext = HouseContext.build(house);
-		houseContext.update();
-		
-		
-		// 后台默认创建的手机用户信息
-		UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.PROPRIETOR);
-		
-		try { 
-			// 用户信息校验
-			user = checkService.createUserCheck(user);
-		} catch (UserException e) {
-			logger.error("创建用户出现异常，异常编码为({})，异常信息为({})", e.getCode(), e.getMessage());
-			return;
-		}
-		
-		// 发送TCC消息，创建用户（内含创建客户或更新客户逻辑）
-		tccMsgService.sendTccMsg(TccBasicEvent.CREATE_USER, user.toString());
 	}
 
 	/**
@@ -127,34 +134,40 @@ public class HouseholdService implements IHouseholdService {
 	@Override
 	@Transactional(rollbackOn=Exception.class)
 	public void updatePropritor(ProprietorSingleHouseVo singleHouse) throws LiefengException  {
-		
-		// 校验信息
-		validateProprietor(singleHouse);
-		
-		// 客户信息校验
-		CustomerVo customer = initCustomer(singleHouse);
-		customer = checkService.updateCustomerCheck(customer);
-		
-		// 业主信息更新
-		ProprietorVo proprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
-		proprietor.setId(singleHouse.getProprietorId());
-		ProprietorContext proprietorContext = ProprietorContext.build(proprietor);
-		proprietorContext.update();
-		
-		// 业主房产信息更新
-		ProprietorHouseVo proprietorHouse = MyBeanUtil.createBean(singleHouse, ProprietorHouseVo.class);
-		proprietorHouse.setId(singleHouse.getProprietorHouseId());
-		ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.build(proprietorHouse);
-		proprietorHouseContext.update();
-		
-		// 用户更新信息设置
-		UserVo newUser = setUpUser4Update(customer); 
-		
-		// 校验用户信息
-		UserVo user = checkService.updateUserCheck(newUser);
-		
-		// 发送TCC消息，更新用户信息
-		tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_USER, user.toString());
+		try {
+			// 校验信息
+			validateProprietor(singleHouse);
+			
+			// 客户信息校验
+			CustomerVo customer = initCustomer(singleHouse);
+			customer = checkService.updateCustomerCheck(customer);
+			
+			// 业主信息更新
+			ProprietorVo proprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
+			proprietor.setId(singleHouse.getProprietorId());
+			ProprietorContext proprietorContext = ProprietorContext.build(proprietor);
+			proprietorContext.update();
+			
+			// 业主房产信息更新
+			ProprietorHouseVo proprietorHouse = MyBeanUtil.createBean(singleHouse, ProprietorHouseVo.class);
+			proprietorHouse.setId(singleHouse.getProprietorHouseId());
+			ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.build(proprietorHouse);
+			proprietorHouseContext.update();
+			
+			// 用户更新信息设置
+			UserVo newUser = setUpUser4Update(customer); 
+			
+			// 校验用户信息
+			UserVo user = checkService.updateUserCheck(newUser);
+			
+			// 发送TCC消息，更新用户信息
+			tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_USER, user.toString());
+		} catch (LiefengException e) {
+			logger.error("更新业主信息出现异常,异常码（{}）,异常信息（{}）", e.getCode() , e.getMessage());
+			throw new LiefengException(e.getCode(), e.getMessage());
+		} catch (Exception e) {
+			throw new LiefengException(e);
+		}
 	}
 	
 	/**
@@ -164,45 +177,52 @@ public class HouseholdService implements IHouseholdService {
 	@Transactional(rollbackOn=Exception.class)
 	public void saveResident(ResidentVo resident) throws LiefengException {
 		
-		// 校验信息
-		validateResident(resident);
-		
-		// 客户信息校验
-		CustomerVo customer = resident.getCustomer();
-		customer.setRealName(resident.getName());
-		customer.setMobile(resident.getMobile());
-		customer = checkService.createCustomerCheck(customer);
-		
-		// 校验住户是否已存在
-		HouseContext houseContext = HouseContext.loadById(resident.getHouseId());
-		HouseVo house = houseContext.get();
-		ResidentContext residentContext = ResidentContext.build();
-		ResidentVo existedResident = residentContext.get(house.getProjectId(), customer.getGlobalId());
-		if(existedResident == null) { // 新建住户
-			resident.setStatus(HouseholdConstants.ResidentStatus.ACTIVE); // 默认为激活状态
-			resident.setCustGlobalId(customer.getGlobalId());
-			residentContext = ResidentContext.build(resident);
-			residentContext.create();
-		} else { // 更新住户
-			resident.setId(existedResident.getId());
-			resident.setCustGlobalId(customer.getGlobalId());
-			residentContext = ResidentContext.build(resident);
-			residentContext.create();
+		try {
+			// 校验信息
+			validateResident(resident);
+			
+			// 客户信息校验
+			CustomerVo customer = resident.getCustomer();
+			customer.setRealName(resident.getName());
+			customer.setMobile(resident.getMobile());
+			customer = checkService.createCustomerCheck(customer);
+			
+			// 校验住户是否已存在
+			HouseContext houseContext = HouseContext.loadById(resident.getHouseId());
+			HouseVo house = houseContext.get();
+			ResidentContext residentContext = ResidentContext.build();
+			ResidentVo existedResident = residentContext.get(house.getProjectId(), customer.getGlobalId());
+			if(existedResident == null) { // 新建住户
+				resident.setStatus(HouseholdConstants.ResidentStatus.ACTIVE); // 默认为激活状态
+				resident.setCustGlobalId(customer.getGlobalId());
+				residentContext = ResidentContext.build(resident);
+				residentContext.create();
+			} else { // 更新住户
+				resident.setId(existedResident.getId());
+				resident.setCustGlobalId(customer.getGlobalId());
+				residentContext = ResidentContext.build(resident);
+				residentContext.create();
+			}
+			
+			// 后台默认创建的手机用户信息
+			UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.RESIDENT);
+			
+			try { 
+				// 用户信息校验
+				user = checkService.createUserCheck(user);
+			} catch (UserException e) { // 仅仅会捕获到用户存在的异常
+				logger.error("用户创建校验出现异常，异常编码为({})，异常信息为({})", e.getCode(), e.getMessage());
+				return;
+			}
+			
+			// 发送TCC消息，创建用户（内含创建客户或更新客户逻辑）
+			tccMsgService.sendTccMsg(TccBasicEvent.CREATE_USER, user.toString());
+		} catch (LiefengException e) {
+			logger.error("保存住户信息出现异常,异常码（{}）,异常信息（{}）", e.getCode() , e.getMessage());
+			throw new LiefengException(e.getCode(), e.getMessage());
+		} catch (Exception e) {
+			throw new LiefengException(e);
 		}
-		
-		// 后台默认创建的手机用户信息
-		UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.RESIDENT);
-		
-		try { 
-			// 用户信息校验
-			user = checkService.createUserCheck(user);
-		} catch (UserException e) { // 仅仅会捕获到用户存在的异常
-			logger.error("创建用户出现异常，异常编码为({})，异常信息为({})", e.getCode(), e.getMessage());
-			return;
-		}
-		
-		// 发送TCC消息，创建用户（内含创建客户或更新客户逻辑）
-		tccMsgService.sendTccMsg(TccBasicEvent.CREATE_USER, user.toString());
 	}
 
 	/**
@@ -211,27 +231,34 @@ public class HouseholdService implements IHouseholdService {
 	@Override
 	@Transactional(rollbackOn=Exception.class)
 	public void updateResident(ResidentVo resident) throws LiefengException {
-		// 校验信息
-		validateResident(resident);
-		
-		// 客户信息校验
-		CustomerVo customer = resident.getCustomer();
-		customer.setRealName(resident.getName());
-		customer.setMobile(resident.getMobile());
-		checkService.updateCustomerCheck(customer);
-		
-		// 更新住户信息
-		ResidentContext residentContext = ResidentContext.build(resident);
-		residentContext.update();
-		
-		// 用户更新信息设置
-		UserVo newUser = setUpUser4Update(customer); 
-		
-		// 校验用户信息
-		UserVo user = checkService.updateUserCheck(newUser);
-		
-		// 发送Tcc消息，更新用户信息
-		tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_USER, user.toString());
+		try {
+			// 校验信息
+			validateResident(resident);
+			
+			// 客户信息校验
+			CustomerVo customer = resident.getCustomer();
+			customer.setRealName(resident.getName());
+			customer.setMobile(resident.getMobile());
+			checkService.updateCustomerCheck(customer);
+			
+			// 更新住户信息
+			ResidentContext residentContext = ResidentContext.build(resident);
+			residentContext.update();
+			
+			// 用户更新信息设置
+			UserVo newUser = setUpUser4Update(customer); 
+			
+			// 校验用户信息
+			UserVo user = checkService.updateUserCheck(newUser);
+			
+			// 发送Tcc消息，更新用户信息
+			tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_USER, user.toString());
+		} catch (LiefengException e) {
+			logger.error("更新住户信息出现异常,异常码（{}）,异常信息（{}）", e.getCode() , e.getMessage());
+			throw new LiefengException(e.getCode(), e.getMessage());
+		} catch (Exception e) {
+			throw new LiefengException(e);
+		}
 		
 	}
 
