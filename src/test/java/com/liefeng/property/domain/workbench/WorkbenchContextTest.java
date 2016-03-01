@@ -336,4 +336,16 @@ public class WorkbenchContextTest {
 		DataPageValue page  = workbenchService.findNoticeByPageOfPublished("40282081531cf49b01531d3f4e1c0006", "0000000052a7943f0152a7943fc00000", "402881fb530cd2a501530cd2a5580000", 1, 30);
 		System.out.println(page);
 	}
+	
+	/**
+	 * 获取某个状态下，所有通知
+	 *                       
+	 * @author xhw
+	 * @date 2016年3月1日 下午3:19:53
+	 */
+	@Test
+	public void findNoticeByStatus(){
+		List<NoticeVo> noticeVos = workbenchService.findNoticeVoByStatus("1");
+		System.out.println(noticeVos);
+	}
 }

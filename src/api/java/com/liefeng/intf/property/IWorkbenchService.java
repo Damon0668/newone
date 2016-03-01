@@ -229,4 +229,21 @@ public interface IWorkbenchService {
 	 * @date 2016年2月29日 上午11:28:53
 	 */
 	public DataPageValue<NoticeVo> findNoticeByPageOfPublished(String staffId, String manageProject, String deptId, Integer page, Integer size);
+	
+	/**
+	 * 通过状态、查找相应的通知；
+	 * @param status
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年3月1日 下午2:35:56
+	 */
+	public List<NoticeVo> findNoticeVoByStatus(String status);
+	
+	/**
+	 * 根据状态，自动检测通知，如：到发布时间，还没有审核通过的通知，自动归档。
+	 * @param status                      
+	 * @author xhw
+	 * @date 2016年3月1日 下午5:10:03
+	 */
+	public void autoCheckNotice(String status);
 }
