@@ -113,4 +113,22 @@ public class WorkbenchConstants {
 		public static final String ARCHIVETIME = "t.archive_time";
 		
 	}
+	
+	/**
+	 * 通知接收人类型
+	 * @author xhw
+	 * @date 2016年2月29日下午7:39:20
+	 */
+	public static interface NoticePrivilegeType {
+		/**
+		 * 员工
+		 */
+		public static final String STAFF = "1";
+		
+		/**
+		 * 业主/住户
+		 */
+		public static final String RESIDENT= "2";
+		
+	}
 }

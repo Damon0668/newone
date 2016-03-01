@@ -71,5 +71,43 @@ public class SysService implements ISysService {
 		
 		return dictList;
 	}
+	
+	/**
+	 * 根据字典名查找字典值
+	 * @param groupCode 字典组编码
+	 * @param name 字典名
+	 * @return 字典值
+	 */
+	public String getDictValueByName(String groupCode, String name) {
+		List<SysDictVo> dictList = getDictByGroupCode(groupCode);
+		if (ValidateHelper.isNotEmptyCollection(dictList)) {
+			for (SysDictVo sysDict : dictList) {
+				if (sysDict.getName().equals(name)) {
+					return sysDict.getValue();
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * 根据字典值反向查找字典名
+	 * @param groupCode 字典组编码
+	 * @param value 字典值
+	 * @return 字典名
+	 */
+	public String getDictNameByValue(String groupCode, String value) {
+		List<SysDictVo> dictList = getDictByGroupCode(groupCode);
+		if (ValidateHelper.isNotEmptyCollection(dictList)) {
+			for (SysDictVo sysDict : dictList) {
+				if (sysDict.getValue().equals(value)) {
+					return sysDict.getName();
+				}
+			}
+		}
+		
+		return null;
+	}
 
 }

@@ -18,4 +18,20 @@ public interface ISysService {
 	 */
 	public List<SysDictVo> getDictByGroupCode(String groupCode);
 	
+	/**
+	 * 根据字典名查找字典值
+	 * @param groupCode 字典组编码
+	 * @param name 字典名
+	 * @return 字典值
+	 */
+	public String getDictValueByName(String groupCode, String name);
+	
+	/**
+	 * 根据字典值反向查找字典名
+	 * @param groupCode 字典组编码
+	 * @param value 字典值
+	 * @return 字典名
+	 */
+	public String getDictNameByValue(String groupCode, String value);
+	
 }

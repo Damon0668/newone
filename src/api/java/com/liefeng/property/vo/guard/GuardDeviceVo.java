@@ -36,9 +36,14 @@ public class GuardDeviceVo extends BaseValue {
 	private String positionArea;
 	
 	/**
+	 * 摄像头序列号
+	 */
+	private String cameraSn;
+	
+	/**
 	 * 厂家电话
 	 */
-	private String producer_tel;
+	private String producerTel;
 	
 	/**
 	 * 保修期限
@@ -100,12 +105,20 @@ public class GuardDeviceVo extends BaseValue {
 		this.positionArea = positionArea;
 	}
 
-	public String getProducer_tel() {
-		return producer_tel;
+	public String getCameraSn() {
+		return cameraSn;
 	}
 
-	public void setProducer_tel(String producer_tel) {
-		this.producer_tel = producer_tel;
+	public void setCameraSn(String cameraSn) {
+		this.cameraSn = cameraSn;
+	}
+
+	public String getProducerTel() {
+		return producerTel;
+	}
+
+	public void setProducerTel(String producerTel) {
+		this.producerTel = producerTel;
 	}
 
 	public Date getWarrantyDate() {

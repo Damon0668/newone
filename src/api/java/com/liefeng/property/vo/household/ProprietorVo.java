@@ -80,9 +80,9 @@ public class ProprietorVo extends BaseValue {
 	private String remark;
 	
 	/**
-	 *  状态。0：未审提交；1：正常；2：已注销
+	 *  状态。1：激活；2：已注销
 	 */
-	private String staus;
+	private String status;
 
 	/**
 	 * 录入员工ID
@@ -203,12 +203,12 @@ public class ProprietorVo extends BaseValue {
 		this.remark = remark;
 	}
 
-	public String getStaus() {
-		return staus;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setStaus(String staus) {
-		this.staus = staus;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public String getStaffId() {

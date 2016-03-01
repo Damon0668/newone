@@ -2,9 +2,6 @@ package com.liefeng.property.vo.workbench;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-
 import com.liefeng.core.entity.BaseValue;
 
 /**
@@ -126,6 +123,36 @@ public class NoticeVo extends BaseValue{
 	 * 创建人名称
 	 */
 	private String creatorName;
+	
+	/**
+	 * 通知发布范围
+	 */
+	private String privilegeString;
+	
+	/**
+	 * 接收端名称
+	 */
+	private String terminalNameString;
+	
+	/**
+	 * 类型名称
+	 */
+	private String typeName;
+	
+	/**
+	 * 审核人姓名
+	 */
+	private String reviewerName;
+	
+	/**
+	 * 归档姓名
+	 */
+	private String archiverName;
+	
+	/**
+	 * 发布人姓名
+	 */
+	private String publisherName;
 
 	public String getId() {
 		return id;
@@ -317,5 +344,53 @@ public class NoticeVo extends BaseValue{
 
 	public void setCreatorName(String creatorName) {
 		this.creatorName = creatorName;
+	}
+
+	public String getPrivilegeString() {
+		return privilegeString;
+	}
+
+	public void setPrivilegeString(String privilegeString) {
+		this.privilegeString = privilegeString;
+	}
+
+	public String getTerminalNameString() {
+		return terminalNameString;
+	}
+
+	public void setTerminalNameString(String terminalNameString) {
+		this.terminalNameString = terminalNameString;
+	}
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+
+	public String getReviewerName() {
+		return reviewerName;
+	}
+
+	public void setReviewerName(String reviewerName) {
+		this.reviewerName = reviewerName;
+	}
+
+	public String getArchiverName() {
+		return archiverName;
+	}
+
+	public void setArchiverName(String archiverName) {
+		this.archiverName = archiverName;
+	}
+
+	public String getPublisherName() {
+		return publisherName;
+	}
+
+	public void setPublisherName(String publisherName) {
+		this.publisherName = publisherName;
 	}
 }

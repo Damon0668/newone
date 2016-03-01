@@ -25,6 +25,7 @@ import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
+import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.domain.household.CheckinMaterialContext;
 import com.liefeng.property.domain.household.ProprietorContext;
 import com.liefeng.property.domain.household.ProprietorHouseContext;
@@ -78,8 +79,8 @@ public class HouseholdService implements IHouseholdService {
 		proprietorContext = ProprietorContext.build();
 		ProprietorVo proprietor = proprietorContext.get(singleHouse.getProjectId(), customer.getGlobalId());
 		if( proprietor == null) { // 保存业主信息
-			
 			proprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
+			proprietor.setStatus(HouseholdConstants.ProprietorStatus.ACTIVE); // 默认为激活状态
 			proprietorContext = ProprietorContext.build(proprietor);
 			proprietor = proprietorContext.create();
 		} else { // 更新业主信息
@@ -169,6 +170,7 @@ public class HouseholdService implements IHouseholdService {
 		ResidentContext residentContext = ResidentContext.build();
 		ResidentVo existedResident = residentContext.get(house.getProjectId(), customer.getGlobalId());
 		if(existedResident == null) { // 新建住户
+			resident.setStatus(HouseholdConstants.ResidentStatus.ACTIVE); // 默认为激活状态
 			resident.setCustGlobalId(customer.getGlobalId());
 			residentContext = ResidentContext.build(resident);
 			residentContext.create();
@@ -309,6 +311,15 @@ public class HouseholdService implements IHouseholdService {
 		CheckinMaterialContext checkinMaterialContext = CheckinMaterialContext.loadByProprietorHouseId(proprietorHouseId);
 		
 		checkinMaterialContext.delete();
+	}
+	
+	/**
+	 * 根据业主ID获取业主信息
+	 */
+	@Override
+	public ProprietorVo getProprietorById(String id) {
+		ProprietorContext proprietorContext = ProprietorContext.loadById(id);
+		return proprietorContext.get();
 	}
 	
 	/**
