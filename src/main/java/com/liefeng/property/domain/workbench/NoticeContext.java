@@ -160,7 +160,6 @@ public class NoticeContext {
 	 * @param status
 	 * @param staffId
 	 * @param manageProject
-	 * @param orderBy
 	 * @return                      
 	 * @author xhw
 	 * @date 2016年2月29日 上午11:23:02
@@ -176,7 +175,7 @@ public class NoticeContext {
 
 		Long count = noticeQueryRepository.queryByCount(param);
 		count = (count == null ? 0 : count);
-		logger.info("总数量：count=" + count);
+		logger.info("通知总数量：count=" + count);
 
 		return count;
 	}
@@ -198,16 +197,17 @@ public class NoticeContext {
 		paramMap.put("staffId", staffId);
 		paramMap.put("status", status);
 		paramMap.put("manageProject", manageProject);
-		paramMap.put("orderBy", orderBy);
 
 		PagingParamVo param = new PagingParamVo();
 		param.setExtra(paramMap);
 		param.setPage(page);
 		param.setPageSize(size);
+		
+		param.setSort(orderBy);
 
 		Long count = noticeQueryRepository.queryByCount(param);
 		count = (count == null ? 0 : count);
-		logger.info("总数量：count=" + count);
+		logger.info("通知总数量：count=" + count);
 
 		// 设置数据总行数，用于计算偏移量
 		param.getPager().setRowCount(count);
@@ -237,7 +237,7 @@ public class NoticeContext {
 
 		Long count = noticeQueryRepository.queryPublishedByCount(param);
 		count = (count == null ? 0 : count);
-		logger.info("总数量：count=" + count);
+		logger.info("通知总数量：count=" + count);
 
 		return count;
 	}
@@ -266,7 +266,7 @@ public class NoticeContext {
 
 		Long count = noticeQueryRepository.queryPublishedByCount(param);
 		count = (count == null ? 0 : count);
-		logger.info("总数量：count=" + count);
+		logger.info("通知总数量：count=" + count);
 
 		// 设置数据总行数，用于计算偏移量
 		param.getPager().setRowCount(count);
@@ -276,6 +276,22 @@ public class NoticeContext {
 		return returnPage;
 	}
 	
+	/**
+	 * 根据状态，查相应的通知
+	 * @param status 状态
+	 * @return                      
+	 * @author xhw
+	 * @date 2016年3月1日 下午2:33:29
+	 */
+	public List<NoticeVo> findByStatus(String status){
+		List<NoticeVo> noticeVos = null;
+		if(ValidateHelper.isNotEmptyString(status)){
+			List<NoticePo> noticePos = noticeRepository.findByStatus(status);
+			
+			noticeVos = MyBeanUtil.createList(noticePos, NoticeVo.class);
+		}
+		return noticeVos;
+	}
 	protected void setNoticeVo(NoticeVo noticeVo) {
 		this.noticeVo = noticeVo;
 	}

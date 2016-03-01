@@ -47,7 +47,7 @@ public class WorkbenchConstants {
 	 * @author xhw
 	 * @date 2016年2月26日上午10:25:47
 	 */
-	public static interface ObjectSize {
+	public static interface MyPageSize {
 		/**
 		 * 任务（4条）
 		 */
@@ -95,22 +95,22 @@ public class WorkbenchConstants {
 		/**
 		 * 创建时间
 		 */
-		public static final String CREATETIME = "t.create_time";
+		public static final String CREATETIME = "create_time";
 		
 		/**
 		 * 审核时间
 		 */
-		public static final String CHECKTIME= "t.review_time";
+		public static final String CHECKTIME= "review_time";
 		
 		/**
 		 * 发布时间
 		 */
-		public static final String PUBLISHTIME = "t.publish_time";
+		public static final String PUBLISHTIME = "publish_time";
 		
 		/**
 		 * 归档时间
 		 */
-		public static final String ARCHIVETIME = "t.archive_time";
+		public static final String ARCHIVETIME = "archive_time";
 		
 	}
 	

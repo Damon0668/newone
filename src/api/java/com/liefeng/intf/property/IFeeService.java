@@ -269,6 +269,12 @@ public interface IFeeService {
 	 */
 	public void createPublicMerterFee(String projectId, String feeType);
 
+	/**
+	 * 修改费用
+	 * @param feeItemVo
+	 */
+	public void updateFeeItem(FeeItemVo feeItemVo);
+
 
 
 	

@@ -381,7 +381,7 @@ public class FeeServiceTest {
 		feeService.createOwnerMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_ELECTRICITY);
 		feeService.createOwnerMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_GAS);
 		feeService.createPublicMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_PUBLIC_GAS);
-		feeService.createPublicMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_PUBLIC_ELECTRICITY);
+		feeService.createPublicMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_PUBLIC_WATER);
 		feeService.createPublicMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_PUBLIC_ELECTRICITY);
 	}
 	

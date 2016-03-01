@@ -38,7 +38,7 @@ public interface ProprietorHouseRepository extends JpaRepository<ProprietorHouse
 	 * @param projectId
 	 * @param buildingId
 	 */
-	@Query("select ph.mandataryName from HousePo h,ProprietorHousePo ph where ph.projectId=h.projectId and ph.houseNum=h.houseNum and ph.projectId='?0' and  h.buildingId='?1'")
+	@Query("select ph from HousePo h,ProprietorHousePo ph where ph.projectId=h.projectId and ph.houseNum=h.houseNum and ph.projectId=?1 and  h.buildingId=?2")
 	public List<ProprietorHousePo> findByProjectIdAndBuildingId(String projectId, String buildingId);
 
 }
