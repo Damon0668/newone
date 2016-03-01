@@ -30,7 +30,8 @@
 		
 	<bean id="generateFeeItemTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="generateFeeItemJob" />
-		<!-- 生成费用项，每月1号凌晨1点执行一次   -->
+		<!-- 生成费用项，每月1号凌晨1点执行一次   0 0 1 1 * ?-->
+		<!-- 0/5 * * * * ?  5秒执行一次-->
 		<property name="cronExpression" value="0 0 1 1 * ?" /> 
 	</bean>
 	
