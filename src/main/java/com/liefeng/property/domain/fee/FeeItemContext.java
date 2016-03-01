@@ -124,7 +124,6 @@ public class FeeItemContext {
 			if(ValidateHelper.isNotEmptyString(feeItemId)) {
 				feeItemPo = feeItemRepository.findOne(feeItemId);
 			}
-			
 			if(feeItemPo != null) {
 				feeItem = MyBeanUtil.createBean(feeItemPo, FeeItemVo.class);
 			}
@@ -234,6 +233,9 @@ public class FeeItemContext {
 		
 		feeItemPo.setUpdateTime(new Date());
 		feeItemPo.setDeadline(feeItem.getDeadline());
+		feeItemPo.setLateFeeRate(feeItem.getLateFeeRate());
+		feeItemPo.setDiscount(feeItem.getDiscount());
+		feeItemRepository.save(feeItemPo);
 	}
 	
 	/**

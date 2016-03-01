@@ -324,6 +324,7 @@ public class FeeService implements IFeeService {
 				feeItemVo.setProprietorName(houseVo.getName());
 				feeItemVo.setStaffId("-1");
 				feeItemVo.setStatus("0");
+				feeItemVo.setDiscount(1.00);
 				feeItemVo.setTotalFee(sum);
 				feeItemVo.setUnitPrice(price);
 				feeItemVo.setUsageAmount(houseVo.getGrossArea());
@@ -340,8 +341,8 @@ public class FeeService implements IFeeService {
 
 			}
 		} catch (Exception e) {
-			logger.info("***费用{}生成失败******",FeeConstants.FeeSetting.FEE_PROPERTYMANAGE);
-			logger.error(e.getMessage());
+			logger.error("***费用{}生成失败******/n{}",FeeConstants.FeeSetting.FEE_PROPERTYMANAGE,e.getMessage());
+			
 		}
 	}
 
@@ -401,6 +402,7 @@ public class FeeService implements IFeeService {
 				Double sum = houseVo.getGrossArea() * price;
 				logger.info("总金额：" + sum);
 				FeeItemVo feeItemVo = new FeeItemVo();
+				feeItemVo.setUsageAmount(houseVo.getGrossArea());
 				feeItemVo.setCreateTime(new Date());
 				feeItemVo.setUpdateTime(new Date());
 				feeItemVo.setStartDate(TimeUtil.getFirstDayOfMonth(preDate));
@@ -416,6 +418,7 @@ public class FeeService implements IFeeService {
 				feeItemVo.setProprietorName(houseVo.getName());
 				feeItemVo.setStaffId("-1");
 				feeItemVo.setStatus("0");
+				feeItemVo.setDiscount(1.00);
 				feeItemVo.setTotalFee(sum);
 				feeItemVo.setUnitPrice(price);
 
@@ -509,6 +512,7 @@ public class FeeService implements IFeeService {
 				feeItemVo.setProprietorName(proprietorSingleHouseVo.getName());
 				feeItemVo.setStaffId("-1");
 				feeItemVo.setStatus("0");
+				feeItemVo.setDiscount(1.00);
 				feeItemVo.setTotalFee(sum);
 				feeItemVo.setUnitPrice(price);
 
@@ -613,6 +617,7 @@ public class FeeService implements IFeeService {
 				feeItemVo.setProprietorName(proprietorSingleHouseVo.getName());
 				feeItemVo.setStaffId("-1");
 				feeItemVo.setStatus("0");
+				feeItemVo.setDiscount(1.00);
 				feeItemVo.setTotalFee(sum);
 				feeItemVo.setUnitPrice(price);
 
@@ -771,6 +776,7 @@ public class FeeService implements IFeeService {
 				feeItemVo.setProprietorName(proprietorSingleHouseVo.getName());
 				feeItemVo.setStaffId("-1");
 				feeItemVo.setStatus("0");
+				feeItemVo.setDiscount(1.00);
 				feeItemVo.setTotalFee(sum);
 				feeItemVo.setUnitPrice(price);
 				feeItemVo.setUsageAmount(meterRecordVo.getUseAmount());
@@ -898,6 +904,7 @@ public class FeeService implements IFeeService {
 							.getName());
 					feeItemVo.setStaffId("-1");
 					feeItemVo.setStatus("0");
+					feeItemVo.setDiscount(1.00);
 					feeItemVo.setTotalFee(sum);
 					feeItemVo.setUnitPrice(price);
 					feeItemVo.setUsageAmount(meterRecordVo.getUseAmount());
@@ -980,6 +987,7 @@ public class FeeService implements IFeeService {
 		return feeItemContext.getOne(feeItemBo);
 	}
 
+	@Override
 	public void updateFeeItem(FeeItemVo feeItemVo) {
 		FeeItemContext feeItemContext = FeeItemContext.build(feeItemVo);
 		feeItemContext.update();
