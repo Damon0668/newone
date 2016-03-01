@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.CheckinMaterialQueryRepository" > 
+
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.household.CheckinMaterialVo" >
+
+</resultMap>
+
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1 
+<trim  suffixOverrides="," >
+	
+</trim>
+</sql>
+
+<select id="queryByProprietorHouseId" resultMap="BaseResultMap">
+	select
+		cm.id as id,
+		cm.proprietor_house_id as proprietorHouseId,
+		cm.proprietor_id as proprietorId,
+		cm.house_num as houseNum,
+		cm.type as type,
+		cm.url as url,
+		cm.name as name,
+		cm.size as size,
+		cm.create_time as createTime,
+		cm.staff_id as staffId,
+		ps.name as staffName,
+		cm.oem_code as oemCode
+	from
+		property.t_checkin_material cm
+		left join property.t_property_staff ps
+		on ps.id = cm.staff_id
+	where
+		cm.proprietor_house_id = #{proprietorHouseId} 
+</select>
+
+
+</mapper>   

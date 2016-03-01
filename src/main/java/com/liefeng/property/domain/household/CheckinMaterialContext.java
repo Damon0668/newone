@@ -16,6 +16,7 @@ import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.household.CheckinMaterialPo;
 import com.liefeng.property.repository.CheckinMaterialRepository;
+import com.liefeng.property.repository.mybatis.CheckinMaterialQueryRepository;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
 
 /**
@@ -32,6 +33,9 @@ public class CheckinMaterialContext {
 	
 	@Autowired
 	private CheckinMaterialRepository checkinMaterialRepository;
+	
+	@Autowired
+	private CheckinMaterialQueryRepository checkinMaterialQueryRepository;
 	
 	/**
 	 * 入住资料信息ID
@@ -166,11 +170,7 @@ public class CheckinMaterialContext {
 		List<CheckinMaterialVo> returnList = new ArrayList<CheckinMaterialVo>();
 		
 		if(ValidateHelper.isNotEmptyString(proprietorHouseId)) {
-			List<CheckinMaterialPo> dataList = checkinMaterialRepository.findByProprietorHouseId(proprietorHouseId);
-			
-			if(ValidateHelper.isNotEmptyCollection(dataList)) {
-				returnList = MyBeanUtil.createList(dataList, CheckinMaterialVo.class);
-			}
+			returnList = checkinMaterialQueryRepository.queryByProprietorHouseId(proprietorHouseId);
 		}
 		
 		return returnList;
