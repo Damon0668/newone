@@ -165,6 +165,12 @@ public class ProprietorHouseContext {
 		List<ProprietorHousePo> proprietorHousePos = proprietorHouseRepository.findByProjectId(projectId);
 		return MyBeanUtil.createList(proprietorHousePos, ProprietorHouseVo.class);
 	}
+	
+	public List<ProprietorHouseVo> findByProjectIdAndBuildingId(
+			String projectId, String buildingId) {
+		List<ProprietorHousePo> proprietorHousePos = proprietorHouseRepository.findByProjectIdAndBuildingId(projectId,buildingId);
+		return MyBeanUtil.createList(proprietorHousePos, ProprietorHouseVo.class);
+	}
 
 	protected void setProprietorHouseId(String proprietorHouseId) {
 		this.proprietorHouseId = proprietorHouseId;
@@ -183,6 +189,8 @@ public class ProprietorHouseContext {
 	protected void setProprietorHouse(ProprietorHouseVo proprietorHouse) {
 		this.proprietorHouse = proprietorHouse;
 	}
+
+	
 
 	
 	

@@ -27,8 +27,12 @@ import com.liefeng.property.domain.fee.FeeSettingContext;
 import com.liefeng.property.domain.fee.LadderFeeSettingContext;
 import com.liefeng.property.domain.fee.MeterRecordContext;
 import com.liefeng.property.domain.fee.MeterSettingContext;
+import com.liefeng.property.domain.household.ProprietorContext;
 import com.liefeng.property.domain.household.ProprietorHouseContext;
 import com.liefeng.property.domain.project.HouseContext;
+import com.liefeng.property.domain.project.ProjectBuildingContext;
+import com.liefeng.property.po.household.ProprietorPo;
+import com.liefeng.property.util.DateUtil;
 import com.liefeng.property.vo.fee.FeeItemVo;
 import com.liefeng.property.vo.fee.FeeSettingVo;
 import com.liefeng.property.vo.fee.LadderFeeSettingVo;
@@ -36,6 +40,7 @@ import com.liefeng.property.vo.fee.MeterRecordVo;
 import com.liefeng.property.vo.fee.MeterSettingVo;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
+import com.liefeng.property.vo.project.ProjectBuildingVo;
 
 /**
  * 
@@ -271,7 +276,7 @@ public class FeeService implements IFeeService {
 			}
 			
 			//计费期
-			Date[] dates=getCurrentDate(new Date(),Integer.parseInt(feeSettingVo.getPeriod()),feeSettingVo.getStartMonth());
+			Date[] dates=DateUtil.getCurrentDate(new Date(),Integer.parseInt(feeSettingVo.getPeriod()),feeSettingVo.getStartMonth());
 		
 			HouseContext houseContext = HouseContext.loadByProjectIdAndHouseNum(proprietorHouseVo.getProjectId(),proprietorHouseVo.getHouseNum());
 			houseContext = HouseContext.loadById(houseContext.get().getId());
@@ -282,8 +287,8 @@ public class FeeService implements IFeeService {
 			logger.info("总金额："+sum);
 			FeeItemVo feeItemVo = new FeeItemVo();
 			feeItemVo.setUpdateTime(new Date());
-			feeItemVo.setStartDate(getFirstDayOfCurrMonth(preDate));
-			feeItemVo.setEndDate(getLastDayOfCurrMonth(preDate));
+			feeItemVo.setStartDate(TimeUtil.getFirstDayOfMonth(preDate));
+			feeItemVo.setEndDate(TimeUtil.getLastDayOfMonth(preDate));
 			feeItemVo.setFeeType(FeeConstants.FeeSetting.FEE_PROPERTYMANAGE);
 			feeItemVo.setHouseNum(proprietorHouseVo.getHouseNum());
 			feeItemVo.setBuildingId(houseVo.getBuildingId());
@@ -340,7 +345,7 @@ public class FeeService implements IFeeService {
 			}
 			
 			//计费期
-			Date[] dates=getCurrentDate(new Date(),Integer.parseInt(feeSettingVo.getPeriod()),feeSettingVo.getStartMonth());
+			Date[] dates=DateUtil.getCurrentDate(new Date(),Integer.parseInt(feeSettingVo.getPeriod()),feeSettingVo.getStartMonth());
 
 			HouseContext houseContext = HouseContext.loadByProjectIdAndHouseNum(proprietorHouseVo.getProjectId(),proprietorHouseVo.getHouseNum());
 			houseContext = HouseContext.loadById(houseContext.get().getId());
@@ -352,8 +357,8 @@ public class FeeService implements IFeeService {
 			FeeItemVo feeItemVo = new FeeItemVo();
 			feeItemVo.setCreateTime(new Date());
 			feeItemVo.setUpdateTime(new Date());
-			feeItemVo.setStartDate(getFirstDayOfCurrMonth(preDate));
-			feeItemVo.setEndDate(getLastDayOfCurrMonth(preDate));
+			feeItemVo.setStartDate(TimeUtil.getFirstDayOfMonth(preDate));
+			feeItemVo.setEndDate(TimeUtil.getLastDayOfMonth(preDate));
 			feeItemVo.setFeeType(FeeConstants.FeeSetting.FEE_MAINTENANCE);
 			feeItemVo.setHouseNum(proprietorHouseVo.getHouseNum());
 			feeItemVo.setBuildingId(houseVo.getBuildingId());
@@ -411,7 +416,7 @@ public class FeeService implements IFeeService {
 			}
 			
 			//计费期
-			Date[] dates=getCurrentDate(new Date(),Integer.parseInt(feeSettingVo.getPeriod()),feeSettingVo.getStartMonth());
+			Date[] dates=DateUtil.getCurrentDate(new Date(),Integer.parseInt(feeSettingVo.getPeriod()),feeSettingVo.getStartMonth());
 
 			HouseContext houseContext = HouseContext.loadByProjectIdAndHouseNum(proprietorHouseVo.getProjectId(),proprietorHouseVo.getHouseNum());
 			houseContext = HouseContext.loadById(houseContext.get().getId());
@@ -423,8 +428,8 @@ public class FeeService implements IFeeService {
 			FeeItemVo feeItemVo = new FeeItemVo();
 			feeItemVo.setCreateTime(new Date());
 			feeItemVo.setUpdateTime(new Date());
-			feeItemVo.setStartDate(getFirstDayOfCurrMonth(preDate));
-			feeItemVo.setEndDate(getLastDayOfCurrMonth(preDate));
+			feeItemVo.setStartDate(TimeUtil.getFirstDayOfMonth(preDate));
+			feeItemVo.setEndDate(TimeUtil.getLastDayOfMonth(preDate));
 			feeItemVo.setFeeType(FeeConstants.FeeSetting.FEE_GARBAGE);
 			feeItemVo.setHouseNum(proprietorHouseVo.getHouseNum());
 			feeItemVo.setBuildingId(proprietorSingleHouseVo.getBuildingId());
@@ -488,7 +493,7 @@ public class FeeService implements IFeeService {
 			}
 			
 			//计费期
-			Date[] dates=getCurrentDate(new Date(),Integer.parseInt(feeSettingVo.getPeriod()),feeSettingVo.getStartMonth());
+			Date[] dates=DateUtil.getCurrentDate(new Date(),Integer.parseInt(feeSettingVo.getPeriod()),feeSettingVo.getStartMonth());
 
 			HouseContext houseContext = HouseContext.loadByProjectIdAndHouseNum(proprietorHouseVo.getProjectId(),proprietorHouseVo.getHouseNum());
 			houseContext = HouseContext.loadById(houseContext.get().getId());
@@ -500,8 +505,8 @@ public class FeeService implements IFeeService {
 			FeeItemVo feeItemVo = new FeeItemVo();
 			feeItemVo.setCreateTime(new Date());
 			feeItemVo.setUpdateTime(new Date());
-			feeItemVo.setStartDate(getFirstDayOfCurrMonth(preDate));
-			feeItemVo.setEndDate(getLastDayOfCurrMonth(preDate));
+			feeItemVo.setStartDate(TimeUtil.getFirstDayOfMonth(preDate));
+			feeItemVo.setEndDate(TimeUtil.getLastDayOfMonth(preDate));
 			feeItemVo.setFeeType(FeeConstants.FeeSetting.FEE_POLLU);
 			feeItemVo.setHouseNum(proprietorHouseVo.getHouseNum());
 			feeItemVo.setBuildingId(proprietorSingleHouseVo.getBuildingId());
@@ -584,7 +589,7 @@ public class FeeService implements IFeeService {
 				return;
 			}
 			//计费期
-			Date[] dates=getCurrentDate(new Date(),Integer.parseInt(feeSettingVo.getPeriod()),feeSettingVo.getStartMonth());
+			Date[] dates=DateUtil.getCurrentDate(new Date(),Integer.parseInt(feeSettingVo.getPeriod()),feeSettingVo.getStartMonth());
 			logger.info("用量为:"+meterRecordVo.getUseAmount());
 			if(LadderFeeSettingVo != null){
 				logger.info("使用阶梯计算");
@@ -619,8 +624,8 @@ public class FeeService implements IFeeService {
 			FeeItemVo feeItemVo = new FeeItemVo();
 			feeItemVo.setCreateTime(new Date());
 			feeItemVo.setUpdateTime(new Date());
-			feeItemVo.setStartDate(getFirstDayOfCurrMonth(preDate));
-			feeItemVo.setEndDate(getLastDayOfCurrMonth(preDate));
+			feeItemVo.setStartDate(TimeUtil.getFirstDayOfMonth(preDate));
+			feeItemVo.setEndDate(TimeUtil.getLastDayOfMonth(preDate));
 			feeItemVo.setFeeType(feeType);
 			feeItemVo.setHouseNum(proprietorHouseVo.getHouseNum());
 			feeItemVo.setBuildingId(proprietorSingleHouseVo.getBuildingId());
@@ -649,6 +654,105 @@ public class FeeService implements IFeeService {
 		}
 	}
 	
+	/**
+	 * 公摊费用生成
+	 * @param projectId
+	 * @param feeType
+	 */
+	@Override
+	public void createPublicMerterFee(String projectId,String feeType){
+		String meterType = "";
+		switch (feeType) {
+		case FeeConstants.FeeSetting.FEE_PUBLIC_WATER:
+			meterType = FeeConstants.MeterRecord.METER_PUBLIC_WATER;
+			break;
+		case FeeConstants.FeeSetting.FEE_PUBLIC_ELECTRICITY :
+			meterType = FeeConstants.MeterRecord.METER_PUBLIC_ELECTRICITY;
+			break;
+		case FeeConstants.FeeSetting.FEE_PUBLIC_GAS :
+			meterType = FeeConstants.MeterRecord.METER_PUBLIC_GAS ;
+			break;
+		}
+		
+		//上个月日期
+		Date preDate = TimeUtil.getDayBeforeByMonth(new Date(), 1);
+		
+		FeeSettingContext feeSettingContext = FeeSettingContext.loadByProjectId(projectId);
+		FeeSettingVo feeSettingVo = feeSettingContext.findChargeable("-1",feeType);
+
+		
+		ProjectBuildingContext buildingContext = ProjectBuildingContext.loadByProjectId(projectId);
+		List<ProjectBuildingVo> projectBuildingVos = buildingContext.finByProjectId();
+		
+		ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.build();
+		for(ProjectBuildingVo projectBuildingVo :projectBuildingVos){ //所有楼栋
+			List<ProprietorHouseVo> proprietorHouseVos = proprietorHouseContext.findByProjectIdAndBuildingId(projectId,projectBuildingVo.getId());
+			for(ProprietorHouseVo proprietorHouseVo :proprietorHouseVos){//所有业主房产
+				//上个月仪表读数
+				MeterRecordContext meterRecordContext = MeterRecordContext.loadByProjectId(proprietorHouseVo.getProjectId());
+				MeterRecordVo meterRecordVo = meterRecordContext.get(proprietorHouseVo.getHouseNum(),null,meterType,FeeConstants.MeterRecord.METEROWNER_YSE,preDate);
+			
+				logger.info("开始计算生成房号为"+proprietorHouseVo.getHouseNum()+",仪表id为"+feeType+"的费用项");
+				
+				Double price = 0.00; //单价
+				Double sum	= 0.00; //总金额
+				
+				FeeItemContext feeItemContext = FeeItemContext.loadByProjectId(proprietorHouseVo.getProjectId());
+				FeeItemVo feeItem = feeItemContext.getPreFeeItem(proprietorHouseVo.getHouseNum(), feeType);
+				if(feeItem != null){
+					logger.info("已经存在该费用项");
+					return;
+				}
+				if(meterRecordVo == null){
+					logger.info("未有抄表记录");
+					return;
+				}
+				if(feeSettingVo == null){
+					logger.info("该费用不收费");
+					return;
+				}
+				//计费期
+				Date[] dates=DateUtil.getCurrentDate(new Date(),Integer.parseInt(feeSettingVo.getPeriod()),feeSettingVo.getStartMonth());
+				logger.info("用量为:"+meterRecordVo.getUseAmount());
+				price = feeSettingVo.getPrice();
+				sum = price*meterRecordVo.getUseAmount()/proprietorHouseVos.size();
+				HouseContext houseContext = HouseContext.loadByProjectIdAndHouseNum(proprietorHouseVo.getProjectId(),proprietorHouseVo.getHouseNum());
+				houseContext = HouseContext.loadById(houseContext.get().getId());
+				ProprietorSingleHouseVo proprietorSingleHouseVo = houseContext.getSingleHouse();
+				FeeItemVo feeItemVo = new FeeItemVo();
+				feeItemVo.setCreateTime(new Date());
+				feeItemVo.setUpdateTime(new Date());
+				feeItemVo.setStartDate(TimeUtil.getFirstDayOfMonth(preDate));
+				feeItemVo.setEndDate(TimeUtil.getLastDayOfMonth(preDate));
+				feeItemVo.setFeeType(feeType);
+				feeItemVo.setHouseNum(proprietorHouseVo.getHouseNum());
+				feeItemVo.setBuildingId(proprietorSingleHouseVo.getBuildingId());
+				feeItemVo.setId(UUIDGenerator.generate());
+				feeItemVo.setLateFeeRate(0.00);//滞纳金
+				feeItemVo.setMeterRecordId(meterRecordVo.getId());
+				feeItemVo.setOemCode(ContextManager.getInstance().getOemCode());
+				feeItemVo.setProjectId(meterRecordVo.getProjectId());
+				feeItemVo.setPropertyId(meterRecordVo.getBuildingId());
+				feeItemVo.setProprietorName(proprietorSingleHouseVo.getName());
+				feeItemVo.setStaffId("-1");
+				feeItemVo.setStatus("0");
+				feeItemVo.setTotalFee(sum);
+				feeItemVo.setUnitPrice(price);
+				feeItemVo.setUsageAmount(meterRecordVo.getUseAmount());
+
+				//设置缴费期限 默认为下个月1号开始收费
+				Calendar deadline=Calendar.getInstance();
+				deadline.setTime(new Date(dates[1].getTime()));
+				deadline.set(Calendar.DATE, feeSettingVo.getPaymentPeriod());
+				deadline.add(Calendar.MONTH, 1);
+				feeItemVo.setDeadline(deadline.getTime());
+				
+				feeItemContext = FeeItemContext.build(feeItemVo);
+				feeItemContext.create();
+			}
+		}
+	}
+	
 	@Override
 	@Transactional
 	public void collect(String feeItemId){
@@ -668,13 +772,13 @@ public class FeeService implements IFeeService {
 		int startMonth = feeSettingVos.get(0).getStartMonth();
 		//计费期设置
 		if(feeItemBo.getStartDate()==null){
-			Date[] dates = FeeService.getCurrentDate(new Date(), cycle, startMonth);
-			feeItemBo.setStartDate(FeeService.getFirstDayOfCurrMonth(dates[0]));
-			feeItemBo.setEndDate(FeeService.getLastDayOfCurrMonth(dates[1]));
+			Date[] dates = DateUtil.getCurrentDate(new Date(), cycle, startMonth);
+			feeItemBo.setStartDate(TimeUtil.getFirstDayOfMonth(dates[0]));
+			feeItemBo.setEndDate(TimeUtil.getLastDayOfMonth(dates[1]));
 		}else{
-			Date[] dates = FeeService.getCurrentDate(feeItemBo.getStartDate(), cycle, startMonth);
-			feeItemBo.setStartDate(FeeService.getFirstDayOfCurrMonth(dates[0]));
-			feeItemBo.setEndDate(FeeService.getLastDayOfCurrMonth(dates[1]));
+			Date[] dates = DateUtil.getCurrentDate(feeItemBo.getStartDate(), cycle, startMonth);
+			feeItemBo.setStartDate(TimeUtil.getFirstDayOfMonth(dates[0]));
+			feeItemBo.setEndDate(TimeUtil.getLastDayOfMonth(dates[1]));
 		}
 		
 		FeeItemContext feeItemContext = FeeItemContext.build();
@@ -690,13 +794,13 @@ public class FeeService implements IFeeService {
 		int startMonth = feeSettingVos.get(0).getStartMonth();
 		//计费期设置
 		if(feeItemBo.getStartDate()==null){
-			Date[] dates = FeeService.getCurrentDate(new Date(), cycle, startMonth);
-			feeItemBo.setStartDate(FeeService.getFirstDayOfCurrMonth(dates[0]));
-			feeItemBo.setEndDate(FeeService.getLastDayOfCurrMonth(dates[1]));
+			Date[] dates = DateUtil.getCurrentDate(new Date(), cycle, startMonth);
+			feeItemBo.setStartDate(TimeUtil.getFirstDayOfMonth(dates[0]));
+			feeItemBo.setEndDate(TimeUtil.getLastDayOfMonth(dates[1]));
 		}else{
-			Date[] dates = FeeService.getCurrentDate(feeItemBo.getStartDate(), cycle, startMonth);
-			feeItemBo.setStartDate(FeeService.getFirstDayOfCurrMonth(dates[0]));
-			feeItemBo.setEndDate(FeeService.getLastDayOfCurrMonth(dates[1]));
+			Date[] dates = DateUtil.getCurrentDate(feeItemBo.getStartDate(), cycle, startMonth);
+			feeItemBo.setStartDate(TimeUtil.getFirstDayOfMonth(dates[0]));
+			feeItemBo.setEndDate(TimeUtil.getLastDayOfMonth(dates[1]));
 		}
 		
 		FeeItemContext feeItemContext = FeeItemContext.build();
@@ -717,117 +821,16 @@ public class FeeService implements IFeeService {
 		int startMonth = feeSettingVos.get(0).getStartMonth();
 		//计费期设置
 		if(feeItemBo.getStartDate()==null){
-			Date[] dates = FeeService.getCurrentDate(new Date(), cycle, startMonth);
-			feeItemBo.setStartDate(FeeService.getFirstDayOfCurrMonth(dates[0]));
-			feeItemBo.setEndDate(FeeService.getLastDayOfCurrMonth(dates[1]));
+			Date[] dates = DateUtil.getCurrentDate(new Date(), cycle, startMonth);
+			feeItemBo.setStartDate(TimeUtil.getFirstDayOfMonth(dates[0]));
+			feeItemBo.setEndDate(TimeUtil.getLastDayOfMonth(dates[1]));
 		}else{
-			Date[] dates = FeeService.getCurrentDate(feeItemBo.getStartDate(), cycle, startMonth);
-			feeItemBo.setStartDate(FeeService.getFirstDayOfCurrMonth(dates[0]));
-			feeItemBo.setEndDate(FeeService.getLastDayOfCurrMonth(dates[1]));
+			Date[] dates = DateUtil.getCurrentDate(feeItemBo.getStartDate(), cycle, startMonth);
+			feeItemBo.setStartDate(TimeUtil.getFirstDayOfMonth(dates[0]));
+			feeItemBo.setEndDate(TimeUtil.getLastDayOfMonth(dates[1]));
 		}
 		
 		FeeItemContext feeItemContext = FeeItemContext.build();
 		return feeItemContext.findAll(feeItemBo,currentPage,pageSize);
 	}
-	
-	//TODO 移动到core
-	/**
-	 * 获取某月第一天
-	 * @param date
-	 * @return
-	 */
-	public static Date getFirstDayOfCurrMonth(Date date){
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		calendar.set(Calendar.DATE, 1);
-		return TimeUtil.format(TimeUtil.format(calendar.getTime(),TimeUtil.PATTERN_1),TimeUtil.PATTERN_1);
-	}
-		
-	/**
-	 * 获取某月最后一天
-	 * @param date
-	 * @return
-	 */
-	public static Date getLastDayOfCurrMonth(Date date){
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
-		return TimeUtil.format(TimeUtil.format(calendar.getTime(),TimeUtil.PATTERN_1),TimeUtil.PATTERN_1);
-	}
-		
-		/**
-		 * 获取thisdate从属分期的时间段
-		 * 
-		 * @param thisdate
-		 *            当前时间，可指定
-		 * @param cycle
-		 *            周期度量，例2个月一次则为2
-		 * @param startMonth起始月份
-		 *            ，一般设为1，即1月份开始
-		 * @return 数组 date[0]为周期的起始时间，date[1]为结束时间
-		 * @throws Exception
-		 * @throws NumberFormatException
-		 */
-		public static Date[] getCurrentDate(Date thisdate, int cycle, int startMonth) {
-
-			Date[] date = new Date[2];
-			@SuppressWarnings("deprecation")
-			int thismonth = thisdate.getMonth() + 1;
-			int count = thismonth / cycle;
-			int i = thismonth % cycle;
-			int start = 0;
-			int end = 0;
-			if (i == 0) {
-				start = (count - 1) * cycle + 1;
-				end = count * cycle;
-			} else {
-				start = count * cycle + 1;
-				end = (count + 1) * cycle;
-			}
-			start += startMonth - 1;
-			end += startMonth - 1;
-			// System.out.println(start+"---------"+end);
-			// 字符串转换为日期
-			Date startdate = null;
-			Date enddate = null;
-			try {
-				Calendar c = Calendar.getInstance();
-				c.setTime(thisdate);
-				c.add(2, start - thismonth);
-				startdate = c.getTime();
-
-				c.setTime(startdate);
-				c.add(2, end - start);
-				enddate = c.getTime();
-
-			} catch (Exception e) {
-			}
-			date[0] = TimeUtil.format(TimeUtil.format(startdate, TimeUtil.PATTERN_1),TimeUtil.PATTERN_1);
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(enddate);
-			calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
-			date[1] = TimeUtil.format(TimeUtil.format(calendar.getTime(), TimeUtil.PATTERN_1),TimeUtil.PATTERN_1);
-			return date;
-		}
-		
-		/**  
-	     * 计算两个日期之间相差的天数  
-	     * @param smdate 较小的时间 
-	     * @param bdate  较大的时间 
-	     * @return 相差天数 
-	     * @throws ParseException  
-	     */    
-	    public static int daysBetween(Date smdate,Date bdate) throws ParseException{    
-	        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");  
-	        smdate=sdf.parse(sdf.format(smdate));  
-	        bdate=sdf.parse(sdf.format(bdate));  
-	        Calendar cal = Calendar.getInstance();    
-	        cal.setTime(smdate);    
-	        long time1 = cal.getTimeInMillis();                 
-	        cal.setTime(bdate);    
-	        long time2 = cal.getTimeInMillis();         
-	        long between_days=(time2-time1)/(1000*3600*24);  
-	            
-	       return Integer.parseInt(String.valueOf(between_days));           
-	    }
 }

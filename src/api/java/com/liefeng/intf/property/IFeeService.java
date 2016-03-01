@@ -262,6 +262,13 @@ public interface IFeeService {
 	public DataPageValue<FeeItemVo> findAllFeeItem(FeeItemBo feeItemBo,
 			Integer currentPage, Integer pageSize);
 
+	/**
+	 * 公摊费用
+	 * @param projectId
+	 * @param feeType
+	 */
+	public void createPublicMerterFee(String projectId, String feeType);
+
 
 
 	

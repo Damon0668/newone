@@ -1,5 +1,7 @@
 package com.liefeng.property.domain.project;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -221,5 +223,15 @@ public class ProjectBuildingContext {
 		voPage = poPage.map(new Po2VoConverter<ProjectBuildingPo, ProjectBuildingVo>(ProjectBuildingVo.class));
 		
 		return new DataPageValue<ProjectBuildingVo>(voPage.getContent(), voPage.getTotalElements(), size, page);
+	}
+	
+	/**
+	 * 获取项目下的所有楼栋
+	 * @return
+	 */
+	public List<ProjectBuildingVo> finByProjectId(){
+		List<ProjectBuildingPo> projectBuildingPos = projectBuildingRepository.findByProjectIdAndParentIdIsNull(projectId);
+		
+		return MyBeanUtil.createList(projectBuildingPos, ProjectBuildingVo.class);
 	}
 }

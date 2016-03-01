@@ -5,6 +5,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.liefeng.property.po.household.ProprietorHousePo;
 
@@ -31,5 +32,13 @@ public interface ProprietorHouseRepository extends JpaRepository<ProprietorHouse
 	 * @return
 	 */
 	public List<ProprietorHousePo> findByProjectId(String projectId);
+
+	/**
+	 * 获取楼栋下的所有业主
+	 * @param projectId
+	 * @param buildingId
+	 */
+	@Query("select ph.mandataryName from HousePo h,ProprietorHousePo ph where ph.projectId=h.projectId and ph.houseNum=h.houseNum and ph.projectId='?0' and  h.buildingId='?1'")
+	public List<ProprietorHousePo> findByProjectIdAndBuildingId(String projectId, String buildingId);
 
 }

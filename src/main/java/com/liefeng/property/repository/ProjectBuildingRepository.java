@@ -1,5 +1,7 @@
 package com.liefeng.property.repository;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
@@ -47,4 +49,12 @@ public interface ProjectBuildingRepository extends JpaRepository<ProjectBuilding
      * @return
      */
     public Page<ProjectBuildingPo> findFloorsByParentId(String parentId, Pageable pageable);
+
+    /**
+     * 获取某项目下的所有楼栋
+     * @param projectId
+     * @return
+     */
+	public List<ProjectBuildingPo> findByProjectIdAndParentIdIsNull(
+			String projectId);
 }

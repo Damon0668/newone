@@ -1,12 +1,10 @@
 package com.liefeng.property.domain.fee;
 
-import java.sql.Time;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.mockito.internal.stubbing.answers.DoesNothing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -168,11 +166,7 @@ public class FeeItemContext {
 		
 		for(FeeItemVo feeItemVo:meterRecordVos){
 			Integer days=0;
-			try {
-				days = FeeService.daysBetween(feeItemVo.getDeadline(), new Date());
-			} catch (ParseException e) {
-				logger.error(e.getMessage());
-			}
+			days = TimeUtil.daysBetween(feeItemVo.getDeadline(), new Date());
 			Integer deadline = days < 0 ? 0 : days;
 			Double receivableAmount = feeItemVo.getTotalFee()*feeItemVo.getDiscount()+(feeItemVo.getTotalFee()*feeItemVo.getLateFeeRate()*deadline);
 			feeItemVo.setReceivableAmount(receivableAmount);
@@ -197,11 +191,7 @@ public class FeeItemContext {
 		if(meterRecordVos !=null && meterRecordVos.size()>0){
 			Integer days=0;
 			feeItemVo = meterRecordVos.get(0);
-			try {
-				days = FeeService.daysBetween(feeItemVo.getDeadline(), new Date());
-			} catch (ParseException e) {
-				logger.error(e.getMessage());
-			}
+			days = TimeUtil.daysBetween(feeItemVo.getDeadline(), new Date());
 			Integer deadline = days < 0 ? 0 : days;
 			Double receivableAmount = feeItemVo.getTotalFee()*feeItemVo.getDiscount()+(feeItemVo.getTotalFee()*feeItemVo.getLateFeeRate()*deadline);
 			feeItemVo.setReceivableAmount(receivableAmount);
