@@ -16,6 +16,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
+import com.liefeng.property.vo.workbench.MessagePrivilegeVo;
 import com.liefeng.property.vo.workbench.MessageVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
@@ -478,5 +479,44 @@ public class WorkbenchContextTest {
 	@Test
 	public void deleteMessageById(){
 		workbenchService.deleteMessageById("402889d253367eb70153367eb7710000");
+	}
+	
+	/**
+	 * 创建消息权限
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 下午5:33:52
+	 */
+	@Test
+	public void createMessagePrivilege(){
+		MessagePrivilegeVo messagePrivilegeVo = new MessagePrivilegeVo();
+		messagePrivilegeVo.setMessageId("402889d25336a818015336a818a70000");
+		messagePrivilegeVo.setProjectId("2");
+		messagePrivilegeVo.setGroupId("-1");
+		messagePrivilegeVo.setType("1");
+		workbenchService.createMessagePrivilege(messagePrivilegeVo);
+	}
+	
+	/**
+	 * 通过消息id，获取消息的权限
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 下午5:43:41
+	 */
+	@Test
+	public void findMessagePrivilegeByMessageID(){
+		List<MessagePrivilegeVo> messagePrivilegeVos = workbenchService.findMessagePrivilegeByMessageId("402889d25336a818015336a818a70000");
+		System.out.println(messagePrivilegeVos);
+	}
+	
+	/**
+	 * 通过消息id，删除消息的权限
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 下午5:45:46
+	 */
+	@Test
+	public void deleteMessagePrivilegeByMessageId(){
+		workbenchService.deleteMessagePrivilegeByMessageId("402889d25336a818015336a818a70000");
 	}
 }

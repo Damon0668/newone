@@ -12,12 +12,14 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.domain.workbench.MessageContext;
+import com.liefeng.property.domain.workbench.MessagePrivilegeContext;
 import com.liefeng.property.domain.workbench.NoticeContext;
 import com.liefeng.property.domain.workbench.NoticePrivilegeContext;
 import com.liefeng.property.domain.workbench.ScheduleContext;
 import com.liefeng.property.domain.workbench.TaskAttachmentContext;
 import com.liefeng.property.domain.workbench.TaskContext;
 import com.liefeng.property.domain.workbench.TaskPrivilegeContext;
+import com.liefeng.property.vo.workbench.MessagePrivilegeVo;
 import com.liefeng.property.vo.workbench.MessageVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
@@ -427,5 +429,25 @@ public class WorkbenchService implements IWorkbenchService {
 	public void deleteMessageById(String id) {
 		MessageContext messageContext = MessageContext.loadById(id);
 		messageContext.deleteById();
+	}
+
+	@Override
+	public MessagePrivilegeVo createMessagePrivilege(
+			MessagePrivilegeVo messagePrivilegeVo) {
+		MessagePrivilegeContext messagePrivilegeContext = MessagePrivilegeContext.build(messagePrivilegeVo);
+		return messagePrivilegeContext.create();
+	}
+
+	@Override
+	public List<MessagePrivilegeVo> findMessagePrivilegeByMessageId(
+			String messageId) {
+		MessagePrivilegeContext messagePrivilegeContext = MessagePrivilegeContext.loadByMessageId(messageId);
+		return messagePrivilegeContext.findByMessageId();
+	}
+
+	@Override
+	public void deleteMessagePrivilegeByMessageId(String messageId) {
+		MessagePrivilegeContext messagePrivilegeContext = MessagePrivilegeContext.loadByMessageId(messageId);
+		messagePrivilegeContext.deleteByMessageId();
 	}
 }

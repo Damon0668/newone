@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
+import com.liefeng.property.vo.workbench.MessagePrivilegeVo;
 import com.liefeng.property.vo.workbench.MessageVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
@@ -328,4 +329,30 @@ public interface IWorkbenchService {
 	 * @2016年3月2日 下午4:16:32
 	 */
 	public void deleteMessageById(String id);
+	
+	/**
+	 * 创建消息权限
+	 * @param messagePrivilegeVo
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 下午5:17:50
+	 */
+	public MessagePrivilegeVo createMessagePrivilege(MessagePrivilegeVo messagePrivilegeVo);
+	
+	/**
+	 * 根据消息id，获取消息的权限
+	 * @param messageId 消息id
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 下午5:19:41
+	 */
+	public List<MessagePrivilegeVo> findMessagePrivilegeByMessageId(String messageId);
+	
+	/**
+	 * 根据消息id，删除消息的权限
+	 * @param messageId 消息id
+	 * @author xhw
+	 * @2016年3月2日 下午5:20:41
+	 */
+	public void deleteMessagePrivilegeByMessageId(String messageId);
 }
