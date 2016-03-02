@@ -6,6 +6,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
+import com.liefeng.property.vo.workbench.ScheduleVo;
 import com.liefeng.property.vo.workbench.TaskAttachmentVo;
 import com.liefeng.property.vo.workbench.TaskPrivilegeVo;
 import com.liefeng.property.vo.workbench.TaskVo;
@@ -246,4 +247,48 @@ public interface IWorkbenchService {
 	 * @date 2016年3月1日 下午5:10:03
 	 */
 	public void autoCheckNotice(String status);
+	
+	/**
+	 * 根据日程id，查找日程
+	 * @param id 日程id
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 上午9:18:17
+	 */
+	public ScheduleVo findScheduleById(String id);
+	
+	/**
+	 * 创建日程
+	 * @param scheduleVo
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 上午9:19:09
+	 */
+	public ScheduleVo createSchedule(ScheduleVo scheduleVo);
+	
+	
+	/**
+	 * 跟新日程
+	 * @param scheduleVo
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 上午9:19:46
+	 */
+	public ScheduleVo updateSchedule(ScheduleVo scheduleVo);
+	
+	/**
+	 * 根据日程id，删除日程
+	 * @param id 日程id
+	 * @author xhw
+	 * @2016年3月2日 上午9:20:34
+	 */
+	public void deleteScheduleById(String id);
+	
+	/**
+	 * 根据创建人id，删除该创建人的所有日程
+	 * @param creatorId 创建人id
+	 * @author xhw
+	 * @2016年3月2日 上午9:21:34
+	 */
+	public void deleteScheduleByCreatorId(String creatorId);
 }

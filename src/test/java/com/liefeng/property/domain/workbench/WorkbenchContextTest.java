@@ -15,6 +15,7 @@ import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
+import com.liefeng.property.vo.workbench.ScheduleVo;
 import com.liefeng.property.vo.workbench.TaskAttachmentVo;
 import com.liefeng.property.vo.workbench.TaskPrivilegeVo;
 import com.liefeng.property.vo.workbench.TaskVo;
@@ -347,5 +348,77 @@ public class WorkbenchContextTest {
 	public void findNoticeByStatus(){
 		List<NoticeVo> noticeVos = workbenchService.findNoticeVoByStatus("1");
 		System.out.println(noticeVos);
+	}
+	
+	/**
+	 * 创建日程
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 上午9:29:34
+	 */
+	@Test
+	public void createSchedule(){
+		ScheduleVo scheduleVo = new ScheduleVo();
+		scheduleVo.setContent("晚上一起吃饭");
+		scheduleVo.setCreatorId("40282081531cf49b01531d3f4e1c0006");
+		scheduleVo.setRepeats("1");
+		scheduleVo.setScheduleDate(new Date());
+		scheduleVo.setTimes(1);
+		scheduleVo.setTitle("吃饭");
+		
+		workbenchService.createSchedule(scheduleVo);
+	}
+	
+	/**
+	 * 根据日程id，获取日程
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 上午9:59:33
+	 */
+	@Test
+	public void findScheduleById(){
+		ScheduleVo scheduleVo = workbenchService.findScheduleById("402889d253350ba80153350ba8100000");
+		System.out.println(scheduleVo);
+	}
+	
+	/**
+	 * 更新日程
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 上午10:03:04
+	 */
+	@Test
+	public void updateSchedule(){
+		ScheduleVo scheduleVo = new ScheduleVo();
+		scheduleVo.setId("402889d253350ba80153350ba8100000");
+		scheduleVo.setContent("晚上一起吃饭2");
+		scheduleVo.setCreatorId("40282081531cf49b01531d3f4e1c0006");
+		scheduleVo.setRepeats("2");
+		scheduleVo.setScheduleDate(new Date());
+		scheduleVo.setTimes(3);
+		scheduleVo.setTitle("吃饭3");
+		workbenchService.updateSchedule(scheduleVo);
+	}
+	
+	/**
+	 * 根据日程id，删除日程
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 上午10:05:02
+	 */
+	@Test
+	public void deleteScheduleById(){
+		workbenchService.deleteScheduleById("402889d253350ba80153350ba8100000");
+	}
+	
+	/**
+	 * 根据创建人id，删除创建人所有日程
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 上午10:06:57
+	 */
+	@Test
+	public void deleteScheduleByCreatorId(){
+		workbenchService.deleteScheduleByCreatorId("40282081531cf49b01531d3f4e1c0006");
 	}
 }
