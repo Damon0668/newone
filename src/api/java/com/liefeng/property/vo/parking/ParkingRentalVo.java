@@ -1,4 +1,4 @@
-package com.liefeng.property.vo.household;
+package com.liefeng.property.vo.parking;
 
 import java.util.Date;
 

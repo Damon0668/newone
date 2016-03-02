@@ -4,7 +4,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.liefeng.property.po.project.ParkingPo;
+import com.liefeng.property.po.parking.ParkingPo;
 
 /**
  * 车位信息仓储层
@@ -14,5 +14,7 @@ import com.liefeng.property.po.project.ParkingPo;
  */
 @Transactional
 public interface ParkingRepository extends JpaRepository<ParkingPo, String> {
+
+	public ParkingPo findByProjectIdAndNum(String projectId, String num);
 
 }

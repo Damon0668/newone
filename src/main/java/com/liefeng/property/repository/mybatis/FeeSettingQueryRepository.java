@@ -6,7 +6,7 @@ import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.property.vo.fee.FeeSettingVo;
 
 /**
- * 抄表列表
+ * 费用设置查询
  * @author wuzhijing
  * @date 2016年2月23日19:38:33
  */

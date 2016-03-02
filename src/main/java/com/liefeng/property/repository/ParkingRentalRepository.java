@@ -4,7 +4,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.liefeng.property.po.household.ParkingRentalPo;
+import com.liefeng.property.po.parking.ParkingRentalPo;
 
 /**
  * 车位租售信息仓储层

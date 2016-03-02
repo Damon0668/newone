@@ -1,6 +1,5 @@
 package com.liefeng.property.domain.fee;
 
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;

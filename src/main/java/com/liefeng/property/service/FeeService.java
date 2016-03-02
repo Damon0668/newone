@@ -1,7 +1,5 @@
 package com.liefeng.property.service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +29,6 @@ import com.liefeng.property.domain.household.ProprietorContext;
 import com.liefeng.property.domain.household.ProprietorHouseContext;
 import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.domain.project.ProjectBuildingContext;
-import com.liefeng.property.po.household.ProprietorPo;
 import com.liefeng.property.util.DateUtil;
 import com.liefeng.property.vo.fee.FeeItemVo;
 import com.liefeng.property.vo.fee.FeeSettingVo;

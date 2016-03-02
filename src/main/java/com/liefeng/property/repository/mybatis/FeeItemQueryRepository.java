@@ -7,7 +7,7 @@ import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.vo.fee.FeeItemVo;
 
 /**
- * 抄表列表
+ * 费用查询
  * @author wuzhijing
  * @date 2016年2月23日19:38:33
  */

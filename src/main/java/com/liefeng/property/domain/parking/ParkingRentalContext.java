@@ -1,4 +1,4 @@
-package com.liefeng.property.domain.household;
+package com.liefeng.property.domain.parking;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,14 +10,14 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
-import com.liefeng.property.po.household.ParkingRentalPo;
+import com.liefeng.property.po.parking.ParkingRentalPo;
 import com.liefeng.property.repository.ParkingRentalRepository;
-import com.liefeng.property.vo.household.ParkingRentalVo;
+import com.liefeng.property.vo.parking.ParkingRentalVo;
 
 /**
  * 车位租售信息领域模型
  * 
- * @author ZhenTingJun
+ * @author wuzhijing
  * @date 2015-12-25
  */
 @Service
@@ -54,7 +54,7 @@ public class ParkingRentalContext {
 	 */
 	public static ParkingRentalContext build(ParkingRentalVo parkingRental) {
 		ParkingRentalContext parkingRentalContext = getInstance();
-		parkingRentalContext.parkingRental = parkingRental;
+		parkingRentalContext.setParkingRental(parkingRental);
 		
 		return parkingRentalContext;
 	}
@@ -76,7 +76,7 @@ public class ParkingRentalContext {
 	 */
 	public static ParkingRentalContext loadById(String parkingRentalId) {
 		ParkingRentalContext parkingRentalContext = getInstance();
-		parkingRentalContext.parkingRentalId = parkingRentalId;
+		parkingRentalContext.setParkingRentalId(parkingRentalId); 
 		
 		return parkingRentalContext;
 	}
@@ -100,6 +100,12 @@ public class ParkingRentalContext {
 		return parkingRental;
 	}
 	
+	public void update() {
+		if(parkingRental!=null && ValidateHelper.isNotEmptyString(parkingRental.getId())){
+			parkingRentalRepository.save(MyBeanUtil.createBean(parkingRental,ParkingRentalPo.class));
+		}
+	}
+	
 	/**
 	 * 保存车位租售信息
 	 */
@@ -111,4 +117,14 @@ public class ParkingRentalContext {
 			parkingRentalRepository.save(parkingRentalPo);
 		}
 	}
+	
+	protected void setParkingRental(ParkingRentalVo parkingRental) {
+		this.parkingRental = parkingRental;
+	}
+	
+	protected void setParkingRentalId(String parkingRentalId) {
+		this.parkingRentalId = parkingRentalId;
+	}
+
+	
 }

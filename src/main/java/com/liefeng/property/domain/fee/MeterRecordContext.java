@@ -399,7 +399,6 @@ public class MeterRecordContext {
 		}
 	}
 	
-	
 	protected void setMeterRecord(MeterRecordVo meterRecord) {
 		this.meterRecord = meterRecord;
 	}

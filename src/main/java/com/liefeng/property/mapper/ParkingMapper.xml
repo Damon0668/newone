@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.ParkingQueryRepository">
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap"
+		type="com.liefeng.property.vo.parking.ParkingSingleRentalVo">
+		<result column="id" property="id" />
+		<result column="project_id" property="projectId" />
+		<result column="building_id" property="buildingId" />
+		<result column="code" property="code" />
+		<result column="floor" property="floor" />
+		<result column="num" property="num" />
+		<result column="area" property="area" />
+		<result column="suitable_car" property="suitableCar" />
+		<result column="pre_rent_price" property="preRentPrice" />
+		<result column="pre_sale_price" property="preSalePrice" />
+		<result column="manage_fee" property="manageFee" />
+		<result column="status" property="status" />
+		<result column="oem_code" property="oemCode" />
+
+		<result column="parkingRentalId" property="parkingRentalId" />
+		<result column="type" property="type" />
+		<result column="house_num" property="houseNum" />
+		<result column="customer_name" property="customerName" />
+		<result column="phone" property="phone" />
+		<result column="plate_num" property="plateNum" />
+		<result column="start_date" property="startDate" />
+		<result column="end_date" property="endDate" />
+		<result column="price" property="price" />
+		<result column="authorization" property="authorization" />
+
+	</resultMap>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="extra.num != null and extra.num != ''">
+				AND p.num = #{extra.num}
+			</if>
+			<if test="extra.customerName != null and extra.customerName != ''">
+				 AND p.customer_name like CONCAT('%', #{extra.customerName },'%')
+			</if>
+			<if test="extra.status != null and extra.status != ''">
+				AND pr.status = #{extra.status}
+			</if>
+		</trim>
+	</sql>
+
+	<select id="queryByPage" resultMap="BaseResultMap">
+		select
+		p.id,
+		p.project_id,
+		p.building_id,
+		p.code,
+		p.floor,
+		p.num,
+		p.area,
+		p.suitable_car,
+		p.pre_rent_price,
+		p.pre_sale_price,
+		p.manage_fee,
+		p.status,
+
+		pr.id as parkingRentalId,
+		pr.type,
+		pr.house_num,
+		pr.customer_name,
+		pr.phone,
+		pr.plate_num,
+		pr.start_date,
+		pr.end_date,
+		pr.price,
+		pr.authorization
+		from t_parking p
+		left join t_parking_rental pr on pr.parking_id=p.id
+		<include refid="Example_Where_Clause" />
+		<if
+			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
+			${pager.mysqlQueryCondition}
+		</if>
+	</select>
+	
+	<select id="queryByCount" resultType="java.lang.Long" >
+	select 
+	  count(1) 
+	from(
+		select
+		p.id
+		from t_parking p
+		left join t_parking_rental pr on pr.parking_id=p.id
+		<include refid="Example_Where_Clause" />
+		) t
+	</select>
+	
+	<select id="queryById" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		p.id,
+		p.project_id,
+		p.building_id,
+		p.code,
+		p.floor,
+		p.num,
+		p.area,
+		p.suitable_car,
+		p.pre_rent_price,
+		p.pre_sale_price,
+		p.manage_fee,
+		p.status,
+
+		pr.id as parkingRentalId,
+		pr.type,
+		pr.house_num,
+		pr.customer_name,
+		pr.phone,
+		pr.plate_num,
+		pr.start_date,
+		pr.end_date,
+		pr.price,
+		pr.authorization
+		from t_parking p
+		left join t_parking_rental pr on pr.parking_id=p.id 
+		where p.id = #{id}
+	</select>
+	
+</mapper>   

@@ -16,14 +16,13 @@ public class FeeItemTask {
 	private static Logger logger = LoggerFactory.getLogger(FeeItemTask.class);
 	
 	public void generateFeeItem() {
-		ContextManager.getInstance().setOemCode("property");
-		FeeService feeService = SpringBeanUtil.getBean(FeeService.class);
+				FeeService feeService = SpringBeanUtil.getBean(FeeService.class);
 		ProjectService projectService = SpringBeanUtil.getBean(ProjectService.class);
 		DataPageValue<ProjectVo> projectDataPageValue = projectService.findProjects(1, 1000);
 	
 		logger.info("**********开始生成费用************");
 		for (ProjectVo projectvo : projectDataPageValue.getDataList()) {
-		
+			ContextManager.getInstance().setOemCode(projectvo.getOemCode());
 			feeService.createPropertyManageFee(projectvo.getId());
 			feeService.createPolluFee(projectvo.getId());
 			feeService.createGarbageFee(projectvo.getId());
