@@ -68,6 +68,9 @@ public class HouseholdService implements IHouseholdService {
 	@Transactional(rollbackOn=Exception.class)
 	public void saveProprietor(ProprietorSingleHouseVo singleHouse) throws LiefengException {
 		try {
+			// 业主是否存在标识
+			boolean isExit = false;
+			
 			// 校验信息
 			validateProprietor(singleHouse);
 			
@@ -76,21 +79,20 @@ public class HouseholdService implements IHouseholdService {
 			customer = checkService.createCustomerCheck(customer);
 			singleHouse.setCustGlobalId(customer.getGlobalId());
 			
-			// 校验业主是否已存在
+			// 校验同个OEM下，同个小区业主是否已存在
 			ProprietorContext proprietorContext = null;
 			proprietorContext = ProprietorContext.build();
 			ProprietorVo proprietor = proprietorContext.get(singleHouse.getProjectId(), customer.getGlobalId());
-			if( proprietor == null) { // 保存业主信息
+			
+			// 同个OEM下，同个小区保留一份业主信息，不同小区保留多份业主信息
+			if( proprietor == null) { 
 				proprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
 				proprietor.setStatus(HouseholdConstants.ProprietorStatus.ACTIVE); // 默认为激活状态
 				proprietorContext = ProprietorContext.build(proprietor);
 				proprietor = proprietorContext.create();
-			} else { // 更新业主信息
-				
-				ProprietorVo newProprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
-				newProprietor.setId(proprietor.getId());
-				proprietorContext = ProprietorContext.build(newProprietor);
-				proprietor = proprietorContext.update();
+			} else {
+				isExit = true; // 同个OEM下，同个小区业主信息已存在
+				logger.info("业主信息已存在，后续将不执行业主用户创建动作");
 			}
 			
 			// 业主房产信息保存
@@ -99,27 +101,31 @@ public class HouseholdService implements IHouseholdService {
 			ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.build(proprietorHouse);
 			proprietorHouseContext.create();
 			
-			// 更新房子销售状态
+			// 更新房子销售状态为售出
 			HouseVo house = new HouseVo();
 			house.setId(singleHouse.getHouseId());
 			house.setSaleStatus(ProjectConstants.HouseSaleStatus.HAD_SALE);
 			HouseContext houseContext = HouseContext.build(house);
 			houseContext.update();
 			
-			
-			// 后台默认创建的手机用户信息
-			UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.PROPRIETOR);
-			
-			try { 
-				// 用户信息校验
-				user = checkService.createUserCheck(user);
-			} catch (UserException e) {
-				logger.error("创建用户出现异常，异常编码为({})，异常信息为({})", e.getCode(), e.getMessage());
-				return;
+			// 仅当同个OEM下，同个小区下业主不存在时，才做用户创建
+			// 业主信息存在时，即使传过来的手机号不同也不做用户创建，为了保证同个OEM下，同个小区业主用户信息只有一份
+			if(!isExit) {
+				// 后台默认创建的手机用户信息
+				UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.PROPRIETOR);
+				
+				try { 
+					// 用户信息校验
+					user = checkService.createUserCheck(user);
+				} catch (UserException e) {
+					logger.error("创建用户出现异常，异常编码为({})，异常信息为({})", e.getCode(), e.getMessage());
+					return;
+				}
+				
+				// 发送TCC消息，创建用户（内含创建客户或更新客户逻辑）
+				tccMsgService.sendTccMsg(TccBasicEvent.CREATE_USER, user.toString());
 			}
 			
-			// 发送TCC消息，创建用户（内含创建客户或更新客户逻辑）
-			tccMsgService.sendTccMsg(TccBasicEvent.CREATE_USER, user.toString());
 		} catch (LiefengException e) {
 			logger.error("保存业主信息出现异常,异常码（{}）,异常信息（{}）。", e.getCode() , e.getMessage());
 			throw new LiefengException(e.getCode(), e.getMessage());
@@ -176,8 +182,10 @@ public class HouseholdService implements IHouseholdService {
 	@Override
 	@Transactional(rollbackOn=Exception.class)
 	public void saveResident(ResidentVo resident) throws LiefengException {
-		
 		try {
+			// 住户是否存在标识
+			boolean isExit = false;
+			
 			// 校验信息
 			validateResident(resident);
 			
@@ -192,31 +200,36 @@ public class HouseholdService implements IHouseholdService {
 			HouseVo house = houseContext.get();
 			ResidentContext residentContext = ResidentContext.build();
 			ResidentVo existedResident = residentContext.get(house.getProjectId(), customer.getGlobalId());
-			if(existedResident == null) { // 新建住户
+			
+			// 同个OEM下，同个小区只保存一份住户信息，不同小区保存多份住户信息
+			if(existedResident == null) { 
 				resident.setStatus(HouseholdConstants.ResidentStatus.ACTIVE); // 默认为激活状态
 				resident.setCustGlobalId(customer.getGlobalId());
 				residentContext = ResidentContext.build(resident);
 				residentContext.create();
-			} else { // 更新住户
-				resident.setId(existedResident.getId());
-				resident.setCustGlobalId(customer.getGlobalId());
-				residentContext = ResidentContext.build(resident);
-				residentContext.create();
+			} else {
+				
+				isExit = true; // 同个OEM下，同个小区住户信息已存在
+				logger.info("住户信息已存在，后续将不执行住户用户创建动作");
 			}
 			
-			// 后台默认创建的手机用户信息
-			UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.RESIDENT);
-			
-			try { 
-				// 用户信息校验
-				user = checkService.createUserCheck(user);
-			} catch (UserException e) { // 仅仅会捕获到用户存在的异常
-				logger.error("用户创建校验出现异常，异常编码为({})，异常信息为({})", e.getCode(), e.getMessage());
-				return;
+			// 仅当同个OEM下，同个小区下住户不存在时，才做用户创建
+			// 住户信息存在时，即使传过来的手机号不同也不做用户创建，为了保证同个OEM下，同个小区住户用户信息只有一份
+			if(isExit) {
+				// 后台默认创建的手机用户信息
+				UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.RESIDENT);
+				
+				try { 
+					// 用户信息校验
+					user = checkService.createUserCheck(user);
+				} catch (UserException e) { // 仅仅会捕获到用户存在的异常
+					logger.error("用户创建校验出现异常，异常编码为({})，异常信息为({})", e.getCode(), e.getMessage());
+					return;
+				}
+				
+				// 发送TCC消息，创建用户（内含创建客户或更新客户逻辑）
+				tccMsgService.sendTccMsg(TccBasicEvent.CREATE_USER, user.toString());
 			}
-			
-			// 发送TCC消息，创建用户（内含创建客户或更新客户逻辑）
-			tccMsgService.sendTccMsg(TccBasicEvent.CREATE_USER, user.toString());
 		} catch (LiefengException e) {
 			logger.error("保存住户信息出现异常,异常码（{}）,异常信息（{}）", e.getCode() , e.getMessage());
 			throw new LiefengException(e.getCode(), e.getMessage());
@@ -359,6 +372,17 @@ public class HouseholdService implements IHouseholdService {
 	}
 	
 	/**
+	 * 分页查询业主用户信息
+	 */
+	@Override
+	public DataPageValue<UserVo> listProprietorUser(ProprietorBo params, Integer currentPage, Integer pageSize) {
+		ProprietorContext proprietorContext = ProprietorContext.build();
+		
+		return proprietorContext.listProprietorUser(params, currentPage, pageSize);
+	}
+	
+	
+	/**
 	 * 初始化客户信息
 	 */
 	private CustomerVo initCustomer(ProprietorSingleHouseVo singleHouse) {
@@ -461,8 +485,7 @@ public class HouseholdService implements IHouseholdService {
 	private UserVo setUpUser4Update(CustomerVo customer) {
 		UserVo user = userService.getUserByCustGlobalId(customer.getGlobalId());
 		UserVo newUser = new UserVo();
-		newUser.setName(customer.getMobile());
-		newUser.setMobile(customer.getMobile());
+		newUser.setCustomer(customer);
 		if(user != null) {
 			newUser.setId(user.getId());
 			newUser.setPassword(user.getPassword());
@@ -470,4 +493,5 @@ public class HouseholdService implements IHouseholdService {
 		
 		return newUser;
 	}
+
 }

@@ -58,10 +58,6 @@
 	    AND a.oem_code =  #{extra.oemCode}
 	</if>
 	
-	<if test="extra.oemCode != null and extra.oemCode != ''" >
-	    AND a.oem_code =  #{extra.oemCode}
-	</if>
-	
 	<if test="extra.custGlobalId != null and extra.custGlobalId != ''" >
 	    AND a.custGlobalId =  #{extra.custGlobalId}
 	</if>

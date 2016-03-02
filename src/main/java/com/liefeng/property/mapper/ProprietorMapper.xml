@@ -5,51 +5,17 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.liefeng.property.repository.mybatis.ProprietorQueryRepository" > 
 
-<!-- Result Map-->
+<!-- 业主-->
 <resultMap id="BaseResultMap" type="com.liefeng.property.vo.household.ProprietorSingleHouseVo" >
-	<result column="proprietorId" property="proprietorId"/>
-	<result column="projectId" property="projectId"/>
-	<result column="projectName" property="projectName"/>
-	<result column="name" property="name"/>
-	<result column="phone" property="phone"/>
-	<result column="email" property="email"/>
-	<result column="workUnit" property="workUnit"/>
-	<result column="address" property="address"/>		
-	<result column="zipCode" property="zipCode"/>
-	<result column="emergencyContact" property="emergencyContact"/>
-	<result column="emergencyPhone" property="emergencyPhone"/>
-	<result column="picUrl" property="picUrl"/>
-	<result column="remark" property="remark"/>
 	
-	<result column="proprietorHouseId" property="proprietorHouseId"/>
-	<result column="contractCode" property="contractCode"/>
-	<result column="useType" property="useType"/>
-	<result column="payType" property="payType"/>
-	<result column="checkinMode" property="checkinMode"/>
-	<result column="checkinDate" property="checkinDate"/>
-	<result column="mandataryRelation" property="mandataryRelation"/>
-	<result column="mandataryName" property="mandataryName"/>
-	<result column="mandatarySex" property="mandatarySex"/>
-	<result column="mandataryPhone" property="mandataryPhone"/>
-	<result column="mandataryIdNum" property="mandataryIdNum"/>
-	<result column="mandataryWorkUnit" property="mandataryWorkUnit"/>
-	<result column="mandataryAddress" property="mandataryAddress"/>
-	
-	<result column="customerId" property="customerId"/>
-	<result column="custGlobalId" property="custGlobalId"/>
-	<result column="idNum" property="idNum"/>
-	<result column="mobile" property="mobile"/>
-	<result column="realName" property="realName"/>
-	<result column="sex" property="sex"/>
-	<result column="birthday" property="birthday"/>
-	<result column="maritalStatus" property="maritalStatus"/>
-	<result column="status" property="status"/>
-	
-	<result column="houseId" property="houseId"/>
-	<result column="houseNum" property="houseNum"/>	
 </resultMap>
 
-<!-- 查询条件 -->
+<!-- 用户 -->
+<resultMap id="UserResultMap" type="com.liefeng.base.vo.UserVo" >
+	<result column="customerName" property="customer.realName"/>
+</resultMap>
+
+<!-- 业主查询条件 -->
 <sql id="Example_Where_Clause">
 	WHERE 1=1 
 <trim  suffixOverrides="," >
@@ -91,6 +57,40 @@
 	
 	<if test="extra.oemCode != null and extra.oemCode != ''" >
 	    AND a.oem_code =  #{extra.oemCode}
+	</if>
+</trim>
+</sql>
+
+<!-- 用户查询条件 -->
+<sql id="User_Where_Clause">
+	where 1=1 
+<trim  suffixOverrides="," >
+	<if test="extra.projectId != null and extra.projectId != ''" >
+	    and p.project_id =  #{extra.projectId}
+	</if>
+	
+	<if test="extra.oemCode != null and extra.oemCode != ''" >
+	    and u.oem_code = #{extra.oemCode}
+	</if>
+	
+	<if test="extra.buildingId != null and extra.buildingId != ''" >
+	    and h.building_id = #{extra.buildingId}
+	</if>
+	
+	<if test="extra.floorId != null and extra.floorId != ''" >
+	    and h.floor_id = #{extra.floorId}
+	</if>
+	
+	<if test="extra.phone != null and extra.phone != ''" >
+	    and u.moblie like concat('%',#{extra.phone},'%')
+	</if>
+	
+	<if test="extra.proprietorName != null and extra.proprietorName != ''" >
+	    and p.name like concat('%',#{extra.proprietorName},'%')
+	</if>
+	
+	<if test="extra.houseNum != null and extra.houseNum != ''" >
+	    and h.house_name like concat('%',#{extra.houseNum},'%')
 	</if>
 </trim>
 </sql>
@@ -200,5 +200,51 @@
 	 WHERE
 	    a.id = #{proprietorHouseId}
 </select>
+
+
+<select id="queryProprietorUser" resultMap="UserResultMap">
+	select 
+		u.id as id,
+		u.user_global_id as userGlobalId,
+		u.cust_global_id as custGlobalId,
+		u.register_type as registerType,
+		u.mobile as mobile,
+		u.activate_time as activateTime,
+		u.last_login_time as lastLoginTime,
+		u.status as status,
+		u.oem_code as oemCode,
+		p.name as customerName
+	from
+		basic.t_user u
+		left join property.t_proprietor p
+		on p.cust_global_id = u.cust_global_id and p.phone = u.name and p.oem_code = u.oem_code
+		left join property.t_proprietor_house ph
+		on ph.proprietor_id = p.id
+		left join property.t_house h
+		on h.project_id = ph.project_id and h.house_num = ph.house_num	
+	<include refid="User_Where_Clause"/>
+	<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+		${pager.mysqlQueryCondition}
+	</if>
+</select>
+
+<select id="queryProprietorUserCount"  resultType="java.lang.Long">
+	select
+	  count(1)
+	from (
+		select 
+			u.id as id
+		from
+			basic.t_user u
+			left join property.t_proprietor p
+			on p.cust_global_id = u.cust_global_id and p.phone = u.name and p.oem_code = u.oem_code
+			left join property.t_proprietor_house ph
+			on ph.proprietor_id = p.id
+			left join property.t_house h
+			on h.project_id = ph.project_id and h.house_num = ph.house_num	
+		<include refid="User_Where_Clause"/>
+	) as ttt
+</select>
+
 
 </mapper>   

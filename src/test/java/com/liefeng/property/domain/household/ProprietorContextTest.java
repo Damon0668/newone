@@ -3,9 +3,13 @@ package com.liefeng.property.domain.household;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.security.access.method.P;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
+import com.liefeng.base.vo.UserVo;
+import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.vo.household.ProprietorVo;
 
 /**
@@ -30,4 +34,17 @@ public class ProprietorContextTest {
 		ProprietorContext proprietorContext = ProprietorContext.build(proprietor);
 		proprietorContext.update();
 	}
+	
+	@Test
+	public void listProprietorUser() {
+		
+		ProprietorBo proprietorBo = new ProprietorBo();
+		proprietorBo.setProjectId("0000000052a7943f0152a7943fc00000");
+		proprietorBo.setOemCode("property");
+		
+		ProprietorContext proprietorContext = ProprietorContext.build();
+		DataPageValue<UserVo> dataPage = proprietorContext.listProprietorUser(proprietorBo, 1, 10);
+		System.out.println(dataPage);
+	}
+	
 }

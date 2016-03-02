@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.EncryptionUtil;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
@@ -222,6 +223,39 @@ public class ProprietorContext {
 		}
 		
 		return proprietor;
+	}
+	
+	/**
+	 * 分页查询业主用户信息
+	 * @param params 查询过滤参数
+	 * @param currentPage 分页当前页
+	 * @param pageSize 分页大小
+	 * @return
+	 */
+	public DataPageValue<UserVo> listProprietorUser(ProprietorBo params, Integer currentPage, Integer pageSize) {
+		logger.info("查询参数为{}，分页当前页为{}，分页大小为{}", params, currentPage, pageSize);
+		// 查询参数拷贝
+		Map<String, String> extra = MyBeanUtil.bean2Map(params);
+		
+		PagingParamVo pagingParamVo = new PagingParamVo();
+		pagingParamVo.setExtra(extra);
+		pagingParamVo.setRows(pageSize);
+		pagingParamVo.setPage(currentPage);
+
+		Long count = proprietorQueryRepository.queryProprietorUserCount(pagingParamVo);
+		count = (count == null ? 0 : count);
+		logger.info("总数量：count=" + count);
+		
+		// 设置数据总行数，用于计算偏移量
+		pagingParamVo.getPager().setRowCount(count);
+		List<UserVo> userList = proprietorQueryRepository.queryProprietorUser(pagingParamVo);
+		userList = (ValidateHelper.isEmptyCollection(userList) ? 
+				new ArrayList<UserVo>() : userList);
+
+		DataPageValue<UserVo> userPage = new DataPageValue<UserVo>(
+				userList, count, pageSize, currentPage);
+		
+		return userPage;
 	}
 
 	protected void setProprietorId(String proprietorId) {

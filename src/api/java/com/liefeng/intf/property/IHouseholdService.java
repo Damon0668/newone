@@ -2,6 +2,7 @@ package com.liefeng.intf.property;
 
 import java.util.List;
 
+import com.liefeng.base.vo.UserVo;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.household.ProprietorBo;
@@ -112,5 +113,14 @@ public interface IHouseholdService {
 	 * @return 业主信息
 	 */
 	public ProprietorVo getProprietorById(String id);
+	
+	/**
+	 * 分页查询业主用户信息
+	 * @param params 查询过滤参数
+	 * @param currentPage 分页当前页
+	 * @param pageSize 分页大小
+	 * @return
+	 */
+	public DataPageValue<UserVo> listProprietorUser(ProprietorBo params, Integer currentPage, Integer pageSize);
 	
 }
