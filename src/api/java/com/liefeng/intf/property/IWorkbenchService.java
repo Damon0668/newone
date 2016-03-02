@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
+import com.liefeng.property.vo.workbench.MessagePrivilegeVo;
+import com.liefeng.property.vo.workbench.MessageVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
 import com.liefeng.property.vo.workbench.ScheduleVo;
@@ -301,4 +303,82 @@ public interface IWorkbenchService {
 	 * @2016年3月2日 下午2:09:44
 	 */
 	public List<ScheduleVo> findScheduleByCreatorIdAndQueryDate(String creatorId, String queryDate);
+	
+	/**
+	 * 创建消息
+	 * @param messageVo
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 下午4:14:38
+	 */
+	public MessageVo createMessageVo(MessageVo messageVo);
+	
+	/**
+	 * 根据消息id，获取消息
+	 * @param id 消息id
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 下午4:15:37
+	 */
+	public MessageVo findMessageById(String id);
+	
+	/**
+	 * 根据消息id，删除消息
+	 * @param id 消息id
+	 * @author xhw
+	 * @2016年3月2日 下午4:16:32
+	 */
+	public void deleteMessageById(String id);
+	
+	/**
+	 * 创建消息权限
+	 * @param messagePrivilegeVo
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 下午5:17:50
+	 */
+	public MessagePrivilegeVo createMessagePrivilege(MessagePrivilegeVo messagePrivilegeVo);
+	
+	/**
+	 * 根据消息id，获取消息的权限
+	 * @param messageId 消息id
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 下午5:19:41
+	 */
+	public List<MessagePrivilegeVo> findMessagePrivilegeByMessageId(String messageId);
+	
+	/**
+	 * 根据消息id，删除消息的权限
+	 * @param messageId 消息id
+	 * @author xhw
+	 * @2016年3月2日 下午5:20:41
+	 */
+	public void deleteMessagePrivilegeByMessageId(String messageId);
+	
+	/**
+	 * 获取消息总数
+	 * @param type 消息类型：1：系统，2：个人
+	 * @param staffId 员工id
+	 * @param deptId  部门id
+	 * @param manageProject 管理的项目
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 下午8:33:35
+	 */
+	public Long findMessageCount(String type, String staffId, String deptId, String manageProject);
+	
+	/**
+	 * 获取消息（分页）
+	 * @param type 消息类型：1：系统，2：个人
+	 * @param staffId 员工id
+	 * @param deptId 部门id
+	 * @param manageProject 管理的项目
+	 * @param page
+	 * @param size
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 下午8:35:57
+	 */
+	public DataPageValue<MessageVo> findMessageByPage(String type, String staffId, String deptId, String manageProject, Integer page, Integer size);
 }

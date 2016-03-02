@@ -3,6 +3,7 @@ package com.liefeng.property.domain.workbench;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,13 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
+import com.liefeng.property.vo.workbench.MessagePrivilegeVo;
+import com.liefeng.property.vo.workbench.MessageVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
 import com.liefeng.property.vo.workbench.ScheduleVo;
@@ -33,6 +38,10 @@ public class WorkbenchContextTest {
 	@Autowired
 	private IWorkbenchService workbenchService;
 	
+	@Before
+	public void before(){
+		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
+	}
 	/**
 	 * 根据taskId获取任务
 	 * @author xhw
@@ -432,5 +441,106 @@ public class WorkbenchContextTest {
 	public void findScheduleByCreatorIdAndQueryDate(){
 		List<ScheduleVo> scheduleVos = workbenchService.findScheduleByCreatorIdAndQueryDate("40282081531cf49b01531d3f4e1c0006", "2016-03-02");
 		System.out.println(scheduleVos);
+	}
+	
+	/**
+	 * 创建消息
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 下午4:21:00
+	 */
+	@Test
+	public void createMessage(){
+		MessageVo messageVo = new MessageVo();
+		messageVo.setContent("吃饭啦");
+		messageVo.setCreatorId("40282081531cf49b01531d3f4e1c0006");
+		messageVo.setType("2");
+		workbenchService.createMessageVo(messageVo);
+	}
+	
+	/**
+	 * 根据消息id，获取消息
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 下午4:45:07
+	 */
+	@Test
+	public void findMessageById(){
+		MessageVo messageVo = workbenchService.findMessageById("402889d253367eb70153367eb7710000");
+		System.out.println(messageVo);
+	}
+	
+	/**
+	 * 根据消息id，删除消息
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 下午4:46:41
+	 */
+	@Test
+	public void deleteMessageById(){
+		workbenchService.deleteMessageById("402889d253367eb70153367eb7710000");
+	}
+	
+	/**
+	 * 创建消息权限
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 下午5:33:52
+	 */
+	@Test
+	public void createMessagePrivilege(){
+		MessagePrivilegeVo messagePrivilegeVo = new MessagePrivilegeVo();
+		messagePrivilegeVo.setMessageId("402889d25336a818015336a818a70000");
+		messagePrivilegeVo.setProjectId("0000000052a7943f0152a7943fc00000");
+		messagePrivilegeVo.setGroupId("-1");
+		messagePrivilegeVo.setType("1");
+		workbenchService.createMessagePrivilege(messagePrivilegeVo);
+	}
+	
+	/**
+	 * 通过消息id，获取消息的权限
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 下午5:43:41
+	 */
+	@Test
+	public void findMessagePrivilegeByMessageID(){
+		List<MessagePrivilegeVo> messagePrivilegeVos = workbenchService.findMessagePrivilegeByMessageId("402889d25336a818015336a818a70000");
+		System.out.println(messagePrivilegeVos);
+	}
+	
+	/**
+	 * 通过消息id，删除消息的权限
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 下午5:45:46
+	 */
+	@Test
+	public void deleteMessagePrivilegeByMessageId(){
+		workbenchService.deleteMessagePrivilegeByMessageId("402889d25336a818015336a818a70000");
+	}
+	
+	/**
+	 * 查询消息总数
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 下午8:44:42
+	 */
+	@Test
+	public void findMessageCount(){
+		Long countLong = workbenchService.findMessageCount("2", "40282081531cf49b01531d3f4e1c0006", "402881fb530cd2a501530cd2a5580000", "0000000052a7943f0152a7943fc00000");
+		System.out.println(countLong);
+	}
+	
+	/**
+	 * 查消息（分页）
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 下午8:54:24
+	 */
+	@Test
+	public void findMessageByPage(){
+		DataPageValue<MessageVo> messageDataPageValue = workbenchService.findMessageByPage("2", "40282081531cf49b01531d3f4e1c0006", "402881fb530cd2a501530cd2a5580000", "0000000052a7943f0152a7943fc00000", 1, 30);
+		System.out.print(messageDataPageValue);
 	}
 }
