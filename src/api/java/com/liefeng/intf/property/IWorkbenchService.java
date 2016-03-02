@@ -355,4 +355,30 @@ public interface IWorkbenchService {
 	 * @2016年3月2日 下午5:20:41
 	 */
 	public void deleteMessagePrivilegeByMessageId(String messageId);
+	
+	/**
+	 * 获取消息总数
+	 * @param type 消息类型：1：系统，2：个人
+	 * @param staffId 员工id
+	 * @param deptId  部门id
+	 * @param manageProject 管理的项目
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 下午8:33:35
+	 */
+	public Long findMessageCount(String type, String staffId, String deptId, String manageProject);
+	
+	/**
+	 * 获取消息（分页）
+	 * @param type 消息类型：1：系统，2：个人
+	 * @param staffId 员工id
+	 * @param deptId 部门id
+	 * @param manageProject 管理的项目
+	 * @param page
+	 * @param size
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 下午8:35:57
+	 */
+	public DataPageValue<MessageVo> findMessageByPage(String type, String staffId, String deptId, String manageProject, Integer page, Integer size);
 }

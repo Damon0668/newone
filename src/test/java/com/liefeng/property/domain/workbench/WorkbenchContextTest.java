@@ -491,7 +491,7 @@ public class WorkbenchContextTest {
 	public void createMessagePrivilege(){
 		MessagePrivilegeVo messagePrivilegeVo = new MessagePrivilegeVo();
 		messagePrivilegeVo.setMessageId("402889d25336a818015336a818a70000");
-		messagePrivilegeVo.setProjectId("2");
+		messagePrivilegeVo.setProjectId("0000000052a7943f0152a7943fc00000");
 		messagePrivilegeVo.setGroupId("-1");
 		messagePrivilegeVo.setType("1");
 		workbenchService.createMessagePrivilege(messagePrivilegeVo);
@@ -518,5 +518,29 @@ public class WorkbenchContextTest {
 	@Test
 	public void deleteMessagePrivilegeByMessageId(){
 		workbenchService.deleteMessagePrivilegeByMessageId("402889d25336a818015336a818a70000");
+	}
+	
+	/**
+	 * 查询消息总数
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 下午8:44:42
+	 */
+	@Test
+	public void findMessageCount(){
+		Long countLong = workbenchService.findMessageCount("2", "40282081531cf49b01531d3f4e1c0006", "402881fb530cd2a501530cd2a5580000", "0000000052a7943f0152a7943fc00000");
+		System.out.println(countLong);
+	}
+	
+	/**
+	 * 查消息（分页）
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 下午8:54:24
+	 */
+	@Test
+	public void findMessageByPage(){
+		DataPageValue<MessageVo> messageDataPageValue = workbenchService.findMessageByPage("2", "40282081531cf49b01531d3f4e1c0006", "402881fb530cd2a501530cd2a5580000", "0000000052a7943f0152a7943fc00000", 1, 30);
+		System.out.print(messageDataPageValue);
 	}
 }

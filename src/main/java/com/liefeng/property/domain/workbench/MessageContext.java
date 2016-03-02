@@ -17,12 +17,11 @@ import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
-import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.po.workbench.MessagePo;
-import com.liefeng.property.po.workbench.NoticePo;
+import com.liefeng.property.repository.mybatis.MessageQueryRepository;
 import com.liefeng.property.repository.workbench.MessageRepository;
 import com.liefeng.property.vo.workbench.MessageVo;
-import com.liefeng.property.vo.workbench.NoticeVo;
+import com.liefeng.property.vo.workbench.TaskVo;
 
 
 /**
@@ -39,6 +38,8 @@ public class MessageContext {
 	@Autowired
 	private MessageRepository messageRepository;
 	
+	@Autowired
+	private MessageQueryRepository messageQueryRepository;
 	
 	/**
 	 * 客户值对象
@@ -147,6 +148,68 @@ public class MessageContext {
 		}
 	}
 
+	/**
+	 * 获取消息总数
+	 * @param type 消息类型：1：系统，2：个人
+	 * @param staffId 员工id
+	 * @param deptId  部门id
+	 * @param manageProject 管理的项目
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 下午8:33:35
+	 */
+	public Long findCount(String type, String staffId, String deptId, String manageProject) {
+		HashMap<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("type", type);
+		paramMap.put("staffId", staffId);
+		paramMap.put("deptId", deptId);
+		paramMap.put("manageProject", manageProject);
+
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(paramMap);
+
+		Long count = messageQueryRepository.queryByCount(param);
+		count = (count == null ? 0 : count);
+		logger.info("消息总数量：count=" + count);
+
+		return count;
+	}
+
+	/**
+	 * 获取消息（分页）
+	 * @param type 消息类型：1：系统，2：个人
+	 * @param staffId 员工id
+	 * @param deptId 部门id
+	 * @param manageProject 管理的项目
+	 * @param page
+	 * @param size
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 下午8:35:57
+	 */
+	public DataPageValue<MessageVo> findByPage(String type, String staffId, String deptId, String manageProject, Integer page, Integer size) {
+		HashMap<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("type", type);
+		paramMap.put("staffId", staffId);
+		paramMap.put("deptId", deptId);
+		paramMap.put("manageProject", manageProject);
+
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(paramMap);
+		param.setPage(page);
+		param.setPageSize(size);
+
+		Long count = messageQueryRepository.queryByCount(param);
+		count = (count == null ? 0 : count);
+		logger.info("消息总数量：count=" + count);
+
+		// 设置数据总行数，用于计算偏移量
+		param.getPager().setRowCount(count);
+		List<MessageVo> list = messageQueryRepository.queryByPage(param);
+		DataPageValue<MessageVo> returnPage = new DataPageValue<MessageVo>(list, count, size, page);
+
+		return returnPage;
+	}
 	
 	protected void setMessageVo(MessageVo messageVo) {
 		this.messageVo = messageVo;

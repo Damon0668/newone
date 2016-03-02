@@ -450,4 +450,20 @@ public class WorkbenchService implements IWorkbenchService {
 		MessagePrivilegeContext messagePrivilegeContext = MessagePrivilegeContext.loadByMessageId(messageId);
 		messagePrivilegeContext.deleteByMessageId();
 	}
+
+	@Override
+	public Long findMessageCount(String type, String staffId, String deptId,
+			String manageProject) {
+		MessageContext messageContext = MessageContext.build();
+		return messageContext.findCount(type, staffId, deptId, manageProject);
+	}
+
+	@Override
+	public DataPageValue<MessageVo> findMessageByPage(String type,
+			String staffId, String deptId, String manageProject, Integer page,
+			Integer size) {
+		MessageContext messageContext = MessageContext.build();
+
+		return messageContext.findByPage(type, staffId, deptId, manageProject, page, size);
+	}
 }

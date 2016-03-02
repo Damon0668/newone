@@ -48,6 +48,11 @@ public class MessageVo extends BaseValue{
 	 * OEM编码
 	 */
 	private String oemCode;
+	
+	/**
+	 * 创建人姓名
+	 */
+	private String creatorName;
 
 
 	public String getId() {
@@ -116,6 +121,16 @@ public class MessageVo extends BaseValue{
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+
+	public String getCreatorName() {
+		return creatorName;
+	}
+
+
+	public void setCreatorName(String creatorName) {
+		this.creatorName = creatorName;
 	}
 
 }
