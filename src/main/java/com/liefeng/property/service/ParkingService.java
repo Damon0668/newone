@@ -27,7 +27,7 @@ import com.liefeng.property.vo.parking.ParkingVo;
 @Service
 public class ParkingService implements IParkingService {
 
-	private static Logger logger = LoggerFactory.getLogger(ParkingServiceTest.class);
+	private static Logger logger = LoggerFactory.getLogger(ParkingService.class);
 
 	@Override
 	public void createParking(ParkingVo parkingVo) {
