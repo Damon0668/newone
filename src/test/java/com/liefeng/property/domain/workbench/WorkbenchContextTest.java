@@ -3,6 +3,7 @@ package com.liefeng.property.domain.workbench;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,12 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
+import com.liefeng.property.vo.workbench.MessageVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
 import com.liefeng.property.vo.workbench.ScheduleVo;
@@ -33,6 +37,10 @@ public class WorkbenchContextTest {
 	@Autowired
 	private IWorkbenchService workbenchService;
 	
+	@Before
+	public void before(){
+		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
+	}
 	/**
 	 * 根据taskId获取任务
 	 * @author xhw
@@ -432,5 +440,43 @@ public class WorkbenchContextTest {
 	public void findScheduleByCreatorIdAndQueryDate(){
 		List<ScheduleVo> scheduleVos = workbenchService.findScheduleByCreatorIdAndQueryDate("40282081531cf49b01531d3f4e1c0006", "2016-03-02");
 		System.out.println(scheduleVos);
+	}
+	
+	/**
+	 * 创建消息
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 下午4:21:00
+	 */
+	@Test
+	public void createMessage(){
+		MessageVo messageVo = new MessageVo();
+		messageVo.setContent("吃饭啦");
+		messageVo.setCreatorId("40282081531cf49b01531d3f4e1c0006");
+		messageVo.setType("2");
+		workbenchService.createMessageVo(messageVo);
+	}
+	
+	/**
+	 * 根据消息id，获取消息
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 下午4:45:07
+	 */
+	@Test
+	public void findMessageById(){
+		MessageVo messageVo = workbenchService.findMessageById("402889d253367eb70153367eb7710000");
+		System.out.println(messageVo);
+	}
+	
+	/**
+	 * 根据消息id，删除消息
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 下午4:46:41
+	 */
+	@Test
+	public void deleteMessageById(){
+		workbenchService.deleteMessageById("402889d253367eb70153367eb7710000");
 	}
 }

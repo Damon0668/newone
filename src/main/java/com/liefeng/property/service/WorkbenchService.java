@@ -11,12 +11,14 @@ import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.property.constant.WorkbenchConstants;
+import com.liefeng.property.domain.workbench.MessageContext;
 import com.liefeng.property.domain.workbench.NoticeContext;
 import com.liefeng.property.domain.workbench.NoticePrivilegeContext;
 import com.liefeng.property.domain.workbench.ScheduleContext;
 import com.liefeng.property.domain.workbench.TaskAttachmentContext;
 import com.liefeng.property.domain.workbench.TaskContext;
 import com.liefeng.property.domain.workbench.TaskPrivilegeContext;
+import com.liefeng.property.vo.workbench.MessageVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
 import com.liefeng.property.vo.workbench.ScheduleVo;
@@ -407,5 +409,23 @@ public class WorkbenchService implements IWorkbenchService {
 			String creatorId, String queryDate) {
 		ScheduleContext scheduleContext = ScheduleContext.build();
 		return scheduleContext.findByCreatorIdAndQueryDate(creatorId, queryDate);
+	}
+
+	@Override
+	public MessageVo createMessageVo(MessageVo messageVo) {
+		MessageContext messageContext = MessageContext.build(messageVo);
+		return messageContext.create();
+	}
+
+	@Override
+	public MessageVo findMessageById(String id) {
+		MessageContext messageContext = MessageContext.loadById(id);
+		return messageContext.getById();
+	}
+
+	@Override
+	public void deleteMessageById(String id) {
+		MessageContext messageContext = MessageContext.loadById(id);
+		messageContext.deleteById();
 	}
 }

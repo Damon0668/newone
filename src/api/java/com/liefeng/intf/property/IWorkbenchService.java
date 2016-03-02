@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
+import com.liefeng.property.vo.workbench.MessageVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
 import com.liefeng.property.vo.workbench.ScheduleVo;
@@ -301,4 +302,30 @@ public interface IWorkbenchService {
 	 * @2016年3月2日 下午2:09:44
 	 */
 	public List<ScheduleVo> findScheduleByCreatorIdAndQueryDate(String creatorId, String queryDate);
+	
+	/**
+	 * 创建消息
+	 * @param messageVo
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 下午4:14:38
+	 */
+	public MessageVo createMessageVo(MessageVo messageVo);
+	
+	/**
+	 * 根据消息id，获取消息
+	 * @param id 消息id
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 下午4:15:37
+	 */
+	public MessageVo findMessageById(String id);
+	
+	/**
+	 * 根据消息id，删除消息
+	 * @param id 消息id
+	 * @author xhw
+	 * @2016年3月2日 下午4:16:32
+	 */
+	public void deleteMessageById(String id);
 }
