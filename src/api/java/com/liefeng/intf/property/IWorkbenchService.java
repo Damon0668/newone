@@ -291,4 +291,14 @@ public interface IWorkbenchService {
 	 * @2016年3月2日 上午9:21:34
 	 */
 	public void deleteScheduleByCreatorId(String creatorId);
+	
+	/**
+	 * 通过创建人id、日期，查找该创建人在这一天的日程
+	 * @param creatorId
+	 * @param queryDate
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 下午2:09:44
+	 */
+	public List<ScheduleVo> findScheduleByCreatorIdAndQueryDate(String creatorId, String queryDate);
 }

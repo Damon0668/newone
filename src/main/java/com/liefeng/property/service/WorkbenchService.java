@@ -401,4 +401,11 @@ public class WorkbenchService implements IWorkbenchService {
 		ScheduleContext scheduleContext = ScheduleContext.build();
 		scheduleContext.deleteByCreatorId(creatorId);
 	}
+
+	@Override
+	public List<ScheduleVo> findScheduleByCreatorIdAndQueryDate(
+			String creatorId, String queryDate) {
+		ScheduleContext scheduleContext = ScheduleContext.build();
+		return scheduleContext.findByCreatorIdAndQueryDate(creatorId, queryDate);
+	}
 }

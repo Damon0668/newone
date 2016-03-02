@@ -1,8 +1,11 @@
 package com.liefeng.property.repository.workbench;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.liefeng.property.po.workbench.SchedulePo;
 
@@ -30,4 +33,7 @@ public interface ScheduleRepository extends JpaRepository<SchedulePo, String> {
 	 * @2016年3月2日 上午9:13:06
 	 */
 	public void deleteByCreatorId(String creatorId);
+	
+	@Query("select t from SchedulePo t where t.creatorId=?1 and t.repeats='1'  and datediff(?2, t.scheduleDate)>=0 and ( t.times=-1 or datediff(?2, t.scheduleDate)<t.times)")
+	public List<SchedulePo> findByCreatorIdAndQueryDate(String creatorId, String queryDate);
 }

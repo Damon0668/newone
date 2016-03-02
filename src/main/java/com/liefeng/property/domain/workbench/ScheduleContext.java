@@ -1,6 +1,7 @@
 package com.liefeng.property.domain.workbench;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -170,6 +171,24 @@ public class ScheduleContext {
 			
 			logger.info("Delete schedule of creatorId : {} success.", creatorId);
 		}
+	}
+	
+	/**
+	 * 通过创建人id、日期，查找该创建人在这一天的日程
+	 * @param creatorId 创建人id
+	 * @param queryDate 查询日期
+	 * @return
+	 * @author xhw
+	 * @2016年3月2日 下午2:07:38
+	 */
+	public List<ScheduleVo>  findByCreatorIdAndQueryDate(String creatorId, String queryDate){
+		List<ScheduleVo> scheduleVos = null;
+		if(ValidateHelper.isNotEmptyString(creatorId)&&ValidateHelper.isNotEmptyString(queryDate)){
+			List<SchedulePo> schedulePos = scheduleRepository.findByCreatorIdAndQueryDate(creatorId, queryDate);
+			
+			scheduleVos = MyBeanUtil.createList(schedulePos, ScheduleVo.class);
+		}
+		return scheduleVos;
 	}
 	
 	protected void setScheduleVo(ScheduleVo scheduleVo) {

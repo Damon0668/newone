@@ -421,4 +421,16 @@ public class WorkbenchContextTest {
 	public void deleteScheduleByCreatorId(){
 		workbenchService.deleteScheduleByCreatorId("40282081531cf49b01531d3f4e1c0006");
 	}
+	
+	/**
+	 * 通过创建人id、日期，查找该创建人在这一天的日程
+	 * 
+	 * @author xhw
+	 * @2016年3月2日 下午2:11:25
+	 */
+	@Test
+	public void findScheduleByCreatorIdAndQueryDate(){
+		List<ScheduleVo> scheduleVos = workbenchService.findScheduleByCreatorIdAndQueryDate("40282081531cf49b01531d3f4e1c0006", "2016-03-02");
+		System.out.println(scheduleVos);
+	}
 }
