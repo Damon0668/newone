@@ -48,6 +48,7 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
+	@Transactional
 	public void createTask(TaskVo task){
 		TaskContext taskContext = TaskContext.build(task);
 		TaskVo taskVo = taskContext.create();
@@ -85,6 +86,7 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
+	@Transactional
 	public void updateTask(TaskVo taskVo) {
 		TaskContext taskContext = TaskContext.build(taskVo);
 		taskContext.update();
@@ -166,6 +168,7 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
+	@Transactional
 	public NoticeVo createNotice(NoticeVo notice) {
 		NoticeContext noticeContext = NoticeContext.build(notice);
 		NoticeVo noticeVo =  noticeContext.create();
@@ -219,6 +222,7 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
+	@Transactional
 	public NoticeVo updateNotice(NoticeVo notice) {
 		NoticeContext noticeContext = NoticeContext.build(notice);
 		NoticeVo noticeVo = noticeContext.update();
@@ -416,6 +420,7 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
+	@Transactional
 	public WebsiteMsgVo createWebsiteMsgVo(WebsiteMsgVo websiteMsg) {
 		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.build(websiteMsg);
 		WebsiteMsgVo websiteMsgVo = websiteMsgContext.create();
