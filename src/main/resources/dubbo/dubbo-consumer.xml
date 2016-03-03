@@ -23,6 +23,10 @@
     <!-- 用户服务  -->
     <dubbo:reference id="userService"
         interface="com.liefeng.intf.base.user.IUserService" check="false" />
+        
+    <!-- 设备服务  -->
+    <dubbo:reference id="deviceService"
+        interface="com.liefeng.intf.base.device.IDeviceService" check="false" />
 
 	<!-- 校验服务  -->
     <dubbo:reference id="checkService"
