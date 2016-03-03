@@ -389,7 +389,7 @@ public interface IWorkbenchService {
 	 * @author xhw
 	 * @2016年3月3日 下午2:21:43
 	 */
-	public List<WebsiteMsgVo> findWebsiteMsgByParentId(String parentId);
+	public List<WebsiteMsgVo> getReplyMsgList(String parentId);
 	
 	/**
 	 * 根据创建人id，获取创建人创建的消息（父消息）（分页）
@@ -400,7 +400,7 @@ public interface IWorkbenchService {
 	 * @author xhw
 	 * @2016年3月3日 下午3:02:43
 	 */
-	public DataPageValue<WebsiteMsgVo> findWebsiteMsgByCreatorIdAndParentIdIsNull(String creatorId, int page, int size);
+	public DataPageValue<WebsiteMsgVo> findWebsiteMsgByCreatorId(String creatorId, int page, int size);
 	
 	
 }

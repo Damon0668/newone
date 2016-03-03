@@ -552,7 +552,7 @@ public class WorkbenchContextTest {
 	 */
 	@Test
 	public void findWebsiteMsgByParentId(){
-		List<WebsiteMsgVo> websiteMsgVos = workbenchService.findWebsiteMsgByParentId("402889d2533a791601533a7916cf0000");
+		List<WebsiteMsgVo> websiteMsgVos = workbenchService.getReplyMsgList("402889d2533a791601533a7916cf0000");
 		System.out.println("回复信息："+websiteMsgVos);
 	}
 	/**
@@ -560,7 +560,7 @@ public class WorkbenchContextTest {
 	 */
 	@Test
 	public void findWebsiteMsgByCreatorIdAndParentIdIsNull(){
-		DataPageValue<WebsiteMsgVo> websiteMsgDataPageValue = workbenchService.findWebsiteMsgByCreatorIdAndParentIdIsNull("40282081531cf49b01531d3f4e1c0006", 1, 30);
+		DataPageValue<WebsiteMsgVo> websiteMsgDataPageValue = workbenchService.findWebsiteMsgByCreatorId("40282081531cf49b01531d3f4e1c0006", 1, 30);
 		System.out.println(websiteMsgDataPageValue);
 	}
 }
