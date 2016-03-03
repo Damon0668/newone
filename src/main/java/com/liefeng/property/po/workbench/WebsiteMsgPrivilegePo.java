@@ -9,13 +9,13 @@ import com.liefeng.core.entity.BaseValue;
 
 
 /**
- * 消息权限持久化对象
+ * 站内消息权限持久化对象
  * @author xhw
  * @2016年3月2日 下午4:50:26
  */
 @Entity
-@Table(name="t_message_privilege")
-public class MessagePrivilegePo extends BaseValue{
+@Table(name="t_website_msg_privilege")
+public class WebsiteMsgPrivilegePo extends BaseValue{
 
 	private static final long serialVersionUID = 4084913703229948489L;
 
@@ -31,11 +31,6 @@ public class MessagePrivilegePo extends BaseValue{
 	@Column(name = "message_id")
 	private String messageId;
 
-	/**
-	 * 权限类型。1：对员工；2：对业主或住户；3：外部人员
-	 */
-	@Column(name = "type")
-	private String type;
 
 	/**
 	 * 项目ID。
@@ -44,16 +39,16 @@ public class MessagePrivilegePo extends BaseValue{
 	private String projectId;
 
 	/**
-	 * 群ID。如果被通知者是员工，则该字段为部门ID，-1表示该项目下所有部门都可见。如果被通知者是业主或住户，则该字段为楼栋ID，-1表示该项目下所有楼栋都可见。
+	 * 部门ID
 	 */
-	@Column(name = "group_id")
-	private String groupId;
+	@Column(name = "department_id")
+	private String departmentId;
 
 	/**
-	 * 接收人ID
+	 * 员工ID
 	 */
-	@Column(name = "recipient_id")
-	private String recipientId;
+	@Column(name = "staff_id")
+	private String staffId;
 
 
 	/**
@@ -82,17 +77,6 @@ public class MessagePrivilegePo extends BaseValue{
 		this.messageId = messageId;
 	}
 
-
-	public String getType() {
-		return type;
-	}
-
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-
 	public String getProjectId() {
 		return projectId;
 	}
@@ -102,27 +86,6 @@ public class MessagePrivilegePo extends BaseValue{
 		this.projectId = projectId;
 	}
 
-
-	public String getGroupId() {
-		return groupId;
-	}
-
-
-	public void setGroupId(String groupId) {
-		this.groupId = groupId;
-	}
-
-
-	public String getRecipientId() {
-		return recipientId;
-	}
-
-
-	public void setRecipientId(String recipientId) {
-		this.recipientId = recipientId;
-	}
-
-
 	public String getOemCode() {
 		return oemCode;
 	}
@@ -130,6 +93,26 @@ public class MessagePrivilegePo extends BaseValue{
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+
+	public String getDepartmentId() {
+		return departmentId;
+	}
+
+
+	public void setDepartmentId(String departmentId) {
+		this.departmentId = departmentId;
+	}
+
+
+	public String getStaffId() {
+		return staffId;
+	}
+
+
+	public void setStaffId(String staffId) {
+		this.staffId = staffId;
 	}
 
 

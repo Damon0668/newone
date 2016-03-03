@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
-import com.liefeng.property.vo.workbench.MessagePrivilegeVo;
-import com.liefeng.property.vo.workbench.MessageVo;
+import com.liefeng.property.vo.workbench.WebsiteMsgPrivilegeVo;
+import com.liefeng.property.vo.workbench.WebsiteMsgVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
 import com.liefeng.property.vo.workbench.ScheduleVo;
@@ -305,59 +305,59 @@ public interface IWorkbenchService {
 	public List<ScheduleVo> findScheduleByCreatorIdAndQueryDate(String creatorId, String queryDate);
 	
 	/**
-	 * 创建消息
-	 * @param messageVo
+	 * 创建站内消息
+	 * @param websiteMsgVo
 	 * @return
 	 * @author xhw
-	 * @2016年3月2日 下午4:14:38
+	 * @2016年3月3日 上午10:36:35
 	 */
-	public MessageVo createMessageVo(MessageVo messageVo);
+	public WebsiteMsgVo createWebsiteMsgVo(WebsiteMsgVo websiteMsgVo);
 	
 	/**
-	 * 根据消息id，获取消息
+	 * 根据站内消息id，获取站内消息
 	 * @param id 消息id
 	 * @return
 	 * @author xhw
 	 * @2016年3月2日 下午4:15:37
 	 */
-	public MessageVo findMessageById(String id);
+	public WebsiteMsgVo findWebsiteMsgById(String id);
 	
 	/**
-	 * 根据消息id，删除消息
-	 * @param id 消息id
+	 * 根据站内消息id，删除站内消息
+	 * @param id 站内消息id
 	 * @author xhw
 	 * @2016年3月2日 下午4:16:32
 	 */
-	public void deleteMessageById(String id);
+	public void deleteWebsiteMsgById(String id);
 	
 	/**
-	 * 创建消息权限
-	 * @param messagePrivilegeVo
+	 * 创建站内消息权限
+	 * @param websiteMsgPrivilegeVo
 	 * @return
 	 * @author xhw
 	 * @2016年3月2日 下午5:17:50
 	 */
-	public MessagePrivilegeVo createMessagePrivilege(MessagePrivilegeVo messagePrivilegeVo);
+	public WebsiteMsgPrivilegeVo createWebsiteMsgPrivilege(WebsiteMsgPrivilegeVo websiteMsgPrivilegeVo);
 	
 	/**
-	 * 根据消息id，获取消息的权限
+	 * 根据站内消息id，获取站内消息的权限
 	 * @param messageId 消息id
 	 * @return
 	 * @author xhw
 	 * @2016年3月2日 下午5:19:41
 	 */
-	public List<MessagePrivilegeVo> findMessagePrivilegeByMessageId(String messageId);
+	public List<WebsiteMsgPrivilegeVo> findWebsiteMsgPrivilegeByMessageId(String messageId);
 	
 	/**
-	 * 根据消息id，删除消息的权限
+	 * 根据站内消息id，删除站内消息的权限
 	 * @param messageId 消息id
 	 * @author xhw
 	 * @2016年3月2日 下午5:20:41
 	 */
-	public void deleteMessagePrivilegeByMessageId(String messageId);
+	public void deleteWebsiteMsgPrivilegeByMessageId(String messageId);
 	
 	/**
-	 * 获取消息总数
+	 * 获取站内消息总数
 	 * @param type 消息类型：1：系统，2：个人
 	 * @param staffId 员工id
 	 * @param deptId  部门id
@@ -366,10 +366,10 @@ public interface IWorkbenchService {
 	 * @author xhw
 	 * @2016年3月2日 下午8:33:35
 	 */
-	public Long findMessageCount(String type, String staffId, String deptId, String manageProject);
+	public Long findWebsiteMsgCount(String type, String staffId, String deptId, String manageProject);
 	
 	/**
-	 * 获取消息（分页）
+	 * 获取站内消息（分页）
 	 * @param type 消息类型：1：系统，2：个人
 	 * @param staffId 员工id
 	 * @param deptId 部门id
@@ -380,5 +380,5 @@ public interface IWorkbenchService {
 	 * @author xhw
 	 * @2016年3月2日 下午8:35:57
 	 */
-	public DataPageValue<MessageVo> findMessageByPage(String type, String staffId, String deptId, String manageProject, Integer page, Integer size);
+	public DataPageValue<WebsiteMsgVo> findWebsiteMsgByPage(String type, String staffId, String deptId, String manageProject, Integer page, Integer size);
 }

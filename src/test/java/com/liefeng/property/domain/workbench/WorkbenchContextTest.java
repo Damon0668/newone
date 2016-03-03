@@ -16,14 +16,14 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
-import com.liefeng.property.vo.workbench.MessagePrivilegeVo;
-import com.liefeng.property.vo.workbench.MessageVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
 import com.liefeng.property.vo.workbench.ScheduleVo;
 import com.liefeng.property.vo.workbench.TaskAttachmentVo;
 import com.liefeng.property.vo.workbench.TaskPrivilegeVo;
 import com.liefeng.property.vo.workbench.TaskVo;
+import com.liefeng.property.vo.workbench.WebsiteMsgPrivilegeVo;
+import com.liefeng.property.vo.workbench.WebsiteMsgVo;
 
 
 /**
@@ -444,80 +444,79 @@ public class WorkbenchContextTest {
 	}
 	
 	/**
-	 * 创建消息
+	 * 创建站内消息
 	 * 
 	 * @author xhw
 	 * @2016年3月2日 下午4:21:00
 	 */
 	@Test
-	public void createMessage(){
-		MessageVo messageVo = new MessageVo();
+	public void createWebsiteMsg(){
+		WebsiteMsgVo messageVo = new WebsiteMsgVo();
 		messageVo.setContent("吃饭啦");
 		messageVo.setCreatorId("40282081531cf49b01531d3f4e1c0006");
 		messageVo.setType("2");
-		workbenchService.createMessageVo(messageVo);
+		workbenchService.createWebsiteMsgVo(messageVo);
 	}
 	
 	/**
-	 * 根据消息id，获取消息
+	 * 根据站内消息id，获取站内消息
 	 * 
 	 * @author xhw
 	 * @2016年3月2日 下午4:45:07
 	 */
 	@Test
-	public void findMessageById(){
-		MessageVo messageVo = workbenchService.findMessageById("402889d253367eb70153367eb7710000");
+	public void findWebsiteMsgById(){
+		WebsiteMsgVo messageVo = workbenchService.findWebsiteMsgById("402889d2533a791601533a7916cf0000");
 		System.out.println(messageVo);
 	}
 	
 	/**
-	 * 根据消息id，删除消息
+	 * 根据站内消息id，删除站内消息
 	 * 
 	 * @author xhw
 	 * @2016年3月2日 下午4:46:41
 	 */
 	@Test
-	public void deleteMessageById(){
-		workbenchService.deleteMessageById("402889d253367eb70153367eb7710000");
+	public void deleteWebsiteMsgById(){
+		workbenchService.deleteWebsiteMsgById("402889d2533a791601533a7916cf0000");
 	}
 	
 	/**
-	 * 创建消息权限
+	 * 创建站内消息权限
 	 * 
 	 * @author xhw
 	 * @2016年3月2日 下午5:33:52
 	 */
 	@Test
-	public void createMessagePrivilege(){
-		MessagePrivilegeVo messagePrivilegeVo = new MessagePrivilegeVo();
-		messagePrivilegeVo.setMessageId("402889d25336a818015336a818a70000");
+	public void createWebsiteMsgPrivilege(){
+		WebsiteMsgPrivilegeVo messagePrivilegeVo = new WebsiteMsgPrivilegeVo();
+		messagePrivilegeVo.setMessageId("402889d2533a791601533a7916cf0000");
 		messagePrivilegeVo.setProjectId("0000000052a7943f0152a7943fc00000");
-		messagePrivilegeVo.setGroupId("-1");
-		messagePrivilegeVo.setType("1");
-		workbenchService.createMessagePrivilege(messagePrivilegeVo);
+		messagePrivilegeVo.setDepartmentId("-1");
+		workbenchService.createWebsiteMsgPrivilege(messagePrivilegeVo);
 	}
 	
 	/**
-	 * 通过消息id，获取消息的权限
+	 * 通过站内消息id，获取站内消息的权限
 	 * 
 	 * @author xhw
 	 * @2016年3月2日 下午5:43:41
 	 */
 	@Test
-	public void findMessagePrivilegeByMessageID(){
-		List<MessagePrivilegeVo> messagePrivilegeVos = workbenchService.findMessagePrivilegeByMessageId("402889d25336a818015336a818a70000");
+	public void findWebsiteMsgPrivilegeByMessageID(){
+		List<WebsiteMsgPrivilegeVo> messagePrivilegeVos = workbenchService.findWebsiteMsgPrivilegeByMessageId("402889d2533a791601533a7916cf0000");
 		System.out.println(messagePrivilegeVos);
 	}
 	
 	/**
-	 * 通过消息id，删除消息的权限
+	 * 通过站内消息id，删除站内消息的权限
 	 * 
 	 * @author xhw
 	 * @2016年3月2日 下午5:45:46
 	 */
 	@Test
-	public void deleteMessagePrivilegeByMessageId(){
-		workbenchService.deleteMessagePrivilegeByMessageId("402889d25336a818015336a818a70000");
+	public void deleteWebsiteMsgPrivilegeByMessageId(){
+		workbenchService.deleteWebsiteMsgPrivilegeByMessageId("402889d25336a818015336a818a70000");
 	}
 	
 	/**
@@ -528,19 +527,19 @@ public class WorkbenchContextTest {
 	 */
 	@Test
 	public void findMessageCount(){
-		Long countLong = workbenchService.findMessageCount("2", "40282081531cf49b01531d3f4e1c0006", "402881fb530cd2a501530cd2a5580000", "0000000052a7943f0152a7943fc00000");
+		Long countLong = workbenchService.findWebsiteMsgCount("2", "40282081531cf49b01531d3f4e1c0006", "402881fb530cd2a501530cd2a5580000", "0000000052a7943f0152a7943fc00000");
 		System.out.println(countLong);
 	}
 	
 	/**
-	 * 查消息（分页）
+	 * 查站内消息（分页）
 	 * 
 	 * @author xhw
 	 * @2016年3月2日 下午8:54:24
 	 */
 	@Test
-	public void findMessageByPage(){
-		DataPageValue<MessageVo> messageDataPageValue = workbenchService.findMessageByPage("2", "40282081531cf49b01531d3f4e1c0006", "402881fb530cd2a501530cd2a5580000", "0000000052a7943f0152a7943fc00000", 1, 30);
+	public void findWebsiteMsgByPage(){
+		DataPageValue<WebsiteMsgVo> messageDataPageValue = workbenchService.findWebsiteMsgByPage("2", "40282081531cf49b01531d3f4e1c0006", "402881fb530cd2a501530cd2a5580000", "0000000052a7943f0152a7943fc00000", 1, 30);
 		System.out.print(messageDataPageValue);
 	}
 }

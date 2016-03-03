@@ -131,4 +131,24 @@ public class WorkbenchConstants {
 		public static final String RESIDENT= "2";
 		
 	}
+	
+	/**
+	 * 站内消息类型
+	 * @author xhw
+	 * @2016年3月3日 上午11:04:06
+	 */
+	public static interface WebsiteMsgType {
+		/**
+		 * 系统消息
+		 */
+		public static final String SYSTEM = "1";
+		
+		/**
+		 * 个人消息
+		 */
+		public static final String PERSON= "2";
+		
+	}
+	
+	
 }

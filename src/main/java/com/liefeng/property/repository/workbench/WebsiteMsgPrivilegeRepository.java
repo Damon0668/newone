@@ -6,16 +6,16 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.liefeng.property.po.workbench.MessagePrivilegePo;
+import com.liefeng.property.po.workbench.WebsiteMsgPrivilegePo;
 
 
 /**
- * 消息权限仓储层
+ * 站内消息权限仓储层
  * @author xhw
  * @2016年3月2日 下午4:58:00
  */
 @Transactional
-public interface MessagePrivilegeRepository extends JpaRepository<MessagePrivilegePo, String> {
+public interface WebsiteMsgPrivilegeRepository extends JpaRepository<WebsiteMsgPrivilegePo, String> {
 	
 	/**
 	 * 根据消息id，获取消息的权限
@@ -24,7 +24,7 @@ public interface MessagePrivilegeRepository extends JpaRepository<MessagePrivile
 	 * @author xhw
 	 * @2016年3月2日 下午5:11:13
 	 */
-	public List<MessagePrivilegePo> findByMessageId(String messageId);
+	public List<WebsiteMsgPrivilegePo> findByMessageId(String messageId);
 	
 	/**
 	 * 根据消息id，删除消息的权限

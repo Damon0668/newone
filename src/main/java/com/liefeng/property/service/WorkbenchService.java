@@ -11,16 +11,16 @@ import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.property.constant.WorkbenchConstants;
-import com.liefeng.property.domain.workbench.MessageContext;
-import com.liefeng.property.domain.workbench.MessagePrivilegeContext;
+import com.liefeng.property.domain.workbench.WebsiteMsgContext;
+import com.liefeng.property.domain.workbench.WebsiteMsgPrivilegeContext;
 import com.liefeng.property.domain.workbench.NoticeContext;
 import com.liefeng.property.domain.workbench.NoticePrivilegeContext;
 import com.liefeng.property.domain.workbench.ScheduleContext;
 import com.liefeng.property.domain.workbench.TaskAttachmentContext;
 import com.liefeng.property.domain.workbench.TaskContext;
 import com.liefeng.property.domain.workbench.TaskPrivilegeContext;
-import com.liefeng.property.vo.workbench.MessagePrivilegeVo;
-import com.liefeng.property.vo.workbench.MessageVo;
+import com.liefeng.property.vo.workbench.WebsiteMsgPrivilegeVo;
+import com.liefeng.property.vo.workbench.WebsiteMsgVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
 import com.liefeng.property.vo.workbench.ScheduleVo;
@@ -414,56 +414,56 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
-	public MessageVo createMessageVo(MessageVo messageVo) {
-		MessageContext messageContext = MessageContext.build(messageVo);
-		return messageContext.create();
+	public WebsiteMsgVo createWebsiteMsgVo(WebsiteMsgVo websiteMsgVo) {
+		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.build(websiteMsgVo);
+		return websiteMsgContext.create();
 	}
 
 	@Override
-	public MessageVo findMessageById(String id) {
-		MessageContext messageContext = MessageContext.loadById(id);
-		return messageContext.getById();
+	public WebsiteMsgVo findWebsiteMsgById(String id) {
+		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.loadById(id);
+		return websiteMsgContext.getById();
 	}
 
 	@Override
-	public void deleteMessageById(String id) {
-		MessageContext messageContext = MessageContext.loadById(id);
-		messageContext.deleteById();
+	public void deleteWebsiteMsgById(String id) {
+		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.loadById(id);
+		websiteMsgContext.deleteById();
 	}
 
 	@Override
-	public MessagePrivilegeVo createMessagePrivilege(
-			MessagePrivilegeVo messagePrivilegeVo) {
-		MessagePrivilegeContext messagePrivilegeContext = MessagePrivilegeContext.build(messagePrivilegeVo);
-		return messagePrivilegeContext.create();
+	public WebsiteMsgPrivilegeVo createWebsiteMsgPrivilege(
+			WebsiteMsgPrivilegeVo websiteMsgPrivilegeVo) {
+		WebsiteMsgPrivilegeContext websiteMsgPrivilegeContext = WebsiteMsgPrivilegeContext.build(websiteMsgPrivilegeVo);
+		return websiteMsgPrivilegeContext.create();
 	}
 
 	@Override
-	public List<MessagePrivilegeVo> findMessagePrivilegeByMessageId(
+	public List<WebsiteMsgPrivilegeVo> findWebsiteMsgPrivilegeByMessageId(
 			String messageId) {
-		MessagePrivilegeContext messagePrivilegeContext = MessagePrivilegeContext.loadByMessageId(messageId);
-		return messagePrivilegeContext.findByMessageId();
+		WebsiteMsgPrivilegeContext websiteMsgPrivilegeContext = WebsiteMsgPrivilegeContext.loadByMessageId(messageId);
+		return websiteMsgPrivilegeContext.findByMessageId();
 	}
 
 	@Override
-	public void deleteMessagePrivilegeByMessageId(String messageId) {
-		MessagePrivilegeContext messagePrivilegeContext = MessagePrivilegeContext.loadByMessageId(messageId);
-		messagePrivilegeContext.deleteByMessageId();
+	public void deleteWebsiteMsgPrivilegeByMessageId(String messageId) {
+		WebsiteMsgPrivilegeContext websiteMsgPrivilegeContext = WebsiteMsgPrivilegeContext.loadByMessageId(messageId);
+		websiteMsgPrivilegeContext.deleteByMessageId();
 	}
 
 	@Override
-	public Long findMessageCount(String type, String staffId, String deptId,
+	public Long findWebsiteMsgCount(String type, String staffId, String deptId,
 			String manageProject) {
-		MessageContext messageContext = MessageContext.build();
-		return messageContext.findCount(type, staffId, deptId, manageProject);
+		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.build();
+		return websiteMsgContext.findCount(type, staffId, deptId, manageProject);
 	}
 
 	@Override
-	public DataPageValue<MessageVo> findMessageByPage(String type,
+	public DataPageValue<WebsiteMsgVo> findWebsiteMsgByPage(String type,
 			String staffId, String deptId, String manageProject, Integer page,
 			Integer size) {
-		MessageContext messageContext = MessageContext.build();
+		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.build();
 
-		return messageContext.findByPage(type, staffId, deptId, manageProject, page, size);
+		return websiteMsgContext.findByPage(type, staffId, deptId, manageProject, page, size);
 	}
 }

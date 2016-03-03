@@ -4,15 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 import com.liefeng.core.mybatis.repository.BaseRepository;
-import com.liefeng.property.vo.workbench.MessageVo;
-import com.liefeng.property.vo.workbench.TaskVo;
+import com.liefeng.property.vo.workbench.WebsiteMsgVo;
 
 /**
- * 消息
+ * 站内消息
  * @author xhw
  * @date 2016年2月23日下午7:46:32
  */
-public interface MessageQueryRepository extends BaseRepository<MessageVo>{
+public interface WebsiteMsgQueryRepository extends BaseRepository<WebsiteMsgVo>{
 	
 	/**
 	 * 查询消息（分页）
@@ -21,7 +20,7 @@ public interface MessageQueryRepository extends BaseRepository<MessageVo>{
 	 * @author xhw
 	 * @2016年3月2日 下午7:50:14
 	 */
-	public List<MessageVo> queryByPage(Map<String, String> paramMap);
+	public List<WebsiteMsgVo> queryByPage(Map<String, String> paramMap);
 	
 	/**
 	 * 查询消息总数

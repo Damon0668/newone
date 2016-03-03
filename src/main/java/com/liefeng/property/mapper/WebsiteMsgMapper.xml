@@ -3,9 +3,9 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.liefeng.property.repository.mybatis.MessageQueryRepository" > 
+<mapper namespace="com.liefeng.property.repository.mybatis.WebsiteMsgQueryRepository" > 
 <!-- Result Map-->
-<resultMap id="BaseResultMap" type="com.liefeng.property.vo.workbench.MessageVo" >
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.workbench.WebsiteMsgVo" >
 	<result column="id" property="id"/>
 	<result column="content" property="content"/>
 	<result column="creator_id" property="creatorId"/>
@@ -23,20 +23,17 @@ and(
 )
 and(
 	(
-		p.type = '1'
-		and p.group_id = '-1'
+	    p.department_id = '-1'
 		and FIND_IN_SET(p.project_id, #{extra.manageProject})
 	)
 	or(
-		p.type = '1'
-		and p.group_id = #{extra.deptid}
-		and p.recipient_id = '-1'
+		p.department_id = #{extra.deptid}
+		and p.staff_id = '-1'
 		and FIND_IN_SET(p.project_id, #{extra.manageProject})
 	)
 	or(
-		p.type = '1'
-		and p.group_id = #{extra.deptid}
-		and p.recipient_id = #{extra.staffId}
+	    p.department_id = #{extra.deptid}
+		and p.staff_id = #{extra.staffId}
 		and FIND_IN_SET(p.project_id, #{extra.manageProject})
 	)
 	or t.creator_id = #{extra.staffId}
@@ -52,8 +49,8 @@ order by t.create_time desc
 	    t.create_time, 
 	    t.creator_id
 	from 
-		t_message t, 
-		t_message_privilege p
+		t_website_msg t, 
+		t_website_msg_privilege p
 		<include refid="Where_Clause" />
 		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
 	          ${pager.mysqlQueryCondition}
@@ -69,8 +66,8 @@ order by t.create_time desc
 			DISTINCT
 			t.id
 	    from 
-	    	t_message t, 
-			t_message_privilege p
+	    	t_website_msg t, 
+		    t_website_msg_privilege p
 	    <include refid="Where_Clause" />
 		) t
 </select>

@@ -4,16 +4,16 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.liefeng.property.po.workbench.MessagePo;
+import com.liefeng.property.po.workbench.WebsiteMsgPo;
 
 
 /**
- * 消息仓储层
+ * 站内消息仓储层
  * @author xhw
  * @2016年3月2日 下午3:49:26
  */
 @Transactional
-public interface MessageRepository extends JpaRepository<MessagePo, String> {
+public interface WebsiteMsgRepository extends JpaRepository<WebsiteMsgPo, String> {
 	
 	/**
 	 * 根据消息id，删除消息
