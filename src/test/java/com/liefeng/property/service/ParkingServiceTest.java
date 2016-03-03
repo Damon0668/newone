@@ -8,7 +8,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
 import com.liefeng.core.dubbo.filter.ContextManager;
-import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IParkingService;
 import com.liefeng.property.bo.parking.ParkingBo;
 import com.liefeng.property.vo.parking.ParkingSingleRentalVo;

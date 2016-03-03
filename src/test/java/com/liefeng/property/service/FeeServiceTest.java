@@ -404,4 +404,15 @@ public class FeeServiceTest {
 		DataPageValue<FeeItemVo> feeItemVo = feeService.findAllFeeItem(feeItemBo,1,30);
 	    System.out.println(feeItemVo);	
 	}
+	
+	@Test
+	public void findPersonal(){
+		ContextManager.getInstance().setOemCode("1");
+		FeeItemBo feeItemBo = new FeeItemBo();
+		feeItemBo.setProjectId("0000000052a7943f0152a7943fc00000");
+		feeItemBo.setHouseNum("A0288");
+		feeItemBo.setStatus("0");
+		DataPageValue<FeeItemVo> feeItemVo = feeService.findPersonal(feeItemBo,1,30);
+	    System.out.println(feeItemVo);	
+	}
 }

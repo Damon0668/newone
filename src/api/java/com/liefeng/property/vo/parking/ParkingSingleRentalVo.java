@@ -1,6 +1,7 @@
 package com.liefeng.property.vo.parking;
 
 import java.util.Date;
+import java.util.List;
 
 import com.liefeng.core.entity.BaseValue;
 
@@ -126,6 +127,11 @@ public class ParkingSingleRentalVo extends BaseValue{
 	 * 管理授权
 	 */
 	private String authorization;
+	
+	/**
+	 * 附近
+	 */
+	private List<ParkingAttachmentVo> attachmentVos;
 
 	public String getId() {
 		return id;
@@ -309,5 +315,13 @@ public class ParkingSingleRentalVo extends BaseValue{
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public List<ParkingAttachmentVo> getAttachmentVos() {
+		return attachmentVos;
+	}
+
+	public void setAttachmentVos(List<ParkingAttachmentVo> attachmentVos) {
+		this.attachmentVos = attachmentVos;
 	}
 }

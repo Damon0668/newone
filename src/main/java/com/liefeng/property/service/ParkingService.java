@@ -1,18 +1,25 @@
 package com.liefeng.property.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IParkingService;
 import com.liefeng.property.bo.parking.ParkingBo;
+import com.liefeng.property.domain.parking.ParkingAttachmentContext;
 import com.liefeng.property.domain.parking.ParkingContext;
 import com.liefeng.property.domain.parking.ParkingRentalContext;
+import com.liefeng.property.domain.project.ProjectContext;
+import com.liefeng.property.vo.parking.ParkingAttachmentVo;
 import com.liefeng.property.vo.parking.ParkingRentalVo;
 import com.liefeng.property.vo.parking.ParkingSingleRentalVo;
 import com.liefeng.property.vo.parking.ParkingVo;
+import com.liefeng.property.vo.project.ProjectVo;
 
 /**
  * 
@@ -31,12 +38,22 @@ public class ParkingService implements IParkingService {
 
 	@Override
 	public void createParking(ParkingVo parkingVo) {
+
+		ProjectContext projectContext =ProjectContext.loadById(parkingVo.getProjectId());
+		ProjectVo projectVo = projectContext.getProject();
+		parkingVo.setCode(projectVo.getCode()+parkingVo.getNum());
+		
 		ParkingContext parkingContext = ParkingContext.build(parkingVo);
 		parkingContext.create();
 	}
 	
 	@Override
 	public void createManyParking(ParkingVo parkingVo,Integer startNum,Integer endNum) {
+		
+		ProjectContext projectContext =ProjectContext.loadById(parkingVo.getProjectId());
+		ProjectVo projectVo = projectContext.getProject();
+		parkingVo.setCode(projectVo.getCode());
+		
 		ParkingContext parkingContext = ParkingContext.build(parkingVo);
 		parkingContext.createMany(startNum,endNum);
 	}
@@ -50,8 +67,17 @@ public class ParkingService implements IParkingService {
 		ParkingContext parkingContext = ParkingContext.build(parkingVo);
 		parkingContext.update();
 		
+		parkingRentalVo.setId(parkingSingleRentalVo.getParkingRentalId());
+		parkingRentalVo.setParkingId(parkingVo.getId());
 		ParkingRentalContext parkingRentalContext = ParkingRentalContext.build(parkingRentalVo);
-		parkingRentalContext.update();
+		
+		if(ValidateHelper.isNotEmptyString(parkingRentalVo.getId())){
+			parkingRentalContext.update();
+		}else{
+			parkingRentalContext.create();
+		}
+		
+		
 	}
 
 	@Override
@@ -72,6 +98,24 @@ public class ParkingService implements IParkingService {
 		ParkingContext parkingContext = ParkingContext.build();
 		
 		return parkingContext.list(parkingBo, page, size);
+	}
+
+	@Override
+	public void createParkingAttachment(ParkingAttachmentVo attachmentVo) {
+		ParkingAttachmentContext attachmentContext = ParkingAttachmentContext.build(attachmentVo);
+		attachmentContext.create();
+	}
+
+	@Override
+	public void deleteParkingAttachment(String id) {
+		ParkingAttachmentContext attachmentContext = ParkingAttachmentContext.loadById(id);
+		attachmentContext.delete();
+	}
+
+	@Override
+	public List<ParkingAttachmentVo> getParkingAttachment(String parkingRentalId) {
+		ParkingAttachmentContext attachmentContext = ParkingAttachmentContext.build();
+		return attachmentContext.get(parkingRentalId);
 	}
 
 }

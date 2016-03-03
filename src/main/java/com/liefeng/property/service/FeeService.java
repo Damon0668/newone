@@ -1015,4 +1015,17 @@ public class FeeService implements IFeeService {
 		FeeItemContext feeItemContext = FeeItemContext.build();
 		return feeItemContext.findAll(feeItemBo, currentPage, pageSize);
 	}
+	
+	/**
+	 * 获取个人历史费用信息(历史欠费,收费)
+	 * @param feeItemBo
+	 * @param currentPage
+	 * @param pageSize
+	 * @return
+	 */
+	@Override
+	public DataPageValue<FeeItemVo> findPersonal(FeeItemBo feeItemBo,Integer currentPage,Integer pageSize){	
+		FeeItemContext feeItemContext = FeeItemContext.build();
+		return feeItemContext.findPersonal(feeItemBo,currentPage,pageSize);
+	}
 }

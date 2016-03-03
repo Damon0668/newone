@@ -17,4 +17,8 @@ public interface FeeItemQueryRepository extends BaseRepository<FeeItemVo>{
 
 	public List<FeeItemVo> queryAllByPage(PagingParamVo param);
 
+	public Long queryPersonalByCount(PagingParamVo param);
+
+	public List<FeeItemVo> queryPersonalByPage(PagingParamVo param);
+
 }

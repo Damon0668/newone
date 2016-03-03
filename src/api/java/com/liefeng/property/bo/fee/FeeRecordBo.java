@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.liefeng.core.entity.BaseValue;
 
-public class FeeItemBo extends BaseValue {
+public class FeeRecordBo extends BaseValue {
 
 	private static final long serialVersionUID = 1686086443428551319L;
 
@@ -12,11 +12,6 @@ public class FeeItemBo extends BaseValue {
 	 * 项目ID
 	 */
 	private String projectId;
-
-	/**
-	 * 楼栋ID
-	 */
-	private String buildingId;
 
 	/**
 	 * 房号
@@ -49,12 +44,6 @@ public class FeeItemBo extends BaseValue {
 	 * 结束时间
 	 */
 	private Date endDate;
-	
-	/**
-	 * 是否需要总和
-	 * 空 为 算出总和
-	 */
-	private Boolean isSum;
 
 	public String getProjectId() {
 		return projectId;
@@ -62,14 +51,6 @@ public class FeeItemBo extends BaseValue {
 
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
-	}
-
-	public String getBuildingId() {
-		return buildingId;
-	}
-
-	public void setBuildingId(String buildingId) {
-		this.buildingId = buildingId;
 	}
 
 	public String getHouseNum() {
@@ -118,13 +99,5 @@ public class FeeItemBo extends BaseValue {
 
 	public void setFeeType(String feeType) {
 		this.feeType = feeType;
-	}
-
-	public Boolean getIsSum() {
-		return isSum;
-	}
-
-	public void setIsSum(Boolean isSum) {
-		this.isSum = isSum;
 	}
 }

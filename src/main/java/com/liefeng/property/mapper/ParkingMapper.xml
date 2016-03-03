@@ -42,10 +42,10 @@
 				AND p.num = #{extra.num}
 			</if>
 			<if test="extra.customerName != null and extra.customerName != ''">
-				 AND p.customer_name like CONCAT('%', #{extra.customerName },'%')
+				 AND pr.customer_name like CONCAT('%', #{extra.customerName },'%')
 			</if>
 			<if test="extra.status != null and extra.status != ''">
-				AND pr.status = #{extra.status}
+				AND p.status = #{extra.status}
 			</if>
 		</trim>
 	</sql>

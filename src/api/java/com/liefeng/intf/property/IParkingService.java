@@ -1,7 +1,10 @@
 package com.liefeng.intf.property;
 
+import java.util.List;
+
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.bo.parking.ParkingBo;
+import com.liefeng.property.vo.parking.ParkingAttachmentVo;
 import com.liefeng.property.vo.parking.ParkingSingleRentalVo;
 import com.liefeng.property.vo.parking.ParkingVo;
 
@@ -46,4 +49,19 @@ public interface IParkingService {
 	 * @param endNum
 	 */
 	public void createManyParking(ParkingVo parkingVo, Integer startNum, Integer endNum);
+
+	/**
+	 * 创建附件
+	 */
+	public void createParkingAttachment(ParkingAttachmentVo attachmentVo);
+	
+	/**
+	 * 删除附件
+	 */
+	public void deleteParkingAttachment(String id);
+	
+	/**
+	 * 根据租售信息id查询附件
+	 */
+	public List<ParkingAttachmentVo> getParkingAttachment(String parkingRentalId);
 }

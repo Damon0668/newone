@@ -275,6 +275,16 @@ public interface IFeeService {
 	 */
 	public void updateFeeItem(FeeItemVo feeItemVo);
 
+	/**
+	 * 获取个人历史费用信息(历史欠费,收费)
+	 * @param feeItemBo
+	 * @param currentPage
+	 * @param pageSize
+	 * @return
+	 */
+	public DataPageValue<FeeItemVo> findPersonal(FeeItemBo feeItemBo,
+			Integer currentPage, Integer pageSize);
+
 
 
 	

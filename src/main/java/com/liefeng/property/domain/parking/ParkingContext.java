@@ -199,6 +199,9 @@ public class ParkingContext {
 		count = (count == null ? 0 : count);
 		logger.info("总数量：count={0}", count);
 		
+		// 设置数据总行数，用于计算偏移量
+		param.getPager().setRowCount(count);
+		
 		List<ParkingSingleRentalVo> parkingSingleRentalVos = parkingQueryRepository.queryByPage(param);
 		DataPageValue<ParkingSingleRentalVo> returnPage = new DataPageValue<ParkingSingleRentalVo>(parkingSingleRentalVos, count, size, page);
 		
