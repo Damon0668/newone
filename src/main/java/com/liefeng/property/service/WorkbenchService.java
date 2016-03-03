@@ -509,15 +509,15 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
-	public List<WebsiteMsgVo> findWebsiteMsgByParentId(String parentId) {
+	public List<WebsiteMsgVo> getReplyMsgList(String parentId) {
 		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.build();
-		return websiteMsgContext.findByParentId(parentId);
+		return websiteMsgContext.getReplyMsgList(parentId);
 	}
 
 	@Override
-	public DataPageValue<WebsiteMsgVo> findWebsiteMsgByCreatorIdAndParentIdIsNull(
+	public DataPageValue<WebsiteMsgVo> findWebsiteMsgByCreatorId(
 			String creatorId, int page, int size) {
 		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.build();
-		return websiteMsgContext.findByCreatorIdAndParentIdIsNull(creatorId, page, size);
+		return websiteMsgContext.findByCreatorId(creatorId, page, size);
 	}
 }

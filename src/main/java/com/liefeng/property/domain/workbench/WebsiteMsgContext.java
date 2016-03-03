@@ -137,7 +137,7 @@ public class WebsiteMsgContext {
 	}
 	
 	/**
-	 * 根据站内消息id，删除站内消息
+	 * 根据站内消息id，删除站内消息及其回复消息
 	 * @author xhw
 	 * @2016年3月2日 下午4:08:32
 	 */
@@ -220,7 +220,7 @@ public class WebsiteMsgContext {
 	 * @author xhw
 	 * @2016年3月3日 下午2:20:10
 	 */
-	public List<WebsiteMsgVo> findByParentId(String parentId){
+	public List<WebsiteMsgVo> getReplyMsgList(String parentId){
 		List<WebsiteMsgVo> websiteMsgVos = null;
 		if(ValidateHelper.isNotEmptyString(parentId)){
 			List<WebsiteMsgPo> websiteMsgPos = websiteMsgRepository.findByParentIdOrderByCreateTimeDesc(parentId);
@@ -238,7 +238,7 @@ public class WebsiteMsgContext {
 	 * @param size 页面大小
 	 * @return
 	 */
-	public DataPageValue<WebsiteMsgVo> findByCreatorIdAndParentIdIsNull(String creatorId, int page, int size) {
+	public DataPageValue<WebsiteMsgVo> findByCreatorId(String creatorId, int page, int size) {
 		Page<WebsiteMsgVo> voPage = null;
 
 		// spring-data 的page从0开始
