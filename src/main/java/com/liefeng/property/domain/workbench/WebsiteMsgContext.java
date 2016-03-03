@@ -8,18 +8,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
+import com.liefeng.property.po.project.ProjectBuildingPo;
 import com.liefeng.property.po.workbench.WebsiteMsgPo;
 import com.liefeng.property.repository.mybatis.WebsiteMsgQueryRepository;
 import com.liefeng.property.repository.workbench.WebsiteMsgRepository;
+import com.liefeng.property.vo.project.ProjectBuildingVo;
 import com.liefeng.property.vo.workbench.WebsiteMsgVo;
 
 
@@ -208,6 +213,41 @@ public class WebsiteMsgContext {
 		DataPageValue<WebsiteMsgVo> returnPage = new DataPageValue<WebsiteMsgVo>(list, count, size, page);
 
 		return returnPage;
+	}
+	
+	/**
+	 * 根据parentId，获取站内消息的回复信息
+	 * @param parentId
+	 * @return
+	 * @author xhw
+	 * @2016年3月3日 下午2:20:10
+	 */
+	public List<WebsiteMsgVo> findByParentId(String parentId){
+		List<WebsiteMsgVo> websiteMsgVos = null;
+		if(ValidateHelper.isNotEmptyString(parentId)){
+			List<WebsiteMsgPo> websiteMsgPos = websiteMsgRepository.findByParentIdOrderByCreateTimeDesc(parentId);
+			
+			websiteMsgVos = MyBeanUtil.createList(websiteMsgPos, WebsiteMsgVo.class);
+		}
+		
+		return websiteMsgVos;
+	}
+	
+	/**
+	 * 根据创建人id，获取创建人创建的消息（父消息）（分页）
+	 * 
+	 * @param page 第几页，最小为1
+	 * @param size 页面大小
+	 * @return
+	 */
+	public DataPageValue<WebsiteMsgVo> findByCreatorIdAndParentIdIsNull(String creatorId, int page, int size) {
+		Page<WebsiteMsgVo> voPage = null;
+
+		// spring-data 的page从0开始
+		Page<WebsiteMsgPo> poPage = websiteMsgRepository.findByCreatorIdAndParentIdIsNull(creatorId, new PageRequest(page - 1, size));
+		voPage = poPage.map(new Po2VoConverter<WebsiteMsgPo, WebsiteMsgVo>(WebsiteMsgVo.class));
+		
+		return new DataPageValue<WebsiteMsgVo>(voPage.getContent(), voPage.getTotalElements(), size, page);
 	}
 	
 	protected void setwebsiteMsgVo(WebsiteMsgVo websiteMsgVo) {

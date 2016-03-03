@@ -466,4 +466,17 @@ public class WorkbenchService implements IWorkbenchService {
 
 		return websiteMsgContext.findByPage(type, staffId, deptId, manageProject, page, size);
 	}
+
+	@Override
+	public List<WebsiteMsgVo> findWebsiteMsgByParentId(String parentId) {
+		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.build();
+		return websiteMsgContext.findByParentId(parentId);
+	}
+
+	@Override
+	public DataPageValue<WebsiteMsgVo> findWebsiteMsgByCreatorIdAndParentIdIsNull(
+			String creatorId, int page, int size) {
+		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.build();
+		return websiteMsgContext.findByCreatorIdAndParentIdIsNull(creatorId, page, size);
+	}
 }

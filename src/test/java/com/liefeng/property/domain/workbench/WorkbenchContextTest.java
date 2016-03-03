@@ -452,9 +452,10 @@ public class WorkbenchContextTest {
 	@Test
 	public void createWebsiteMsg(){
 		WebsiteMsgVo messageVo = new WebsiteMsgVo();
-		messageVo.setContent("吃饭啦");
+		messageVo.setContent("好的");
 		messageVo.setCreatorId("40282081531cf49b01531d3f4e1c0006");
 		messageVo.setType("2");
+		messageVo.setParentId("402889d2533a791601533a7916cf0000");
 		workbenchService.createWebsiteMsgVo(messageVo);
 	}
 	
@@ -541,5 +542,25 @@ public class WorkbenchContextTest {
 	public void findWebsiteMsgByPage(){
 		DataPageValue<WebsiteMsgVo> messageDataPageValue = workbenchService.findWebsiteMsgByPage("2", "40282081531cf49b01531d3f4e1c0006", "402881fb530cd2a501530cd2a5580000", "0000000052a7943f0152a7943fc00000", 1, 30);
 		System.out.print(messageDataPageValue);
+	}
+	
+	/**
+	 * 根据parentId，获取站内消息的回复信息
+	 * 
+	 * @author xhw
+	 * @2016年3月3日 下午2:24:32
+	 */
+	@Test
+	public void findWebsiteMsgByParentId(){
+		List<WebsiteMsgVo> websiteMsgVos = workbenchService.findWebsiteMsgByParentId("402889d2533a791601533a7916cf0000");
+		System.out.println("回复信息："+websiteMsgVos);
+	}
+	/**
+	 * 根据创建人id，获取创建人创建的消息（父消息）（分页）
+	 */
+	@Test
+	public void findWebsiteMsgByCreatorIdAndParentIdIsNull(){
+		DataPageValue<WebsiteMsgVo> websiteMsgDataPageValue = workbenchService.findWebsiteMsgByCreatorIdAndParentIdIsNull("40282081531cf49b01531d3f4e1c0006", 1, 30);
+		System.out.println(websiteMsgDataPageValue);
 	}
 }

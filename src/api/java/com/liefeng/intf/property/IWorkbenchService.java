@@ -381,4 +381,26 @@ public interface IWorkbenchService {
 	 * @2016年3月2日 下午8:35:57
 	 */
 	public DataPageValue<WebsiteMsgVo> findWebsiteMsgByPage(String type, String staffId, String deptId, String manageProject, Integer page, Integer size);
+	
+	/**
+	 * 根据parentId，获取站内消息的回复信息
+	 * @param parentId
+	 * @return
+	 * @author xhw
+	 * @2016年3月3日 下午2:21:43
+	 */
+	public List<WebsiteMsgVo> findWebsiteMsgByParentId(String parentId);
+	
+	/**
+	 * 根据创建人id，获取创建人创建的消息（父消息）（分页）
+	 * @param creatorId
+	 * @param page 第几页，最小为1
+	 * @param size 页面大小
+	 * @return
+	 * @author xhw
+	 * @2016年3月3日 下午3:02:43
+	 */
+	public DataPageValue<WebsiteMsgVo> findWebsiteMsgByCreatorIdAndParentIdIsNull(String creatorId, int page, int size);
+	
+	
 }
