@@ -414,9 +414,41 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
-	public WebsiteMsgVo createWebsiteMsgVo(WebsiteMsgVo websiteMsgVo) {
-		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.build(websiteMsgVo);
-		return websiteMsgContext.create();
+	public WebsiteMsgVo createWebsiteMsgVo(WebsiteMsgVo websiteMsg) {
+		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.build(websiteMsg);
+		WebsiteMsgVo websiteMsgVo = websiteMsgContext.create();
+		if (websiteMsgVo != null) { // 创建消息的权限 
+			if (ValidateHelper.isNotEmptyString(websiteMsgVo.getPrivilegeStr())) { // 权限
+				//每个权限使用逗号隔开，权限的具体信息使用|隔开
+				String[] privilegeArray = websiteMsgVo.getPrivilegeStr().split(",");
+				for(int i=0; i<privilegeArray.length; i++){
+					String[] privilege = privilegeArray[i].split("\\|");
+					WebsiteMsgPrivilegeVo websiteMsgPrivilegeVo= new WebsiteMsgPrivilegeVo();
+					websiteMsgPrivilegeVo.setMessageId(websiteMsgVo.getId());
+					
+					if("0".equals(privilege[1])){ // 代表权限是某个项目下的所有人
+						websiteMsgPrivilegeVo.setProjectId(privilege[0]);
+						websiteMsgPrivilegeVo.setDepartmentId("-1");
+					}else{
+						if("0".equals(privilege[2])){//代表权限是有某个项目管理权限的，并且是某个部门的所有员工
+							websiteMsgPrivilegeVo.setProjectId(privilege[0]);
+							websiteMsgPrivilegeVo.setDepartmentId(privilege[1]);
+							websiteMsgPrivilegeVo.setStaffId("-1");
+						}else{
+							websiteMsgPrivilegeVo.setProjectId(privilege[0]);
+							websiteMsgPrivilegeVo.setDepartmentId(privilege[1]);
+							websiteMsgPrivilegeVo.setStaffId(privilege[2]);
+						}
+					}
+				
+					createWebsiteMsgPrivilege(websiteMsgPrivilegeVo);
+				}
+
+			}
+
+		}
+		
+		return websiteMsgVo;
 	}
 
 	@Override
