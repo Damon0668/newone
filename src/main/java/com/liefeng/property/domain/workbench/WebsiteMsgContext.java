@@ -20,11 +20,9 @@ import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
-import com.liefeng.property.po.project.ProjectBuildingPo;
 import com.liefeng.property.po.workbench.WebsiteMsgPo;
 import com.liefeng.property.repository.mybatis.WebsiteMsgQueryRepository;
 import com.liefeng.property.repository.workbench.WebsiteMsgRepository;
-import com.liefeng.property.vo.project.ProjectBuildingVo;
 import com.liefeng.property.vo.workbench.WebsiteMsgVo;
 
 
@@ -143,9 +141,9 @@ public class WebsiteMsgContext {
 	 * @author xhw
 	 * @2016年3月2日 下午4:08:32
 	 */
-	public void deleteById(){
+	public void delete(){
 		if(ValidateHelper.isNotEmptyString(id)){
-			websiteMsgRepository.deleteById(id);
+			websiteMsgRepository.deleteByIdOrParentId(id, id);
 			
 			logger.info("delete websiteMsg of id : {} success.", id);
 
