@@ -3,6 +3,8 @@ package com.liefeng.property.service;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -457,10 +459,17 @@ public class WorkbenchService implements IWorkbenchService {
 		return websiteMsgContext.getById();
 	}
 
+	
 	@Override
+	@Transactional
 	public void deleteWebsiteMsgById(String id) {
+		//删除消息及其回复消息
 		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.loadById(id);
-		websiteMsgContext.deleteById();
+		websiteMsgContext.delete();
+		
+		//删除消息的所有权限
+		WebsiteMsgPrivilegeContext websiteMsgPrivilegeContext = WebsiteMsgPrivilegeContext.loadByMessageId(id);
+		websiteMsgPrivilegeContext.deleteByMessageId();
 	}
 
 	@Override

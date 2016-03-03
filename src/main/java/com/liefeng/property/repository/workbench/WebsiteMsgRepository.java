@@ -25,7 +25,7 @@ public interface WebsiteMsgRepository extends JpaRepository<WebsiteMsgPo, String
 	 * @author xhw
 	 * @2016年3月2日 下午4:05:44
 	 */
-	public void deleteById(String id);
+	public void deleteByIdOrParentId(String id, String parentId);
 	
 	/**
 	 * 查询站内消息的回复信息
