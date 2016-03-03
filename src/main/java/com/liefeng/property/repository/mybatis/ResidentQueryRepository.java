@@ -1,5 +1,7 @@
 package com.liefeng.property.repository.mybatis;
 
+import java.util.List;
+
 import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.vo.household.ResidentVo;
@@ -18,5 +20,12 @@ public interface ResidentQueryRepository extends BaseRepository<ResidentVo> {
 	 * @return 住户信息
 	 */
 	public ResidentVo queryByCustGlobalIdAndProjectId(PagingParamVo param);
+	
+	/**
+	 * 查询业主所有房产中的住户
+	 * @param param 查询过滤参数
+	 * @return 住户列表
+	 */
+	public List<ResidentVo> queryResidents(PagingParamVo param);
 	
 }

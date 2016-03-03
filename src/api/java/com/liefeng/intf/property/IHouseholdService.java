@@ -123,4 +123,12 @@ public interface IHouseholdService {
 	 */
 	public DataPageValue<UserVo> listProprietorUser(ProprietorBo params, Integer currentPage, Integer pageSize);
 	
+	/**
+	 * 获取业主所有房产中的住户
+	 * @param projectId 项目ID
+	 * @param custGlobalId 业主关联客户全局ID
+	 * @return 住户信息
+	 */
+	public List<ResidentVo> getResidentsInProprietorHouse(String projectId, String custGlobalId);
+	
 }

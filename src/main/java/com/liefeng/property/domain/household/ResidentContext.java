@@ -68,7 +68,7 @@ public class ResidentContext {
 	 */
 	public static ResidentContext build(ResidentVo resident) {
 		 ResidentContext residentContext = getInstance();
-		 residentContext.resident = resident;
+		 residentContext.setResident(resident);
 		 
 		 return residentContext;
 	}
@@ -90,7 +90,7 @@ public class ResidentContext {
 	 */
 	public static ResidentContext loadById(String residentId) {
 		ResidentContext residentContext = getInstance();
-		 residentContext.residentId = residentId;
+		 residentContext.setResidentId(residentId);
 		 
 		 return residentContext;
 	}
@@ -200,4 +200,30 @@ public class ResidentContext {
 
 		return residentPage;
 	}
+	
+	/**
+	 * 查询业主所有房产中的住户
+	 * @param projectId 项目ID
+	 * @param custGlobalId 业主关联的全局客户ID
+	 * @return 住户列表
+	 */
+	public List<ResidentVo> getResidentsInProprietorHouse(String projectId, String custGlobalId) {
+		PagingParamVo pagingParamVo = new PagingParamVo();
+		Map<String, String> extra = new HashMap<String ,String>();
+		extra.put("projectId", projectId);
+		extra.put("custGlobalId", custGlobalId);
+		pagingParamVo.setExtra(extra);
+		
+		return residentQueryRepository.queryResidents(pagingParamVo);
+	}
+
+	protected void setResidentId(String residentId) {
+		this.residentId = residentId;
+	}
+
+	protected void setResident(ResidentVo resident) {
+		this.resident = resident;
+	}
+	
+	
 }

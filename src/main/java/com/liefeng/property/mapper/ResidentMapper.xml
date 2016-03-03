@@ -7,26 +7,6 @@
 
 <!-- Result Map-->
 <resultMap id="BaseResultMap" type="com.liefeng.property.vo.household.ResidentVo" >
-	<result column="id" property="id"/>
-	<result column="custGlobalId" property="custGlobalId"/>
-	<result column="houseId" property="houseId"/>
-	<result column="proprietorId" property="proprietorId"/>
-	<result column="isProprietor" property="isProprietor"/>
-	<result column="residentType" property="residentType"/>
-	<result column="residentRelation" property="residentRelation"/>
-	<result column="checkinDate" property="checkinDate"/>
-	<result column="checkupDate" property="checkupDate"/>
-	<result column="name" property="name"/>
-	<result column="mobile" property="mobile"/>
-	<result column="tel" property="tel"/>
-	<result column="workUnit" property="workUnit"/>
-	<result column="hobbies" property="hobbies"/>
-	<result column="specialty" property="specialty"/>
-	<result column="pic" property="pic"/>
-	<result column="remark" property="remark"/>
-	<result column="status" property="status"/>
-	<result column="oemCode" property="oemCode"/>
-	
 	<result column="customerId" property="customer.id"/>
 	<result column="globalId" property="customer.globalId"/>
 	<result column="idNum" property="customer.idNum"/>
@@ -149,6 +129,28 @@ FROM
 	      ON b.id = a.house_id
 	  WHERE
 	      a.cust_global_id = #{extra.custGlobalId} AND b.project_id = #{extra.projectId} AND a.status != '2'
+</select>
+
+<!-- 查询业主房产中住户 -->
+<select id="queryResidents" resultMap="BaseResultMap">
+	select
+		pj.full_name as projectName,
+		h.house_num as houseNum,
+		r.name as name,
+		r.resident_relation as residentRelation
+	from
+		property.t_resident r 
+		left join property.t_proprietor p
+		on p.id = r.proprietor_id
+		left join property.t_house h
+		on h.id = r.house_id ,
+		property.t_project pj
+	where
+		p.project_id = pj.id
+		and p.project_id = #{extra.projectId} 
+		and p.cust_global_id = #{extra.custGlobalId}
+	order by
+		h.house_num
 </select>
 
 </mapper>   

@@ -381,6 +381,14 @@ public class HouseholdService implements IHouseholdService {
 		return proprietorContext.listProprietorUser(params, currentPage, pageSize);
 	}
 	
+	/**
+	 * 获取业主所有房产中的住户
+	 */
+	@Override
+	public List<ResidentVo> getResidentsInProprietorHouse(String projectId, String custGlobalId) {
+		ResidentContext residentContext = ResidentContext.build();
+		return residentContext.getResidentsInProprietorHouse(projectId, custGlobalId);
+	}
 	
 	/**
 	 * 初始化客户信息
@@ -392,6 +400,7 @@ public class HouseholdService implements IHouseholdService {
 		customer.setMobile(singleHouse.getPhone());
 		customer.setGlobalId(singleHouse.getCustGlobalId());
 		customer.setId(singleHouse.getCustomerId());
+		customer.setPortraitUrl(singleHouse.getPicUrl());
 		
 		return customer;
 	}
@@ -471,6 +480,7 @@ public class HouseholdService implements IHouseholdService {
 		user.setName(phone); // 账号
 		user.setPassword(password); // 初始密码
 		user.setMobile(phone); // 设置手机号码
+		user.setAvatarUrl(customer.getPortraitUrl());
 		user.setRegisterType(UserConstants.RegisterType.PC); // 注册类型
 		user.setHouseholdType(householdType); // 账号类型
 		user.setOemCode(ContextManager.getInstance().getOemCode()); // OEM编码

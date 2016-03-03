@@ -119,7 +119,17 @@ public class ResidentVo extends BaseValue {
 	 * 客户信息
 	 */
 	private CustomerVo customer;
-
+	
+	/**
+	 * 项目名称
+	 */
+	private String projectName;
+	
+	/**
+	 * 房间号
+	 */
+	private String houseNum;
+	
 	public String getId() {
 		return id;
 	}
@@ -286,6 +296,22 @@ public class ResidentVo extends BaseValue {
 
 	public void setCustomer(CustomerVo customer) {
 		this.customer = customer;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getHouseNum() {
+		return houseNum;
+	}
+
+	public void setHouseNum(String houseNum) {
+		this.houseNum = houseNum;
 	}
 
 }
