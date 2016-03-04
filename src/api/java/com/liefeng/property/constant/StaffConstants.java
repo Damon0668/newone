@@ -14,7 +14,7 @@ public class StaffConstants {
 	/**
 	 * 物业员工状态
 	 */
-	public interface StaffStatus{
+	public static interface StaffStatus{
 		
 		/**
 		 * 激活
@@ -32,7 +32,7 @@ public class StaffConstants {
 	 * 物业员工
 	 * 在职状态
 	 */
-	public interface WorkStatus{
+	public static interface WorkStatus{
 		/**
 		 * 在职
 		 */
@@ -47,7 +47,7 @@ public class StaffConstants {
 	/**
 	 * 员工档案
 	 */
-	public interface StaffArchive{
+	public static interface StaffArchive{
 		
 		/**
 		 * 身份证

@@ -38,6 +38,6 @@ public interface TaskQueryRepository extends BaseRepository<TaskVo>{
 	 * @author xhw
 	 * @date 2016年2月25日 上午11:57:13
 	 */
-	public List<TaskVo> queryTaskByStaffIdAndSize(Map<String, String> paramMap);
+	public List<TaskVo> queryTaskByStaffIdAndSize(Map<String, Object> paramMap);
 	
 }

@@ -51,7 +51,22 @@ public class WorkbenchConstants {
 		/**
 		 * 任务（4条）
 		 */
-		public static final Integer TASKSIZE = 4;
+		public static final Integer TASK_SIZE = 4;
+		
+		/**
+		 * 通知（4条）
+		 */
+		public static final Integer NOTICE_SIZE = 4;
+		
+		/**
+		 * 消息（4条）
+		 */
+		public static final Integer MSG_SIZE = 4;
+		
+		/**
+		 * 日程（6条）
+		 */
+		public static final Integer SCHEDULE_SIZE = 6;
 	}
 	
 	/**

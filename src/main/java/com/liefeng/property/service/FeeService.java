@@ -27,7 +27,6 @@ import com.liefeng.property.domain.fee.FeeSettingContext;
 import com.liefeng.property.domain.fee.LadderFeeSettingContext;
 import com.liefeng.property.domain.fee.MeterRecordContext;
 import com.liefeng.property.domain.fee.MeterSettingContext;
-import com.liefeng.property.domain.household.ProprietorContext;
 import com.liefeng.property.domain.household.ProprietorHouseContext;
 import com.liefeng.property.domain.parking.ParkingContext;
 import com.liefeng.property.domain.project.HouseContext;
