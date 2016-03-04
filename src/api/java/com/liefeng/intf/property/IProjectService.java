@@ -233,5 +233,11 @@ public interface IProjectService {
 	 * @return 
 	 */
 	public ProprietorSingleHouseVo getSingleHouse(String houseId);
+
+	/**
+	 * 查询所有项目(不包含OEM)
+	 * @return
+	 */
+	public List<ProjectVo> findAll();
 	
 }

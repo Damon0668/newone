@@ -1,5 +1,7 @@
 package com.liefeng.property.repository;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +16,7 @@ import com.liefeng.property.po.parking.ParkingRentalPo;
  */
 @Transactional
 public interface ParkingRentalRepository extends JpaRepository<ParkingRentalPo, String> {
+
+	public List<ParkingRentalPo> findByParkingId(String parkId);
 
 }

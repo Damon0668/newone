@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.TimeUtil;
 import com.liefeng.common.util.UUIDGenerator;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IFeeService;
 import com.liefeng.property.bo.fee.FeeItemBo;
 import com.liefeng.property.bo.fee.MeterRecordBo;
+import com.liefeng.property.bo.parking.ParkingBo;
 import com.liefeng.property.constant.FeeConstants;
 import com.liefeng.property.domain.fee.FeeItemContext;
 import com.liefeng.property.domain.fee.FeeRecordContext;
@@ -27,6 +29,7 @@ import com.liefeng.property.domain.fee.MeterRecordContext;
 import com.liefeng.property.domain.fee.MeterSettingContext;
 import com.liefeng.property.domain.household.ProprietorContext;
 import com.liefeng.property.domain.household.ProprietorHouseContext;
+import com.liefeng.property.domain.parking.ParkingContext;
 import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.domain.project.ProjectBuildingContext;
 import com.liefeng.property.util.DateUtil;
@@ -37,6 +40,8 @@ import com.liefeng.property.vo.fee.MeterRecordVo;
 import com.liefeng.property.vo.fee.MeterSettingVo;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
+import com.liefeng.property.vo.parking.ParkingSingleRentalVo;
+import com.liefeng.property.vo.project.HouseVo;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
 
 /**
@@ -430,7 +435,7 @@ public class FeeService implements IFeeService {
 				feeItemContext.create();
 			}
 		} catch (Exception e) {
-			logger.info("***费用{}生成失败******",FeeConstants.FeeSetting.FEE_PROPERTYMANAGE);
+			logger.error("***费用{}生成失败******",FeeConstants.FeeSetting.FEE_PROPERTYMANAGE);
 			logger.error(e.getMessage());
 		}
 	}
@@ -524,7 +529,7 @@ public class FeeService implements IFeeService {
 				feeItemContext.create();
 			}
 		} catch (Exception e) {
-			logger.info("***费用{}生成失败******",FeeConstants.FeeSetting.FEE_GARBAGE);
+			logger.error("***费用{}生成失败******",FeeConstants.FeeSetting.FEE_GARBAGE);
 			logger.error(e.getMessage());
 		}
 	}
@@ -629,7 +634,7 @@ public class FeeService implements IFeeService {
 				feeItemContext.create();
 			}
 		} catch (Exception e) {
-			logger.info("***费用{}生成失败******",FeeConstants.FeeSetting.FEE_POLLU);
+			logger.error("***费用{}生成失败******",FeeConstants.FeeSetting.FEE_POLLU);
 			logger.error(e.getMessage());
 		}
 	}
@@ -789,7 +794,7 @@ public class FeeService implements IFeeService {
 				feeItemContext.create();
 			}
 		} catch (Exception e) {
-			logger.info("***费用{}生成失败******",feeType);
+			logger.error("***费用{}生成失败******",feeType);
 			logger.error(e.getMessage());
 		}
 	}
@@ -918,11 +923,126 @@ public class FeeService implements IFeeService {
 				}
 			}
 		} catch (Exception e) {
-			logger.info("***费用{}生成失败******",feeType);
+			logger.error("***费用{}生成失败******",feeType);
 			logger.error(e.getMessage());
 		}
 	}
 
+	/**
+	 * 车位费用生成
+	 * @param projectId
+	 */
+	@Override
+	public void createParkingFee(String projectId){
+		
+		logger.info("***开始生成车位费用******");
+		
+		try{
+			// 上个月日期
+			Date preDate = TimeUtil.getDayBeforeByMonth(new Date(), 1);
+			
+			ParkingContext parkingContext = ParkingContext.build();
+			ParkingBo parkingBo = new ParkingBo();
+			parkingBo.setProjectId(projectId);
+			//查询所有车位信息
+			List<ParkingSingleRentalVo> parkingSingleRentalVos = parkingContext.findByProjectId(projectId);
+		
+			for (ParkingSingleRentalVo paSingleRentalVo : parkingSingleRentalVos) {
+				//无业主判断
+				if(paSingleRentalVo==null||ValidateHelper.isEmptyString(paSingleRentalVo.getHouseNum())||!paSingleRentalVo.getAuthorization().equals("1")){
+					continue;
+				}
+				
+				HouseContext houseContext = HouseContext
+						.loadByProjectIdAndHouseNum(
+								paSingleRentalVo.getProjectId(),
+								paSingleRentalVo.getHouseNum());
+				HouseVo houseVo =  houseContext.get();
+				if(houseVo == null){
+					continue;
+				}
+				houseContext = HouseContext
+						.loadById(houseVo.getId());
+				ProprietorSingleHouseVo proprietorSingleHouseVo = houseContext
+						.getSingleHouse();
+				if(proprietorSingleHouseVo == null){
+					continue;
+				}
+				
+				//查询业主信息
+				ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.loadByProjectIdAndHouseNum(paSingleRentalVo.getProjectId(), paSingleRentalVo.getHouseNum());
+				ProprietorHouseVo proprietorHouseVo = proprietorHouseContext.getProprietorHouse();
+				//查询是否已经生成费用
+				FeeItemContext feeItemContext = FeeItemContext
+						.loadByProjectId(paSingleRentalVo.getProjectId());
+				FeeItemVo feeItem = feeItemContext.getPreFeeItem(
+						paSingleRentalVo.getHouseNum(), FeeConstants.FeeSetting.FEE_PARKING);
+				
+				if (feeItem != null) {
+					logger.info("已经存在该费用项");
+					return;
+				}
+				
+				//查询费用设置
+				FeeSettingContext feeSettingContext = FeeSettingContext
+						.loadByProjectId(projectId);
+				FeeSettingVo feeSettingVo = feeSettingContext.findChargeable(
+						proprietorHouseVo.getUseType(),
+						FeeConstants.FeeSetting.FEE_PARKING);
+				
+				if (feeSettingVo == null) {
+					logger.info("该费用不收费");
+					return;
+				}
+				
+				// 计费期
+				Date[] dates = DateUtil.getCurrentDate(new Date(),
+						Integer.parseInt(feeSettingVo.getPeriod()),
+						feeSettingVo.getStartMonth());
+
+			
+				Double price = paSingleRentalVo.getManageFee(); // 单价
+				Double sum =  paSingleRentalVo.getManageFee();;
+				logger.info("总金额：" + sum);
+				FeeItemVo feeItemVo = new FeeItemVo();
+				feeItemVo.setCreateTime(new Date());
+				feeItemVo.setUpdateTime(new Date());
+				feeItemVo.setStartDate(TimeUtil.getFirstDayOfMonth(preDate));
+				feeItemVo.setEndDate(TimeUtil.getLastDayOfMonth(preDate));
+				feeItemVo.setFeeType(FeeConstants.FeeSetting.FEE_PARKING);
+				feeItemVo.setHouseNum(proprietorHouseVo.getHouseNum());
+				feeItemVo
+						.setBuildingId(proprietorSingleHouseVo.getBuildingId());
+				feeItemVo.setId(UUIDGenerator.generate());
+				feeItemVo.setLateFeeRate(0.00);// 滞纳金
+				feeItemVo.setOemCode(ContextManager.getInstance().getOemCode());
+				feeItemVo.setProjectId(proprietorHouseVo.getProjectId());
+				feeItemVo
+						.setPropertyId(proprietorSingleHouseVo.getBuildingId());
+				feeItemVo.setProprietorName(proprietorSingleHouseVo.getName());
+				feeItemVo.setStaffId("-1");
+				feeItemVo.setStatus("0");
+				feeItemVo.setDiscount(1.00);
+				feeItemVo.setTotalFee(sum);
+				feeItemVo.setUnitPrice(price);
+
+				// 设置缴费期限 默认为下个月1号开始收费
+				Calendar deadline = Calendar.getInstance();
+				deadline.setTime(new Date(dates[1].getTime()));
+				deadline.set(Calendar.DATE, feeSettingVo.getPaymentPeriod());
+				deadline.add(Calendar.MONTH, 1);
+				feeItemVo.setDeadline(deadline.getTime());
+
+				feeItemContext = FeeItemContext.build(feeItemVo);
+				feeItemContext.create();
+			}
+		
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.error("***车位费用生成失败******{}",e.getMessage());
+		}
+		logger.info("***车位费用生成结束******");
+	}
 	@Override
 	@Transactional
 	public void collect(String feeItemId) {

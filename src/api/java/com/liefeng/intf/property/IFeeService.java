@@ -270,6 +270,12 @@ public interface IFeeService {
 	public void createPublicMerterFee(String projectId, String feeType);
 
 	/**
+	 * 生成车位管理费
+	 * @param projectId
+	 */
+	public void createParkingFee(String projectId);
+
+	/**
 	 * 修改费用
 	 * @param feeItemVo
 	 */
@@ -284,6 +290,7 @@ public interface IFeeService {
 	 */
 	public DataPageValue<FeeItemVo> findPersonal(FeeItemBo feeItemBo,
 			Integer currentPage, Integer pageSize);
+
 
 
 

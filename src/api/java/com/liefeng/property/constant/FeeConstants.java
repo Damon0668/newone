@@ -137,6 +137,11 @@ public class FeeConstants {
 		 */
 		public static final String FEE_GARBAGE = "8";
 
+		/**
+		 * 车位管理费
+		 */
+		public static final String FEE_PARKING = "6";
+
 		
 	}
 }
