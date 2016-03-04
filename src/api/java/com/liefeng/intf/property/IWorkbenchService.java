@@ -415,7 +415,7 @@ public interface IWorkbenchService {
 	 * @author xhw
 	 * @2016年3月4日 下午4:39:52
 	 */
-	public DataPageValue<StaffContactsVo> findStaffContacts(String departmentId, String status, String workStatus, int page, int size);
+	public DataPageValue<StaffContactsVo> findStaffContacts(String departmentId, int page, int size);
 	
 	/**
 	 * 获取员工通讯录中的人数
@@ -426,7 +426,7 @@ public interface IWorkbenchService {
 	 * @author xhw
 	 * @2016年3月4日 下午4:42:07
 	 */
-	public Long findCountOfStaffContacts(String departmentId, String status, String workStatus);
+	public Long findCountOfStaffContacts(String departmentId);
 	
 	/**
 	 * 查询业主通讯录（分页）
@@ -439,7 +439,7 @@ public interface IWorkbenchService {
 	 * @author xhw
 	 * @2016年3月4日 下午5:15:37
 	 */
-	public DataPageValue<ProprietorContactsVo> findProprietorContacts(String projectId, String buildingId, String status, Integer page, Integer size);
+	public DataPageValue<ProprietorContactsVo> findProprietorContacts(String projectId, String buildingId, Integer page, Integer size);
 
 	/**
 	 * 业主通讯录总数
@@ -450,6 +450,6 @@ public interface IWorkbenchService {
 	 * @author xhw
 	 * @2016年3月4日 下午5:16:34
 	 */
-	public Long findCountOfProprietorContacts(String projectId, String buildingId, String status);
+	public Long findCountOfProprietorContacts(String projectId, String buildingId);
 	
 }

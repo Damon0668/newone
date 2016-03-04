@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.constant.HouseholdConstants;
+import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.domain.workbench.ProprietorContactsContext;
 import com.liefeng.property.domain.workbench.StaffContactsContext;
@@ -532,33 +534,29 @@ public class WorkbenchService implements IWorkbenchService {
 
 	@Override
 	public DataPageValue<StaffContactsVo> findStaffContacts(
-			String departmentId, String status, String workStatus, int page,
-			int size) {
+			String departmentId, int page, int size) {
 		StaffContactsContext staffContactsContext = StaffContactsContext.build();
-		return staffContactsContext.findByPage(departmentId, status, workStatus, page, size);
+		return staffContactsContext.findByPage(departmentId, StaffConstants.StaffStatus.ACTIVE, StaffConstants.WorkStatus.IN_OFFICE, page, size);
 	}
 
 	@Override
-	public Long findCountOfStaffContacts(String departmentId, String status,
-			String workStatus) {
+	public Long findCountOfStaffContacts(String departmentId) {
 		StaffContactsContext staffContactsContext = StaffContactsContext.build();
 
-		return staffContactsContext.findCount(departmentId, status, workStatus);
+		return staffContactsContext.findCount(departmentId, StaffConstants.StaffStatus.ACTIVE, StaffConstants.WorkStatus.IN_OFFICE);
 	}
 
 	@Override
 	public DataPageValue<ProprietorContactsVo> findProprietorContacts(
-			String projectId, String buildingId, String status, Integer page,
-			Integer size) {
+			String projectId, String buildingId, Integer page, Integer size) {
 		ProprietorContactsContext proprietorContactsContext = ProprietorContactsContext.build();
-		return proprietorContactsContext.findByPage(projectId, buildingId, status, page, size);
+		return proprietorContactsContext.findByPage(projectId, buildingId, HouseholdConstants.ProprietorStatus.ACTIVE, page, size);
 	}
 
 	@Override
-	public Long findCountOfProprietorContacts(String projectId,
-			String buildingId, String status) {
+	public Long findCountOfProprietorContacts(String projectId, String buildingId) {
 		ProprietorContactsContext proprietorContactsContext = ProprietorContactsContext.build();
 
-		return proprietorContactsContext.findCount(projectId, buildingId, status);
+		return proprietorContactsContext.findCount(projectId, buildingId, HouseholdConstants.ProprietorStatus.ACTIVE);
 	}
 }
