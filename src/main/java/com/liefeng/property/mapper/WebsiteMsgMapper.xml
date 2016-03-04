@@ -16,7 +16,6 @@
 <sql id="Where_Clause">
 where 
 	t.id = p.message_id 
-and t.type =  #{extra.type}
 and(
 	t.parent_id = ''
 	or t.parent_id IS NULL
@@ -38,7 +37,14 @@ and(
 	)
 	or t.creator_id = #{extra.staffId}
 )
-order by t.create_time desc
+
+<trim  suffixOverrides="," >
+	<if test="extra.type != null and extra.type != ''">
+		and t.type =  #{extra.type}
+	</if>
+        order by t.create_time desc
+</trim>
+
 </sql>
 
 <select id="queryByPage" resultMap="BaseResultMap">
