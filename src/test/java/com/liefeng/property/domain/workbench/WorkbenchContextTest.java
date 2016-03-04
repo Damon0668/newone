@@ -574,7 +574,7 @@ public class WorkbenchContextTest {
 	 */
 	@Test
 	public void findStaffContactsByPage(){
-		DataPageValue<StaffContactsVo> staffContactsDataPageValue = workbenchService.findStaffContacts("402881fb530cd2a501530cd2a5580000", "", "", 1, 30);
+		DataPageValue<StaffContactsVo> staffContactsDataPageValue = workbenchService.findStaffContacts("402881fb530cd2a501530cd2a5580000", 1, 30);
 		System.out.println(staffContactsDataPageValue);
 	}
 	
@@ -586,7 +586,7 @@ public class WorkbenchContextTest {
 	 */
 	@Test
 	public void findCountOfStaffContacts(){
-		Long countLong = workbenchService.findCountOfStaffContacts("402881fb530cd2a501530cd2a5580000", "", "");
+		Long countLong = workbenchService.findCountOfStaffContacts("402881fb530cd2a501530cd2a5580000");
 		System.out.println(countLong);
 	}
 	
@@ -598,7 +598,7 @@ public class WorkbenchContextTest {
 	 */
 	@Test
 	public void findProprietorContactsByPage(){
-		DataPageValue<ProprietorContactsVo> proprietorContactsDataPageValue = workbenchService.findProprietorContacts("0000000052a7943f0152a7943fc00000", "1123456789", "", 1, 30);
+		DataPageValue<ProprietorContactsVo> proprietorContactsDataPageValue = workbenchService.findProprietorContacts("0000000052a7943f0152a7943fc00000", "1123456789", 1, 30);
 		System.out.println(proprietorContactsDataPageValue);
 	}
 	
@@ -610,7 +610,7 @@ public class WorkbenchContextTest {
 	 */
 	@Test
 	public void findCountOfProprietorContacts(){
-		Long countLong = workbenchService.findCountOfProprietorContacts("0000000052a7943f0152a7943fc00000", "1123456789", "");
+		Long countLong = workbenchService.findCountOfProprietorContacts("0000000052a7943f0152a7943fc00000", "1123456789");
 		System.out.println(countLong);
 	}
 }
