@@ -23,7 +23,7 @@
             and gd.oem_code = #{extra.oemCode}
         </if>
         <if test="extra.projectId != null and extra.projectId != ''" >
-            AND p.project_id =  #{extra.projectId}
+            AND gd.project_id =  #{extra.projectId}
         </if>
         <if test="extra.installPosition != null and extra.installPosition != ''" >
             AND d.install_position like CONCAT('%',#{extra.installPosition},'%')
@@ -64,7 +64,7 @@
 		LEFT JOIN t_project p ON gd.project_id = p.id
 		LEFT JOIN basic.t_device d ON gd.device_global_id = d.global_id
 		<include refid="Example_Where_Clause"/>
-		ORDER BY gd.project_id desc,gd.create_time
+		ORDER BY gd.project_id desc,gd.create_time desc
 		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
 		    ${pager.mysqlQueryCondition}
 		</if>
