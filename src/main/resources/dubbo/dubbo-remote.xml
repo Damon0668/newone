@@ -37,7 +37,7 @@
       <dubbo:service interface="com.liefeng.intf.property.IPropertyStaffService" ref="propertyStaffService" />
       
       <!-- 门禁服务 -->
-      <dubbo:service interface="com.liefeng.intf.property.IGuardSerivce" ref="guardService"/>
+      <dubbo:service interface="com.liefeng.intf.property.IGuardService" ref="guardService"/>
       
       <!-- 车位管理服务 -->
       <dubbo:service interface="com.liefeng.intf.property.IParkingService" ref="parkingService"/>
