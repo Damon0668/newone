@@ -224,9 +224,9 @@ public class TaskContext {
 	 * @date 2016年2月25日 上午11:23:46
 	 */
 	public List<TaskVo> findByStaffIdAndSize(String staffId, Integer size) {
-		HashMap<String, String> paramMap = new HashMap<String, String>();
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("staffId", staffId);
-		paramMap.put("size", String.valueOf(size));
+		paramMap.put("size", size);
 
 		return taskQueryRepository.queryTaskByStaffIdAndSize(paramMap);
 	}
