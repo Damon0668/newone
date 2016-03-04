@@ -41,5 +41,6 @@
       
       <!-- 车位管理服务 -->
       <dubbo:service interface="com.liefeng.intf.property.IParkingService" ref="parkingService"/>
+
 	  
 </beans>
