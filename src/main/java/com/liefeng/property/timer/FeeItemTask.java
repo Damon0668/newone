@@ -2,22 +2,28 @@ package com.liefeng.property.timer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.intf.property.IFeeService;
+import com.liefeng.intf.property.IProjectService;
 import com.liefeng.property.constant.FeeConstants;
-import com.liefeng.property.service.FeeService;
-import com.liefeng.property.service.ProjectService;
 import com.liefeng.property.vo.project.ProjectVo;
 
 public class FeeItemTask {
 
 	private static Logger logger = LoggerFactory.getLogger(FeeItemTask.class);
 	
+	@Autowired
+	private IFeeService feeService;
+	
+	@Autowired
+	private IProjectService projectService;
+	
 	public void generateFeeItem() {
-				FeeService feeService = SpringBeanUtil.getBean(FeeService.class);
-		ProjectService projectService = SpringBeanUtil.getBean(ProjectService.class);
+//		FeeService feeService = SpringBeanUtil.getBean(FeeService.class);
+//		ProjectService projectService = SpringBeanUtil.getBean(ProjectService.class);
 		DataPageValue<ProjectVo> projectDataPageValue = projectService.findProjects(1, 1000);
 	
 		logger.info("**********开始生成费用************");
