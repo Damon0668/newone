@@ -71,5 +71,5 @@ public interface IParkingService {
 	 * @param parkingId
 	 * @return
 	 */
-	public List<ParkingRentalVo> findPaParkingRentalByParkingId(String parkingId);
+	public List<ParkingRentalVo> findParkingRentalByParkingId(String parkingId);
 }

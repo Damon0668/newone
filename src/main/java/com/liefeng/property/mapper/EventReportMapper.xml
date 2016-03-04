@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.liefeng.property.repository.mybatis.EventReportQueryRepository">
+
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap"
+		type="com.liefeng.property.vo.workbench.EventReportVo">
+
+	</resultMap>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="extra.eventType != null and extra.eventType != ''">
+				AND #{extra.eventType} = fi.event_type
+			</if>
+			<if test="extra.startDate != null and extra.startDate != '' and 
+					extra.endDate != null and extra.endDate != ''">
+				AND fi.create_time between #{extra.startDate} And #{extra.endDate}
+			</if>
+			<if test="extra.status != null and extra.status != ''">
+				AND #{extra.status} = fi.status
+			</if>
+			<if test="extra.location != null and extra.location != ''">
+				AND fi.location like CONCAT('%','#{extra.location}','%' );
+			</if>
+			<if test="extra.orderNum != null and extra.orderNum != ''">
+				AND fi.location like CONCAT('%','#{extra.location}','%' );
+			</if>
+		</trim>
+	</sql>
+
+	<select id="queryByPage" resultMap="BaseResultMap">
+		select 
+			er.id,
+			er.project_id,
+			er.house_num,
+			er.proprietor_name,
+			er.reporter_name,
+			er.phone,
+			er.report_time,
+			er.report_mode,
+			er.event_type,
+			er.category,
+			er.location,
+			er.title,
+			er.content,
+			er.status,
+			er.priority,
+			er.service_type,
+			er.pic_url,
+			er.order_time,
+			er.result,
+			er.staff_id,
+			er.accepter_id,
+			er.accept_time,
+			er.create_time,
+			er.oem_code
+		from t_event_report er
+		<include refid="Example_Where_Clause" />
+		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
+			${pager.mysqlQueryCondition}
+		</if>
+	</select>
+	
+	<select id="queryByPage" resultMap="BaseResultMap">
+		select count(1) from (
+		select 
+			er.id
+		from t_event_report er
+		<include refid="Example_Where_Clause" />
+		) t
+	</select>
+
+
+</mapper>   

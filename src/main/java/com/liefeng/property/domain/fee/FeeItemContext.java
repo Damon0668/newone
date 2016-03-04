@@ -287,8 +287,6 @@ public class FeeItemContext {
 		return MyBeanUtil.createBean(feeItemPo, FeeItemVo.class);
 	}
 	
-	
-	
 	protected void setFeeItem(FeeItemVo feeItem) {
 		this.feeItem = feeItem;
 	}

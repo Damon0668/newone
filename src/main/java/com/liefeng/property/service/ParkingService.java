@@ -82,7 +82,7 @@ public class ParkingService implements IParkingService {
 	}
 	
 	@Override
-	public  List<ParkingRentalVo> findPaParkingRentalByParkingId(String parkingId){
+	public  List<ParkingRentalVo> findParkingRentalByParkingId(String parkingId){
 		ParkingRentalContext parkingRentalContext = ParkingRentalContext.build();
 		return parkingRentalContext.list(parkingId);
 	}
