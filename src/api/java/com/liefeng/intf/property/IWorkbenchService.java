@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
+import com.liefeng.property.vo.workbench.ProprietorContactsVo;
+import com.liefeng.property.vo.workbench.StaffContactsVo;
 import com.liefeng.property.vo.workbench.WebsiteMsgPrivilegeVo;
 import com.liefeng.property.vo.workbench.WebsiteMsgVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
@@ -402,5 +404,52 @@ public interface IWorkbenchService {
 	 */
 	public DataPageValue<WebsiteMsgVo> findWebsiteMsgByCreatorId(String creatorId, int page, int size);
 	
+	/**
+	 * 查询员工通讯录
+	 * @param departmentId 部门id
+	 * @param status 状态：1：激活；2：注销
+	 * @param workStatus 在职状态 1：在职；2：离职
+	 * @param page
+	 * @param size
+	 * @return
+	 * @author xhw
+	 * @2016年3月4日 下午4:39:52
+	 */
+	public DataPageValue<StaffContactsVo> findStaffContacts(String departmentId, String status, String workStatus, int page, int size);
+	
+	/**
+	 * 获取员工通讯录中的人数
+	 * @param departmentId 部门id
+	 * @param status 状态：1：激活；2：注销
+	 * @param workStatus 在职状态 1：在职；2：离职
+	 * @return
+	 * @author xhw
+	 * @2016年3月4日 下午4:42:07
+	 */
+	public Long findCountOfStaffContacts(String departmentId, String status, String workStatus);
+	
+	/**
+	 * 查询业主通讯录（分页）
+	 * @param projectId 项目id
+	 * @param buildingId 楼栋id
+	 * @param status 状态
+	 * @param page
+	 * @param size
+	 * @return
+	 * @author xhw
+	 * @2016年3月4日 下午5:15:37
+	 */
+	public DataPageValue<ProprietorContactsVo> findProprietorContacts(String projectId, String buildingId, String status, Integer page, Integer size);
+
+	/**
+	 * 业主通讯录总数
+	 * @param projectId 项目id
+	 * @param buildingId 楼栋id
+	 * @param status 状态
+	 * @return
+	 * @author xhw
+	 * @2016年3月4日 下午5:16:34
+	 */
+	public Long findCountOfProprietorContacts(String projectId, String buildingId, String status);
 	
 }
