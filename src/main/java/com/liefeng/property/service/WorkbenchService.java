@@ -12,7 +12,11 @@ import org.springframework.stereotype.Service;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.constant.HouseholdConstants;
+import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
+import com.liefeng.property.domain.workbench.ProprietorContactsContext;
+import com.liefeng.property.domain.workbench.StaffContactsContext;
 import com.liefeng.property.domain.workbench.WebsiteMsgContext;
 import com.liefeng.property.domain.workbench.WebsiteMsgPrivilegeContext;
 import com.liefeng.property.domain.workbench.NoticeContext;
@@ -21,6 +25,8 @@ import com.liefeng.property.domain.workbench.ScheduleContext;
 import com.liefeng.property.domain.workbench.TaskAttachmentContext;
 import com.liefeng.property.domain.workbench.TaskContext;
 import com.liefeng.property.domain.workbench.TaskPrivilegeContext;
+import com.liefeng.property.vo.workbench.ProprietorContactsVo;
+import com.liefeng.property.vo.workbench.StaffContactsVo;
 import com.liefeng.property.vo.workbench.WebsiteMsgPrivilegeVo;
 import com.liefeng.property.vo.workbench.WebsiteMsgVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
@@ -524,5 +530,33 @@ public class WorkbenchService implements IWorkbenchService {
 			String creatorId, int page, int size) {
 		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.build();
 		return websiteMsgContext.findByCreatorId(creatorId, page, size);
+	}
+
+	@Override
+	public DataPageValue<StaffContactsVo> findStaffContacts(
+			String departmentId, int page, int size) {
+		StaffContactsContext staffContactsContext = StaffContactsContext.build();
+		return staffContactsContext.findByPage(departmentId, StaffConstants.StaffStatus.ACTIVE, StaffConstants.WorkStatus.IN_OFFICE, page, size);
+	}
+
+	@Override
+	public Long findCountOfStaffContacts(String departmentId) {
+		StaffContactsContext staffContactsContext = StaffContactsContext.build();
+
+		return staffContactsContext.findCount(departmentId, StaffConstants.StaffStatus.ACTIVE, StaffConstants.WorkStatus.IN_OFFICE);
+	}
+
+	@Override
+	public DataPageValue<ProprietorContactsVo> findProprietorContacts(
+			String projectId, String buildingId, Integer page, Integer size) {
+		ProprietorContactsContext proprietorContactsContext = ProprietorContactsContext.build();
+		return proprietorContactsContext.findByPage(projectId, buildingId, HouseholdConstants.ProprietorStatus.ACTIVE, page, size);
+	}
+
+	@Override
+	public Long findCountOfProprietorContacts(String projectId, String buildingId) {
+		ProprietorContactsContext proprietorContactsContext = ProprietorContactsContext.build();
+
+		return proprietorContactsContext.findCount(projectId, buildingId, HouseholdConstants.ProprietorStatus.ACTIVE);
 	}
 }

@@ -82,7 +82,7 @@
 	</if>
 	
 	<if test="extra.phone != null and extra.phone != ''" >
-	    and u.moblie like concat('%',#{extra.phone},'%')
+	    and u.mobile like concat('%',#{extra.phone},'%')
 	</if>
 	
 	<if test="extra.proprietorName != null and extra.proprietorName != ''" >
@@ -90,7 +90,7 @@
 	</if>
 	
 	<if test="extra.houseNum != null and extra.houseNum != ''" >
-	    and h.house_name like concat('%',#{extra.houseNum},'%')
+	    and h.house_num like concat('%',#{extra.houseNum},'%')
 	</if>
 </trim>
 </sql>
@@ -204,7 +204,7 @@
 
 <select id="queryProprietorUser" resultMap="UserResultMap">
 	select 
-		u.id as id,
+		distinct u.id as id,
 		u.user_global_id as userGlobalId,
 		u.cust_global_id as custGlobalId,
 		u.register_type as registerType,
@@ -217,7 +217,7 @@
 	from
 		basic.t_user u
 		left join property.t_proprietor p
-		on p.cust_global_id = u.cust_global_id and p.phone = u.name and p.oem_code = u.oem_code
+		on p.cust_global_id = u.cust_global_id and p.phone = u.mobile and p.oem_code = u.oem_code
 		left join property.t_proprietor_house ph
 		on ph.proprietor_id = p.id
 		left join property.t_house h
@@ -233,11 +233,11 @@
 	  count(1)
 	from (
 		select 
-			u.id as id
+			distinct u.id as id
 		from
 			basic.t_user u
 			left join property.t_proprietor p
-			on p.cust_global_id = u.cust_global_id and p.phone = u.name and p.oem_code = u.oem_code
+			on p.cust_global_id = u.cust_global_id and p.phone = u.mobile and p.oem_code = u.oem_code
 			left join property.t_proprietor_house ph
 			on ph.proprietor_id = p.id
 			left join property.t_house h

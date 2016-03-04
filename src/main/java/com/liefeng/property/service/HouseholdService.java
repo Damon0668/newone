@@ -477,7 +477,7 @@ public class HouseholdService implements IHouseholdService {
 		
 		user.setCustomer(customer);
 		user.setCustGlobalId(customer.getGlobalId()); // 客户全局ID
-		user.setName(phone); // 账号
+		// user.setName(phone); // 账号
 		user.setPassword(password); // 初始密码
 		user.setMobile(phone); // 设置手机号码
 		user.setAvatarUrl(customer.getPortraitUrl());
