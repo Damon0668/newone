@@ -12,9 +12,11 @@ import org.springframework.stereotype.Service;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
+import com.liefeng.property.domain.workbench.EventReportContext;
 import com.liefeng.property.domain.workbench.ProprietorContactsContext;
 import com.liefeng.property.domain.workbench.StaffContactsContext;
 import com.liefeng.property.domain.workbench.WebsiteMsgContext;
@@ -25,6 +27,7 @@ import com.liefeng.property.domain.workbench.ScheduleContext;
 import com.liefeng.property.domain.workbench.TaskAttachmentContext;
 import com.liefeng.property.domain.workbench.TaskContext;
 import com.liefeng.property.domain.workbench.TaskPrivilegeContext;
+import com.liefeng.property.vo.workbench.EventReportVo;
 import com.liefeng.property.vo.workbench.ProprietorContactsVo;
 import com.liefeng.property.vo.workbench.StaffContactsVo;
 import com.liefeng.property.vo.workbench.WebsiteMsgPrivilegeVo;
@@ -558,5 +561,30 @@ public class WorkbenchService implements IWorkbenchService {
 		ProprietorContactsContext proprietorContactsContext = ProprietorContactsContext.build();
 
 		return proprietorContactsContext.findCount(projectId, buildingId, HouseholdConstants.ProprietorStatus.ACTIVE);
+	}
+	
+	/***********报事************/
+	/**
+	 * 报事列表查询
+	 */
+	public DataPageValue<EventReportVo> listEventReport(EventReportBo eventReportBo,Integer page, Integer size){
+		EventReportContext eventReportContext = EventReportContext.build();
+		return eventReportContext.list(eventReportBo, page, size);
+	}
+	
+	/**
+	 * 创建报事
+	 */
+	public void createEventReport(EventReportVo eventReportVo){
+		EventReportContext eventReportContext = EventReportContext.build(eventReportVo);
+		eventReportContext.create();
+	}
+	
+	/**
+	 * 修改报事
+	 */
+	public void updateEventReport(EventReportVo eventReportVo){
+		EventReportContext eventReportContext = EventReportContext.build(eventReportVo);
+		eventReportContext.update();
 	}
 }

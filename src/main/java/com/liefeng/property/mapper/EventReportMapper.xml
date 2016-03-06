@@ -68,7 +68,7 @@
 		</if>
 	</select>
 	
-	<select id="queryByPage" resultMap="BaseResultMap">
+	<select id="queryByCount" resultMap="java.lang.Long">
 		select count(1) from (
 		select 
 			er.id

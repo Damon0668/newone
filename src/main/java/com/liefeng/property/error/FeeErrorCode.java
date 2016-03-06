@@ -3,9 +3,8 @@ package com.liefeng.property.error;
 import com.liefeng.core.error.IErrorCode;
 
 /**
- * 项目相关错误码
- * @author Huangama
- * @date 2015-12-22
+ * 费用相关错误码
+ * @author wuzhiing
  */
 public enum FeeErrorCode implements IErrorCode {
 	
