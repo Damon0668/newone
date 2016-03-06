@@ -60,6 +60,11 @@ public class StaffContactsVo extends BaseValue{
 	 * OEM编码
 	 */
 	private String oemCode;
+	
+	/**
+	 * 接收人信息
+	 */
+	private String receiverMessage;
 
 	public String getCustGlobalId() {
 		return custGlobalId;
@@ -139,6 +144,14 @@ public class StaffContactsVo extends BaseValue{
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getReceiverMessage() {
+		return receiverMessage;
+	}
+
+	public void setReceiverMessage(String receiverMessage) {
+		this.receiverMessage = receiverMessage;
 	}
 	
 
