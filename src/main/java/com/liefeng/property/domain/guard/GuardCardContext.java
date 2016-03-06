@@ -13,6 +13,7 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.property.constant.GuardConstants;
 import com.liefeng.property.po.guard.GuardCardPo;
 import com.liefeng.property.repository.guard.GuardCardRepository;
 import com.liefeng.property.vo.guard.GuardCardVo;
@@ -73,7 +74,7 @@ public class GuardCardContext {
 		
 		GuardCardPo guardCardPo = MyBeanUtil.createBean(guardCard, GuardCardPo.class);
 		guardCardPo.setId(UUIDGenerator.generate());
-		guardCardPo.setStatus("");
+		guardCardPo.setStatus(GuardConstants.GuardCardStatus.NORMAL);
 		guardCardPo.setCreateTime(new Date());
 		guardCardPo.setOemCode(ContextManager.getInstance().getOemCode());
 		
