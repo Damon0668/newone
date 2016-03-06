@@ -1,13 +1,23 @@
 package com.liefeng.property.domain.guard;
 
+import java.util.List;
+
+import javax.transaction.Transactional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.SpringBeanUtil;
+import com.liefeng.common.util.UUIDGenerator;
+import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.property.po.guard.GuardCardPrivilegePo;
 import com.liefeng.property.repository.guard.GuardCardPrivilegeRepository;
+import com.liefeng.property.service.GuardService;
 import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
-import com.liefeng.property.vo.guard.GuardCardVo;
 
 /**
  * 磁卡权限领域模型
@@ -18,6 +28,8 @@ import com.liefeng.property.vo.guard.GuardCardVo;
 @Scope("prototype")
 public class GuardCardPrivilegeContext {
 
+	private Logger logger = LoggerFactory.getLogger(GuardCardPrivilegeContext.class);
+	
 	@Autowired
 	private GuardCardPrivilegeRepository guardCardPrivilegeRepository;
 	
@@ -58,6 +70,29 @@ public class GuardCardPrivilegeContext {
 		guardCardPrivilegeContext.setGuardDeviceId(guardDeviceId);
 		return guardCardPrivilegeContext;
 	}
+	
+	/**
+	 * 磁卡授权
+	 * @param guardDeviceId 门口机ID列表
+	 */
+	@Transactional(rollbackOn=Exception.class)
+	public void grantGuardCard(List<String> guardDeviceIds){
+		if(ValidateHelper.isNotEmptyString(cardId)){
+			if(ValidateHelper.isNotEmptyCollection(guardDeviceIds)){
+				for (String guardDeviceId : guardDeviceIds) {
+					GuardCardPrivilegePo guardCardPrivilegePo = new GuardCardPrivilegePo();
+					guardCardPrivilegePo.setId(UUIDGenerator.generate());
+					guardCardPrivilegePo.setCardId(cardId);
+					guardCardPrivilegePo.setGuardDeviceId(guardDeviceId);
+					guardCardPrivilegePo.setOemCode(ContextManager.getInstance().getOemCode());
+					
+					logger.info("grantGuardCard guardCardPrivilegePo = {}", guardCardPrivilegePo);
+					guardCardPrivilegeRepository.save(guardCardPrivilegePo);
+				}
+			}
+		}
+	}
+	
 	
 	protected void setCardId(String cardId) {
 		this.cardId = cardId;

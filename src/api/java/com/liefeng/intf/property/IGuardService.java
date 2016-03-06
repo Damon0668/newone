@@ -5,6 +5,7 @@ import java.util.List;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
 import com.liefeng.property.vo.guard.GuardDeviceVo;
+import com.liefeng.property.vo.household.VisitorVo;
 
 /**
  * 门禁服务
@@ -13,6 +14,10 @@ import com.liefeng.property.vo.guard.GuardDeviceVo;
  * @date 2016年3月1日
  */
 public interface IGuardService {
+	
+	/*
+	 * ****************** 门禁设备相关 ******************
+	 */
 	
 	/**
 	 * 添加门禁设备
@@ -54,4 +59,27 @@ public interface IGuardService {
 	 * @return true 存在 false 不存在
 	 */
 	public Boolean isExistGuardNum(String guardNum);
+	
+	/*
+	 * ****************** 磁卡相关 ******************
+	 */
+	
+	/**
+	 * 磁卡授权
+	 * @param guardCardId 磁卡ID
+	 * @param guardDeviceId 门口机ID列表
+	 */
+	public void grantGuardCard(String guardCardId, List<String> guardDeviceId);
+	
+	/*
+	 * ****************** 访客相关  ******************
+	 */
+	
+	/**
+	 * 新增访客信息
+	 * @param visitorVo
+	 */
+	public void createVisitorInfo(VisitorVo visitor);
+	
+	
 }
