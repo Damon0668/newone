@@ -15,6 +15,8 @@ import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.workbench.EventReportBo;
+import com.liefeng.property.constant.WorkbenchConstants;
+import com.liefeng.property.exception.WorkbenchException;
 import com.liefeng.property.po.workbench.EventReportPo;
 import com.liefeng.property.repository.mybatis.EventReportQueryRepository;
 import com.liefeng.property.repository.workbench.EventReportRepository;
@@ -77,6 +79,17 @@ public class EventReportContext {
 			eventReportRepository.save(MyBeanUtil.createBean(eventReport,
 					EventReportPo.class));
 		}
+	}
+	
+	public void update(){
+		EventReportPo eventReportPo = eventReportRepository.findOne(eventReport.getId());
+		
+		/*if(eventReportPo.getStatus().equals(WorkbenchConstants.EventReport.STATUS_ALREADYWORKERS)){
+			throw new WorkbenchException(en)
+		}*/
+		
+		eventReportRepository.save(MyBeanUtil.createBean(eventReport,
+				EventReportPo.class));
 	}
 
 	public EventReportVo get() {

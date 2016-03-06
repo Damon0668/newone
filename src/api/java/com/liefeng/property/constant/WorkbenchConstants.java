@@ -165,4 +165,23 @@ public class WorkbenchConstants {
 		
 	}
 	
+	/**
+	 * 报事
+	 */
+	public static interface EventReport{
+		/**
+		 * 报事状态 未处理
+		 */
+		public static final String STATUS_UNTREATED = "0"; 
+		
+		/**
+		 * 报事状态 已派工
+		 */
+		public static final String STATUS_ALREADYWORKERS = "1"; 
+		
+		/**
+		 * 报事状态 未处理
+		 */
+		public static final String STATUS_ALREADYFEEDBACK = "2"; 
+	}
 }
