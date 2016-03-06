@@ -16,6 +16,7 @@ import com.liefeng.property.error.FeeErrorCode;
 import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.FeeRecordPo;
 import com.liefeng.property.repository.FeeRecordRepository;
+import com.liefeng.property.repository.mybatis.FeeRecordQueryRepository;
 import com.liefeng.property.vo.fee.FeeItemVo;
 import com.liefeng.property.vo.fee.FeeRecordVo;
 
@@ -35,6 +36,8 @@ public class FeeRecordContext {
 	@Autowired
 	private FeeRecordRepository feeRecordRepository;
 	
+	@Autowired
+	private FeeRecordQueryRepository feeRecordQueryRepository;
 	/**
 	 * 缴费记录ID
 	 */
@@ -142,7 +145,8 @@ public class FeeRecordContext {
     			feeRecordVo.setId(UUIDGenerator.generate());
     			feeRecordRepository.save(MyBeanUtil.createBean(feeRecordVo, FeeRecordPo.class));
     }
-
+    
+    
     protected void setFeeItemId(String feeItemId) {
 		this.feeItemId = feeItemId;
 	}

@@ -12,7 +12,7 @@ import com.liefeng.property.vo.guard.GuardDeviceVo;
  * @author 蔡少东
  * @date 2016年3月1日
  */
-public interface IGuardSerivce {
+public interface IGuardService {
 	
 	/**
 	 * 添加门禁设备
@@ -40,4 +40,18 @@ public interface IGuardSerivce {
 	 * @return
 	 */
 	public DataPageValue<GuardDeviceVo> listGuardDevice(GuardDeviceBo guardDeviceBo, int page, int size);
+	
+	/**
+	 * 查找门禁设备
+	 * @param guardDeviceId 门禁设备ID
+	 * @return
+	 */
+	public GuardDeviceVo findGuardDevice(String guardDeviceId);
+	
+	/**
+	 * 检测门禁设备号是否存储
+	 * @param guardNum 门禁设备号
+	 * @return true 存在 false 不存在
+	 */
+	public Boolean isExistGuardNum(String guardNum);
 }

@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.parking;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -199,16 +200,25 @@ public class ParkingContext {
 		count = (count == null ? 0 : count);
 		logger.info("总数量：count={0}", count);
 		
+		// 设置数据总行数，用于计算偏移量
+		param.getPager().setRowCount(count);
+		
 		List<ParkingSingleRentalVo> parkingSingleRentalVos = parkingQueryRepository.queryByPage(param);
 		DataPageValue<ParkingSingleRentalVo> returnPage = new DataPageValue<ParkingSingleRentalVo>(parkingSingleRentalVos, count, size, page);
 		
 		return returnPage;
 	}
 	
+	public List<ParkingSingleRentalVo> findByProjectId(String projectId) {
+		
+		List<ParkingSingleRentalVo> parkingSingleRentalVos = parkingQueryRepository.queryByProjectId(projectId);
+		return parkingSingleRentalVos;
+	}
+	
 	public void update() {
 		if(parking!=null && ValidateHelper.isNotEmptyString(parking.getId())){
-			parking.setOemCode(ContextManager.getInstance().getOemCode());
-			parkingRepository.save(MyBeanUtil.createBean(parking,ParkingPo.class));
+				parking.setOemCode(ContextManager.getInstance().getOemCode());
+				parkingRepository.save(MyBeanUtil.createBean(parking,ParkingPo.class));
 		}
 	}
 
@@ -220,6 +230,8 @@ public class ParkingContext {
 	protected void setParkingId(String parkingId) {
 		this.parkingId = parkingId;
 	}
+
+	
 
 	
 	

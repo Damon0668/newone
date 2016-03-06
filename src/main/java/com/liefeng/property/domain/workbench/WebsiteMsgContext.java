@@ -20,11 +20,9 @@ import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
-import com.liefeng.property.po.project.ProjectBuildingPo;
 import com.liefeng.property.po.workbench.WebsiteMsgPo;
 import com.liefeng.property.repository.mybatis.WebsiteMsgQueryRepository;
 import com.liefeng.property.repository.workbench.WebsiteMsgRepository;
-import com.liefeng.property.vo.project.ProjectBuildingVo;
 import com.liefeng.property.vo.workbench.WebsiteMsgVo;
 
 
@@ -139,13 +137,13 @@ public class WebsiteMsgContext {
 	}
 	
 	/**
-	 * 根据站内消息id，删除站内消息
+	 * 根据站内消息id，删除站内消息及其回复消息
 	 * @author xhw
 	 * @2016年3月2日 下午4:08:32
 	 */
-	public void deleteById(){
+	public void delete(){
 		if(ValidateHelper.isNotEmptyString(id)){
-			websiteMsgRepository.deleteById(id);
+			websiteMsgRepository.deleteByIdOrParentId(id, id);
 			
 			logger.info("delete websiteMsg of id : {} success.", id);
 
@@ -222,7 +220,7 @@ public class WebsiteMsgContext {
 	 * @author xhw
 	 * @2016年3月3日 下午2:20:10
 	 */
-	public List<WebsiteMsgVo> findByParentId(String parentId){
+	public List<WebsiteMsgVo> getReplyMsgList(String parentId){
 		List<WebsiteMsgVo> websiteMsgVos = null;
 		if(ValidateHelper.isNotEmptyString(parentId)){
 			List<WebsiteMsgPo> websiteMsgPos = websiteMsgRepository.findByParentIdOrderByCreateTimeDesc(parentId);
@@ -240,7 +238,7 @@ public class WebsiteMsgContext {
 	 * @param size 页面大小
 	 * @return
 	 */
-	public DataPageValue<WebsiteMsgVo> findByCreatorIdAndParentIdIsNull(String creatorId, int page, int size) {
+	public DataPageValue<WebsiteMsgVo> findByCreatorId(String creatorId, int page, int size) {
 		Page<WebsiteMsgVo> voPage = null;
 
 		// spring-data 的page从0开始

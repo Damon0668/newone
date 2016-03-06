@@ -42,10 +42,10 @@
 				AND p.num = #{extra.num}
 			</if>
 			<if test="extra.customerName != null and extra.customerName != ''">
-				 AND p.customer_name like CONCAT('%', #{extra.customerName },'%')
+				 AND pr.customer_name like CONCAT('%', #{extra.customerName },'%')
 			</if>
 			<if test="extra.status != null and extra.status != ''">
-				AND pr.status = #{extra.status}
+				AND p.status = #{extra.status}
 			</if>
 		</trim>
 	</sql>
@@ -77,6 +77,7 @@
 		pr.authorization
 		from t_parking p
 		left join t_parking_rental pr on pr.parking_id=p.id
+		And (((pr.start_date &lt;= Now() And pr.end_date &gt;= Now())) or pr.end_date is null)
 		<include refid="Example_Where_Clause" />
 		<if
 			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
@@ -123,7 +124,40 @@
 		pr.authorization
 		from t_parking p
 		left join t_parking_rental pr on pr.parking_id=p.id 
+		And (((pr.start_date &lt;= Now() And pr.end_date &gt;= Now())) or pr.end_date is null)
 		where p.id = #{id}
+	</select>
+	
+	<select id="queryByProjectId" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		p.id,
+		p.project_id,
+		p.building_id,
+		p.code,
+		p.floor,
+		p.num,
+		p.area,
+		p.suitable_car,
+		p.pre_rent_price,
+		p.pre_sale_price,
+		sum(p.manage_fee) as manage_fee,
+		p.status,
+
+		pr.id as parkingRentalId,
+		pr.type,
+		pr.house_num,
+		pr.customer_name,
+		pr.phone,
+		pr.plate_num,
+		pr.start_date,
+		pr.end_date,
+		pr.price,
+		pr.authorization
+		from t_parking p
+		left join t_parking_rental pr on pr.parking_id=p.id
+		And (((pr.start_date &lt;= Now() And pr.end_date &gt;= Now())) or pr.end_date is null)
+		Where p.project_id = #{projectId}
+		group by p.project_id,pr.house_num
 	</select>
 	
 </mapper>   

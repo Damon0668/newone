@@ -131,6 +131,21 @@ public class FeeItemVo extends BaseValue {
 	 * OEM编码
 	 */
 	private String oemCode;
+	
+	/**
+	 * 应收金额
+	 */
+	private Double recordReceivableAmount;
+	
+	/**
+	 * 实收金额
+	 */
+	private Double paidAmount;
+	
+	/**
+	 * 创建时间
+	 */
+	private Date recordCreateTime;
 
 	public String getId() {
 		return id;
@@ -306,5 +321,29 @@ public class FeeItemVo extends BaseValue {
 
 	public void setReceivableAmount(Double receivableAmount) {
 		this.receivableAmount = receivableAmount;
+	}
+
+	public Double getRecordReceivableAmount() {
+		return recordReceivableAmount;
+	}
+
+	public void setRecordReceivableAmount(Double recordReceivableAmount) {
+		this.recordReceivableAmount = recordReceivableAmount;
+	}
+
+	public Double getPaidAmount() {
+		return paidAmount;
+	}
+
+	public void setPaidAmount(Double paidAmount) {
+		this.paidAmount = paidAmount;
+	}
+
+	public Date getRecordCreateTime() {
+		return recordCreateTime;
+	}
+
+	public void setRecordCreateTime(Date recordCreateTime) {
+		this.recordCreateTime = recordCreateTime;
 	}
 }

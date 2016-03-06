@@ -3,16 +3,15 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper
-	namespace="com.liefeng.property.repository.mybatis.FeeItemQueryRepository">
+<mapper namespace="com.liefeng.property.repository.mybatis.FeeItemQueryRepository">
 	<!-- Result Map -->
 	<resultMap id="BaseResultMap" type="com.liefeng.property.vo.fee.FeeItemVo">
 		<result column="id" property="id" />
 		<result column="project_id" property="projectId" />
-		<result column="building_id" property="buildingId"/>
-		<result column="house_num" property="houseNum"/>
+		<result column="building_id" property="buildingId" />
+		<result column="house_num" property="houseNum" />
 		<result column="fee_type" property="feeType" />
-		<result column="proprietor_name" property="proprietorName" />		
+		<result column="proprietor_name" property="proprietorName" />
 		<result column="start_date" property="startDate" />
 		<result column="end_date" property="endDate" />
 		<result column="usage_amount" property="usageAmount" />
@@ -24,6 +23,9 @@
 		<result column="receivableAmount" property="receivableAmount" />
 		<result column="status" property="status" />
 		<result column="oem_code" property="oemCode" />
+		<result column="recordReceivableAmount" property="recordReceivableAmount" />
+		<result column="paidAmount" property="paidAmount" />
+		<result column="recordCreateTime" property="recordCreateTime" />
 	</resultMap>
 
 
@@ -31,11 +33,11 @@
 	<sql id="Example_Where_Clause">
 		where 1=1
 		<trim suffixOverrides=",">
-			
-				AND  #{extra.startDate}  &lt;=  fi.start_date 
-				AND  #{extra.endDate}	&gt;= fi.end_date
+
+			AND #{extra.startDate} &lt;= fi.start_date
+			AND #{extra.endDate} &gt;= fi.end_date
 			<if test="extra.feeType != null and extra.feeType != ''">
-				AND  #{extra.feeType}	= fi.fee_type
+				AND #{extra.feeType} = fi.fee_type
 			</if>
 			<if test="extra.projectId != null and extra.projectId != ''">
 				AND fi.project_id = #{extra.projectId}
@@ -52,87 +54,144 @@
 			<if test="extra.status != null and extra.status != ''">
 				AND fi.status = #{extra.status}
 			</if>
-			
+
 			<if test="extra.proprietorName != null and extra.proprietorName  != ''">
-				AND fi.proprietor_name  like CONCAT('%','${extra.proprietorName}','%' )
+				AND fi.proprietor_name like
+				CONCAT('%','${extra.proprietorName}','%' )
 			</if>
-			
+
 		</trim>
 	</sql>
 	
+	<sql id="Personal_Where_Clause">
+		where 
+		fi.project_id = #{extra.projectId}
+		AND fi.house_num = #{extra.houseNum}
+		AND fi.status = #{extra.status}
+	</sql>
+
 	<select id="queryByPage" resultMap="BaseResultMap">
 		select
-			fi.id,
-			fi.project_id,
-			fi.house_num,
-			fi.fee_type,
-			fi.start_date,
-			fi.end_date,
-			fi.proprietor_name,
-			fi.usage_amount,
-			fi.unit_price,
-			fi.total_fee,
-			fi.deadline,
-			fi.discount,
-			fi.deadline,
-			fi.late_fee_rate,
-			fi.status
+		fi.id,
+		fi.project_id,
+		fi.house_num,
+		fi.fee_type,
+		fi.start_date,
+		fi.end_date,
+		fi.proprietor_name,
+		fi.usage_amount,
+		fi.unit_price,
+		fi.total_fee,
+		fi.deadline,
+		fi.discount,
+		fi.deadline,
+		fi.late_fee_rate,
+		fi.status
 		from t_fee_item fi
 		<include refid="Example_Where_Clause" />
-		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
-          ${pager.mysqlQueryCondition}
-        </if>
+		<if
+			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
+			${pager.mysqlQueryCondition}
+		</if>
 	</select>
 
-	<select id="queryByCount"  resultType="java.lang.Long">
-	select 
-	  count(1) 
-	from(
+	<select id="queryByCount" resultType="java.lang.Long">
 		select
-		 fi.id
+		count(1)
+		from(
+		select
+		fi.id
 		from t_fee_item fi
 		<include refid="Example_Where_Clause" />
+		) t
+	</select>
+
+	<!-- 费用提醒 -->
+	<select id="queryAllByPage" resultMap="BaseResultMap">
+		select
+		fi.id,
+		fi.house_num,
+		fi.fee_type,
+		min(fi.start_date) as start_date,
+		max(fi.end_date)as end_date,
+		fi.proprietor_name,
+		fi.usage_amount,
+		fi.unit_price,
+		fi.total_fee,
+		fi.deadline,
+		fi.discount,
+		min(fi.deadline),
+		fi.late_fee_rate,
+		fi.status,
+		sum(
+		(total_fee * discount)+
+		(total_fee *(case when datediff(fi.deadline,NOW())>0 then
+		datediff(fi.deadline,NOW()) else 0 end) * fi.late_fee_rate)) as
+		receivableAmount
+		from t_fee_item fi
+		<include refid="Example_Where_Clause" />
+		GROUP BY fi.project_id,fi.house_num
+		<if
+			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
+			${pager.mysqlQueryCondition}
+		</if>
+	</select>
+
+	<select id="queryAllByCount" resultType="java.lang.Long">
+		select
+		count(1)
+		from(
+		select
+		fi.id
+		from t_fee_item fi
+		<include refid="Example_Where_Clause" />
+		GROUP BY fi.project_id,fi.house_num
 		) t
 	</select>
 	
 	<!-- 费用提醒 -->
-	<select id="queryAllByPage" resultMap="BaseResultMap">
+	<select id="queryPersonalByPage" resultMap="BaseResultMap">
 		select
-			fi.id,
-			fi.house_num,
-			fi.fee_type,
-			min(fi.start_date) as start_date,
-			max(fi.end_date)as end_date,
-			fi.proprietor_name,
-			fi.usage_amount,
-			fi.unit_price,
-			fi.total_fee,
-			fi.deadline,
-			fi.discount,
-			min(fi.deadline),
-			fi.late_fee_rate,
-			fi.status,
-			sum(
-			(total_fee * discount)+
-			(total_fee *(case when datediff(fi.deadline,NOW())>0 then datediff(fi.deadline,NOW()) else 0 end) * fi.late_fee_rate)) as receivableAmount
-		from t_fee_item fi 
-		<include refid="Example_Where_Clause" />
-		GROUP BY fi.project_id,fi.house_num
-		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
-          ${pager.mysqlQueryCondition}
-        </if>
+		fi.id,
+		fi.house_num,
+		fi.fee_type,
+		fi.start_date as start_date,
+		fi.end_date as end_date,
+		fi.proprietor_name,
+		fi.usage_amount,
+		fi.unit_price,
+		fi.total_fee,
+		fi.deadline,
+		fi.discount,
+		min(fi.deadline),
+		fi.late_fee_rate,
+		fi.status,
+		sum(
+		(total_fee * discount)+
+		(total_fee *(case when datediff(fi.deadline,NOW())>0 then
+		datediff(fi.deadline,NOW()) else 0 end) * fi.late_fee_rate)) as
+		receivableAmount,
+		fr.receivable_amount as recordReceivableAmount,
+		fr.paid_amount as paidAmount,
+		fr.create_time as recordCreateTime
+		from t_fee_item fi left join t_fee_record fr on fr.fee_item_id=fi.id
+		<include refid="Personal_Where_Clause" />
+		order by fi.create_time desc
+		<if
+			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
+			${pager.mysqlQueryCondition}
+		</if>
 	</select>
-	
-	<select id="queryAllByCount"  resultType="java.lang.Long">
-	select 
-	  count(1) 
-	from(
+
+	<select id="queryPersonalByCount" resultType="java.lang.Long">
 		select
-		 fi.id
+		count(1)
+		from(
+		select
+		fi.id
 		from t_fee_item fi
-		<include refid="Example_Where_Clause" />
-		GROUP BY fi.project_id,fi.house_num
+		<include refid="Personal_Where_Clause" />
 		) t
 	</select>
-	 	 
+
 </mapper>   

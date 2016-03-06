@@ -54,7 +54,21 @@ public class WebsiteMsgVo extends BaseValue{
 	 */
 	private String creatorName;
 
-
+	/**
+	 * 回复数量
+	 */
+	private Integer replyCount;
+	
+	/**
+	 * 接收人姓名
+	 */
+	private String receiverName;
+	
+	/**
+	 * 消息的接收人范围
+	 */
+	private String privilegeStr;
+	
 	public String getId() {
 		return id;
 	}
@@ -131,6 +145,36 @@ public class WebsiteMsgVo extends BaseValue{
 
 	public void setCreatorName(String creatorName) {
 		this.creatorName = creatorName;
+	}
+
+
+	public Integer getReplyCount() {
+		return replyCount;
+	}
+
+
+	public void setReplyCount(Integer replyCount) {
+		this.replyCount = replyCount;
+	}
+
+
+	public String getReceiverName() {
+		return receiverName;
+	}
+
+
+	public void setReceiverName(String receiverName) {
+		this.receiverName = receiverName;
+	}
+
+
+	public String getPrivilegeStr() {
+		return privilegeStr;
+	}
+
+
+	public void setPrivilegeStr(String privilegeStr) {
+		this.privilegeStr = privilegeStr;
 	}
 
 }

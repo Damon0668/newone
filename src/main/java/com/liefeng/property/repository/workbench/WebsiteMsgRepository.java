@@ -20,12 +20,12 @@ import com.liefeng.property.po.workbench.WebsiteMsgPo;
 public interface WebsiteMsgRepository extends JpaRepository<WebsiteMsgPo, String> {
 	
 	/**
-	 * 根据消息id，删除消息
+	 * 根据消息id，删除消息及其回复消息
 	 * @param id 消息id
 	 * @author xhw
 	 * @2016年3月2日 下午4:05:44
 	 */
-	public void deleteById(String id);
+	public void deleteByIdOrParentId(String id, String parentId);
 	
 	/**
 	 * 查询站内消息的回复信息

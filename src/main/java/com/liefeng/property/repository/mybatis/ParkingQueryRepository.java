@@ -1,5 +1,7 @@
 package com.liefeng.property.repository.mybatis;
 
+import java.util.List;
+
 import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.property.vo.parking.ParkingSingleRentalVo;
 
@@ -10,4 +12,6 @@ import com.liefeng.property.vo.parking.ParkingSingleRentalVo;
 public interface ParkingQueryRepository extends BaseRepository<ParkingSingleRentalVo>{
 
 	public ParkingSingleRentalVo queryById(String id);
+	
+	public List<ParkingSingleRentalVo> queryByProjectId(String projectId);
 }

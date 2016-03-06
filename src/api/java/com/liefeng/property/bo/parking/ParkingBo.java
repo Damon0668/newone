@@ -13,6 +13,8 @@ public class ParkingBo extends BaseValue {
 	private String status;
 
 	private String buildingId;
+	
+	private String num;
 
 	public String getProjectId() {
 		return projectId;
@@ -44,5 +46,13 @@ public class ParkingBo extends BaseValue {
 
 	public void setBuildingId(String buildingId) {
 		this.buildingId = buildingId;
+	}
+
+	public String getNum() {
+		return num;
+	}
+
+	public void setNum(String num) {
+		this.num = num;
 	}
 }

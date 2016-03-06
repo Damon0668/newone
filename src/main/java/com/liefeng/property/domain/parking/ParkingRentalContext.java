@@ -1,5 +1,7 @@
 package com.liefeng.property.domain.parking;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +118,11 @@ public class ParkingRentalContext {
 			ParkingRentalPo parkingRentalPo = MyBeanUtil.createBean(parkingRental, ParkingRentalPo.class);
 			parkingRentalRepository.save(parkingRentalPo);
 		}
+	}
+	
+	public List<ParkingRentalVo> list(String parkId){
+		List<ParkingRentalPo> parkingRentalPos = parkingRentalRepository.findByParkingId(parkId);
+		return MyBeanUtil.createList(parkingRentalPos, ParkingRentalVo.class);
 	}
 	
 	protected void setParkingRental(ParkingRentalVo parkingRental) {

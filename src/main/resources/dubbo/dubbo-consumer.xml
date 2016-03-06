@@ -31,4 +31,5 @@
 	<!-- 校验服务  -->
     <dubbo:reference id="checkService"
         interface="com.liefeng.intf.base.ICheckService" check="false" />
+        
 </beans>

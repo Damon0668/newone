@@ -49,6 +49,12 @@ public class FeeItemBo extends BaseValue {
 	 * 结束时间
 	 */
 	private Date endDate;
+	
+	/**
+	 * 是否需要总和
+	 * 空 为 算出总和
+	 */
+	private Boolean isSum;
 
 	public String getProjectId() {
 		return projectId;
@@ -112,5 +118,13 @@ public class FeeItemBo extends BaseValue {
 
 	public void setFeeType(String feeType) {
 		this.feeType = feeType;
+	}
+
+	public Boolean getIsSum() {
+		return isSum;
+	}
+
+	public void setIsSum(Boolean isSum) {
+		this.isSum = isSum;
 	}
 }

@@ -18,7 +18,9 @@ import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
+import com.liefeng.property.vo.workbench.ProprietorContactsVo;
 import com.liefeng.property.vo.workbench.ScheduleVo;
+import com.liefeng.property.vo.workbench.StaffContactsVo;
 import com.liefeng.property.vo.workbench.TaskAttachmentVo;
 import com.liefeng.property.vo.workbench.TaskPrivilegeVo;
 import com.liefeng.property.vo.workbench.TaskVo;
@@ -552,7 +554,7 @@ public class WorkbenchContextTest {
 	 */
 	@Test
 	public void findWebsiteMsgByParentId(){
-		List<WebsiteMsgVo> websiteMsgVos = workbenchService.findWebsiteMsgByParentId("402889d2533a791601533a7916cf0000");
+		List<WebsiteMsgVo> websiteMsgVos = workbenchService.getReplyMsgList("402889d2533a791601533a7916cf0000");
 		System.out.println("回复信息："+websiteMsgVos);
 	}
 	/**
@@ -560,7 +562,55 @@ public class WorkbenchContextTest {
 	 */
 	@Test
 	public void findWebsiteMsgByCreatorIdAndParentIdIsNull(){
-		DataPageValue<WebsiteMsgVo> websiteMsgDataPageValue = workbenchService.findWebsiteMsgByCreatorIdAndParentIdIsNull("40282081531cf49b01531d3f4e1c0006", 1, 30);
+		DataPageValue<WebsiteMsgVo> websiteMsgDataPageValue = workbenchService.findWebsiteMsgByCreatorId("40282081531cf49b01531d3f4e1c0006", 1, 30);
 		System.out.println(websiteMsgDataPageValue);
+	}
+	
+	/**
+	 * 查询员工通讯录（分页）
+	 * 
+	 * @author xhw
+	 * @2016年3月4日 下午4:46:53
+	 */
+	@Test
+	public void findStaffContactsByPage(){
+		DataPageValue<StaffContactsVo> staffContactsDataPageValue = workbenchService.findStaffContacts("402881fb530cd2a501530cd2a5580000", 1, 30);
+		System.out.println(staffContactsDataPageValue);
+	}
+	
+	/**
+	 * 查询员工通讯录的数量
+	 * 
+	 * @author xhw
+	 * @2016年3月4日 下午4:49:07
+	 */
+	@Test
+	public void findCountOfStaffContacts(){
+		Long countLong = workbenchService.findCountOfStaffContacts("402881fb530cd2a501530cd2a5580000");
+		System.out.println(countLong);
+	}
+	
+	/**
+	 * 查找业主通讯录（分页）
+	 * 
+	 * @author xhw
+	 * @2016年3月4日 下午5:20:00
+	 */
+	@Test
+	public void findProprietorContactsByPage(){
+		DataPageValue<ProprietorContactsVo> proprietorContactsDataPageValue = workbenchService.findProprietorContacts("0000000052a7943f0152a7943fc00000", "1123456789", 1, 30);
+		System.out.println(proprietorContactsDataPageValue);
+	}
+	
+	/**
+	 * 获取业主通讯录总数
+	 * 
+	 * @author xhw
+	 * @2016年3月4日 下午5:22:03
+	 */
+	@Test
+	public void findCountOfProprietorContacts(){
+		Long countLong = workbenchService.findCountOfProprietorContacts("0000000052a7943f0152a7943fc00000", "1123456789");
+		System.out.println(countLong);
 	}
 }

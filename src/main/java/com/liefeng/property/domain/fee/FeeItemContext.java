@@ -25,7 +25,6 @@ import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.FeeItemPo;
 import com.liefeng.property.repository.FeeItemRepository;
 import com.liefeng.property.repository.mybatis.FeeItemQueryRepository;
-import com.liefeng.property.service.FeeService;
 import com.liefeng.property.vo.fee.FeeItemVo;
 
 /**
@@ -198,7 +197,7 @@ public class FeeItemContext {
 	}
 	
 	/**
-	 * 获取所有未交费的费用
+	 * 费用提醒
 	 * @param feeItemBo
 	 * @return
 	 */
@@ -219,6 +218,33 @@ public class FeeItemContext {
 		
 		return new DataPageValue<FeeItemVo>(meterRecordVos, total, pageSize, currentPage);
 
+	}
+	
+	/**
+	 * 获取个人历史费用信息(历史欠费,收费)
+	 * @param feeItemBo
+	 * @param currentPage
+	 * @param pageSize
+	 * @return
+	 */
+	public DataPageValue<FeeItemVo> findPersonal(FeeItemBo feeItemBo,Integer currentPage,Integer pageSize){		
+		Map<String, String> extra = MyBeanUtil.bean2Map(feeItemBo);
+
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		param.setPage(currentPage);
+		param.setPageSize(pageSize);
+		
+		Long total = feeItemQueryRepository.queryPersonalByCount(param);
+		total = (total == null ? 0 : total);
+		logger.info("FeeItem List total：total={}", total);
+		
+		// 设置数据总行数，用于计算偏移量
+		param.getPager().setRowCount(total);
+		
+		List<FeeItemVo> meterRecordVos = feeItemQueryRepository.queryPersonalByPage(param);
+		
+		return new DataPageValue<FeeItemVo>(meterRecordVos, total, pageSize, currentPage);
 	}
 	
 	public void update() {
@@ -260,7 +286,6 @@ public class FeeItemContext {
 		FeeItemPo feeItemPo = feeItemRepository.getPreFeeItem(projectId,houseNum, feeType,preDate);
 		return MyBeanUtil.createBean(feeItemPo, FeeItemVo.class);
 	}
-	
 	
 	protected void setFeeItem(FeeItemVo feeItem) {
 		this.feeItem = feeItem;

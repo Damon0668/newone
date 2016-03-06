@@ -3,6 +3,8 @@ package com.liefeng.property.service;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -10,7 +12,13 @@ import org.springframework.stereotype.Service;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.bo.workbench.EventReportBo;
+import com.liefeng.property.constant.HouseholdConstants;
+import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
+import com.liefeng.property.domain.workbench.EventReportContext;
+import com.liefeng.property.domain.workbench.ProprietorContactsContext;
+import com.liefeng.property.domain.workbench.StaffContactsContext;
 import com.liefeng.property.domain.workbench.WebsiteMsgContext;
 import com.liefeng.property.domain.workbench.WebsiteMsgPrivilegeContext;
 import com.liefeng.property.domain.workbench.NoticeContext;
@@ -19,6 +27,9 @@ import com.liefeng.property.domain.workbench.ScheduleContext;
 import com.liefeng.property.domain.workbench.TaskAttachmentContext;
 import com.liefeng.property.domain.workbench.TaskContext;
 import com.liefeng.property.domain.workbench.TaskPrivilegeContext;
+import com.liefeng.property.vo.workbench.EventReportVo;
+import com.liefeng.property.vo.workbench.ProprietorContactsVo;
+import com.liefeng.property.vo.workbench.StaffContactsVo;
 import com.liefeng.property.vo.workbench.WebsiteMsgPrivilegeVo;
 import com.liefeng.property.vo.workbench.WebsiteMsgVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
@@ -46,6 +57,7 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
+	@Transactional
 	public void createTask(TaskVo task){
 		TaskContext taskContext = TaskContext.build(task);
 		TaskVo taskVo = taskContext.create();
@@ -83,6 +95,7 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
+	@Transactional
 	public void updateTask(TaskVo taskVo) {
 		TaskContext taskContext = TaskContext.build(taskVo);
 		taskContext.update();
@@ -164,6 +177,7 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
+	@Transactional
 	public NoticeVo createNotice(NoticeVo notice) {
 		NoticeContext noticeContext = NoticeContext.build(notice);
 		NoticeVo noticeVo =  noticeContext.create();
@@ -217,6 +231,7 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
+	@Transactional
 	public NoticeVo updateNotice(NoticeVo notice) {
 		NoticeContext noticeContext = NoticeContext.build(notice);
 		NoticeVo noticeVo = noticeContext.update();
@@ -414,9 +429,42 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
-	public WebsiteMsgVo createWebsiteMsgVo(WebsiteMsgVo websiteMsgVo) {
-		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.build(websiteMsgVo);
-		return websiteMsgContext.create();
+	@Transactional
+	public WebsiteMsgVo createWebsiteMsgVo(WebsiteMsgVo websiteMsg) {
+		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.build(websiteMsg);
+		WebsiteMsgVo websiteMsgVo = websiteMsgContext.create();
+		if (websiteMsgVo != null) { // 创建消息的权限 
+			if (ValidateHelper.isNotEmptyString(websiteMsgVo.getPrivilegeStr())) { // 权限
+				//每个权限使用逗号隔开，权限的具体信息使用|隔开
+				String[] privilegeArray = websiteMsgVo.getPrivilegeStr().split(",");
+				for(int i=0; i<privilegeArray.length; i++){
+					String[] privilege = privilegeArray[i].split("\\|");
+					WebsiteMsgPrivilegeVo websiteMsgPrivilegeVo= new WebsiteMsgPrivilegeVo();
+					websiteMsgPrivilegeVo.setMessageId(websiteMsgVo.getId());
+					
+					if("0".equals(privilege[1])){ // 代表权限是某个项目下的所有人
+						websiteMsgPrivilegeVo.setProjectId(privilege[0]);
+						websiteMsgPrivilegeVo.setDepartmentId("-1");
+					}else{
+						if("0".equals(privilege[2])){//代表权限是有某个项目管理权限的，并且是某个部门的所有员工
+							websiteMsgPrivilegeVo.setProjectId(privilege[0]);
+							websiteMsgPrivilegeVo.setDepartmentId(privilege[1]);
+							websiteMsgPrivilegeVo.setStaffId("-1");
+						}else{
+							websiteMsgPrivilegeVo.setProjectId(privilege[0]);
+							websiteMsgPrivilegeVo.setDepartmentId(privilege[1]);
+							websiteMsgPrivilegeVo.setStaffId(privilege[2]);
+						}
+					}
+				
+					createWebsiteMsgPrivilege(websiteMsgPrivilegeVo);
+				}
+
+			}
+
+		}
+		
+		return websiteMsgVo;
 	}
 
 	@Override
@@ -425,10 +473,17 @@ public class WorkbenchService implements IWorkbenchService {
 		return websiteMsgContext.getById();
 	}
 
+	
 	@Override
+	@Transactional
 	public void deleteWebsiteMsgById(String id) {
+		//删除消息及其回复消息
 		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.loadById(id);
-		websiteMsgContext.deleteById();
+		websiteMsgContext.delete();
+		
+		//删除消息的所有权限
+		WebsiteMsgPrivilegeContext websiteMsgPrivilegeContext = WebsiteMsgPrivilegeContext.loadByMessageId(id);
+		websiteMsgPrivilegeContext.deleteByMessageId();
 	}
 
 	@Override
@@ -468,15 +523,68 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
-	public List<WebsiteMsgVo> findWebsiteMsgByParentId(String parentId) {
+	public List<WebsiteMsgVo> getReplyMsgList(String parentId) {
 		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.build();
-		return websiteMsgContext.findByParentId(parentId);
+		return websiteMsgContext.getReplyMsgList(parentId);
 	}
 
 	@Override
-	public DataPageValue<WebsiteMsgVo> findWebsiteMsgByCreatorIdAndParentIdIsNull(
+	public DataPageValue<WebsiteMsgVo> findWebsiteMsgByCreatorId(
 			String creatorId, int page, int size) {
 		WebsiteMsgContext websiteMsgContext = WebsiteMsgContext.build();
-		return websiteMsgContext.findByCreatorIdAndParentIdIsNull(creatorId, page, size);
+		return websiteMsgContext.findByCreatorId(creatorId, page, size);
+	}
+
+	@Override
+	public DataPageValue<StaffContactsVo> findStaffContacts(
+			String departmentId, int page, int size) {
+		StaffContactsContext staffContactsContext = StaffContactsContext.build();
+		return staffContactsContext.findByPage(departmentId, StaffConstants.StaffStatus.ACTIVE, StaffConstants.WorkStatus.IN_OFFICE, page, size);
+	}
+
+	@Override
+	public Long findCountOfStaffContacts(String departmentId) {
+		StaffContactsContext staffContactsContext = StaffContactsContext.build();
+
+		return staffContactsContext.findCount(departmentId, StaffConstants.StaffStatus.ACTIVE, StaffConstants.WorkStatus.IN_OFFICE);
+	}
+
+	@Override
+	public DataPageValue<ProprietorContactsVo> findProprietorContacts(
+			String projectId, String buildingId, Integer page, Integer size) {
+		ProprietorContactsContext proprietorContactsContext = ProprietorContactsContext.build();
+		return proprietorContactsContext.findByPage(projectId, buildingId, HouseholdConstants.ProprietorStatus.ACTIVE, page, size);
+	}
+
+	@Override
+	public Long findCountOfProprietorContacts(String projectId, String buildingId) {
+		ProprietorContactsContext proprietorContactsContext = ProprietorContactsContext.build();
+
+		return proprietorContactsContext.findCount(projectId, buildingId, HouseholdConstants.ProprietorStatus.ACTIVE);
+	}
+	
+	/***********报事************/
+	/**
+	 * 报事列表查询
+	 */
+	public DataPageValue<EventReportVo> listEventReport(EventReportBo eventReportBo,Integer page, Integer size){
+		EventReportContext eventReportContext = EventReportContext.build();
+		return eventReportContext.list(eventReportBo, page, size);
+	}
+	
+	/**
+	 * 创建报事
+	 */
+	public void createEventReport(EventReportVo eventReportVo){
+		EventReportContext eventReportContext = EventReportContext.build(eventReportVo);
+		eventReportContext.create();
+	}
+	
+	/**
+	 * 修改报事
+	 */
+	public void updateEventReport(EventReportVo eventReportVo){
+		EventReportContext eventReportContext = EventReportContext.build(eventReportVo);
+		eventReportContext.update();
 	}
 }
