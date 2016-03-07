@@ -16,7 +16,10 @@ import com.liefeng.base.constant.DeviceConstants;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.intf.property.IGuardService;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
+import com.liefeng.property.constant.GuardConstants;
 import com.liefeng.property.constant.SysConstants;
+import com.liefeng.property.vo.guard.GuardCardUserVo;
+import com.liefeng.property.vo.guard.GuardCardVo;
 import com.liefeng.property.vo.guard.GuardDeviceVo;
 
 /**
@@ -26,7 +29,7 @@ import com.liefeng.property.vo.guard.GuardDeviceVo;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-public class GuardDeviceServiceTest {
+public class GuardServiceTest {
 
 	@Autowired
 	private IGuardService guardSerivce;
@@ -76,5 +79,20 @@ public class GuardDeviceServiceTest {
 	@Test
 	public void queryTest(){
 		System.out.println(guardSerivce.listGuardDevice(new GuardDeviceBo(), 1, 10));
+	}
+	
+	@Test
+	public void createGuardCardTest(){
+		GuardCardVo guardCard = new GuardCardVo();
+		GuardCardUserVo guardCardUser = new GuardCardUserVo();
+		guardCard.setSn("123");
+		guardCard.setStatus(GuardConstants.GuardCardStatus.NORMAL);
+		guardCard.setType(GuardConstants.GuardCardType.PERMANENT);
+		
+		
+		guardCardUser.setStaffId("123");
+		guardCardUser.setUserType("1");
+		
+		guardSerivce.createGuardCard(guardCardUser, guardCard);
 	}
 }

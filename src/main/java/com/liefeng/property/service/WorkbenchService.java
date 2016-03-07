@@ -650,4 +650,12 @@ public class WorkbenchService implements IWorkbenchService {
 		}
 		
 	}
+
+	@Override
+	public DataPageValue<NoticeVo> findNoticeOfPublished(String terminal,
+			String noticeType, String projectId, String groupId,
+			String privilegeType, Integer page, Integer size) {
+		NoticeContext noticeContext = NoticeContext.build();
+		return noticeContext.findOfPublished(terminal, noticeType, projectId, groupId, privilegeType, page, size);
+	}
 }

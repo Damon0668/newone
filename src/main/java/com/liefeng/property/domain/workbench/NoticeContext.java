@@ -296,6 +296,43 @@ public class NoticeContext {
 		this.noticeVo = noticeVo;
 	}
 
+	/**
+	 * 查看已发布通知（分页、app）
+	 * @param terminal 接收端类型
+	 * @param naticeType 通知类型
+	 * @param projectId 项目id（员工：所管理的项目id字符串，业主：所在项目id）
+	 * @param groupId （员工：部门id，业主：楼栋id）
+	 * @param privilegeType 接收人类型（员工：1，业主：2）
+	 * @param page
+	 * @param size
+	 * @return
+	 * @author xhw
+	 * @2016年3月7日 下午3:24:55
+	 */
+	public DataPageValue<NoticeVo> findOfPublished(String terminal, String naticeType, String projectId, String groupId, String privilegeType, Integer page, Integer size) {
+		HashMap<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("terminal", terminal);
+		paramMap.put("naticeType", naticeType);
+		paramMap.put("projectId", projectId);
+		paramMap.put("groupId", groupId);
+		paramMap.put("privilegeType", privilegeType);
+
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(paramMap);
+		param.setPage(page);
+		param.setPageSize(size);
+
+		Long count = noticeQueryRepository.queryCountOfPublished(param);
+		count = (count == null ? 0 : count);
+		logger.info("通知总数量：count=" + count);
+
+		// 设置数据总行数，用于计算偏移量
+		param.getPager().setRowCount(count);
+		List<NoticeVo> list = noticeQueryRepository.queryOfPublished(param);
+		DataPageValue<NoticeVo> returnPage = new DataPageValue<NoticeVo>(list, count, size, page);
+
+		return returnPage;
+	}
 	protected void setId(String id) {
 		this.id = id;
 	}

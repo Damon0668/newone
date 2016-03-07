@@ -484,4 +484,19 @@ public interface IWorkbenchService {
 	 */
 	public void pushMessage(String receiveUserType, String sendUserId, String receiveUserId, String content);
 	
+	/**
+	 * 查看已发布通知（分页、app）
+	 * @param terminal 接收端类型
+	 * @param naticeType 通知类型
+	 * @param projectId 项目id（员工：所管理的项目id字符串，业主：所在项目id）
+	 * @param groupId （员工：部门id，业主：楼栋id）
+	 * @param privilegeType 接收人类型（员工：1，业主：2）
+	 * @param page
+	 * @param size
+	 * @return
+	 * @author xhw
+	 * @2016年3月7日 下午3:24:55
+	 */
+	public DataPageValue<NoticeVo> findNoticeOfPublished(String terminal, String noticeType, String projectId, String groupId, String privilegeType, Integer page, Integer size);
+	
 }

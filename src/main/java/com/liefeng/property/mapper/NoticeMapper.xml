@@ -90,6 +90,79 @@ from(
 	    <include refid="Where_Clause" />
 	) t
 </select>
+<!-- 查询已发布的通知（app） -->
+<select id="queryOfPublished" resultMap="BaseResultMap">
+    SELECT
+    	DISTINCT
+	    t.id, 
+	    t.title, 
+	    t.publish_time
+	FROM
+		t_notice t,
+		t_notice_privilege p
+	WHERE
+		t.id = p.notice_id
+	AND (t.terminal = '0'
+	<if test=" extra.terminal != null and extra.terminal != ''" >
+	    OR t.terminal = #{extra.terminal}
+	</if>
+	)
+	<if test=" extra.noticeType != null and extra.noticeType != ''" >
+	AND t.type = #{extra.noticeType}
+	</if>
+	AND t.status = '4'
+	AND(
+		(
+			p.group_id = '-1'
+			AND FIND_IN_SET(p.project_id, #{extra.projectId})
+		)
+		OR(
+			p.group_id = #{extra.groupId}
+			AND p.type = #{extra.privilegeType}
+			AND FIND_IN_SET(p.project_id, #{extra.projectId})
+		)
+	   )
+		ORDER BY t.publish_time DESC
+		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	          ${pager.mysqlQueryCondition}
+	    </if>
+</select>
+
+<!-- 查询已发布通知数量（app） -->
+<select id="queryCountOfPublished"  resultType="java.lang.Long">
+select 
+	count(1) 
+from(
+		SELECT
+			DISTINCT
+			t.id
+	    FROM 
+	    	t_notice t,
+			t_notice_privilege p
+	    WHERE
+		t.id = p.notice_id
+	AND (t.terminal = '0'
+	<if test=" extra.terminal != null and extra.terminal != ''" >
+	    OR t.terminal = #{extra.terminal}
+	</if>
+	)
+	<if test=" extra.noticeType != null and extra.noticeType != ''" >
+	AND t.type = #{extra.noticeType}
+	</if>
+	AND t.status = '4'
+	AND(
+		(
+			p.group_id = '-1'
+			AND FIND_IN_SET(p.project_id, #{extra.projectId})
+		)
+		OR(
+			p.group_id = #{extra.groupId}
+			AND p.type = #{extra.privilegeType}
+			AND FIND_IN_SET(p.project_id, #{extra.projectId})
+		)
+	   )
+	) t
+</select>
 
 <select id="queryPublishedByPage" resultMap="BaseResultMap">
     SELECT
@@ -160,4 +233,5 @@ from(
 	   )
 	) t
 </select>
+
 </mapper>   

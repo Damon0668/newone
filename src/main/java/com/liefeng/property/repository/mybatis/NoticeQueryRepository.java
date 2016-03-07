@@ -49,5 +49,22 @@ public interface NoticeQueryRepository extends BaseRepository<NoticeVo>{
 	 */
 	public Long queryPublishedByCount(PagingParamVo paramMap);
 	
+	/**
+	 * 查看已发布通知（分页、app）
+	 * @param paramMap {terminal：接收端类型；noticeType：通知类型； projectId：项目id；groupId：部门id（楼栋id）；privilegeType：接收人类型；}
+	 * @return
+	 * @author xhw
+	 * @2016年3月7日 下午3:18:03
+	 */
+	public List<NoticeVo> queryOfPublished(PagingParamVo paramMap);
+	
+	/**
+	 * 查询已发布通知总数(app)
+	 * @param paramMap {terminal：接收端类型；noticeType：消息类型； projectId：项目id；groupId：部门id（楼栋id）；privilegeType：接收人类型；}
+	 * @return
+	 * @author xhw
+	 * @2016年3月7日 下午3:18:56
+	 */
+	public Long queryCountOfPublished(PagingParamVo paramMap);
 	
 }

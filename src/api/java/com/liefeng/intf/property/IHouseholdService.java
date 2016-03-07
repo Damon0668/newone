@@ -163,5 +163,4 @@ public interface IHouseholdService {
 	 * @param checkinScheduleList 入住安排时间列表
 	 */
 	public void saveCheckinSchedule(String projectId, List<CheckinScheduleVo> checkinScheduleList);
-	
 }

@@ -1,6 +1,5 @@
 package com.liefeng.property.domain.workbench;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,22 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.liefeng.common.util.MyBeanUtil;
-import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
-import com.liefeng.common.util.UUIDGenerator;
-import com.liefeng.common.util.ValidateHelper;
-import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
-import com.liefeng.property.po.workbench.WebsiteMsgPo;
 import com.liefeng.property.repository.mybatis.StaffContactsQueryRepository;
 import com.liefeng.property.vo.workbench.StaffContactsVo;
-import com.liefeng.property.vo.workbench.WebsiteMsgVo;
 
 
 /**
@@ -44,6 +34,7 @@ public class StaffContactsContext {
 	/**
 	 * 部门id
 	 */
+	@SuppressWarnings("unused")
 	private String departmentId;
 	
 	/**
