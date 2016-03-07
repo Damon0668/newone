@@ -156,7 +156,6 @@ FROM
 		h.house_num
 </select>
 
-<<<<<<< HEAD
 <sql id="GuardResident_Where_Clause">
     WHERE 1=1 
 <trim  suffixOverrides="," >
@@ -305,7 +304,4 @@ select count(*) from (
 </select>
 
 
-</mapper>   
-=======
 </mapper>
->>>>>>> refs/remotes/origin/master
