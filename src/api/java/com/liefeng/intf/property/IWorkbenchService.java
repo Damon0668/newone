@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
+import com.liefeng.property.bo.workbench.EventReportBo;
+import com.liefeng.property.vo.workbench.EventReportVo;
 import com.liefeng.property.vo.workbench.ProprietorContactsVo;
 import com.liefeng.property.vo.workbench.StaffContactsVo;
 import com.liefeng.property.vo.workbench.WebsiteMsgPrivilegeVo;
@@ -451,6 +453,25 @@ public interface IWorkbenchService {
 	 * @2016年3月4日 下午5:16:34
 	 */
 	public Long findCountOfProprietorContacts(String projectId, String buildingId);
+
+	/**
+	 * 报事列表查询
+	 */
+	public DataPageValue<EventReportVo> listEventReport(EventReportBo eventReportBo,
+			Integer page, Integer size);
+
+	/**
+	 * 创建报事
+	 */
+	public void createEventReport(EventReportVo eventReportVo);
+
+	/**
+	 * 修改报事
+	 */
+	public void updateEventReport(EventReportVo eventReportVo);
+
+
+	public EventReportVo getEventReport(String id);
 	
 	/**
 	 * 推送消息
