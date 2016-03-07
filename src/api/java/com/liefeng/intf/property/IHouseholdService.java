@@ -10,6 +10,7 @@ import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
 import com.liefeng.property.vo.household.CheckinQueueVo;
+import com.liefeng.property.vo.household.CheckinScheduleVo;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
@@ -95,7 +96,7 @@ public interface IHouseholdService {
 	 * @param proprietorHouseId 业主房产ID
 	 * @return 入住资料列表
 	 */
-	public List<CheckinMaterialVo> getCheckinMaterialByProprietorHouseId(String proprietorHouseId);
+	public List<CheckinMaterialVo> getMaterialByProprietorHouseId(String proprietorHouseId);
 	
 	/**
 	 * 批量保存入住资料
@@ -107,7 +108,7 @@ public interface IHouseholdService {
 	 * 根据业主房产ID删除入住资料信息
 	 * @param proprietorHouseId 业主房产ID
 	 */
-	public void delCheckinMaterialByProprietorHouseId(String proprietorHouseId) throws Exception;
+	public void delMaterialByProprietorHouseId(String proprietorHouseId) throws Exception;
 	
 	/**
 	 * 根据业主ID获取业主信息
@@ -129,7 +130,7 @@ public interface IHouseholdService {
 	 * 获取业主所有房产中的住户
 	 * @param projectId 项目ID
 	 * @param custGlobalId 业主关联客户全局ID
-	 * @return 住户信息
+	 * @return 住户信息列表
 	 */
 	public List<ResidentVo> getResidentsInProprietorHouse(String projectId, String custGlobalId);
 	
@@ -138,7 +139,7 @@ public interface IHouseholdService {
 	 * @param params 查询过滤参数
 	 * @param pageSize 分页大小
 	 * @param currentPage 分页当前页
-	 * @return 入住排队列表
+	 * @return 入住排队分页数据
 	 */
 	public DataPageValue<CheckinQueueVo> getCheckinQueues(CheckinQueueBo params, Integer pageSize, Integer currentPage);
 	
@@ -148,5 +149,19 @@ public interface IHouseholdService {
 	 * @throws LiefengException
 	 */
 	public void updateCheckinQueue(CheckinQueueVo checkinQueue) throws LiefengException;
+	
+	/**
+	 * 根据项目查询入住安排时间
+	 * @param projectId 项目ID
+	 * @return 入住安排时间列表
+	 */
+	public List<CheckinScheduleVo> getScheduleByProjectId(String projectId);
+	
+	/**
+	 * 批量保存入住安排时间
+	 * @param projectId 项目ID
+	 * @param checkinScheduleList 入住安排时间列表
+	 */
+	public void saveCheckinSchedule(String projectId, List<CheckinScheduleVo> checkinScheduleList);
 	
 }
