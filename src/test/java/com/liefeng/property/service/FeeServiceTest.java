@@ -2,6 +2,7 @@ package com.liefeng.property.service;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +25,7 @@ import com.liefeng.property.vo.fee.FeeSettingVo;
 import com.liefeng.property.vo.fee.LadderFeeSettingVo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
 import com.liefeng.property.vo.fee.MeterSettingVo;
+import com.liefeng.property.vo.project.ProjectVo;
 
 /**
  * 
@@ -371,18 +373,23 @@ public class FeeServiceTest {
 
 	@Test
 	public void createFee(){
-		ContextManager.getInstance().setOemCode("1");
+		List<ProjectVo> projectDataPageValue = projectService.findAll();
 		
-		feeService.createPropertyManageFee("0000000052a7943f0152a7943fc00000");
-		feeService.createPolluFee("0000000052a7943f0152a7943fc00000");
-		feeService.createGarbageFee("0000000052a7943f0152a7943fc00000");
-		feeService.createMaintenanceFee("0000000052a7943f0152a7943fc00000");
-		feeService.createOwnerMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_WATER);
-		feeService.createOwnerMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_ELECTRICITY);
-		feeService.createOwnerMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_GAS);
-		feeService.createPublicMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_PUBLIC_GAS);
-		feeService.createPublicMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_PUBLIC_WATER);
-		feeService.createPublicMerterFee("0000000052a7943f0152a7943fc00000",FeeConstants.FeeSetting.FEE_PUBLIC_ELECTRICITY);
+		for (ProjectVo projectvo : projectDataPageValue) {
+			ContextManager.getInstance().setOemCode(projectvo.getOemCode());
+			feeService.createPropertyManageFee(projectvo.getId());
+			feeService.createPolluFee(projectvo.getId());
+			feeService.createGarbageFee(projectvo.getId());
+			feeService.createMaintenanceFee(projectvo.getId());
+			feeService.createParkingFee(projectvo.getId());
+			feeService.createOwnerMerterFee(projectvo.getId(),FeeConstants.FeeSetting.FEE_WATER);
+			feeService.createOwnerMerterFee(projectvo.getId(),FeeConstants.FeeSetting.FEE_ELECTRICITY);
+			feeService.createOwnerMerterFee(projectvo.getId(),FeeConstants.FeeSetting.FEE_GAS);
+			feeService.createPublicMerterFee(projectvo.getId(),FeeConstants.FeeSetting.FEE_PUBLIC_GAS);
+			feeService.createPublicMerterFee(projectvo.getId(),FeeConstants.FeeSetting.FEE_PUBLIC_ELECTRICITY);
+			feeService.createPublicMerterFee(projectvo.getId(),FeeConstants.FeeSetting.FEE_PUBLIC_ELECTRICITY);
+
+		}
 	}
 	
 	@Test 

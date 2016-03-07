@@ -21,7 +21,7 @@
     <dubbo:consumer timeout="10000000" filter="OemCodeConsumerFilter"/>
     
     <!-- 使用zookeeper注册中心暴露服务地址 -->
-    <dubbo:registry address="${dubbo.registry.url}" file="property.cache" register="false"/>
+    <dubbo:registry address="${dubbo.registry.url}" file="property.cache" />
 
     <dubbo:protocol name="dubbo" port="${dubbo.protocol.port}" host="${dubbo.protocol.host}" />
     

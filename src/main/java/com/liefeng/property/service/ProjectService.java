@@ -220,4 +220,10 @@ public class ProjectService implements IProjectService {
 		}
 		return projectIdList;
 	}
+
+	@Override
+	public List<ProjectVo> findAll() {
+		HouseContext houseContext = HouseContext.build();
+		return houseContext.findAll();
+	}
 }

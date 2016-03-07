@@ -5,6 +5,7 @@ import java.util.List;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.bo.parking.ParkingBo;
 import com.liefeng.property.vo.parking.ParkingAttachmentVo;
+import com.liefeng.property.vo.parking.ParkingRentalVo;
 import com.liefeng.property.vo.parking.ParkingSingleRentalVo;
 import com.liefeng.property.vo.parking.ParkingVo;
 
@@ -64,4 +65,11 @@ public interface IParkingService {
 	 * 根据租售信息id查询附件
 	 */
 	public List<ParkingAttachmentVo> getParkingAttachment(String parkingRentalId);
+
+	/**
+	 * 车位历史变动
+	 * @param parkingId
+	 * @return
+	 */
+	public List<ParkingRentalVo> findParkingRentalByParkingId(String parkingId);
 }

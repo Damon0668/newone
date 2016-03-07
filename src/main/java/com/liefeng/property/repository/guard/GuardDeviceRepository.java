@@ -13,5 +13,11 @@ import com.liefeng.property.po.guard.GuardDevicePo;
  */
 @Transactional
 public interface GuardDeviceRepository extends JpaRepository<GuardDevicePo, String> {
-
+	/**
+	 * 查找门禁设备
+	 * @param guardNum 门禁设备号
+	 * @param oemCode
+	 * @return
+	 */
+	public GuardDevicePo findByGuardNumAndOemCode(String guardNum, String oemCode);
 }

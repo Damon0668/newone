@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.liefeng.Application;
 import com.liefeng.base.constant.DeviceConstants;
 import com.liefeng.core.dubbo.filter.ContextManager;
-import com.liefeng.intf.property.IGuardSerivce;
+import com.liefeng.intf.property.IGuardService;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
 import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.vo.guard.GuardDeviceVo;
@@ -29,7 +29,7 @@ import com.liefeng.property.vo.guard.GuardDeviceVo;
 public class GuardDeviceServiceTest {
 
 	@Autowired
-	private IGuardSerivce guardSerivce;
+	private IGuardService guardSerivce;
 	
 	@Before
 	public void setOemCode(){
@@ -39,7 +39,7 @@ public class GuardDeviceServiceTest {
 	@Test
 	public void createTest(){
 		GuardDeviceVo guardDeviceVo = new GuardDeviceVo();
-		guardDeviceVo.setType(DeviceConstants.Type.TVBOX);
+		guardDeviceVo.setType(DeviceConstants.Type.GUARD);
 		guardDeviceVo.setProjectId("0000000052a7943f0152a7943fc00000");
 		guardDeviceVo.setBuildingId("1123456789");
 		guardDeviceVo.setInstallPosition("大门口");
@@ -58,10 +58,11 @@ public class GuardDeviceServiceTest {
 	public void updateTest(){
 		GuardDeviceVo guardDeviceVo = new GuardDeviceVo();
 		guardDeviceVo.setDeviceGlobalId("D1603011521178af41b8e952784");
-		guardDeviceVo.setType(DeviceConstants.Type.TVBOX);
+		guardDeviceVo.setType(DeviceConstants.Type.GUARD);
 		guardDeviceVo.setId("4028208153310d520153310d52590000");
-		guardDeviceVo.setProjectId("1");
+		guardDeviceVo.setProjectId("2");
 		guardDeviceVo.setBuildingId("11234567890");
+		guardDeviceVo.setManufacturer("测试2");
 		guardSerivce.updateGuradDevice(guardDeviceVo);
 	}
 	

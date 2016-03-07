@@ -316,11 +316,6 @@ public class FeeItemContext {
 		List<FeeItemPo> feeItemPoList = this.feeItemRepository.getPreFeeItem(projectId, houseNum, startDate, endDate);
 		return MyBeanUtil.createList(feeItemPoList, FeeItemVo.class);
 	}
-	
-
-	
-
-	
 
 
 	

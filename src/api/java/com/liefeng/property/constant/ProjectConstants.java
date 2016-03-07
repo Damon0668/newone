@@ -15,7 +15,7 @@ public class ProjectConstants {
 	/**
 	 * 房子销售状态
 	 */
-	public interface HouseSaleStatus {
+	public static interface HouseSaleStatus {
 		
 		/**
 		 * 未售

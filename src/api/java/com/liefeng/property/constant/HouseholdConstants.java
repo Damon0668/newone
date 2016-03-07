@@ -15,7 +15,7 @@ public class HouseholdConstants {
 	/**
 	 * 业主状态
 	 */
-	public interface ProprietorStatus {
+	public static interface ProprietorStatus {
 		
 		/**
 		 * 激活
@@ -32,7 +32,7 @@ public class HouseholdConstants {
 	/**
 	 * 住户状态
 	 */
-	public interface ResidentStatus {
+	public static interface ResidentStatus {
 		
 		/**
 		 * 激活

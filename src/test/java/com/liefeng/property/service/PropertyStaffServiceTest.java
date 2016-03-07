@@ -79,4 +79,7 @@ public class PropertyStaffServiceTest {
 		List<PropertyStaffVo> propertyStaffList =  propertyStaffService.findPropertyStaff("0", "0000000052a7943f0152a7943fc00000");
 		System.out.println(propertyStaffList);
 	}
+	public void findStaffContactPrivilege(){
+		System.out.println(propertyStaffService.findStaffContactPrivilege("40282081531cf49b01531d4c72a80009"));
+	}
 }

@@ -2,6 +2,8 @@ package com.liefeng.property.vo.guard;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.liefeng.base.vo.device.DeviceVo;
 
 /**
@@ -11,10 +13,11 @@ import com.liefeng.base.vo.device.DeviceVo;
  */
 public class GuardDeviceVo extends DeviceVo {
 
-	private static final long serialVersionUID = -3314952455007904877L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7742515295286315350L;
 
-	private String id;
-	
 	/**
 	 * 设备全局ID。关联t_device表
 	 */
@@ -48,11 +51,13 @@ public class GuardDeviceVo extends DeviceVo {
 	/**
 	 * 保修期限
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd") 
 	private Date warrantyDate;
 	
 	/**
 	 * 购买日期
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd") 
 	private Date buyDate;
 	
 	/**
@@ -64,23 +69,6 @@ public class GuardDeviceVo extends DeviceVo {
 	 * 门口机编号
 	 */
 	private String guardNum;
-	
-	/**
-	 * OEM编码
-	 */
-	private String oemCode;
-	
-	public DeviceVo getDevice() {
-		return (DeviceVo)this;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getDeviceGlobalId() {
 		return deviceGlobalId;
@@ -88,6 +76,7 @@ public class GuardDeviceVo extends DeviceVo {
 
 	public void setDeviceGlobalId(String deviceGlobalId) {
 		this.deviceGlobalId = deviceGlobalId;
+		super.setGlobalId(deviceGlobalId);
 	}
 
 	public String getProjectId() {
@@ -152,14 +141,6 @@ public class GuardDeviceVo extends DeviceVo {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
-	}
-
-	public String getOemCode() {
-		return oemCode;
-	}
-
-	public void setOemCode(String oemCode) {
-		this.oemCode = oemCode;
 	}
 
 	public String getGuardNum() {

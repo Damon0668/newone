@@ -74,10 +74,17 @@ public class ParkingService implements IParkingService {
 		if(ValidateHelper.isNotEmptyString(parkingRentalVo.getId())){
 			parkingRentalContext.update();
 		}else{
+			if(ValidateHelper.isNotEmptyString(parkingRentalVo.getCustomerName()))
 			parkingRentalContext.create();
 		}
 		
 		
+	}
+	
+	@Override
+	public  List<ParkingRentalVo> findParkingRentalByParkingId(String parkingId){
+		ParkingRentalContext parkingRentalContext = ParkingRentalContext.build();
+		return parkingRentalContext.list(parkingId);
 	}
 
 	@Override

@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,8 @@ import com.liefeng.property.vo.guard.GuardDeviceVo;
 @Service
 @Scope("prototype")
 public class GuardDeviceContext {
-
+	private static Logger logger = LoggerFactory.getLogger(GuardDeviceContext.class);
+	
 	@Autowired
 	private GuardDeviceRepository guardDeviceRepository;
 	
@@ -84,16 +87,21 @@ public class GuardDeviceContext {
 		guardDevicePo.setId(UUIDGenerator.generate());
 		guardDevicePo.setCreateTime(new Date());
 		guardDevicePo.setOemCode(ContextManager.getInstance().getOemCode());
+		
+		logger.info("create guardDevice ={}", guardDevice);
 		guardDeviceRepository.save(guardDevicePo);
 		guardDevice = MyBeanUtil.createBean(guardDevicePo, GuardDeviceVo.class);
 	}
 	
 	public void update(){
+		
 		if(ValidateHelper.isNotEmptyString(guardDevice.getId())){
 			GuardDevicePo guardDevicePo = guardDeviceRepository.findOne(guardDevice.getId());
 			
 			if(guardDevicePo != null){
 				MyBeanUtil.copyBeanNotNull2Bean(guardDevice, guardDevicePo);
+				
+				logger.info("update guardDevice ={}", guardDevice);
 				guardDeviceRepository.save(guardDevicePo);
 				guardDevice = MyBeanUtil.createBean(guardDevicePo, GuardDeviceVo.class);
 			}
@@ -102,6 +110,7 @@ public class GuardDeviceContext {
 	}
 	
 	public void delete(){
+		logger.info("delete id ={}", id);
 		if(ValidateHelper.isNotEmptyString(id)){
 			guardDeviceRepository.delete(id);
 		}
@@ -111,7 +120,9 @@ public class GuardDeviceContext {
 		if(guardDevice == null){
 			if(ValidateHelper.isNotEmptyString(id)){
 				GuardDevicePo guardDevicePo = guardDeviceRepository.findOne(id);
-				guardDevice = MyBeanUtil.createBean(guardDevicePo, GuardDeviceVo.class);
+				if(guardDevicePo != null){
+					guardDevice = MyBeanUtil.createBean(guardDevicePo, GuardDeviceVo.class);
+				}
 			}
 		}
 		return guardDevice;
@@ -120,6 +131,8 @@ public class GuardDeviceContext {
 	public DataPageValue<GuardDeviceVo> listGuardDevice(GuardDeviceBo guardDeviceBo, Integer currentPage,Integer pageSize){
 		
 		guardDeviceBo.setOemCode(ContextManager.getInstance().getOemCode());
+		currentPage = currentPage == null ? 1 : currentPage;
+		pageSize = pageSize == null ? 10 : pageSize;
 		
 		Map<String, String> extra = MyBeanUtil.bean2Map(guardDeviceBo);
 		PagingParamVo param = new PagingParamVo();
@@ -132,6 +145,18 @@ public class GuardDeviceContext {
 		List<GuardDeviceVo> guardDeviceList = guardDeviceQueryRepository.queryByPage(param);
 		
 		return new DataPageValue<GuardDeviceVo>(guardDeviceList, total, pageSize, currentPage);
+	}
+	
+	public Boolean isExistGuardNum(String guardNum){
+		Boolean result = false;
+		String oemCode = ContextManager.getInstance().getOemCode();
+		GuardDevicePo  guardDevicePo = guardDeviceRepository.findByGuardNumAndOemCode(guardNum, oemCode);
+		
+		if(guardDevicePo != null){
+			result = true;
+		}
+		
+		return result;
 	}
 	
 	protected void setId(String id) {

@@ -86,6 +86,13 @@ public interface IPropertyStaffService {
 	 */
 	public PropertyStaffVo findPropertyStaffByAccount(String account);
 	
+	/**
+	 * 获取员工通讯录权限
+	 * @param staffId 员工ID
+	 * @return
+	 */
+	public List<PropertyDepartmentVo> findStaffContactPrivilege(String staffId);
+	
 	/*********************** 部门相关接口 **********************/
 	
 	/**

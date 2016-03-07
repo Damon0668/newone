@@ -103,7 +103,8 @@ from(
 	    t.end_time, 
 	    t.reason, 
 	    t.creator_id,
-	    t.publisher_id
+	    t.publisher_id,
+	    t.publish_time
 	FROM
 		t_notice t,
 		t_notice_privilege p

@@ -10,6 +10,7 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.household.VisitorPo;
 import com.liefeng.property.repository.VisitorRepository;
 import com.liefeng.property.vo.household.VisitorVo;
@@ -18,6 +19,7 @@ import com.liefeng.property.vo.household.VisitorVo;
  * 访客信息领域模型
  * 
  * @author ZhenTingJun
+ * @author 蔡少东
  * @date 2015-12-23
  */
 @Service
@@ -106,9 +108,10 @@ public class VisitorContext {
 	public void create() {
 		if(visitor != null) {
 			visitor.setId(UUIDGenerator.generate());
-			visitor.setOemCode(""); // TODO 待确定后补齐
-			
+			visitor.setOemCode(ContextManager.getInstance().getOemCode());
 			VisitorPo visitorPo = MyBeanUtil.createBean(visitor, VisitorPo.class);
+			
+			logger.info("create visitor = {}", visitor);
 			visitorRepository.save(visitorPo);
 		}
 	}

@@ -254,7 +254,7 @@ public class MeterRecordContext {
 	}
 	
 	/**
-	 * 获取上一期某个月的读数
+	 * 获取某个月的读数
 	 * @param houseNum 房间号  查询公摊为空
 	 * @param buildingId 楼栋id 查询业主表为空
 	 * @param meterType 表类型

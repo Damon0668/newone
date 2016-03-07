@@ -51,7 +51,22 @@ public class WorkbenchConstants {
 		/**
 		 * 任务（4条）
 		 */
-		public static final Integer TASKSIZE = 4;
+		public static final Integer TASK_SIZE = 4;
+		
+		/**
+		 * 通知（4条）
+		 */
+		public static final Integer NOTICE_SIZE = 4;
+		
+		/**
+		 * 消息（4条）
+		 */
+		public static final Integer MSG_SIZE = 4;
+		
+		/**
+		 * 日程（6条）
+		 */
+		public static final Integer SCHEDULE_SIZE = 6;
 	}
 	
 	/**
@@ -150,5 +165,23 @@ public class WorkbenchConstants {
 		
 	}
 	
-	
+	/**
+	 * 报事
+	 */
+	public static interface EventReport{
+		/**
+		 * 报事状态 未处理
+		 */
+		public static final String STATUS_UNTREATED = "0"; 
+		
+		/**
+		 * 报事状态 已派工
+		 */
+		public static final String STATUS_ALREADYWORKERS = "1"; 
+		
+		/**
+		 * 报事状态 未处理
+		 */
+		public static final String STATUS_ALREADYFEEDBACK = "2"; 
+	}
 }

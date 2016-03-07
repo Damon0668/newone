@@ -24,6 +24,7 @@ import com.liefeng.property.repository.HouseRepository;
 import com.liefeng.property.repository.mybatis.HouseQueryRepository;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.project.HouseVo;
+import com.liefeng.property.vo.project.ProjectVo;
 
 /**
  * 房产信息领域模型
@@ -242,6 +243,15 @@ public class HouseContext {
 		
 		return returnPage;
 	}
+	
+	/**
+	 * 查询所有项目
+	 * @return
+	 */
+	public List<ProjectVo> findAll() {
+		List<HousePo> projectVos = houseRepository.findAll();
+		return MyBeanUtil.createList(projectVos, ProjectVo.class);
+	}
 
 	protected String getProjectId() {
 		return projectId;
@@ -258,5 +268,7 @@ public class HouseContext {
 	protected void setBuildingId(String buildingId) {
 		this.buildingId = buildingId;
 	}
+
+
 	
 }

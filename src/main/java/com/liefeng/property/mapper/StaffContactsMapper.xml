@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.StaffContactsQueryRepository" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.workbench.StaffContactsVo" >
+	<result column="cust_global_id" property="custGlobalId"/>
+	<result column="department_id" property="departmentId"/>
+	<result column="staff_id" property="staffId"/>
+	<result column="name" property="name"/>
+	<result column="number" property="number"/>
+	<result column="status" property="status"/>
+	<result column="work_status" property="workStatus"/>
+	<result column="phone" property="phone"/>
+	<result column="email" property="email"/>
+</resultMap>
+
+<!-- 查询条件 -->
+<sql id="Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="extra.departmentId != null and extra.departmentId != ''">
+		and department_id =  #{extra.departmentId}
+	</if>
+	<if test="extra.status != null and extra.status != ''">
+		and status =  #{extra.status}
+	</if>
+	<if test="extra.workStatus != null and extra.workStatus != ''">
+		and work_status =  #{extra.workStatus}
+	</if>
+</trim>
+
+</sql>
+
+<select id="queryByPage" resultMap="BaseResultMap">
+    select 
+		cust_global_id,
+	    department_id, 
+	    staff_id, 
+	    name, 
+	    number,
+	    phone,
+	    email
+	from 
+		property.v_staff_contacts
+		<include refid="Where_Clause" />
+		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	          ${pager.mysqlQueryCondition}
+	    </if>
+</select>
+
+
+<select id="queryByCount"  resultType="java.lang.Long">
+	select 
+		count(1) 
+	from(
+		select 
+			cust_global_id
+	    from 
+	    	property.v_staff_contacts
+	    <include refid="Where_Clause" />
+		) t
+</select>
+
+</mapper>   
