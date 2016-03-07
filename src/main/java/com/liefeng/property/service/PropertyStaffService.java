@@ -1,5 +1,6 @@
 package com.liefeng.property.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -35,6 +36,7 @@ import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffArchiveVo;
+import com.liefeng.property.vo.staff.StaffContactPrivilegeVo;
 
 /**
  * 物业员工服务
@@ -272,6 +274,22 @@ public class PropertyStaffService implements IPropertyStaffService {
 				}
 			}
 		}
+	}
+
+	@Override
+	public List<PropertyDepartmentVo> findStaffContactPrivilege(String staffId) {
+		List<PropertyDepartmentVo> propertyDepartmentList = null;
+		if(ValidateHelper.isNotEmptyString(staffId)){
+			List<StaffContactPrivilegeVo> staffContactPrivilegeList= StaffContactPrivilegeContext.loadByStaffId(staffId).findContactPrivilege();
+			if(ValidateHelper.isNotEmptyCollection(staffContactPrivilegeList)){
+				propertyDepartmentList = new ArrayList<PropertyDepartmentVo>();
+				for (StaffContactPrivilegeVo staffContactPrivilegeVo : staffContactPrivilegeList) {
+					PropertyDepartmentVo propertyDepartmentVo = PropertyDepartmentContext.loadById(staffContactPrivilegeVo.getDepartmentId()).get();
+					propertyDepartmentList.add(propertyDepartmentVo);
+				}
+			}
+		}
+		return propertyDepartmentList;
 	}
 
 }

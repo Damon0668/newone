@@ -36,6 +36,11 @@ public class PropertyDepartmentVo extends BaseValue {
 	 * OEM编码
 	 */
 	private String oemCode;
+	
+	/**
+	 * 部门中人员数量
+	 */
+	private Long count;
 
 	public String getId() {
 		return Id;
@@ -75,5 +80,13 @@ public class PropertyDepartmentVo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public Long getCount() {
+		return count;
+	}
+
+	public void setCount(Long count) {
+		this.count = count;
 	}
 }

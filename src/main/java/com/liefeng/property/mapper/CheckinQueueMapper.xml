@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.CheckinQueueQueryRepository" > 
+
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.household.CheckinQueueVo" >
+
+</resultMap>
+
+<!-- 查询条件 -->
+<sql id="Base_Clause">
+	where 1=1 
+	<trim  suffixOverrides="," >
+		<if test="extra.houseNum != null and extra.houseNum != ''">
+			and un.houseNum = #{extra.houseNum}
+		</if>
+		
+		<if test="extra.name != null and extra.name != ''">
+			and un.proprietorName = #{extra.name}
+		</if>
+		
+		<if test="extra.seq != null and extra.seq > 0">
+			and un.seq = #{extra.seq}
+		</if>
+	
+		<choose>
+			<when test="extra.isToday != null and extra.isToday == 'y'">
+				and TO_DAYS(un.createTime) = TO_DAYS(NOW()) 
+			</when>
+			
+			<when test="extra.createTime != null and extra.createTime != ''">
+				and TO_DAYS(un.createTime) = TO_DAYS(#{extra.createTime}) 
+			</when>
+		</choose>
+		
+		<choose>
+			<when test="extra.status != null and extra.status != ''">
+				and un.status = #{extra.status}
+			</when>
+		</choose>
+	</trim>
+</sql>
+
+<select id="queryByPage" resultMap="BaseResultMap">
+	select
+		un.*
+	from
+		((select
+			cq.id as id,
+			cq.user_id as userId,
+			cq.project_id as projectId,
+			cq.house_id as houseId,
+			cq.seq as seq,
+			cq.status as status,
+			cq.create_time as createTime,
+			cq.tran_time as tranTime,
+			cq.oem_code as oemCode,
+			ph.id as proprietorHouseId,
+			ph.house_num as houseNum,
+			p.id as proprietorId,
+			p.name as proprietorName,
+			p.phone as mobile
+		from
+			property.t_proprietor_house ph
+			left join property.t_house h
+			on h.project_id = ph.project_id and h.house_num = ph.house_num
+			left join property.t_proprietor p 
+			on p.id = ph.proprietor_id 
+			left join property.t_checkin_queue cq
+			on cq.project_id = h.project_id and cq.house_id = h.id
+		where
+			((TO_DAYS(cq.create_time) = TO_DAYS(NOW()) and cq.status != '2') 
+			or (TO_DAYS(cq.create_time) != TO_DAYS(NOW()) and cq.status = '1'))
+			and cq.project_id = #{extra.projectId} 
+			and cq.oem_code = #{extra.oemCode}
+		order by
+			to_days(cq.create_time) desc, cq.seq asc)
+		union all 
+		(select
+			cq.id as id,
+			cq.user_id as userId,
+			cq.project_id as projectId,
+			cq.house_id as houseId,
+			cq.seq as seq,
+			cq.status as status,
+			cq.create_time as createTime,
+			cq.tran_time as tranTime,
+			cq.oem_code as oemCode,
+			ph.id as proprietorHouseId,
+			ph.house_num as houseNum,
+			p.id as proprietorId,
+			p.name as proprietorName,
+			p.phone as mobile
+		from
+			property.t_proprietor_house ph
+			left join property.t_house h
+			on h.project_id = ph.project_id and h.house_num = ph.house_num
+			left join property.t_proprietor p 
+			on p.id = ph.proprietor_id 
+			left join property.t_checkin_queue cq
+			on cq.project_id = h.project_id and cq.house_id = h.id
+		where
+			(cq.id != null and cq.status = '2'
+			 and cq.project_id = #{extra.projectId} 
+			 and cq.oem_code = #{extra.oemCode})
+			or (cq.id = null)
+		order by
+			cq.tran_time desc)) as un
+	<include refid="Base_Clause"/>
+    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+        ${pager.mysqlQueryCondition}
+    </if>
+</select>
+
+<select id="queryByCount"  resultType="java.lang.Long">
+	select
+		count(1)
+	from
+		(select
+			un.*
+		from
+			((select
+				cq.seq as seq,
+				cq.status as status,
+				cq.create_time as createTime,
+				cq.tran_time as tranTime,
+				ph.house_num as houseNum,
+				p.name as proprietorName,
+				p.phone as mobile
+			 from
+				property.t_proprietor_house ph
+				left join property.t_house h
+				on h.project_id = ph.project_id and h.house_num = ph.house_num
+				left join property.t_proprietor p 
+				on p.id = ph.proprietor_id 
+				left join property.t_checkin_queue cq
+				on cq.project_id = h.project_id and cq.house_id = h.id
+			 where
+				((TO_DAYS(cq.create_time) = TO_DAYS(NOW()) and cq.status != '2') 
+				or (TO_DAYS(cq.create_time) != TO_DAYS(NOW()) and cq.status = '1'))
+				and cq.project_id = #{extra.projectId} 
+				and cq.oem_code = #{extra.oemCode})
+			 union all 
+			 (select
+				cq.seq as seq,
+				cq.status as status,
+				cq.create_time as createTime,
+				cq.tran_time as tranTime,
+				ph.house_num as houseNum,
+				p.name as proprietorName,
+				p.phone as mobile
+			 from
+				property.t_proprietor_house ph
+				left join property.t_house h
+				on h.project_id = ph.project_id and h.house_num = ph.house_num
+				left join property.t_proprietor p 
+				on p.id = ph.proprietor_id 
+				left join property.t_checkin_queue cq
+				on cq.project_id = h.project_id and cq.house_id = h.id
+			 where
+				(cq.id != null and cq.status = '2'
+			 	 and cq.project_id = #{extra.projectId} 
+			 	 and cq.oem_code = #{extra.oemCode})
+				 or (cq.id = null))
+			) as un 
+			<include refid="Base_Clause"/>
+		) as ttt
+</select>
+
+
+</mapper>   

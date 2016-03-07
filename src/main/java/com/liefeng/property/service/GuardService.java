@@ -17,13 +17,15 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.device.IDeviceService;
 import com.liefeng.intf.property.IGuardService;
-import com.liefeng.intf.property.IProjectService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
+import com.liefeng.property.domain.guard.GuardCardPrivilegeContext;
 import com.liefeng.property.domain.guard.GuardDeviceContext;
+import com.liefeng.property.domain.household.VisitorContext;
+import com.liefeng.property.vo.guard.GuardCardVo;
 import com.liefeng.property.vo.guard.GuardDeviceVo;
-import com.liefeng.property.vo.project.ProjectVo;
+import com.liefeng.property.vo.household.VisitorVo;
 
 /**
  * 门禁服务
@@ -43,9 +45,7 @@ public class GuardService implements IGuardService{
 	
 	@Autowired
 	private IDeviceService deviceService;
-	
-	@Autowired
-	private IProjectService projectService;
+
 
 	@Transactional(rollbackOn=Exception.class)
 	@Override
@@ -116,6 +116,17 @@ public class GuardService implements IGuardService{
 	@Override
 	public Boolean isExistGuardNum(String guardNum) {
 		return GuardDeviceContext.build().isExistGuardNum(guardNum);
+	}
+
+	@Override
+	public void grantGuardCard(String guardCardId, List<String> guardDeviceId) {
+		logger.info("grantGuardCard guardCardId = {}, guardDeviceId = {}", guardCardId, guardDeviceId);
+		GuardCardPrivilegeContext.loadByCardId(guardCardId).grantGuardCard(guardDeviceId);
+	}
+
+	@Override
+	public void createVisitorInfo(VisitorVo visitor) {
+		VisitorContext.build(visitor).create();
 	}
 
 }
