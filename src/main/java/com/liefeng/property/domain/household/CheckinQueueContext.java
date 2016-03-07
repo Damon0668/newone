@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.household;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.household.CheckinQueueBo;
+import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.po.household.CheckinQueuePo;
 import com.liefeng.property.repository.CheckinQueueRepository;
 import com.liefeng.property.repository.mybatis.CheckinQueueQueryRepository;
@@ -138,6 +140,12 @@ public class CheckinQueueContext {
 			
 			CheckinQueuePo checkinQueuePo = checkinQueueRepository.findOne(checkinQueue.getId());
 			MyBeanUtil.copyBeanNotNull2Bean(checkinQueue, checkinQueuePo);
+			
+			// 完成办理时更新完成时间字段
+			if(checkinQueuePo.getStatus().equals(HouseholdConstants.CheckinQueueStatus.FINISHED)) {
+				checkinQueuePo.setTranTime(new Date());
+			}
+			
 			checkinQueueRepository.save(checkinQueuePo);
 			logger.info("更新入住排队信息成功，checkinQueueId={}",checkinQueue.getId());
 		} else {

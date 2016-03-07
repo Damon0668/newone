@@ -403,6 +403,15 @@ public class HouseholdService implements IHouseholdService {
 	}
 	
 	/**
+	 * 更新入住排队信息
+	 */
+	@Override
+	public void updateCheckinQueue(CheckinQueueVo checkinQueue) throws LiefengException {
+		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build(checkinQueue);
+		checkinQueueContext.update();
+	}
+	
+	/**
 	 * 初始化客户信息
 	 */
 	private CustomerVo initCustomer(ProprietorSingleHouseVo singleHouse) {

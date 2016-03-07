@@ -142,4 +142,11 @@ public interface IHouseholdService {
 	 */
 	public DataPageValue<CheckinQueueVo> getCheckinQueues(CheckinQueueBo params, Integer pageSize, Integer currentPage);
 	
+	/**
+	 * 更新入住排队信息
+	 * @param checkinQueue 入住排队值对象
+	 * @throws LiefengException
+	 */
+	public void updateCheckinQueue(CheckinQueueVo checkinQueue) throws LiefengException;
+	
 }
