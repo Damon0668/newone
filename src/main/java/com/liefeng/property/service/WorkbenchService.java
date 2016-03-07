@@ -567,6 +567,7 @@ public class WorkbenchService implements IWorkbenchService {
 	/**
 	 * 报事列表查询
 	 */
+	@Override
 	public DataPageValue<EventReportVo> listEventReport(EventReportBo eventReportBo,Integer page, Integer size){
 		EventReportContext eventReportContext = EventReportContext.build();
 		return eventReportContext.list(eventReportBo, page, size);
@@ -575,6 +576,7 @@ public class WorkbenchService implements IWorkbenchService {
 	/**
 	 * 创建报事
 	 */
+	@Override
 	public void createEventReport(EventReportVo eventReportVo){
 		EventReportContext eventReportContext = EventReportContext.build(eventReportVo);
 		eventReportContext.create();
@@ -583,8 +585,15 @@ public class WorkbenchService implements IWorkbenchService {
 	/**
 	 * 修改报事
 	 */
+	@Override
 	public void updateEventReport(EventReportVo eventReportVo){
 		EventReportContext eventReportContext = EventReportContext.build(eventReportVo);
 		eventReportContext.update();
+	}
+	
+	@Override
+	public EventReportVo getEventReport(String id){
+		EventReportContext eventReportContext = EventReportContext.loadById(id);
+		return eventReportContext.get();
 	}
 }
