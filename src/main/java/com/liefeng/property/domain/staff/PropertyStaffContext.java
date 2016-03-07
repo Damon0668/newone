@@ -135,12 +135,12 @@ public class PropertyStaffContext {
 			PropertyStaffPo propertyStaffPo = null;
 			
 			if(ValidateHelper.isNotEmptyString(propertyStaffId)) {
-				logger.info("【PropertyStaffContext.getPropertyStaff】Query property staff by id:", propertyStaffId);
+				logger.info("【PropertyStaffContext.getPropertyStaff】Query property staff by id:{}", propertyStaffId);
 				propertyStaffPo = propertyStaffRepository.findOne(propertyStaffId);
 			}
 			
 			if(ValidateHelper.isEmptyString(propertyStaffId) && ValidateHelper.isNotEmptyString(account)){
-				logger.info("【PropertyStaffContext.getPropertyStaff】Query property staff by account:", account);
+				logger.info("【PropertyStaffContext.getPropertyStaff】Query property staff by account:{}", account);
 				propertyStaffPo = propertyStaffRepository.findByAccount(account);
 			}
 			
@@ -149,7 +149,7 @@ public class PropertyStaffContext {
 			}
 		}
 		
-		logger.info("【PropertyStaffContext.getPropertyStaff】Query property staff, details:", propertyStaff);
+		logger.info("【PropertyStaffContext.getPropertyStaff】Query property staff, details:{}", propertyStaff);
 		
 		return propertyStaff;
 	}
