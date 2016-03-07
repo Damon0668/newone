@@ -1,5 +1,6 @@
 package com.liefeng.property.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,37 +8,45 @@ import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.intf.service.msg.IPushMsgService;
+import com.liefeng.mq.type.MessageEvent;
 import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.domain.workbench.EventReportContext;
-import com.liefeng.property.domain.workbench.ProprietorContactsContext;
-import com.liefeng.property.domain.workbench.StaffContactsContext;
-import com.liefeng.property.domain.workbench.WebsiteMsgContext;
-import com.liefeng.property.domain.workbench.WebsiteMsgPrivilegeContext;
 import com.liefeng.property.domain.workbench.NoticeContext;
 import com.liefeng.property.domain.workbench.NoticePrivilegeContext;
+import com.liefeng.property.domain.workbench.ProprietorContactsContext;
 import com.liefeng.property.domain.workbench.ScheduleContext;
+import com.liefeng.property.domain.workbench.StaffContactsContext;
 import com.liefeng.property.domain.workbench.TaskAttachmentContext;
 import com.liefeng.property.domain.workbench.TaskContext;
 import com.liefeng.property.domain.workbench.TaskPrivilegeContext;
+import com.liefeng.property.domain.workbench.WebsiteMsgContext;
+import com.liefeng.property.domain.workbench.WebsiteMsgPrivilegeContext;
 import com.liefeng.property.vo.workbench.EventReportVo;
-import com.liefeng.property.vo.workbench.ProprietorContactsVo;
-import com.liefeng.property.vo.workbench.StaffContactsVo;
-import com.liefeng.property.vo.workbench.WebsiteMsgPrivilegeVo;
-import com.liefeng.property.vo.workbench.WebsiteMsgVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
+import com.liefeng.property.vo.workbench.ProprietorContactsVo;
 import com.liefeng.property.vo.workbench.ScheduleVo;
+import com.liefeng.property.vo.workbench.StaffContactsVo;
 import com.liefeng.property.vo.workbench.TaskAttachmentVo;
 import com.liefeng.property.vo.workbench.TaskPrivilegeVo;
 import com.liefeng.property.vo.workbench.TaskVo;
+import com.liefeng.property.vo.workbench.WebsiteMsgPrivilegeVo;
+import com.liefeng.property.vo.workbench.WebsiteMsgVo;
+import com.liefeng.service.constant.PushMsgConstants;
+import com.liefeng.service.vo.msg.ListUserMsg;
+import com.liefeng.service.vo.msg.SingleUserMsg;
 
 
 /**
@@ -48,6 +57,13 @@ import com.liefeng.property.vo.workbench.TaskVo;
 @Service
 public class WorkbenchService implements IWorkbenchService {
 	private static Logger logger = LoggerFactory.getLogger(WorkbenchService.class);
+	
+	@Autowired
+	private IUserService userService;
+	
+	@Autowired
+	private IPushMsgService pushMsgService;
+	
 	@Override
 	public TaskVo findTaskById(String taskId) {
 		TaskContext taskContext = TaskContext.loadById(taskId);
@@ -567,6 +583,7 @@ public class WorkbenchService implements IWorkbenchService {
 	/**
 	 * 报事列表查询
 	 */
+	@Override
 	public DataPageValue<EventReportVo> listEventReport(EventReportBo eventReportBo,Integer page, Integer size){
 		EventReportContext eventReportContext = EventReportContext.build();
 		return eventReportContext.list(eventReportBo, page, size);
@@ -575,6 +592,7 @@ public class WorkbenchService implements IWorkbenchService {
 	/**
 	 * 创建报事
 	 */
+	@Override
 	public void createEventReport(EventReportVo eventReportVo){
 		EventReportContext eventReportContext = EventReportContext.build(eventReportVo);
 		eventReportContext.create();
@@ -583,8 +601,53 @@ public class WorkbenchService implements IWorkbenchService {
 	/**
 	 * 修改报事
 	 */
+	@Override
 	public void updateEventReport(EventReportVo eventReportVo){
 		EventReportContext eventReportContext = EventReportContext.build(eventReportVo);
 		eventReportContext.update();
+	}
+	
+	@Override
+	public EventReportVo getEventReport(String id){
+		EventReportContext eventReportContext = EventReportContext.loadById(id);
+		return eventReportContext.get();
+	}
+
+	@Override
+	public void pushMessage(String receiveUserType, String sendUserId, String receiveUserId, String content) {
+		if(receiveUserType.equals(WorkbenchConstants.ReceiveUserType.TYPE_STAFF)){
+			
+		}else{
+			if(ValidateHelper.isNotEmptyString(receiveUserId)){ //业主id字符串不为空
+				String[] userIdArray = receiveUserId.split(",");
+				if(userIdArray.length > 1){  //推送消息给多个用户
+					List<String> receiveUserIdList = new ArrayList<String>();
+					
+					//将业主id转为app段的userid
+					for(int i = 0; i < userIdArray.length; i++){
+						UserVo userVo = userService.getUserByCustGlobalId(userIdArray[i]);
+						if(userVo != null){
+							receiveUserIdList.add(userVo.getId());
+						}
+					}
+					ListUserMsg message = new ListUserMsg();
+					message.setContent(content);
+					message.setSendUserId(sendUserId);
+					message.setReceiveUserIdList(receiveUserIdList);
+					
+					pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
+				}else{
+					UserVo userVo = userService.getUserByCustGlobalId(userIdArray[0]);
+					if(userVo != null){
+						SingleUserMsg message = new SingleUserMsg();
+						message.setContent(content);
+						message.setSendUserId(sendUserId);
+						message.setReceiveUserId(userVo.getId());
+						pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
+					}
+				}
+			}
+		}
+		
 	}
 }
