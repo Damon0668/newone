@@ -90,20 +90,12 @@ from(
 	    <include refid="Where_Clause" />
 	) t
 </select>
-
+<!-- 查询已发布的通知（app） -->
 <select id="queryOfPublished" resultMap="BaseResultMap">
     SELECT
     	DISTINCT
 	    t.id, 
 	    t.title, 
-	    t.content, 
-	    t.status, 
-	    t.priority, 
-	    t.start_time, 
-	    t.end_time, 
-	    t.reason, 
-	    t.creator_id,
-	    t.publisher_id,
 	    t.publish_time
 	FROM
 		t_notice t,
@@ -136,6 +128,7 @@ from(
 	    </if>
 </select>
 
+<!-- 查询已发布通知数量（app） -->
 <select id="queryCountOfPublished"  resultType="java.lang.Long">
 select 
 	count(1) 

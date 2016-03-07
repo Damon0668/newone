@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.entity.DataValue;
 import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.property.vo.workbench.NoticeVo;
 
@@ -32,8 +33,8 @@ public class WorkbenchController {
 	 * @param projectId 项目id（员工：所管理的项目id字符串，业主：所在项目id）
 	 * @param groupId （员工：部门id，业主：楼栋id）
 	 * @param privilegeType 接收人类型（员工：1，业主：2）
-	 * @param page
-	 * @param size
+	 * @param page 第几页，最小值为1
+	 * @param size 每页条数，最小值为0
 	 * @return
 	 * @author xhw
 	 * @2016年3月7日 下午3:58:45
@@ -41,12 +42,23 @@ public class WorkbenchController {
 	@RequestMapping("getNoticeList")
 	@ResponseBody
 	public DataListValue<NoticeVo> getNoticeList(String terminal, String noticeType, String projectId, String groupId, String privilegeType, Integer page, Integer size){
-		logger.info("terminal="+terminal+" noticeType="+noticeType+" projectId ="+projectId+"  groupId="+groupId+" privilegeType ="+privilegeType+"  page="+page+"  size ="+size);
-		
 		DataPageValue<NoticeVo> noticeVos = workbenchService.findNoticeOfPublished(terminal, noticeType, projectId, groupId, privilegeType, page, size);
-		logger.info("noticeVos ="+noticeVos);
-
 		return DataListValue.success(noticeVos.getDataList());
 	}
+	
+	/**
+	 * 根据id获取通知
+	 * @param id 通知id
+	 * @return
+	 * @author xhw
+	 * @2016年3月7日 下午7:08:08
+	 */
+	@RequestMapping("getNotice")
+	@ResponseBody
+	public DataValue<NoticeVo> getNotice(String id){
+		NoticeVo noticeVo = workbenchService.getNoticeById(id);
+		return DataValue.success(noticeVo);
+	}
+	
 
 }
