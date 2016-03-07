@@ -613,4 +613,17 @@ public class WorkbenchContextTest {
 		Long countLong = workbenchService.findCountOfProprietorContacts("0000000052a7943f0152a7943fc00000", "1123456789");
 		System.out.println(countLong);
 	}
+	
+	/**
+	 * 查找已发布通知（app）
+	 * 
+	 * @author xhw
+	 * @2016年3月7日 下午3:39:07
+	 */
+	@Test
+	public void findNoticeOfPublished(){
+		DataPageValue<NoticeVo> noticeDataPageValue = workbenchService.findNoticeOfPublished("0", "1", "0000000052a7943f0152a7943fc00000", "1123456789", WorkbenchConstants.NoticePrivilegeType.RESIDENT, 1, 30);
+		System.out.println(noticeDataPageValue);
+	}
+	
 }

@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
+import com.liefeng.property.bo.workbench.EventReportBo;
+import com.liefeng.property.vo.workbench.EventReportVo;
 import com.liefeng.property.vo.workbench.ProprietorContactsVo;
 import com.liefeng.property.vo.workbench.StaffContactsVo;
 import com.liefeng.property.vo.workbench.WebsiteMsgPrivilegeVo;
@@ -451,5 +453,50 @@ public interface IWorkbenchService {
 	 * @2016年3月4日 下午5:16:34
 	 */
 	public Long findCountOfProprietorContacts(String projectId, String buildingId);
+
+	/**
+	 * 报事列表查询
+	 */
+	public DataPageValue<EventReportVo> listEventReport(EventReportBo eventReportBo,
+			Integer page, Integer size);
+
+	/**
+	 * 创建报事
+	 */
+	public void createEventReport(EventReportVo eventReportVo);
+
+	/**
+	 * 修改报事
+	 */
+	public void updateEventReport(EventReportVo eventReportVo);
+
+
+	public EventReportVo getEventReport(String id);
+	
+	/**
+	 * 推送消息
+	 * @param receiveUserType 接收人类型（员工：1，业主：2）
+	 * @param sendUserId 推送人id
+	 * @param receiveUserId 接收人id字符串（多个接收人id，用逗号隔开）
+	 * @param content 发送内容
+	 * @author xhw
+	 * @2016年3月7日 上午9:48:39
+	 */
+	public void pushMessage(String receiveUserType, String sendUserId, String receiveUserId, String content);
+	
+	/**
+	 * 查看已发布通知（分页、app）
+	 * @param terminal 接收端类型
+	 * @param naticeType 通知类型
+	 * @param projectId 项目id（员工：所管理的项目id字符串，业主：所在项目id）
+	 * @param groupId （员工：部门id，业主：楼栋id）
+	 * @param privilegeType 接收人类型（员工：1，业主：2）
+	 * @param page
+	 * @param size
+	 * @return
+	 * @author xhw
+	 * @2016年3月7日 下午3:24:55
+	 */
+	public DataPageValue<NoticeVo> findNoticeOfPublished(String terminal, String noticeType, String projectId, String groupId, String privilegeType, Integer page, Integer size);
 	
 }

@@ -108,7 +108,9 @@ public class ResidentContext {
 				
 				// 对身份证号进行解密
 				String idnum = resident.getCustomer().getIdNum();
-				resident.getCustomer().setIdNum(EncryptionUtil.decryptCustIdNum(idnum));
+				if(ValidateHelper.isNotEmptyString(idnum)) {
+					resident.getCustomer().setIdNum(EncryptionUtil.decryptCustIdNum(idnum));
+				}
 			}
 		}
 		
@@ -196,6 +198,14 @@ public class ResidentContext {
 		List<ResidentVo> residentVoList = residentQueryRepository.queryByPage(pagingParamVo);
 		residentVoList = (ValidateHelper.isEmptyCollection(residentVoList) ? 
 				new ArrayList<ResidentVo>() : residentVoList);
+		
+		// 对身份证号进行解密
+		for(ResidentVo resident : residentVoList) {
+			String idnum = resident.getCustomer().getIdNum();
+			if(ValidateHelper.isNotEmptyString(idnum)) {
+				resident.getCustomer().setIdNum(EncryptionUtil.decryptCustIdNum(idnum));
+			}
+		}
 
 		DataPageValue<ResidentVo> residentPage = new DataPageValue<ResidentVo>(
 				residentVoList, count, pageSize, currentPage);
