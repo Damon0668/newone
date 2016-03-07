@@ -21,7 +21,6 @@ import com.liefeng.property.po.household.CheckinQueuePo;
 import com.liefeng.property.repository.CheckinQueueRepository;
 import com.liefeng.property.repository.mybatis.CheckinQueueQueryRepository;
 import com.liefeng.property.vo.household.CheckinQueueVo;
-import com.liefeng.property.vo.project.HouseSpecVo;
 
 /**
  * 入住排队上下文
@@ -163,13 +162,13 @@ public class CheckinQueueContext {
 	 * @param cuerrentPage 分页当前页 
 	 * @return 入住排队列表
 	 */
-	public DataPageValue<CheckinQueueVo> getCheckinQueues(CheckinQueueBo params,  Integer pageSize, Integer cuerrentPage) {
+	public DataPageValue<CheckinQueueVo> getCheckinQueues(CheckinQueueBo params,  Integer pageSize, Integer currentPage) {
 		// 参数拷贝
 		Map<String, String> extra = MyBeanUtil.bean2Map(params);
 		
 		PagingParamVo param = new PagingParamVo();
 		param.setExtra(extra);
-		param.setPage(cuerrentPage);
+		param.setPage(currentPage);
 		param.setPageSize(pageSize);
 		
 		Long count = checkinQueueQueryRepository.queryByCount(param);
@@ -179,7 +178,7 @@ public class CheckinQueueContext {
 		// 设置数据总行数，用于计算偏移量
 		param.getPager().setRowCount(count);
 		List<CheckinQueueVo> list = checkinQueueQueryRepository.queryByPage(param);
-		DataPageValue<CheckinQueueVo> returnPage = new DataPageValue<CheckinQueueVo>(list, count, pageSize, cuerrentPage);
+		DataPageValue<CheckinQueueVo> returnPage = new DataPageValue<CheckinQueueVo>(list, count, pageSize, currentPage);
 		
 		return returnPage;
 	}

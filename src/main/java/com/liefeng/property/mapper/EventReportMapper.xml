@@ -17,50 +17,50 @@
 		where 1=1
 		<trim suffixOverrides=",">
 			<if test="extra.eventType != null and extra.eventType != ''">
-				AND #{extra.eventType} = fi.event_type
+				AND #{extra.eventType} = er.event_type
 			</if>
 			<if test="extra.startDate != null and extra.startDate != '' and 
 					extra.endDate != null and extra.endDate != ''">
-				AND fi.create_time between #{extra.startDate} And #{extra.endDate}
+				AND er.create_time between #{extra.startDate} And #{extra.endDate}
 			</if>
 			<if test="extra.status != null and extra.status != ''">
-				AND #{extra.status} = fi.status
+				AND #{extra.status} = er.status
 			</if>
 			<if test="extra.location != null and extra.location != ''">
-				AND fi.location like CONCAT('%','#{extra.location}','%' );
+				AND er.location like CONCAT('%','#{extra.location}','%' );
 			</if>
 			<if test="extra.orderNum != null and extra.orderNum != ''">
-				AND fi.location like CONCAT('%','#{extra.location}','%' );
+				AND er.location like CONCAT('%','#{extra.orderNum}','%' );
 			</if>
 		</trim>
 	</sql>
 
 	<select id="queryByPage" resultMap="BaseResultMap">
 		select 
-			er.id,
-			er.project_id,
-			er.house_num,
-			er.proprietor_name,
-			er.reporter_name,
-			er.phone,
-			er.report_time,
-			er.report_mode,
-			er.event_type,
-			er.category,
-			er.location,
-			er.title,
-			er.content,
-			er.status,
-			er.priority,
-			er.service_type,
-			er.pic_url,
-			er.order_time,
-			er.result,
-			er.staff_id,
-			er.accepter_id,
-			er.accept_time,
-			er.create_time,
-			er.oem_code
+			er.id as id,
+			er.project_id as projectId,
+			er.house_num as houseNum,
+			er.proprietor_name as proprietorName,
+			er.reporter_name as reporterName,
+			er.phone as phone ,
+			er.report_time as reportTime,
+			er.report_mode as reportMode,
+			er.event_type as eventType,
+			er.category as category,
+			er.location as location,
+			er.title as title,
+			er.content as content,
+			er.status as status,
+			er.priority as priority,
+			er.service_type as serviceType,
+			er.pic_url as picUrl,
+			er.order_time as picUrl,
+			er.result as result,
+			er.staff_id as staffId,
+			er.accepter_id as staffId,
+			er.accept_time as acceptTime,
+			er.create_time as createTime,
+			er.oem_code as oemCode
 		from t_event_report er
 		<include refid="Example_Where_Clause" />
 		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
