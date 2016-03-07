@@ -4,7 +4,11 @@ import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
+import com.liefeng.property.bo.guard.GuardResidentBo;
+import com.liefeng.property.vo.guard.GuardCardUserVo;
+import com.liefeng.property.vo.guard.GuardCardVo;
 import com.liefeng.property.vo.guard.GuardDeviceVo;
+import com.liefeng.property.vo.guard.GuardResidentVo;
 import com.liefeng.property.vo.household.VisitorVo;
 
 /**
@@ -65,11 +69,32 @@ public interface IGuardService {
 	 */
 	
 	/**
+	 * 创建门禁卡
+	 * @param guardCardUser 门禁卡用户关系
+	 * @param guardCard 门禁卡对象
+	 */
+	public void createGuardCard(GuardCardUserVo guardCardUser, GuardCardVo guardCard);
+	
+	/**
 	 * 磁卡授权
 	 * @param guardCardId 磁卡ID
 	 * @param guardDeviceId 门口机ID列表
 	 */
 	public void grantGuardCard(String guardCardId, List<String> guardDeviceId);
+	
+	/**
+	 * 修改门禁卡状态
+	 * @param cardId
+	 * @param status
+	 */
+	public void updateGuardCardStatus(String cardId, String status);
+	
+	/**
+	 * 检查门禁卡的sn号是否存在
+	 * @param sn
+	 * @return true
+	 */
+	public Boolean isExistCardSn(String sn);
 	
 	/*
 	 * ****************** 访客相关  ******************
@@ -81,5 +106,16 @@ public interface IGuardService {
 	 */
 	public void createVisitorInfo(VisitorVo visitor);
 	
-	
+	/*
+	 * ****************** 住户相关 ******************
+	 */
+
+	/**
+	 * 门禁模块
+	 * 查询住户列表
+	 * @param page 当前页
+	 * @param size 每页集合数
+	 * @return
+	 */
+	public DataPageValue<GuardResidentVo> listGuardRedisent(GuardResidentBo guardResidentBo, Integer pageSize, Integer currentPage);
 }
