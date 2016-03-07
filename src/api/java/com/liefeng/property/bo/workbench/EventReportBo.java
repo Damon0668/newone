@@ -24,10 +24,6 @@ public class EventReportBo  extends BaseValue {
 	private String orderNum;
 	
 	private String status;
-	
-	private Date startDate;
-	
-	private Date endDate;
 
 	public String getProjectId() {
 		return projectId;
@@ -75,21 +71,5 @@ public class EventReportBo  extends BaseValue {
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
 	}
 }

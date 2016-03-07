@@ -2,6 +2,7 @@ package com.liefeng.property.service;
 
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.core.entity.ReturnValue;
+import com.liefeng.core.error.IErrorCode;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
@@ -33,6 +36,8 @@ public class PropertyStaffServiceTest {
 		propertyStaff.setPassword("test");
 		propertyStaff.setNumber("test");
 		propertyStaff.setWorkStatus("1");
+		ReturnValue returnValue = null;
+		Assert.assertTrue(IErrorCode.SUCCESS.equals(returnValue.getCode()));
 	}
 	
 	@Test
@@ -40,6 +45,8 @@ public class PropertyStaffServiceTest {
 		PropertyStaffVo propertyStaff = new PropertyStaffVo();
 		propertyStaff.setId("402889015307189f015307189f2b0000");
 		propertyStaff.setNumber("test2");
+		ReturnValue returnValue = null;
+		Assert.assertTrue(IErrorCode.SUCCESS.equals(returnValue.getCode()));
 	}
 	
 	@Test
@@ -68,9 +75,11 @@ public class PropertyStaffServiceTest {
 	}
 	
 	@Test
+	public void findPropertyStaff(){
+		List<PropertyStaffVo> propertyStaffList =  propertyStaffService.findPropertyStaff("0", "0000000052a7943f0152a7943fc00000");
+		System.out.println(propertyStaffList);
+	}
 	public void findStaffContactPrivilege(){
 		System.out.println(propertyStaffService.findStaffContactPrivilege("40282081531cf49b01531d4c72a80009"));
 	}
-	
-	
 }

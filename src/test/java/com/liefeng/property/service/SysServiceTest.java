@@ -17,7 +17,6 @@ import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.property.ISysService;
 import com.liefeng.property.constant.SysConstants;
-import com.liefeng.property.domain.sys.SysMenuContext;
 import com.liefeng.property.vo.sys.SysDictVo;
 
 /**
@@ -70,12 +69,5 @@ public class SysServiceTest {
 			System.out.println(e.getCode());
 			System.out.println(e.getMessage());
 		}
-	}
-	
-	@Test
-	public void test() {
-		SysMenuContext context = SysMenuContext.build();
-		context.findMenusByUserId("40282081531cf49b01531d3f4e1c0006");
-		System.out.println("***********");
 	}
 }

@@ -147,6 +147,8 @@ public class PropertyStaffContext {
 			}
 		}
 		
+		logger.info("【PropertyStaffContext.getPropertyStaff】Query property staff, details:", propertyStaff);
+		
 		return propertyStaff;
 	}
 	

@@ -1147,4 +1147,12 @@ public class FeeService implements IFeeService {
 		FeeItemContext feeItemContext = FeeItemContext.build();
 		return feeItemContext.findPersonal(feeItemBo,currentPage,pageSize);
 	}
+
+	@Override
+	public List<FeeItemVo> getFeeItemByFeedate(String projectId,
+			String houseNum, String feeType, Date startDate, Date endDate)
+			throws LiefengException {
+		FeeItemContext feeItemContext = FeeItemContext.build();
+		return feeItemContext.getFeeItemByFeedate(projectId, houseNum, startDate, endDate);
+	}
 }

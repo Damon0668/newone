@@ -473,4 +473,15 @@ public interface IWorkbenchService {
 
 	public EventReportVo getEventReport(String id);
 	
+	/**
+	 * 推送消息
+	 * @param receiveUserType 接收人类型（员工：1，业主：2）
+	 * @param sendUserId 推送人id
+	 * @param receiveUserId 接收人id字符串（多个接收人id，用逗号隔开）
+	 * @param content 发送内容
+	 * @author xhw
+	 * @2016年3月7日 上午9:48:39
+	 */
+	public void pushMessage(String receiveUserType, String sendUserId, String receiveUserId, String content);
+	
 }

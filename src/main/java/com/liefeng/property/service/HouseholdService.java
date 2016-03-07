@@ -23,13 +23,11 @@ import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
-import com.liefeng.property.bo.household.CheckinQueueBo;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.ProjectConstants;
 import com.liefeng.property.domain.household.CheckinMaterialContext;
-import com.liefeng.property.domain.household.CheckinQueueContext;
 import com.liefeng.property.domain.household.ProprietorContext;
 import com.liefeng.property.domain.household.ProprietorHouseContext;
 import com.liefeng.property.domain.household.ResidentContext;
@@ -37,7 +35,6 @@ import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.error.HouseholdErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
-import com.liefeng.property.vo.household.CheckinQueueVo;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
@@ -394,6 +391,7 @@ public class HouseholdService implements IHouseholdService {
 	}
 	
 	/**
+<<<<<<< HEAD
 	 * 分页查询入住排队信息
 	 */
 	@Override
@@ -412,6 +410,8 @@ public class HouseholdService implements IHouseholdService {
 	}
 	
 	/**
+=======
+>>>>>>> 3486fe0394d0520c32e0fa8f7db812482645f321
 	 * 初始化客户信息
 	 */
 	private CustomerVo initCustomer(ProprietorSingleHouseVo singleHouse) {
@@ -524,4 +524,5 @@ public class HouseholdService implements IHouseholdService {
 		
 		return newUser;
 	}
+
 }

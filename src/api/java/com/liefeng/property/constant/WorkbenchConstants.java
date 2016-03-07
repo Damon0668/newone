@@ -184,4 +184,21 @@ public class WorkbenchConstants {
 		 */
 		public static final String STATUS_ALREADYFEEDBACK = "2"; 
 	}
+	
+	/**
+	 * 消息接收人类型
+	 */
+	public static interface ReceiveUserType{
+		/**
+		 * 员工
+		 */
+		public static final String TYPE_STAFF = "1"; 
+		
+		/**
+		 * 业主
+		 */
+		public static final String TYPE_PROPRIETOR = "2"; 
+		
+	}
+	
 }

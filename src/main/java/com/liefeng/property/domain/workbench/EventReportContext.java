@@ -1,26 +1,21 @@
 package com.liefeng.property.domain.workbench;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
-import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
-import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.constant.WorkbenchConstants;
-import com.liefeng.property.error.WorkbenchErrorCode;
 import com.liefeng.property.exception.WorkbenchException;
 import com.liefeng.property.po.workbench.EventReportPo;
 import com.liefeng.property.repository.mybatis.EventReportQueryRepository;
@@ -81,9 +76,6 @@ public class EventReportContext {
 
 	public void create() {
 		if (eventReport != null) {
-			eventReport.setId(UUIDGenerator.generate());
-			eventReport.setOemCode(ContextManager.getInstance().getOemCode());
-			eventReport.setCreateTime(new Date());
 			eventReportRepository.save(MyBeanUtil.createBean(eventReport,
 					EventReportPo.class));
 		}
@@ -92,13 +84,11 @@ public class EventReportContext {
 	public void update(){
 		EventReportPo eventReportPo = eventReportRepository.findOne(eventReport.getId());
 		
-		if(eventReportPo.getStatus().equals(WorkbenchConstants.EventReport.STATUS_ALREADYWORKERS)){
-			throw new WorkbenchException(WorkbenchErrorCode.CANNOT_UPDATE_EVENTREPORT_STATUS_ALREADYWORKERS);
-		}else if(eventReportPo.getStatus().equals(WorkbenchConstants.EventReport.STATUS_ALREADYFEEDBACK)){
-			throw new WorkbenchException(WorkbenchErrorCode.CANNOT_UPDATE_EVENTREPORT_STATUS_UNTREATED);
-		}
-		BeanUtils.copyProperties(eventReport, eventReportPo);
-		eventReportRepository.save(MyBeanUtil.createBean(eventReportPo,
+		/*if(eventReportPo.getStatus().equals(WorkbenchConstants.EventReport.STATUS_ALREADYWORKERS)){
+			throw new WorkbenchException(en)
+		}*/
+		
+		eventReportRepository.save(MyBeanUtil.createBean(eventReport,
 				EventReportPo.class));
 	}
 
