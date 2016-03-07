@@ -36,6 +36,11 @@ public class GuardResidentVo extends ResidentVo{
 	private String guardCardStatus;
 	
 	/**
+	 * 住户类型
+	 */
+	private String userType;
+	
+	/**
 	 * 车牌号
 	 */
 	private String plateNum;
@@ -78,5 +83,13 @@ public class GuardResidentVo extends ResidentVo{
 
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
+	}
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
 	}
 }
