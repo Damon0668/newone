@@ -285,9 +285,7 @@ public class FeeItemContext {
 		Date preDate = TimeUtil.getDayBeforeByMonth(new Date(), 1);
 		FeeItemPo feeItemPo = feeItemRepository.getPreFeeItem(projectId,houseNum, feeType,preDate);
 		return MyBeanUtil.createBean(feeItemPo, FeeItemVo.class);
-	}
-	
-	
+	}	
 	
 	protected void setFeeItem(FeeItemVo feeItem) {
 		this.feeItem = feeItem;
@@ -301,6 +299,23 @@ public class FeeItemContext {
 		this.projectId = projectId;
 	}
 
+	/**
+	 * 获取该房号的所属时间段的所有费用数据
+	 * 
+	 * @param projectId
+	 *            项目ID
+	 * @param houseNum
+	 *            房号
+	 * @param startDate
+	 *            计费所属开始时间
+	 * @param endDate
+	 *            计费所属结束时间
+	 * @return
+	 */
+	public List<FeeItemVo> getFeeItemByFeedate(String projectId, String houseNum, Date startDate, Date endDate) {
+		List<FeeItemPo> feeItemPoList = this.feeItemRepository.getPreFeeItem(projectId, houseNum, startDate, endDate);
+		return MyBeanUtil.createList(feeItemPoList, FeeItemVo.class);
+	}
 	
 
 	
