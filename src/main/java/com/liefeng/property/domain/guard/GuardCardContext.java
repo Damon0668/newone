@@ -37,6 +37,11 @@ public class GuardCardContext {
 	private String cardId;
 	
 	/**
+	 * 磁卡sn号
+	 */
+	private String sn;
+	
+	/**
 	 * 门禁磁卡对象
 	 */
 	private GuardCardVo guardCard;
@@ -58,6 +63,12 @@ public class GuardCardContext {
 		return guardCardContext;
 	}
 	
+	public static GuardCardContext loadBySn(String sn) {
+		GuardCardContext guardCardContext = getInstance();
+		guardCardContext.setSn(sn);
+		return guardCardContext;
+	}
+	
 	public GuardCardVo get(){
 		if(guardCard == null){
 			if(ValidateHelper.isNotEmptyString(cardId)){
@@ -70,7 +81,7 @@ public class GuardCardContext {
 		return guardCard;
 	}
 	
-	public void create(){
+	public GuardCardVo create(){
 		
 		GuardCardPo guardCardPo = MyBeanUtil.createBean(guardCard, GuardCardPo.class);
 		guardCardPo.setId(UUIDGenerator.generate());
@@ -81,6 +92,8 @@ public class GuardCardContext {
 		logger.info("create guardCard ={}", guardCard);
 		guardCardRepository.save(guardCardPo);
 		guardCard = MyBeanUtil.createBean(guardCardPo, GuardCardVo.class);
+		
+		return guardCard;
 	}
 	
 	public void updata(){
@@ -93,9 +106,28 @@ public class GuardCardContext {
 				
 				logger.info("update guardCard ={}", guardCard);
 				guardCardRepository.save(guardCardPo);
+				
 				guardCard = MyBeanUtil.createBean(guardCardPo, GuardCardVo.class);
 			}
 			
+		}
+	}
+	
+	public void updataStatus(String status){
+		if(ValidateHelper.isNotEmptyString(cardId)){
+			GuardCardPo guardCardPo = guardCardRepository.findOne(cardId);
+			if(guardCardPo != null){
+				if(GuardConstants.GuardCardStatus.CANCEL.equals(status) 
+						|| GuardConstants.GuardCardStatus.LOSS.equals(status) 
+						|| GuardConstants.GuardCardStatus.NORMAL.equals(status) ){
+					guardCardPo.setStatus(status);
+					
+					logger.info("updataStatus guardCard ={}", guardCardPo);
+					guardCardRepository.save(guardCardPo);
+					
+					guardCard = MyBeanUtil.createBean(guardCardPo, GuardCardVo.class);
+				}
+			}
 		}
 	}
 	
@@ -106,11 +138,27 @@ public class GuardCardContext {
 		}
 	}
 	
+	public Boolean isExistCardSn(){
+		Boolean result = false;
+		if(ValidateHelper.isNotEmptyString(sn)){
+			String oemCode = ContextManager.getInstance().getOemCode();
+			GuardCardPo guardCardPo = guardCardRepository.findBySnAndOemCode(sn, oemCode);
+			if(guardCardPo != null){
+				result = true;
+			}
+		}
+		return result;
+	}
+	
 	protected void setCardId(String cardId) {
 		this.cardId = cardId;
 	}
 	
 	protected void setGuardCard(GuardCardVo guardCard) {
 		this.guardCard = guardCard;
+	}
+
+	protected void setSn(String sn) {
+		this.sn = sn;
 	}
 }

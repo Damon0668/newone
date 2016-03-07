@@ -13,5 +13,11 @@ import com.liefeng.property.po.guard.GuardCardPo;
  */
 @Transactional
 public interface GuardCardRepository extends JpaRepository<GuardCardPo, String> {
-
+	
+	/**
+	 * 根据SN号查询
+	 * @param sn
+	 * @return
+	 */
+	public GuardCardPo findBySnAndOemCode(String sn, String oemCode);
 }

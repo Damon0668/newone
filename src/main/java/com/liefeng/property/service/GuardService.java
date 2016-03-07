@@ -14,17 +14,24 @@ import com.liefeng.base.vo.device.DeviceVo;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.device.IDeviceService;
 import com.liefeng.intf.property.IGuardService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
+import com.liefeng.property.bo.guard.GuardResidentBo;
+import com.liefeng.property.domain.guard.GuardCardContext;
 import com.liefeng.property.domain.guard.GuardCardPrivilegeContext;
+import com.liefeng.property.domain.guard.GuardCardUserContext;
 import com.liefeng.property.domain.guard.GuardDeviceContext;
+import com.liefeng.property.domain.household.ResidentContext;
 import com.liefeng.property.domain.household.VisitorContext;
+import com.liefeng.property.vo.guard.GuardCardUserVo;
 import com.liefeng.property.vo.guard.GuardCardVo;
 import com.liefeng.property.vo.guard.GuardDeviceVo;
+import com.liefeng.property.vo.guard.GuardResidentVo;
 import com.liefeng.property.vo.household.VisitorVo;
 
 /**
@@ -45,7 +52,6 @@ public class GuardService implements IGuardService{
 	
 	@Autowired
 	private IDeviceService deviceService;
-
 
 	@Transactional(rollbackOn=Exception.class)
 	@Override
@@ -127,6 +133,40 @@ public class GuardService implements IGuardService{
 	@Override
 	public void createVisitorInfo(VisitorVo visitor) {
 		VisitorContext.build(visitor).create();
+	}
+
+	@Override
+	public DataPageValue<GuardResidentVo> listGuardRedisent(GuardResidentBo guardResidentBo, Integer pageSize, Integer currentPage) {
+			
+		DataPageValue<GuardResidentVo> dataPageValue = ResidentContext.build().listGuardResident4Page(guardResidentBo, pageSize, currentPage);
+
+		return dataPageValue;
+	}
+
+	@Transactional(rollbackOn=Exception.class)
+	@Override
+	public void createGuardCard(GuardCardUserVo guardCardUser, GuardCardVo guardCard) {
+		try{
+			guardCard = GuardCardContext.build(guardCard).create();
+			
+			guardCardUser.setCardId(guardCard.getId());
+			GuardCardUserContext.build(guardCardUser).create();
+		}catch(LiefengException e){
+			throw new LiefengException(e.getCode(), e.getMessage());
+		}catch (Exception e) {
+			throw new LiefengException(e);
+		}
+		
+	}
+
+	@Override
+	public void updateGuardCardStatus(String cardId, String status) {
+		GuardCardContext.loadById(cardId).updataStatus(status);
+	}
+
+	@Override
+	public Boolean isExistCardSn(String sn) {
+		return GuardCardContext.loadBySn(sn).isExistCardSn();
 	}
 
 }
