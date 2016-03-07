@@ -55,7 +55,8 @@
 	      a.tel AS tel,
 	      b.id_num AS idNum,
 	      b.sex AS sex,
-	      a.status AS status
+	      a.status AS status,
+	      a.work_unit as workUnit
 	  FROM
 	      property.t_resident a 
 	      LEFT JOIN basic.t_customer b 
@@ -153,4 +154,4 @@ FROM
 		h.house_num
 </select>
 
-</mapper>   
+</mapper>

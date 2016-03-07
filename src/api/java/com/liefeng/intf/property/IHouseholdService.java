@@ -131,4 +131,20 @@ public interface IHouseholdService {
 	 */
 	public List<ResidentVo> getResidentsInProprietorHouse(String projectId, String custGlobalId);
 	
+	/**
+	 * 分页查询入住排队信息
+	 * @param params 查询过滤参数
+	 * @param pageSize 分页大小
+	 * @param currentPage 分页当前页
+	 * @return 入住排队列表
+	 */
+	public DataPageValue<CheckinQueueVo> getCheckinQueues(CheckinQueueBo params, Integer pageSize, Integer currentPage);
+	
+	/**
+	 * 更新入住排队信息
+	 * @param checkinQueue 入住排队值对象
+	 * @throws LiefengException
+	 */
+	public void updateCheckinQueue(CheckinQueueVo checkinQueue) throws LiefengException;
+	
 }

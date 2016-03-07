@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.household;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,11 +18,11 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.household.CheckinQueueBo;
+import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.po.household.CheckinQueuePo;
 import com.liefeng.property.repository.CheckinQueueRepository;
 import com.liefeng.property.repository.mybatis.CheckinQueueQueryRepository;
 import com.liefeng.property.vo.household.CheckinQueueVo;
-import com.liefeng.property.vo.project.HouseSpecVo;
 
 /**
  * 入住排队上下文
@@ -139,6 +140,12 @@ public class CheckinQueueContext {
 			
 			CheckinQueuePo checkinQueuePo = checkinQueueRepository.findOne(checkinQueue.getId());
 			MyBeanUtil.copyBeanNotNull2Bean(checkinQueue, checkinQueuePo);
+			
+			// 完成办理时更新完成时间字段
+			if(checkinQueuePo.getStatus().equals(HouseholdConstants.CheckinQueueStatus.FINISHED)) {
+				checkinQueuePo.setTranTime(new Date());
+			}
+			
 			checkinQueueRepository.save(checkinQueuePo);
 			logger.info("更新入住排队信息成功，checkinQueueId={}",checkinQueue.getId());
 		} else {
@@ -163,13 +170,13 @@ public class CheckinQueueContext {
 	 * @param cuerrentPage 分页当前页 
 	 * @return 入住排队列表
 	 */
-	public DataPageValue<CheckinQueueVo> getCheckinQueues(CheckinQueueBo params,  Integer pageSize, Integer cuerrentPage) {
+	public DataPageValue<CheckinQueueVo> getCheckinQueues(CheckinQueueBo params,  Integer pageSize, Integer currentPage) {
 		// 参数拷贝
 		Map<String, String> extra = MyBeanUtil.bean2Map(params);
 		
 		PagingParamVo param = new PagingParamVo();
 		param.setExtra(extra);
-		param.setPage(cuerrentPage);
+		param.setPage(currentPage);
 		param.setPageSize(pageSize);
 		
 		Long count = checkinQueueQueryRepository.queryByCount(param);
@@ -179,7 +186,7 @@ public class CheckinQueueContext {
 		// 设置数据总行数，用于计算偏移量
 		param.getPager().setRowCount(count);
 		List<CheckinQueueVo> list = checkinQueueQueryRepository.queryByPage(param);
-		DataPageValue<CheckinQueueVo> returnPage = new DataPageValue<CheckinQueueVo>(list, count, pageSize, cuerrentPage);
+		DataPageValue<CheckinQueueVo> returnPage = new DataPageValue<CheckinQueueVo>(list, count, pageSize, currentPage);
 		
 		return returnPage;
 	}

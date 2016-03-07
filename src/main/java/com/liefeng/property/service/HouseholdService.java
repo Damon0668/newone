@@ -391,6 +391,27 @@ public class HouseholdService implements IHouseholdService {
 	}
 	
 	/**
+<<<<<<< HEAD
+	 * 分页查询入住排队信息
+	 */
+	@Override
+	public DataPageValue<CheckinQueueVo> getCheckinQueues(CheckinQueueBo params, Integer pageSize, Integer currentPage) {
+		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
+		return checkinQueueContext.getCheckinQueues(params, pageSize, currentPage);
+	}
+	
+	/**
+	 * 更新入住排队信息
+	 */
+	@Override
+	public void updateCheckinQueue(CheckinQueueVo checkinQueue) throws LiefengException {
+		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build(checkinQueue);
+		checkinQueueContext.update();
+	}
+	
+	/**
+=======
+>>>>>>> 3486fe0394d0520c32e0fa8f7db812482645f321
 	 * 初始化客户信息
 	 */
 	private CustomerVo initCustomer(ProprietorSingleHouseVo singleHouse) {

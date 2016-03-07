@@ -15,11 +15,11 @@
 	where 1=1 
 	<trim  suffixOverrides="," >
 		<if test="extra.houseNum != null and extra.houseNum != ''">
-			and un.houseNum = #{extra.houseNum}
+			and un.houseNum like concat('%',#{extra.houseNum},'%')
 		</if>
 		
 		<if test="extra.name != null and extra.name != ''">
-			and un.proprietorName = #{extra.name}
+			and un.proprietorName like concat('%',#{extra.name},'%')
 		</if>
 		
 		<if test="extra.seq != null and extra.seq > 0">
@@ -27,12 +27,12 @@
 		</if>
 	
 		<choose>
-			<when test="extra.isToday != null and extra.isToday == 'y'">
+			<when test="extra.isToday != null and extra.isToday != ''">
 				and TO_DAYS(un.createTime) = TO_DAYS(NOW()) 
 			</when>
 			
 			<when test="extra.createTime != null and extra.createTime != ''">
-				and TO_DAYS(un.createTime) = TO_DAYS(#{extra.createTime}) 
+				and TO_DAYS(un.createTime) = TO_DAYS(FROM_UNIXTIME(#{extra.createTime}/1000,'%Y-%m-%d')) 
 			</when>
 		</choose>
 		
@@ -103,9 +103,10 @@
 			left join property.t_checkin_queue cq
 			on cq.project_id = h.project_id and cq.house_id = h.id
 		where
-			cq.status = '2'
-			and cq.project_id = #{extra.projectId} 
-			and cq.oem_code = #{extra.oemCode}
+			(cq.id != null and cq.status = '2'
+			 and cq.project_id = #{extra.projectId} 
+			 and cq.oem_code = #{extra.oemCode})
+			or (cq.id = null)
 		order by
 			cq.tran_time desc)) as un
 	<include refid="Base_Clause"/>
@@ -160,9 +161,10 @@
 				left join property.t_checkin_queue cq
 				on cq.project_id = h.project_id and cq.house_id = h.id
 			 where
-				cq.status = '2'
-				and cq.project_id = #{extra.projectId} 
-				and cq.oem_code = #{extra.oemCode})
+				(cq.id != null and cq.status = '2'
+			 	 and cq.project_id = #{extra.projectId} 
+			 	 and cq.oem_code = #{extra.oemCode})
+				 or (cq.id = null))
 			) as un 
 			<include refid="Base_Clause"/>
 		) as ttt
