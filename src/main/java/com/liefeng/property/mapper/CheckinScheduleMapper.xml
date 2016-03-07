@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.CheckinScheduleQueryRepository" > 
+
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.household.CheckinScheduleVo" >
+
+</resultMap>
+
+<!-- 查询条件 -->
+<sql id="Base_Clause">
+	where 1=1 
+	<trim  suffixOverrides="," >
+		<if test="extra.projectId != null and extra.projectId != ''">
+			and pb.project_id = #{extra.projectId} and pb.parent_id is null
+		</if>
+		
+		<if test="extra.oemCode != null and extra.oemCode != ''">
+			and pb.oem_code = #{extra.oemCode}
+		</if>
+	</trim>
+</sql>
+
+<select id="queryByNoPage" resultMap="BaseResultMap">
+	select
+		cs.id as id,
+		pb.project_id as projectId,
+		pb.id as buildingId,
+		pb.name as buildingName,
+		cs.start_date as startDate,
+		cs.end_date as endDate,
+		cs.oem_code as oemCode
+	from
+		property.t_project_building pb
+		left join property.t_checkin_schedule cs
+		on cs.building_id = pb.id and cs.project_id = pb.project_id
+	<include refid="Base_Clause"/>
+</select>
+
+</mapper>   
