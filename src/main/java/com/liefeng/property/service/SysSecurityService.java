@@ -126,6 +126,7 @@ public class SysSecurityService implements ISysSecurityService{
 
 	@Override
 	public List<SysMenuVo> listMenusByUserId(String userId) {
+		logger.info("listMenusByUserId userId = {}", userId);
 		return SysMenuContext.build().findMenusByUserId(userId);
 	}
 
