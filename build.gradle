@@ -24,6 +24,14 @@ jar {
     from sourceSets.api.output
 }
 
+task copyMapperXml() {
+	copy {
+		from 'src/main/java/com/liefeng/property/mapper'
+		into 'build/classes/main/com/liefeng/property/mapper'
+		include '*.xml'
+	}
+}
+
 task releaseApiJar(type:Jar,dependsOn: 'apiSrcJar') {
     baseName = 'liefeng-property-api'
     from sourceSets.api.output
