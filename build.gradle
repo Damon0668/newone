@@ -24,6 +24,7 @@ jar {
     from sourceSets.api.output
 }
 
+// [Notice]: Run this task first, before 'build'. Because 'build' task excluded mybatis mapper xml.
 task copyMapperXml() {
 	dependsOn clean
 	print '*********** Clean build directory successfully! ***********'
