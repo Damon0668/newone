@@ -2,6 +2,8 @@ package com.liefeng.property.vo.household;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.liefeng.core.entity.BaseValue;
 
 /**
@@ -10,6 +12,7 @@ import com.liefeng.core.entity.BaseValue;
  * @author ZhenTingJun
  * @date 2016年3月6日
  */
+@JsonInclude(Include.NON_EMPTY)
 public class CheckinQueueVo extends BaseValue {
 
 	private static final long serialVersionUID = 4953334449200565710L;

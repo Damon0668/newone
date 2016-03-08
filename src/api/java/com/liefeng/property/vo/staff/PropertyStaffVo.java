@@ -68,12 +68,6 @@ public class PropertyStaffVo extends BaseValue {
 	private String position;
 	
 	/**
-	 * 管理的项目
-	 * 多个项目用逗号','隔开
-	 */
-	private String manageProjects;
-	
-	/**
 	 * 创建时间
 	 */
 	private Date createTime;
@@ -171,14 +165,6 @@ public class PropertyStaffVo extends BaseValue {
 
 	public void setPosition(String position) {
 		this.position = position;
-	}
-
-	public String getManageProjects() {
-		return manageProjects;
-	}
-
-	public void setManageProjects(String manageProjects) {
-		this.manageProjects = manageProjects;
 	}
 
 	public Date getCreateTime() {

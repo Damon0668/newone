@@ -198,6 +198,26 @@ public class CheckinScheduleContext {
 		return dataList;
 	}
 	
+	/**
+	 * 根据项目id、楼栋id，获取入住安排时间
+	 * @param projectId 项目id
+	 * @param buildingId 楼栋id
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月8日 下午12:06:29
+	 */
+	public CheckinScheduleVo getCheckinSchedule(String projectId, String buildingId){
+		CheckinScheduleVo checkinScheduleVo = null;
+		
+		if(ValidateHelper.isNotEmptyString(projectId) && ValidateHelper.isNotEmptyString(buildingId)){
+			 CheckinSchedulePo checkinSchedulePo = checkinScheduleRepository.findByProjectIdAndBuildingId(projectId, buildingId);
+			 
+			 checkinScheduleVo = MyBeanUtil.createBean(checkinSchedulePo, CheckinScheduleVo.class);
+		}
+		
+		return checkinScheduleVo;
+	}
+	
 	protected void setCheckinScheduleId(String checkinScheduleId) {
 		this.checkinScheduleId = checkinScheduleId;
 	}

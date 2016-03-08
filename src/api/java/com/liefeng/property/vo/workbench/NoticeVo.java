@@ -2,6 +2,8 @@ package com.liefeng.property.vo.workbench;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.liefeng.core.entity.BaseValue;
 
 /**
@@ -9,6 +11,7 @@ import com.liefeng.core.entity.BaseValue;
  * @author xhw
  * @date 2016年2月26日下午3:29:17
  */
+@JsonInclude(Include.NON_EMPTY)
 public class NoticeVo extends BaseValue{
 
 	private static final long serialVersionUID = 7490040678039560355L;

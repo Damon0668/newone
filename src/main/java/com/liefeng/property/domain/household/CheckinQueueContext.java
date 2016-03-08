@@ -118,7 +118,7 @@ public class CheckinQueueContext {
 	/**
 	 * 保存入住排队信息
 	 */
-	public void create() {
+	public CheckinQueueVo create() {
 		if(checkinQueue != null) {
 			checkinQueue.setId(UUIDGenerator.generate());
 			checkinQueue.setOemCode(ContextManager.getInstance().getOemCode());
@@ -127,6 +127,8 @@ public class CheckinQueueContext {
 			checkinQueueRepository.save(checkinQueuePo);
 			logger.info("保存入住排队信息成功，checkinQueue={}",checkinQueue);
 		}
+		
+		return checkinQueue;
 	}
 	
 	/**
@@ -194,6 +196,62 @@ public class CheckinQueueContext {
 		return returnPage;
 	}
 
+	/**
+	 * 获取用户的“已经办理”或“正在办理”的入住排队
+	 * @param userId 手机端用户id
+	 * @param projectId 项目id
+	 * @param houseId 房间id
+	 * @param status 状态
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月8日 下午3:52:51
+	 */
+	public CheckinQueueVo getOfNOtStatus(String userId, String projectId, String houseId, String status){
+		if(checkinQueue == null) {
+			CheckinQueuePo queuePo = checkinQueueRepository.findByUserIdAndProjectIdAndHouseIdAndStatusNot(userId, projectId, houseId, status);
+			
+			checkinQueue = MyBeanUtil.createBean(queuePo, CheckinQueueVo.class);
+		}
+		
+		return checkinQueue;
+	}
+	
+	/**
+	 * 获取今天用户未办理的排队
+	 * @param userId 手机端用户id
+	 * @param projectId 项目id
+	 * @param houseId 房间id
+	 * @param queryDate 查询时间
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月8日 下午4:23:31
+	 */
+	public CheckinQueueVo getOfToday(String userId, String projectId, String houseId, String queryDate){
+		if(checkinQueue == null) {
+			CheckinQueuePo queuePo = checkinQueueRepository.findCheckinQueue(userId, projectId, houseId, queryDate);
+			
+			checkinQueue = MyBeanUtil.createBean(queuePo, CheckinQueueVo.class);
+		}
+		return checkinQueue;
+	}
+	
+	/**
+	 * 通过项目id、日期，获取这一天的所有排队
+	 * @param projectId 项目id
+	 * @param queryDate 日期
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月8日 下午7:42:22
+	 */
+	public List<CheckinQueueVo> getAllOfTody(String projectId, String queryDate){
+		List<CheckinQueueVo> queueVoList = null;
+		if(ValidateHelper.isNotEmptyString(projectId) && ValidateHelper.isNotEmptyString(queryDate)){
+			List<CheckinQueuePo> queuePoList = checkinQueueRepository.findCheckinQueueOfToday(projectId, queryDate);
+			
+			queueVoList = MyBeanUtil.createList(queuePoList, CheckinQueueVo.class);
+		}
+		return queueVoList;
+	}
 	protected void setCheckinQueueId(String checkinQueueId) {
 		this.checkinQueueId = checkinQueueId;
 	}

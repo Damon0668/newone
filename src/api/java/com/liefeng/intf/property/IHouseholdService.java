@@ -163,4 +163,59 @@ public interface IHouseholdService {
 	 * @param checkinScheduleList 入住安排时间列表
 	 */
 	public void saveCheckinSchedule(String projectId, List<CheckinScheduleVo> checkinScheduleList);
+	
+	/**
+	 * 根据项目id、楼栋id，获取入住安排时间
+	 * @param projectId 项目id
+	 * @param buildingId 楼栋id
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月8日 下午1:40:18
+	 */
+	public CheckinScheduleVo getCheckinSchedule(String projectId, String buildingId);
+	
+	/**
+	 * 根据项目id、楼栋id，手机端用户id，创建排队号
+	 * @param projectId 项目id
+	 * @param buildingId 楼栋id
+	 * @param userId 手机端用户id
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月8日 下午2:27:21
+	 */
+	public CheckinQueueVo createCheckinQueue(String projectId, String houseId, String userId) throws LiefengException;
+	
+	/**
+	 * 获取用户的“已经办理”或“正在办理”的入住排队
+	 * @param userId 手机端用户id
+	 * @param projectId 项目id
+	 * @param houseId 房间id
+	 * @param status 状态
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月8日 下午3:52:51
+	 */
+	public CheckinQueueVo getCheckinQueueOfNotStatus(String userId, String projectId, String houseId, String status);
+	
+	/**
+	 * 获取今天用户未办理的排队
+	 * @param userId 手机端用户id
+	 * @param projectId 项目id
+	 * @param houseId 房间id
+	 * @param queryDate 查询时间
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月8日 下午4:23:31
+	 */
+	public CheckinQueueVo getCheckinQueueOfUNTREATED(String userId, String projectId, String houseId, String queryDate);
+	
+	/**
+	 * 通过项目id、日期，获取这一天的所有排队
+	 * @param projectId 项目id
+	 * @param queryDate 日期
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月8日 下午7:42:22
+	 */
+	public List<CheckinQueueVo> getAllOfTody(String projectId, String queryDate);
 }
