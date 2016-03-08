@@ -588,19 +588,22 @@ public class HouseholdService implements IHouseholdService {
 		
 		CheckinQueueVo queueVo = null;
 		//查用户“正在办理”，或“已经办理”的排队
-		queueVo = getCheckinQueueOfNotStatus(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.UNTREATED);
+		queueVo = getCheckinQueueOfStatus(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.FINISHED);
 		if(queueVo != null){
 			if(queueVo.getStatus().equals(HouseholdConstants.CheckinQueueStatus.FINISHED)){
 				throw new PropertyException(HouseholdErrorCode.CHECKIN_QUEUE_FINISHED);
 			}
 			
+			
+		}
+		queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.HANDLING, TimeUtil.format(date, "yyyy-MM-dd"));
+		if(queueVo != null){
 			if(queueVo.getStatus().equals(HouseholdConstants.CheckinQueueStatus.HANDLING)){
 				throw new PropertyException(HouseholdErrorCode.CHECKIN_QUEUE_HANDLING);
 			}
 		}
-		
 		//查用户今天“尚未办理”的排队
-		queueVo = getCheckinQueueOfUNTREATED(userId, projectId, houseId, TimeUtil.format(date, "yyyy-MM-dd"));
+		queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.UNTREATED, TimeUtil.format(date, "yyyy-MM-dd"));
 		if(queueVo == null){
 			CheckinQueueVo queue = new CheckinQueueVo();
 			queue.setCreateTime(new Date());
@@ -629,15 +632,43 @@ public class HouseholdService implements IHouseholdService {
 	}
 
 	@Override
-	public CheckinQueueVo getCheckinQueueOfUNTREATED(String userId,
-			String projectId, String houseId, String queryDate) {
+	public CheckinQueueVo getCheckinQueueOfToday(String userId,
+			String projectId, String houseId, String status, String queryDate) {
 		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
-		return checkinQueueContext.getOfToday(userId, projectId, houseId, queryDate);
+		return checkinQueueContext.getOfToday(userId, projectId, houseId, status, queryDate);
 	}
 
 	@Override
 	public List<CheckinQueueVo> getAllOfTody(String projectId, String queryDate) {
 		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
 		return checkinQueueContext.getAllOfTody(projectId, queryDate);
+	}
+
+	@Override
+	public CheckinQueueVo getCheckinQueue(String projectId, String houseId, String userId )throws LiefengException {
+		CheckinQueueVo queue = new CheckinQueueVo();
+		CheckinQueueVo queueVo = getCheckinQueueOfStatus(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.FINISHED);
+		if(queueVo != null){  //已经办理
+			queue.setPageStatus(HouseholdConstants.CheckinPageStatus.FINISHED);
+		}else{
+			//今天办理中
+			CheckinQueueVo queueVo2 = queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.HANDLING, TimeUtil.format(new Date(), "yyyy-MM-dd"));
+			//今天未办理
+			CheckinQueueVo queueVo3 = queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.UNTREATED, TimeUtil.format(new Date(), "yyyy-MM-dd"));
+			if(queueVo2 == null && queueVo3 == null){ //没有排号
+				queue.setPageStatus(HouseholdConstants.CheckinPageStatus.NONUMBER);
+			}else{ //有排号
+				queue.setPageStatus(HouseholdConstants.CheckinPageStatus.HASNUMBER);
+			}
+		}
+		
+		return queue;
+	}
+
+	@Override
+	public CheckinQueueVo getCheckinQueueOfStatus(String userId,
+			String projectId, String houseId, String status) {
+		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
+		return checkinQueueContext.getOfStatus(userId, projectId, houseId, status);
 	}
 }

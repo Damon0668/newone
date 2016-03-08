@@ -42,5 +42,14 @@ public class HouseholdController {
 		return DataValue.success(queueVo);
 	}
 	
+	@RequestMapping("createCheckinQueue")
+	@ResponseBody
+	public DataValue<CheckinQueueVo> getCheckinQueue(String projectId, String houseId, String userId) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		
+		CheckinQueueVo queueVo = householdService.createCheckinQueue(projectId, houseId, userId);
+		
+		return DataValue.success(queueVo);
+	}
 
 }

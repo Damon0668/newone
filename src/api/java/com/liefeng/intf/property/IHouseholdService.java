@@ -198,16 +198,17 @@ public interface IHouseholdService {
 	public CheckinQueueVo getCheckinQueueOfNotStatus(String userId, String projectId, String houseId, String status);
 	
 	/**
-	 * 获取今天用户未办理的排队
+	 * 获取今天用户某状态的排队
 	 * @param userId 手机端用户id
 	 * @param projectId 项目id
 	 * @param houseId 房间id
+	 * @param status 状态
 	 * @param queryDate 查询时间
 	 * @return 
 	 * @author xhw
 	 * @date 2016年3月8日 下午4:23:31
 	 */
-	public CheckinQueueVo getCheckinQueueOfUNTREATED(String userId, String projectId, String houseId, String queryDate);
+	public CheckinQueueVo getCheckinQueueOfToday(String userId, String projectId, String houseId, String status, String queryDate);
 	
 	/**
 	 * 通过项目id、日期，获取这一天的所有排队
@@ -218,4 +219,27 @@ public interface IHouseholdService {
 	 * @date 2016年3月8日 下午7:42:22
 	 */
 	public List<CheckinQueueVo> getAllOfTody(String projectId, String queryDate);
+	
+	/**
+	 * 根据项目id，房间id，手机用户id，获取排队（用于app接口）
+	 * @param projectId 项目id
+	 * @param houseId 房间id
+	 * @param userId 手机端用户id
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月8日 下午8:24:12
+	 */
+	public CheckinQueueVo getCheckinQueue(String projectId, String houseId, String userId) throws LiefengException;
+	
+	/**
+	 * 根据手机端用户id，项目id，房间id，状态，获取最近一条排队
+	 * @param userId 手机端用户id
+	 * @param projectId 项目id
+	 * @param houseId 房间id
+	 * @param status 状态
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月8日 下午8:30:57
+	 */
+	public CheckinQueueVo getCheckinQueueOfStatus(String userId, String projectId, String houseId, String status);
 }

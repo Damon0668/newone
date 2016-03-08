@@ -217,18 +217,19 @@ public class CheckinQueueContext {
 	}
 	
 	/**
-	 * 获取今天用户未办理的排队
+	 * 获取今天用户某状态的排队
 	 * @param userId 手机端用户id
 	 * @param projectId 项目id
 	 * @param houseId 房间id
+	 * @param status 状态
 	 * @param queryDate 查询时间
 	 * @return 
 	 * @author xhw
 	 * @date 2016年3月8日 下午4:23:31
 	 */
-	public CheckinQueueVo getOfToday(String userId, String projectId, String houseId, String queryDate){
+	public CheckinQueueVo getOfToday(String userId, String projectId, String houseId, String status, String queryDate){
 		if(checkinQueue == null) {
-			CheckinQueuePo queuePo = checkinQueueRepository.findCheckinQueue(userId, projectId, houseId, queryDate);
+			CheckinQueuePo queuePo = checkinQueueRepository.findCheckinQueue(userId, projectId, houseId, status, queryDate);
 			
 			checkinQueue = MyBeanUtil.createBean(queuePo, CheckinQueueVo.class);
 		}
@@ -252,6 +253,27 @@ public class CheckinQueueContext {
 		}
 		return queueVoList;
 	}
+	
+	/**
+	 * 根据手机端用户id，项目id，房间id，状态，获取最近一条排队
+	 * @param userId 手机端用户id
+	 * @param projectId 项目id
+	 * @param houseId 房间id
+	 * @param status 状态
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月8日 下午8:30:57
+	 */
+	public CheckinQueueVo getOfStatus(String userId, String projectId, String houseId, String status){
+		if(checkinQueue == null) {
+			CheckinQueuePo queuePo = checkinQueueRepository.findByUserIdAndProjectIdAndHouseIdAndStatusOrderByCreateTimeDesc(userId, projectId, houseId, status);
+			
+			checkinQueue = MyBeanUtil.createBean(queuePo, CheckinQueueVo.class);
+		}
+		
+		return checkinQueue;
+	}
+	
 	protected void setCheckinQueueId(String checkinQueueId) {
 		this.checkinQueueId = checkinQueueId;
 	}

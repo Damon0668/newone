@@ -89,6 +89,20 @@ public class CheckinQueueVo extends BaseValue {
 	 */
 	private String mobile;
 	
+	/**
+	 * 当前办理排号
+	 */
+	private Integer nowSeq;
+	
+	/**
+	 * 还差多人号
+	 */
+	private Integer number;
+	
+	/**
+	 * 页面状态（1：没有排号； 2：有排号  3：已经办理）
+	 */
+	private String pageStatus;
 	
 	public String getId() {
 		return id;
@@ -200,6 +214,30 @@ public class CheckinQueueVo extends BaseValue {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+
+	public Integer getNowSeq() {
+		return nowSeq;
+	}
+
+	public void setNowSeq(Integer nowSeq) {
+		this.nowSeq = nowSeq;
+	}
+
+	public Integer getNumber() {
+		return number;
+	}
+
+	public void setNumber(Integer number) {
+		this.number = number;
+	}
+
+	public String getPageStatus() {
+		return pageStatus;
+	}
+
+	public void setPageStatus(String pageStatus) {
+		this.pageStatus = pageStatus;
 	}
 
 }
