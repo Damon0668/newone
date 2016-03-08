@@ -15,4 +15,10 @@ import com.liefeng.property.po.household.CheckinSchedulePo;
 @Transactional
 public interface CheckinScheduleRepository extends JpaRepository<CheckinSchedulePo, String> {
 	
+	/**
+	 * 更具项目ID和OEM编码删除入住安排时间
+	 * @param projectId 项目ID
+	 * @param oemCode OEM编码
+	 */
+	public void deleteByProjectIdAndOemCode(String projectId, String oemCode);
 }

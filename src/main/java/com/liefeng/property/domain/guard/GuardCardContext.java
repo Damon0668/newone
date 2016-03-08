@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
+import com.liefeng.common.util.TimeUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
@@ -85,11 +86,17 @@ public class GuardCardContext {
 		
 		GuardCardPo guardCardPo = MyBeanUtil.createBean(guardCard, GuardCardPo.class);
 		guardCardPo.setId(UUIDGenerator.generate());
+		
+		guardCardPo.setStartDate(TimeUtil.getDate(new Date()));
+		if(GuardConstants.GuardCardType.TEMP.equals(guardCard.getType())){
+			guardCardPo.setEndDate(TimeUtil.getDayAfter(TimeUtil.getDate(new Date()), guardCard.getDuration()));
+		}
+		
 		guardCardPo.setStatus(GuardConstants.GuardCardStatus.NORMAL);
 		guardCardPo.setCreateTime(new Date());
 		guardCardPo.setOemCode(ContextManager.getInstance().getOemCode());
 		
-		logger.info("create guardCard ={}", guardCard);
+		logger.info("create guardCard ={}", guardCardPo);
 		guardCardRepository.save(guardCardPo);
 		guardCard = MyBeanUtil.createBean(guardCardPo, GuardCardVo.class);
 		
@@ -102,9 +109,12 @@ public class GuardCardContext {
 			GuardCardPo guardCardPo = guardCardRepository.findOne(guardCard.getId());
 			
 			if(guardCardPo != null){
-				MyBeanUtil.copyBeanNotNull2Bean(guardCard, guardCardPo);
 				
 				logger.info("update guardCard ={}", guardCard);
+				
+				MyBeanUtil.copyBeanNotNull2Bean(guardCard, guardCardPo);
+				
+				logger.info("update guardCardPo ={}", guardCardPo);
 				guardCardRepository.save(guardCardPo);
 				
 				guardCard = MyBeanUtil.createBean(guardCardPo, GuardCardVo.class);

@@ -143,7 +143,7 @@ public class CheckinMaterialContext {
 	 * 保存入住资料信息
 	 */
 	public void create(List<CheckinMaterialVo> checkinMaterialList) throws Exception {
-		if (checkinMaterialList != null && checkinMaterialList.size() > 0) {
+		if (ValidateHelper.isNotEmptyCollection(checkinMaterialList)) {
 			for(CheckinMaterialVo checkinMaterial : checkinMaterialList) {
 				checkinMaterial.setId(UUIDGenerator.generate());
 				checkinMaterial.setOemCode(ContextManager.getInstance().getOemCode());
