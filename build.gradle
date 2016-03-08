@@ -24,6 +24,20 @@ jar {
     from sourceSets.api.output
 }
 
+task copyMapperXml() {
+	dependsOn clean
+	print '*********** Clean build directory successfully! ***********'
+	
+	doLast {
+        copy {
+			from 'src/main/java/com/liefeng/property/mapper'
+			into 'build/classes/main/com/liefeng/property/mapper'
+			include '*.xml'
+		}
+		print '*********** Copy mybatis mapper xml successfully! ***********'
+    }
+}
+
 task releaseApiJar(type:Jar,dependsOn: 'apiSrcJar') {
     baseName = 'liefeng-property-api'
     from sourceSets.api.output
@@ -84,11 +98,5 @@ dependencies {
    
    apiCompile 'com.liefeng:liefeng-core:1.1.3'
    apiCompile 'com.liefeng:liefeng-basic-api:1.0.1'
-   
-   copy {
-		from 'src/main/java/com/liefeng/property/mapper'
-		into 'build/classes/main/com/liefeng/property/mapper'
-		include '*.xml'
-	}
 }
 
