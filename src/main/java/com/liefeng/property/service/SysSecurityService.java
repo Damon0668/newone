@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.core.entity.DataPageValue;
@@ -22,7 +24,9 @@ import com.liefeng.property.vo.sys.SysRoleVo;
  */
 @Service
 public class SysSecurityService implements ISysSecurityService{
-
+	
+	private static final Logger logger = LoggerFactory.getLogger(SysSecurityService.class);
+	
 	@Override
 	public DataPageValue<SysRoleVo> listRoles4page(String name, String type, int page, int size) {
 		return SysRoleContext.build().findRolesByName4page(name, page, size);
@@ -122,11 +126,13 @@ public class SysSecurityService implements ISysSecurityService{
 
 	@Override
 	public List<SysMenuVo> listMenusByUserId(String userId) {
+		logger.info("listMenusByUserId userId = {}", userId);
 		return SysMenuContext.build().findMenusByUserId(userId);
 	}
 
 	@Override
 	public List<SysRoleVo> findRolesByUserId(String userId) {
+		logger.info("findRolesByUserId userId = {}", userId);
 		return SysRoleContext.build().findRolesByUserId(userId);
 	}
 	

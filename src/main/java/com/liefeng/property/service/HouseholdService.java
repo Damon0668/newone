@@ -30,6 +30,7 @@ import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.ProjectConstants;
 import com.liefeng.property.domain.household.CheckinMaterialContext;
 import com.liefeng.property.domain.household.CheckinQueueContext;
+import com.liefeng.property.domain.household.CheckinScheduleContext;
 import com.liefeng.property.domain.household.ProprietorContext;
 import com.liefeng.property.domain.household.ProprietorHouseContext;
 import com.liefeng.property.domain.household.ResidentContext;
@@ -38,6 +39,7 @@ import com.liefeng.property.error.HouseholdErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
 import com.liefeng.property.vo.household.CheckinQueueVo;
+import com.liefeng.property.vo.household.CheckinScheduleVo;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
@@ -339,7 +341,7 @@ public class HouseholdService implements IHouseholdService {
 	 * 根据业主房产ID查询入住资料信息
 	 */
 	@Override
-	public List<CheckinMaterialVo> getCheckinMaterialByProprietorHouseId(String proprietorHouseId) {
+	public List<CheckinMaterialVo> getMaterialByProprietorHouseId(String proprietorHouseId) {
 		CheckinMaterialContext checkinMaterialContext = CheckinMaterialContext.loadByProprietorHouseId(proprietorHouseId);
 		
 		return checkinMaterialContext.getList();
@@ -359,7 +361,7 @@ public class HouseholdService implements IHouseholdService {
 	 * 根据业主房产ID删除入住资料信息
 	 */
 	@Override
-	public void delCheckinMaterialByProprietorHouseId(String proprietorHouseId) throws Exception {
+	public void delMaterialByProprietorHouseId(String proprietorHouseId) throws Exception {
 		CheckinMaterialContext checkinMaterialContext = CheckinMaterialContext.loadByProprietorHouseId(proprietorHouseId);
 		
 		checkinMaterialContext.delete();
@@ -394,7 +396,6 @@ public class HouseholdService implements IHouseholdService {
 	}
 	
 	/**
-<<<<<<< HEAD
 	 * 分页查询入住排队信息
 	 */
 	@Override
@@ -413,8 +414,29 @@ public class HouseholdService implements IHouseholdService {
 	}
 	
 	/**
-=======
->>>>>>> 3486fe0394d0520c32e0fa8f7db812482645f321
+	 * 根据项目ID查询入住安排时间
+	 */
+	@Override
+	public List<CheckinScheduleVo> getScheduleByProjectId(String projectId) {
+		CheckinScheduleContext checkinScheduleContext = CheckinScheduleContext.loadByProjectId(projectId);
+		return checkinScheduleContext.getCheckinSchedules();
+	}
+
+	/**
+	 * 批量保存入住安排时间
+	 */
+	@Override
+	public void saveCheckinSchedule(String projectId, List<CheckinScheduleVo> checkinScheduleList) {
+		// 删除旧的入住安排时间
+		CheckinScheduleContext checkinScheduleContext = CheckinScheduleContext.loadByProjectId(projectId);
+		checkinScheduleContext.delete();
+		
+		// 保存新增的入住安排时间
+		checkinScheduleContext = CheckinScheduleContext.build();
+		checkinScheduleContext.create(checkinScheduleList);
+	}
+	
+	/**
 	 * 初始化客户信息
 	 */
 	private CustomerVo initCustomer(ProprietorSingleHouseVo singleHouse) {
@@ -527,5 +549,4 @@ public class HouseholdService implements IHouseholdService {
 		
 		return newUser;
 	}
-
 }

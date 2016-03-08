@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
+import com.liefeng.property.vo.guard.GuardResidentVo;
 import com.liefeng.property.vo.household.ResidentVo;
 
 /**
@@ -27,5 +28,16 @@ public interface ResidentQueryRepository extends BaseRepository<ResidentVo> {
 	 * @return 住户列表
 	 */
 	public List<ResidentVo> queryResidents(PagingParamVo param);
-	
+
+	/**
+	 * 门禁模块
+	 * 查询住户列表
+	 * @return
+	 */
+	public List<GuardResidentVo> queryGuardResidents(PagingParamVo param);
+
+	/**
+	 * 查询集合总数
+	 */
+	public Long queryGuardResidentsByCount(PagingParamVo param);
 }

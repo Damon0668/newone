@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.household;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -186,6 +187,8 @@ public class CheckinQueueContext {
 		// 设置数据总行数，用于计算偏移量
 		param.getPager().setRowCount(count);
 		List<CheckinQueueVo> list = checkinQueueQueryRepository.queryByPage(param);
+		list = (ValidateHelper.isEmptyCollection(list) ? new ArrayList<CheckinQueueVo>() : list);
+		
 		DataPageValue<CheckinQueueVo> returnPage = new DataPageValue<CheckinQueueVo>(list, count, pageSize, currentPage);
 		
 		return returnPage;
