@@ -1,16 +1,15 @@
 package com.liefeng.property.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.error.HouseholdErrorCode;
+import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.vo.workbench.NoticeVo;
 
 /**
@@ -21,7 +20,6 @@ import com.liefeng.property.vo.workbench.NoticeVo;
 @RestController
 @RequestMapping(value = "/workbench")
 public class WorkbenchController {
-	private static Logger logger = LoggerFactory.getLogger(WorkbenchController.class);
 
 	@Autowired
 	private IWorkbenchService workbenchService;
@@ -41,9 +39,9 @@ public class WorkbenchController {
 	 */
 	@RequestMapping("getNoticeList")
 	@ResponseBody
-	public DataListValue<NoticeVo> getNoticeList(String terminal, String noticeType, String projectId, String groupId, String privilegeType, Integer page, Integer size){
-		DataPageValue<NoticeVo> noticeVos = workbenchService.findNoticeOfPublished(terminal, noticeType, projectId, groupId, privilegeType, page, size);
-		return DataListValue.success(noticeVos.getDataList());
+	public DataPageValue<NoticeVo> getNoticeList(String terminal, String noticeType, String projectId, String groupId, String privilegeType, Integer page, Integer size){
+		DataPageValue<NoticeVo> noticeDataPage = workbenchService.findNoticeOfPublished(terminal, noticeType, projectId, groupId, privilegeType, page, size);
+		return noticeDataPage;
 	}
 	
 	/**

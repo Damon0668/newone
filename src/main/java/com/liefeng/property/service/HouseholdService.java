@@ -1,5 +1,6 @@
 package com.liefeng.property.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -14,6 +15,7 @@ import com.liefeng.base.exception.UserException;
 import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.TimeUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
@@ -21,6 +23,7 @@ import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
+import com.liefeng.intf.property.IProjectService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.household.CheckinQueueBo;
@@ -65,6 +68,9 @@ public class HouseholdService implements IHouseholdService {
 	
 	@Autowired
 	private IUserService userService;
+	
+	@Autowired
+	private IProjectService projectService;
 
 	/**
 	 * 保存业主信息
@@ -548,5 +554,79 @@ public class HouseholdService implements IHouseholdService {
 		}
 		
 		return newUser;
+	}
+
+	/**
+	 * 根据项目id、楼栋id，获取入住安排时间
+	 */
+	@Override
+	public CheckinScheduleVo getCheckinSchedule(String projectId,
+			String buildingId) {
+		CheckinScheduleContext checkinScheduleContext = CheckinScheduleContext.build();
+		return checkinScheduleContext.getCheckinSchedule(projectId, buildingId);
+	}
+
+	/**
+	 * 根据项目id、楼栋id，手机端用户id，创建排队号
+	 */
+	@Override
+	public CheckinQueueVo createCheckinQueue(String projectId, String houseId, String userId) throws LiefengException {
+		HouseVo houseVo = projectService.findHouseById(houseId);
+		String buildingId = houseVo.getBuildingId();
+		CheckinScheduleVo schedule = getCheckinSchedule(projectId, buildingId);
+		
+		//还没有安排入住办理时间
+		if(schedule == null){
+			throw new PropertyException(HouseholdErrorCode.CHECKIN_SCHEDULE_INFO_NULL);
+		}
+		
+		//还没到入住办理开始时间
+		Date date = new Date();
+		if(date.before(schedule.getStartDate())){
+			throw new PropertyException(HouseholdErrorCode.CHECKIN_SCHEDULE_NOT_START);
+		}
+		
+		CheckinQueueVo queueVo = null;
+		//查用户“正在办理”，或“已经办理”的排队
+		queueVo = getCheckinQueueOfNotStatus(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.UNTREATED);
+		if(queueVo != null){
+			if(queueVo.getStatus().equals(HouseholdConstants.CheckinQueueStatus.FINISHED)){
+				throw new PropertyException(HouseholdErrorCode.CHECKIN_QUEUE_FINISHED);
+			}
+			
+			if(queueVo.getStatus().equals(HouseholdConstants.CheckinQueueStatus.HANDLING)){
+				throw new PropertyException(HouseholdErrorCode.CHECKIN_QUEUE_HANDLING);
+			}
+		}
+		
+		//查用户今天“尚未办理”的排队
+		queueVo = getCheckinQueueOfUNTREATED(userId, projectId, houseId, TimeUtil.format(date, "yyyy-MM-dd"));
+		if(queueVo == null){
+			CheckinQueueVo queue = new CheckinQueueVo();
+			queue.setCreateTime(new Date());
+			queue.setHouseId(houseId);
+			queue.setProjectId(projectId);
+			queue.setUserId(userId);
+			queue.setSeq(1); //TODO
+			queue.setStatus(HouseholdConstants.CheckinQueueStatus.UNTREATED);
+			CheckinQueueContext checkinQueueContext = CheckinQueueContext.build(queue);
+			
+			queueVo = checkinQueueContext.create();
+		}
+		return queueVo;
+	}
+
+	@Override
+	public CheckinQueueVo getCheckinQueueOfNotStatus(String userId,
+			String projectId, String houseId, String status) {
+		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
+		return checkinQueueContext.getOfNOtStatus(userId, projectId, houseId, status);
+	}
+
+	@Override
+	public CheckinQueueVo getCheckinQueueOfUNTREATED(String userId,
+			String projectId, String houseId, String queryDate) {
+		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
+		return checkinQueueContext.getOfToday(userId, projectId, houseId, queryDate);
 	}
 }
