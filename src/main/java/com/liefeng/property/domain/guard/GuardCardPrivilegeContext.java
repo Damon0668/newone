@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.guard.GuardCardPrivilegePo;
 import com.liefeng.property.repository.guard.GuardCardPrivilegeRepository;
-import com.liefeng.property.service.GuardService;
 import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
 
 /**
@@ -79,6 +79,8 @@ public class GuardCardPrivilegeContext {
 	public void grantGuardCard(List<String> guardDeviceIds){
 		if(ValidateHelper.isNotEmptyString(cardId)){
 			if(ValidateHelper.isNotEmptyCollection(guardDeviceIds)){
+				deleteByCardId();
+				
 				for (String guardDeviceId : guardDeviceIds) {
 					GuardCardPrivilegePo guardCardPrivilegePo = new GuardCardPrivilegePo();
 					guardCardPrivilegePo.setId(UUIDGenerator.generate());
@@ -93,6 +95,25 @@ public class GuardCardPrivilegeContext {
 		}
 	}
 	
+	public List<GuardCardPrivilegeVo> findAllPrivilege(){
+		List<GuardCardPrivilegeVo> dataList = null;
+		if(ValidateHelper.isNotEmptyString(cardId)){
+			logger.info("findAllPrivilege cardId = {}", cardId);
+			List<GuardCardPrivilegePo> guardCardPrivilegeList = guardCardPrivilegeRepository.findByCardId(cardId);
+			if(ValidateHelper.isNotEmptyCollection(guardCardPrivilegeList)){
+				dataList = MyBeanUtil.createList(guardCardPrivilegeList, GuardCardPrivilegeVo.class);
+				logger.info("findAllPrivilege dataList = {}", dataList);
+			}
+		}
+		return dataList;
+	}
+	
+	public void deleteByCardId(){
+		if(ValidateHelper.isNotEmptyString(cardId)){
+			logger.info("deleteByCardId cardId = {}", cardId);
+			guardCardPrivilegeRepository.deleteByCardId(cardId);
+		}
+	}
 	
 	protected void setCardId(String cardId) {
 		this.cardId = cardId;

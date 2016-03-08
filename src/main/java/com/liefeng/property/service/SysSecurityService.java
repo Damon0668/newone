@@ -47,6 +47,7 @@ public class SysSecurityService implements ISysSecurityService{
 
 	@Override
 	public List<SysMenuVo> listMenusAndCheck(Long roleId) {
+		logger.info("listMenusAndCheck roleId = {}", roleId);
 		return SysMenuContext.build().findMenusAndCheck(roleId);
 	}
 

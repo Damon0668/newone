@@ -1,6 +1,7 @@
 package com.liefeng.property.domain.guard;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +51,11 @@ public class GuardDeviceContext {
 	private String deviceGlobalId;
 	
 	/**
+	 * 项目ID
+	 */
+	private String projectId;
+	
+	/**
 	 * 门禁设备对象
 	 */
 	private GuardDeviceVo guardDevice;
@@ -79,6 +85,12 @@ public class GuardDeviceContext {
 	public static GuardDeviceContext loadByDeviceGlobalId(String deviceGlobalId) {
 		GuardDeviceContext guardDeviceContext = getInstance();
 		guardDeviceContext.setDeviceGlobalId(deviceGlobalId);
+		return guardDeviceContext;
+	}
+	
+	public static GuardDeviceContext loadByProjectId(String projectId) {
+		GuardDeviceContext guardDeviceContext = getInstance();
+		guardDeviceContext.setProjectId(projectId);
 		return guardDeviceContext;
 	}
 	
@@ -128,7 +140,7 @@ public class GuardDeviceContext {
 		return guardDevice;
 	}
 	
-	public DataPageValue<GuardDeviceVo> listGuardDevice(GuardDeviceBo guardDeviceBo, Integer currentPage,Integer pageSize){
+	public DataPageValue<GuardDeviceVo> listGuardDevice4Page(GuardDeviceBo guardDeviceBo, Integer currentPage,Integer pageSize){
 		
 		guardDeviceBo.setOemCode(ContextManager.getInstance().getOemCode());
 		currentPage = currentPage == null ? 1 : currentPage;
@@ -147,6 +159,24 @@ public class GuardDeviceContext {
 		return new DataPageValue<GuardDeviceVo>(guardDeviceList, total, pageSize, currentPage);
 	}
 	
+	public List<GuardDeviceVo> findGuardDevice(){
+		List<GuardDeviceVo> guardDeviceList = null;
+		if(ValidateHelper.isNotEmptyString(projectId)){
+			Map<String, String> extra = new HashMap<String, String>();
+			extra.put("projectId", projectId);
+			
+			PagingParamVo param = new PagingParamVo();
+			param.setExtra(extra);
+			param.setPage(1);
+			param.setPageSize(Integer.MAX_VALUE);
+			
+			guardDeviceList = guardDeviceQueryRepository.queryByPage(param);
+			
+			logger.info("findGuardDevice guardDeviceList = {}", guardDeviceList);
+		}
+		return guardDeviceList;
+	}
+	
 	public Boolean isExistGuardNum(String guardNum){
 		Boolean result = false;
 		String oemCode = ContextManager.getInstance().getOemCode();
@@ -163,6 +193,10 @@ public class GuardDeviceContext {
 		this.id = id;
 	}
 	
+	protected void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
 	protected void setDeviceGlobalId(String deviceGlobalId) {
 		this.deviceGlobalId = deviceGlobalId;
 	}
@@ -170,4 +204,6 @@ public class GuardDeviceContext {
 	protected void setGuardDevice(GuardDeviceVo guardDevice) {
 		this.guardDevice = guardDevice;
 	}
+	
+	
 }

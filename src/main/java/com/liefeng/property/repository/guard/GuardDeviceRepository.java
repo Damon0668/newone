@@ -1,5 +1,7 @@
 package com.liefeng.property.repository.guard;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +11,7 @@ import com.liefeng.property.po.guard.GuardDevicePo;
 /**
  * 门禁设备仓储层
  * @author Huangama
+ * @author 蔡少东
  * @date 2016-2-25
  */
 @Transactional
@@ -20,4 +23,11 @@ public interface GuardDeviceRepository extends JpaRepository<GuardDevicePo, Stri
 	 * @return
 	 */
 	public GuardDevicePo findByGuardNumAndOemCode(String guardNum, String oemCode);
+	
+	/**
+	 * 根据项目ID查询设备
+	 * @param projectId 项目ID
+	 * @return
+	 */
+	public List<GuardDevicePo> findByProjectId(String projectId);
 }

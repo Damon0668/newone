@@ -55,6 +55,8 @@
         SELECT
             gd.id,
 		    p.full_name project_id,
+		    d.name,
+		    d.type,
 		    d.install_position,
 		    gd.guard_num,
 		    d.run_status,

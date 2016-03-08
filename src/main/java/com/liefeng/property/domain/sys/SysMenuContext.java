@@ -354,7 +354,7 @@ public class SysMenuContext {
 	 */
 	public List<SysMenuVo> findMenusByUserId(String userId){
 		
-		logger.info("findMenusByUserId userId={}", userId);
+		logger.info("findMenusByUserId userId = {}", userId);
 		
 		List<SysMenuVo> menuList = null;
 		

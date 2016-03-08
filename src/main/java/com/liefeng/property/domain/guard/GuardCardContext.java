@@ -76,6 +76,7 @@ public class GuardCardContext {
 				GuardCardPo guardCardPo = guardCardRepository.findOne(cardId);
 				if(guardCardPo != null){
 					guardCard = MyBeanUtil.createBean(guardCardPo, GuardCardVo.class);
+					logger.info("get cardId = {}, guardCard = {}", cardId, guardCard);
 				}
 			}
 		}
@@ -90,6 +91,8 @@ public class GuardCardContext {
 		guardCardPo.setStartDate(TimeUtil.getDate(new Date()));
 		if(GuardConstants.GuardCardType.TEMP.equals(guardCard.getType())){
 			guardCardPo.setEndDate(TimeUtil.getDayAfter(TimeUtil.getDate(new Date()), guardCard.getDuration()));
+		}else{
+			guardCardPo.setEndDate(null);
 		}
 		
 		guardCardPo.setStatus(GuardConstants.GuardCardStatus.NORMAL);
@@ -106,6 +109,7 @@ public class GuardCardContext {
 	public void updata(){
 		
 		if(ValidateHelper.isNotEmptyString(guardCard.getId())){
+
 			GuardCardPo guardCardPo = guardCardRepository.findOne(guardCard.getId());
 			
 			if(guardCardPo != null){
@@ -113,6 +117,14 @@ public class GuardCardContext {
 				logger.info("update guardCard ={}", guardCard);
 				
 				MyBeanUtil.copyBeanNotNull2Bean(guardCard, guardCardPo);
+				
+				if(GuardConstants.GuardCardType.TEMP.equals(guardCard.getType())){
+					if(guardCard.getDuration() > 0){
+						guardCardPo.setEndDate(TimeUtil.getDayAfter(TimeUtil.getDate(new Date()), guardCard.getDuration()));
+					}
+				}else{
+					guardCardPo.setEndDate(null);
+				}
 				
 				logger.info("update guardCardPo ={}", guardCardPo);
 				guardCardRepository.save(guardCardPo);

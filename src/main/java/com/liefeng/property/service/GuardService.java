@@ -28,6 +28,7 @@ import com.liefeng.property.domain.guard.GuardCardUserContext;
 import com.liefeng.property.domain.guard.GuardDeviceContext;
 import com.liefeng.property.domain.household.ResidentContext;
 import com.liefeng.property.domain.household.VisitorContext;
+import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
 import com.liefeng.property.vo.guard.GuardCardUserVo;
 import com.liefeng.property.vo.guard.GuardCardVo;
 import com.liefeng.property.vo.guard.GuardDeviceVo;
@@ -104,7 +105,7 @@ public class GuardService implements IGuardService{
 
 	@Override
 	public DataPageValue<GuardDeviceVo> listGuardDevice(GuardDeviceBo guardDeviceBo, int page, int size) {
-		return GuardDeviceContext.build().listGuardDevice(guardDeviceBo, page, size);
+		return GuardDeviceContext.build().listGuardDevice4Page(guardDeviceBo, page, size);
 	}
 
 	@Override
@@ -145,12 +146,14 @@ public class GuardService implements IGuardService{
 
 	@Transactional(rollbackOn=Exception.class)
 	@Override
-	public void createGuardCard(GuardCardUserVo guardCardUser, GuardCardVo guardCard) {
+	public void createGuardCard(GuardCardUserVo guardCardUser, GuardCardVo guardCard, List<String> guardDeviceIds) {
 		try{
 			guardCard = GuardCardContext.build(guardCard).create();
 			
 			guardCardUser.setCardId(guardCard.getId());
 			GuardCardUserContext.build(guardCardUser).create();
+			
+			GuardCardPrivilegeContext.loadByCardId(guardCard.getId()).grantGuardCard(guardDeviceIds);
 		}catch(LiefengException e){
 			throw new LiefengException(e.getCode(), e.getMessage());
 		}catch (Exception e) {
@@ -167,6 +170,37 @@ public class GuardService implements IGuardService{
 	@Override
 	public Boolean isExistCardSn(String sn) {
 		return GuardCardContext.loadBySn(sn).isExistCardSn();
+	}
+
+	@Override
+	public List<GuardDeviceVo> findGuardDeviceByProjectId(String projectId) {
+		logger.info("findGuardDeviceByProjectId projectId = {}", projectId);
+		return GuardDeviceContext.loadByProjectId(projectId).findGuardDevice();
+	}
+
+	@Override
+	public GuardCardVo findGuardCard(String cardId) {
+		logger.info("findGuardCard cardId = {}", cardId);
+		return GuardCardContext.loadById(cardId).get();
+	}
+
+	@Override
+	public GuardCardUserVo findGuardCardUser(String cardId) {
+		logger.info("findGuardCardUser cardId = {}", cardId);
+		return GuardCardUserContext.loadByCardId(cardId).get();
+	}
+
+	@Override
+	public List<GuardCardPrivilegeVo> findGuardCarPrivilege(String cardId) {
+		logger.info("findGuardCarPrivilege cardId = {}", cardId);
+		return GuardCardPrivilegeContext.loadByCardId(cardId).findAllPrivilege();
+	}
+
+	@Transactional(rollbackOn=Exception.class)
+	@Override
+	public void updateGuardCard(GuardCardVo guardCard, List<String> guardDeviceIds) {
+		GuardCardContext.build(guardCard).updata();
+		GuardCardPrivilegeContext.loadByCardId(guardCard.getId()).grantGuardCard(guardDeviceIds);
 	}
 
 }

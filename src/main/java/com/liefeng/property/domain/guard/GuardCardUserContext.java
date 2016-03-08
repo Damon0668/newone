@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.guard.GuardCardUserPo;
 import com.liefeng.property.repository.guard.GuardCardUserRepository;
@@ -54,6 +55,20 @@ public class GuardCardUserContext {
 		GuardCardUserContext guardCardUserContext = getInstance();
 		guardCardUserContext.setCardId(cardId);
 		return guardCardUserContext;
+	}
+	
+	public GuardCardUserVo get(){
+		if(guardCardUser == null){
+			if(ValidateHelper.isNotEmptyString(cardId)){
+				logger.info("get cardId = {}", cardId);
+				GuardCardUserPo guardCardUserPo = guardCardUserRepository.findByCardId(cardId);
+				if(guardCardUserPo != null){
+					guardCardUser = MyBeanUtil.createBean(guardCardUserPo, GuardCardUserVo.class);
+					logger.info("get guardCardUser = {}", guardCardUser);
+				}
+			}
+		}
+		return guardCardUser;
 	}
 	
 	public void create(){

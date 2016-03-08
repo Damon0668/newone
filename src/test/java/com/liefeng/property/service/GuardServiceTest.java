@@ -93,6 +93,6 @@ public class GuardServiceTest {
 		guardCardUser.setStaffId("123");
 		guardCardUser.setUserType("1");
 		
-		guardSerivce.createGuardCard(guardCardUser, guardCard);
+		guardSerivce.createGuardCard(guardCardUser, guardCard, null);
 	}
 }
