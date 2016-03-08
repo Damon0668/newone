@@ -607,7 +607,12 @@ public class HouseholdService implements IHouseholdService {
 			queue.setHouseId(houseId);
 			queue.setProjectId(projectId);
 			queue.setUserId(userId);
-			queue.setSeq(1); //TODO
+			List<CheckinQueueVo> queueVoList = getAllOfTody(projectId, TimeUtil.format(new Date(), "yyyy-MM-dd"));
+			if(queueVoList == null || queueVoList.size() <= 0){
+				queue.setSeq(1); 
+			}else{
+				queue.setSeq(queueVoList.size() + 1);
+			}
 			queue.setStatus(HouseholdConstants.CheckinQueueStatus.UNTREATED);
 			CheckinQueueContext checkinQueueContext = CheckinQueueContext.build(queue);
 			
@@ -628,5 +633,11 @@ public class HouseholdService implements IHouseholdService {
 			String projectId, String houseId, String queryDate) {
 		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
 		return checkinQueueContext.getOfToday(userId, projectId, houseId, queryDate);
+	}
+
+	@Override
+	public List<CheckinQueueVo> getAllOfTody(String projectId, String queryDate) {
+		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
+		return checkinQueueContext.getAllOfTody(projectId, queryDate);
 	}
 }

@@ -234,6 +234,24 @@ public class CheckinQueueContext {
 		}
 		return checkinQueue;
 	}
+	
+	/**
+	 * 通过项目id、日期，获取这一天的所有排队
+	 * @param projectId 项目id
+	 * @param queryDate 日期
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月8日 下午7:42:22
+	 */
+	public List<CheckinQueueVo> getAllOfTody(String projectId, String queryDate){
+		List<CheckinQueueVo> queueVoList = null;
+		if(ValidateHelper.isNotEmptyString(projectId) && ValidateHelper.isNotEmptyString(queryDate)){
+			List<CheckinQueuePo> queuePoList = checkinQueueRepository.findCheckinQueueOfToday(projectId, queryDate);
+			
+			queueVoList = MyBeanUtil.createList(queuePoList, CheckinQueueVo.class);
+		}
+		return queueVoList;
+	}
 	protected void setCheckinQueueId(String checkinQueueId) {
 		this.checkinQueueId = checkinQueueId;
 	}

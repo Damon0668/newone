@@ -208,4 +208,14 @@ public interface IHouseholdService {
 	 * @date 2016年3月8日 下午4:23:31
 	 */
 	public CheckinQueueVo getCheckinQueueOfUNTREATED(String userId, String projectId, String houseId, String queryDate);
+	
+	/**
+	 * 通过项目id、日期，获取这一天的所有排队
+	 * @param projectId 项目id
+	 * @param queryDate 日期
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月8日 下午7:42:22
+	 */
+	public List<CheckinQueueVo> getAllOfTody(String projectId, String queryDate);
 }
