@@ -26,6 +26,7 @@
 <sql id="Example_Where_Clause">
     WHERE 1=1 
     and stf.status = '1'
+    and stf.creator_id != '0'
 	<trim  suffixOverrides="," >
         <if test="extra.oemCode != null and extra.oemCode != ''" >
             and stf.oem_code = #{extra.oemCode}
