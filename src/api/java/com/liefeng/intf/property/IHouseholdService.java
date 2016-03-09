@@ -253,4 +253,16 @@ public interface IHouseholdService {
 	 * @date 2016年3月9日 上午10:51:54
 	 */
 	public DataPageValue<CheckinQueueVo> getCheckinQueueOfNotStatus(String projectId, String status, String queryDate, Integer page, Integer size);
+	
+	/**
+	 * 判断业主是否已经登记入住
+	 * @param proprietorId 业主id
+	 * @param userId 手机端用户id
+	 * @param projectId 项目id
+	 * @param houseId 房间id
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月9日 下午4:18:37
+	 */
+	public void checkProrietorStatus(String proprietorId, String userId, String projectId, String houseId) throws LiefengException;
 }

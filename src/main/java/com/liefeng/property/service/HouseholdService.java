@@ -713,4 +713,33 @@ public class HouseholdService implements IHouseholdService {
 		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
 		return checkinQueueContext.getNotStatus(projectId, status, queryDate, page, size);
 	}
+
+	@Override
+	public void checkProrietorStatus(String proprietorId, String userId, String projectId, String houseId) throws LiefengException {
+		
+		//获取用户“已办理”的排队
+		CheckinQueueVo queueVo = getCheckinQueueOfStatus(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.FINISHED);
+		if(queueVo != null){
+			throw new PropertyException(HouseholdErrorCode.CHECKIN_PROPRIETOR_CLOSE);
+		}
+		
+		//判断是否已经过了办理时间
+		HouseVo houseVo = projectService.findHouseById(houseId);
+		String buildingId = houseVo.getBuildingId();
+		CheckinScheduleVo schedule = getCheckinSchedule(projectId, buildingId);
+		if(schedule != null){
+			Date date = TimeUtil.formatDate(new Date(), "yyyy-MM-dd");
+			if(date.after(schedule.getEndDate())){
+				throw new PropertyException(HouseholdErrorCode.CHECKIN_PROPRIETOR_CLOSE);
+			}
+		}
+		
+		ProprietorVo proprietorVo = getProprietorById(proprietorId);
+		//修改
+		if(ValidateHelper.isNotEmptyString(proprietorVo.getEmergencyContact()) || ValidateHelper.isNotEmptyString(proprietorVo.getEmergencyPhone())){
+			throw new PropertyException(HouseholdErrorCode.CHECKIN_PROPRIETOR_MODIFY);
+		}else{ //登记
+			throw new PropertyException(HouseholdErrorCode.CHECKIN_PROPRIETOR_CHECK);
+		}
+	}
 }
