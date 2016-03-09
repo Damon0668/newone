@@ -15,7 +15,7 @@ import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.vo.household.CheckinQueueVo;
-import com.liefeng.property.vo.household.ProprietorVo;
+import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 
 /**
  * 入住办理公共服务类（app） 
@@ -105,5 +105,51 @@ public class HouseholdController {
 		householdService.checkProrietorStatus(proprietorId, userId, projectId, houseId);
 		
 		return ReturnValue.success();
+	}
+	
+	/**
+	 * 登记业主情况
+	 * @param proprietorId
+	 * @param picUrl
+	 * @param sex
+	 * @param workUnit
+	 * @param emergencyContact
+	 * @param emergencyPhone
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月9日 下午7:02:26
+	 */
+	@RequestMapping("registerProprietor")
+	@ResponseBody
+	public ReturnValue registerProprietor(String proprietorId, String picUrl, String sex, String workUnit, String emergencyContact, String emergencyPhone) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		ProprietorSingleHouseVo singleHouse = new ProprietorSingleHouseVo();
+		singleHouse.setProprietorId(proprietorId);
+		singleHouse.setPicUrl(picUrl);
+		singleHouse.setWorkUnit(workUnit);
+		singleHouse.setEmergencyContact(emergencyContact);
+		singleHouse.setEmergencyPhone(emergencyPhone);
+		singleHouse.setSex(sex);
+		
+		householdService.registerProprietor(singleHouse);
+		
+		return ReturnValue.success();
+	}
+	
+	/**
+	 * 获取业主的登记情况
+	 * @param proprietorId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月9日 下午7:58:34
+	 */
+	@RequestMapping("getProprietorOfRegister")
+	@ResponseBody
+	public DataValue<ProprietorSingleHouseVo> getProprietorOfRegister(String proprietorId) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		
+		ProprietorSingleHouseVo singleHouseVo =  householdService.getProprietorOfRegister(proprietorId);
+		
+		return DataValue.success(singleHouseVo);
 	}
 }

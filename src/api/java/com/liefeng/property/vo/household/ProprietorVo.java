@@ -98,7 +98,7 @@ public class ProprietorVo extends BaseValue {
 	 * OEM编码
 	 */
 	private String oemCode;
-
+	
 	public String getId() {
 		return id;
 	}

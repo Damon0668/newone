@@ -742,4 +742,36 @@ public class HouseholdService implements IHouseholdService {
 			throw new PropertyException(HouseholdErrorCode.CHECKIN_PROPRIETOR_CHECK);
 		}
 	}
+
+	@Override
+	public void registerProprietor(ProprietorSingleHouseVo singleHouse) throws LiefengException {
+		//更新业主信息
+		ProprietorVo proprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
+		proprietor.setId(singleHouse.getProprietorId());
+		proprietor.setRegisterTime(new Date());
+		ProprietorContext proprietorContext = ProprietorContext.build(proprietor);
+		ProprietorVo proprietorVo = proprietorContext.update();
+		
+		CustomerVo customer = userService.getCustomerByGlobalId(proprietorVo.getCustGlobalId());
+		customer.setSex(singleHouse.getSex());
+		customer = checkService.updateCustomerCheck(customer);
+		// 发送TCC消息，更新用户信息
+		tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_CUSTOMER, customer.toString());
+	}
+
+	@Override
+	public ProprietorSingleHouseVo getProprietorOfRegister(String proprietorId) {
+		//业主
+		ProprietorVo proprietorVo = getProprietorById(proprietorId);
+		ProprietorSingleHouseVo singleHouseVo = new ProprietorSingleHouseVo();
+		
+		//copy
+		MyBeanUtil.copyBeanNotNull2Bean(proprietorVo, singleHouseVo);
+		singleHouseVo.setProprietorId(proprietorId);
+		//用户信息
+		CustomerVo customer = userService.getCustomerByGlobalId(proprietorVo.getCustGlobalId());
+		singleHouseVo.setSex(customer.getSex());
+		
+		return singleHouseVo;
+	}
 }
