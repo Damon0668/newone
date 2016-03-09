@@ -77,13 +77,6 @@ public class PropertyStaffPo extends BaseValue {
 	private String position;
 	
 	/**
-	 * 管理的项目
-	 * 多个项目用逗号','隔开
-	 */
-	@Column(name = "manage_projects")
-	private String manageProjects;
-	
-	/**
 	 * 状态
 	 * 1:激活
 	 * 2:注销
@@ -179,14 +172,6 @@ public class PropertyStaffPo extends BaseValue {
 
 	public void setPosition(String position) {
 		this.position = position;
-	}
-
-	public String getManageProjects() {
-		return manageProjects;
-	}
-
-	public void setManageProjects(String manageProjects) {
-		this.manageProjects = manageProjects;
 	}
 
 	public Date getCreateTime() {

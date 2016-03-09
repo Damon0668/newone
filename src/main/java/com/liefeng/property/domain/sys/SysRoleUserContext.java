@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.property.po.sys.SysRoleUserPo;
 import com.liefeng.property.repository.sys.SysRoleUserRepository;
+import com.liefeng.property.service.PropertyStaffService;
 import com.liefeng.property.vo.sys.SysRoleUserVo;
 
 /**
@@ -26,6 +29,8 @@ import com.liefeng.property.vo.sys.SysRoleUserVo;
 @Scope("prototype")
 public class SysRoleUserContext {
 
+	private static final Logger logger = LoggerFactory.getLogger(SysRoleUserContext.class);
+	
 	@Autowired
 	private SysRoleUserRepository sysRoleUserRepository;
 	
@@ -86,7 +91,11 @@ public class SysRoleUserContext {
 	 * @return
 	 */
 	public List<SysRoleUserVo> findRoles(){
+		logger.info("findRoles userId = {}", userId);
 		List<SysRoleUserPo> dataList = sysRoleUserRepository.findByUserId(userId);
+		
+		logger.info("findRoles SysRoleUserList = {}", dataList);
+		
 		return MyBeanUtil.createList(dataList, SysRoleUserVo.class);
 	}
 	

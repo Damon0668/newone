@@ -36,6 +36,12 @@ public class GuardCardVo extends BaseValue {
 	private Date startDate;
 	
 	/**
+	 * 临时卡 的有效时长
+	 * 按天
+	 */
+	private int duration;
+	
+	/**
 	 * 使用结束日期
 	 */
 	private Date endDate;
@@ -114,4 +120,11 @@ public class GuardCardVo extends BaseValue {
 		this.oemCode = oemCode;
 	}
 
+	public int getDuration() {
+		return duration;
+	}
+
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
 }

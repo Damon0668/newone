@@ -13,5 +13,11 @@ import com.liefeng.property.po.guard.GuardCardUserPo;
  */
 @Transactional
 public interface GuardCardUserRepository extends JpaRepository<GuardCardUserPo, String> {
-
+	
+	/**
+	 * 查询
+	 * @param cardId 磁卡ID
+	 * @return
+	 */
+	public GuardCardUserPo findByCardId(String cardId);
 }

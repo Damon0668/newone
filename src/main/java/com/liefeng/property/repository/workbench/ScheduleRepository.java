@@ -34,6 +34,14 @@ public interface ScheduleRepository extends JpaRepository<SchedulePo, String> {
 	 */
 	public void deleteByCreatorId(String creatorId);
 	
+	/**
+	 * 查询用户一天所有的日程
+	 * @param creatorId 用户id
+	 * @param queryDate 时间
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月8日 下午3:28:40
+	 */
 	@Query("select t from SchedulePo t where t.creatorId=?1 and t.repeats='1'  and datediff(?2, t.scheduleDate)>=0 and ( t.times=-1 or datediff(?2, t.scheduleDate)<t.times)")
 	public List<SchedulePo> findByCreatorIdAndQueryDate(String creatorId, String queryDate);
 }

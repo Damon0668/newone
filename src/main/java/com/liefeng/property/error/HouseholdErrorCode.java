@@ -44,6 +44,18 @@ public enum HouseholdErrorCode implements IErrorCode {
 	 * 住户名字为空
 	 */
 	RESIDENT_NAME_NULL("业主名字为空"),
+	
+   /***************** 入住安排时间相关 *******************/
+	
+	CHECKIN_SCHEDULE_INFO_NULL("入住安排时间为空"),
+	
+	CHECKIN_SCHEDULE_NOT_START("入住办理尚未开始"),
+	
+   /***************** 入住排队相关 *******************/
+
+	CHECKIN_QUEUE_FINISHED("入住办理已经完成"),
+	
+	CHECKIN_QUEUE_HANDLING("入住办理正在办理中"),
 
 	;
 

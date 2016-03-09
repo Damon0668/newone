@@ -43,6 +43,13 @@ public class CheckinScheduleVo extends BaseValue {
 	 * OEM编码
 	 */
 	private String oemCode;
+	
+	/*======== 附加字段 ==========*/
+	
+	/**
+	 * 楼栋名称
+	 */
+	private String buildingName;
 
 	public String getId() {
 		return id;
@@ -90,6 +97,14 @@ public class CheckinScheduleVo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getBuildingName() {
+		return buildingName;
+	}
+
+	public void setBuildingName(String buildingName) {
+		this.buildingName = buildingName;
 	}
 	
 }

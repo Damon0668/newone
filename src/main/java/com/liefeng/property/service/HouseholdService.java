@@ -1,5 +1,6 @@
 package com.liefeng.property.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -14,6 +15,7 @@ import com.liefeng.base.exception.UserException;
 import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.TimeUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
@@ -21,6 +23,7 @@ import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
+import com.liefeng.intf.property.IProjectService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.household.CheckinQueueBo;
@@ -30,6 +33,7 @@ import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.ProjectConstants;
 import com.liefeng.property.domain.household.CheckinMaterialContext;
 import com.liefeng.property.domain.household.CheckinQueueContext;
+import com.liefeng.property.domain.household.CheckinScheduleContext;
 import com.liefeng.property.domain.household.ProprietorContext;
 import com.liefeng.property.domain.household.ProprietorHouseContext;
 import com.liefeng.property.domain.household.ResidentContext;
@@ -38,6 +42,7 @@ import com.liefeng.property.error.HouseholdErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
 import com.liefeng.property.vo.household.CheckinQueueVo;
+import com.liefeng.property.vo.household.CheckinScheduleVo;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
@@ -63,6 +68,9 @@ public class HouseholdService implements IHouseholdService {
 	
 	@Autowired
 	private IUserService userService;
+	
+	@Autowired
+	private IProjectService projectService;
 
 	/**
 	 * 保存业主信息
@@ -339,7 +347,7 @@ public class HouseholdService implements IHouseholdService {
 	 * 根据业主房产ID查询入住资料信息
 	 */
 	@Override
-	public List<CheckinMaterialVo> getCheckinMaterialByProprietorHouseId(String proprietorHouseId) {
+	public List<CheckinMaterialVo> getMaterialByProprietorHouseId(String proprietorHouseId) {
 		CheckinMaterialContext checkinMaterialContext = CheckinMaterialContext.loadByProprietorHouseId(proprietorHouseId);
 		
 		return checkinMaterialContext.getList();
@@ -359,7 +367,7 @@ public class HouseholdService implements IHouseholdService {
 	 * 根据业主房产ID删除入住资料信息
 	 */
 	@Override
-	public void delCheckinMaterialByProprietorHouseId(String proprietorHouseId) throws Exception {
+	public void delMaterialByProprietorHouseId(String proprietorHouseId) throws Exception {
 		CheckinMaterialContext checkinMaterialContext = CheckinMaterialContext.loadByProprietorHouseId(proprietorHouseId);
 		
 		checkinMaterialContext.delete();
@@ -394,7 +402,6 @@ public class HouseholdService implements IHouseholdService {
 	}
 	
 	/**
-<<<<<<< HEAD
 	 * 分页查询入住排队信息
 	 */
 	@Override
@@ -413,8 +420,29 @@ public class HouseholdService implements IHouseholdService {
 	}
 	
 	/**
-=======
->>>>>>> 3486fe0394d0520c32e0fa8f7db812482645f321
+	 * 根据项目ID查询入住安排时间
+	 */
+	@Override
+	public List<CheckinScheduleVo> getScheduleByProjectId(String projectId) {
+		CheckinScheduleContext checkinScheduleContext = CheckinScheduleContext.loadByProjectId(projectId);
+		return checkinScheduleContext.getCheckinSchedules();
+	}
+
+	/**
+	 * 批量保存入住安排时间
+	 */
+	@Override
+	public void saveCheckinSchedule(String projectId, List<CheckinScheduleVo> checkinScheduleList) {
+		// 删除旧的入住安排时间
+		CheckinScheduleContext checkinScheduleContext = CheckinScheduleContext.loadByProjectId(projectId);
+		checkinScheduleContext.delete();
+		
+		// 保存新增的入住安排时间
+		checkinScheduleContext = CheckinScheduleContext.build();
+		checkinScheduleContext.create(checkinScheduleList);
+	}
+	
+	/**
 	 * 初始化客户信息
 	 */
 	private CustomerVo initCustomer(ProprietorSingleHouseVo singleHouse) {
@@ -528,4 +556,119 @@ public class HouseholdService implements IHouseholdService {
 		return newUser;
 	}
 
+	/**
+	 * 根据项目id、楼栋id，获取入住安排时间
+	 */
+	@Override
+	public CheckinScheduleVo getCheckinSchedule(String projectId,
+			String buildingId) {
+		CheckinScheduleContext checkinScheduleContext = CheckinScheduleContext.build();
+		return checkinScheduleContext.getCheckinSchedule(projectId, buildingId);
+	}
+
+	/**
+	 * 根据项目id、楼栋id，手机端用户id，创建排队号
+	 */
+	@Override
+	public CheckinQueueVo createCheckinQueue(String projectId, String houseId, String userId) throws LiefengException {
+		HouseVo houseVo = projectService.findHouseById(houseId);
+		String buildingId = houseVo.getBuildingId();
+		CheckinScheduleVo schedule = getCheckinSchedule(projectId, buildingId);
+		
+		//还没有安排入住办理时间
+		if(schedule == null){
+			throw new PropertyException(HouseholdErrorCode.CHECKIN_SCHEDULE_INFO_NULL);
+		}
+		
+		//还没到入住办理开始时间
+		Date date = new Date();
+		if(date.before(schedule.getStartDate())){
+			throw new PropertyException(HouseholdErrorCode.CHECKIN_SCHEDULE_NOT_START);
+		}
+		
+		CheckinQueueVo queueVo = null;
+		//查用户“正在办理”，或“已经办理”的排队
+		queueVo = getCheckinQueueOfStatus(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.FINISHED);
+		if(queueVo != null){
+			if(queueVo.getStatus().equals(HouseholdConstants.CheckinQueueStatus.FINISHED)){
+				throw new PropertyException(HouseholdErrorCode.CHECKIN_QUEUE_FINISHED);
+			}
+			
+			
+		}
+		queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.HANDLING, TimeUtil.format(date, "yyyy-MM-dd"));
+		if(queueVo != null){
+			if(queueVo.getStatus().equals(HouseholdConstants.CheckinQueueStatus.HANDLING)){
+				throw new PropertyException(HouseholdErrorCode.CHECKIN_QUEUE_HANDLING);
+			}
+		}
+		//查用户今天“尚未办理”的排队
+		queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.UNTREATED, TimeUtil.format(date, "yyyy-MM-dd"));
+		if(queueVo == null){
+			CheckinQueueVo queue = new CheckinQueueVo();
+			queue.setCreateTime(new Date());
+			queue.setHouseId(houseId);
+			queue.setProjectId(projectId);
+			queue.setUserId(userId);
+			List<CheckinQueueVo> queueVoList = getAllOfTody(projectId, TimeUtil.format(new Date(), "yyyy-MM-dd"));
+			if(queueVoList == null || queueVoList.size() <= 0){
+				queue.setSeq(1); 
+			}else{
+				queue.setSeq(queueVoList.size() + 1);
+			}
+			queue.setStatus(HouseholdConstants.CheckinQueueStatus.UNTREATED);
+			CheckinQueueContext checkinQueueContext = CheckinQueueContext.build(queue);
+			
+			queueVo = checkinQueueContext.create();
+		}
+		return queueVo;
+	}
+
+	@Override
+	public CheckinQueueVo getCheckinQueueOfNotStatus(String userId,
+			String projectId, String houseId, String status) {
+		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
+		return checkinQueueContext.getOfNOtStatus(userId, projectId, houseId, status);
+	}
+
+	@Override
+	public CheckinQueueVo getCheckinQueueOfToday(String userId,
+			String projectId, String houseId, String status, String queryDate) {
+		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
+		return checkinQueueContext.getOfToday(userId, projectId, houseId, status, queryDate);
+	}
+
+	@Override
+	public List<CheckinQueueVo> getAllOfTody(String projectId, String queryDate) {
+		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
+		return checkinQueueContext.getAllOfTody(projectId, queryDate);
+	}
+
+	@Override
+	public CheckinQueueVo getCheckinQueue(String projectId, String houseId, String userId )throws LiefengException {
+		CheckinQueueVo queue = new CheckinQueueVo();
+		CheckinQueueVo queueVo = getCheckinQueueOfStatus(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.FINISHED);
+		if(queueVo != null){  //已经办理
+			queue.setPageStatus(HouseholdConstants.CheckinPageStatus.FINISHED);
+		}else{
+			//今天办理中
+			CheckinQueueVo queueVo2 = queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.HANDLING, TimeUtil.format(new Date(), "yyyy-MM-dd"));
+			//今天未办理
+			CheckinQueueVo queueVo3 = queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.UNTREATED, TimeUtil.format(new Date(), "yyyy-MM-dd"));
+			if(queueVo2 == null && queueVo3 == null){ //没有排号
+				queue.setPageStatus(HouseholdConstants.CheckinPageStatus.NONUMBER);
+			}else{ //有排号
+				queue.setPageStatus(HouseholdConstants.CheckinPageStatus.HASNUMBER);
+			}
+		}
+		
+		return queue;
+	}
+
+	@Override
+	public CheckinQueueVo getCheckinQueueOfStatus(String userId,
+			String projectId, String houseId, String status) {
+		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
+		return checkinQueueContext.getOfStatus(userId, projectId, houseId, status);
+	}
 }

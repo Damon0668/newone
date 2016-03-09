@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
@@ -30,7 +32,9 @@ import com.liefeng.property.vo.sys.SysMenuVo;
 @Service
 @Scope("prototype")
 public class SysMenuContext {
-
+	
+	private static Logger logger = LoggerFactory.getLogger(SysMenuContext.class);
+	
 	@Autowired
 	private SysMenuRepository sysMenuRepository;
 	
@@ -350,13 +354,17 @@ public class SysMenuContext {
 	 */
 	public List<SysMenuVo> findMenusByUserId(String userId){
 		
+		logger.info("findMenusByUserId userId = {}", userId);
+		
 		List<SysMenuVo> menuList = null;
 		
 		List<SysMenuVo> userMenuList = sysMenuQueryRepository.queryMenusByUserId(userId);
 		
+		logger.info("userMenuList = {}", userMenuList);
+		
 		if(ValidateHelper.isNotEmptyCollection(userMenuList)){
 			
-			menuList = buildSubMenu(MyBeanUtil.createList(userMenuList, SysMenuVo.class));			
+			menuList = buildSubMenu(MyBeanUtil.createList(userMenuList, SysMenuVo.class));
 			
 		}
 		return menuList;

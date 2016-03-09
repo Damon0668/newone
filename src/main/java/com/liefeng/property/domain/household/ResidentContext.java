@@ -19,10 +19,12 @@ import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
+import com.liefeng.property.bo.guard.GuardResidentBo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.po.household.ResidentPo;
 import com.liefeng.property.repository.ResidentRepository;
 import com.liefeng.property.repository.mybatis.ResidentQueryRepository;
+import com.liefeng.property.vo.guard.GuardResidentVo;
 import com.liefeng.property.vo.household.ResidentVo;
 
 /**
@@ -209,6 +211,39 @@ public class ResidentContext {
 				residentVoList, count, pageSize, currentPage);
 
 		return residentPage;
+	}
+	
+	/**
+	 * 门禁模块
+	 * 查询住户信息
+	 * @param pageSize
+	 * @param currentPage
+	 * @return
+	 */
+	public DataPageValue<GuardResidentVo> listGuardResident4Page(GuardResidentBo guardResidentBo, Integer pageSize,Integer currentPage){
+		
+		guardResidentBo.setOemCode(ContextManager.getInstance().getOemCode());
+		
+		Map<String, String> extra = MyBeanUtil.bean2Map(guardResidentBo);
+		
+		PagingParamVo pagingParamVo = new PagingParamVo();
+		pagingParamVo.setExtra(extra);
+		pagingParamVo.setRows(pageSize);
+		pagingParamVo.setPage(currentPage);
+		
+		Long count = residentQueryRepository.queryGuardResidentsByCount(pagingParamVo);
+		count = (count == null ? 0 : count);
+		
+		logger.info("总数量：count=" + count);
+		
+		List<GuardResidentVo> guardResidentVoList = residentQueryRepository.queryGuardResidents(pagingParamVo);
+		guardResidentVoList = (ValidateHelper.isEmptyCollection(guardResidentVoList) ? 
+				new ArrayList<GuardResidentVo>() : guardResidentVoList);
+
+		DataPageValue<GuardResidentVo> guardResidentPage = new DataPageValue<GuardResidentVo>(
+				guardResidentVoList, count, pageSize, currentPage);
+		
+		return guardResidentPage;
 	}
 	
 	/**

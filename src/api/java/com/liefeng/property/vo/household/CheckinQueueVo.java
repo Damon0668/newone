@@ -2,6 +2,8 @@ package com.liefeng.property.vo.household;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.liefeng.core.entity.BaseValue;
 
 /**
@@ -10,6 +12,7 @@ import com.liefeng.core.entity.BaseValue;
  * @author ZhenTingJun
  * @date 2016年3月6日
  */
+@JsonInclude(Include.NON_EMPTY)
 public class CheckinQueueVo extends BaseValue {
 
 	private static final long serialVersionUID = 4953334449200565710L;
@@ -86,6 +89,20 @@ public class CheckinQueueVo extends BaseValue {
 	 */
 	private String mobile;
 	
+	/**
+	 * 当前办理排号
+	 */
+	private Integer nowSeq;
+	
+	/**
+	 * 还差多人号
+	 */
+	private Integer number;
+	
+	/**
+	 * 页面状态（1：没有排号； 2：有排号  3：已经办理）
+	 */
+	private String pageStatus;
 	
 	public String getId() {
 		return id;
@@ -197,6 +214,30 @@ public class CheckinQueueVo extends BaseValue {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+
+	public Integer getNowSeq() {
+		return nowSeq;
+	}
+
+	public void setNowSeq(Integer nowSeq) {
+		this.nowSeq = nowSeq;
+	}
+
+	public Integer getNumber() {
+		return number;
+	}
+
+	public void setNumber(Integer number) {
+		this.number = number;
+	}
+
+	public String getPageStatus() {
+		return pageStatus;
+	}
+
+	public void setPageStatus(String pageStatus) {
+		this.pageStatus = pageStatus;
 	}
 
 }

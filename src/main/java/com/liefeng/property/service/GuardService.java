@@ -14,17 +14,25 @@ import com.liefeng.base.vo.device.DeviceVo;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.device.IDeviceService;
 import com.liefeng.intf.property.IGuardService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
+import com.liefeng.property.bo.guard.GuardResidentBo;
+import com.liefeng.property.domain.guard.GuardCardContext;
 import com.liefeng.property.domain.guard.GuardCardPrivilegeContext;
+import com.liefeng.property.domain.guard.GuardCardUserContext;
 import com.liefeng.property.domain.guard.GuardDeviceContext;
+import com.liefeng.property.domain.household.ResidentContext;
 import com.liefeng.property.domain.household.VisitorContext;
+import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
+import com.liefeng.property.vo.guard.GuardCardUserVo;
 import com.liefeng.property.vo.guard.GuardCardVo;
 import com.liefeng.property.vo.guard.GuardDeviceVo;
+import com.liefeng.property.vo.guard.GuardResidentVo;
 import com.liefeng.property.vo.household.VisitorVo;
 
 /**
@@ -45,7 +53,6 @@ public class GuardService implements IGuardService{
 	
 	@Autowired
 	private IDeviceService deviceService;
-
 
 	@Transactional(rollbackOn=Exception.class)
 	@Override
@@ -98,7 +105,7 @@ public class GuardService implements IGuardService{
 
 	@Override
 	public DataPageValue<GuardDeviceVo> listGuardDevice(GuardDeviceBo guardDeviceBo, int page, int size) {
-		return GuardDeviceContext.build().listGuardDevice(guardDeviceBo, page, size);
+		return GuardDeviceContext.build().listGuardDevice4Page(guardDeviceBo, page, size);
 	}
 
 	@Override
@@ -127,6 +134,73 @@ public class GuardService implements IGuardService{
 	@Override
 	public void createVisitorInfo(VisitorVo visitor) {
 		VisitorContext.build(visitor).create();
+	}
+
+	@Override
+	public DataPageValue<GuardResidentVo> listGuardRedisent(GuardResidentBo guardResidentBo, Integer pageSize, Integer currentPage) {
+			
+		DataPageValue<GuardResidentVo> dataPageValue = ResidentContext.build().listGuardResident4Page(guardResidentBo, pageSize, currentPage);
+
+		return dataPageValue;
+	}
+
+	@Transactional(rollbackOn=Exception.class)
+	@Override
+	public void createGuardCard(GuardCardUserVo guardCardUser, GuardCardVo guardCard, List<String> guardDeviceIds) {
+		try{
+			guardCard = GuardCardContext.build(guardCard).create();
+			
+			guardCardUser.setCardId(guardCard.getId());
+			GuardCardUserContext.build(guardCardUser).create();
+			
+			GuardCardPrivilegeContext.loadByCardId(guardCard.getId()).grantGuardCard(guardDeviceIds);
+		}catch(LiefengException e){
+			throw new LiefengException(e.getCode(), e.getMessage());
+		}catch (Exception e) {
+			throw new LiefengException(e);
+		}
+		
+	}
+
+	@Override
+	public void updateGuardCardStatus(String cardId, String status) {
+		GuardCardContext.loadById(cardId).updataStatus(status);
+	}
+
+	@Override
+	public Boolean isExistCardSn(String sn) {
+		return GuardCardContext.loadBySn(sn).isExistCardSn();
+	}
+
+	@Override
+	public List<GuardDeviceVo> findGuardDeviceByProjectId(String projectId) {
+		logger.info("findGuardDeviceByProjectId projectId = {}", projectId);
+		return GuardDeviceContext.loadByProjectId(projectId).findGuardDevice();
+	}
+
+	@Override
+	public GuardCardVo findGuardCard(String cardId) {
+		logger.info("findGuardCard cardId = {}", cardId);
+		return GuardCardContext.loadById(cardId).get();
+	}
+
+	@Override
+	public GuardCardUserVo findGuardCardUser(String cardId) {
+		logger.info("findGuardCardUser cardId = {}", cardId);
+		return GuardCardUserContext.loadByCardId(cardId).get();
+	}
+
+	@Override
+	public List<GuardCardPrivilegeVo> findGuardCarPrivilege(String cardId) {
+		logger.info("findGuardCarPrivilege cardId = {}", cardId);
+		return GuardCardPrivilegeContext.loadByCardId(cardId).findAllPrivilege();
+	}
+
+	@Transactional(rollbackOn=Exception.class)
+	@Override
+	public void updateGuardCard(GuardCardVo guardCard, List<String> guardDeviceIds) {
+		GuardCardContext.build(guardCard).updata();
+		GuardCardPrivilegeContext.loadByCardId(guardCard.getId()).grantGuardCard(guardDeviceIds);
 	}
 
 }
