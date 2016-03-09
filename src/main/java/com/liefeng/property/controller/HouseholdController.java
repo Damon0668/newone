@@ -1,6 +1,7 @@
 package com.liefeng.property.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.common.util.TimeUtil;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
@@ -16,6 +18,7 @@ import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.vo.household.CheckinQueueVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
+import com.liefeng.property.vo.household.ResidentVo;
 
 /**
  * 入住办理公共服务类（app） 
@@ -151,5 +154,22 @@ public class HouseholdController {
 		ProprietorSingleHouseVo singleHouseVo =  householdService.getProprietorOfRegister(proprietorId);
 		
 		return DataValue.success(singleHouseVo);
+	}
+	
+	/**
+	 * 获取住户列表
+	 * @param houseId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月9日 下午9:13:46
+	 */
+	@RequestMapping("getResidentList")
+	@ResponseBody
+	public DataListValue<ResidentVo> getResidentList(String houseId) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		
+		List<ResidentVo> residentVoList = householdService.getResidentListByHouseId(houseId);
+		
+		return DataListValue.success(residentVoList);
 	}
 }

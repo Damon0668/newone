@@ -282,4 +282,13 @@ public interface IHouseholdService {
 	 * @date 2016年3月9日 下午8:00:19
 	 */
 	public ProprietorSingleHouseVo getProprietorOfRegister(String proprietorId);
+	
+	/**
+	 * 根据房间id，获取住户
+	 * @param houseId 房间id
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月9日 下午9:11:26
+	 */
+	public List<ResidentVo> getResidentListByHouseId(String houseId);
 }

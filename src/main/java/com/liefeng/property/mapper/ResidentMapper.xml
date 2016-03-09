@@ -15,7 +15,9 @@
 	<result column="nativePlace" property="customer.nativePlace"/>
 	<result column="national" property="customer.national"/>	
 	<result column="maritalStatus" property="customer.maritalStatus"/>
-	<result column="eduDegree" property="customer.eduDegree"/>	
+	<result column="eduDegree" property="customer.eduDegree"/>
+	<result column="id" property="id"/>
+	<result column="name" property="name"/>
 </resultMap>
 
 <resultMap id="GuardResidentVo" type="com.liefeng.property.vo.guard.GuardResidentVo" ></resultMap>
@@ -303,5 +305,15 @@ select count(*) from (
 
 </select>
 
+<select id="queryByHouseId" resultMap="BaseResultMap">
+	SELECT
+		id,
+		name
+	FROM
+		t_resident
+	WHERE
+		house_id = #{extra.houseId}
+	AND status = '1'
+</select>
 
 </mapper>

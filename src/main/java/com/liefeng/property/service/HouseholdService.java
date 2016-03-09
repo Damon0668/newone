@@ -749,6 +749,7 @@ public class HouseholdService implements IHouseholdService {
 		ProprietorVo proprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
 		proprietor.setId(singleHouse.getProprietorId());
 		proprietor.setRegisterTime(new Date());
+		proprietor.setStatus(HouseholdConstants.ProprietorStatus.ACTIVE);
 		ProprietorContext proprietorContext = ProprietorContext.build(proprietor);
 		ProprietorVo proprietorVo = proprietorContext.update();
 		
@@ -774,4 +775,11 @@ public class HouseholdService implements IHouseholdService {
 		
 		return singleHouseVo;
 	}
+
+	@Override
+	public List<ResidentVo> getResidentListByHouseId(String houseId) {
+		ResidentContext residentContext = ResidentContext.build();
+		return residentContext.getByHouseId(houseId);
+	}
+
 }
