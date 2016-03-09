@@ -628,7 +628,7 @@ public class HouseholdService implements IHouseholdService {
 	public CheckinQueueVo getCheckinQueueOfNotStatus(String userId,
 			String projectId, String houseId, String status) {
 		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
-		return checkinQueueContext.getOfNOtStatus(userId, projectId, houseId, status);
+		return checkinQueueContext.getOneOfNOtStatus(userId, projectId, houseId, status);
 	}
 
 	@Override
@@ -641,15 +641,17 @@ public class HouseholdService implements IHouseholdService {
 	@Override
 	public List<CheckinQueueVo> getAllOfTody(String projectId, String queryDate) {
 		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
-		return checkinQueueContext.getAllOfTody(projectId, queryDate);
+		return checkinQueueContext.getAllOfToday(projectId, queryDate);
 	}
 
 	@Override
 	public CheckinQueueVo getCheckinQueue(String projectId, String houseId, String userId )throws LiefengException {
 		CheckinQueueVo queue = new CheckinQueueVo();
-		CheckinQueueVo queueVo = getCheckinQueueOfStatus(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.FINISHED);
+		CheckinQueueVo queueVo = null;
+		queueVo = getCheckinQueueOfStatus(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.FINISHED);
 		if(queueVo != null){  //已经办理
 			queue.setPageStatus(HouseholdConstants.CheckinPageStatus.FINISHED);
+			queue.setSeq(0);
 		}else{
 			//今天办理中
 			CheckinQueueVo queueVo2 = queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.HANDLING, TimeUtil.format(new Date(), "yyyy-MM-dd"));
@@ -657,9 +659,26 @@ public class HouseholdService implements IHouseholdService {
 			CheckinQueueVo queueVo3 = queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.UNTREATED, TimeUtil.format(new Date(), "yyyy-MM-dd"));
 			if(queueVo2 == null && queueVo3 == null){ //没有排号
 				queue.setPageStatus(HouseholdConstants.CheckinPageStatus.NONUMBER);
+				queue.setSeq(0);; //排号为0，表示没有排号
 			}else{ //有排号
 				queue.setPageStatus(HouseholdConstants.CheckinPageStatus.HASNUMBER);
+				if(queueVo2 != null){
+					queue.setSeq(queueVo2.getSeq());
+				}else{
+					queue.setSeq(queueVo3.getSeq());
+				}
 			}
+		}
+		
+		//以小区为范围，获取最新“在办理中”的排队
+		queueVo = getLatestOfCheckinQueue(projectId, HouseholdConstants.CheckinQueueStatus.HANDLING);
+		if(queueVo != null){
+			queue.setNowSeq(queueVo.getSeq());
+			Integer number = queue.getSeq() - queue.getNowSeq();
+			if(number < 0){
+				number = 0;
+			}
+			queue.setNumber(number);
 		}
 		
 		return queue;
@@ -670,5 +689,19 @@ public class HouseholdService implements IHouseholdService {
 			String projectId, String houseId, String status) {
 		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
 		return checkinQueueContext.getOfStatus(userId, projectId, houseId, status);
+	}
+
+	@Override
+	public CheckinQueueVo getLatestOfCheckinQueue(String projectId,
+			String status) {
+		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
+		return checkinQueueContext.getLatest(projectId, status);
+	}
+
+	@Override
+	public List<CheckinQueueVo> getCheckinQueueOfNotStatus(String projectId,
+			String status, String queryDate) {
+		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
+		return checkinQueueContext.getNotStatus(projectId, status, queryDate);
 	}
 }

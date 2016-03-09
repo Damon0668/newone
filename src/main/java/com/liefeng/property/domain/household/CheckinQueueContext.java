@@ -206,7 +206,7 @@ public class CheckinQueueContext {
 	 * @author xhw
 	 * @date 2016年3月8日 下午3:52:51
 	 */
-	public CheckinQueueVo getOfNOtStatus(String userId, String projectId, String houseId, String status){
+	public CheckinQueueVo getOneOfNOtStatus(String userId, String projectId, String houseId, String status){
 		if(checkinQueue == null) {
 			CheckinQueuePo queuePo = checkinQueueRepository.findByUserIdAndProjectIdAndHouseIdAndStatusNot(userId, projectId, houseId, status);
 			
@@ -244,7 +244,7 @@ public class CheckinQueueContext {
 	 * @author xhw
 	 * @date 2016年3月8日 下午7:42:22
 	 */
-	public List<CheckinQueueVo> getAllOfTody(String projectId, String queryDate){
+	public List<CheckinQueueVo> getAllOfToday(String projectId, String queryDate){
 		List<CheckinQueueVo> queueVoList = null;
 		if(ValidateHelper.isNotEmptyString(projectId) && ValidateHelper.isNotEmptyString(queryDate)){
 			List<CheckinQueuePo> queuePoList = checkinQueueRepository.findCheckinQueueOfToday(projectId, queryDate);
@@ -272,6 +272,42 @@ public class CheckinQueueContext {
 		}
 		
 		return checkinQueue;
+	}
+	
+	/**
+	 * 根据项目id、状态，获取最新的该状态的排队
+	 * @param projectId 项目id
+	 * @param status 状态
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月9日 上午10:00:35
+	 */
+	public CheckinQueueVo getLatest(String projectId, String status){
+		if(checkinQueue == null) {
+			CheckinQueuePo queuePo = checkinQueueRepository.findByProjectIdAndStatusOrderBySeqDesc(projectId, status);
+			
+			checkinQueue = MyBeanUtil.createBean(queuePo, CheckinQueueVo.class);
+		}
+		return checkinQueue;
+	}
+	
+	/**
+	 * 根据项目id、状态、时间，获取非此状态的所有排队
+	 * @param projectId 项目id
+	 * @param status 状态
+	 * @param queryDate 时间
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月9日 上午10:51:54
+	 */
+	public List<CheckinQueueVo> getNotStatus(String projectId, String status, String queryDate){
+		List<CheckinQueueVo> queueVoList = null;
+		if(ValidateHelper.isNotEmptyString(projectId) && ValidateHelper.isNotEmptyString(queryDate) && ValidateHelper.isNotEmptyString(status)){
+			List<CheckinQueuePo> queuePoList = checkinQueueRepository.findOfProjectIdAndTodayAndNotStatus(projectId, status, queryDate);
+			
+			queueVoList = MyBeanUtil.createList(queuePoList, CheckinQueueVo.class);
+		}
+		return queueVoList;
 	}
 	
 	protected void setCheckinQueueId(String checkinQueueId) {

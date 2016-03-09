@@ -42,7 +42,7 @@ public class HouseholdController {
 		return DataValue.success(queueVo);
 	}
 	
-	@RequestMapping("createCheckinQueue")
+	@RequestMapping("getCheckinQueue")
 	@ResponseBody
 	public DataValue<CheckinQueueVo> getCheckinQueue(String projectId, String houseId, String userId) {
 		ContextManager.getInstance().setOemCode("property"); //TODO

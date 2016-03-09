@@ -242,4 +242,25 @@ public interface IHouseholdService {
 	 * @date 2016年3月8日 下午8:30:57
 	 */
 	public CheckinQueueVo getCheckinQueueOfStatus(String userId, String projectId, String houseId, String status);
+	
+	/**
+	 * 根据项目id、状态，获取最新的该状态的排队
+	 * @param projectId 项目id
+	 * @param status 状态
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月9日 上午10:04:02
+	 */
+	public CheckinQueueVo getLatestOfCheckinQueue(String projectId, String status);
+	
+	/**
+	 * 根据项目id、状态、时间，获取非此状态的排队
+	 * @param projectId 项目id
+	 * @param status 状态
+	 * @param queryDate 时间
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月9日 上午10:51:54
+	 */
+	public List<CheckinQueueVo> getCheckinQueueOfNotStatus(String projectId, String status, String queryDate);
 }
