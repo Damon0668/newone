@@ -87,13 +87,10 @@
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />
 	</root>
-	
-	<logger name="com.liefeng" level="ERROR" additivity="true">
-        <appender-ref ref="EFILE" />
-    </logger>
 
 	<logger name="com.liefeng" level="INFO" additivity="true">
 		<appender-ref ref="ASYNC" />
+		<appender-ref ref="EFILE" />
 	</logger>
 	
 	<logger name="java.sql.Connection" level="DEBUG" additivity="true">
