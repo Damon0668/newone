@@ -13,7 +13,9 @@ import com.liefeng.property.vo.sys.SysRoleVo;
  * @date 2016年2月3日
  */
 public interface ISysSecurityService {
-	
+	/*
+	 * ****************** 角色部分 ******************
+	 */
 	/**
 	 * 查询系统角色
 	 * @return
@@ -34,6 +36,13 @@ public interface ISysSecurityService {
 	 * @return
 	 */
 	public List<SysRoleVo> findRolesByUserId(String userId);
+	
+	/**
+	 * 查询角色
+	 * @param roleId 角色ID
+	 * @return
+	 */
+	public SysRoleVo findRoleByRoleId(Long roleId);
 	
 	/**
 	 * 添加系统角色

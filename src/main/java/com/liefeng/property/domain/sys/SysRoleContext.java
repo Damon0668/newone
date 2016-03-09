@@ -3,6 +3,8 @@ package com.liefeng.property.domain.sys;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
@@ -28,7 +30,9 @@ import com.liefeng.property.vo.sys.SysRoleVo;
 @Service
 @Scope("prototype")
 public class SysRoleContext {
-
+	
+	private static Logger logger = LoggerFactory.getLogger(SysRoleContext.class);
+	
 	@Autowired
 	private SysRoleRepository sysRoleRepository;
 	
@@ -71,8 +75,11 @@ public class SysRoleContext {
 	 * @return
 	 */
 	public SysRoleVo get(){
-		SysRolePo sysRolePo = sysRoleRepository.findOne(id);
-		role = MyBeanUtil.createBean(sysRolePo, SysRoleVo.class);
+		if(role == null && id != null){
+			SysRolePo sysRolePo = sysRoleRepository.findOne(id);
+			role = MyBeanUtil.createBean(sysRolePo, SysRoleVo.class);
+			logger.info("get role = {}", role);
+		}
 		return role;
 	}
 	

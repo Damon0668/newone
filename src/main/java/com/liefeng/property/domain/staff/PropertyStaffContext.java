@@ -246,4 +246,12 @@ public class PropertyStaffContext {
 		pagingParamVo.setExtra(extra);
 		return propertyStaffQueryRepository.queryByDeptIdAndProjectId(pagingParamVo);
 	}
+	
+	public List<PropertyStaffVo> findByRoleId(Long roleId){
+		Map<String, String> extra = new HashMap<String, String>();
+		extra.put("roleId", String.valueOf(roleId));
+		PagingParamVo pagingParamVo = new PagingParamVo();
+		pagingParamVo.setExtra(extra);
+		return propertyStaffQueryRepository.queryByRoleId(pagingParamVo);
+	}
 }

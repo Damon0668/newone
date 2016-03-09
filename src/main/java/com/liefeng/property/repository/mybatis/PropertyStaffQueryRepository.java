@@ -13,5 +13,20 @@ import com.liefeng.property.vo.staff.PropertyStaffVo;
  * @date 2016年2月23日
  */
 public interface PropertyStaffQueryRepository extends BaseRepository<PropertyStaffListVo>{
+	
+	/**
+	 * 查询员工
+	 * 根据部门ID和项目ID
+	 * @param param
+	 * @return
+	 */
 	public List<PropertyStaffVo> queryByDeptIdAndProjectId(PagingParamVo param);
+	
+	/**
+	 * 查找员工
+	 * 根据角色ID
+	 * @param param
+	 * @return
+	 */
+	public List<PropertyStaffVo> queryByRoleId(PagingParamVo param);
 }

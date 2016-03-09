@@ -19,7 +19,12 @@
 </resultMap>
 
 <resultMap id="PropertyStaffVo" type="com.liefeng.property.vo.staff.PropertyStaffVo" >
-
+    <result column="id" property="id"/>
+    <result column="entry_time" property="entryTime"/>
+    <result column="work_status" property="workStatus"/>
+    <result column="department_id" property="departmentId"/>
+    <result column="creator_id" property="creatorId"/>
+    <result column="oem_code" property="oemCode"/>
 </resultMap>
 
 <!-- 查询条件 -->
@@ -104,5 +109,26 @@
     </if>
     
 </select>
+
+<select id="queryByRoleId" resultMap="PropertyStaffVo" >
+    SELECT
+        stf.id,
+        stf.account,
+        stf.name,
+        stf.number,
+        stf.entry_time,
+        stf.work_status,
+        stf.department_id,
+        stf.position,
+        stf.create_time,
+        stf.creator_id,
+        stf.oem_code
+	FROM
+	    t_sys_role_user sru
+	LEFT JOIN t_property_staff stf ON sru.user_id = stf.id
+	WHERE
+	    sru.role_id = #{extra.roleId}
+</select>
+
 
 </mapper>
