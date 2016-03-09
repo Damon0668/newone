@@ -86,7 +86,7 @@ public class HouseholdConstants {
 	}
 	
 	/**
-	 * 入住办理页面状态 1：没有排号； 2：有排号 没在办理； 3：有排号在办理； 4：已经办理
+	 * 入住办理页面状态 1：没有排号； 2：有排号； 3：已经办理
 	 */
 	public static interface CheckinPageStatus {
 		
@@ -106,4 +106,5 @@ public class HouseholdConstants {
 		public String FINISHED = "3";
 		
 	}
+	
 }
