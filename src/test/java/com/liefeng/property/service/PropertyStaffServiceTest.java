@@ -3,6 +3,7 @@ package com.liefeng.property.service;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.error.IErrorCode;
 import com.liefeng.intf.property.IPropertyStaffService;
+import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 
@@ -27,6 +29,11 @@ import com.liefeng.property.vo.staff.PropertyStaffVo;
 public class PropertyStaffServiceTest {
 	@Autowired
 	private IPropertyStaffService propertyStaffService;
+	
+	@Before
+	public void before(){
+		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
+	}
 	
 	@Test
 	public void create(){
@@ -81,5 +88,10 @@ public class PropertyStaffServiceTest {
 	}
 	public void findStaffContactPrivilege(){
 		System.out.println(propertyStaffService.findStaffContactPrivilege("40282081531cf49b01531d4c72a80009"));
+	}
+	
+	@Test
+	public void findPropertyStaffByRoleId(){
+		System.out.println(propertyStaffService.findPropertyStaffByRoleId(40L));
 	}
 }

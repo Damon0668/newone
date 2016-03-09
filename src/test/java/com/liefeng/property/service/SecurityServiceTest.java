@@ -2,6 +2,7 @@ package com.liefeng.property.service;
 
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,10 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.ISysSecurityService;
+import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.domain.sys.SysMenuContext;
 import com.liefeng.property.domain.sys.SysRoleContext;
 import com.liefeng.property.repository.mybatis.SysMenuQueryRepository;
@@ -28,9 +31,14 @@ public class SecurityServiceTest {
 
 	@Autowired
 	private ISysSecurityService sysSecurityService;
-	
+
 	@Autowired
 	private SysMenuQueryRepository sysMenuQueryRepository;
+	
+	@Before
+	public void before(){
+		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
+	}
 	
 	@Test
 	public void listRolesTest(){
@@ -68,5 +76,17 @@ public class SecurityServiceTest {
 	@Test
 	public void queryButtonsCode(){
 		List<String> list = sysMenuQueryRepository.queryButtonsCodeByUserId("62");
+		System.out.println(list);
 	}
+	
+	@Test
+	public void listAllRoles(){
+		System.out.println(sysSecurityService.listAllRoles());
+	}
+	
+	@Test
+	public void findRoleByRoleId(){
+		System.out.println(sysSecurityService.findRoleByRoleId(40L));
+	}
+
 }

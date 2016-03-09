@@ -292,4 +292,9 @@ public class PropertyStaffService implements IPropertyStaffService {
 		return propertyDepartmentList;
 	}
 
+	@Override
+	public List<PropertyStaffVo> findPropertyStaffByRoleId(Long roleId) {
+		return PropertyStaffContext.build().findByRoleId(roleId);
+	}
+
 }

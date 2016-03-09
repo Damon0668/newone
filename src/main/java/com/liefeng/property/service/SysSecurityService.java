@@ -136,6 +136,12 @@ public class SysSecurityService implements ISysSecurityService{
 		logger.info("findRolesByUserId userId = {}", userId);
 		return SysRoleContext.build().findRolesByUserId(userId);
 	}
+
+	@Override
+	public SysRoleVo findRoleByRoleId(Long roleId) {
+		logger.info("findRolesByRoleId roleId = {}", roleId);
+		return SysRoleContext.loadById(roleId).get();
+	}
 	
 
 }
