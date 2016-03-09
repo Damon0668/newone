@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,18 +19,6 @@ import com.liefeng.property.po.household.CheckinQueuePo;
  */
 @Transactional
 public interface CheckinQueueRepository extends JpaRepository<CheckinQueuePo, String> {
-	
-	/**
-	 * 根据手机端用户id、项目id、房间id、非此状态的入住排队
-	 * @param userId 手机端用户id
-	 * @param projectId 项目id
-	 * @param houseId 房间id
-	 * @param status 状态
-	 * @return 
-	 * @author xhw
-	 * @date 2016年3月8日 下午3:46:03
-	 */
-	public CheckinQueuePo findByUserIdAndProjectIdAndHouseIdAndStatusNot(String userId, String projectId, String houseId, String status);
 	
 	/**
 	 * 获取用户今天某状态的排队号
@@ -65,4 +55,28 @@ public interface CheckinQueueRepository extends JpaRepository<CheckinQueuePo, St
 	 * @date 2016年3月8日 下午8:30:57
 	 */
 	public CheckinQueuePo findByUserIdAndProjectIdAndHouseIdAndStatusOrderByCreateTimeDesc(String userId, String projectId, String houseId, String status);
+
+	/**
+	 * 根据项目id、状态，时间、获取最新的该状态的排队
+	 * @param projectId 项目id
+	 * @param status 状态
+	 * param queryDate 时间
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月9日 上午9:50:01
+	 */
+	@Query("select c from CheckinQueuePo c where c.projectId=?1 and c.status=?2 and datediff(?3, c.createTime)=0 order by c.seq desc")
+	public CheckinQueuePo findByProjectIdAndStatusAndCreateTimeOrderBySeqDesc(String projectId, String status, String queryDate);
+	
+	/**
+	 * 根据项目id、状态、时间，获取非此状态的排队
+	 * @param projectId 项目id
+	 * @param status 状态
+	 * @param queryDate 时间
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月9日 上午10:51:54
+	 */
+	@Query("select c from CheckinQueuePo c where c.projectId=?1 and c.status!=?2 and datediff(?3, c.createTime)=0 order by c.seq desc")
+	public Page<CheckinQueuePo> findOfProjectIdAndTodayAndNotStatus(String projectId, String status, String queryDate, Pageable pageable);
 }

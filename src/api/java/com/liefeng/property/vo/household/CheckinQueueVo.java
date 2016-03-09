@@ -12,7 +12,7 @@ import com.liefeng.core.entity.BaseValue;
  * @author ZhenTingJun
  * @date 2016年3月6日
  */
-@JsonInclude(Include.NON_EMPTY)
+@JsonInclude(Include.NON_NULL)
 public class CheckinQueueVo extends BaseValue {
 
 	private static final long serialVersionUID = 4953334449200565710L;
