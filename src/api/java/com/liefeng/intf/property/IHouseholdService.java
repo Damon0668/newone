@@ -185,17 +185,6 @@ public interface IHouseholdService {
 	 */
 	public CheckinQueueVo createCheckinQueue(String projectId, String houseId, String userId) throws LiefengException;
 	
-	/**
-	 * 获取用户的“已经办理”或“正在办理”的入住排队
-	 * @param userId 手机端用户id
-	 * @param projectId 项目id
-	 * @param houseId 房间id
-	 * @param status 状态
-	 * @return 
-	 * @author xhw
-	 * @date 2016年3月8日 下午3:52:51
-	 */
-	public CheckinQueueVo getCheckinQueueOfNotStatus(String userId, String projectId, String houseId, String status);
 	
 	/**
 	 * 获取今天用户某状态的排队
@@ -244,17 +233,18 @@ public interface IHouseholdService {
 	public CheckinQueueVo getCheckinQueueOfStatus(String userId, String projectId, String houseId, String status);
 	
 	/**
-	 * 根据项目id、状态，获取最新的该状态的排队
+	 * 根据项目id、状态，获取今天最新的该状态的排队
 	 * @param projectId 项目id
 	 * @param status 状态
+	 * @param queryDate 时间
 	 * @return 
 	 * @author xhw
 	 * @date 2016年3月9日 上午10:04:02
 	 */
-	public CheckinQueueVo getLatestOfCheckinQueue(String projectId, String status);
+	public CheckinQueueVo getLatestOfCheckinQueue(String projectId, String status, String queryDate);
 	
 	/**
-	 * 根据项目id、状态、时间，获取非此状态的排队
+	 * 根据项目id、状态、时间，获取非此状态的排队(分页）
 	 * @param projectId 项目id
 	 * @param status 状态
 	 * @param queryDate 时间
@@ -262,5 +252,5 @@ public interface IHouseholdService {
 	 * @author xhw
 	 * @date 2016年3月9日 上午10:51:54
 	 */
-	public List<CheckinQueueVo> getCheckinQueueOfNotStatus(String projectId, String status, String queryDate);
+	public DataPageValue<CheckinQueueVo> getCheckinQueueOfNotStatus(String projectId, String status, String queryDate, Integer page, Integer size);
 }
