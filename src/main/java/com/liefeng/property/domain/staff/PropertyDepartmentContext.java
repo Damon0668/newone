@@ -16,7 +16,6 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.error.StaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.staff.PropertyDepartmentPo;
-import com.liefeng.property.po.staff.PropertyStaffPo;
 import com.liefeng.property.repository.PropertyDepartmentRepository;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 
@@ -161,6 +160,22 @@ public class PropertyDepartmentContext {
 			propertyDepartmentRepository.delete(propertyDepartmentId);
 			logger.info("Delete department: '{}' successfully!", propertyDepartmentId);
 		}
+	}
+	
+	/**
+	 * 查询多个部门
+	 * @param ids
+	 * @return
+	 */
+	public List<PropertyDepartmentVo> findDepartments(List<String> ids){
+		if(ValidateHelper.isNotEmptyCollection(ids)){
+			List<PropertyDepartmentPo> propertyDepartmentList = propertyDepartmentRepository.findAll(ids);
+			logger.info("findDepartments propertyDepartmentList = {}", propertyDepartmentList);
+			if(ValidateHelper.isNotEmptyCollection(propertyDepartmentList)){
+				return MyBeanUtil.createList(propertyDepartmentList, PropertyDepartmentVo.class);
+			}
+		}
+		return null;
 	}
 	
 	/**

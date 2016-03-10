@@ -280,7 +280,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 	public List<PropertyDepartmentVo> findStaffContactPrivilege(String staffId) {
 		List<PropertyDepartmentVo> propertyDepartmentList = null;
 		if(ValidateHelper.isNotEmptyString(staffId)){
-			List<StaffContactPrivilegeVo> staffContactPrivilegeList= StaffContactPrivilegeContext.loadByStaffId(staffId).findContactPrivilege();
+			List<StaffContactPrivilegeVo> staffContactPrivilegeList = StaffContactPrivilegeContext.loadByStaffId(staffId).findContactPrivilege();
 			if(ValidateHelper.isNotEmptyCollection(staffContactPrivilegeList)){
 				propertyDepartmentList = new ArrayList<PropertyDepartmentVo>();
 				for (StaffContactPrivilegeVo staffContactPrivilegeVo : staffContactPrivilegeList) {
@@ -295,6 +295,12 @@ public class PropertyStaffService implements IPropertyStaffService {
 	@Override
 	public List<PropertyStaffVo> findPropertyStaffByRoleId(Long roleId) {
 		return PropertyStaffContext.build().findByRoleId(roleId);
+	}
+
+	@Override
+	public List<PropertyDepartmentVo> getDepartments(List<String> departmentIds) {
+		logger.error("getDepartments departmentIds = {}", departmentIds);
+		return PropertyDepartmentContext.build().findDepartments(departmentIds);
 	}
 
 }

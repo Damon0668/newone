@@ -1,5 +1,6 @@
 package com.liefeng.property.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
@@ -8,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
@@ -26,6 +28,7 @@ import com.liefeng.property.vo.staff.PropertyStaffVo;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
+@ActiveProfiles("dev")
 public class PropertyStaffServiceTest {
 	@Autowired
 	private IPropertyStaffService propertyStaffService;
@@ -86,6 +89,7 @@ public class PropertyStaffServiceTest {
 		List<PropertyStaffVo> propertyStaffList =  propertyStaffService.findPropertyStaff("0", "0000000052a7943f0152a7943fc00000");
 		System.out.println(propertyStaffList);
 	}
+	@Test
 	public void findStaffContactPrivilege(){
 		System.out.println(propertyStaffService.findStaffContactPrivilege("40282081531cf49b01531d4c72a80009"));
 	}
@@ -93,5 +97,13 @@ public class PropertyStaffServiceTest {
 	@Test
 	public void findPropertyStaffByRoleId(){
 		System.out.println(propertyStaffService.findPropertyStaffByRoleId(40L));
+	}
+	
+	@Test
+	public void getDepartmentsByIds(){
+		List<String> ids = new ArrayList<String>();
+		ids.add("402881fb530cd2a501530cd2a5580000");
+		ids.add("402881fb530cd2a501530cd2a6970001");
+		System.out.println(propertyStaffService.getDepartments(ids));
 	}
 }
