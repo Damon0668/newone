@@ -15,6 +15,7 @@ import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
+import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.constant.HouseholdConstants;
@@ -33,6 +34,9 @@ public class HouseholdController {
 
 	@Autowired
 	private IHouseholdService householdService;
+	
+	@Autowired
+	private IUserService userService;
 	
 	/**
 	 * 通过扫二维码，获取排队号
@@ -211,5 +215,26 @@ public class HouseholdController {
 		householdService.saveResident(residentVo);
 		
 		return ReturnValue.success();
+	}
+	
+	/**
+	 * 获取这号的详情
+	 * @param residentId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月10日 下午4:17:19
+	 */
+	@RequestMapping("getResident")
+	@ResponseBody
+	public DataValue<ResidentVo> getResident(String residentId) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		
+		ResidentVo residentVo = householdService.getResident(residentId);
+		//用户信息
+		CustomerVo customer = userService.getCustomerByGlobalId(residentVo.getCustGlobalId());
+		
+		residentVo.setCustomer(customer);
+		
+		return DataValue.success(residentVo);
 	}
 }

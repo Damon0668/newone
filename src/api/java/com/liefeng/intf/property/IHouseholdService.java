@@ -291,4 +291,5 @@ public interface IHouseholdService {
 	 * @date 2016年3月9日 下午9:11:26
 	 */
 	public List<ResidentVo> getResidentListByHouseId(String houseId);
+	
 }

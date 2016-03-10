@@ -783,4 +783,5 @@ public class HouseholdService implements IHouseholdService {
 		return residentContext.getByHouseId(houseId);
 	}
 
+
 }
