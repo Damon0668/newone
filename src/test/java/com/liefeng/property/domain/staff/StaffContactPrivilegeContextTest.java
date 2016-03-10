@@ -6,6 +6,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
+import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffContactPrivilegeVo;
 
 /**
@@ -28,6 +29,13 @@ public class StaffContactPrivilegeContextTest {
 	@Test
 	public void findTest(){
 		System.out.println(StaffContactPrivilegeContext.loadByStaffId("1").findContactPrivilegeToDeptIds());
+	}
+	
+	@Test
+	public void getPropertyStaffTest() {
+		PropertyStaffContext context = PropertyStaffContext.loadByAccount("admin");
+		PropertyStaffVo propertyStaff = context.getPropertyStaff();
+		System.out.println("************ "+ propertyStaff);
 	}
 	
 }
