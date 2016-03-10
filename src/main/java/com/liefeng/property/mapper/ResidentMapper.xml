@@ -18,6 +18,7 @@
 	<result column="eduDegree" property="customer.eduDegree"/>
 	<result column="id" property="id"/>
 	<result column="name" property="name"/>
+	<result column="cust_global_id" property="custGlobalId"/>
 </resultMap>
 
 <resultMap id="GuardResidentVo" type="com.liefeng.property.vo.guard.GuardResidentVo" ></resultMap>
@@ -308,7 +309,8 @@ select count(*) from (
 <select id="queryByHouseId" resultMap="BaseResultMap">
 	SELECT
 		id,
-		name
+		name,
+		cust_global_id
 	FROM
 		t_resident
 	WHERE

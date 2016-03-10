@@ -127,6 +127,13 @@ public interface IPropertyStaffService {
 	public List<PropertyDepartmentVo> getDepartments();
 	
 	/**
+	 * 查询多个部门
+	 * @param departmentIds
+	 * @return
+	 */
+	public List<PropertyDepartmentVo> getDepartments(List<String> departmentIds);
+	
+	/**
 	 * 根据部门ID获取部门负责人信息
 	 * @param departmentId 部门ID
 	 * @return 部门负责人信息

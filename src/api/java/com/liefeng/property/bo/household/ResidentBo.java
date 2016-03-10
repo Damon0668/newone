@@ -66,6 +66,11 @@ public class ResidentBo extends BaseValue {
 	 * 籍贯
 	 */
 	private String nativePlace;
+	
+	/**
+	 * 客户全局唯一标识
+	 */
+	private String custGlobalId;
 
 	public String getResidentId() {
 		return residentId;
@@ -153,6 +158,14 @@ public class ResidentBo extends BaseValue {
 
 	public void setNativePlace(String nativePlace) {
 		this.nativePlace = nativePlace;
+	}
+
+	public String getCustGlobalId() {
+		return custGlobalId;
+	}
+
+	public void setCustGlobalId(String custGlobalId) {
+		this.custGlobalId = custGlobalId;
 	}
 
 }
