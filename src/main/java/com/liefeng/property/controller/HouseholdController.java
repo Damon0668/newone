@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.common.util.TimeUtil;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataListValue;
@@ -15,6 +16,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IHouseholdService;
+import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.vo.household.CheckinQueueVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
@@ -171,5 +173,43 @@ public class HouseholdController {
 		List<ResidentVo> residentVoList = householdService.getResidentListByHouseId(houseId);
 		
 		return DataListValue.success(residentVoList);
+	}
+	
+	/**
+	 * 登记住户情况
+	 * @param pic 头像路径
+	 * @param name 姓名
+	 * @param sex 性别
+	 * @param idNum 身份证号码
+	 * @param mobile 手机号码
+	 * @param residentRelation 与业主的关系
+	 * @param workUnit 工作单位
+	 * @param nativePlace 籍贯
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月10日 下午1:59:08
+	 */
+	@RequestMapping("registerResident")
+	@ResponseBody
+	public ReturnValue registerResident(ResidentBo residentBo) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		ResidentVo residentVo = new ResidentVo();
+		CustomerVo customer = new CustomerVo();
+		customer.setSex(residentBo.getSex());
+		customer.setIdNum(residentBo.getIdNum());
+		customer.setNativePlace(residentBo.getNativePlace());
+		
+		residentVo.setCustomer(customer);
+		residentVo.setHouseId(residentBo.getHouseId());
+		residentVo.setProprietorId(residentBo.getProprietorId());
+		residentVo.setPic(residentBo.getPic());
+		residentVo.setName(residentBo.getName());
+		residentVo.setMobile(residentBo.getMobile());
+		residentVo.setResidentRelation(residentBo.getResidentRelation());
+		residentVo.setWorkUnit(residentBo.getWorkUnit());
+		
+		householdService.saveResident(residentVo);
+		
+		return ReturnValue.success();
 	}
 }

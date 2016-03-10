@@ -226,7 +226,7 @@ public class HouseholdService implements IHouseholdService {
 			
 			// 仅当同个OEM下，同个小区下住户不存在时，才做用户创建
 			// 住户信息存在时，即使传过来的手机号不同也不做用户创建，为了保证同个OEM下，同个小区住户用户信息只有一份
-			if(isExit) {
+			if(!isExit) {
 				// 后台默认创建的手机用户信息
 				UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.RESIDENT);
 				
@@ -522,6 +522,7 @@ public class HouseholdService implements IHouseholdService {
 	 * @return 用户信息
 	 */
 	private UserVo setUpUser4Create(CustomerVo customer , String householdType) {
+		String oemCode = ContextManager.getInstance().getOemCode();
 		// 后台默认创建的用户信息
 		UserVo user = new UserVo();
 		String phone = customer.getMobile();
@@ -529,13 +530,13 @@ public class HouseholdService implements IHouseholdService {
 		
 		user.setCustomer(customer);
 		user.setCustGlobalId(customer.getGlobalId()); // 客户全局ID
-		// user.setName(phone); // 账号
+	    user.setName(phone + oemCode); // 默认设置的用户名为手机号+oemCode
 		user.setPassword(password); // 初始密码
 		user.setMobile(phone); // 设置手机号码
 		user.setAvatarUrl(customer.getPortraitUrl());
 		user.setRegisterType(UserConstants.RegisterType.PC); // 注册类型
 		user.setHouseholdType(householdType); // 账号类型
-		user.setOemCode(ContextManager.getInstance().getOemCode()); // OEM编码
+		user.setOemCode(oemCode); // OEM编码
 		return user;
 	}
 	
