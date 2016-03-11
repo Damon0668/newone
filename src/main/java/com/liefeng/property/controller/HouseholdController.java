@@ -253,7 +253,6 @@ public class HouseholdController {
 		ResidentVo residentVo = new ResidentVo();
 		CustomerVo customer = new CustomerVo();
 		customer.setSex(residentBo.getSex());
-		customer.setIdNum(residentBo.getIdNum());
 		customer.setNativePlace(residentBo.getNativePlace());
 		customer.setGlobalId(residentBo.getCustGlobalId());
 		
@@ -262,7 +261,6 @@ public class HouseholdController {
 		
 		residentVo.setCustomer(customer);
 		residentVo.setPic(residentBo.getPic());
-		residentVo.setName(residentBo.getName());
 		residentVo.setMobile(residentBo.getMobile());
 		residentVo.setResidentRelation(residentBo.getResidentRelation());
 		residentVo.setWorkUnit(residentBo.getWorkUnit());
