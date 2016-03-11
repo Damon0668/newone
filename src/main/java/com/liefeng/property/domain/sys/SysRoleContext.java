@@ -130,7 +130,9 @@ public class SysRoleContext {
 		
 		Page<SysRoleVo> voPage = null;
 		
-		Page<SysRolePo> poPage = sysRoleRepository.findByNameLike(name, new PageRequest(page - 1, size));
+		String oemCode = ContextManager.getInstance().getOemCode();
+		
+		Page<SysRolePo> poPage = sysRoleRepository.findByOemCodeAndNameLike(oemCode, name, new PageRequest(page - 1, size));
 		
 		voPage = poPage.map(new Po2VoConverter<SysRolePo, SysRoleVo>(SysRoleVo.class));
 		
