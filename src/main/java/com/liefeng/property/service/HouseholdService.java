@@ -551,6 +551,8 @@ public class HouseholdService implements IHouseholdService {
 		newUser.setCustomer(customer);
 		if(user != null) {
 			newUser.setId(user.getId());
+			newUser.setName(user.getName());
+			newUser.setMobile(user.getMobile());
 			newUser.setPassword(user.getPassword());
 		}
 		

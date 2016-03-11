@@ -237,4 +237,38 @@ public class HouseholdController {
 		
 		return DataValue.success(residentVo);
 	}
+	
+	/**
+	 * 更新住户情况
+	 * @param residentBo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月10日 下午4:36:32
+	 */
+	@RequestMapping("updateResident")
+	@ResponseBody
+	public ReturnValue updateResident(ResidentBo residentBo) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		
+		ResidentVo residentVo = new ResidentVo();
+		CustomerVo customer = new CustomerVo();
+		customer.setSex(residentBo.getSex());
+		customer.setIdNum(residentBo.getIdNum());
+		customer.setNativePlace(residentBo.getNativePlace());
+		customer.setGlobalId(residentBo.getCustGlobalId());
+		
+		CustomerVo customerVo = userService.getCustomerByGlobalId(residentBo.getCustGlobalId());
+		customer.setId(customerVo.getId());
+		
+		residentVo.setCustomer(customer);
+		residentVo.setPic(residentBo.getPic());
+		residentVo.setName(residentBo.getName());
+		residentVo.setMobile(residentBo.getMobile());
+		residentVo.setResidentRelation(residentBo.getResidentRelation());
+		residentVo.setWorkUnit(residentBo.getWorkUnit());
+		residentVo.setId(residentBo.getResidentId());
+		
+		householdService.updateResident(residentVo);
+		return ReturnValue.success();
+	}
 }
