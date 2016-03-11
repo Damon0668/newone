@@ -22,6 +22,7 @@ import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
+import com.liefeng.property.domain.workbench.EventProcessContext;
 import com.liefeng.property.domain.workbench.EventReportContext;
 import com.liefeng.property.domain.workbench.NoticeContext;
 import com.liefeng.property.domain.workbench.NoticePrivilegeContext;
@@ -33,6 +34,7 @@ import com.liefeng.property.domain.workbench.TaskContext;
 import com.liefeng.property.domain.workbench.TaskPrivilegeContext;
 import com.liefeng.property.domain.workbench.WebsiteMsgContext;
 import com.liefeng.property.domain.workbench.WebsiteMsgPrivilegeContext;
+import com.liefeng.property.vo.workbench.EventProcessVo;
 import com.liefeng.property.vo.workbench.EventReportVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
@@ -608,6 +610,26 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 	
 	@Override
+	public void createEventProcess(EventProcessVo eventProcessVo){
+		EventProcessContext.build(eventProcessVo).create();
+	}
+	
+	@Override
+	public void updateEventProcess(EventProcessVo eventProcessVo){
+		EventProcessContext.build(eventProcessVo).update();
+	}
+	
+	@Override
+	public EventProcessVo findEventProcessByWfTaskId(String wfTaskId){
+		return EventProcessContext.build().findByWfTaskId(wfTaskId);
+	}
+	
+	@Override
+	public EventReportVo findEventReportByWfTaskId(String wfOrderId){
+		return EventReportContext.build().findByWfOrderId(wfOrderId);
+	}
+	
+	@Override
 	public EventReportVo getEventReport(String id){
 		EventReportContext eventReportContext = EventReportContext.loadById(id);
 		return eventReportContext.get();
@@ -657,5 +679,12 @@ public class WorkbenchService implements IWorkbenchService {
 			String privilegeType, Integer page, Integer size) {
 		NoticeContext noticeContext = NoticeContext.build();
 		return noticeContext.findOfPublished(terminal, noticeType, projectId, groupId, privilegeType, page, size);
+	}
+	
+	/**************报事工单处理******************/
+	@Override
+	public DataPageValue<EventReportVo> getWaitingForEventReportList(EventReportBo eventReportBo,
+			Integer page, Integer size){
+		return EventReportContext.build().getWaitingForList(eventReportBo, page, size);
 	}
 }

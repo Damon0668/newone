@@ -2,6 +2,8 @@ package com.liefeng.property.vo.workbench;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+
 import com.liefeng.core.entity.BaseValue;
 
 /**
@@ -18,6 +20,11 @@ public class EventReportVo extends BaseValue {
 	 */
 	private String id;
 
+	/**
+	 * 流程实例id
+	 */
+	private String wfOrderId;
+	
 	/**
 	 * 项目ID
 	 */
@@ -132,6 +139,41 @@ public class EventReportVo extends BaseValue {
 	 * OEM编码
 	 */
 	private String oemCode;
+	
+	/**
+	 * 任务id
+	 */
+	private String taskId;
+	
+	/**
+	 * 流程id
+	 */
+	private String processId;
+	
+	/**
+	 * 工单id
+	 */
+	private String orderId;
+	
+	/**
+	 * 任务显示名称
+	 */
+	private String taskDisplayName;
+	
+	/**
+	 * 工单号
+	 */
+	private String orderNo;
+	
+	/**
+	 *	当前任务
+	 */
+	private String taskName;
+	
+	/**
+	 * 状态
+	 */
+	private String auditStatus;
 	
 	public Character getImportant() {
 		return priority.charAt(1);
@@ -339,6 +381,70 @@ public class EventReportVo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getWfOrderId() {
+		return wfOrderId;
+	}
+
+	public void setWfOrderId(String wfOrderId) {
+		this.wfOrderId = wfOrderId;
+	}
+
+	public String getAuditStatus() {
+		return auditStatus;
+	}
+
+	public void setAuditStatus(String auditStatus) {
+		this.auditStatus = auditStatus;
+	}
+
+	public String getTaskName() {
+		return taskName;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
+	}
+
+	public String getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
+	}
+
+	public String getProcessId() {
+		return processId;
+	}
+
+	public void setProcessId(String processId) {
+		this.processId = processId;
+	}
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
+	public String getTaskDisplayName() {
+		return taskDisplayName;
+	}
+
+	public void setTaskDisplayName(String taskDisplayName) {
+		this.taskDisplayName = taskDisplayName;
+	}
+
+	public String getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
 	}
 
 }

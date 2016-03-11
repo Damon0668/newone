@@ -1,174 +1,160 @@
-package com.liefeng.property.po.workbench;
+package com.liefeng.property.vo.workbench;
 
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 import com.liefeng.core.entity.BaseValue;
 
 /**
- * 报事持久化对象
+ * 报事值对象
  * @author Huangama
  * @date 2016-3-3
  */
-@Entity
-@Table(name="t_event_report")
-public class EventReportPo extends BaseValue {
+public class EventReportFlowVo extends BaseValue {
 
-	private static final long serialVersionUID = -503816334942552780L;
+	private static final long serialVersionUID = -2581787604165953419L;
 
 	/**
 	 * 主键
 	 */
-	@Id
 	private String id;
 
 	/**
 	 * 流程实例id
 	 */
-	@Column(name = "wf_order_id")
 	private String wfOrderId;
 	
 	/**
 	 * 项目ID
 	 */
-	@Column(name = "project_id")
 	private String projectId;
 
 	/**
 	 * 房间号
 	 */
-	@Column(name = "house_num")
 	private String houseNum;
 
 	/**
 	 * 业主姓名
 	 */
-	@Column(name = "proprietor_name")
 	private String proprietorName;
 
 	/**
 	 * 报事人姓名
 	 */
-	@Column(name = "reporter_name")
 	private String reporterName;
 
 	/**
 	 * 报事人电话
 	 */
-	@Column(name = "phone")
 	private String phone;
 
 	/**
 	 * 报事时间
 	 */
-	@Column(name = "report_time")
 	private Date reportTime;
 
 	/**
 	 * 报事方式。1：来电；2：APP客户端；3：上门。
 	 */
-	@Column(name = "report_mode")
 	private String reportMode;
 
 	/**
 	 * 事件类型
 	 */
-	@Column(name = "event_type")
 	private String eventType;
 
 	/**
 	 * 事件具体类别
 	 */
-	@Column(name = "category")
 	private String category;
 
 	/**
 	 * 位置
 	 */
-	@Column(name = "location")
 	private String location;
 
 	/**
 	 * 事件主题
 	 */
-	@Column(name = "title")
 	private String title;
 	
 	/**
 	 * 事件内容
 	 */
-	@Column(name = "content")
 	private String content;
 	
 	/**
 	 * 状态。0：未处理；1：已派工；2：已反馈。
 	 */
-	@Column(name = "status")
 	private String status;
 	
 	/**
 	 * 优先级。高位表示紧急程度，低位表示重要程度，如：10表示紧急不重要；11表示紧急重要。
 	 */
-	@Column(name = "priority")
-	private String priority;
+	private String priority = "00";
 	
 	/**
 	 * 服务类型。0：免费；1：收费
 	 */
-	@Column(name = "service_type")
 	private String serviceType;
 	
 	/**
 	 * 照片URL
 	 */
-	@Column(name = "pic_url")
 	private String picUrl;
 	
 	/**
 	 * 预约时间
 	 */
-	@Column(name = "order_time")
 	private Date orderTime;
 	
 	/**
 	 * 处理结果
 	 */
-	@Column(name = "result")
 	private String result;
 	
 	/**
 	 * 录入员工ID
 	 */
-	@Column(name = "staff_id")
 	private String staffId;
 	
 	/**
 	 * 受理人ID
 	 */
-	@Column(name = "accepter_id")
 	private String accepterId;
 	
 	/**
 	 * 受理时间
 	 */
-	@Column(name = "accept_time")
 	private Date acceptTime;
 
 	/**
 	 * 创建时间
 	 */
-	@Column(name = "create_time")
 	private Date createTime;
 
 	/**
 	 * OEM编码
 	 */
-	@Column(name = "oem_code", updatable = false)
 	private String oemCode;
+	
+	public Character getImportant() {
+		return priority.charAt(1);
+	}
+
+	public void setImportant(Character important) {
+		priority = Character.valueOf(priority.charAt(0)).toString() + important.toString();
+	}
+
+	public Character getEmergency() {
+		return priority.charAt(0);
+	}
+
+	public void setEmergency(Character emergency) {
+		priority = emergency.toString() + Character.valueOf(priority.charAt(1)).toString();
+	}
 
 	public String getId() {
 		return id;
