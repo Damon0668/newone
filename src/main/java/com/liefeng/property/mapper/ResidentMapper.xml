@@ -19,6 +19,8 @@
 	<result column="id" property="id"/>
 	<result column="name" property="name"/>
 	<result column="cust_global_id" property="custGlobalId"/>
+	<result column="mobile" property="mobile"/>
+	<result column="pic" property="pic"/>
 </resultMap>
 
 <resultMap id="GuardResidentVo" type="com.liefeng.property.vo.guard.GuardResidentVo" ></resultMap>
@@ -310,7 +312,9 @@ select count(*) from (
 	SELECT
 		id,
 		name,
-		cust_global_id
+		cust_global_id,
+		pic,
+		mobile
 	FROM
 		t_resident
 	WHERE
