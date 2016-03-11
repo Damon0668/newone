@@ -226,7 +226,7 @@ public class HouseholdService implements IHouseholdService {
 			
 			// 仅当同个OEM下，同个小区下住户不存在时，才做用户创建
 			// 住户信息存在时，即使传过来的手机号不同也不做用户创建，为了保证同个OEM下，同个小区住户用户信息只有一份
-			if(isExit) {
+			if(!isExit) {
 				// 后台默认创建的手机用户信息
 				UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.RESIDENT);
 				
@@ -522,6 +522,7 @@ public class HouseholdService implements IHouseholdService {
 	 * @return 用户信息
 	 */
 	private UserVo setUpUser4Create(CustomerVo customer , String householdType) {
+		String oemCode = ContextManager.getInstance().getOemCode();
 		// 后台默认创建的用户信息
 		UserVo user = new UserVo();
 		String phone = customer.getMobile();
@@ -529,13 +530,13 @@ public class HouseholdService implements IHouseholdService {
 		
 		user.setCustomer(customer);
 		user.setCustGlobalId(customer.getGlobalId()); // 客户全局ID
-		// user.setName(phone); // 账号
+	    user.setName(phone + oemCode); // 默认设置的用户名为手机号+oemCode
 		user.setPassword(password); // 初始密码
 		user.setMobile(phone); // 设置手机号码
 		user.setAvatarUrl(customer.getPortraitUrl());
 		user.setRegisterType(UserConstants.RegisterType.PC); // 注册类型
 		user.setHouseholdType(householdType); // 账号类型
-		user.setOemCode(ContextManager.getInstance().getOemCode()); // OEM编码
+		user.setOemCode(oemCode); // OEM编码
 		return user;
 	}
 	
@@ -550,6 +551,8 @@ public class HouseholdService implements IHouseholdService {
 		newUser.setCustomer(customer);
 		if(user != null) {
 			newUser.setId(user.getId());
+			newUser.setName(user.getName());
+			newUser.setMobile(user.getMobile());
 			newUser.setPassword(user.getPassword());
 		}
 		
@@ -713,4 +716,74 @@ public class HouseholdService implements IHouseholdService {
 		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
 		return checkinQueueContext.getNotStatus(projectId, status, queryDate, page, size);
 	}
+
+	@Override
+	public void checkProrietorStatus(String proprietorId, String userId, String projectId, String houseId) throws LiefengException {
+		
+		//获取用户“已办理”的排队
+		CheckinQueueVo queueVo = getCheckinQueueOfStatus(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.FINISHED);
+		if(queueVo != null){
+			throw new PropertyException(HouseholdErrorCode.CHECKIN_PROPRIETOR_CLOSE);
+		}
+		
+		//判断是否已经过了办理时间
+		HouseVo houseVo = projectService.findHouseById(houseId);
+		String buildingId = houseVo.getBuildingId();
+		CheckinScheduleVo schedule = getCheckinSchedule(projectId, buildingId);
+		if(schedule != null){
+			Date date = TimeUtil.formatDate(new Date(), "yyyy-MM-dd");
+			if(date.after(schedule.getEndDate())){
+				throw new PropertyException(HouseholdErrorCode.CHECKIN_PROPRIETOR_CLOSE);
+			}
+		}
+		
+		ProprietorVo proprietorVo = getProprietorById(proprietorId);
+		//修改
+		if(ValidateHelper.isNotEmptyString(proprietorVo.getEmergencyContact()) || ValidateHelper.isNotEmptyString(proprietorVo.getEmergencyPhone())){
+			throw new PropertyException(HouseholdErrorCode.CHECKIN_PROPRIETOR_MODIFY);
+		}else{ //登记
+			throw new PropertyException(HouseholdErrorCode.CHECKIN_PROPRIETOR_CHECK);
+		}
+	}
+
+	@Override
+	public void registerProprietor(ProprietorSingleHouseVo singleHouse) throws LiefengException {
+		//更新业主信息
+		ProprietorVo proprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
+		proprietor.setId(singleHouse.getProprietorId());
+		proprietor.setRegisterTime(new Date());
+		proprietor.setStatus(HouseholdConstants.ProprietorStatus.ACTIVE);
+		ProprietorContext proprietorContext = ProprietorContext.build(proprietor);
+		ProprietorVo proprietorVo = proprietorContext.update();
+		
+		CustomerVo customer = userService.getCustomerByGlobalId(proprietorVo.getCustGlobalId());
+		customer.setSex(singleHouse.getSex());
+		customer = checkService.updateCustomerCheck(customer);
+		// 发送TCC消息，更新用户信息
+		tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_CUSTOMER, customer.toString());
+	}
+
+	@Override
+	public ProprietorSingleHouseVo getProprietorOfRegister(String proprietorId) {
+		//业主
+		ProprietorVo proprietorVo = getProprietorById(proprietorId);
+		ProprietorSingleHouseVo singleHouseVo = new ProprietorSingleHouseVo();
+		
+		//copy
+		MyBeanUtil.copyBeanNotNull2Bean(proprietorVo, singleHouseVo);
+		singleHouseVo.setProprietorId(proprietorId);
+		//用户信息
+		CustomerVo customer = userService.getCustomerByGlobalId(proprietorVo.getCustGlobalId());
+		singleHouseVo.setSex(customer.getSex());
+		
+		return singleHouseVo;
+	}
+
+	@Override
+	public List<ResidentVo> getResidentListByHouseId(String houseId) {
+		ResidentContext residentContext = ResidentContext.build();
+		return residentContext.getByHouseId(houseId);
+	}
+
+
 }

@@ -2,14 +2,18 @@ package com.liefeng.property.vo.household;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.liefeng.core.entity.BaseValue;
 
 /**
  * 业主综合信息值对象
  * 
  * @author ZhenTingJun
+ * @author xhw
  * @date 2015-12-28
  */
+@JsonInclude(Include.NON_NULL)
 public class ProprietorSingleHouseVo extends BaseValue {
 
 	private static final long serialVersionUID = -8954670665706939873L;

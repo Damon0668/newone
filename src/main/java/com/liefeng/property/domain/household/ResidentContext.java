@@ -262,6 +262,21 @@ public class ResidentContext {
 		return residentQueryRepository.queryResidents(pagingParamVo);
 	}
 
+	/**
+	 * 根据房间id，获取住户
+	 * @param houseId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月9日 下午9:09:58
+	 */
+	public List<ResidentVo> getByHouseId(String houseId){
+		PagingParamVo pagingParamVo = new PagingParamVo();
+		Map<String, String> extra = new HashMap<String ,String>();
+		extra.put("houseId", houseId);
+		pagingParamVo.setExtra(extra);
+		
+		return residentQueryRepository.queryByHouseId(pagingParamVo);
+	}
 	protected void setResidentId(String residentId) {
 		this.residentId = residentId;
 	}

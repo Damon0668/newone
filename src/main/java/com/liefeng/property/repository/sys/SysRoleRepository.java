@@ -31,6 +31,6 @@ public interface SysRoleRepository extends JpaRepository<SysRolePo, Long>{
 	 * @param pageable
 	 * @return
 	 */
-	public Page<SysRolePo> findByNameLike(String name, Pageable pageable);
+	public Page<SysRolePo> findByOemCodeAndNameLike(String oemCode, String name, Pageable pageable);
 
 }

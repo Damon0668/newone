@@ -253,4 +253,43 @@ public interface IHouseholdService {
 	 * @date 2016年3月9日 上午10:51:54
 	 */
 	public DataPageValue<CheckinQueueVo> getCheckinQueueOfNotStatus(String projectId, String status, String queryDate, Integer page, Integer size);
+	
+	/**
+	 * 判断业主是否已经登记入住
+	 * @param proprietorId 业主id
+	 * @param userId 手机端用户id
+	 * @param projectId 项目id
+	 * @param houseId 房间id
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月9日 下午4:18:37
+	 */
+	public void checkProrietorStatus(String proprietorId, String userId, String projectId, String houseId) throws LiefengException;
+	
+	/**
+	 * 业主情况登记
+	 * @param singleHouse 
+	 * @author xhw
+	 * @date 2016年3月9日 下午5:44:31
+	 */
+	public void registerProprietor(ProprietorSingleHouseVo singleHouse) throws LiefengException;
+	
+	/**
+	 * 根据业主id，获取业主的登记情况
+	 * @param proprietorId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月9日 下午8:00:19
+	 */
+	public ProprietorSingleHouseVo getProprietorOfRegister(String proprietorId);
+	
+	/**
+	 * 根据房间id，获取住户
+	 * @param houseId 房间id
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月9日 下午9:11:26
+	 */
+	public List<ResidentVo> getResidentListByHouseId(String houseId);
+	
 }

@@ -40,4 +40,13 @@ public interface ResidentQueryRepository extends BaseRepository<ResidentVo> {
 	 * 查询集合总数
 	 */
 	public Long queryGuardResidentsByCount(PagingParamVo param);
+	
+	/**
+	 * 根据房间id，获取住户
+	 * @param param {houseId:房间id}
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月9日 下午9:05:58
+	 */
+	public List<ResidentVo> queryByHouseId(PagingParamVo param);
 }

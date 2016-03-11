@@ -17,6 +17,7 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.po.sys.SysMenuPo;
 import com.liefeng.property.repository.mybatis.SysMenuQueryRepository;
@@ -191,7 +192,7 @@ public class SysMenuContext {
 	 * @return
 	 */
 	public List<SysMenuVo> findAllMenus(){
-		List<SysMenuVo> sysMenuList = MyBeanUtil.createList(sysMenuRepository.findAll(),SysMenuVo.class);
+		List<SysMenuVo> sysMenuList = MyBeanUtil.createList(sysMenuRepository.findAll(), SysMenuVo.class);
 		return sysMenuList;
 	}
 	

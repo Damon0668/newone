@@ -56,7 +56,13 @@ public enum HouseholdErrorCode implements IErrorCode {
 	CHECKIN_QUEUE_FINISHED("入住办理已经完成"),
 	
 	CHECKIN_QUEUE_HANDLING("入住办理正在办理中"),
-
+	
+   /***************** 业主登记相关 *******************/
+	CHECKIN_PROPRIETOR_CLOSE("业主登记功能已经关闭"),
+	
+	CHECKIN_PROPRIETOR_CHECK("业主情况登记"),
+	
+	CHECKIN_PROPRIETOR_MODIFY("修改业主登记资料"),
 	;
 
 	private String desc;
