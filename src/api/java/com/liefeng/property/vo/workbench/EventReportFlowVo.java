@@ -11,7 +11,7 @@ import com.liefeng.core.entity.BaseValue;
  * @author Huangama
  * @date 2016-3-3
  */
-public class EventReportVo extends BaseValue {
+public class EventReportFlowVo extends BaseValue {
 
 	private static final long serialVersionUID = -2581787604165953419L;
 
@@ -139,41 +139,6 @@ public class EventReportVo extends BaseValue {
 	 * OEM编码
 	 */
 	private String oemCode;
-	
-	/**
-	 * 任务id
-	 */
-	private String taskId;
-	
-	/**
-	 * 流程id
-	 */
-	private String processId;
-	
-	/**
-	 * 工单id
-	 */
-	private String orderId;
-	
-	/**
-	 * 任务显示名称
-	 */
-	private String taskDisplayName;
-	
-	/**
-	 * 工单号
-	 */
-	private String orderNo;
-	
-	/**
-	 *	当前任务
-	 */
-	private String taskName;
-	
-	/**
-	 * 状态
-	 */
-	private String auditStatus;
 	
 	public Character getImportant() {
 		return priority.charAt(1);
@@ -389,22 +354,6 @@ public class EventReportVo extends BaseValue {
 
 	public void setWfOrderId(String wfOrderId) {
 		this.wfOrderId = wfOrderId;
-	}
-
-	public String getAuditStatus() {
-		return auditStatus;
-	}
-
-	public void setAuditStatus(String auditStatus) {
-		this.auditStatus = auditStatus;
-	}
-
-	public String getTaskName() {
-		return taskName;
-	}
-
-	public void setTaskName(String taskName) {
-		this.taskName = taskName;
 	}
 
 }

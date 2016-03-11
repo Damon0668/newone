@@ -5,6 +5,7 @@ import java.util.List;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.workbench.EventReportBo;
+import com.liefeng.property.vo.workbench.EventProcessVo;
 import com.liefeng.property.vo.workbench.EventReportVo;
 import com.liefeng.property.vo.workbench.ProprietorContactsVo;
 import com.liefeng.property.vo.workbench.StaffContactsVo;
@@ -498,5 +499,44 @@ public interface IWorkbenchService {
 	 * @2016年3月7日 下午3:24:55
 	 */
 	public DataPageValue<NoticeVo> findNoticeOfPublished(String terminal, String noticeType, String projectId, String groupId, String privilegeType, Integer page, Integer size);
+
+
+	/**
+	 * 创建处理过程
+	 * @param eventProcessVo
+	 */
+	public void createEventProcess(EventProcessVo eventProcessVo);
+
+
+	/**
+	 * 更新处理过程
+	 * @param eventProcessVo
+	 */
+	public void updateEventProcess(EventProcessVo eventProcessVo);
+
+	/**
+	 * 根据流程任务id获取处理过程
+	 * @param wfTaskId 流程任务id
+	 * @return
+	 */
+	public EventProcessVo findEventProcessByWfTaskId(String wfTaskId);
+
+	/**
+	 * 根据流程工单id获取工单信息
+	 * @param wfOrderId
+	 * @return
+	 */
+	public EventReportVo findEventReportByWfTaskId(String wfOrderId);
+
+	
+	/**
+	 * 获取报事工单处理列表 分页
+	 * @param eventReportBo
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public DataPageValue<EventReportVo> getWaitingForEventReportList(
+			EventReportBo eventReportBo, Integer page, Integer size);
 	
 }

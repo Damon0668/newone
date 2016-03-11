@@ -14,4 +14,6 @@ import com.liefeng.property.po.workbench.EventReportPo;
 @Transactional
 public interface EventReportRepository extends JpaRepository<EventReportPo, String> {
 
+	public EventReportPo findByWfOrderId(String wfOrderId);
+
 }

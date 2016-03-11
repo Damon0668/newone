@@ -97,6 +97,11 @@ public class EventReportContext {
 		return MyBeanUtil.createBean(eventReportPo, EventReportVo.class);
 	}
 	
+	public EventReportVo findByWfOrderId(String wfOrderId){
+		EventReportPo eventReportPo = eventReportRepository.findByWfOrderId(wfOrderId);
+		return MyBeanUtil.createBean(eventReportPo, EventReportVo.class);
+	}
+	
 	public DataPageValue<EventReportVo> list(EventReportBo eventReportBo,Integer currentPage,Integer pageSize) {
 		Map<String, String> extra = MyBeanUtil.bean2Map(eventReportBo);
 
@@ -113,6 +118,26 @@ public class EventReportContext {
 		param.getPager().setRowCount(total);
 		
 		List<EventReportVo> eventReportVos = eventReportQueryRepository.queryByPage(param);
+		
+		return new DataPageValue<EventReportVo>(eventReportVos, total, pageSize, currentPage);
+	}
+	
+	public DataPageValue<EventReportVo> getWaitingForList(EventReportBo eventReportBo,Integer currentPage,Integer pageSize){
+		Map<String, String> extra = MyBeanUtil.bean2Map(eventReportBo);
+
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		param.setPage(currentPage);
+		param.setPageSize(pageSize);
+		
+		Long total = eventReportQueryRepository.waitingForQueryByCount(param);
+		total = (total == null ? 0 : total);
+		logger.info("EventReport List total：total={}", total);
+		
+		// 设置数据总行数，用于计算偏移量
+		param.getPager().setRowCount(total);
+		
+		List<EventReportVo> eventReportVos = eventReportQueryRepository.waitingForQueryByPage(param);
 		
 		return new DataPageValue<EventReportVo>(eventReportVos, total, pageSize, currentPage);
 	}

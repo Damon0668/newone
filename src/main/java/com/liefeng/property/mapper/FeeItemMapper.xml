@@ -33,9 +33,11 @@
 	<sql id="Example_Where_Clause">
 		where 1=1
 		<trim suffixOverrides=",">
-
+			<if test="extra.startDate != null and extra.startDate != ''
+				and extra.endDate != null and extra.endDate != '' ">
 			AND #{extra.startDate} &lt;= fi.start_date
 			AND #{extra.endDate} &gt;= fi.end_date
+			</if>
 			<if test="extra.feeType != null and extra.feeType != ''">
 				AND #{extra.feeType} = fi.fee_type
 			</if>
@@ -176,6 +178,7 @@
 		fr.create_time as recordCreateTime
 		from t_fee_item fi left join t_fee_record fr on fr.fee_item_id=fi.id
 		<include refid="Personal_Where_Clause" />
+		group by fi.fee_type
 		order by fi.create_time desc
 		<if
 			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">

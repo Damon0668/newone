@@ -27,6 +27,12 @@ public class EventReportPo extends BaseValue {
 	private String id;
 
 	/**
+	 * 流程实例id
+	 */
+	@Column(name = "wf_order_id")
+	private String wfOrderId;
+	
+	/**
 	 * 项目ID
 	 */
 	@Column(name = "project_id")
@@ -354,6 +360,14 @@ public class EventReportPo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getWfOrderId() {
+		return wfOrderId;
+	}
+
+	public void setWfOrderId(String wfOrderId) {
+		this.wfOrderId = wfOrderId;
 	}
 
 }
