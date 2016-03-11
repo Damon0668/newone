@@ -17,7 +17,6 @@ import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.sys.SysRoleUserPo;
 import com.liefeng.property.repository.sys.SysRoleUserRepository;
-import com.liefeng.property.service.PropertyStaffService;
 import com.liefeng.property.vo.sys.SysRoleUserVo;
 
 /**

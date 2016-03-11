@@ -15,7 +15,6 @@ import com.liefeng.property.error.PropertyStaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.staff.StaffContactPrivilegePo;
 import com.liefeng.property.repository.StaffContactPrivilegeRepository;
-import com.liefeng.property.vo.project.ProjectVo;
 import com.liefeng.property.vo.staff.StaffContactPrivilegeVo;
 
 /**
