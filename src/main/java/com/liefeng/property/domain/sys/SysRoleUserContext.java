@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.sys.SysRoleUserPo;
 import com.liefeng.property.repository.sys.SysRoleUserRepository;
 import com.liefeng.property.service.PropertyStaffService;
@@ -75,13 +76,15 @@ public class SysRoleUserContext {
 	@Transactional(rollbackOn=Exception.class)
 	public void grantRoles(Long[] roleIds){
 		
+		String oemCode = ContextManager.getInstance().getOemCode();
+		
 		deleteAll();
 		
 		for (Long roleId : roleIds) {
 			SysRoleUserPo sysRoleUserPo = new SysRoleUserPo();
 			sysRoleUserPo.setUserId(this.userId);
 			sysRoleUserPo.setRoleId(roleId);
-			sysRoleUserPo.setOemCode("test");
+			sysRoleUserPo.setOemCode(oemCode);
 			sysRoleUserRepository.save(sysRoleUserPo);
 		}
 	}

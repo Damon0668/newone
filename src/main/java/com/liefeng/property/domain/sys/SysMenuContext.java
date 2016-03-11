@@ -129,8 +129,9 @@ public class SysMenuContext {
 	 * 创建菜单
 	 */
 	public SysMenuVo create() {
+		String oemCode = ContextManager.getInstance().getOemCode();
 		SysMenuPo sysMenuPo = MyBeanUtil.createBean(sysMenu, SysMenuPo.class);
-		sysMenuPo.setOemCode("test");
+		sysMenuPo.setOemCode(oemCode);
 		sysMenuRepository.save(sysMenuPo);
 		sysMenu = MyBeanUtil.createBean(sysMenuPo, SysMenuVo.class);
 		return sysMenu;
