@@ -47,6 +47,13 @@ public interface SysMenuRepository extends JpaRepository<SysMenuPo, Long>{
 	public List<SysMenuPo> findMenusIgnoreButton();
 	
 	/**
+	 * 根据oemCode查询菜单
+	 * @param oemCode
+	 * @return
+	 */
+	public List<SysMenuPo> findByOemCode(String oemCode);
+	
+	/**
 	 * 查找子菜单
 	 * @param parentId 父ID
 	 * @return 子菜单列表
