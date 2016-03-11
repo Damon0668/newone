@@ -407,4 +407,44 @@ public class EventReportVo extends BaseValue {
 		this.taskName = taskName;
 	}
 
+	public String getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
+	}
+
+	public String getProcessId() {
+		return processId;
+	}
+
+	public void setProcessId(String processId) {
+		this.processId = processId;
+	}
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
+	public String getTaskDisplayName() {
+		return taskDisplayName;
+	}
+
+	public void setTaskDisplayName(String taskDisplayName) {
+		this.taskDisplayName = taskDisplayName;
+	}
+
+	public String getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
+
 }
