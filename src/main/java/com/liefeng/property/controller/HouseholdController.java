@@ -26,6 +26,7 @@ import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.vo.household.CheckinQueueVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
+import com.liefeng.property.vo.household.ResidentFeedbackVo;
 import com.liefeng.property.vo.household.ResidentVo;
 
 /**
@@ -319,4 +320,33 @@ public class HouseholdController {
 		return ReturnValue.success();
 	}
 	
+	/**
+	 * 创建用户反馈
+	 * @param houseId 房屋id
+	 * @param residentId 住户/业主id
+	 * @param isProprietor 是否为业主。0：否；1：是
+	 * @param content 内容
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月14日 上午11:02:05
+	 */
+	@RequestMapping("createResidentFeedback")
+	@ResponseBody
+	public ReturnValue createResidentFeedback(String houseId, String residentId, String isProprietor, String content) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		
+		ResidentFeedbackVo residentFeedbackVo = new ResidentFeedbackVo();
+		residentFeedbackVo.setContent(content);
+		residentFeedbackVo.setHouseId(houseId);
+		residentFeedbackVo.setResidentId(residentId);
+		if(isProprietor.equals("0")){
+			residentFeedbackVo.setIsProprietor(HouseholdConstants.IsProprietor.NO);
+		}else{
+			residentFeedbackVo.setIsProprietor(HouseholdConstants.IsProprietor.YES);
+		}
+		
+		householdService.createResidentFeedback(residentFeedbackVo);
+		
+		return ReturnValue.success();
+	}
 }

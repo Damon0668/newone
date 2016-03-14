@@ -20,8 +20,8 @@ import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.error.StaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.staff.PropertyDepartmentPo;
-import com.liefeng.property.repository.PropertyDepartmentRepository;
 import com.liefeng.property.repository.mybatis.PropertyDepartmentQueryRepository;
+import com.liefeng.property.repository.staff.PropertyDepartmentRepository;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 
 /**

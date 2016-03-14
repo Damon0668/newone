@@ -5,19 +5,24 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IProjectService;
 import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.bo.project.HouseSpecBo;
+import com.liefeng.property.domain.project.AppHomeImageContext;
 import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.domain.project.HouseSpecContext;
 import com.liefeng.property.domain.project.ProjectBuildingContext;
 import com.liefeng.property.domain.project.ProjectContext;
+import com.liefeng.property.domain.project.ProjectNoticeContext;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
+import com.liefeng.property.vo.project.AppHomeImageVo;
 import com.liefeng.property.vo.project.HouseSpecVo;
 import com.liefeng.property.vo.project.HouseVo;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
+import com.liefeng.property.vo.project.ProjectNoticeVo;
 import com.liefeng.property.vo.project.ProjectVo;
 
 /**
@@ -26,6 +31,7 @@ import com.liefeng.property.vo.project.ProjectVo;
  * @author Huangama
  * @author levy
  * @author 蔡少东
+ * @author ZhenTingJun
  * @date 2015-12-22
  */
 @Service
@@ -225,5 +231,121 @@ public class ProjectService implements IProjectService {
 	public List<ProjectVo> findAll() {
 		HouseContext houseContext = HouseContext.build();
 		return houseContext.findAll();
+	}
+
+	@Override
+	public ProjectNoticeVo createProjectNotice(ProjectNoticeVo projectNotice) {
+		ProjectNoticeContext projectNoticeContext = ProjectNoticeContext.build(projectNotice);
+		return projectNoticeContext.create();
+	}
+
+	@Override
+	public void deleteProjectNotice(String projectNoticeIds) {
+		ProjectNoticeContext projectNoticeContext = ProjectNoticeContext.loadById(projectNoticeIds);
+		projectNoticeContext.delete();
+	}
+
+	@Override
+	public ProjectNoticeVo updateProjectNotice(ProjectNoticeVo projectNotice) {
+		ProjectNoticeContext projectNoticeContext = ProjectNoticeContext.build(projectNotice);
+		return projectNoticeContext.update();
+	}
+
+	@Override
+	public ProjectNoticeVo getProjectNotice(String projectNoticeId) {
+		ProjectNoticeContext projectNoticeContext = ProjectNoticeContext.loadById(projectNoticeId);
+		ProjectNoticeVo projectNotice = projectNoticeContext.get();
+		
+		// 设置小区名称
+		if(projectNotice != null && ValidateHelper.isNotEmptyString(projectNotice.getProjectId())) {
+			ProjectContext projectContext = ProjectContext.loadById(projectNotice.getProjectId());
+			ProjectVo project = projectContext.getProject();
+			
+			if(project != null) {
+				projectNotice.setProjectName(project.getFullName());
+			}
+		}
+		
+		return projectNotice;
+	}
+
+	@Override
+	public DataPageValue<ProjectNoticeVo> findProjectNotices(String projectId, Integer currentPage, Integer pageSize) {
+		ProjectNoticeContext projectNoticeContext = ProjectNoticeContext.build();
+		DataPageValue<ProjectNoticeVo> dataPage = projectNoticeContext.findProjectNotices(projectId, currentPage, pageSize);
+		
+		if(dataPage != null && ValidateHelper.isNotEmptyCollection(dataPage.getDataList())) {
+			for(ProjectNoticeVo projectNotice : dataPage.getDataList()) {
+				// 设置小区名称
+				if(projectNotice != null && ValidateHelper.isNotEmptyString(projectNotice.getProjectId())) {
+					ProjectContext projectContext = ProjectContext.loadById(projectNotice.getProjectId());
+					ProjectVo project = projectContext.getProject();
+					
+					if(project != null) {
+						projectNotice.setProjectName(project.getFullName());
+					}
+				}
+			}
+		}
+		
+		return dataPage;
+	}
+
+	@Override
+	public AppHomeImageVo createAppHomeImage(AppHomeImageVo appHomeImage) {
+		AppHomeImageContext appHomeImageContext = AppHomeImageContext.build(appHomeImage);
+		return appHomeImageContext.create();
+	}
+
+	@Override
+	public void deleteAppHomeImage(String appHomeImageIds) {
+		AppHomeImageContext appHomeImageContext = AppHomeImageContext.loadById(appHomeImageIds);
+		appHomeImageContext.delete();
+	}
+
+	@Override
+	public AppHomeImageVo updateAppHomeImage(AppHomeImageVo appHomeImage) {
+		AppHomeImageContext appHomeImageContext = AppHomeImageContext.build(appHomeImage);
+		return appHomeImageContext.update();
+	}
+
+	@Override
+	public AppHomeImageVo getAppHomeImage(String appHomeImageId) {
+		AppHomeImageContext appHomeImageContext = AppHomeImageContext.loadById(appHomeImageId);
+		AppHomeImageVo appHomeImage = appHomeImageContext.get();
+		
+		// 设置小区名称
+		if(appHomeImage != null && ValidateHelper.isNotEmptyString(appHomeImage.getProjectId())) {
+			ProjectContext projectContext = ProjectContext.loadById(appHomeImage.getProjectId());
+			ProjectVo project = projectContext.getProject();
+			
+			if(project != null) {
+				appHomeImage.setProjectName(project.getFullName());
+			}
+		}
+		
+		return appHomeImageContext.get();
+	}
+
+	@Override
+	public DataPageValue<AppHomeImageVo> findAppHomeImages(String projectId, Integer currentPage, Integer pageSize) {
+		AppHomeImageContext appHomeImageContext = AppHomeImageContext.build();
+		DataPageValue<AppHomeImageVo> dataPage = appHomeImageContext.findAppHomeImages(projectId, currentPage, pageSize);
+		
+		if(dataPage != null && ValidateHelper.isNotEmptyCollection(dataPage.getDataList())) {
+			for(AppHomeImageVo appHomeImage : dataPage.getDataList()) {
+				// 设置小区名称
+				if(appHomeImage != null && ValidateHelper.isNotEmptyString(appHomeImage.getProjectId())) {
+					ProjectContext projectContext = ProjectContext.loadById(appHomeImage.getProjectId());
+					ProjectVo project = projectContext.getProject();
+					
+					if(project != null) {
+						appHomeImage.setProjectName(project.getFullName());
+					}
+				}
+			}
+		}
+		
+		return dataPage;
 	}
 }

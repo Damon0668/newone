@@ -24,7 +24,7 @@ import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.household.CheckinQueueBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.po.household.CheckinQueuePo;
-import com.liefeng.property.repository.CheckinQueueRepository;
+import com.liefeng.property.repository.household.CheckinQueueRepository;
 import com.liefeng.property.repository.mybatis.CheckinQueueQueryRepository;
 import com.liefeng.property.vo.household.CheckinQueueVo;
 

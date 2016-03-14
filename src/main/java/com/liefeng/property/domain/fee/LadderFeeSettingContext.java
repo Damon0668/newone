@@ -21,7 +21,7 @@ import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.error.FeeErrorCode;
 import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.LadderFeeSettingPo;
-import com.liefeng.property.repository.LadderFeeSettingRepository;
+import com.liefeng.property.repository.fee.LadderFeeSettingRepository;
 import com.liefeng.property.vo.fee.LadderFeeSettingVo;
 
 /**

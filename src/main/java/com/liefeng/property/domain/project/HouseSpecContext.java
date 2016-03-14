@@ -20,8 +20,8 @@ import com.liefeng.property.bo.project.HouseSpecBo;
 import com.liefeng.property.error.ProjectErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.project.HouseSpecPo;
-import com.liefeng.property.repository.HouseSpecRepository;
 import com.liefeng.property.repository.mybatis.HouseSpecQueryRepository;
+import com.liefeng.property.repository.project.HouseSpecRepository;
 import com.liefeng.property.vo.project.HouseSpecVo;
 
 /**

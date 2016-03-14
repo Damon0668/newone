@@ -26,10 +26,10 @@ import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.MeterRecordPo;
 import com.liefeng.property.po.fee.MeterSettingPo;
 import com.liefeng.property.po.project.ProjectBuildingPo;
-import com.liefeng.property.repository.MeterRecordRepository;
-import com.liefeng.property.repository.MeterSettingRepository;
-import com.liefeng.property.repository.ProjectBuildingRepository;
+import com.liefeng.property.repository.fee.MeterRecordRepository;
+import com.liefeng.property.repository.fee.MeterSettingRepository;
 import com.liefeng.property.repository.mybatis.MeterRecordQueryRepository;
+import com.liefeng.property.repository.project.ProjectBuildingRepository;
 import com.liefeng.property.vo.fee.MeterRecordVo;
 
 /**

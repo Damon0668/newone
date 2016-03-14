@@ -15,7 +15,7 @@ import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.property.error.FeeErrorCode;
 import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.FeeRecordPo;
-import com.liefeng.property.repository.FeeRecordRepository;
+import com.liefeng.property.repository.fee.FeeRecordRepository;
 import com.liefeng.property.repository.mybatis.FeeRecordQueryRepository;
 import com.liefeng.property.vo.fee.FeeItemVo;
 import com.liefeng.property.vo.fee.FeeRecordVo;
@@ -38,6 +38,7 @@ public class FeeRecordContext {
 	
 	@Autowired
 	private FeeRecordQueryRepository feeRecordQueryRepository;
+	
 	/**
 	 * 缴费记录ID
 	 */
