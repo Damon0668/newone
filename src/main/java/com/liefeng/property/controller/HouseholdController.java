@@ -410,6 +410,7 @@ public class HouseholdController {
 				appMsgSettingVo.setLockFlag(HouseholdConstants.AppMsgSetting.OPEN);
 			}
 			
+			
 			if(popFlag.equals("0")){
 				appMsgSettingVo.setPopFlag(HouseholdConstants.AppMsgSetting.CLOSE);
 			}else{
