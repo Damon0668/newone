@@ -15,7 +15,7 @@ import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.household.CheckinMaterialPo;
-import com.liefeng.property.repository.CheckinMaterialRepository;
+import com.liefeng.property.repository.household.CheckinMaterialRepository;
 import com.liefeng.property.repository.mybatis.CheckinMaterialQueryRepository;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
 

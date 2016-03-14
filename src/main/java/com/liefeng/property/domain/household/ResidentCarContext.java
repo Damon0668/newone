@@ -11,7 +11,7 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.property.po.household.ResidentCarPo;
-import com.liefeng.property.repository.ResidentCarRepository;
+import com.liefeng.property.repository.household.ResidentCarRepository;
 import com.liefeng.property.vo.household.ResidentCarVo;
 
 /**

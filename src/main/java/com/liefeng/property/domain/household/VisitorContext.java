@@ -12,7 +12,7 @@ import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.household.VisitorPo;
-import com.liefeng.property.repository.VisitorRepository;
+import com.liefeng.property.repository.household.VisitorRepository;
 import com.liefeng.property.vo.household.VisitorVo;
 
 /**

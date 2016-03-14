@@ -7,9 +7,11 @@ import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.bo.project.HouseSpecBo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
+import com.liefeng.property.vo.project.AppHomeImageVo;
 import com.liefeng.property.vo.project.HouseSpecVo;
 import com.liefeng.property.vo.project.HouseVo;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
+import com.liefeng.property.vo.project.ProjectNoticeVo;
 import com.liefeng.property.vo.project.ProjectVo;
 
 /**
@@ -239,5 +241,78 @@ public interface IProjectService {
 	 * @return
 	 */
 	public List<ProjectVo> findAll();
+	
+	/**
+	 * 保存小区通告
+	 * @param projectNotice 小区通告值对象
+	 * @return 小区通告信息
+	 */
+	public ProjectNoticeVo createProjectNotice(ProjectNoticeVo projectNotice);
+	
+	/**
+	 * 删除小区通告
+	 * @param projectNoticeIds 小区通告ID串（以","隔开）
+	 */
+	public void deleteProjectNotice(String projectNoticeIds);
+	
+	
+	/**
+	 * 更新小区通告信息
+	 * @param projectNotice 小区通告值对象
+	 * @return 小区通告信息
+	 */
+	public ProjectNoticeVo updateProjectNotice(ProjectNoticeVo projectNotice);
+	
+	/**
+	 * 根据ID查询小区通告
+	 * @param projectNoticeId 小区通告ID
+	 * @return 小区通告信息
+	 */
+	public ProjectNoticeVo getProjectNotice(String projectNoticeId);
+	
+	/**
+	 * 分页获取小区通告信息
+	 * @param projectId 小区ID
+	 * @param currentPage 分页当前页
+	 * @param pageSize 分页大小
+	 * @return 小区通告分页数据
+	 */
+	public DataPageValue<ProjectNoticeVo> findProjectNotices(String projectId, Integer currentPage, Integer pageSize);
+	
+	/**
+	 * 保存首页轮播图信息
+	 * @param appHomeImage 轮播图值对象
+	 * @return 轮播图信息
+	 */
+	public AppHomeImageVo createAppHomeImage(AppHomeImageVo appHomeImage);
+	
+	/**
+	 * 删除首页轮播图信息
+	 * @param appHomeImageIds 轮播图ID串（以","隔开）
+	 */
+	public void deleteAppHomeImage(String appHomeImageIds);
+	
+	/**
+	 * 更新首页轮播图信息
+	 * @param appHomeImage 轮播图值对象
+	 * @return 轮播图信息
+	 */
+	public AppHomeImageVo updateAppHomeImage(AppHomeImageVo appHomeImage);
+	
+	/**
+	 * 根据ID查询首页轮播图信息
+	 * @param appHomeImageId 轮播图ID
+	 * @return 轮播图信息
+	 */
+	public AppHomeImageVo getAppHomeImage(String appHomeImageId);
+	
+	/**
+	 * 分页查询首页轮播图信息
+	 * @param projectId 小区ID
+	 * @param currentPage 分页当前页
+	 * @param pageSize 分页大小
+	 * @return 轮播图分页信息
+	 */
+	public DataPageValue<AppHomeImageVo> findAppHomeImages(String projectId, Integer currentPage, Integer pageSize);
 	
 }

@@ -23,8 +23,8 @@ import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.error.PropertyStaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.staff.PropertyStaffPo;
-import com.liefeng.property.repository.PropertyStaffRepository;
 import com.liefeng.property.repository.mybatis.PropertyStaffQueryRepository;
+import com.liefeng.property.repository.staff.PropertyStaffRepository;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 

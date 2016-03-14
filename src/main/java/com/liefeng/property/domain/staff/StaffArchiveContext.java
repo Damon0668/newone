@@ -12,7 +12,7 @@ import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.staff.StaffArchivePo;
-import com.liefeng.property.repository.StaffArchiveRepository;
+import com.liefeng.property.repository.staff.StaffArchiveRepository;
 import com.liefeng.property.vo.staff.StaffArchiveVo;
 
 /**
