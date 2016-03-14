@@ -340,12 +340,7 @@ public class HouseholdController {
 		residentFeedbackVo.setContent(content);
 		residentFeedbackVo.setHouseId(houseId);
 		residentFeedbackVo.setResidentId(residentId);
-		if(isProprietor.equals("0")){
-			residentFeedbackVo.setIsProprietor(HouseholdConstants.IsProprietor.NO);
-		}else{
-			residentFeedbackVo.setIsProprietor(HouseholdConstants.IsProprietor.YES);
-		}
-		
+		residentFeedbackVo.setIsProprietor(isProprietor);
 		householdService.createResidentFeedback(residentFeedbackVo);
 		
 		return ReturnValue.success();
@@ -370,58 +365,20 @@ public class HouseholdController {
 		AppMsgSettingVo appMsgSettingVo = householdService.getAppMsgSetting(userId);
 		if(appMsgSettingVo == null){  //创建
 			AppMsgSettingVo appMsgSetting = new AppMsgSettingVo();
-			if(floatFlag.equals("0")){
-				appMsgSetting.setFloatFlag(HouseholdConstants.AppMsgSetting.CLOSE);
-			}else{
-				appMsgSetting.setFloatFlag(HouseholdConstants.AppMsgSetting.OPEN);
-			}
-			
-			if(lockFlag.equals("0")){
-				appMsgSetting.setLockFlag(HouseholdConstants.AppMsgSetting.CLOSE);
-			}else{
-				appMsgSetting.setLockFlag(HouseholdConstants.AppMsgSetting.OPEN);
-			}
-			
-			if(popFlag.equals("0")){
-				appMsgSetting.setPopFlag(HouseholdConstants.AppMsgSetting.CLOSE);
-			}else{
-				appMsgSetting.setPopFlag(HouseholdConstants.AppMsgSetting.OPEN);
-			}
-			
-			if(sound.equals("0")){
-				appMsgSetting.setSound(HouseholdConstants.AppMsgSetting.CLOSE);
-			}else{
-				appMsgSetting.setSound(HouseholdConstants.AppMsgSetting.OPEN);
-			}
+			appMsgSetting.setFloatFlag(floatFlag);
+			appMsgSetting.setLockFlag(lockFlag);
+			appMsgSetting.setPopFlag(popFlag);			
+			appMsgSetting.setSound(sound);
 			
 			appMsgSetting.setUserId(userId);
 			
 			householdService.createAppMsgSetting(appMsgSetting);
 		}else{ //更新
-			if(floatFlag.equals("0")){
-				appMsgSettingVo.setFloatFlag(HouseholdConstants.AppMsgSetting.CLOSE);
-			}else{
-				appMsgSettingVo.setFloatFlag(HouseholdConstants.AppMsgSetting.OPEN);
-			}
-			
-			if(lockFlag.equals("0")){
-				appMsgSettingVo.setLockFlag(HouseholdConstants.AppMsgSetting.CLOSE);
-			}else{
-				appMsgSettingVo.setLockFlag(HouseholdConstants.AppMsgSetting.OPEN);
-			}
-			
-			if(popFlag.equals("0")){
-				appMsgSettingVo.setPopFlag(HouseholdConstants.AppMsgSetting.CLOSE);
-			}else{
-				appMsgSettingVo.setPopFlag(HouseholdConstants.AppMsgSetting.OPEN);
-			}
-			
-			if(sound.equals("0")){
-				appMsgSettingVo.setSound(HouseholdConstants.AppMsgSetting.CLOSE);
-			}else{
-				appMsgSettingVo.setSound(HouseholdConstants.AppMsgSetting.OPEN);
-			}
-			
+			appMsgSettingVo.setFloatFlag(floatFlag);
+			appMsgSettingVo.setLockFlag(lockFlag);
+			appMsgSettingVo.setPopFlag(popFlag);			
+			appMsgSettingVo.setSound(sound);
+			appMsgSettingVo.setUserId(userId);
 			appMsgSettingVo.setUpdateTime(new Date());
 			
 			householdService.updateAppMsgSetting(appMsgSettingVo);

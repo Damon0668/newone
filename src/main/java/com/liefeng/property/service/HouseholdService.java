@@ -597,7 +597,7 @@ public class HouseholdService implements IHouseholdService {
 		//查用户“已经办理”的排队
 		queueVo = getCheckinQueueOfStatus(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.FINISHED);
 		if(queueVo != null){
-			if(queueVo.getStatus().equals(HouseholdConstants.CheckinQueueStatus.FINISHED)){
+			if(HouseholdConstants.CheckinQueueStatus.FINISHED.equals(queueVo.getStatus())){
 				throw new PropertyException(HouseholdErrorCode.CHECKIN_QUEUE_FINISHED);
 			}
 			
