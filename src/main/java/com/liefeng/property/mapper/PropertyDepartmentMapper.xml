@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.PropertyDepartmentQueryRepository" > 
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.staff.PropertyDepartmentVo" >
+    <result column="direcotorName" property="director.name"/>
+</resultMap>
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1 
+<trim  suffixOverrides="," >
+    <if test="extra.oemCode != null and extra.oemCode != ''" >
+        and d.oem_code = #{extra.oemCode}
+    </if>
+</trim>
+</sql>
+
+<select id="queryByCount"  resultType="java.lang.Long">
+
+    SELECT 
+      COUNT(1) 
+    FROM
+      t_property_department d
+      
+      <include refid="Example_Where_Clause"/>
+      
+</select>
+
+<select id="queryByPage" resultMap="BaseResultMap">
+	SELECT
+	   s.`name` directorName,
+	   d.id,
+	   d.name,
+	   d.tel,
+	   d.director_id directorId,
+       d.oem_code oemCode
+	FROM
+	    t_property_department d
+	LEFT JOIN t_property_staff s ON d.director_id = s.id
+    <include refid="Example_Where_Clause"/>
+	<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	</if>
+</select>
+
+</mapper>

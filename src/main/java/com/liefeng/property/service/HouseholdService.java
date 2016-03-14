@@ -31,6 +31,7 @@ import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.ProjectConstants;
+import com.liefeng.property.domain.household.AppMsgSettingContext;
 import com.liefeng.property.domain.household.CheckinMaterialContext;
 import com.liefeng.property.domain.household.CheckinQueueContext;
 import com.liefeng.property.domain.household.CheckinScheduleContext;
@@ -41,6 +42,7 @@ import com.liefeng.property.domain.household.ResidentFeedbackContext;
 import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.error.HouseholdErrorCode;
 import com.liefeng.property.exception.PropertyException;
+import com.liefeng.property.vo.household.AppMsgSettingVo;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
 import com.liefeng.property.vo.household.CheckinQueueVo;
 import com.liefeng.property.vo.household.CheckinScheduleVo;
@@ -792,6 +794,24 @@ public class HouseholdService implements IHouseholdService {
 			ResidentFeedbackVo residentFeedbackVo) {
 		ResidentFeedbackContext residentFeedbackContext = ResidentFeedbackContext.build(residentFeedbackVo);
 		return residentFeedbackContext.create();
+	}
+
+	@Override
+	public AppMsgSettingVo createAppMsgSetting(AppMsgSettingVo appMsgSettingVo) {
+		AppMsgSettingContext appMsgSettingContext = AppMsgSettingContext.build(appMsgSettingVo);
+		return appMsgSettingContext.create();
+	}
+
+	@Override
+	public AppMsgSettingVo getAppMsgSetting(String userId) {
+		AppMsgSettingContext appMsgSettingContext = AppMsgSettingContext.loadByUserId(userId);
+		return appMsgSettingContext.get();
+	}
+
+	@Override
+	public AppMsgSettingVo updateAppMsgSetting(AppMsgSettingVo appMsgSettingVo) {
+		AppMsgSettingContext appMsgSettingContext = AppMsgSettingContext.build(appMsgSettingVo);
+		return appMsgSettingContext.update();
 	}
 
 

@@ -127,4 +127,25 @@ public class HouseholdConstants {
 		
 		
 	}
+	
+	/**
+	 * 用户手机端消息设置
+	 *  
+	 * @author xhw
+	 * @date 2016年3月14日 下午2:59:59
+	 */
+	public static interface AppMsgSetting {
+		
+		/**
+		 * 关闭：0
+		 */
+		public String CLOSE = "0";
+		
+		/**
+		 * 打开：1 
+		 */
+		public String OPEN = "1";
+		
+		
+	}
 }

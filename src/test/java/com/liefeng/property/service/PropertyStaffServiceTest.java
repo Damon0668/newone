@@ -106,4 +106,9 @@ public class PropertyStaffServiceTest {
 		ids.add("402881fb530cd2a501530cd2a6970001");
 		System.out.println(propertyStaffService.getDepartments(ids));
 	}
+	
+	@Test
+	public void getDepartments4page(){
+		System.out.println(propertyStaffService.listDepartment4Page(1, 10));
+	}
 }

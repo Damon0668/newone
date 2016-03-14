@@ -303,4 +303,9 @@ public class PropertyStaffService implements IPropertyStaffService {
 		return PropertyDepartmentContext.build().findDepartments(departmentIds);
 	}
 
+	@Override
+	public DataPageValue<PropertyDepartmentVo> listDepartment4Page(Integer page, Integer size) {
+		return PropertyDepartmentContext.build().getDepartments4Page(page, size);
+	}
+
 }

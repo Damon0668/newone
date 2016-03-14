@@ -6,11 +6,15 @@ import com.liefeng.core.entity.BaseValue;
  * 部门信息值对象
  * 
  * @author ZhenTingJun
+ * @author 蔡少东
  * @date 2015-12-24
  */
 public class PropertyDepartmentVo extends BaseValue {
 
-	private static final long serialVersionUID = -6233489149979679268L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4443957278734231695L;
 
 	/**
 	 * 主键
@@ -31,6 +35,11 @@ public class PropertyDepartmentVo extends BaseValue {
 	 * 负责人ID
 	 */
 	private String directorId;
+	
+	/**
+	 * 负责人
+	 */
+	private PropertyStaffVo director;
 	
 	/**
 	 * OEM编码
@@ -89,4 +98,13 @@ public class PropertyDepartmentVo extends BaseValue {
 	public void setCount(Long count) {
 		this.count = count;
 	}
+
+	public PropertyStaffVo getDirector() {
+		return director;
+	}
+
+	public void setDirector(PropertyStaffVo director) {
+		this.director = director;
+	}
+
 }

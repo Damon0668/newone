@@ -1,6 +1,5 @@
 package com.liefeng.property.domain.parking;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,8 +20,8 @@ import com.liefeng.property.bo.parking.ParkingBo;
 import com.liefeng.property.error.ParkingErrorCode;
 import com.liefeng.property.exception.ParkingException;
 import com.liefeng.property.po.parking.ParkingPo;
-import com.liefeng.property.repository.ParkingRepository;
 import com.liefeng.property.repository.mybatis.ParkingQueryRepository;
+import com.liefeng.property.repository.parking.ParkingRepository;
 import com.liefeng.property.vo.parking.ParkingSingleRentalVo;
 import com.liefeng.property.vo.parking.ParkingVo;
 

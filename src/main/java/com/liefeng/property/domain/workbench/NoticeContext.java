@@ -150,6 +150,8 @@ public class NoticeContext {
 			noticeRepository.save(noticePo);
 			
 			logger.info("Update notice of id: {} success.", noticeVo.getId());
+			
+			noticeVo = MyBeanUtil.createBean(noticePo, NoticeVo.class);
 		}
 		
 		return noticeVo;

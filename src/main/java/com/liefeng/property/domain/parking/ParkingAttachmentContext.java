@@ -1,7 +1,6 @@
 package com.liefeng.property.domain.parking;
 
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,11 +11,9 @@ import org.springframework.stereotype.Service;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
-import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.po.parking.ParkingAttachmentPo;
-import com.liefeng.property.repository.ParkingAttachmentRepository;
+import com.liefeng.property.repository.parking.ParkingAttachmentRepository;
 import com.liefeng.property.vo.parking.ParkingAttachmentVo;
-import com.liefeng.property.vo.project.HouseVo;
 
 /**
  * 车位租售附件领域模型

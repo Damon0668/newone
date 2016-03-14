@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.property.po.staff.ManageProjectPo;
-import com.liefeng.property.repository.ManageProjectRepository;
+import com.liefeng.property.repository.staff.ManageProjectRepository;
 
 /**
  * 员工与项目关系

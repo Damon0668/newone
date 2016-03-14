@@ -141,6 +141,8 @@ public class ScheduleContext {
 			scheduleRepository.save(schedulePo);
 			
 			logger.info("Update schedule of id: {} success.", scheduleVo.getId());
+			
+			scheduleVo = MyBeanUtil.createBean(schedulePo, ScheduleVo.class);
 		}
 		
 		return scheduleVo;

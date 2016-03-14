@@ -23,7 +23,9 @@
 	<result column="pic" property="pic"/>
 </resultMap>
 
-<resultMap id="GuardResidentVo" type="com.liefeng.property.vo.guard.GuardResidentVo" ></resultMap>
+<resultMap id="GuardResidentVo" type="com.liefeng.property.vo.guard.GuardResidentVo" >
+
+</resultMap>
 
 <!-- 查询条件 -->
 <sql id="Example_Where_Clause">

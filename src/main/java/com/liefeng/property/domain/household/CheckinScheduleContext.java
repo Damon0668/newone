@@ -18,7 +18,7 @@ import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.po.household.CheckinSchedulePo;
-import com.liefeng.property.repository.CheckinScheduleRepository;
+import com.liefeng.property.repository.household.CheckinScheduleRepository;
 import com.liefeng.property.repository.mybatis.CheckinScheduleQueryRepository;
 import com.liefeng.property.vo.household.CheckinScheduleVo;
 
