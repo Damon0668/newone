@@ -3,10 +3,13 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="com.liefeng.property.repository.mybatis.PropertyDepartmentQueryRepository" > 
+
 <resultMap id="BaseResultMap" type="com.liefeng.property.vo.staff.PropertyDepartmentVo" >
-    <result column="direcotorName" property="director.name"/>
+    <result column="directorName" property="director.name"/>
 </resultMap>
+
 <!-- 查询条件 -->
 <sql id="Example_Where_Clause">
 where 1=1 
@@ -30,12 +33,12 @@ where 1=1
 
 <select id="queryByPage" resultMap="BaseResultMap">
 	SELECT
-	   s.`name` directorName,
 	   d.id,
 	   d.name,
 	   d.tel,
 	   d.director_id directorId,
-       d.oem_code oemCode
+       d.oem_code oemCode,
+       s.name as directorName
 	FROM
 	    t_property_department d
 	LEFT JOIN t_property_staff s ON d.director_id = s.id

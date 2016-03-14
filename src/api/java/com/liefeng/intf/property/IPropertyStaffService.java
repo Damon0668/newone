@@ -64,6 +64,13 @@ public interface IPropertyStaffService {
 	
 	/**
 	 * 查询物业员工
+	 * @param departmentId 部门ID
+	 * @return
+	 */
+	public List<PropertyStaffVo> findPropertyStaff(String departmentId);
+	
+	/**
+	 * 查询物业员工
 	 * @param roleId 角色ID
 	 * @return
 	 */
