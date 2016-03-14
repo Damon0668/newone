@@ -122,6 +122,15 @@ public interface IPropertyStaffService {
 	
 	/**
 	 * 查询某个OEM下所有部门列表
+	 * 分页
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public DataPageValue<PropertyDepartmentVo> listDepartment4Page(Integer page, Integer size);
+	
+	/**
+	 * 查询某个OEM下所有部门列表
 	 * @return 部门列表
 	 */
 	public List<PropertyDepartmentVo> getDepartments();

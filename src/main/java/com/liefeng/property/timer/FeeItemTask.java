@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
@@ -13,6 +14,7 @@ import com.liefeng.intf.property.IProjectService;
 import com.liefeng.property.constant.FeeConstants;
 import com.liefeng.property.vo.project.ProjectVo;
 
+@Component
 public class FeeItemTask {
 
 	private static Logger logger = LoggerFactory.getLogger(FeeItemTask.class);
