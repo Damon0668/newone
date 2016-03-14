@@ -37,6 +37,7 @@ import com.liefeng.property.domain.household.CheckinScheduleContext;
 import com.liefeng.property.domain.household.ProprietorContext;
 import com.liefeng.property.domain.household.ProprietorHouseContext;
 import com.liefeng.property.domain.household.ResidentContext;
+import com.liefeng.property.domain.household.ResidentFeedbackContext;
 import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.error.HouseholdErrorCode;
 import com.liefeng.property.exception.PropertyException;
@@ -46,6 +47,7 @@ import com.liefeng.property.vo.household.CheckinScheduleVo;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
+import com.liefeng.property.vo.household.ResidentFeedbackVo;
 import com.liefeng.property.vo.household.ResidentVo;
 import com.liefeng.property.vo.project.HouseVo;
 
@@ -783,6 +785,13 @@ public class HouseholdService implements IHouseholdService {
 	public List<ResidentVo> getResidentListByHouseId(String houseId) {
 		ResidentContext residentContext = ResidentContext.build();
 		return residentContext.getByHouseId(houseId);
+	}
+
+	@Override
+	public ResidentFeedbackVo createResidentFeedback(
+			ResidentFeedbackVo residentFeedbackVo) {
+		ResidentFeedbackContext residentFeedbackContext = ResidentFeedbackContext.build(residentFeedbackVo);
+		return residentFeedbackContext.create();
 	}
 
 

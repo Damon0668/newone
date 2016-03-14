@@ -14,6 +14,7 @@ import com.liefeng.property.vo.household.CheckinScheduleVo;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
+import com.liefeng.property.vo.household.ResidentFeedbackVo;
 import com.liefeng.property.vo.household.ResidentVo;
 
 /**
@@ -291,5 +292,14 @@ public interface IHouseholdService {
 	 * @date 2016年3月9日 下午9:11:26
 	 */
 	public List<ResidentVo> getResidentListByHouseId(String houseId);
+	
+	/**
+	 * 创建用户反馈
+	 * @param residentFeedbackVo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月14日 上午10:36:09
+	 */
+	public ResidentFeedbackVo createResidentFeedback(ResidentFeedbackVo residentFeedbackVo);
 	
 }
