@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.MyBeanUtil;
-<<<<<<< HEAD
 import com.liefeng.common.util.UUIDGenerator;
-=======
->>>>>>> 494966f86f9cbe42fad77fa666324333c71f384a
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
@@ -51,16 +48,13 @@ import com.liefeng.property.domain.workbench.TaskContext;
 import com.liefeng.property.domain.workbench.TaskPrivilegeContext;
 import com.liefeng.property.domain.workbench.WebsiteMsgContext;
 import com.liefeng.property.domain.workbench.WebsiteMsgPrivilegeContext;
-<<<<<<< HEAD
 import com.liefeng.property.error.HouseholdErrorCode;
 import com.liefeng.property.error.WorkbenchErrorCode;
 import com.liefeng.property.exception.PropertyException;
-=======
 import com.liefeng.property.error.WorkbenchErrorCode;
 import com.liefeng.property.exception.WorkbenchException;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.workbench.EventProcAttachVo;
->>>>>>> 494966f86f9cbe42fad77fa666324333c71f384a
 import com.liefeng.property.vo.workbench.EventProcessVo;
 import com.liefeng.property.vo.workbench.EventReportVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
