@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
@@ -22,6 +23,7 @@ import com.liefeng.property.vo.household.ResidentVo;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
+@ActiveProfiles("dev")
 public class HouseholdServiceTest {
 	
 	@Autowired
@@ -48,8 +50,8 @@ public class HouseholdServiceTest {
 	@Test
 	public void listResident4Page() {
 		ResidentBo residentBo = new ResidentBo();
-		residentBo.setProprietorId("123456789");
-		residentBo.setHouseId("123456789");
+		residentBo.setProprietorId("402889be53219e9d0153219e9d230000");
+		residentBo.setHouseId("402889f952fdedba0152fdedbac80000");
 		
 		DataPageValue<ResidentVo> residentPage = householdService.listResident4Page(residentBo, 2, 1);
 		
