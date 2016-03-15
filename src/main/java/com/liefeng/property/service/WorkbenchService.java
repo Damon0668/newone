@@ -2,12 +2,17 @@ package com.liefeng.property.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.snaker.engine.access.QueryFilter;
+import org.snaker.engine.entity.Order;
+import org.snaker.engine.entity.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +22,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.intf.service.msg.IPushMsgService;
+import com.liefeng.intf.service.workflow.IWorkflowService;
 import com.liefeng.mq.type.MessageEvent;
 import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.constant.HouseholdConstants;
@@ -34,6 +40,8 @@ import com.liefeng.property.domain.workbench.TaskContext;
 import com.liefeng.property.domain.workbench.TaskPrivilegeContext;
 import com.liefeng.property.domain.workbench.WebsiteMsgContext;
 import com.liefeng.property.domain.workbench.WebsiteMsgPrivilegeContext;
+import com.liefeng.property.error.WorkbenchErrorCode;
+import com.liefeng.property.exception.WorkbenchException;
 import com.liefeng.property.vo.workbench.EventProcessVo;
 import com.liefeng.property.vo.workbench.EventReportVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
@@ -65,6 +73,9 @@ public class WorkbenchService implements IWorkbenchService {
 	
 	@Autowired
 	private IPushMsgService pushMsgService;
+	
+	@Autowired
+	private IWorkflowService workflowService;
 	
 	@Override
 	public TaskVo findTaskById(String taskId) {
@@ -686,5 +697,54 @@ public class WorkbenchService implements IWorkbenchService {
 	public DataPageValue<EventReportVo> getWaitingForEventReportList(EventReportBo eventReportBo,
 			Integer page, Integer size){
 		return EventReportContext.build().getWaitingForList(eventReportBo, page, size);
+	}
+	
+	//派单
+	@Override
+	public void EventReporDistribute(EventReportVo eventReportVo,EventProcessVo eventProcessVo,String staffid,String nextAccepterId){
+		Map<String, Object> arg = new HashMap<String, Object>();
+		arg.put("distributeLeaflets", staffid);
+		arg.put("dispatching", eventProcessVo.getNextAccepterId());
+		Order order = workflowService.startInstanceByName(WorkbenchConstants.EventReport.EVENT_REPORT_FLOW_NAME, 0, staffid,arg);
+		List<Task> tasks = workflowService.getActiveTasks(new QueryFilter().setOrderId(order.getId()));
+		workflowService.execute(tasks.get(0).getId(), staffid, arg);
+		eventReportVo.setWfOrderId(order.getId());
+		EventReportContext.build(eventReportVo).update();
+		
+		eventProcessVo.setWfTaskId(tasks.get(0).getId());
+		EventProcessContext.build(eventProcessVo).create();
+	}
+	
+	@Override
+	public List<EventProcessVo> getHisEventProcess(String orderId){
+		return EventProcessContext.build().getHis(orderId);
+	}
+	
+	@Override
+	public void executeEventReporFlow(EventReportVo eventReportVo,EventProcessVo eventProcessVo,String staffid,String nextAccepterId){
+		
+		if(ValidateHelper.isEmptyString(eventProcessVo.getTaskName())){
+			logger.error("executeEventReporFlow taskName is Null or Empty");
+			throw  new WorkbenchException(WorkbenchErrorCode.PARAM_IS_NULL);
+		}
+		if(ValidateHelper.isEmptyString(eventProcessVo.getWfTaskId())){
+			logger.error("executeEventReporFlow taskId is Null or Empty");
+			throw  new WorkbenchException(WorkbenchErrorCode.PARAM_IS_NULL);
+		}
+		EventProcessContext eventProcessContext = EventProcessContext.build(eventProcessVo);
+		if(ValidateHelper.isEmptyString(eventProcessVo.getId())){
+			eventProcessContext.create();
+		}else{
+			eventProcessContext.update();
+		}
+		org.snaker.engine.entity.Process process = workflowService.getProcessByName(WorkbenchConstants.EventReport.EVENT_REPORT_FLOW_NAME);
+		//获取下一个步骤的角色名称
+		String role = workflowService.getNextTaskRole(process.getId(), eventProcessVo.getTaskName());
+	
+		Map<String, Object> arg = new HashMap<String, Object>();
+		arg.put(role, nextAccepterId);
+		
+		//执行
+		workflowService.execute(eventProcessVo.getWfTaskId(), staffid, arg);
 	}
 }

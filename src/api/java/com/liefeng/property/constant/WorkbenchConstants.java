@@ -182,7 +182,12 @@ public class WorkbenchConstants {
 		/**
 		 * 报事状态 未处理
 		 */
-		public static final String STATUS_ALREADYFEEDBACK = "2"; 
+		public static final String STATUS_ALREADYFEEDBACK = "2";
+		
+		/**
+		 * 报事流程名称
+		 */
+		public static final String EVENT_REPORT_FLOW_NAME = "eventReportFlow"; 
 	}
 	
 	/**

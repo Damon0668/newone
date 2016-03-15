@@ -538,5 +538,32 @@ public interface IWorkbenchService {
 	 */
 	public DataPageValue<EventReportVo> getWaitingForEventReportList(
 			EventReportBo eventReportBo, Integer page, Integer size);
+
+	/**
+	 * 派单 开始任务
+	 * @param eventReportVo 
+	 * @param eventProcessVo
+	 * @param staffid 当前办理人id
+	 * @param nextAccepterId 下一步办理人id
+	 */
+	public void EventReporDistribute(EventReportVo eventReportVo,
+			EventProcessVo eventProcessVo, String staffid, String nextAccepterId);
+
+	/**
+	 * 报事处理过程列表
+	 * @param orderId 工单id
+	 * @return
+	 */
+	public List<EventProcessVo> getHisEventProcess(String orderId);
+
+	/**
+	 * 执行下一步
+	 * @param eventReportVo 
+	 * @param eventProcessVo
+	 * @param staffid 当前办理人id
+	 * @param nextAccepterId 下一步办理人id
+	 */
+	public void executeEventReporFlow(EventReportVo eventReportVo,
+			EventProcessVo eventProcessVo, String staffid, String nextAccepterId);
 	
 }

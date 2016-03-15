@@ -63,6 +63,26 @@ public class EventProcessVo extends BaseValue{
 	 * OEM编码
 	 */
 	private String oemCode;
+	
+	/**
+	 * 任务显示名称
+	 */
+	private String taskDisplayName;
+	
+	/**
+	 *	当前任务
+	 */
+	private String taskName;
+	
+	/**
+	 * 当前办理人名称
+	 */
+	private String currAccepterName;
+	
+	/**
+	 * 下一步办理人名称
+	 */
+	private String nextNccepterName;
 
 	public String getId() {
 		return id;
@@ -150,5 +170,37 @@ public class EventProcessVo extends BaseValue{
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getTaskDisplayName() {
+		return taskDisplayName;
+	}
+
+	public void setTaskDisplayName(String taskDisplayName) {
+		this.taskDisplayName = taskDisplayName;
+	}
+
+	public String getTaskName() {
+		return taskName;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
+	}
+
+	public String getNextNccepterName() {
+		return nextNccepterName;
+	}
+
+	public void setNextNccepterName(String nextNccepterName) {
+		this.nextNccepterName = nextNccepterName;
+	}
+
+	public String getCurrAccepterName() {
+		return currAccepterName;
+	}
+
+	public void setCurrAccepterName(String currAccepterName) {
+		this.currAccepterName = currAccepterName;
 	}
 }
