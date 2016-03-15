@@ -107,6 +107,12 @@ public interface IPropertyStaffService {
 	 */
 	public List<PropertyDepartmentVo> findStaffContactPrivilege(String staffId);
 	
+	/**
+	 * 查询物业员工  包含部门名称，职位名称
+	 * @param staffId 员工ID
+	 * @return
+	 */
+	public PropertyStaffVo findPropertyStaffById4DP(String staffId);
 	/*********************** 部门相关接口 **********************/
 	
 	/**

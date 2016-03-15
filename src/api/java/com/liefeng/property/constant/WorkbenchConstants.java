@@ -187,7 +187,27 @@ public class WorkbenchConstants {
 		/**
 		 * 报事流程名称
 		 */
-		public static final String EVENT_REPORT_FLOW_NAME = "eventReportFlow"; 
+		public static final String EVENT_REPORT_FLOW_NAME = "eventReportFlow";
+
+		/**
+		 * 未签收
+		 */
+		public static final String SIGNFOR_NO = "0"; 
+		
+		/**
+		 * 已经签收
+		 */
+		public static final String SIGNFOR_YES = "1";
+
+		/**
+		 * 附件类型 附件
+		 */
+		public static final String EVENTPROCATTACH_ATTACH = "1"; 
+		
+		/**
+		 * 附件类型 图片
+		 */
+		public static final String EVENTPROCATTACH_PIC = "2"; 
 	}
 	
 	/**

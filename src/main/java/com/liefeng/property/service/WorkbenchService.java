@@ -1,6 +1,7 @@
 package com.liefeng.property.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,17 +18,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.base.vo.UserVo;
+import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.base.user.IUserService;
+import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.intf.service.workflow.IWorkflowService;
 import com.liefeng.mq.type.MessageEvent;
+import com.liefeng.mq.type.intf.IEvent;
 import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
+import com.liefeng.property.domain.workbench.EventProcAttachContext;
 import com.liefeng.property.domain.workbench.EventProcessContext;
 import com.liefeng.property.domain.workbench.EventReportContext;
 import com.liefeng.property.domain.workbench.NoticeContext;
@@ -42,6 +47,8 @@ import com.liefeng.property.domain.workbench.WebsiteMsgContext;
 import com.liefeng.property.domain.workbench.WebsiteMsgPrivilegeContext;
 import com.liefeng.property.error.WorkbenchErrorCode;
 import com.liefeng.property.exception.WorkbenchException;
+import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.property.vo.workbench.EventProcAttachVo;
 import com.liefeng.property.vo.workbench.EventProcessVo;
 import com.liefeng.property.vo.workbench.EventReportVo;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
@@ -76,6 +83,10 @@ public class WorkbenchService implements IWorkbenchService {
 	
 	@Autowired
 	private IWorkflowService workflowService;
+	
+	@Autowired
+	private IPropertyStaffService propertyStaffService;
+	
 	
 	@Override
 	public TaskVo findTaskById(String taskId) {
@@ -630,9 +641,50 @@ public class WorkbenchService implements IWorkbenchService {
 		EventProcessContext.build(eventProcessVo).update();
 	}
 	
+	/***********************附件*************************/
+	
+	@Override
+	public void createEventProcAttach(EventProcAttachVo eventProcAttachVo){
+		EventProcAttachContext.build(eventProcAttachVo).create();
+	}
+	
+	@Override
+	public void deleteEventProcAttach(String id){
+		EventProcAttachContext.loadById(id).delete();
+	}
+	
+	@Override
+	public List<EventProcAttachVo> findEventProcAttachByEventProcessIdAndType(String eventProcessId,String type){
+		return EventProcAttachContext.build().findByEventProcessIdAndType(eventProcessId, type);
+	}
+	
 	@Override
 	public EventProcessVo findEventProcessByWfTaskId(String wfTaskId){
-		return EventProcessContext.build().findByWfTaskId(wfTaskId);
+		EventProcessVo eventProcessVo = EventProcessContext.build().findByWfTaskId(wfTaskId);
+		//设置当前办理人的显示名称
+				if(ValidateHelper.isNotEmptyString(eventProcessVo.getCurrAccepterId())){
+				PropertyStaffVo propertyStaffVo	= propertyStaffService.findPropertyStaffById4DP(eventProcessVo.getCurrAccepterId());
+				eventProcessVo.setCurrAccepterName(propertyStaffVo.getDepartmentName()+"--"+propertyStaffVo.getPositionName()+"--"+propertyStaffVo.getName());
+				}
+				//设置下一步办理人显示名称
+				eventProcessVo.setNextAccepterName(" ");
+				if(ValidateHelper.isNotEmptyString(eventProcessVo.getNextAccepterId()))
+				for (String accid : eventProcessVo.getNextAccepterId().split(",")) {
+					PropertyStaffVo propertyStaffVo1	= propertyStaffService.findPropertyStaffById4DP(accid);
+					eventProcessVo.setNextAccepterName(eventProcessVo.getNextAccepterName()+propertyStaffVo1.getDepartmentName()+"--"+propertyStaffVo1.getPositionName()+"--"+propertyStaffVo1.getName()+",");
+				}
+				eventProcessVo.setNextAccepterName(eventProcessVo.getNextAccepterName().substring(0,eventProcessVo.getNextAccepterName().length()-1));
+				
+				//设置协办人的显示名称
+				eventProcessVo.setAssistAccepterName(" ");
+				if(ValidateHelper.isNotEmptyString(eventProcessVo.getAssistAccepterIds()))
+				for (String accid : eventProcessVo.getAssistAccepterIds().split(",")) {
+					PropertyStaffVo propertyStaffVo1	= propertyStaffService.findPropertyStaffById4DP(accid);
+					eventProcessVo.setAssistAccepterName(eventProcessVo.getAssistAccepterName()+propertyStaffVo1.getDepartmentName()+"--"+propertyStaffVo1.getPositionName()+"--"+propertyStaffVo1.getName()+",");
+				}
+				eventProcessVo.setAssistAccepterName(eventProcessVo.getAssistAccepterName().substring(0,eventProcessVo.getAssistAccepterName().length()-1));
+				
+				return eventProcessVo;
 	}
 	
 	@Override
@@ -717,7 +769,78 @@ public class WorkbenchService implements IWorkbenchService {
 	
 	@Override
 	public List<EventProcessVo> getHisEventProcess(String orderId){
-		return EventProcessContext.build().getHis(orderId);
+		List<EventProcessVo>  eventProcessVos =  EventProcessContext.build().getHis(orderId);
+		for (EventProcessVo eventProcessVo : eventProcessVos) {
+			
+			//设置附件
+			eventProcessVo.setAttachs(EventProcAttachContext.build().findByEventProcessIdAndType(eventProcessVo.getId(), WorkbenchConstants.EventReport.EVENTPROCATTACH_ATTACH));
+			
+			//设置图片
+			eventProcessVo.setPics(EventProcAttachContext.build().findByEventProcessIdAndType(eventProcessVo.getId(), WorkbenchConstants.EventReport.EVENTPROCATTACH_PIC));
+			
+			//设置当前办理人的显示名称
+			if(ValidateHelper.isNotEmptyString(eventProcessVo.getCurrAccepterId())){
+				PropertyStaffVo propertyStaffVo	= propertyStaffService.findPropertyStaffById4DP(eventProcessVo.getCurrAccepterId());
+				eventProcessVo.setCurrAccepterName(propertyStaffVo.getDepartmentName()+"--"+propertyStaffVo.getPositionName()+"--"+propertyStaffVo.getName());
+			}
+			
+			//设置下一步办理人显示名称
+			eventProcessVo.setNextAccepterName(" ");
+			if(ValidateHelper.isNotEmptyString(eventProcessVo.getNextAccepterId()))
+			for (String accid : eventProcessVo.getNextAccepterId().split(",")) {
+				PropertyStaffVo propertyStaffVo1	= propertyStaffService.findPropertyStaffById4DP(accid);
+				eventProcessVo.setNextAccepterName(eventProcessVo.getNextAccepterName()+propertyStaffVo1.getDepartmentName()+"--"+propertyStaffVo1.getPositionName()+"--"+propertyStaffVo1.getName()+",");
+			}
+			eventProcessVo.setNextAccepterName(eventProcessVo.getNextAccepterName().substring(0,eventProcessVo.getNextAccepterName().length()-1));
+			
+			//设置协办人的显示名称
+			eventProcessVo.setAssistAccepterName(" ");
+			if(ValidateHelper.isNotEmptyString(eventProcessVo.getAssistAccepterIds()))
+			for (String accid : eventProcessVo.getAssistAccepterIds().split(",")) {
+				PropertyStaffVo propertyStaffVo1	= propertyStaffService.findPropertyStaffById4DP(accid);
+				eventProcessVo.setAssistAccepterName(eventProcessVo.getAssistAccepterName()+propertyStaffVo1.getDepartmentName()+"--"+propertyStaffVo1.getPositionName()+"--"+propertyStaffVo1.getName()+",");
+			}
+			eventProcessVo.setAssistAccepterName(eventProcessVo.getAssistAccepterName().substring(0,eventProcessVo.getAssistAccepterName().length()-1));
+
+		}
+		return eventProcessVos;
+	}
+	
+	//当前活动的任务
+	@Override
+	public EventProcessVo getActiveEventProcess(String orderId,String staffid){
+		EventProcessVo eventProcessVo = EventProcessContext.build().getActive(orderId,staffid);
+		
+		//设置附件
+		eventProcessVo.setAttachs(EventProcAttachContext.build().findByEventProcessIdAndType(eventProcessVo.getId(), WorkbenchConstants.EventReport.EVENTPROCATTACH_ATTACH));
+		
+		//设置图片
+		eventProcessVo.setPics(EventProcAttachContext.build().findByEventProcessIdAndType(eventProcessVo.getId(), WorkbenchConstants.EventReport.EVENTPROCATTACH_PIC));
+
+		//设置当前办理人的显示名称
+		if(ValidateHelper.isNotEmptyString(eventProcessVo.getCurrAccepterId())){
+		PropertyStaffVo propertyStaffVo	= propertyStaffService.findPropertyStaffById4DP(eventProcessVo.getCurrAccepterId());
+		eventProcessVo.setCurrAccepterName(propertyStaffVo.getDepartmentName()+"--"+propertyStaffVo.getPositionName()+"--"+propertyStaffVo.getName());
+		}
+		//设置下一步办理人显示名称
+		eventProcessVo.setNextAccepterName(" ");
+		if(ValidateHelper.isNotEmptyString(eventProcessVo.getNextAccepterId()))
+		for (String accid : eventProcessVo.getNextAccepterId().split(",")) {
+			PropertyStaffVo propertyStaffVo1	= propertyStaffService.findPropertyStaffById4DP(accid);
+			eventProcessVo.setNextAccepterName(eventProcessVo.getNextAccepterName()+propertyStaffVo1.getDepartmentName()+"--"+propertyStaffVo1.getPositionName()+"--"+propertyStaffVo1.getName()+",");
+		}
+		eventProcessVo.setNextAccepterName(eventProcessVo.getNextAccepterName().substring(0,eventProcessVo.getNextAccepterName().length()-1));
+		
+		//设置协办人的显示名称
+		eventProcessVo.setAssistAccepterName(" ");
+		if(ValidateHelper.isNotEmptyString(eventProcessVo.getAssistAccepterIds()))
+		for (String accid : eventProcessVo.getAssistAccepterIds().split(",")) {
+			PropertyStaffVo propertyStaffVo1	= propertyStaffService.findPropertyStaffById4DP(accid);
+			eventProcessVo.setAssistAccepterName(eventProcessVo.getAssistAccepterName()+propertyStaffVo1.getDepartmentName()+"--"+propertyStaffVo1.getPositionName()+"--"+propertyStaffVo1.getName()+",");
+		}
+		eventProcessVo.setAssistAccepterName(eventProcessVo.getAssistAccepterName().substring(0,eventProcessVo.getAssistAccepterName().length()-1));
+		
+		return eventProcessVo;
 	}
 	
 	@Override
@@ -731,6 +854,20 @@ public class WorkbenchService implements IWorkbenchService {
 			logger.error("executeEventReporFlow taskId is Null or Empty");
 			throw  new WorkbenchException(WorkbenchErrorCode.PARAM_IS_NULL);
 		}
+		
+		//保存 附件
+		if(ValidateHelper.isNotEmptyCollection(eventProcessVo.getAttachs()))
+		for (EventProcAttachVo eventProcAttachVo : eventProcessVo.getAttachs()) {
+			EventProcAttachContext.build(eventProcAttachVo).create();
+		}
+		
+		//保存 图片
+		if(ValidateHelper.isNotEmptyCollection(eventProcessVo.getPics()))
+		for (EventProcAttachVo eventProcAttachVo : eventProcessVo.getPics()) {
+			EventProcAttachContext.build(eventProcAttachVo).create();
+		}
+		
+		//创建或者修改
 		EventProcessContext eventProcessContext = EventProcessContext.build(eventProcessVo);
 		if(ValidateHelper.isEmptyString(eventProcessVo.getId())){
 			eventProcessContext.create();
@@ -746,5 +883,63 @@ public class WorkbenchService implements IWorkbenchService {
 		
 		//执行
 		workflowService.execute(eventProcessVo.getWfTaskId(), staffid, arg);
+	}
+	
+	/*
+	 * 签收
+	 */
+	@Override
+	public void eventReporSignfor(String wfTaskId,String staffid){
+		EventProcessContext eventProcessContext = EventProcessContext.build();
+		EventProcessVo eventProcessVo = eventProcessContext.findByWfTaskId(wfTaskId);
+		
+		Task task = workflowService.findTaskById(wfTaskId);
+		if(task == null ){
+			throw new WorkbenchException(WorkbenchErrorCode.TASK_NOT_EXIST);
+		}
+		
+		//判断是否已经签收
+		if(eventProcessVo.getStatus() == null || eventProcessVo.getStatus().equals(WorkbenchConstants.EventReport.SIGNFOR_NO)){
+			eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_YES);
+			
+			List<String> removeStaffid = compare(task.getActorIds(),new String[]{staffid});
+			
+			workflowService.removeTaskActor(wfTaskId, (String[]) removeStaffid.toArray());
+			EventProcessContext.build(eventProcessVo).update();
+		}else{
+			throw new WorkbenchException(WorkbenchErrorCode.ALREADY_SIGNFOR);
+		}
+	}
+	
+	//退回
+	@Override
+	public void eventReporSendBack(String wfTaskId){
+		EventProcessContext eventProcessContext = EventProcessContext.build();
+		EventProcessVo eventProcessVo = eventProcessContext.findByWfTaskId(wfTaskId);
+		
+		Task task = workflowService.findTaskById(wfTaskId);
+		if(task == null ){
+			throw new WorkbenchException(WorkbenchErrorCode.TASK_NOT_EXIST);
+		}
+		if(eventProcessVo.getStatus() != null && eventProcessVo.getStatus().equals(WorkbenchConstants.EventReport.SIGNFOR_YES)){
+			eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_NO);
+			workflowService.addTaskActor(wfTaskId, eventProcessVo.getNextAccepterId().split(","));
+		}else{
+			throw new WorkbenchException(WorkbenchErrorCode.ALREADY_SENDBACK);
+		}
+		
+	}
+	
+	
+	//TODO 字符串 移至core
+	public static <T> List<T> compare(T[] t1, T[] t2) {
+	    List<T> list1 = Arrays.asList(t1);
+	    List<T> list2 = new ArrayList<T>();
+	    for (T t : t2) {
+	      if (!list1.contains(t)) {
+	        list2.add(t);
+	      }
+	    }
+	    return list2;
 	}
 }

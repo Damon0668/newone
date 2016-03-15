@@ -313,4 +313,10 @@ public class PropertyStaffService implements IPropertyStaffService {
 		return PropertyStaffContext.build().findByDepartmentId(departmentId);
 	}
 
+	@Override
+	public PropertyStaffVo findPropertyStaffById4DP(String staffId) {
+		logger.info("select PropertyStaff by id is {}",staffId);
+		return PropertyStaffContext.loadById(staffId).findPropertyStaffById4DP();
+	}
+
 }

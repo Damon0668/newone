@@ -130,5 +130,16 @@
 	    sru.role_id = #{extra.roleId}
 </select>
 
+<select id="findPropertyStaffById4DP"  resultMap="PropertyStaffVo" >
+	select 
+	 ps.*,
+	 pd.name as departmentName,
+	 sd.name as positionName
+	 from 
+	 property.t_property_staff ps 
+	 left join property.t_property_department pd on pd.id = ps.department_id 
+	 left join t_sys_dict sd on sd.`value`=ps.position and sd.group_code ='POSITION'  
+	 where ps.id = #{propertyStaffId}
+</select>
 
 </mapper>

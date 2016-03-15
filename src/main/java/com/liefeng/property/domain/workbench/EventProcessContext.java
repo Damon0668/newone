@@ -87,6 +87,11 @@ public class EventProcessContext {
 		return eventProcessQueryRepository.getHisEventProcess(orderId);
 	}
 	
+	public EventProcessVo getActive(String orderId,String staffid) {
+		logger.info("exe method getActive orderId eq {}",orderId);
+		return eventProcessQueryRepository.getActiveEventProcess(orderId,staffid);
+	}
+	
 	public void update(){
 		eventProcess.setOemCode(ContextManager.getInstance().getOemCode());
 		eventProcessRepository.save(MyBeanUtil.createBean(eventProcess, EventProcessPo.class));
@@ -99,5 +104,7 @@ public class EventProcessContext {
 	protected void setEventProcess(EventProcessVo eventProcess) {
 		this.eventProcess = eventProcess;
 	}
+
+	
 	
 }

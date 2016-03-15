@@ -21,18 +21,47 @@
 		ep.audit_status as auditStatus,
 		ep.result as result,
 		ep.grab,
-		ep.accept_time as accept_time,
+		ep.accept_time as acceptTime,
+		ep.status,
+		ep.consumptions,
+		ep.timeliness,
+		ep.level,
+		ep.attitude,
+		ep.revisit_mode as revisitMode,
 		t.display_Name as taskDisplayName,
 		t.task_Name as taskName
-		
-		(select CONCAT(pd.`name`,"--",sd.`name`,"--",ps.`name`)  from property.t_property_staff ps left join property.t_property_department pd on pd.id = ps.department_id left join t_sys_dict sd on sd.`value`=ps.position and sd.group_code ='POSITION'  where ps.id = ep.next_accepter_id) as currAccepterName,
-	    (select CONCAT(pd.`name`,"--",sd.`name`,"--",ps.`name`)  from property.t_property_staff ps left join property.t_property_department pd on pd.id = ps.department_id left join t_sys_dict sd on sd.`value`=ps.position and sd.group_code ='POSITION'  where ps.id = ep.curr_accepter_id) as nextNccepterName, 
-		
-		
 		FROM
 		service.wf_hist_task t
 		left join property.t_event_process ep on t.id = ep.wf_task_id
 		Where t.order_id=#{orderId}
 	</select>
 	
+	
+	<select id="getActiveEventProcess" resultMap="BaseResultMap">
+		SELECT
+		ep.id,
+		ep.event_id as eventId,
+		ep.wf_task_id as wfTaskId,
+		ep.curr_accepter_id as currAccepterId,
+		ep.next_accepter_id as nextAccepterId,
+		ep.assist_accepter_ids as assistAccepterIds,
+		ep.audit_status as auditStatus,
+		ep.result as result,
+		ep.grab,
+		ep.accept_time as acceptTime,
+		ep.status,
+		ep.consumptions,
+		ep.timeliness,
+		ep.level,
+		ep.attitude,
+		ep.revisit_mode as revisitMode,
+		t.display_Name as taskDisplayName,
+		t.task_Name as taskName
+		FROM
+		service.wf_task t
+		left join service.wf_task_actor ta on t.id = ta.task_Id
+		left join property.t_event_process ep on t.id = ep.wf_task_id
+		Where t.order_id = #{0}
+		And ta.actor_Id = #{1}
+	</select>
 </mapper>   

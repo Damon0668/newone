@@ -15,4 +15,6 @@ import com.liefeng.property.vo.workbench.EventReportVo;
 public interface EventProcessQueryRepository extends BaseRepository<EventProcessVo>{
 	
 	public List<EventProcessVo> getHisEventProcess(String orderId);
+
+	public EventProcessVo getActiveEventProcess(String orderId,String staffid);
 }

@@ -29,4 +29,10 @@ public interface PropertyStaffQueryRepository extends BaseRepository<PropertySta
 	 * @return
 	 */
 	public List<PropertyStaffVo> queryByRoleId(PagingParamVo param);
+	
+	/**
+	 * 员工信息，包含 名称，岗位名称
+	 * @return
+	 */
+	public PropertyStaffVo findPropertyStaffById4DP(String propertyStaffId);
 }

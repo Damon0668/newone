@@ -148,6 +148,7 @@
 		LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
 		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
 		<include refid="Waiting_Where_Clause" />
+		AND (ep.`status`=0 OR ep.`status` IS NULL)
 		<if
 			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
 			${pager.mysqlQueryCondition}

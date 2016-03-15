@@ -5,6 +5,7 @@ import java.util.List;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.workbench.EventReportBo;
+import com.liefeng.property.vo.workbench.EventProcAttachVo;
 import com.liefeng.property.vo.workbench.EventProcessVo;
 import com.liefeng.property.vo.workbench.EventReportVo;
 import com.liefeng.property.vo.workbench.ProprietorContactsVo;
@@ -565,5 +566,47 @@ public interface IWorkbenchService {
 	 */
 	public void executeEventReporFlow(EventReportVo eventReportVo,
 			EventProcessVo eventProcessVo, String staffid, String nextAccepterId);
+
+	/**
+	 * 签收
+	 * @param wfTaskId
+	 * @param staffid
+	 */
+	public void eventReporSignfor(String wfTaskId, String staffid);
+
+	/**
+	 * 退回
+	 * @param wfTaskId
+	 */
+	public void eventReporSendBack(String wfTaskId);
+
+	/**
+	 * 获取当前活动的任务
+	 * @param wfOrderId
+	 * @param staffid
+	 * @return
+	 */
+	public EventProcessVo getActiveEventProcess(String wfOrderId, String staffid);
+
+	
+	/**
+	 * 创建报事附件
+	 * @param eventProcAttachVo
+	 */
+	public void createEventProcAttach(EventProcAttachVo eventProcAttachVo);
+
+	/**
+	 * 删除报事附件
+	 * @param id
+	 */
+	public void deleteEventProcAttach(String id);
+
+	/**
+	 * 获取报事附件
+	 * @param eventProcessId
+	 * @param type
+	 * @return
+	 */
+	public List<EventProcAttachVo> findEventProcAttachByEventProcessIdAndType(String eventProcessId, String type);
 	
 }
