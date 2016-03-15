@@ -107,24 +107,4 @@ public class HouseholdConstants {
 		
 	}
 	
-	/**
-	 * 是否是业主
-	 *  
-	 * @author xhw
-	 * @date 2016年3月14日 上午11:07:04
-	 */
-	public static interface IsProprietor {
-		
-		/**
-		 * 不是业主：0
-		 */
-		public String NO = "0";
-		
-		/**
-		 * 是业主：1 
-		 */
-		public String YES = "1";
-		
-		
-	}
 }

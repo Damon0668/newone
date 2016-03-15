@@ -373,7 +373,7 @@ public class WorkbenchService implements IWorkbenchService {
 			List<NoticeVo> noticeVos = findNoticeVoByStatus(status);
 
 			for (NoticeVo noticeVo : noticeVos) {
-				if (status.equals(WorkbenchConstants.NoticeStatus.PUBLISHING)) { // “待发布”状态
+				if (WorkbenchConstants.NoticeStatus.PUBLISHING.equals(status)) { // “待发布”状态
 					if (!nowTime.before(noticeVo.getStartTime())) { // 到了发布时间，将“待发布”状态的通知发布
 						noticeVo.setPublisherId("0"); // 0代表系统自动发布
 						noticeVo.setPublishTime(new Date());
@@ -382,7 +382,7 @@ public class WorkbenchService implements IWorkbenchService {
 
 						logger.info("***将通知：title{} 发布******", noticeVo.getTitle());
 					}
-				} else if (status.equals(WorkbenchConstants.NoticeStatus.ARCHIVING)) { // “待归档”状态
+				} else if (WorkbenchConstants.NoticeStatus.ARCHIVING.equals(status)) { // “待归档”状态
 					if (!nowTime.before(noticeVo.getEndTime())) { // 将过了“公布时效”的通知进行归档
 						noticeVo.setArchiverId("0"); // 0代表有系统自动归档
 						noticeVo.setArchiveTime(new Date());
