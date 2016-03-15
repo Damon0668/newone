@@ -26,9 +26,9 @@ import com.liefeng.property.vo.staff.PropertyStaffVo;
  * @author 蔡少东
  * @date 2016年2月22日
  */
+@ActiveProfiles("dev")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@ActiveProfiles("dev")
 public class PropertyStaffServiceTest {
 	@Autowired
 	private IPropertyStaffService propertyStaffService;
