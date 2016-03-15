@@ -69,95 +69,84 @@ public class PropertyStaffService implements IPropertyStaffService {
 
 	@Transactional(rollbackOn=Exception.class)
 	@Override
-	public void createStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo){
-		try{
-			logger.info("createStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
-			
-			//客户创建校验
-			CustomerVo customerVo = checkService.createCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
-			
-			logger.info("createStaff createCustomerCheck customerVo = {}", customerVo);
-			
-			//创建员工
-			PropertyStaffVo propertyStaffVo = PropertyStaffContext.build(propertyStaffDetailInfo.getPropertyStaffVo()).create();
-			
-			propertyStaffDetailInfo.getStaffArchiveVo().setStaffId(propertyStaffVo.getId());
-			
-			propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(customerVo.getGlobalId());
-			
-			//创建员工档案
-			StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).create();
-			
-			logger.info("createStaff StaffArchive create success");
-	
-			//员工授权
-			sysSecurityService.grantRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
-			
-			//员工管理相关项目
-			ManageProjectContext.build(propertyStaffVo.getId()).grantManageProject(propertyStaffDetailInfo.getManageProjects());
-			
-			//员工通讯录授权
-			StaffContactPrivilegeContext.loadByStaffId(propertyStaffVo.getId()).grantPrivilege(propertyStaffDetailInfo.getContactProjects());
-			
-			logger.info("createStaff sendTccMsg event = {} , content = {}", TccBasicEvent.CREATE_CUSTOMER, customerVo);
-			
-			//发送tcc消息创建客户
-			tccMsgService.sendTccMsg(TccBasicEvent.CREATE_CUSTOMER, customerVo.toString());
-			
-			logger.info("createStaff sendTccMsg success");
-			
-		}catch(LiefengException e){
-			throw new LiefengException(e.getCode(), e.getMessage());
-		}catch(Exception e){
-			throw new LiefengException(e);
-		}
+	public void createStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException{
+
+		logger.info("createStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
+		
+		//客户创建校验
+		CustomerVo customerVo = checkService.createCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
+		
+		logger.info("createStaff createCustomerCheck customerVo = {}", customerVo);
+		
+		//创建员工
+		PropertyStaffVo propertyStaffVo = PropertyStaffContext.build(propertyStaffDetailInfo.getPropertyStaffVo()).create();
+		
+		propertyStaffDetailInfo.getStaffArchiveVo().setStaffId(propertyStaffVo.getId());
+		
+		propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(customerVo.getGlobalId());
+		
+		//创建员工档案
+		StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).create();
+		
+		logger.info("createStaff StaffArchive create success");
+
+		//员工授权
+		sysSecurityService.grantRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
+		
+		//员工管理相关项目
+		ManageProjectContext.build(propertyStaffVo.getId()).grantManageProject(propertyStaffDetailInfo.getManageProjects());
+		
+		//员工通讯录授权
+		StaffContactPrivilegeContext.loadByStaffId(propertyStaffVo.getId()).grantPrivilege(propertyStaffDetailInfo.getContactProjects());
+		
+		logger.info("createStaff sendTccMsg event = {} , content = {}", TccBasicEvent.CREATE_CUSTOMER, customerVo);
+		
+		//发送tcc消息创建客户
+		tccMsgService.sendTccMsg(TccBasicEvent.CREATE_CUSTOMER, customerVo.toString());
+		
+		logger.info("createStaff sendTccMsg success");
+
 	}
 
 	@Transactional(rollbackOn=Exception.class)
 	@Override
 	public void updateStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo){
-		try{
-			logger.info("updateStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
-			
-			CustomerVo customerVo = checkService.updateCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
-			
-			logger.info("updateStaff createCustomerCheck customerVo = {}", customerVo);
-			
-			PropertyStaffVo propertyStaffVo = propertyStaffDetailInfo.getPropertyStaffVo();
-			
-			//更新员工信息
-			PropertyStaffContext.build(propertyStaffVo).update();
-			
-			logger.info("updateStaff propertyStaff update success");
-					
-			propertyStaffDetailInfo.getStaffArchiveVo().setStaffId(propertyStaffVo.getId());
-					
-			propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(customerVo.getGlobalId());
-					
-			//更新员工档案
-			StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).update();
-					
-			//员工授权
-			sysSecurityService.grantRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
-					
-			//员工管理相关项目
-			ManageProjectContext.build(propertyStaffVo.getId()).grantManageProject(propertyStaffDetailInfo.getManageProjects());
-			
-			//员工通讯录授权
-			StaffContactPrivilegeContext.loadByStaffId(propertyStaffVo.getId()).grantPrivilege(propertyStaffDetailInfo.getContactProjects());
-					
-			logger.info("updateStaff sendTccMsg event = {} , content = {}", TccBasicEvent.UPDATE_CUSTOMER, customerVo);
-			
-			//发送tcc消息
-			tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_CUSTOMER, customerVo.toString());
-			
-			logger.info("updateStaff sendTccMsg success");
-			
-		}catch(LiefengException e){
-			throw new LiefengException(e.getCode(), e.getMessage());
-		}catch(Exception e){
-			throw new LiefengException(e);
-		}
+		
+		logger.info("updateStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
+		
+		CustomerVo customerVo = checkService.updateCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
+		
+		logger.info("updateStaff createCustomerCheck customerVo = {}", customerVo);
+		
+		PropertyStaffVo propertyStaffVo = propertyStaffDetailInfo.getPropertyStaffVo();
+		
+		//更新员工信息
+		PropertyStaffContext.build(propertyStaffVo).update();
+		
+		logger.info("updateStaff propertyStaff update success");
+				
+		propertyStaffDetailInfo.getStaffArchiveVo().setStaffId(propertyStaffVo.getId());
+				
+		propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(customerVo.getGlobalId());
+				
+		//更新员工档案
+		StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).update();
+				
+		//员工授权
+		sysSecurityService.grantRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
+				
+		//员工管理相关项目
+		ManageProjectContext.build(propertyStaffVo.getId()).grantManageProject(propertyStaffDetailInfo.getManageProjects());
+		
+		//员工通讯录授权
+		StaffContactPrivilegeContext.loadByStaffId(propertyStaffVo.getId()).grantPrivilege(propertyStaffDetailInfo.getContactProjects());
+				
+		logger.info("updateStaff sendTccMsg event = {} , content = {}", TccBasicEvent.UPDATE_CUSTOMER, customerVo);
+		
+		//发送tcc消息
+		tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_CUSTOMER, customerVo.toString());
+		
+		logger.info("updateStaff sendTccMsg success");
 	}
 	
 	@Override
