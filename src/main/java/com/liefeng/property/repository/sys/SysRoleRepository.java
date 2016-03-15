@@ -24,7 +24,7 @@ public interface SysRoleRepository extends JpaRepository<SysRolePo, Long>{
 	 * @param oemCode
 	 * @return
 	 */
-	public List<SysRolePo> findByOemCode(String oemCode);
+	public List<SysRolePo> findByOemCodeOrderByIdDesc(String oemCode);
 	/**
 	 * 查询角色
 	 * @param name 模糊查找 "%name%"
