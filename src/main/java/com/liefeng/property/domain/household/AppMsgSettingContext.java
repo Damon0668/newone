@@ -13,13 +13,9 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
-import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.household.AppMsgSettingPo;
-import com.liefeng.property.po.household.ResidentFeedbackPo;
-import com.liefeng.property.po.workbench.TaskPo;
-import com.liefeng.property.repository.AppMsgSettingRepository;
+import com.liefeng.property.repository.household.AppMsgSettingRepository;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
-import com.liefeng.property.vo.workbench.TaskVo;
 
 
 /**

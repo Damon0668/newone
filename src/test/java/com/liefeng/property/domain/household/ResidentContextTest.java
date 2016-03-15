@@ -13,8 +13,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.bo.household.ResidentFeedbackBo;
 import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
 import com.liefeng.property.vo.household.ResidentFeedbackVo;
@@ -55,11 +57,19 @@ public class ResidentContextTest {
 	 */
 	@Test
 	public void crateResidentFeedback(){
+		
 		ResidentFeedbackVo residentFeedbackVo = new ResidentFeedbackVo();
+		
+		/*//业主
 		residentFeedbackVo.setHouseId("402889f952fd79a60152fd79a6820000");
 		residentFeedbackVo.setContent("不错");
 		residentFeedbackVo.setIsProprietor("1");
-		residentFeedbackVo.setResidentId("402889bf5320ceae015320ceaee60000");
+		residentFeedbackVo.setResidentId("402889bf5320ceae015320ceaee60000");*/
+		
+		residentFeedbackVo.setHouseId("402889f952fdedba0152fdedbac80000");
+		residentFeedbackVo.setContent("不错");
+		residentFeedbackVo.setIsProprietor("0");
+		residentFeedbackVo.setResidentId("402889cc532b038301532b0383ef0000");
 		
 		householdService.createResidentFeedback(residentFeedbackVo);
 	}
@@ -110,5 +120,24 @@ public class ResidentContextTest {
 	public void getAppMsgSetting(){
 		AppMsgSettingVo appMsgSettingVo = householdService.getAppMsgSetting("8af41b8e532b037f01532b0380320001");
 		System.out.println(appMsgSettingVo);
+	}
+	
+	/**
+	 * 查询用户反馈（分页）
+	 *  
+	 * @author xhw
+	 * @date 2016年3月15日 下午2:35:38
+	 */
+	@Test
+	public void getResidentFeedback(){
+		ResidentFeedbackBo feedbackBo = new ResidentFeedbackBo();
+		feedbackBo.setProjectId("0000000052a7943f0152a7943fc00000");
+		feedbackBo.setBuildingId("");
+		feedbackBo.setFloorId("");
+		feedbackBo.setHouseNum("");
+		feedbackBo.setResidentName("俊");
+		feedbackBo.setOemCode(ContextManager.getInstance().getOemCode());
+		DataPageValue<ResidentFeedbackVo> feedbackPage = householdService.getResidentFeedbackPage(feedbackBo, 1, 30);
+		System.out.println(feedbackPage);
 	}
 }

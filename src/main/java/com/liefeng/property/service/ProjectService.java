@@ -274,20 +274,6 @@ public class ProjectService implements IProjectService {
 		ProjectNoticeContext projectNoticeContext = ProjectNoticeContext.build();
 		DataPageValue<ProjectNoticeVo> dataPage = projectNoticeContext.findProjectNotices(projectId, currentPage, pageSize);
 		
-		if(dataPage != null && ValidateHelper.isNotEmptyCollection(dataPage.getDataList())) {
-			for(ProjectNoticeVo projectNotice : dataPage.getDataList()) {
-				// 设置小区名称
-				if(projectNotice != null && ValidateHelper.isNotEmptyString(projectNotice.getProjectId())) {
-					ProjectContext projectContext = ProjectContext.loadById(projectNotice.getProjectId());
-					ProjectVo project = projectContext.getProject();
-					
-					if(project != null) {
-						projectNotice.setProjectName(project.getFullName());
-					}
-				}
-			}
-		}
-		
 		return dataPage;
 	}
 
@@ -301,6 +287,8 @@ public class ProjectService implements IProjectService {
 	public void deleteAppHomeImage(String appHomeImageIds) {
 		AppHomeImageContext appHomeImageContext = AppHomeImageContext.loadById(appHomeImageIds);
 		appHomeImageContext.delete();
+		
+		// TODO 以后补上删除OSS上逻辑业务
 	}
 
 	@Override
@@ -331,20 +319,6 @@ public class ProjectService implements IProjectService {
 	public DataPageValue<AppHomeImageVo> findAppHomeImages(String projectId, Integer currentPage, Integer pageSize) {
 		AppHomeImageContext appHomeImageContext = AppHomeImageContext.build();
 		DataPageValue<AppHomeImageVo> dataPage = appHomeImageContext.findAppHomeImages(projectId, currentPage, pageSize);
-		
-		if(dataPage != null && ValidateHelper.isNotEmptyCollection(dataPage.getDataList())) {
-			for(AppHomeImageVo appHomeImage : dataPage.getDataList()) {
-				// 设置小区名称
-				if(appHomeImage != null && ValidateHelper.isNotEmptyString(appHomeImage.getProjectId())) {
-					ProjectContext projectContext = ProjectContext.loadById(appHomeImage.getProjectId());
-					ProjectVo project = projectContext.getProject();
-					
-					if(project != null) {
-						appHomeImage.setProjectName(project.getFullName());
-					}
-				}
-			}
-		}
 		
 		return dataPage;
 	}

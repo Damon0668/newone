@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.ResidentFeedbackQueryRepository" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.household.ResidentFeedbackVo" >
+	<result column="resident_id" property="residentId"/>
+	<result column="resident_name" property="residentName"/>
+	<result column="content" property="content"/>
+	<result column="create_time" property="createTime"/>
+	<result column="house_num" property="houseNum"/>
+	<result column="building_name" property="buildingName"/>
+</resultMap>
+
+<!-- 查询条件 -->
+<sql id="Where_Clause">
+where a.oem_code = h.oem_code AND a.house_id = h.id AND h.building_id = b.id 
+<trim  suffixOverrides="," >
+	<if test="extra.projectId != null and extra.projectId != '' " >
+	    and h.project_id = #{extra.projectId}
+	</if>
+	<if test="extra.buildingId != null and extra.buildingId!= '' " >
+	    and h.building_id = #{extra.buildingId}
+	</if>
+	<if test="extra.floorId != null and extra.floorId!= '' " >
+	    and h.floor_id = #{extra.floorId}
+	</if>
+	<if test="extra.houseNum != null and extra.houseNum != ''" >
+	    and h.house_num like  concat('%', #{extra.houseNum},'%')
+	</if>
+	<if test="extra.residentName != null and extra.residentName != ''" >
+	    and a.resident_name like  concat('%', #{extra.residentName},'%')
+	</if>
+	<if test="extra.oemCode != null and extra.oemCode != ''" >
+	    AND a.oem_code =  #{extra.oemCode}
+	</if>
+    order by a.create_time desc
+</trim>
+</sql>
+
+<select id="queryResidentFeedback" resultMap="BaseResultMap">
+    SELECT
+		a.resident_id,
+		a.resident_name,
+		a.content,
+		a.create_time,
+		h.house_num,
+		b.name AS building_name
+	FROM
+	(
+		(
+			SELECT
+				rf.resident_id AS resident_id,
+				p.name AS resident_name,
+				rf.house_id AS house_id,
+				rf.content AS content,
+				p.phone AS phone,
+				rf.create_time AS create_time,
+				p.oem_code AS oem_code
+			FROM
+				t_resident_feedback rf,
+				t_proprietor p
+			WHERE
+				rf.resident_id = p.id
+			AND rf.is_proprietor = '1'
+		)
+		UNION
+			(
+				SELECT
+					rf.resident_id AS resident_id,
+					r.name AS resident_name,
+					rf.house_id AS house_id,
+					rf.content AS content,
+					r.mobile AS phone,
+					rf.create_time AS create_time,
+					r.oem_code AS oem_code
+				FROM
+					t_resident_feedback rf,
+					t_resident r
+				WHERE
+					rf.resident_id = r.id
+				AND rf.is_proprietor = '0'
+			)
+	)a,
+	t_house h,
+	t_project_building b
+	<include refid="Where_Clause" />
+	<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+          ${pager.mysqlQueryCondition}
+    </if>
+</select>
+
+
+<select id="queryResidentFeedbackCount"  resultType="java.lang.Long">
+select 
+	count(1) 
+from(
+		SELECT
+			a.resident_id,
+			a.resident_name,
+			a.content,
+			a.create_time,
+			h.house_num,
+			b.name AS building_name
+		FROM
+		(
+			(
+				SELECT
+					rf.resident_id AS resident_id,
+					p.name AS resident_name,
+					rf.house_id AS house_id,
+					rf.content AS content,
+					p.phone AS phone,
+					rf.create_time AS create_time,
+					p.oem_code AS oem_code
+				FROM
+					t_resident_feedback rf,
+					t_proprietor p
+				WHERE
+					rf.resident_id = p.id
+				AND rf.is_proprietor = '1'
+			)
+			UNION
+				(
+					SELECT
+						rf.resident_id AS resident_id,
+						r.name AS resident_name,
+						rf.house_id AS house_id,
+						rf.content AS content,
+						r.mobile AS phone,
+						rf.create_time AS create_time,
+						r.oem_code AS oem_code
+					FROM
+						t_resident_feedback rf,
+						t_resident r
+					WHERE
+						rf.resident_id = r.id
+					AND rf.is_proprietor = '0'
+				)
+		)a,
+		t_house h,
+		t_project_building b
+	    <include refid="Where_Clause" />
+	) t
+</select>
+
+</mapper>   

@@ -26,9 +26,9 @@ import com.liefeng.property.vo.staff.PropertyStaffVo;
  * @author 蔡少东
  * @date 2016年2月22日
  */
+@ActiveProfiles("dev")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@ActiveProfiles("dev")
 public class PropertyStaffServiceTest {
 	@Autowired
 	private IPropertyStaffService propertyStaffService;
@@ -110,5 +110,10 @@ public class PropertyStaffServiceTest {
 	@Test
 	public void getDepartments4page(){
 		System.out.println(propertyStaffService.listDepartment4Page(1, 10));
+	}
+	
+	@Test
+	public void updatePassword(){
+		propertyStaffService.updateStaffPassword("40282081531cf49b01531d4c72a80009", "1234567", "1");
 	}
 }
