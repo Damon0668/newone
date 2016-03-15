@@ -141,7 +141,7 @@ public class SysRoleContext {
 	
 	public List<SysRoleVo> findAll(){
 		String oemCode = ContextManager.getInstance().getOemCode();
-		return MyBeanUtil.createList(sysRoleRepository.findByOemCode(oemCode),SysRoleVo.class);
+		return MyBeanUtil.createList(sysRoleRepository.findByOemCodeOrderByIdDesc(oemCode),SysRoleVo.class);
 	}
 	
 	/**

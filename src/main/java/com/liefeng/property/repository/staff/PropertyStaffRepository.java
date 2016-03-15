@@ -1,8 +1,11 @@
 package com.liefeng.property.repository.staff;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.liefeng.property.po.staff.PropertyStaffPo;
 
@@ -20,4 +23,13 @@ public interface PropertyStaffRepository extends JpaRepository<PropertyStaffPo, 
 	 * @return
 	 */
 	public PropertyStaffPo findByAccount(String account);
+	
+	/**
+	 * 根据oem查询员工
+	 * 员工必须是在职并且激活的
+	 * @param oemCode
+	 * @return
+	 */
+	@Query("select st from PropertyStaffPo st where st.departmentId = ?1 and st.oemCode = ?2 and  st.workStatus = '1' and st.status = '1' and creatorId != '0' ")
+	public List<PropertyStaffPo> findByDepartmentIdAndOemCode(String departmentId, String oemCode);
 }

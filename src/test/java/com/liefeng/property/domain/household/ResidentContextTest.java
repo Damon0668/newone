@@ -55,11 +55,19 @@ public class ResidentContextTest {
 	 */
 	@Test
 	public void crateResidentFeedback(){
+		
 		ResidentFeedbackVo residentFeedbackVo = new ResidentFeedbackVo();
+		
+		/*//业主
 		residentFeedbackVo.setHouseId("402889f952fd79a60152fd79a6820000");
 		residentFeedbackVo.setContent("不错");
 		residentFeedbackVo.setIsProprietor("1");
-		residentFeedbackVo.setResidentId("402889bf5320ceae015320ceaee60000");
+		residentFeedbackVo.setResidentId("402889bf5320ceae015320ceaee60000");*/
+		
+		residentFeedbackVo.setHouseId("402889f952fdedba0152fdedbac80000");
+		residentFeedbackVo.setContent("不错");
+		residentFeedbackVo.setIsProprietor("0");
+		residentFeedbackVo.setResidentId("402889cc532b038301532b0383ef0000");
 		
 		householdService.createResidentFeedback(residentFeedbackVo);
 	}

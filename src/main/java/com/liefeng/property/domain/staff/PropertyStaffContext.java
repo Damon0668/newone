@@ -247,11 +247,31 @@ public class PropertyStaffContext {
 		return propertyStaffQueryRepository.queryByDeptIdAndProjectId(pagingParamVo);
 	}
 	
+	/**
+	 * 根据角色查询员工
+	 * @param roleId 角色ID
+	 * @return
+	 */
 	public List<PropertyStaffVo> findByRoleId(Long roleId){
 		Map<String, String> extra = new HashMap<String, String>();
 		extra.put("roleId", String.valueOf(roleId));
 		PagingParamVo pagingParamVo = new PagingParamVo();
 		pagingParamVo.setExtra(extra);
 		return propertyStaffQueryRepository.queryByRoleId(pagingParamVo);
+	}
+	
+	
+	/**
+	 * 根据部门ID查询员工 
+	 * 员工必须是在职并且激活的
+	 * @return
+	 */
+	public List<PropertyStaffVo> findByDepartmentId(String departmentId){
+		String oemCode = ContextManager.getInstance().getOemCode();
+		List<PropertyStaffPo> propertyStaffList = propertyStaffRepository.findByDepartmentIdAndOemCode(departmentId, oemCode);
+		if(ValidateHelper.isNotEmptyCollection(propertyStaffList)){
+			return MyBeanUtil.createList(propertyStaffList, PropertyStaffVo.class);
+		}
+		return null;
 	}
 }

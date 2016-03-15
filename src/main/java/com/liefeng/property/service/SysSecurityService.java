@@ -63,6 +63,9 @@ public class SysSecurityService implements ISysSecurityService{
 	
 	@Override
 	public DataPageValue<SysMenuVo> listMenus(Long parentId, boolean isIgnoreButton, int page, int size){
+		
+		parentId = parentId == null ? 0 : parentId;
+		
 		DataPageValue<SysMenuVo> menus = null;
 		
 		if(isIgnoreButton){
@@ -87,6 +90,9 @@ public class SysSecurityService implements ISysSecurityService{
 
 	@Override
 	public SysMenuVo findMenu(Long menuId) {
+		
+		menuId = menuId == null ? 0L : menuId;
+		
 		return SysMenuContext.loadById(menuId).getMenu();
 	}
 
