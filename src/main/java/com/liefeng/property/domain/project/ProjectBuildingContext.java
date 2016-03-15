@@ -20,7 +20,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.error.ProjectErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.project.ProjectBuildingPo;
-import com.liefeng.property.repository.ProjectBuildingRepository;
+import com.liefeng.property.repository.project.ProjectBuildingRepository;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
 
 /**

@@ -299,8 +299,18 @@ public class PropertyStaffService implements IPropertyStaffService {
 
 	@Override
 	public List<PropertyDepartmentVo> getDepartments(List<String> departmentIds) {
-		logger.error("getDepartments departmentIds = {}", departmentIds);
+		logger.info("getDepartments departmentIds = {}", departmentIds);
 		return PropertyDepartmentContext.build().findDepartments(departmentIds);
+	}
+
+	@Override
+	public DataPageValue<PropertyDepartmentVo> listDepartment4Page(Integer page, Integer size) {
+		return PropertyDepartmentContext.build().getDepartments4Page(page, size);
+	}
+
+	@Override
+	public List<PropertyStaffVo> findPropertyStaff(String departmentId) {
+		return PropertyStaffContext.build().findByDepartmentId(departmentId);
 	}
 
 }

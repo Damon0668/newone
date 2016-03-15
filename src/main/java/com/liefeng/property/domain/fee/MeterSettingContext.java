@@ -23,7 +23,7 @@ import com.liefeng.property.constant.FeeConstants;
 import com.liefeng.property.error.FeeErrorCode;
 import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.MeterSettingPo;
-import com.liefeng.property.repository.MeterSettingRepository;
+import com.liefeng.property.repository.fee.MeterSettingRepository;
 import com.liefeng.property.vo.fee.MeterSettingVo;
 
 /**

@@ -64,6 +64,13 @@ public interface IPropertyStaffService {
 	
 	/**
 	 * 查询物业员工
+	 * @param departmentId 部门ID
+	 * @return
+	 */
+	public List<PropertyStaffVo> findPropertyStaff(String departmentId);
+	
+	/**
+	 * 查询物业员工
 	 * @param roleId 角色ID
 	 * @return
 	 */
@@ -119,6 +126,15 @@ public interface IPropertyStaffService {
 	 * @param departmentId 部门ID
 	 */
 	public void deleteDepartment(String departmentId);
+	
+	/**
+	 * 查询某个OEM下所有部门列表
+	 * 分页
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public DataPageValue<PropertyDepartmentVo> listDepartment4Page(Integer page, Integer size);
 	
 	/**
 	 * 查询某个OEM下所有部门列表

@@ -13,7 +13,7 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.property.po.parking.ParkingRentalPo;
-import com.liefeng.property.repository.ParkingRentalRepository;
+import com.liefeng.property.repository.parking.ParkingRentalRepository;
 import com.liefeng.property.vo.parking.ParkingRentalVo;
 
 /**

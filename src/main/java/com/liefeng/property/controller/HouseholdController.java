@@ -24,8 +24,10 @@ import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.constant.HouseholdConstants;
+import com.liefeng.property.vo.household.AppMsgSettingVo;
 import com.liefeng.property.vo.household.CheckinQueueVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
+import com.liefeng.property.vo.household.ResidentFeedbackVo;
 import com.liefeng.property.vo.household.ResidentVo;
 
 /**
@@ -319,4 +321,85 @@ public class HouseholdController {
 		return ReturnValue.success();
 	}
 	
+	/**
+	 * 创建用户反馈
+	 * @param houseId 房屋id
+	 * @param residentId 住户/业主id
+	 * @param isProprietor 是否为业主。0：否；1：是
+	 * @param content 内容
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月14日 上午11:02:05
+	 */
+	@RequestMapping("createResidentFeedback")
+	@ResponseBody
+	public ReturnValue createResidentFeedback(String houseId, String residentId, String isProprietor, String content) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		
+		ResidentFeedbackVo residentFeedbackVo = new ResidentFeedbackVo();
+		residentFeedbackVo.setContent(content);
+		residentFeedbackVo.setHouseId(houseId);
+		residentFeedbackVo.setResidentId(residentId);
+		residentFeedbackVo.setIsProprietor(isProprietor);
+		householdService.createResidentFeedback(residentFeedbackVo);
+		
+		return ReturnValue.success();
+	}
+	
+	/**
+	 * 保存用户手机端消息设置
+	 * @param userId
+	 * @param sound
+	 * @param popFlag
+	 * @param floatFlag
+	 * @param lockFlag
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月14日 下午3:06:51
+	 */
+	@RequestMapping("saveAppMsgSetting")
+	@ResponseBody
+	public ReturnValue saveAppMsgSetting(String userId, String sound, String popFlag, String floatFlag, String lockFlag) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		
+		AppMsgSettingVo appMsgSettingVo = householdService.getAppMsgSetting(userId);
+		if(appMsgSettingVo == null){  //创建
+			AppMsgSettingVo appMsgSetting = new AppMsgSettingVo();
+			appMsgSetting.setFloatFlag(floatFlag);
+			appMsgSetting.setLockFlag(lockFlag);
+			appMsgSetting.setPopFlag(popFlag);			
+			appMsgSetting.setSound(sound);
+			
+			appMsgSetting.setUserId(userId);
+			
+			householdService.createAppMsgSetting(appMsgSetting);
+		}else{ //更新
+			appMsgSettingVo.setFloatFlag(floatFlag);
+			appMsgSettingVo.setLockFlag(lockFlag);
+			appMsgSettingVo.setPopFlag(popFlag);			
+			appMsgSettingVo.setSound(sound);
+			appMsgSettingVo.setUserId(userId);
+			appMsgSettingVo.setUpdateTime(new Date());
+			
+			householdService.updateAppMsgSetting(appMsgSettingVo);
+		}
+		
+		return ReturnValue.success();
+	}
+	
+	/**
+	 * 根据用户id，获取用户手机端消息设置
+	 * @param userId 用户id
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月14日 下午3:17:45
+	 */
+	@RequestMapping("getAppMsgSetting")
+	@ResponseBody
+	public DataValue<AppMsgSettingVo> getAppMsgSetting(String userId) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		
+		AppMsgSettingVo appMsgSettingVo = householdService.getAppMsgSetting(userId);
+		return DataValue.success(appMsgSettingVo);
+	}
 }

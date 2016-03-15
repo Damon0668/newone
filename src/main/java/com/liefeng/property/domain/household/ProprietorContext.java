@@ -22,7 +22,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.po.household.ProprietorPo;
-import com.liefeng.property.repository.ProprietorRepository;
+import com.liefeng.property.repository.household.ProprietorRepository;
 import com.liefeng.property.repository.mybatis.ProprietorQueryRepository;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;

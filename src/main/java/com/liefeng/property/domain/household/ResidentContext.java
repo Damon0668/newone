@@ -22,7 +22,7 @@ import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.guard.GuardResidentBo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.po.household.ResidentPo;
-import com.liefeng.property.repository.ResidentRepository;
+import com.liefeng.property.repository.household.ResidentRepository;
 import com.liefeng.property.repository.mybatis.ResidentQueryRepository;
 import com.liefeng.property.vo.guard.GuardResidentVo;
 import com.liefeng.property.vo.household.ResidentVo;

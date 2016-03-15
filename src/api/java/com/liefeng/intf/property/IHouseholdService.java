@@ -8,12 +8,14 @@ import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.household.CheckinQueueBo;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
+import com.liefeng.property.vo.household.AppMsgSettingVo;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
 import com.liefeng.property.vo.household.CheckinQueueVo;
 import com.liefeng.property.vo.household.CheckinScheduleVo;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
+import com.liefeng.property.vo.household.ResidentFeedbackVo;
 import com.liefeng.property.vo.household.ResidentVo;
 
 /**
@@ -291,5 +293,41 @@ public interface IHouseholdService {
 	 * @date 2016年3月9日 下午9:11:26
 	 */
 	public List<ResidentVo> getResidentListByHouseId(String houseId);
+	
+	/**
+	 * 创建用户反馈
+	 * @param residentFeedbackVo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月14日 上午10:36:09
+	 */
+	public ResidentFeedbackVo createResidentFeedback(ResidentFeedbackVo residentFeedbackVo);
+	
+	/**
+	 * 创建用户手机端消息设置
+	 * @param appMsgSettingVo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月14日 下午1:47:40
+	 */
+	public AppMsgSettingVo createAppMsgSetting(AppMsgSettingVo appMsgSettingVo);
+	
+	/**
+	 * 根据用户id，获取用户手机端消息设置
+	 * @param userId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月14日 下午1:48:30
+	 */
+	public AppMsgSettingVo getAppMsgSetting(String userId);
+	
+	/**
+	 * 更新用户手机端消息设置
+	 * @param appMsgSettingVo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月14日 下午1:49:21
+	 */
+	public AppMsgSettingVo updateAppMsgSetting(AppMsgSettingVo appMsgSettingVo);
 	
 }

@@ -21,8 +21,8 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.error.ProjectErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.project.ProjectPo;
-import com.liefeng.property.repository.ProjectRepository;
 import com.liefeng.property.repository.mybatis.ProjectQueryRepository;
+import com.liefeng.property.repository.project.ProjectRepository;
 import com.liefeng.property.vo.project.ProjectVo;
 
 /**

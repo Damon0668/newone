@@ -15,7 +15,7 @@ import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.household.ProprietorHousePo;
-import com.liefeng.property.repository.ProprietorHouseRepository;
+import com.liefeng.property.repository.household.ProprietorHouseRepository;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 
 /**

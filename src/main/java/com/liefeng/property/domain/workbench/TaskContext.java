@@ -153,6 +153,8 @@ public class TaskContext {
 			taskRepository.save(taskPo);
 
 			logger.info("Update task of id: {} success.", task.getId());
+			
+			task = MyBeanUtil.createBean(taskPo, TaskVo.class);
 		}
 
 		return task;

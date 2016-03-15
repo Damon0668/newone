@@ -43,6 +43,12 @@ public class SysRoleMenuContext {
 		return sysRoleMenuContext;
 	}
 	
+	public static SysRoleMenuContext build(SysRoleMenuVo sysRoleMenu) {
+		SysRoleMenuContext sysRoleMenuContext = getInstance();
+		sysRoleMenuContext.setSysRoleMenu(sysRoleMenu);
+		return sysRoleMenuContext;
+	}
+	
 	public static SysRoleMenuContext loadByRoleId(Long roleId){
 		SysRoleMenuContext sysRoleMenuContext = getInstance();
 		sysRoleMenuContext.setRoleId(roleId);
@@ -114,4 +120,10 @@ public class SysRoleMenuContext {
 	public void deleteRoleMenu(Long menuId){
 		sysRoleMenuRepository.deleteByMenuId(menuId);
 	}
+
+	
+	protected void setSysRoleMenu(SysRoleMenuVo sysRoleMenu) {
+		this.sysRoleMenu = sysRoleMenu;
+	}
+	
 }

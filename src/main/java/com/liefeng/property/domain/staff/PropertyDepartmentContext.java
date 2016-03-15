@@ -1,6 +1,8 @@
 package com.liefeng.property.domain.staff;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +15,13 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.error.StaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.staff.PropertyDepartmentPo;
-import com.liefeng.property.repository.PropertyDepartmentRepository;
+import com.liefeng.property.repository.mybatis.PropertyDepartmentQueryRepository;
+import com.liefeng.property.repository.staff.PropertyDepartmentRepository;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 
 /**
@@ -33,6 +38,9 @@ public class PropertyDepartmentContext {
 	
 	@Autowired
 	private PropertyDepartmentRepository propertyDepartmentRepository;
+	
+	@Autowired
+	private PropertyDepartmentQueryRepository propertyDepartmentQueryRepository;
 	
 	/**
 	 * 部门信息ID
@@ -176,6 +184,35 @@ public class PropertyDepartmentContext {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * 获取某个OEM下所有部门列表
+	 * 分页
+	 * @param page 当前页 (默认1)
+	 * @param size 每页数据条数(默认10条)
+	 * @return
+	 */
+	public DataPageValue<PropertyDepartmentVo> getDepartments4Page(Integer page, Integer size){
+		Map<String, String> extra = new HashMap<String,String>();
+		
+		page = page == null ? 1 : page;
+		size = size == null ? 10 : size;
+		
+		extra.put("oemCode", ContextManager.getInstance().getOemCode());
+		
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		param.setPage(page);
+		param.setPageSize(size);
+		
+		Long total = propertyDepartmentQueryRepository.queryByCount(param);
+		
+		param.getPager().setRowCount(total);
+		
+		List<PropertyDepartmentVo> propertyDepartments = propertyDepartmentQueryRepository.queryByPage(param);
+		
+		return new DataPageValue<PropertyDepartmentVo>(propertyDepartments, total, page, size);
 	}
 	
 	/**

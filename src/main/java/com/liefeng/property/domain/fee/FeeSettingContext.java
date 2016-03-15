@@ -22,7 +22,7 @@ import com.liefeng.property.constant.FeeConstants;
 import com.liefeng.property.error.FeeErrorCode;
 import com.liefeng.property.exception.FeeException;
 import com.liefeng.property.po.fee.FeeSettingPo;
-import com.liefeng.property.repository.FeeSettingRepository;
+import com.liefeng.property.repository.fee.FeeSettingRepository;
 import com.liefeng.property.repository.mybatis.FeeSettingQueryRepository;
 import com.liefeng.property.vo.fee.FeeSettingVo;
 
