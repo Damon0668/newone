@@ -180,9 +180,34 @@ public class WorkbenchConstants {
 		public static final String STATUS_ALREADYWORKERS = "1"; 
 		
 		/**
-		 * 报事状态 未处理
+		 * 报事状态 已反馈
 		 */
-		public static final String STATUS_ALREADYFEEDBACK = "2"; 
+		public static final String STATUS_ALREADYFEEDBACK = "2";
+		
+		/**
+		 * 报事流程名称
+		 */
+		public static final String EVENT_REPORT_FLOW_NAME = "eventReportFlow";
+
+		/**
+		 * 未签收
+		 */
+		public static final String SIGNFOR_NO = "0"; 
+		
+		/**
+		 * 已经签收
+		 */
+		public static final String SIGNFOR_YES = "1";
+
+		/**
+		 * 附件类型 附件
+		 */
+		public static final String EVENTPROCATTACH_ATTACH = "1"; 
+		
+		/**
+		 * 附件类型 图片
+		 */
+		public static final String EVENTPROCATTACH_PIC = "2"; 
 	}
 	
 	/**
@@ -199,6 +224,26 @@ public class WorkbenchConstants {
 		 */
 		public static final String TYPE_PROPRIETOR = "2"; 
 		
+	}
+	
+	/**
+	 * 报事方式
+	 */
+	public static interface EventReportMode{
+		/**
+		 * 来电:1
+		 */
+		public static final String PHONE = "1"; 
+		
+		/**
+		 * app客服端：2
+		 */
+		public static final String APP = "2"; 
+		
+		/**
+		 * 上门
+		 */
+		public static final String VISIT = "3"; 
 	}
 	
 }
