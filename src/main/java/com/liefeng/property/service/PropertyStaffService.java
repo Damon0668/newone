@@ -70,7 +70,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 
 	@Transactional(rollbackOn=Exception.class)
 	@Override
-	public void createStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException {
+	public void createStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo){
 		try{
 			logger.info("createStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
 			
@@ -116,7 +116,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 
 	@Transactional(rollbackOn=Exception.class)
 	@Override
-	public void updateStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException {
+	public void updateStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo){
 		try{
 			logger.info("updateStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
 			
@@ -162,7 +162,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 	}
 	
 	@Override
-	public List<PropertyStaffVo> findPropertyStaff(String departmentId, String projectId) throws LiefengException {
+	public List<PropertyStaffVo> findPropertyStaff(String departmentId, String projectId){
 		return PropertyStaffContext.build().listPropertyStaffByDeptIdAndProjectId(departmentId, projectId);
 	}
 
@@ -266,12 +266,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 	public void updateStaffStatus(List<String> staffIdList, String status) throws LiefengException {
 		if(ValidateHelper.isNotEmptyCollection(staffIdList)){
 			for (String staffId : staffIdList) {
-				if(StaffConstants.WorkStatus.IN_OFFICE.equals(status)){
-					PropertyStaffContext.loadById(staffId).updateStaffStatus(StaffConstants.WorkStatus.IN_OFFICE);
-				}
-				if(StaffConstants.WorkStatus.LEAVE_OFFICE.equals(status)){
-					PropertyStaffContext.loadById(staffId).updateStaffStatus(StaffConstants.WorkStatus.LEAVE_OFFICE);
-				}
+				PropertyStaffContext.loadById(staffId).updateStaffStatus(status);
 			}
 		}
 	}
@@ -311,6 +306,11 @@ public class PropertyStaffService implements IPropertyStaffService {
 	@Override
 	public List<PropertyStaffVo> findPropertyStaff(String departmentId) {
 		return PropertyStaffContext.build().findByDepartmentId(departmentId);
+	}
+
+	@Override
+	public void updateStaffPassword(String staffId, String oldPassword, String newPassword) {
+		PropertyStaffContext.loadById(staffId).updataPassword(oldPassword, newPassword);
 	}
 
 }

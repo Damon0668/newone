@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.staff;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -195,7 +196,18 @@ public class PropertyStaffContext {
 	 * 更新员工状态
 	 */
 	public void updateStaffStatus(String status) {
+		
+		logger.info("updateStaffStatus status = {}", status);
+		
 		PropertyStaffPo propertyStaffPo = propertyStaffRepository.findOne(propertyStaffId);
+		
+		if(StaffConstants.WorkStatus.IN_OFFICE.equals(status)){
+			propertyStaffPo.setStatus(status);
+		}
+		if(StaffConstants.WorkStatus.LEAVE_OFFICE.equals(status)){
+			propertyStaffPo.setStatus(status);
+		}
+		
 		propertyStaffPo.setStatus(status);
 		propertyStaffRepository.save(propertyStaffPo);
 	}
@@ -272,6 +284,24 @@ public class PropertyStaffContext {
 		if(ValidateHelper.isNotEmptyCollection(propertyStaffList)){
 			return MyBeanUtil.createList(propertyStaffList, PropertyStaffVo.class);
 		}
-		return null;
+		return new ArrayList<PropertyStaffVo>();
+	}
+	
+	
+	/**
+	 * 更新密码
+	 * @param oldPassword
+	 * @param newPassword
+	 */
+	public void updataPassword(String oldPassword, String newPassword){
+		if(ValidateHelper.isNotEmptyString(propertyStaffId)){
+			PropertyStaffPo propertyStaffPo = propertyStaffRepository.findOne(propertyStaffId);
+			if(propertyStaffPo != null){
+				if(propertyStaffPo.getPassword().equals(oldPassword)){
+					propertyStaffPo.setPassword(newPassword);
+					propertyStaffRepository.save(propertyStaffPo);
+				}
+			}
+		}
 	}
 }
