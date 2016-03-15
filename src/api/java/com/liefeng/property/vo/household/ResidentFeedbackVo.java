@@ -2,11 +2,6 @@ package com.liefeng.property.vo.household;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import com.liefeng.core.entity.BaseValue;
 
 
@@ -53,6 +48,21 @@ public class ResidentFeedbackVo extends BaseValue{
 	 * oem编码
 	 */
 	private String oemCode;
+	
+	/**
+	 * 业主/住户姓名
+	 */
+	private String residentName;
+	
+	/**
+	 * 房号
+	 */
+	private String houseNum;
+	
+	/**
+	 * 楼栋名称
+	 */
+	private String buildingName;
 
 	public String getId() {
 		return id;
@@ -108,6 +118,30 @@ public class ResidentFeedbackVo extends BaseValue{
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getResidentName() {
+		return residentName;
+	}
+
+	public void setResidentName(String residentName) {
+		this.residentName = residentName;
+	}
+
+	public String getHouseNum() {
+		return houseNum;
+	}
+
+	public void setHouseNum(String houseNum) {
+		this.houseNum = houseNum;
+	}
+
+	public String getBuildingName() {
+		return buildingName;
+	}
+
+	public void setBuildingName(String buildingName) {
+		this.buildingName = buildingName;
 	}
 
 }

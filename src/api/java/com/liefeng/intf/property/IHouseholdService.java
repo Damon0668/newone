@@ -8,6 +8,7 @@ import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.household.CheckinQueueBo;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
+import com.liefeng.property.bo.household.ResidentFeedbackBo;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
 import com.liefeng.property.vo.household.CheckinQueueVo;
@@ -329,5 +330,16 @@ public interface IHouseholdService {
 	 * @date 2016年3月14日 下午1:49:21
 	 */
 	public AppMsgSettingVo updateAppMsgSetting(AppMsgSettingVo appMsgSettingVo);
+	
+	/**
+	 * 查询用户反馈（分页）
+	 * @param params 查询过滤参数
+	 * @param currentPage 当前页
+	 * @param pageSize 页大小
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月15日 下午2:32:26
+	 */
+	public DataPageValue<ResidentFeedbackVo> getResidentFeedbackPage(ResidentFeedbackBo params, Integer currentPage, Integer pageSize);
 	
 }

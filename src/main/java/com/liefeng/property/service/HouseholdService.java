@@ -29,6 +29,7 @@ import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.household.CheckinQueueBo;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
+import com.liefeng.property.bo.household.ResidentFeedbackBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.ProjectConstants;
 import com.liefeng.property.domain.household.AppMsgSettingContext;
@@ -812,6 +813,13 @@ public class HouseholdService implements IHouseholdService {
 	public AppMsgSettingVo updateAppMsgSetting(AppMsgSettingVo appMsgSettingVo) {
 		AppMsgSettingContext appMsgSettingContext = AppMsgSettingContext.build(appMsgSettingVo);
 		return appMsgSettingContext.update();
+	}
+
+	@Override
+	public DataPageValue<ResidentFeedbackVo> getResidentFeedbackPage(
+			ResidentFeedbackBo params, Integer currentPage, Integer pageSize) {
+		ResidentFeedbackContext residentFeedbackContext = ResidentFeedbackContext.build();
+		return residentFeedbackContext.getResidentFeedPage(params, currentPage, pageSize);
 	}
 
 
