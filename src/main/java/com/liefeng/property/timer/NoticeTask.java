@@ -3,11 +3,13 @@ package com.liefeng.property.timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.property.constant.WorkbenchConstants;
 
+@Component
 public class NoticeTask {
 
 	private static Logger logger = LoggerFactory.getLogger(NoticeTask.class);

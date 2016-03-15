@@ -1,4 +1,4 @@
-package com.liefeng.property.repository;
+package com.liefeng.property.repository.household;
 
 import javax.transaction.Transactional;
 

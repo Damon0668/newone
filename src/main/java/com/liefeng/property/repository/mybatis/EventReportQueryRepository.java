@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
-import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.vo.workbench.EventReportVo;
 
 /**

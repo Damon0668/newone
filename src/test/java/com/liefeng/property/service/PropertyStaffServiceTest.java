@@ -26,9 +26,9 @@ import com.liefeng.property.vo.staff.PropertyStaffVo;
  * @author 蔡少东
  * @date 2016年2月22日
  */
+@ActiveProfiles("dev")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@ActiveProfiles("dev")
 public class PropertyStaffServiceTest {
 	@Autowired
 	private IPropertyStaffService propertyStaffService;
@@ -105,5 +105,10 @@ public class PropertyStaffServiceTest {
 		ids.add("402881fb530cd2a501530cd2a5580000");
 		ids.add("402881fb530cd2a501530cd2a6970001");
 		System.out.println(propertyStaffService.getDepartments(ids));
+	}
+	
+	@Test
+	public void getDepartments4page(){
+		System.out.println(propertyStaffService.listDepartment4Page(1, 10));
 	}
 }

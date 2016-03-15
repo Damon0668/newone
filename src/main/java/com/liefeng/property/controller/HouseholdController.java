@@ -24,6 +24,7 @@ import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.constant.HouseholdConstants;
+import com.liefeng.property.vo.household.AppMsgSettingVo;
 import com.liefeng.property.vo.household.CheckinQueueVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ResidentFeedbackVo;
@@ -339,14 +340,66 @@ public class HouseholdController {
 		residentFeedbackVo.setContent(content);
 		residentFeedbackVo.setHouseId(houseId);
 		residentFeedbackVo.setResidentId(residentId);
-		if(isProprietor.equals("0")){
-			residentFeedbackVo.setIsProprietor(HouseholdConstants.IsProprietor.NO);
-		}else{
-			residentFeedbackVo.setIsProprietor(HouseholdConstants.IsProprietor.YES);
-		}
-		
+		residentFeedbackVo.setIsProprietor(isProprietor);
 		householdService.createResidentFeedback(residentFeedbackVo);
 		
 		return ReturnValue.success();
+	}
+	
+	/**
+	 * 保存用户手机端消息设置
+	 * @param userId
+	 * @param sound
+	 * @param popFlag
+	 * @param floatFlag
+	 * @param lockFlag
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月14日 下午3:06:51
+	 */
+	@RequestMapping("saveAppMsgSetting")
+	@ResponseBody
+	public ReturnValue saveAppMsgSetting(String userId, String sound, String popFlag, String floatFlag, String lockFlag) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		
+		AppMsgSettingVo appMsgSettingVo = householdService.getAppMsgSetting(userId);
+		if(appMsgSettingVo == null){  //创建
+			AppMsgSettingVo appMsgSetting = new AppMsgSettingVo();
+			appMsgSetting.setFloatFlag(floatFlag);
+			appMsgSetting.setLockFlag(lockFlag);
+			appMsgSetting.setPopFlag(popFlag);			
+			appMsgSetting.setSound(sound);
+			
+			appMsgSetting.setUserId(userId);
+			
+			householdService.createAppMsgSetting(appMsgSetting);
+		}else{ //更新
+			appMsgSettingVo.setFloatFlag(floatFlag);
+			appMsgSettingVo.setLockFlag(lockFlag);
+			appMsgSettingVo.setPopFlag(popFlag);			
+			appMsgSettingVo.setSound(sound);
+			appMsgSettingVo.setUserId(userId);
+			appMsgSettingVo.setUpdateTime(new Date());
+			
+			householdService.updateAppMsgSetting(appMsgSettingVo);
+		}
+		
+		return ReturnValue.success();
+	}
+	
+	/**
+	 * 根据用户id，获取用户手机端消息设置
+	 * @param userId 用户id
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月14日 下午3:17:45
+	 */
+	@RequestMapping("getAppMsgSetting")
+	@ResponseBody
+	public DataValue<AppMsgSettingVo> getAppMsgSetting(String userId) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		
+		AppMsgSettingVo appMsgSettingVo = householdService.getAppMsgSetting(userId);
+		return DataValue.success(appMsgSettingVo);
 	}
 }

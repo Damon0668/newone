@@ -1,8 +1,6 @@
 package com.liefeng.property.domain.household;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,16 +11,11 @@ import org.springframework.stereotype.Service;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
-import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
-import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.household.ResidentFeedbackPo;
-import com.liefeng.property.po.workbench.TaskPo;
-import com.liefeng.property.repository.ResidentFeedbackRepository;
+import com.liefeng.property.repository.household.ResidentFeedbackRepository;
 import com.liefeng.property.vo.household.ResidentFeedbackVo;
-import com.liefeng.property.vo.workbench.TaskVo;
 
 
 /**
