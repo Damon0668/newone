@@ -25,4 +25,33 @@ public interface EventReportQueryRepository extends BaseRepository<EventReportVo
 	 * @return
 	 */
 	public Long waitingForQueryByCount (PagingParamVo param);
+	
+	/**
+	 * 流转中
+	 * @param param
+	 * @return
+	 */
+	public List<EventReportVo> flowingQueryByPage (PagingParamVo param);
+	
+	/**
+	 * 流转中总数
+	 * @param param
+	 * @return
+	 */
+	public Long flowingQueryByCount (PagingParamVo param);
+	
+	/**
+	 * 已完成
+	 * @param param
+	 * @return
+	 */
+	public List<EventReportVo> completeQueryByPage (PagingParamVo param);
+	
+	/**
+	 * 已完成总数
+	 * @param param
+	 * @return
+	 */
+	public Long completeQueryByCount (PagingParamVo param);
+	
 }

@@ -42,7 +42,12 @@ public class EventProcAttachVo extends BaseValue {
 	 * 源文件名
 	 */
 	private String fileName;
-
+	
+	/**
+	 * 类型。1：图片；2：附件
+	 */
+	private String type;
+	
 	public String getId() {
 		return id;
 	}
@@ -97,6 +102,14 @@ public class EventProcAttachVo extends BaseValue {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.property.PropertyStaffBo;
+import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
@@ -44,23 +45,36 @@ public interface IPropertyStaffService {
 	 * @throws Exception 
 	 */
 	public void updateStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException;
-	
 	/**
 	 * 批量更新员工状态
 	 * @param staffIdList 员工ID列表
 	 * @param status 状态
 	 * @return
 	 */
-	public void updateStaffStatus(List<String> staffIdList,String status) throws LiefengException;;
+	public void updateStaffStatus(List<String> staffIdList,String status) throws LiefengException;
+	
+	/**
+	 * 修改密码
+	 * @param staffId 员工ID
+	 * @param oldPassword 旧密码
+	 * @param newPassword 新密码
+	 */
+	public void updateStaffPassword(String staffId, String oldPassword, String newPassword) throws PropertyException;
 
 	/**
 	 * 查询物业员工
-	 * @param departmentId 部门ID
-	 * @param projectId 项目ID
+	 * @param staffId 员工ID
+	 * @return
+	 */
+	public PropertyStaffVo findPropertyStaffById(String staffId);
+	
+	/**
+	 * 查询物业员工
+	 * @param account 员工登陆账号(唯一)
 	 * @return
 	 * @throws LiefengException
 	 */
-	public List<PropertyStaffVo> findPropertyStaff(String departmentId, String projectId) throws LiefengException;
+	public PropertyStaffVo findPropertyStaffByAccount(String account);
 	
 	/**
 	 * 查询物业员工
@@ -78,10 +92,12 @@ public interface IPropertyStaffService {
 	
 	/**
 	 * 查询物业员工
-	 * @param staffId 员工ID
+	 * @param departmentId 部门ID
+	 * @param projectId 项目ID
 	 * @return
+	 * @throws LiefengException
 	 */
-	public PropertyStaffVo findPropertyStaffById(String staffId);
+	public List<PropertyStaffVo> findPropertyStaff(String departmentId, String projectId);
 	
 	/**
 	 * 查询物业员工
@@ -91,15 +107,6 @@ public interface IPropertyStaffService {
 	 */
 	public PropertyStaffDetailInfoVo findStaffDetailInfo(String staffId);
 	
-
-	/**
-	 * 查询物业员工
-	 * @param account 员工登陆账号
-	 * @return
-	 * @throws LiefengException
-	 */
-	public PropertyStaffVo findPropertyStaffByAccount(String account);
-	
 	/**
 	 * 获取员工通讯录权限
 	 * @param staffId 员工ID
@@ -107,6 +114,12 @@ public interface IPropertyStaffService {
 	 */
 	public List<PropertyDepartmentVo> findStaffContactPrivilege(String staffId);
 	
+	/**
+	 * 查询物业员工  包含部门名称，职位名称
+	 * @param staffId 员工ID
+	 * @return
+	 */
+	public PropertyStaffVo findPropertyStaffById4DP(String staffId);
 	/*********************** 部门相关接口 **********************/
 	
 	/**

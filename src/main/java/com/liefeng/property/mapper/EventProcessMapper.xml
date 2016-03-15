@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.liefeng.property.repository.mybatis.EventProcessQueryRepository">
+	<resultMap id="BaseResultMap"
+		type="com.liefeng.property.vo.workbench.EventProcessVo">
+
+	</resultMap>
+	
+	<select id="getHisEventProcess" resultMap="BaseResultMap" parameterType="java.lang.String">
+		SELECT
+		ep.id,
+		ep.event_id as eventId,
+		ep.wf_task_id as wfTaskId,
+		ep.curr_accepter_id as currAccepterId,
+		ep.next_accepter_id as nextAccepterId,
+		ep.assist_accepter_ids as assistAccepterIds,
+		ep.audit_status as auditStatus,
+		ep.result as result,
+		ep.grab,
+		ep.accept_time as acceptTime,
+		ep.status,
+		ep.consumptions,
+		ep.timeliness,
+		ep.level,
+		ep.attitude,
+		ep.revisit_mode as revisitMode,
+		t.display_Name as taskDisplayName,
+		t.task_Name as taskName
+		FROM
+		service.wf_hist_task t
+		left join property.t_event_process ep on t.id = ep.wf_task_id
+		Where t.order_id=#{orderId}
+	</select>
+	
+	
+	<select id="getActiveEventProcess" resultMap="BaseResultMap">
+		SELECT
+		ep.id,
+		ep.event_id as eventId,
+		ep.wf_task_id as wfTaskId,
+		ep.curr_accepter_id as currAccepterId,
+		ep.next_accepter_id as nextAccepterId,
+		ep.assist_accepter_ids as assistAccepterIds,
+		ep.audit_status as auditStatus,
+		ep.result as result,
+		ep.grab,
+		ep.accept_time as acceptTime,
+		ep.status,
+		ep.consumptions,
+		ep.timeliness,
+		ep.level,
+		ep.attitude,
+		ep.revisit_mode as revisitMode,
+		t.display_Name as taskDisplayName,
+		t.task_Name as taskName
+		FROM
+		service.wf_task t
+		left join service.wf_task_actor ta on t.id = ta.task_Id
+		left join property.t_event_process ep on t.id = ep.wf_task_id
+		Where t.order_id = #{0}
+		And ta.actor_Id = #{1}
+	</select>
+</mapper>   

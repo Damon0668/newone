@@ -111,4 +111,9 @@ public class PropertyStaffServiceTest {
 	public void getDepartments4page(){
 		System.out.println(propertyStaffService.listDepartment4Page(1, 10));
 	}
+	
+	@Test
+	public void updatePassword(){
+		propertyStaffService.updateStaffPassword("40282081531cf49b01531d4c72a80009", "1234567", "1");
+	}
 }

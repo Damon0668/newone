@@ -2,6 +2,7 @@ package com.liefeng.property.domain.workbench;
 
 
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.text.AbstractDocument.Content;
 
@@ -16,6 +17,7 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.workbench.EventProcessPo;
+import com.liefeng.property.repository.mybatis.EventProcessQueryRepository;
 import com.liefeng.property.repository.workbench.EventProcessRepository;
 import com.liefeng.property.vo.workbench.EventProcessVo;
 
@@ -31,6 +33,9 @@ public class EventProcessContext {
 	
 	@Autowired
 	private EventProcessRepository eventProcessRepository;
+	
+	@Autowired
+	private EventProcessQueryRepository eventProcessQueryRepository;
 	
 	/**
 	 * 主键
@@ -77,7 +82,18 @@ public class EventProcessContext {
 		return MyBeanUtil.createBean(eventProcessPo, EventProcessVo.class);
 	}
 	
+	public List<EventProcessVo> getHis(String orderId){
+		logger.info("exe method getHis orderId eq {}",orderId);
+		return eventProcessQueryRepository.getHisEventProcess(orderId);
+	}
+	
+	public EventProcessVo getActive(String orderId,String staffid) {
+		logger.info("exe method getActive orderId eq {}",orderId);
+		return eventProcessQueryRepository.getActiveEventProcess(orderId,staffid);
+	}
+	
 	public void update(){
+		eventProcess.setOemCode(ContextManager.getInstance().getOemCode());
 		eventProcessRepository.save(MyBeanUtil.createBean(eventProcess, EventProcessPo.class));
 	}
 	
@@ -88,4 +104,7 @@ public class EventProcessContext {
 	protected void setEventProcess(EventProcessVo eventProcess) {
 		this.eventProcess = eventProcess;
 	}
+
+	
+	
 }

@@ -86,6 +86,16 @@ public class PropertyStaffVo extends BaseValue {
 	 * 状态
 	 */
 	private String status;
+	
+	/**
+	 * 部门名称
+	 */
+	private String departmentName;
+	
+	/**
+	 * 职位名称
+	 */
+	private String positionName;
 
 	public String getId() {
 		return id;
@@ -197,5 +207,21 @@ public class PropertyStaffVo extends BaseValue {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+
+	public String getPositionName() {
+		return positionName;
+	}
+
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
 	}
 }

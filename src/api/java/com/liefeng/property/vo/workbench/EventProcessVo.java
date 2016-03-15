@@ -1,6 +1,9 @@
 package com.liefeng.property.vo.workbench;
 
 import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Column;
 
 import com.liefeng.core.entity.BaseValue;
 
@@ -60,10 +63,77 @@ public class EventProcessVo extends BaseValue{
 	private Date acceptTime;
 	
 	/**
+	 * 状态。0：未签收；1：待签收
+	 */
+	private String status;
+	
+	/**
+	 * 消耗材料
+	 */
+	private String consumptions;
+	
+	/**
+	 * 服务及时性。0：不及时；1：及时
+	 */
+	private String timeliness;
+	
+	/**
+	 * 服务水准。0：差；1：一般；2：好
+	 */
+	private String level;
+	
+	/**
+	 * 服务态度。0：差；1：一般；2：好
+	 */
+	private String attitude;
+	
+	/**
+	 * 回访方式。1：电话；2：上门
+	 */
+	private String revisitMode;
+	
+	
+	/**
 	 * OEM编码
 	 */
 	private String oemCode;
-
+	
+	/**
+	 * 任务显示名称
+	 */
+	private String taskDisplayName;
+	
+	/**
+	 *	当前任务
+	 */
+	private String taskName;
+	
+	/**
+	 * 当前办理人名称
+	 */
+	private String currAccepterName;
+	
+	/**
+	 * 下一步办理人名称
+	 */
+	private String nextAccepterName;
+	
+	/**
+	 * 协助办理人名称
+	 * @return
+	 */
+	private String assistAccepterName;
+	
+	/**
+	 * 附件
+	 */
+	private List<EventProcAttachVo> attachs;
+	
+	/**
+	 * 图片
+	 */
+	private List<EventProcAttachVo> pics;
+	
 	public String getId() {
 		return id;
 	}
@@ -150,5 +220,109 @@ public class EventProcessVo extends BaseValue{
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getTaskDisplayName() {
+		return taskDisplayName;
+	}
+
+	public void setTaskDisplayName(String taskDisplayName) {
+		this.taskDisplayName = taskDisplayName;
+	}
+
+	public String getTaskName() {
+		return taskName;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
+	}
+
+	public String getNextAccepterName() {
+		return nextAccepterName;
+	}
+
+	public void setNextAccepterName(String nextAccepterName) {
+		this.nextAccepterName = nextAccepterName;
+	}
+
+	public String getCurrAccepterName() {
+		return currAccepterName;
+	}
+
+	public void setCurrAccepterName(String currAccepterName) {
+		this.currAccepterName = currAccepterName;
+	}
+
+	public String getAssistAccepterName() {
+		return assistAccepterName;
+	}
+
+	public void setAssistAccepterName(String assistAccepterName) {
+		this.assistAccepterName = assistAccepterName;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getConsumptions() {
+		return consumptions;
+	}
+
+	public void setConsumptions(String consumptions) {
+		this.consumptions = consumptions;
+	}
+
+	public String getTimeliness() {
+		return timeliness;
+	}
+
+	public void setTimeliness(String timeliness) {
+		this.timeliness = timeliness;
+	}
+
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
+	}
+
+	public String getAttitude() {
+		return attitude;
+	}
+
+	public void setAttitude(String attitude) {
+		this.attitude = attitude;
+	}
+
+	public String getRevisitMode() {
+		return revisitMode;
+	}
+
+	public void setRevisitMode(String revisitMode) {
+		this.revisitMode = revisitMode;
+	}
+
+	public List<EventProcAttachVo> getAttachs() {
+		return attachs;
+	}
+
+	public void setAttachs(List<EventProcAttachVo> attachs) {
+		this.attachs = attachs;
+	}
+
+	public List<EventProcAttachVo> getPics() {
+		return pics;
+	}
+
+	public void setPics(List<EventProcAttachVo> pics) {
+		this.pics = pics;
 	}
 }

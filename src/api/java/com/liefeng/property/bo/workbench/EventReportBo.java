@@ -7,7 +7,7 @@ import com.liefeng.core.entity.BaseValue;
 /**
  * 报事
  * @author wuzhijing
- *
+ * @author xhw
  */
 public class EventReportBo  extends BaseValue {
 
@@ -24,7 +24,7 @@ public class EventReportBo  extends BaseValue {
 	private String eventType;
 	
 	/**
-	 * 办理时间
+	 * 位置
 	 */
 	private String location;
 	
@@ -67,6 +67,36 @@ public class EventReportBo  extends BaseValue {
 	 * 步骤名称
 	 */
 	private String taskName;
+	
+	/**
+	 * 房间号
+	 */
+	private String houseNum;
+	
+	/**
+	 * 内容
+	 */
+	private String content;
+	
+	/**
+	 * 手机号码
+	 */
+	private String phone;
+	
+	/**
+	 * 图片路径
+	 */
+	private String picUrl;
+	
+	/**
+	 * 报事人姓名
+	 */
+	private String reporterName;
+	
+	/**
+	 * 业主姓名
+	 */
+	private String proprietorName;
 	
 	public String getProjectId() {
 		return projectId;
@@ -154,5 +184,53 @@ public class EventReportBo  extends BaseValue {
 
 	public void setTaskName(String taskName) {
 		this.taskName = taskName;
+	}
+
+	public String getHouseNum() {
+		return houseNum;
+	}
+
+	public void setHouseNum(String houseNum) {
+		this.houseNum = houseNum;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getPicUrl() {
+		return picUrl;
+	}
+
+	public void setPicUrl(String picUrl) {
+		this.picUrl = picUrl;
+	}
+
+	public String getReporterName() {
+		return reporterName;
+	}
+
+	public void setReporterName(String reporterName) {
+		this.reporterName = reporterName;
+	}
+
+	public String getProprietorName() {
+		return proprietorName;
+	}
+
+	public void setProprietorName(String proprietorName) {
+		this.proprietorName = proprietorName;
 	}
 }

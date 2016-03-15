@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.staff;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.property.PropertyStaffBo;
 import com.liefeng.property.constant.StaffConstants;
@@ -195,7 +197,18 @@ public class PropertyStaffContext {
 	 * 更新员工状态
 	 */
 	public void updateStaffStatus(String status) {
+		
+		logger.info("updateStaffStatus status = {}", status);
+		
 		PropertyStaffPo propertyStaffPo = propertyStaffRepository.findOne(propertyStaffId);
+		
+		if(StaffConstants.WorkStatus.IN_OFFICE.equals(status)){
+			propertyStaffPo.setStatus(status);
+		}
+		if(StaffConstants.WorkStatus.LEAVE_OFFICE.equals(status)){
+			propertyStaffPo.setStatus(status);
+		}
+		
 		propertyStaffPo.setStatus(status);
 		propertyStaffRepository.save(propertyStaffPo);
 	}
@@ -272,6 +285,37 @@ public class PropertyStaffContext {
 		if(ValidateHelper.isNotEmptyCollection(propertyStaffList)){
 			return MyBeanUtil.createList(propertyStaffList, PropertyStaffVo.class);
 		}
-		return null;
+		return new ArrayList<PropertyStaffVo>();
+	}
+	
+	
+	/**
+	 * 更新密码
+	 * @param oldPassword
+	 * @param newPassword
+	 */
+	public void updataPassword(String oldPassword, String newPassword){
+		if(ValidateHelper.isNotEmptyString(propertyStaffId)){
+			PropertyStaffPo propertyStaffPo = propertyStaffRepository.findOne(propertyStaffId);
+			
+			if(propertyStaffPo == null){
+				throw new PropertyException(PropertyStaffErrorCode.STAFF_ID_NOT_EXIST);
+			}
+
+			if(!propertyStaffPo.getPassword().equals(oldPassword)){
+				throw new PropertyException(PropertyStaffErrorCode.OLD_PASSWORD_ERROR);
+			}
+			
+			propertyStaffPo.setPassword(newPassword);
+			propertyStaffRepository.save(propertyStaffPo);
+		}
+	}
+
+	/**
+	 * 员工信息，包含 名称，岗位名称
+	 * @return
+	 */
+	public PropertyStaffVo findPropertyStaffById4DP() {
+		return propertyStaffQueryRepository.findPropertyStaffById4DP(propertyStaffId);
 	}
 }

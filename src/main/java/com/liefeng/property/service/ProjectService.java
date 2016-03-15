@@ -287,6 +287,8 @@ public class ProjectService implements IProjectService {
 	public void deleteAppHomeImage(String appHomeImageIds) {
 		AppHomeImageContext appHomeImageContext = AppHomeImageContext.loadById(appHomeImageIds);
 		appHomeImageContext.delete();
+		
+		// TODO 以后补上删除OSS上逻辑业务
 	}
 
 	@Override

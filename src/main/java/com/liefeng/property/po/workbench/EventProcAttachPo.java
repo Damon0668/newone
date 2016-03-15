@@ -3,7 +3,9 @@ package com.liefeng.property.po.workbench;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.liefeng.core.entity.BaseValue;
 
@@ -11,6 +13,8 @@ import com.liefeng.core.entity.BaseValue;
  * 事件处理过程附件持久化对象
  * @author wuzhijing
  */
+@Entity
+@Table(name="t_event_proc_attach")
 public class EventProcAttachPo  extends BaseValue{
 
 	private static final long serialVersionUID = 4456081425631290849L;
@@ -56,6 +60,12 @@ public class EventProcAttachPo  extends BaseValue{
 	 */
 	@Column(name="file_name")
 	private String fileName;
+	
+	/**
+	 * 文件类型 类型。1：图片；2：附件
+	 */
+	@Column(name="type")
+	private String type;
 
 	public String getId() {
 		return id;
@@ -111,6 +121,14 @@ public class EventProcAttachPo  extends BaseValue{
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 }
