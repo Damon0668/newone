@@ -22,7 +22,7 @@ import com.liefeng.mq.type.TccBasicEvent;
  * @date 2016年3月11日 下午2:58:28
  */
 @RestController
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/api/user")
 public class UserController {
 
 	@Autowired

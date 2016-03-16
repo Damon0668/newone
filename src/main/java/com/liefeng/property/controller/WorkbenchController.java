@@ -20,7 +20,7 @@ import com.liefeng.property.vo.workbench.NoticeVo;
  * @2016年3月7日 下午3:54:17
  */
 @RestController
-@RequestMapping(value = "/workbench")
+@RequestMapping(value = "/api/workbench")
 public class WorkbenchController {
 
 	@Autowired

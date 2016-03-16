@@ -25,7 +25,7 @@ import com.liefeng.property.vo.fee.MeterRecordVo;
  * @date 2016年2月29日
  */
 @RestController
-@RequestMapping(value = "/fee")
+@RequestMapping(value = "/api/fee")
 public class FeeController {
 	private static Logger logger = LoggerFactory.getLogger(FeeController.class);
 
