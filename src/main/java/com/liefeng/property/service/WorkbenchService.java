@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.base.vo.UserVo;
-import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.base.user.IUserService;
@@ -27,7 +26,6 @@ import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.intf.service.workflow.IWorkflowService;
 import com.liefeng.mq.type.MessageEvent;
-import com.liefeng.mq.type.intf.IEvent;
 import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.StaffConstants;
@@ -632,8 +630,8 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 	
 	@Override
-	public void createEventProcess(EventProcessVo eventProcessVo){
-		EventProcessContext.build(eventProcessVo).create();
+	public EventProcessVo createEventProcess(EventProcessVo eventProcessVo){
+		return EventProcessContext.build(eventProcessVo).create();
 	}
 	
 	@Override
@@ -654,8 +652,8 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 	
 	@Override
-	public List<EventProcAttachVo> findEventProcAttachByEventProcessIdAndType(String eventProcessId,String type){
-		return EventProcAttachContext.build().findByEventProcessIdAndType(eventProcessId, type);
+	public List<EventProcAttachVo> findEventProcAttachByEventProcessId(String eventProcessId){
+		return EventProcAttachContext.build().findByEventProcessId(eventProcessId);
 	}
 	
 	@Override
@@ -745,15 +743,50 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 	
 	/**************报事工单处理******************/
+	//待办理
 	@Override
 	public DataPageValue<EventReportVo> getWaitingForEventReportList(EventReportBo eventReportBo,
 			Integer page, Integer size){
 		return EventReportContext.build().getWaitingForList(eventReportBo, page, size);
 	}
 	
+	//待签收
+	@Override
+	public DataPageValue<EventReportVo> getSignForEventReporList(EventReportBo eventReportBo,
+			Integer page, Integer size){
+		return EventReportContext.build().getSignForList(eventReportBo, page, size);
+	}
+	
+	//抢单列表
+	@Override
+	public DataPageValue<EventReportVo> getGrabEventReporList(EventReportBo eventReportBo,
+			Integer page, Integer size){
+		return EventReportContext.build().getGrabList(eventReportBo, page, size);
+	}
+	
+	//流转中列表
+	@Override
+	public DataPageValue<EventReportVo> getFlowingEventReporList(EventReportBo eventReportBo,
+			Integer page, Integer size){
+		return EventReportContext.build().getFlowingList(eventReportBo, page, size);
+	}
+	
+	@Override
+	public DataPageValue<EventReportVo> getCompleteEventReporList(
+			EventReportBo eventReportBo, Integer page, Integer size) {
+		return EventReportContext.build().getCompleteList(eventReportBo, page, size);
+
+	}
+	
+	//各种状态数量
+	@Override
+	public Map<String, Long> eventReporNoRead(EventReportBo eventReportBo){
+		return EventReportContext.build().noRead(eventReportBo);
+	}
+	
 	//派单
 	@Override
-	public void EventReporDistribute(EventReportVo eventReportVo,EventProcessVo eventProcessVo,String staffid,String nextAccepterId){
+	public void eventReporDistribute(EventReportVo eventReportVo,EventProcessVo eventProcessVo,String staffid,String nextAccepterId){
 		Map<String, Object> arg = new HashMap<String, Object>();
 		arg.put("distributeLeaflets", staffid);
 		arg.put("dispatching", eventProcessVo.getNextAccepterId());
@@ -767,16 +800,15 @@ public class WorkbenchService implements IWorkbenchService {
 		EventProcessContext.build(eventProcessVo).create();
 	}
 	
+	
+	
 	@Override
 	public List<EventProcessVo> getHisEventProcess(String orderId){
 		List<EventProcessVo>  eventProcessVos =  EventProcessContext.build().getHis(orderId);
 		for (EventProcessVo eventProcessVo : eventProcessVos) {
 			
 			//设置附件
-			eventProcessVo.setAttachs(EventProcAttachContext.build().findByEventProcessIdAndType(eventProcessVo.getId(), WorkbenchConstants.EventReport.EVENTPROCATTACH_ATTACH));
-			
-			//设置图片
-			eventProcessVo.setPics(EventProcAttachContext.build().findByEventProcessIdAndType(eventProcessVo.getId(), WorkbenchConstants.EventReport.EVENTPROCATTACH_PIC));
+			eventProcessVo.setAttachs(EventProcAttachContext.build().findByEventProcessId(eventProcessVo.getId()));
 			
 			//设置当前办理人的显示名称
 			if(ValidateHelper.isNotEmptyString(eventProcessVo.getCurrAccepterId())){
@@ -812,10 +844,8 @@ public class WorkbenchService implements IWorkbenchService {
 		EventProcessVo eventProcessVo = EventProcessContext.build().getActive(orderId,staffid);
 		
 		//设置附件
-		eventProcessVo.setAttachs(EventProcAttachContext.build().findByEventProcessIdAndType(eventProcessVo.getId(), WorkbenchConstants.EventReport.EVENTPROCATTACH_ATTACH));
+		eventProcessVo.setAttachs(EventProcAttachContext.build().findByEventProcessId(eventProcessVo.getId()));
 		
-		//设置图片
-		eventProcessVo.setPics(EventProcAttachContext.build().findByEventProcessIdAndType(eventProcessVo.getId(), WorkbenchConstants.EventReport.EVENTPROCATTACH_PIC));
 
 		//设置当前办理人的显示名称
 		if(ValidateHelper.isNotEmptyString(eventProcessVo.getCurrAccepterId())){
@@ -855,15 +885,14 @@ public class WorkbenchService implements IWorkbenchService {
 			throw  new WorkbenchException(WorkbenchErrorCode.PARAM_IS_NULL);
 		}
 		
+		//设置默认审核状态为通过
+		if(eventProcessVo.getAuditStatus()==null){
+			eventProcessVo.setAuditStatus("1");
+		}
+		
 		//保存 附件
 		if(ValidateHelper.isNotEmptyCollection(eventProcessVo.getAttachs()))
 		for (EventProcAttachVo eventProcAttachVo : eventProcessVo.getAttachs()) {
-			EventProcAttachContext.build(eventProcAttachVo).create();
-		}
-		
-		//保存 图片
-		if(ValidateHelper.isNotEmptyCollection(eventProcessVo.getPics()))
-		for (EventProcAttachVo eventProcAttachVo : eventProcessVo.getPics()) {
 			EventProcAttachContext.build(eventProcAttachVo).create();
 		}
 		
@@ -880,9 +909,22 @@ public class WorkbenchService implements IWorkbenchService {
 	
 		Map<String, Object> arg = new HashMap<String, Object>();
 		arg.put(role, nextAccepterId);
-		
+		//流程决策使用 该步骤主要使用在部门审批
+		arg.put("auditStatus", eventProcessVo.getAuditStatus());
+		if(eventProcessVo.getAuditStatus().equals("1")){
+			arg.put("returnVisit", nextAccepterId);
+		}
 		//执行
-		workflowService.execute(eventProcessVo.getWfTaskId(), staffid, arg);
+		List<Task> tasks = workflowService.execute(eventProcessVo.getWfTaskId(), staffid, arg);
+		
+		if(eventProcessVo.getGrab()!=null && eventProcessVo.getGrab().equals("1")){ //是否抢单
+			if(tasks!=null && tasks.size()>0){
+				EventProcessVo eventProcess = new EventProcessVo();
+				eventProcess.setGrab("1");
+				eventProcess.setWfTaskId(tasks.get(0).getId());
+				EventProcessContext.build(eventProcess).create();;
+			}
+		}
 	}
 	
 	/*
@@ -898,13 +940,25 @@ public class WorkbenchService implements IWorkbenchService {
 			throw new WorkbenchException(WorkbenchErrorCode.TASK_NOT_EXIST);
 		}
 		
+		//判断是否存在处理，没有则创建
+		if(eventProcessVo == null){
+			eventProcessVo = new EventProcessVo();
+			eventProcessVo.setWfTaskId(wfTaskId);
+			eventProcessVo.setNextAccepterId(arrayToString(task.getActorIds()));
+			eventProcessVo.setCurrAccepterId(staffid);
+			EventProcessContext.build(eventProcessVo).create();
+		}
+		
 		//判断是否已经签收
 		if(eventProcessVo.getStatus() == null || eventProcessVo.getStatus().equals(WorkbenchConstants.EventReport.SIGNFOR_NO)){
 			eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_YES);
 			
 			List<String> removeStaffid = compare(task.getActorIds(),new String[]{staffid});
 			
+			//判断是否需要移除其他人
+			if(removeStaffid.size()>0)
 			workflowService.removeTaskActor(wfTaskId, (String[]) removeStaffid.toArray());
+			
 			EventProcessContext.build(eventProcessVo).update();
 		}else{
 			throw new WorkbenchException(WorkbenchErrorCode.ALREADY_SIGNFOR);
@@ -922,13 +976,44 @@ public class WorkbenchService implements IWorkbenchService {
 			throw new WorkbenchException(WorkbenchErrorCode.TASK_NOT_EXIST);
 		}
 		if(eventProcessVo.getStatus() != null && eventProcessVo.getStatus().equals(WorkbenchConstants.EventReport.SIGNFOR_YES)){
-			eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_NO);
-			workflowService.addTaskActor(wfTaskId, eventProcessVo.getNextAccepterId().split(","));
+			eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_NO); //将以签收改为待签收
+			EventProcessContext.build(eventProcessVo).update();
+			List<String> removeStaffid = compare(task.getActorIds(),eventProcessVo.getNextAccepterId().split(","));
+			//判断是否需要添加其他人
+			if(removeStaffid.size()>0)
+			workflowService.addTaskActor(wfTaskId, (String[]) removeStaffid.toArray());
 		}else{
 			throw new WorkbenchException(WorkbenchErrorCode.ALREADY_SENDBACK);
 		}
 		
 	}
+	
+	//撤回
+	@Override
+	public void eventReporWithdraw(String wfTaskId,String staffid){
+		EventProcessVo eventProcessVo = EventProcessContext.build().findByWfTaskId(wfTaskId);
+		Task task = workflowService.findTaskById(wfTaskId);
+		if(task == null ){
+			throw new WorkbenchException(WorkbenchErrorCode.TASK_NOT_EXIST);
+		}
+		
+		if(eventProcessVo == null){
+			eventProcessVo = new EventProcessVo();
+			eventProcessVo.setWfTaskId(task.getId());
+			eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_YES);
+			EventProcessContext.build(eventProcessVo).create();
+		}
+		
+		//判断是否已经签收,签收了则无法撤回
+		if(eventProcessVo.getStatus() == null || eventProcessVo.getStatus().equals(WorkbenchConstants.EventReport.SIGNFOR_NO)){
+			eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_YES);
+			workflowService.withdrawTask(task.getParentTaskId(), staffid);
+			EventProcessContext.build(eventProcessVo).update();
+		 }else{
+			throw new WorkbenchException(WorkbenchErrorCode.ALREADY_SIGNFOR);
+		}
+	}
+	
 	
 	
 	//TODO 字符串 移至core
@@ -942,4 +1027,16 @@ public class WorkbenchService implements IWorkbenchService {
 	    }
 	    return list2;
 	}
+	
+	public static String arrayToString(String[] array){
+		String string ="";
+		for (int i = 0; i < array.length; i++) {
+			string += array[i];
+			if(array.length-1 < i){
+				string += ",";
+			}
+		}
+		return string;
+	}
+
 }

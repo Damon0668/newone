@@ -70,11 +70,12 @@ public class EventProcessContext {
 		return eventProcessContext;
 	}
 	
-	public void create() {
+	public EventProcessVo create() {
 		eventProcess.setId(UUIDGenerator.generate());
 		eventProcess.setOemCode(ContextManager.getInstance().getOemCode());
 		eventProcess.setAcceptTime(new Date());
 		eventProcessRepository.save(MyBeanUtil.createBean(eventProcess, EventProcessPo.class));
+		return eventProcess;
 	}
 	
 	public EventProcessVo findByWfTaskId(String wfTaskId) {
@@ -93,6 +94,7 @@ public class EventProcessContext {
 	}
 	
 	public void update(){
+		eventProcess.setAcceptTime(new Date());
 		eventProcess.setOemCode(ContextManager.getInstance().getOemCode());
 		eventProcessRepository.save(MyBeanUtil.createBean(eventProcess, EventProcessPo.class));
 	}

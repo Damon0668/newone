@@ -60,12 +60,6 @@ public class EventProcAttachPo  extends BaseValue{
 	 */
 	@Column(name="file_name")
 	private String fileName;
-	
-	/**
-	 * 文件类型 类型。1：图片；2：附件
-	 */
-	@Column(name="type")
-	private String type;
 
 	public String getId() {
 		return id;
@@ -123,12 +117,4 @@ public class EventProcAttachPo  extends BaseValue{
 		this.fileName = fileName;
 	}
 
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-	
 }

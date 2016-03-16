@@ -9,7 +9,7 @@ import com.liefeng.core.error.IErrorCode;
  */
 public enum WorkbenchErrorCode implements IErrorCode {
 	
-	CANNOT_UPDATE_EVENTREPORT_STATUS_ALREADYWORKERS("该报事信息"), 
+	CANNOT_UPDATE_EVENTREPORT_STATUS_ALREADYWORKERS("无法更新,该报事信息已经被签收"), 
 	
 	PARAM_IS_NULL("参数为空"), 
 	
