@@ -107,4 +107,26 @@ public class HouseholdConstants {
 		
 	}
 	
+	/**
+	 * 手机好友状态
+	 */
+	public static interface AppFriendStatus {
+		
+		/**
+		 * 等待验证
+		 */
+		public String WAITING = "1";
+		
+		/**
+		 * 已为好友
+		 */
+		public String ASFRIEND = "2";
+		
+		/**
+		 * 拒绝
+		 */
+		public String REFUSE = "3";
+		
+	}
+	
 }
