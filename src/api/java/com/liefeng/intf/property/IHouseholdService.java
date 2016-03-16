@@ -369,7 +369,7 @@ public interface IHouseholdService {
 	 * @author xhw
 	 * @date 2016年3月16日 下午4:02:30
 	 */
-	public List<AppFriendVo> getAppFriendList(String userId, String status);
+	public List<AppFriendVo> getAppFriendListOfStatus(String userId, String status);
 	
 	/**
 	 * 更新手机好友申请状态
@@ -379,5 +379,15 @@ public interface IHouseholdService {
 	 * @date 2016年3月16日 下午5:06:08
 	 */
 	public void updateAppFriend(String id, String status);
+	
+	/**
+	 * 查询用户（通讯录）
+	 * @param userId 用户id
+	 * @param condition 过滤条件
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月16日 下午8:31:54
+	 */
+	public List<AppFriendVo> getUserList(String userId, String condition);
 	
 }

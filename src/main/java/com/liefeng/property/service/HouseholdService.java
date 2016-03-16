@@ -826,6 +826,10 @@ public class HouseholdService implements IHouseholdService {
 
 	@Override
 	public AppFriendVo createAppFriend(AppFriendVo appFriendVo) {
+		//删除“已拒绝”好友申请记录
+		AppFriendContext context = AppFriendContext.build();
+		context.deleteOfStatus(appFriendVo.getUserId(), appFriendVo.getFriendId(), HouseholdConstants.AppFriendStatus.REFUSE);
+		
 		AppFriendContext appFriendContext = AppFriendContext.build(appFriendVo);
 		return appFriendContext.create();
 	}
@@ -837,9 +841,9 @@ public class HouseholdService implements IHouseholdService {
 	}
 
 	@Override
-	public List<AppFriendVo> getAppFriendList(String userId, String status) {
+	public List<AppFriendVo> getAppFriendListOfStatus(String userId, String status) {
 		AppFriendContext appFriendContext = AppFriendContext.build();
-		return appFriendContext.getAppFriendList(userId, status);
+		return appFriendContext.getAppFriendListOfStatus(userId, status);
 	}
 
 	@Override
@@ -866,6 +870,12 @@ public class HouseholdService implements IHouseholdService {
 			friendContext.create();
 		}
 		
+	}
+
+	@Override
+	public List<AppFriendVo> getUserList(String userId, String condition) {
+		AppFriendContext appFriendContext = AppFriendContext.build();
+		return appFriendContext.getUserList(userId, condition);
 	}
 
 

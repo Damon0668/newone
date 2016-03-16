@@ -2,6 +2,8 @@ package com.liefeng.property.vo.household;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.liefeng.core.entity.BaseValue;
 
 
@@ -11,6 +13,7 @@ import com.liefeng.core.entity.BaseValue;
  * @author xhw
  * @date 2016年3月16日 下午1:58:34
  */
+@JsonInclude(Include.NON_EMPTY)
 public class AppFriendVo extends BaseValue{
 	
 	private static final long serialVersionUID = 439475851394709911L;
@@ -49,7 +52,23 @@ public class AppFriendVo extends BaseValue{
 	 * oem编码
 	 */
 	private String oemCode;
-
+	
+	/**
+	 * 好友姓名
+	 */
+	private String friendName;
+	
+	/**
+	 * 手机号码
+	 */
+	private String phone;
+	
+	/**
+	 * 好友头像
+	 */
+	private String avatarUrl;
+	
+	
 	public String getId() {
 		return id;
 	}
@@ -104,6 +123,30 @@ public class AppFriendVo extends BaseValue{
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getFriendName() {
+		return friendName;
+	}
+
+	public void setFriendName(String friendName) {
+		this.friendName = friendName;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
+
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
 	}
 
 }

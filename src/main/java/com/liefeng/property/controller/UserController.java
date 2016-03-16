@@ -1,5 +1,7 @@
 package com.liefeng.property.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -9,6 +11,7 @@ import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.base.ICheckService;
@@ -140,5 +143,23 @@ public class UserController {
 		householdService.deleteAppFriend(userId, friendId);
 		
 		return ReturnValue.success();
+	}
+	
+	/**
+	 * 查询用户（通讯录）
+	 * @param userId 用户id
+	 * @param condition 过滤条件
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月16日 下午8:31:54
+	 */
+	@RequestMapping("getUserList")
+	@ResponseBody
+	public DataListValue<AppFriendVo> getUserList(String userId, String condition) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		
+		List<AppFriendVo> appFriendVoList = householdService.getUserList(userId, condition);
+		
+		return DataListValue.success(appFriendVoList);
 	}
 }

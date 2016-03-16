@@ -402,4 +402,6 @@ public class HouseholdController {
 		AppMsgSettingVo appMsgSettingVo = householdService.getAppMsgSetting(userId);
 		return DataValue.success(appMsgSettingVo);
 	}
+	
+
 }

@@ -115,17 +115,17 @@ public class HouseholdConstants {
 		/**
 		 * 等待验证
 		 */
-		public String WAITING = "1";
+		public String WAITING = "0";
 		
 		/**
 		 * 已为好友
 		 */
-		public String ASFRIEND = "2";
+		public String ASFRIEND = "1";
 		
 		/**
 		 * 拒绝
 		 */
-		public String REFUSE = "3";
+		public String REFUSE = "2";
 		
 	}
 	

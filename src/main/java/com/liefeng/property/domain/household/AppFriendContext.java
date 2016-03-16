@@ -1,6 +1,7 @@
 package com.liefeng.property.domain.household;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -14,8 +15,10 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.po.household.AppFriendPo;
 import com.liefeng.property.repository.household.AppFriendRepository;
+import com.liefeng.property.repository.mybatis.AppFriendQueryRepository;
 import com.liefeng.property.vo.household.AppFriendVo;
 
 
@@ -32,6 +35,9 @@ public class AppFriendContext {
 	
 	@Autowired
 	private AppFriendRepository appFriendRepository;
+	
+	@Autowired
+	private AppFriendQueryRepository appFriendQueryRepository;
 	
 	
 	/**
@@ -150,6 +156,22 @@ public class AppFriendContext {
 	}
 	
 	/**
+	 * 删除某状态的好友
+	 * @param userId
+	 * @param friendId
+	 * @param status 
+	 * @author xhw
+	 * @date 2016年3月16日 下午8:54:21
+	 */
+	public void deleteOfStatus(String userId, String friendId, String status){
+		if(ValidateHelper.isNotEmptyString(userId) && ValidateHelper.isNotEmptyString(friendId) &&ValidateHelper.isNotEmptyString(status)){
+			appFriendRepository.deleteByUserIdAndFriendIdAndStatus(userId, friendId, status);
+			
+			logger.info("Update  appFriend of userId {1} and friendId {2} and status {3}: success.", userId, friendId, status);
+		}
+	}
+	
+	/**
 	 * 根据用户id、好友状态，获取用户的好友列表
 	 * @param userId 用户id
 	 * @param status 好友状态
@@ -157,7 +179,7 @@ public class AppFriendContext {
 	 * @author xhw
 	 * @date 2016年3月16日 下午3:57:01
 	 */
-	public List<AppFriendVo> getAppFriendList(String userId, String status){
+	public List<AppFriendVo> getAppFriendListOfStatus(String userId, String status){
 		List<AppFriendVo> appFriendVoList = null;
 		if(ValidateHelper.isNotEmptyString(userId) && ValidateHelper.isNotEmptyString(status)){
 			List<AppFriendPo> appFriendPoList = appFriendRepository.findByUserIdAndStatus(userId, status);
@@ -167,6 +189,28 @@ public class AppFriendContext {
 		
 		return appFriendVoList;
 	}
+	
+	/**
+	 * 查询用户（通讯录）
+	 * @param userId 用户id
+	 * @param condition 过滤条件
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月16日 下午8:31:54
+	 */
+	public List<AppFriendVo> getUserList(String userId, String condition){
+		HashMap<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("userId", userId);
+		paramMap.put("condition", condition);
+
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(paramMap);
+		
+		List<AppFriendVo> appFriendVoList = appFriendQueryRepository.queryUserList(param);
+		
+		return appFriendVoList;
+	}
+	
 	
 	protected void setAppFriendVo(AppFriendVo appFriendVo) {
 		this.appFriendVo = appFriendVo;
