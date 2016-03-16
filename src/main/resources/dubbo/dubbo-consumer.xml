@@ -32,8 +32,12 @@
     <dubbo:reference id="checkService"
         interface="com.liefeng.intf.base.ICheckService" check="false" />
         
-     <!-- 消息推送 -->
+    <!-- 消息推送 -->
     <dubbo:reference id="pushMsgService"
         interface="com.liefeng.intf.service.msg.IPushMsgService" check="false" />
+        
+    <!-- 流程管理 -->
+    <dubbo:reference id="workflowService"
+        interface="com.liefeng.intf.service.workflow.IWorkflowService" check="false" />
         
 </beans>
