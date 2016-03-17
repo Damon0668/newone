@@ -4,11 +4,15 @@ import java.util.Date;
 
 import com.liefeng.core.entity.BaseValue;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 项目业务值对象
  * @author Huangama
  * @date 2015-12-22
  */
+@ApiModel(parent=BaseValue.class)
 public class ProjectVo extends BaseValue {
 
 	private static final long serialVersionUID = 1841096284447176151L;
@@ -16,6 +20,7 @@ public class ProjectVo extends BaseValue {
 	/**
 	 * 主键
 	 */
+	@ApiModelProperty(value="主键",required=true)
 	private String id;
 	
 	/**
