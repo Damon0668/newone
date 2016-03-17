@@ -1,5 +1,6 @@
 package com.liefeng.property.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,6 +105,7 @@ public class UserController {
 		friendVo.setFriendId(friendId);
 		friendVo.setUserId(userId);
 		friendVo.setStatus(HouseholdConstants.AppFriendStatus.WAITING);
+		friendVo.setCreateTime(new Date());
 		householdService.createAppFriend(friendVo);
 		
 		return ReturnValue.success();
@@ -161,5 +163,55 @@ public class UserController {
 		List<AppFriendVo> appFriendVoList = householdService.getUserList(userId, condition);
 		
 		return DataListValue.success(appFriendVoList);
+	}
+	
+	/**
+	 * 获取好友列表
+	 * @param userId 用户id
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月17日 上午9:53:24
+	 */
+	@RequestMapping("getAppFriendList")
+	@ResponseBody
+	public DataListValue<AppFriendVo> getAppFriendList(String userId) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		
+		List<AppFriendVo> appFriendVoList = householdService.getAppFriendList(userId);
+		
+		return DataListValue.success(appFriendVoList);
+	}
+	
+	/**
+	 * 根据用户id，获取好友操作历史
+	 * @param userId 用户id
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月17日 上午10:57:37
+	 */
+	@RequestMapping("getAppFriendHistoryList")
+	@ResponseBody
+	public DataListValue<AppFriendVo> getAppFriendHistoryList(String userId) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		
+		List<AppFriendVo> appFriendVoList = householdService.getAppFriendHistoryList(userId);
+		
+		return DataListValue.success(appFriendVoList);
+	}
+	
+	/**
+	 * 根据用户id，获取用户信息
+	 * @param userId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月17日 上午11:06:39
+	 */
+	@RequestMapping("getUserById")
+	@ResponseBody
+	public DataValue<UserVo> getUserById(String userId) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		
+		UserVo user = userService.getUserById(userId);
+		return DataValue.success(user);
 	}
 }

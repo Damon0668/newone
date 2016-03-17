@@ -12,8 +12,9 @@
 	<result column="friend_name" property="friendName"/>
 	<result column="avatar_url" property="avatarUrl"/>
 	<result column="phone" property="phone"/>
+	<result column="create_time" property="createTime"/>
+	<result column="status" property="status"/>
 </resultMap>
-
 
 <select id="queryUserList" resultMap="BaseResultMap">
 	SELECT
@@ -35,6 +36,68 @@
 		)a
 	LEFT JOIN property.t_app_friend b ON a.friend_id = b.friend_id
 	AND b.user_id = #{extra.userId}
+</select>
+
+<select id="queryFriendList" resultMap="BaseResultMap">
+	SELECT
+		a.friend_id,
+		b.mobile AS phone,
+		b.avatar_url,
+	CASE WHEN ISNULL(b.nick_name) THEN b.name ELSE b.nick_name END friend_name
+	FROM
+		property.t_app_friend a,
+		basic.t_user b
+	WHERE
+		a.friend_id = b.id
+	AND a.status = '1'
+	AND a.user_id = #{extra.userId}
+</select>
+
+<select id="queryFriendHistoryList" resultMap="BaseResultMap">
+	SELECT
+		id,
+		friend_id,
+		phone,
+		avatar_url,
+		create_time,
+		friend_name,
+		status
+	FROM
+		(
+			SELECT
+				1 num,
+				3 status,
+				a.id,
+				a.friend_id,
+				b.mobile AS phone,
+				b.avatar_url,
+				a.create_time,
+				CASE WHEN ISNULL(b.nick_name) THEN b.name ELSE b.nick_name END friend_name
+			FROM
+				property.t_app_friend a,
+				basic.t_user b
+			WHERE
+				a.user_id = b.id
+			AND a.status = '0'
+			AND a.friend_id = #{extra.userId}
+			UNION
+			SELECT
+				0 num,
+				a.status,
+				a.id,
+				a.friend_id,
+				b.mobile AS phone,
+				b.avatar_url,
+				a.create_time,
+				CASE WHEN ISNULL(b.nick_name) THEN b.name ELSE b.nick_name END friend_name
+			FROM
+				property.t_app_friend a,
+				basic.t_user b
+			WHERE
+				a.friend_id = b.id
+			AND a.user_id = #{extra.userId}
+		)t
+	ORDER BY num DESC, create_time DESC
 </select>
 
 </mapper>   

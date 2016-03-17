@@ -16,6 +16,6 @@ import com.liefeng.property.po.workbench.EventProcAttachPo;
 @Transactional
 public interface EventProcAttachRepository extends JpaRepository<EventProcAttachPo, String> {
 
-	public List<EventProcAttachPo> findByEventProcessIdAndType(String eventProcessId,
-			String type);
+
+	public List<EventProcAttachPo> findByEventProcessId(String eventProcessId);
 }

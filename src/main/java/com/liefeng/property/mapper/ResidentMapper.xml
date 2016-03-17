@@ -7,6 +7,15 @@
 
 <!-- Result Map-->
 <resultMap id="BaseResultMap" type="com.liefeng.property.vo.household.ResidentVo" >
+	<result column="residentHouseId" property="residentHouse.id"/>
+	<result column="houseId" property="residentHouse.houseId"/>
+	<result column="proprietorId" property="residentHouse.proprietorId"/>
+	<result column="residentType" property="residentHouse.residentType"/>
+	<result column="residentRelation" property="residentHouse.residentRelation"/>
+	<result column="checkinDate" property="residentHouse.checkinDate"/>
+	<result column="checkupDate" property="residentHouse.checkupDate"/>
+	<result column="houseNum" property="residentHouse.houseNum"/>
+
 	<result column="customerId" property="customer.id"/>
 	<result column="globalId" property="customer.globalId"/>
 	<result column="idNum" property="customer.idNum"/>
@@ -16,11 +25,6 @@
 	<result column="national" property="customer.national"/>
 	<result column="maritalStatus" property="customer.maritalStatus"/>
 	<result column="eduDegree" property="customer.eduDegree"/>
-	<result column="id" property="id"/>
-	<result column="name" property="name"/>
-	<result column="cust_global_id" property="custGlobalId"/>
-	<result column="mobile" property="mobile"/>
-	<result column="pic" property="pic"/>
 </resultMap>
 
 <resultMap id="GuardResidentVo" type="com.liefeng.property.vo.guard.GuardResidentVo" >
@@ -32,23 +36,23 @@
 	WHERE 1=1 
 <trim  suffixOverrides="," >
 	<if test="extra.proprietorId != null and extra.proprietorId != ''" >
-	    AND a.proprietor_id =  #{extra.proprietorId}
+	    AND rh.proprietor_id =  #{extra.proprietorId}
 	</if>
 
 	<if test="extra.houseId != null and extra.houseId != ''" >
-	    AND a.house_id =  #{extra.houseId}
+	    AND rh.house_id =  #{extra.houseId}
 	</if>
 	
 	<if test="extra.residentId != null and extra.residentId != ''" >
-	    AND a.id =  #{extra.residentId}
+	    AND r.id =  #{extra.residentId}
 	</if>
 	
 	<if test="extra.oemCode != null and extra.oemCode != ''" >
-	    AND a.oem_code =  #{extra.oemCode}
+	    AND r.oem_code =  #{extra.oemCode}
 	</if>
 	
 	<if test="extra.custGlobalId != null and extra.custGlobalId != ''" >
-	    AND a.custGlobalId =  #{extra.custGlobalId}
+	    AND r.custGlobalId =  #{extra.custGlobalId}
 	</if>
 	
 </trim>
@@ -56,20 +60,23 @@
 
 <select id="queryByPage"  resultMap="BaseResultMap">
 	  SELECT
-	      a.id AS id,
-	      a.resident_type AS residentType,
-	      a.resident_relation AS residentRelation,
-	      a.name AS name,
-	      a.mobile AS mobile,
-	      a.tel AS tel,
-	      b.id_num AS idNum,
-	      b.sex AS sex,
-	      a.status AS status,
-	      a.work_unit as workUnit
+	      r.id AS id,
+	      r.name AS name,
+	      r.mobile AS mobile,
+	      r.tel AS tel,
+	      r.status AS status,
+	      r.work_unit as workUnit,
+	      rh.house_id as houseId,
+	      rh.resident_type AS residentType,
+	      rh.resident_relation AS residentRelation,
+	      c.id_num AS idNum,
+	      c.sex AS sex
 	  FROM
-	      property.t_resident a 
-	      LEFT JOIN basic.t_customer b 
-	      ON a.cust_global_id = b.global_id
+	      property.t_resident r 
+	      LEFT JOIN property.t_resident_house rh
+	      ON rh.resident_id = r.id AND rh.oem_code = r.oem_code
+	      LEFT JOIN basic.t_customer c 
+	      ON c.global_id = r.cust_global_id
 	  <include refid="Example_Where_Clause"/>
 	  <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
           ${pager.mysqlQueryCondition}
@@ -81,79 +88,89 @@ SELECT
 	  COUNT(1) 
 FROM
 	( SELECT
-	      a.id
+	      r.id AS id
 	  FROM
-	      property.t_resident a 
-	      LEFT JOIN basic.t_customer b 
-	      ON a.cust_global_id = b.global_id
-	      <include refid="Example_Where_Clause"/>
+	      property.t_resident r 
+	      LEFT JOIN property.t_resident_house rh
+	      ON rh.resident_id = r.id AND rh.oem_code = r.oem_code
+	      LEFT JOIN basic.t_customer c 
+	      ON c.global_id = r.cust_global_id
+	  <include refid="Example_Where_Clause"/>
 	  ) AS ttt
 </select>
 
-<select id="queryById" parameterType="java.lang.String" resultMap="BaseResultMap">
+<!-- 查询某个房屋中某个住户 -->
+<select id="queryByIdAndHouseId" resultMap="BaseResultMap">
 	  SELECT
-	      a.id AS id,
-	      a.cust_global_id as custGlobalId,
-	      a.house_id as houseId,
-	      a.proprietor_id as  proprietorId,
-	      a.is_proprietor as isProprietor,
-	      a.resident_type as residentType,
-	      a.resident_relation as residentRelation,
-	      a.checkin_date as checkinDate,
-	      a.checkup_date as checkupDate,
-	      a.name as name,
-	      a.mobile as mobile,
-	      a.tel as tel,
-	      a.work_unit as workUnit,
-	      a.hobbies as hobbies,
-	      a.specialty as specialty,
-	      a.pic as pic,
-	      a.remark as remark,
-	      a.oem_code as oemCode,
+	      r.id as id,
+	      r.cust_global_id as custGlobalId,
+	      r.project_id as projectId,
+	      r.name as name,
+	      r.mobile as mobile,
+	      r.tel as tel,
+	      r.work_unit as workUnit,
+	      r.hobbies as hobbies,
+	      r.specialty as specialty,
+	      r.pic as pic,
+	      r.remark as remark,
+	      r.oem_code as oemCode,
 	      
-	      b.id as customerId,
-	      b.global_id as globalId,
-	      b.id_num AS idNum,
-	      b.sex AS sex,
-	      b.birthday as birthday,
-	      b.native_place as nativePlace,
-	      b.national as national,
-	      b.marital_status as maritalStatus,
-	      b.edu_degree as eduDegree
+	      rh.id as residentHouseId,
+	      rh.house_id as houseId,
+	      rh.proprietor_id as  proprietorId,
+	      rh.resident_type as residentType,
+	      rh.resident_relation as residentRelation,
+	      rh.checkin_date as checkinDate,
+	      rh.checkup_date as checkupDate,
+	      
+	      c.id as customerId,
+	      c.global_id as globalId,
+	      c.id_num as idNum,
+	      c.sex as sex,
+	      c.birthday as birthday,
+	      c.native_place as nativePlace,
+	      c.national as national,
+	      c.marital_status as maritalStatus,
+	      c.edu_degree as eduDegree
 	  FROM
-	      property.t_resident a 
-	      LEFT JOIN basic.t_customer b 
-	      ON a.cust_global_id = b.global_id
+	      property.t_resident r
+	      LEFT JOIN property.t_resident_house rh
+	      ON rh.resident_id = r.id AND rh.oem_code = r.oem_code
+	      LEFT JOIN basic.t_customer c 
+	      ON r.cust_global_id = c.global_id
 	  WHERE
-	      a.id = #{residentId}
+	      r.id = #{extra.residentId}
+	      AND rh.house_id = #{extra.houseId}
 </select>
 
 
 <select id="queryByCustGlobalIdAndProjectId" resultMap="BaseResultMap">
 	  SELECT
-	      a.id AS id,
-	      a.cust_global_id as custGlobalId
+	      r.id AS id,
+	      r.cust_global_id as custGlobalId
 	  FROM
-	      property.t_resident a 
-	      LEFT JOIN property.t_house b
-	      ON b.id = a.house_id
+	      property.t_resident r 
 	  WHERE
-	      a.cust_global_id = #{extra.custGlobalId} AND b.project_id = #{extra.projectId} AND a.status != '2'
+	      r.cust_global_id = #{extra.custGlobalId} 
+	      AND r.project_id = #{extra.projectId} 
+	      AND r.status != '2'
 </select>
 
 <!-- 查询业主房产中住户 -->
-<select id="queryResidents" resultMap="BaseResultMap">
+<select id="queryResidentInProprietorHouse" resultMap="BaseResultMap">
 	select
 		pj.full_name as projectName,
 		h.house_num as houseNum,
 		r.name as name,
-		r.resident_relation as residentRelation
+		rh.resident_relation as residentRelation
 	from
-		property.t_resident r 
+		property.t_resident r
+		left join property.t_resident_house rh
+		on rh.resident_id = r.id and rh.oem_code = r.oem_code 
 		left join property.t_proprietor p
-		on p.id = r.proprietor_id
+		on p.id = rh.proprietor_id
 		left join property.t_house h
-		on h.id = r.house_id ,
+		on h.id = rh.house_id ,
 		property.t_project pj
 	where
 		p.project_id = pj.id
@@ -202,12 +219,12 @@ select * from (
 	        gc.status guardCardStatus,
 	        rc.plate_num plateNum
 	    FROM
-	        t_resident r
-	    LEFT JOIN t_house h ON r.house_id = h.id
-	    LEFT JOIN t_project p ON h.project_id = p.id
-	    LEFT JOIN t_guard_card_user gcu ON r.id = gcu.user_id
-	    LEFT JOIN t_guard_card gc ON gcu.card_id = gc.id
-	    LEFT JOIN t_resident_car rc on h.id = rc.house_id
+	        property.t_resident r
+	    LEFT JOIN property.t_house h ON r.house_id = h.id
+	    LEFT JOIN property.t_project p ON h.project_id = p.id
+	    LEFT JOIN property.t_guard_card_user gcu ON r.id = gcu.user_id
+	    LEFT JOIN property.t_guard_card gc ON gcu.card_id = gc.id
+	    LEFT JOIN property.t_resident_car rc on h.id = rc.house_id
         where 1=1
         <if test="extra.oemCode != null and extra.oemCode != ''" >
             AND r.oem_code =  #{extra.oemCode}
@@ -230,13 +247,13 @@ select * from (
             gc.status guardCardStatus,
             rc.plate_num plateNum
         FROM
-            t_proprietor p
-        LEFT JOIN t_proprietor_house ph ON p.id = ph.proprietor_id
-        LEFT JOIN t_project prj ON ph.project_id = prj.id
-        LEFT JOIN t_guard_card_user gcu ON p.id = gcu.user_id
-        LEFT JOIN t_guard_card gc ON gcu.card_id = gc.id
-        LEFT JOIN t_house h on prj.id = ph.project_id and ph.house_num = h.house_num
-        LEFT JOIN t_resident_car rc on h.id = rc.house_id
+            property.t_proprietor p
+        LEFT JOIN property.t_proprietor_house ph ON p.id = ph.proprietor_id
+        LEFT JOIN property.t_project prj ON ph.project_id = prj.id
+        LEFT JOIN property.t_guard_card_user gcu ON p.id = gcu.user_id
+        LEFT JOIN property.t_guard_card gc ON gcu.card_id = gc.id
+        LEFT JOIN property.t_house h on prj.id = ph.project_id and ph.house_num = h.house_num
+        LEFT JOIN property.t_resident_car rc on h.id = rc.house_id
         where 1=1 
         <if test="extra.oemCode != null and extra.oemCode != ''" >
             AND p.oem_code =  #{extra.oemCode}
@@ -267,12 +284,12 @@ select count(*) from (
             gc.status guardCardStatus,
             rc.plate_num plateNum
         FROM
-            t_resident r
-        LEFT JOIN t_house h ON r.house_id = h.id
-        LEFT JOIN t_project p ON h.project_id = p.id
-        LEFT JOIN t_guard_card_user gcu ON r.id = gcu.user_id
-        LEFT JOIN t_guard_card gc ON gcu.card_id = gc.id
-        LEFT JOIN t_resident_car rc on h.id = rc.house_id
+            property.t_resident r
+        LEFT JOIN property.t_house h ON r.house_id = h.id
+        LEFT JOIN property.t_project p ON h.project_id = p.id
+        LEFT JOIN property.t_guard_card_user gcu ON r.id = gcu.user_id
+        LEFT JOIN property.t_guard_card gc ON gcu.card_id = gc.id
+        LEFT JOIN property.t_resident_car rc on h.id = rc.house_id
         where 1=1 
         <if test="extra.oemCode != null and extra.oemCode != ''" >
             AND r.oem_code = #{extra.oemCode}
@@ -294,13 +311,13 @@ select count(*) from (
             gc.status guardCardStatus,
             rc.plate_num plateNum
         FROM
-            t_proprietor p
-        LEFT JOIN t_proprietor_house ph ON p.id = ph.proprietor_id
-        LEFT JOIN t_project prj ON ph.project_id = prj.id
-        LEFT JOIN t_guard_card_user gcu ON p.id = gcu.user_id
-        LEFT JOIN t_guard_card gc ON gcu.card_id = gc.id
-        LEFT JOIN t_house h on prj.id = ph.project_id and ph.house_num = h.house_num
-        LEFT JOIN t_resident_car rc on h.id = rc.house_id
+            property.t_proprietor p
+        LEFT JOIN property.t_proprietor_house ph ON p.id = ph.proprietor_id
+        LEFT JOIN property.t_project prj ON ph.project_id = prj.id
+        LEFT JOIN property.t_guard_card_user gcu ON p.id = gcu.user_id
+        LEFT JOIN property.t_guard_card gc ON gcu.card_id = gc.id
+        LEFT JOIN property.t_house h on prj.id = ph.project_id and ph.house_num = h.house_num
+        LEFT JOIN property.t_resident_car rc on h.id = rc.house_id
         where 1=1 
         <if test="extra.oemCode != null and extra.oemCode != ''" >
             AND p.oem_code =  #{extra.oemCode}
@@ -312,16 +329,18 @@ select count(*) from (
 
 <select id="queryByHouseId" resultMap="BaseResultMap">
 	SELECT
-		id,
-		name,
-		cust_global_id,
-		pic,
-		mobile
+		r.id as id,
+		r.name as name,
+		r.cust_global_id as custGlobalId,
+		r.pic as pic,
+		r.mobile as mobile
 	FROM
-		t_resident
+		property.t_resident r
+		left join property.t_resident_house rh
+		on rh.resident_id = r.id and rh.oem_code = r.oem_code
 	WHERE
-		house_id = #{extra.houseId}
-	AND status = '1'
+		rh.house_id = #{extra.houseId}
+	AND r.status = '1'
 </select>
 
 </mapper>

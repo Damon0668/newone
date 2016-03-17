@@ -12,7 +12,7 @@ import com.liefeng.core.error.SystemErrorCode;
 import com.liefeng.core.exception.SystemException;
 
 @SpringBootApplication
-@ImportResource({"classpath:dubbo/dubbo.xml","classpath:timetask.xml"})
+@ImportResource("classpath:cfg.xml")
 public class Application {
 	
 	private static Logger logger = LoggerFactory.getLogger(Application.class);

@@ -27,6 +27,7 @@
 		ep.timeliness,
 		ep.level,
 		ep.attitude,
+		ep.pic_urls as picUrls,
 		ep.revisit_mode as revisitMode,
 		t.display_Name as taskDisplayName,
 		t.task_Name as taskName
@@ -54,6 +55,7 @@
 		ep.timeliness,
 		ep.level,
 		ep.attitude,
+		ep.pic_urls as picUrls,
 		ep.revisit_mode as revisitMode,
 		t.display_Name as taskDisplayName,
 		t.task_Name as taskName

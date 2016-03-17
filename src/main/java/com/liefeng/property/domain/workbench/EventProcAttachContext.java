@@ -73,8 +73,8 @@ public class EventProcAttachContext {
 		eventProcAttachRepository.delete(id);
 	}
 	
-	public List<EventProcAttachVo> findByEventProcessIdAndType(String eventProcessId ,String type){
-		List<EventProcAttachPo> eventProcAttachPos = eventProcAttachRepository.findByEventProcessIdAndType(eventProcessId,type);
+	public List<EventProcAttachVo> findByEventProcessId(String eventProcessId){
+		List<EventProcAttachPo> eventProcAttachPos = eventProcAttachRepository.findByEventProcessId(eventProcessId);
 		return MyBeanUtil.createList(eventProcAttachPos, EventProcAttachVo.class);
 	}
 	

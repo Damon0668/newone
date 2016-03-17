@@ -129,10 +129,7 @@ public class EventProcessVo extends BaseValue{
 	 */
 	private List<EventProcAttachVo> attachs;
 	
-	/**
-	 * 图片
-	 */
-	private List<EventProcAttachVo> pics;
+	private String picUrls;
 	
 	public String getId() {
 		return id;
@@ -318,11 +315,11 @@ public class EventProcessVo extends BaseValue{
 		this.attachs = attachs;
 	}
 
-	public List<EventProcAttachVo> getPics() {
-		return pics;
+	public String getPicUrls() {
+		return picUrls;
 	}
 
-	public void setPics(List<EventProcAttachVo> pics) {
-		this.pics = pics;
+	public void setPicUrls(String picUrls) {
+		this.picUrls = picUrls;
 	}
 }

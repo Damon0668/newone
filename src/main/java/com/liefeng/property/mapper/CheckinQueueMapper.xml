@@ -83,7 +83,7 @@
 			cq.id as id,
 			cq.user_id as userId,
 			cq.project_id as projectId,
-			cq.house_id as houseId,
+			h.id as houseId,
 			cq.seq as seq,
 			cq.status as status,
 			cq.create_time as createTime,
@@ -103,10 +103,10 @@
 			left join property.t_checkin_queue cq
 			on cq.project_id = h.project_id and cq.house_id = h.id
 		where
-			(cq.id is not null and cq.status = '2'
-			 and cq.project_id = #{extra.projectId} 
-			 and cq.oem_code = #{extra.oemCode})
-			or (cq.id is null)
+			(cq.id is not null and cq.status = '2')
+			or (cq.id is null) 
+			and ph.project_id = #{extra.projectId} 
+			and ph.oem_code = #{extra.oemCode}
 		order by
 			cq.tran_time desc)) as un
 	<include refid="Base_Clause"/>

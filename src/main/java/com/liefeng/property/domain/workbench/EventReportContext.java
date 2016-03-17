@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.workbench;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,16 +12,12 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
-import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.workbench.EventReportBo;
-import com.liefeng.property.constant.WorkbenchConstants;
-import com.liefeng.property.exception.WorkbenchException;
 import com.liefeng.property.po.workbench.EventReportPo;
 import com.liefeng.property.repository.mybatis.EventReportQueryRepository;
 import com.liefeng.property.repository.workbench.EventReportRepository;
-import com.liefeng.property.vo.fee.FeeItemVo;
 import com.liefeng.property.vo.workbench.EventReportVo;
 
 /**
@@ -122,6 +119,13 @@ public class EventReportContext {
 		return new DataPageValue<EventReportVo>(eventReportVos, total, pageSize, currentPage);
 	}
 	
+	/**
+	 * 待办理列表
+	 * @param eventReportBo
+	 * @param currentPage
+	 * @param pageSize
+	 * @return
+	 */
 	public DataPageValue<EventReportVo> getWaitingForList(EventReportBo eventReportBo,Integer currentPage,Integer pageSize){
 		Map<String, String> extra = MyBeanUtil.bean2Map(eventReportBo);
 
@@ -141,7 +145,140 @@ public class EventReportContext {
 		
 		return new DataPageValue<EventReportVo>(eventReportVos, total, pageSize, currentPage);
 	}
+	
+	/**
+	 * 带签收列表
+	 * @param eventReportBo
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public DataPageValue<EventReportVo> getSignForList(
+			EventReportBo eventReportBo, Integer page, Integer size) {
+		Map<String, String> extra = MyBeanUtil.bean2Map(eventReportBo);
 
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		param.setPage(page);
+		param.setPageSize(size);
+		
+		Long total = eventReportQueryRepository.signForQueryByCount(param);
+		total = (total == null ? 0 : total);
+		logger.info("EventReport List total：total={}", total);
+		
+		// 设置数据总行数，用于计算偏移量
+		param.getPager().setRowCount(total);
+		
+		List<EventReportVo> eventReportVos = eventReportQueryRepository.signForQueryByPage(param);
+		
+		return new DataPageValue<EventReportVo>(eventReportVos, total, page, size);
+
+	}
+	
+	/**
+	 * 抢单列表
+	 * @param eventReportBo
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public DataPageValue<EventReportVo> getGrabList(
+			EventReportBo eventReportBo, Integer page, Integer size) {
+		Map<String, String> extra = MyBeanUtil.bean2Map(eventReportBo);
+
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		param.setPage(page);
+		param.setPageSize(size);
+		
+		Long total = eventReportQueryRepository.grabQueryByCount(param);
+		total = (total == null ? 0 : total);
+		logger.info("EventReport List total：total={}", total);
+		
+		// 设置数据总行数，用于计算偏移量
+		param.getPager().setRowCount(total);
+		
+		List<EventReportVo> eventReportVos = eventReportQueryRepository.grabQueryByPage(param);
+		
+		return new DataPageValue<EventReportVo>(eventReportVos, total, page, size);
+	}
+	
+	/**
+	 * 流转中分页
+	 * @param eventReportBo
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public DataPageValue<EventReportVo> getFlowingList(
+			EventReportBo eventReportBo, Integer page, Integer size) {
+		Map<String, String> extra = MyBeanUtil.bean2Map(eventReportBo);
+
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		param.setPage(page);
+		param.setPageSize(size);
+		
+		Long total = eventReportQueryRepository.flowingQueryByCount(param);
+		total = (total == null ? 0 : total);
+		logger.info("EventReport List total：total={}", total);
+		
+		// 设置数据总行数，用于计算偏移量
+		param.getPager().setRowCount(total);
+		
+		List<EventReportVo> eventReportVos = eventReportQueryRepository.flowingQueryByPage(param);
+		
+		return new DataPageValue<EventReportVo>(eventReportVos, total, page, size);
+	}
+	
+	/**
+	 * 各种状态数量
+	 * @param eventReportBo
+	 * @return
+	 */
+	public Map<String, Long> noRead(EventReportBo eventReportBo) {
+		Map<String, String> extra = MyBeanUtil.bean2Map(eventReportBo);
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		
+		Map<String, Long> map =new HashMap<String, Long>();
+		map.put("waitingFor", eventReportQueryRepository.waitingForQueryByCount(param));
+		map.put("flowing", eventReportQueryRepository.flowingQueryByCount(param));
+		map.put("grab", eventReportQueryRepository.grabQueryByCount(param));
+		map.put("signFor", eventReportQueryRepository.signForQueryByCount(param));
+		
+		return map;
+	}
+	
+	/**
+	 * 已完成列表
+	 * @param eventReportBo
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public DataPageValue<EventReportVo> getCompleteList(
+			EventReportBo eventReportBo, Integer page, Integer size) {
+		Map<String, String> extra = MyBeanUtil.bean2Map(eventReportBo);
+
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		param.setPage(page);
+		param.setPageSize(size);
+		
+		Long total = eventReportQueryRepository.completeQueryByCount(param);
+		total = (total == null ? 0 : total);
+		logger.info("EventReport List total：total={}", total);
+		
+		// 设置数据总行数，用于计算偏移量
+		param.getPager().setRowCount(total);
+		
+		List<EventReportVo> eventReportVos = eventReportQueryRepository.completeQueryByPage(param);
+		
+		return new DataPageValue<EventReportVo>(eventReportVos, total, page, size);
+
+	}
+	
 	protected void setId(String id) {
 		this.id = id;
 	}
@@ -149,4 +286,13 @@ public class EventReportContext {
 	protected void setEventReport(EventReportVo eventReport) {
 		this.eventReport = eventReport;
 	}
+
+	
+
+	
+	
+
+	
+
+	
 }
