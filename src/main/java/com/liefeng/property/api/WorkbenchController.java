@@ -1,4 +1,4 @@
-package com.liefeng.property.controller;
+package com.liefeng.property.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

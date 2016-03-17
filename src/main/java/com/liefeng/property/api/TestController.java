@@ -1,4 +1,4 @@
-package com.liefeng.property.controller;
+package com.liefeng.property.api;
 
 import javax.validation.Valid;
 
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.core.entity.DataValue;
-import com.liefeng.property.controller.ro.TestRo;
+import com.liefeng.property.api.ro.TestRo;
 import com.liefeng.property.vo.project.ProjectVo;
 
 import io.swagger.annotations.Api;

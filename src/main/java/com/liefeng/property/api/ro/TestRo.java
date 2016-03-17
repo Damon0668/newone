@@ -1,10 +1,15 @@
-package com.liefeng.property.controller.ro;
+package com.liefeng.property.api.ro;
 
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+/**
+ * 请求对象
+ * @author 蔡少东
+ * @date 2016年3月17日
+ */
 @ApiModel
 public class TestRo {
 	
