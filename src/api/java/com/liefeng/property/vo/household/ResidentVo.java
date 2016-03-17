@@ -1,7 +1,5 @@
 package com.liefeng.property.vo.household;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.liefeng.base.vo.CustomerVo;
@@ -27,41 +25,11 @@ public class ResidentVo extends BaseValue {
 	 * 客户全局唯一标识
 	 */
 	private String custGlobalId;
-
+	
 	/**
-	 * 房产ID
+	 * 项目ID（小区ID）
 	 */
-	private String houseId;
-
-	/**
-	 * 业主ID
-	 */
-	private String proprietorId;
-
-	/**
-	 * 是否为业主 0：否；1：是。
-	 */
-	private String isProprietor;
-
-	/**
-	 * 住户类型 1：常住；2：暂住
-	 */
-	private String residentType;
-
-	/**
-	 * 与业主关系
-	 */
-	private String residentRelation;
-
-	/**
-	 * 入住时间
-	 */
-	private Date checkinDate;
-
-	/**
-	 * 入住截止时间
-	 */
-	private Date checkupDate;
+	private String projectId;
 
 	/**
 	 * 住户姓名
@@ -97,12 +65,12 @@ public class ResidentVo extends BaseValue {
 	 * 照片
 	 */
 	private String pic;
-	
+
 	/**
 	 * 状态。0：未审提交；1：正常；2：已注销
 	 */
 	private String status;
-	
+
 	/**
 	 * 录入员工ID
 	 */
@@ -122,17 +90,17 @@ public class ResidentVo extends BaseValue {
 	 * 客户信息
 	 */
 	private CustomerVo customer;
-	
+
 	/**
 	 * 项目名称
 	 */
 	private String projectName;
 	
 	/**
-	 * 房间号
+	 * 住户房屋信息值对象
 	 */
-	private String houseNum;
-	
+	private ResidentHouseVo residentHouse;
+
 	public String getId() {
 		return id;
 	}
@@ -149,60 +117,12 @@ public class ResidentVo extends BaseValue {
 		this.custGlobalId = custGlobalId;
 	}
 
-	public String getHouseId() {
-		return houseId;
+	public String getProjectId() {
+		return projectId;
 	}
 
-	public void setHouseId(String houseId) {
-		this.houseId = houseId;
-	}
-
-	public String getProprietorId() {
-		return proprietorId;
-	}
-
-	public void setProprietorId(String proprietorId) {
-		this.proprietorId = proprietorId;
-	}
-
-	public String getIsProprietor() {
-		return isProprietor;
-	}
-
-	public void setIsProprietor(String isProprietor) {
-		this.isProprietor = isProprietor;
-	}
-
-	public String getResidentType() {
-		return residentType;
-	}
-
-	public void setResidentType(String residentType) {
-		this.residentType = residentType;
-	}
-
-	public String getResidentRelation() {
-		return residentRelation;
-	}
-
-	public void setResidentRelation(String residentRelation) {
-		this.residentRelation = residentRelation;
-	}
-
-	public Date getCheckinDate() {
-		return checkinDate;
-	}
-
-	public void setCheckinDate(Date checkinDate) {
-		this.checkinDate = checkinDate;
-	}
-
-	public Date getCheckupDate() {
-		return checkupDate;
-	}
-
-	public void setCheckupDate(Date checkupDate) {
-		this.checkupDate = checkupDate;
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
 	}
 
 	public String getName() {
@@ -309,12 +229,12 @@ public class ResidentVo extends BaseValue {
 		this.projectName = projectName;
 	}
 
-	public String getHouseNum() {
-		return houseNum;
+	public ResidentHouseVo getResidentHouse() {
+		return residentHouse;
 	}
 
-	public void setHouseNum(String houseNum) {
-		this.houseNum = houseNum;
+	public void setResidentHouse(ResidentHouseVo residentHouse) {
+		this.residentHouse = residentHouse;
 	}
 
 }

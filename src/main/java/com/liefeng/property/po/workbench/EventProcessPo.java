@@ -118,6 +118,11 @@ public class EventProcessPo extends BaseValue{
 	private String revisitMode;
 	
 	/**
+	 * 图片地址
+	 */
+	@Column(name="pic_urls")
+	private String picUrls;
+	/**
 	 * OEM编码
 	 */
 	@Column(name = "oem_code")
@@ -257,5 +262,13 @@ public class EventProcessPo extends BaseValue{
 
 	public void setRevisitMode(String revisitMode) {
 		this.revisitMode = revisitMode;
+	}
+
+	public String getPicUrls() {
+		return picUrls;
+	}
+
+	public void setPicUrls(String picUrls) {
+		this.picUrls = picUrls;
 	}
 }

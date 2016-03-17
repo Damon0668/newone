@@ -61,7 +61,7 @@ public class HouseholdServiceTest {
 	@Test
 	public void getResident() {
 		
-		ResidentVo resident = householdService.getResident("1");
+		ResidentVo resident = householdService.getResident("1","1");
 		System.out.println(resident);
 	}
 

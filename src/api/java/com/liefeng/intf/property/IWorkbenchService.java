@@ -1,6 +1,7 @@
 package com.liefeng.intf.property;
 
 import java.util.List;
+import java.util.Map;
 
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
@@ -505,8 +506,9 @@ public interface IWorkbenchService {
 	/**
 	 * 创建处理过程
 	 * @param eventProcessVo
+	 * @return 
 	 */
-	public void createEventProcess(EventProcessVo eventProcessVo);
+	public EventProcessVo createEventProcess(EventProcessVo eventProcessVo);
 
 
 	/**
@@ -547,7 +549,7 @@ public interface IWorkbenchService {
 	 * @param staffid 当前办理人id
 	 * @param nextAccepterId 下一步办理人id
 	 */
-	public void EventReporDistribute(EventReportVo eventReportVo,
+	public void eventReporDistribute(EventReportVo eventReportVo,
 			EventProcessVo eventProcessVo, String staffid, String nextAccepterId);
 
 	/**
@@ -607,8 +609,68 @@ public interface IWorkbenchService {
 	 * @param type
 	 * @return
 	 */
-	public List<EventProcAttachVo> findEventProcAttachByEventProcessIdAndType(String eventProcessId, String type);
+	public List<EventProcAttachVo> findEventProcAttachByEventProcessId(
+			String eventProcessId);
+
 	
+	/**
+	 * 工单处理待签收分页
+	 * @param eventReportBo
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public DataPageValue<EventReportVo> getSignForEventReporList(
+			EventReportBo eventReportBo, Integer page, Integer size);
+
+	/**
+	 * 工单处理抢单分页
+	 * @param eventReportBo
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public DataPageValue<EventReportVo> getGrabEventReporList(
+			EventReportBo eventReportBo, Integer page, Integer size);
+
+	/**
+	 * 流转中列表
+	 * @param eventReportBo
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public DataPageValue<EventReportVo> getFlowingEventReporList(
+			EventReportBo eventReportBo, Integer page, Integer size);
+	
+	/**
+	 * 流转中列表
+	 * @param eventReportBo
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	public DataPageValue<EventReportVo> getCompleteEventReporList(
+			EventReportBo eventReportBo, Integer page, Integer size);
+	
+	/**
+	 * 报事撤回
+	 * @param wfTaskId 当前任务id
+	 * @param staffid 操作人id
+	 */
+	public void eventReporWithdraw(String wfTaskId, String staffid);
+
+	/**
+	 * 获取各种状态的数量
+	 * @return flowing:流转中 
+	 * 		   grab:待签订
+	 * 		   signFor：待签收
+	 * 		   waitingFor:待办理
+	 * 
+	 */
+	public Map<String, Long> eventReporNoRead(EventReportBo eventReportBo);
+	
+
 	/**
 	 * 通过app创建报事
 	 * @param bo 

@@ -98,13 +98,19 @@ public class ResidentContext {
 	}
 	
 	/**
-	 * 查询住户信息
+	 * 查询某房屋某住户信息
 	 * @return 住户信息值对象
 	 */
-	public ResidentVo get() {
+	public ResidentVo get(String houseId) {
 		if(resident == null) {
-			if(ValidateHelper.isNotEmptyString(residentId)) {
-				resident = residentQueryRepository.queryById(residentId);
+			if(ValidateHelper.isNotEmptyString(residentId) && ValidateHelper.isNotEmptyString(houseId)) {
+				PagingParamVo pagingParamVo = new PagingParamVo();
+				Map<String, String> extra = new HashMap<String ,String>();
+				extra.put("residentId", residentId);
+				extra.put("houseId", houseId);
+				pagingParamVo.setExtra(extra);
+				
+				resident = residentQueryRepository.queryByIdAndHouseId(pagingParamVo);
 				
 				// 对身份证号进行解密
 				String idnum = resident.getCustomer().getIdNum();
@@ -259,14 +265,14 @@ public class ResidentContext {
 		extra.put("custGlobalId", custGlobalId);
 		pagingParamVo.setExtra(extra);
 		
-		return residentQueryRepository.queryResidents(pagingParamVo);
+		return residentQueryRepository.queryResidentInProprietorHouse(pagingParamVo);
 	}
 
 	/**
-	 * 根据房间id，获取住户
-	 * @param houseId
-	 * @return 
-	 * @author xhw
+	 * 根据房间ID，获取住户
+	 * @param houseId 房间ID
+	 * @return 住户列表
+	 * @author XHW
 	 * @date 2016年3月9日 下午9:09:58
 	 */
 	public List<ResidentVo> getByHouseId(String houseId){
@@ -277,6 +283,7 @@ public class ResidentContext {
 		
 		return residentQueryRepository.queryByHouseId(pagingParamVo);
 	}
+	
 	protected void setResidentId(String residentId) {
 		this.residentId = residentId;
 	}

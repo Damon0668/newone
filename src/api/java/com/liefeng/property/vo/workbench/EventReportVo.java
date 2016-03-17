@@ -175,6 +175,11 @@ public class EventReportVo extends BaseValue {
 	 */
 	private String auditStatus;
 	
+	/**
+	 * 是否是上一步骤处理人 0 不是     1 是
+	 */
+	private String isBack;
+	
 	public Character getImportant() {
 		return priority.charAt(1);
 	}
@@ -445,6 +450,14 @@ public class EventReportVo extends BaseValue {
 
 	public void setOrderNo(String orderNo) {
 		this.orderNo = orderNo;
+	}
+
+	public String getIsBack() {
+		return isBack;
+	}
+
+	public void setIsBack(String isBack) {
+		this.isBack = isBack;
 	}
 
 }

@@ -148,7 +148,7 @@
 		LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
 		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
 		<include refid="Waiting_Where_Clause" />
-		AND (ep.`status`=0 OR ep.`status` IS NULL)
+		AND ep.`status`=1 
 		<if
 			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
 			${pager.mysqlQueryCondition}
@@ -167,6 +167,7 @@
 		LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
 		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
 		<include refid="Waiting_Where_Clause" />
+		AND ep.`status`=1 
 		) t
 	</select>
 	
@@ -204,13 +205,18 @@
 		t.id AS taskId,
 		o.order_No as orderNo,
 		t.display_Name AS taskDisplayName,
-		t.task_Name AS taskName
+		t.task_Name AS taskName,
+		
+		<!-- 是否是上一步骤处理人 -->
+		(EXISTS (select t.parent_Task_Id from service.wf_hist_task wht2 left join service.wf_hist_task_actor whta2 on wht2.id = whta2.task_Id where wht2.id = t.parent_Task_Id and whta2.actor_Id in (#{extra.actor}))) as isBack
+		
+		
 		FROM
 		service.wf_task t
 		LEFT JOIN service.wf_order o ON t.order_id = o.id
 		LEFT JOIN service.wf_hist_task wht ON t.parent_Task_Id = wht.id
 		LEFT JOIN service.wf_hist_task_actor whta ON wht.id = whta.task_Id
-		AND whta.actor_Id = #{actorId}
+		AND whta.actor_Id = #{extra.actor}
 		LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
 		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
 		WHERE
@@ -223,7 +229,7 @@
 		WHERE
 			t.order_Id = ht.order_Id
 		AND hta.actor_Id IN(
-			#{actorId}
+			#{extra.actor}
 		)
 		)
 		<if
@@ -253,9 +259,8 @@
 		WHERE
 			t.order_Id = ht.order_Id
 		AND hta.actor_Id IN(
-			#{extra.actorId}
+			#{extra.actor}
 		)
-		AND o.process_id = #{o.process_id}
 		)
 		) t
 	</select>
@@ -302,32 +307,165 @@
 	LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
 	LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
 	LEFT JOIN service.wf_process p ON p.id = o.process_id
-    WHERE
-			1 = 1
+    
+		<include refid="Waiting_Where_Clause" />
 		AND o.order_state = '0'
-		AND ta.actor_id in (#{extra.actorId})
-		AND o.process_id = #{o.process_id}
+		AND ta.actor_id in (#{extra.actor})
 		group by o.id
 	ORDER BY
 			o.create_Time DESC
 	</select>
 	
 	<select id="completeQueryByCount"  resultType="java.lang.Long">
+	select count(1) from (
 	SELECT DISTINCT
-	    t.id as id,
-		
+	    t.id as id
 	FROM
 		service.wf_hist_task t
 	LEFT JOIN service.wf_hist_order o ON t.order_id = o.id
 	LEFT JOIN service.wf_hist_task_actor ta ON ta.task_id = t.id
 	LEFT JOIN service.wf_process p ON p.id = o.process_id
-    WHERE
-			1 = 1
+		<include refid="Waiting_Where_Clause" />
 		AND o.order_state = '0'
 		AND ta.actor_id in (#{extra.actorId})
-		AND o.process_id = #{o.process_id}
 		group by o.id
-	ORDER BY
-			o.create_Time DESC
+		) t
 	</select>
+	
+	<!-- 待签收 -->
+	<select id="signForQueryByPage" resultMap="BaseResultMap">
+		select
+		er.id as id,
+		er.wf_order_id as wfOrderId,
+		er.project_id as projectId,
+		er.house_num as houseNum,
+		er.proprietor_name as houseNum,
+		er.reporter_name as reporterName,
+		er.phone as phone,
+		er.report_time as reportTime,
+		er.report_mode as reportMode,
+		er.event_type as eventType,
+		er.category as category,
+		er.location as location,
+		er.title as title,
+		er.content as content,
+		er.status as status,
+		er.priority as priority,
+		er.service_type as serviceType,
+		er.pic_url as picUrl,
+		er.order_time as orderTime,
+		er.result as result,
+		er.staff_id as staffId,
+		er.accepter_id as accepterId,
+		er.accept_time as acceptTime,
+		er.create_time as createTime,
+		er.oem_code as oemCode,
+		
+		o.process_Id as processId,
+		t.order_Id as orderId,
+		t.id AS taskId,
+		o.order_No as orderNo,
+		t.display_Name AS taskDisplayName,
+		t.task_Name AS taskName
+		FROM
+		service.wf_task t
+		LEFT JOIN service.wf_order o ON t.order_id = o.id
+		LEFT JOIN service.wf_task_actor ta ON ta.task_id = t.id
+		LEFT JOIN service.wf_process p ON p.id = o.process_id
+		LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
+		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
+		<include refid="Waiting_Where_Clause" />
+		AND (ep.`status`=0 or ep.`status` is null)
+		AND (ep.grab != 1 or ep.grab is null)
+		<if
+			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
+			${pager.mysqlQueryCondition}
+		</if>
+	</select>
+	
+	<select id="signForQueryByCount" resultType="java.lang.Long">
+		select count(1) from (
+		select
+		er.id as id
+		FROM
+		service.wf_task t
+		LEFT JOIN service.wf_order o ON t.order_id = o.id
+		LEFT JOIN service.wf_task_actor ta ON ta.task_id = t.id
+		LEFT JOIN service.wf_process p ON p.id = o.process_id
+		LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
+		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
+		<include refid="Waiting_Where_Clause" />
+		AND (ep.`status`=0 or ep.`status` is null)
+		AND (ep.grab != 1 or ep.grab is null)
+		) t
+	</select>
+	
+	<!-- 抢单-->
+	<select id="grabQueryByPage" resultMap="BaseResultMap">
+		select
+		er.id as id,
+		er.wf_order_id as wfOrderId,
+		er.project_id as projectId,
+		er.house_num as houseNum,
+		er.proprietor_name as houseNum,
+		er.reporter_name as reporterName,
+		er.phone as phone,
+		er.report_time as reportTime,
+		er.report_mode as reportMode,
+		er.event_type as eventType,
+		er.category as category,
+		er.location as location,
+		er.title as title,
+		er.content as content,
+		er.status as status,
+		er.priority as priority,
+		er.service_type as serviceType,
+		er.pic_url as picUrl,
+		er.order_time as orderTime,
+		er.result as result,
+		er.staff_id as staffId,
+		er.accepter_id as accepterId,
+		er.accept_time as acceptTime,
+		er.create_time as createTime,
+		er.oem_code as oemCode,
+		
+		o.process_Id as processId,
+		t.order_Id as orderId,
+		t.id AS taskId,
+		o.order_No as orderNo,
+		t.display_Name AS taskDisplayName,
+		t.task_Name AS taskName
+		FROM
+		service.wf_task t
+		LEFT JOIN service.wf_order o ON t.order_id = o.id
+		LEFT JOIN service.wf_task_actor ta ON ta.task_id = t.id
+		LEFT JOIN service.wf_process p ON p.id = o.process_id
+		LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
+		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
+		<include refid="Waiting_Where_Clause" />
+		AND (ep.`status`=0 or ep.`status` is null)
+		AND ep.grab = 1
+		<if
+			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
+			${pager.mysqlQueryCondition}
+		</if>
+	</select>
+	
+	<select id="grabQueryByCount" resultType="java.lang.Long">
+		select count(1) from (
+		select
+		er.id as id
+		FROM
+		service.wf_task t
+		LEFT JOIN service.wf_order o ON t.order_id = o.id
+		LEFT JOIN service.wf_task_actor ta ON ta.task_id = t.id
+		LEFT JOIN service.wf_process p ON p.id = o.process_id
+		LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
+		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
+		<include refid="Waiting_Where_Clause" />
+		AND (ep.`status`=0 or ep.`status` is null)
+		AND ep.grab = 1
+		) t
+	</select>
+	
 </mapper>   
