@@ -9,6 +9,7 @@ import com.liefeng.property.bo.household.CheckinQueueBo;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.bo.household.ResidentFeedbackBo;
+import com.liefeng.property.vo.household.AppFriendVo;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
 import com.liefeng.property.vo.household.CheckinQueueVo;
@@ -342,5 +343,52 @@ public interface IHouseholdService {
 	 * @date 2016年3月15日 下午2:32:26
 	 */
 	public DataPageValue<ResidentFeedbackVo> getResidentFeedbackPage(ResidentFeedbackBo params, Integer currentPage, Integer pageSize);
+	
+	/**
+	 * 创建好友
+	 * @param appFriendVo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月16日 下午3:59:25
+	 */
+	public AppFriendVo createAppFriend(AppFriendVo appFriendVo);
+	
+	/**
+	 * 删除好友
+	 * @param userId 用户id
+	 * @param friendId  好友id
+	 * @author xhw
+	 * @date 2016年3月16日 下午4:01:24
+	 */
+	public void deleteAppFriend(String userId, String friendId);
+	
+	/**
+	 * 根据用户id、好友状态，获取用户的好友列表
+	 * @param userId 用户id
+	 * @param status 好友状态
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月16日 下午4:02:30
+	 */
+	public List<AppFriendVo> getAppFriendListOfStatus(String userId, String status);
+	
+	/**
+	 * 更新手机好友申请状态
+	 * @param id
+	 * @param status 
+	 * @author xhw
+	 * @date 2016年3月16日 下午5:06:08
+	 */
+	public void updateAppFriend(String id, String status);
+	
+	/**
+	 * 查询用户（通讯录）
+	 * @param userId 用户id
+	 * @param condition 过滤条件
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月16日 下午8:31:54
+	 */
+	public List<AppFriendVo> getUserList(String userId, String condition);
 	
 }

@@ -32,6 +32,7 @@ import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.bo.household.ResidentFeedbackBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.ProjectConstants;
+import com.liefeng.property.domain.household.AppFriendContext;
 import com.liefeng.property.domain.household.AppMsgSettingContext;
 import com.liefeng.property.domain.household.CheckinMaterialContext;
 import com.liefeng.property.domain.household.CheckinQueueContext;
@@ -44,6 +45,7 @@ import com.liefeng.property.domain.household.ResidentHouseContext;
 import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.error.HouseholdErrorCode;
 import com.liefeng.property.exception.PropertyException;
+import com.liefeng.property.vo.household.AppFriendVo;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
 import com.liefeng.property.vo.household.CheckinQueueVo;
@@ -832,6 +834,60 @@ public class HouseholdService implements IHouseholdService {
 			ResidentFeedbackBo params, Integer currentPage, Integer pageSize) {
 		ResidentFeedbackContext residentFeedbackContext = ResidentFeedbackContext.build();
 		return residentFeedbackContext.getResidentFeedPage(params, currentPage, pageSize);
+	}
+
+	@Override
+	public AppFriendVo createAppFriend(AppFriendVo appFriendVo) {
+		//删除“已拒绝”好友申请记录
+		AppFriendContext context = AppFriendContext.build();
+		context.deleteOfStatus(appFriendVo.getUserId(), appFriendVo.getFriendId(), HouseholdConstants.AppFriendStatus.REFUSE);
+		
+		AppFriendContext appFriendContext = AppFriendContext.build(appFriendVo);
+		return appFriendContext.create();
+	}
+
+	@Override
+	public void deleteAppFriend(String userId, String friendId) {
+		AppFriendContext appFriendContext = AppFriendContext.build();
+		appFriendContext.delete(userId, friendId);
+	}
+
+	@Override
+	public List<AppFriendVo> getAppFriendListOfStatus(String userId, String status) {
+		AppFriendContext appFriendContext = AppFriendContext.build();
+		return appFriendContext.getAppFriendListOfStatus(userId, status);
+	}
+
+	@Override
+	public void updateAppFriend(String id, String status) {
+		
+		AppFriendVo appFriendVo = new AppFriendVo();
+		appFriendVo.setId(id);
+		appFriendVo.setStatus(status);
+		
+		AppFriendContext appFriendContext = AppFriendContext.build(appFriendVo);
+		//更新
+		appFriendVo  = appFriendContext.update();
+		
+		//同意成为好友
+		if(HouseholdConstants.AppFriendStatus.ASFRIEND.equals(status)){
+			//创建第二条好友
+			AppFriendVo appFriend = new AppFriendVo();
+			appFriend.setFriendId(appFriendVo.getUserId());
+			appFriend.setUserId(appFriendVo.getFriendId());
+			appFriend.setStatus(HouseholdConstants.AppFriendStatus.ASFRIEND);
+			appFriend.setUpdateTime(new Date());
+			
+			AppFriendContext friendContext = AppFriendContext.build(appFriend);
+			friendContext.create();
+		}
+		
+	}
+
+	@Override
+	public List<AppFriendVo> getUserList(String userId, String condition) {
+		AppFriendContext appFriendContext = AppFriendContext.build();
+		return appFriendContext.getUserList(userId, condition);
 	}
 
 
