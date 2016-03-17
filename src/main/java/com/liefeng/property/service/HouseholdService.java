@@ -842,8 +842,20 @@ public class HouseholdService implements IHouseholdService {
 		AppFriendContext context = AppFriendContext.build();
 		context.deleteOfStatus(appFriendVo.getUserId(), appFriendVo.getFriendId(), HouseholdConstants.AppFriendStatus.REFUSE);
 		
-		AppFriendContext appFriendContext = AppFriendContext.build(appFriendVo);
-		return appFriendContext.create();
+		//判断是否有“已添加”的记录
+		AppFriendVo appFriend = context.getAppFriend(appFriendVo.getFriendId(), appFriendVo.getUserId(), HouseholdConstants.AppFriendStatus.ASFRIEND);
+		if(appFriend == null){ //创建一个“待审核”的记录
+			AppFriendContext appFriendContext = AppFriendContext.build(appFriendVo);
+			appFriend = appFriendContext.create();
+		}else{ //创建一个“已成为好友”的记录
+			appFriendVo.setStatus(HouseholdConstants.AppFriendStatus.ASFRIEND);
+			appFriendVo.setUpdateTime(new Date());
+			
+			AppFriendContext appFriendContext = AppFriendContext.build(appFriendVo);
+			appFriend = appFriendContext.create();
+		}
+		
+		return appFriend;
 	}
 
 	@Override
@@ -853,9 +865,9 @@ public class HouseholdService implements IHouseholdService {
 	}
 
 	@Override
-	public List<AppFriendVo> getAppFriendListOfStatus(String userId, String status) {
+	public List<AppFriendVo> getAppFriendList(String userId) {
 		AppFriendContext appFriendContext = AppFriendContext.build();
-		return appFriendContext.getAppFriendListOfStatus(userId, status);
+		return appFriendContext.getAppFriendList(userId);
 	}
 
 	@Override
@@ -888,6 +900,19 @@ public class HouseholdService implements IHouseholdService {
 	public List<AppFriendVo> getUserList(String userId, String condition) {
 		AppFriendContext appFriendContext = AppFriendContext.build();
 		return appFriendContext.getUserList(userId, condition);
+	}
+
+	@Override
+	public List<AppFriendVo> getAppFriendHistoryList(String userId) {
+		AppFriendContext appFriendContext = AppFriendContext.build();
+		return appFriendContext.getAppFriendHistoryList(userId);
+	}
+
+	@Override
+	public AppFriendVo getAppFriend(String userId, String friendId,
+			String status) {
+		AppFriendContext appFriendContext = AppFriendContext.build();
+		return appFriendContext.getAppFriend(userId, friendId, status);
 	}
 
 

@@ -65,4 +65,15 @@ public interface AppFriendRepository extends JpaRepository<AppFriendPo, String> 
 	 */
 	public List<AppFriendPo> findByFriendIdAndStatus(String friendId, String status);
 	
+	/**
+	 * 根据用户id，好友id、状态，获取记录
+	 * @param userId 用户id
+	 * @param friendId 好友id
+	 * @param status 状态
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月17日 下午1:42:10
+	 */
+	public AppFriendPo findByUserIdAndFriendIdAndStatus(String userId, String friendId, String status);
+	
 }
