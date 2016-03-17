@@ -23,25 +23,6 @@
 	<result column="name" property="name"/>
 	<result column="proprietorId" property="proprietorId"/>
 	<result column="useType" property="useType"/>
-</resultMap>
-
-<resultMap id="HouseDetailMap" type="com.liefeng.property.vo.household.ProprietorSingleHouseVo" >
-	<result column="id" property="houseId"/>
-	<result column="house_num" property="houseNum"/>
-	<result column="project_id" property="projectId"/>
-	<result column="building_id" property="buildingId"/>
-	<result column="floor_id" property="floorId"/>
-	<result column="house_type" property="houseType"/>
-	<result column="actual_area" property="actualArea"/>
-	<result column="gross_area" property="grossArea"/>		
-	<result column="usable_area" property="usableArea"/>
-	<result column="apportion_area" property="apportionArea"/>
-	<result column="property_fee" property="propertyFee"/>
-	<result column="sale_status" property="saleStatus"/>
-	<result column="ownership" property="ownership"/>
-	<result column="pay_type" property="payType"/>
-	<result column="name" property="name"/>
-	<result column="proprietorId" property="proprietorId"/>
 	<result column="useType" property="useType"/>
 	<result column="projectName" property="projectName"/>
 	<result column="buildingName" property="buildingName"/>
@@ -102,9 +83,19 @@ FROM
 
 <select id="queryByPage" resultMap="BaseResultMap">
 	  SELECT
-	      h.id,h.house_num,h.project_id,building_id,floor_id,house_type,
-	      actual_area,gross_area,usable_area,apportion_area,
-	      property_fee,sale_status,ownership,
+	      h.id,
+	      h.house_num,
+	      h.project_id,
+	      building_id,
+	      floor_id,
+	      house_type,
+	      actual_area,
+	      gross_area,
+	      usable_area,
+	      apportion_area,
+	      fs.price as property_fee,
+	      sale_status,
+	      ownership,
 	      pay_type,
 	      name,
 	      p.id as proprietorId,
@@ -113,6 +104,8 @@ FROM
 	      property.t_house h
 	      left join property.t_proprietor_house ph
 		  on h.house_num = ph.house_num
+		  left join property.t_fee_setting fs
+		  on fs.project_id = ph.project_id and fs.use_type = ph.use_type and fs.fee_type = '4'
 		  left join property.t_proprietor p
 		  on ph.proprietor_id = p.id 
 	  <include refid="Example_Where_Clause"/>
@@ -121,7 +114,7 @@ FROM
       </if>
 </select>
 
-<select id="queryById" resultMap="HouseDetailMap">
+<select id="queryById" resultMap="BaseResultMap">
 	  SELECT
 	      h.id,
 	      h.house_num,
@@ -133,7 +126,7 @@ FROM
 	      gross_area,
 	      usable_area,
 	      apportion_area,
-	      property_fee,
+	      fs.price as property_fee,
 	      sale_status,
 	      ownership,
 	      pay_type,
@@ -155,10 +148,10 @@ FROM
 		  on h.building_id = pb.id
 		  left join property.t_project_building pf
 		  on h.floor_id = pf.id
+		  left join property.t_fee_setting fs
+		  on fs.project_id = ph.project_id and fs.use_type = ph.use_type and fs.fee_type = '4'
 	Where 
 	     h.id = #{id}
-		  
-	  
 </select>
 
 </mapper>   
