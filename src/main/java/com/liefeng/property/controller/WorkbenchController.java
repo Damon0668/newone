@@ -5,9 +5,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
+import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.bo.workbench.EventReportBo;
+import com.liefeng.property.vo.workbench.EventReportVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
 
 /**
@@ -16,7 +20,7 @@ import com.liefeng.property.vo.workbench.NoticeVo;
  * @2016年3月7日 下午3:54:17
  */
 @RestController
-@RequestMapping(value = "/workbench")
+@RequestMapping(value = "/api/workbench")
 public class WorkbenchController {
 
 	@Autowired
@@ -56,5 +60,19 @@ public class WorkbenchController {
 		return DataValue.success(noticeVo);
 	}
 	
-
+	/**
+	 * 创建报事
+	 * @param bo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月15日 下午6:03:49
+	 */
+	@RequestMapping("createEventReport")
+	@ResponseBody
+	public ReturnValue createEventReport(EventReportBo bo) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		workbenchService.createAppEventReport(bo);
+		
+		return ReturnValue.success();
+	}
 }

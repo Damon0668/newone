@@ -5,6 +5,7 @@ import java.util.List;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.property.PropertyStaffBo;
+import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
@@ -34,7 +35,7 @@ public interface IPropertyStaffService {
 	 * @throws LiefengException
 	 * @throws Exception 
 	 */
-	public void createStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo);
+	public void createStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException;
 	
 	/**
 	 * 更新物业员工
@@ -43,14 +44,14 @@ public interface IPropertyStaffService {
 	 * @throws LiefengException
 	 * @throws Exception 
 	 */
-	public void updateStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo);
+	public void updateStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException;
 	/**
 	 * 批量更新员工状态
 	 * @param staffIdList 员工ID列表
 	 * @param status 状态
 	 * @return
 	 */
-	public void updateStaffStatus(List<String> staffIdList,String status);
+	public void updateStaffStatus(List<String> staffIdList,String status) throws LiefengException;
 	
 	/**
 	 * 修改密码
@@ -58,7 +59,7 @@ public interface IPropertyStaffService {
 	 * @param oldPassword 旧密码
 	 * @param newPassword 新密码
 	 */
-	public void updateStaffPassword(String staffId, String oldPassword, String newPassword);
+	public void updateStaffPassword(String staffId, String oldPassword, String newPassword) throws PropertyException;
 
 	/**
 	 * 查询物业员工

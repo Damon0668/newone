@@ -18,6 +18,7 @@ import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.property.PropertyStaffBo;
 import com.liefeng.property.constant.StaffConstants;
@@ -296,12 +297,17 @@ public class PropertyStaffContext {
 	public void updataPassword(String oldPassword, String newPassword){
 		if(ValidateHelper.isNotEmptyString(propertyStaffId)){
 			PropertyStaffPo propertyStaffPo = propertyStaffRepository.findOne(propertyStaffId);
-			if(propertyStaffPo != null){
-				if(propertyStaffPo.getPassword().equals(oldPassword)){
-					propertyStaffPo.setPassword(newPassword);
-					propertyStaffRepository.save(propertyStaffPo);
-				}
+			
+			if(propertyStaffPo == null){
+				throw new PropertyException(PropertyStaffErrorCode.STAFF_ID_NOT_EXIST);
 			}
+
+			if(!propertyStaffPo.getPassword().equals(oldPassword)){
+				throw new PropertyException(PropertyStaffErrorCode.OLD_PASSWORD_ERROR);
+			}
+			
+			propertyStaffPo.setPassword(newPassword);
+			propertyStaffRepository.save(propertyStaffPo);
 		}
 	}
 

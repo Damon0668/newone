@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.AppFriendQueryRepository" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.household.AppFriendVo" >
+	<result column="id" property="id"/>
+	<result column="user_id" property="userId"/>
+	<result column="friend_id" property="friendId"/>
+	<result column="friend_name" property="friendName"/>
+	<result column="avatar_url" property="avatarUrl"/>
+	<result column="phone" property="phone"/>
+</resultMap>
+
+
+<select id="queryUserList" resultMap="BaseResultMap">
+	SELECT
+		a.*, 
+	CASE WHEN ISNULL(b.status) THEN '2' ELSE b.status END AS status
+	FROM
+		(
+			SELECT
+				id AS friend_id,
+				avatar_url,
+				mobile AS phone,
+			CASE WHEN ISNULL(nick_name) THEN name ELSE nick_name END AS friend_name
+			FROM
+				basic.t_user
+			WHERE
+				mobile = #{extra.condition}
+			OR NAME LIKE concat('%', #{extra.condition},'%')
+			OR nick_name LIKE concat('%', #{extra.condition},'%')
+		)a
+	LEFT JOIN property.t_app_friend b ON a.friend_id = b.friend_id
+	AND b.user_id = #{extra.userId}
+</select>
+
+</mapper>   

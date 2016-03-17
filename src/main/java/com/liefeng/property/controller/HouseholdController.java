@@ -36,7 +36,7 @@ import com.liefeng.property.vo.household.ResidentVo;
  * @date 2016年3月8日 下午1:45:25
  */
 @RestController
-@RequestMapping(value = "/household")
+@RequestMapping(value = "/api/household")
 public class HouseholdController {
 
 	@Autowired
@@ -402,4 +402,6 @@ public class HouseholdController {
 		AppMsgSettingVo appMsgSettingVo = householdService.getAppMsgSetting(userId);
 		return DataValue.success(appMsgSettingVo);
 	}
+	
+
 }

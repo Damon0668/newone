@@ -670,4 +670,13 @@ public interface IWorkbenchService {
 	 */
 	public Map<String, Long> eventReporNoRead(EventReportBo eventReportBo);
 	
+
+	/**
+	 * 通过app创建报事
+	 * @param bo 
+	 * @author xhw
+	 * @date 2016年3月15日 下午6:26:10
+	 */
+	public void createAppEventReport(EventReportBo bo) throws LiefengException;
+	
 }

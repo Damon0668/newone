@@ -18,8 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.base.vo.UserVo;
+import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.property.IWorkbenchService;
@@ -44,6 +48,7 @@ import com.liefeng.property.domain.workbench.TaskPrivilegeContext;
 import com.liefeng.property.domain.workbench.WebsiteMsgContext;
 import com.liefeng.property.domain.workbench.WebsiteMsgPrivilegeContext;
 import com.liefeng.property.error.WorkbenchErrorCode;
+import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.exception.WorkbenchException;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.workbench.EventProcAttachVo;
@@ -1039,4 +1044,33 @@ public class WorkbenchService implements IWorkbenchService {
 		return string;
 	}
 
+	
+	@Override
+	public void createAppEventReport(EventReportBo bo) throws LiefengException {
+		EventReportVo eventReportVo = new EventReportVo();
+		MyBeanUtil.copyBeanNotNull2Bean(bo, eventReportVo);
+		
+		//标题
+		if(!ValidateHelper.isNotEmptyString(eventReportVo.getContent())){
+			logger.error("报事内容为空");
+			throw new PropertyException(WorkbenchErrorCode.EVENTREPORT_CONTENT_NULL);
+		}else{
+			if (eventReportVo.getContent().length() >= 10) {
+				String title = eventReportVo.getContent().substring(0, 10);
+				eventReportVo.setTitle(title);
+			} else {
+				eventReportVo.setTitle(eventReportVo.getContent());
+			}
+		}
+		
+		eventReportVo.setStatus(WorkbenchConstants.EventReport.STATUS_UNTREATED);
+		eventReportVo.setReportMode(WorkbenchConstants.EventReportMode.APP);
+		eventReportVo.setId(UUIDGenerator.generate());
+		eventReportVo.setOemCode(ContextManager.getInstance().getOemCode());
+		eventReportVo.setCreateTime(new Date());
+		eventReportVo.setReportTime(new Date());
+		
+		EventReportContext eventReportContext = EventReportContext.build(eventReportVo);
+		eventReportContext.create();
+	}
 }

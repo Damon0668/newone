@@ -180,7 +180,7 @@ public class WorkbenchConstants {
 		public static final String STATUS_ALREADYWORKERS = "1"; 
 		
 		/**
-		 * 报事状态 未处理
+		 * 报事状态 已反馈
 		 */
 		public static final String STATUS_ALREADYFEEDBACK = "2";
 		
@@ -224,6 +224,26 @@ public class WorkbenchConstants {
 		 */
 		public static final String TYPE_PROPRIETOR = "2"; 
 		
+	}
+	
+	/**
+	 * 报事方式
+	 */
+	public static interface EventReportMode{
+		/**
+		 * 来电:1
+		 */
+		public static final String PHONE = "1"; 
+		
+		/**
+		 * app客服端：2
+		 */
+		public static final String APP = "2"; 
+		
+		/**
+		 * 上门
+		 */
+		public static final String VISIT = "3"; 
 	}
 	
 }
