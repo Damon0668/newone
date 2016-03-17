@@ -83,9 +83,10 @@ public interface IHouseholdService {
 	/**
 	 * 查询住户信息
 	 * @param residentId 住户ID
+	 * @param houseId 房子ID
 	 * @return 住户信息
 	 */
-	public ResidentVo getResident(String residentId);
+	public ResidentVo getResident(String residentId, String houseId);
 	
 	/**
 	 * 根据项目ID和房号查询业主房产信息
@@ -362,14 +363,13 @@ public interface IHouseholdService {
 	public void deleteAppFriend(String userId, String friendId);
 	
 	/**
-	 * 根据用户id、好友状态，获取用户的好友列表
+	 * 根据用户id，获取用户的好友列表
 	 * @param userId 用户id
-	 * @param status 好友状态
 	 * @return 
 	 * @author xhw
 	 * @date 2016年3月16日 下午4:02:30
 	 */
-	public List<AppFriendVo> getAppFriendListOfStatus(String userId, String status);
+	public List<AppFriendVo> getAppFriendList(String userId);
 	
 	/**
 	 * 更新手机好友申请状态
@@ -389,5 +389,25 @@ public interface IHouseholdService {
 	 * @date 2016年3月16日 下午8:31:54
 	 */
 	public List<AppFriendVo> getUserList(String userId, String condition);
+	
+	/**
+	 * 根据用户id，获取好友操作历史
+	 * @param userId 用户id
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月17日 上午10:57:37
+	 */
+	public List<AppFriendVo> getAppFriendHistoryList(String userId);
+	
+	/**
+	 * 根据用户id，好友id、状态，获取记录
+	 * @param userId 用户id
+	 * @param friendId 好友id
+	 * @param status 状态
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月17日 下午1:42:10
+	 */
+	public AppFriendVo getAppFriend(String userId, String friendId, String status);
 	
 }
