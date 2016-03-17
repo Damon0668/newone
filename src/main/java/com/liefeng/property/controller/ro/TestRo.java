@@ -1,5 +1,7 @@
 package com.liefeng.property.controller.ro;
 
+import javax.validation.constraints.NotNull;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -7,10 +9,13 @@ import io.swagger.annotations.ApiModelProperty;
 public class TestRo {
 	
 	@ApiModelProperty(value="主键",required=true)
+	@NotNull
 	private String id;
 	
 	@ApiModelProperty(value="姓名")
 	private String name;
+	
+	public Integer age;
 
 	public String getId() {
 		return id;
@@ -27,4 +32,14 @@ public class TestRo {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+	
+	
 }
