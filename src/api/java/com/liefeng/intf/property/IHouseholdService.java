@@ -18,6 +18,7 @@ import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
 import com.liefeng.property.vo.household.ResidentFeedbackVo;
+import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
 
 /**
@@ -288,14 +289,6 @@ public interface IHouseholdService {
 	 */
 	public ProprietorSingleHouseVo getProprietorOfRegister(String proprietorId);
 	
-	/**
-	 * 根据房间id，获取住户
-	 * @param houseId 房间id
-	 * @return 
-	 * @author xhw
-	 * @date 2016年3月9日 下午9:11:26
-	 */
-	public List<ResidentVo> getResidentListByHouseId(String houseId);
 	
 	/**
 	 * 创建用户反馈
@@ -409,5 +402,15 @@ public interface IHouseholdService {
 	 * @date 2016年3月17日 下午1:42:10
 	 */
 	public AppFriendVo getAppFriend(String userId, String friendId, String status);
+	
+	/**
+	 * 根据住户id，房间id获取residentHouse
+	 * @param residentId 住户id
+	 * @param houseId 房间id
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月17日 下午5:34:52
+	 */
+	public ResidentHouseVo getResidentHouse(String residentId, String houseId);
 	
 }

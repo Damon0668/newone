@@ -798,11 +798,6 @@ public class HouseholdService implements IHouseholdService {
 		return singleHouseVo;
 	}
 
-	@Override
-	public List<ResidentVo> getResidentListByHouseId(String houseId) {
-		ResidentContext residentContext = ResidentContext.build();
-		return residentContext.getByHouseId(houseId);
-	}
 
 	@Override
 	public ResidentFeedbackVo createResidentFeedback(
@@ -913,6 +908,12 @@ public class HouseholdService implements IHouseholdService {
 			String status) {
 		AppFriendContext appFriendContext = AppFriendContext.build();
 		return appFriendContext.getAppFriend(userId, friendId, status);
+	}
+
+	@Override
+	public ResidentHouseVo getResidentHouse(String residentId, String houseId) {
+		ResidentHouseContext residentHouseContext = ResidentHouseContext.build();
+		return residentHouseContext.getResidentHouse(residentId, houseId);
 	}
 
 

@@ -138,7 +138,24 @@ public class ResidentHouseContext {
 		
 		return residentHouse;
 	}
-
+	
+	/**
+	 * 根据住户id，房间id获取residentHouse
+	 * @param residentId 住户id
+	 * @param houseId 房间id
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月17日 下午5:34:52
+	 */
+	public ResidentHouseVo getResidentHouse(String residentId, String houseId){
+		ResidentHouseVo residentHouseVo = null;
+		if(ValidateHelper.isNotEmptyString(residentId) && ValidateHelper.isNotEmptyString(houseId)){
+			ResidentHousePo residentHousePo = residentHouseRepository.findByResidentIdAndHouseId(residentId, houseId);
+			
+			residentHouseVo = MyBeanUtil.createBean(residentHousePo, ResidentHouseVo.class);
+		}
+		return residentHouseVo;
+	}
 	protected void setResidentHouseId(String residentHouseId) {
 		this.residentHouseId = residentHouseId;
 	}

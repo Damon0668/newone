@@ -188,8 +188,10 @@ public class HouseholdController {
 	public DataListValue<ResidentVo> getResidentList(String houseId) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
 		
-		List<ResidentVo> residentVoList = householdService.getResidentListByHouseId(houseId);
-		
+		ResidentBo params = new ResidentBo();
+		params.setHouseId(houseId);
+		DataPageValue<ResidentVo> dataPage = householdService.listResident4Page(params, 1000, 1);
+		List<ResidentVo> residentVoList= dataPage.getDataList();
 		return DataListValue.success(residentVoList);
 	}
 	
@@ -222,9 +224,11 @@ public class HouseholdController {
 		residentVo.setName(residentBo.getName());
 		residentVo.setMobile(residentBo.getMobile());
 		residentVo.setWorkUnit(residentBo.getWorkUnit());
+		residentVo.setProjectId(residentBo.getProjectId());
 		
+		residentHouseVo.setProjectId(residentBo.getProjectId());
 		residentHouseVo.setHouseId(residentBo.getHouseId());
-		residentHouseVo.setProjectId(residentBo.getProprietorId());
+		residentHouseVo.setProprietorId(residentBo.getProprietorId());
 		residentHouseVo.setResidentRelation(residentBo.getResidentRelation());
 		
 		customer.setSex(residentBo.getSex());
@@ -242,17 +246,17 @@ public class HouseholdController {
 	/**
 	 * 获取房子的详情
 	 * @param residentId
+	 * @param houseId
 	 * @return 
 	 * @author xhw
 	 * @date 2016年3月10日 下午4:17:19
 	 */
 	@RequestMapping("getResident")
 	@ResponseBody
-	public DataValue<ResidentVo> getResident(String residentId) {
+	public DataValue<ResidentVo> getResident(String residentId, String houseId) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
 		
-		// TODO 查询需带上房子ID，故需要修改方法入参
-		ResidentVo residentVo = householdService.getResident(residentId,"");
+		ResidentVo residentVo = householdService.getResident(residentId, houseId);
 		//用户信息
 		CustomerVo customer = userService.getCustomerByGlobalId(residentVo.getCustGlobalId());
 		
@@ -282,14 +286,18 @@ public class HouseholdController {
 		customer.setSex(residentBo.getSex());
 		customer.setNativePlace(residentBo.getNativePlace());
 		customer.setGlobalId(residentBo.getCustGlobalId());
+		customer.setIdNum(customerVo.getIdNum());
 		
+		residentVo.setName(residentBo.getName());
 		residentVo.setPic(residentBo.getPic());
 		residentVo.setMobile(residentBo.getMobile());
 		residentVo.setWorkUnit(residentBo.getWorkUnit());
 		residentVo.setId(residentBo.getResidentId());
 		
 		// TODO 需要拿到residentHouseId，接口入参需带上这个参数
+		ResidentHouseVo residentHouse = householdService.getResidentHouse(residentBo.getResidentId(), residentBo.getHouseId());
 		residentHouseVo.setResidentRelation(residentBo.getResidentRelation());
+		residentHouseVo.setId(residentHouse.getId());
 		
 		residentVo.setCustomer(customer);
 		residentVo.setResidentHouse(residentHouseVo);
