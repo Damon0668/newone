@@ -16,6 +16,13 @@ import com.liefeng.property.vo.household.ResidentVo;
 public interface ResidentQueryRepository extends BaseRepository<ResidentVo> {
 	
 	/**
+	 * 根据ID和房屋ID查询住户
+	 * @param param 查询过滤参数
+	 * @return 某房屋某个住户信息
+	 */
+	public ResidentVo queryByIdAndHouseId(PagingParamVo param);
+	
+	/**
 	 * 根据客户全局ID和项目ID查询客户
 	 * @param param 查询过滤参数
 	 * @return 住户信息
@@ -27,7 +34,7 @@ public interface ResidentQueryRepository extends BaseRepository<ResidentVo> {
 	 * @param param 查询过滤参数
 	 * @return 住户列表
 	 */
-	public List<ResidentVo> queryResidents(PagingParamVo param);
+	public List<ResidentVo> queryResidentInProprietorHouse(PagingParamVo param);
 
 	/**
 	 * 门禁模块

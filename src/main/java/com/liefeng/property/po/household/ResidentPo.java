@@ -1,7 +1,5 @@
 package com.liefeng.property.po.household;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -34,47 +32,11 @@ public class ResidentPo extends BaseValue {
 	private String custGlobalId;
 
 	/**
-	 * 房产ID
+	 * 项目ID（小区ID）
 	 */
-	@Column(name = "house_id")
-	private String houseId;
-
-	/**
-	 * 业主ID
-	 */
-	@Column(name = "proprietor_id")
-	private String proprietorId;
-
-	/**
-	 * 是否为业主 0：否；1：是。
-	 */
-	@Column(name = "is_proprietor")
-	private String isProprietor;
-
-	/**
-	 * 住户类型 1：常住；2：暂住
-	 */
-	@Column(name = "resident_type")
-	private String residentType;
-
-	/**
-	 * 与业主关系
-	 */
-	@Column(name = "resident_relation")
-	private String residentRelation;
-
-	/**
-	 * 入住时间
-	 */
-	@Column(name = "checkin_date")
-	private Date checkinDate;
-
-	/**
-	 * 入住截止时间
-	 */
-	@Column(name = "checkup_date")
-	private Date checkupDate;
-
+	@Column(name = "project_id")
+	private String projectId;
+	
 	/**
 	 * 住户姓名
 	 */
@@ -116,13 +78,13 @@ public class ResidentPo extends BaseValue {
 	 */
 	@Column(name = "pic")
 	private String pic;
-	
+
 	/**
 	 * 状态。0：未审提交；1：正常；2：已注销
 	 */
 	@Column(name = "status")
 	private String status;
-	
+
 	/**
 	 * 录入员工ID
 	 */
@@ -157,60 +119,12 @@ public class ResidentPo extends BaseValue {
 		this.custGlobalId = custGlobalId;
 	}
 
-	public String getHouseId() {
-		return houseId;
+	public String getProjectId() {
+		return projectId;
 	}
 
-	public void setHouseId(String houseId) {
-		this.houseId = houseId;
-	}
-
-	public String getProprietorId() {
-		return proprietorId;
-	}
-
-	public void setProprietorId(String proprietorId) {
-		this.proprietorId = proprietorId;
-	}
-
-	public String getIsProprietor() {
-		return isProprietor;
-	}
-
-	public void setIsProprietor(String isProprietor) {
-		this.isProprietor = isProprietor;
-	}
-
-	public String getResidentType() {
-		return residentType;
-	}
-
-	public void setResidentType(String residentType) {
-		this.residentType = residentType;
-	}
-
-	public String getResidentRelation() {
-		return residentRelation;
-	}
-
-	public void setResidentRelation(String residentRelation) {
-		this.residentRelation = residentRelation;
-	}
-
-	public Date getCheckinDate() {
-		return checkinDate;
-	}
-
-	public void setCheckinDate(Date checkinDate) {
-		this.checkinDate = checkinDate;
-	}
-
-	public Date getCheckupDate() {
-		return checkupDate;
-	}
-
-	public void setCheckupDate(Date checkupDate) {
-		this.checkupDate = checkupDate;
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
 	}
 
 	public String getName() {
