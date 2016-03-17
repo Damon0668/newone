@@ -41,6 +41,7 @@ import com.liefeng.property.domain.household.ProprietorContext;
 import com.liefeng.property.domain.household.ProprietorHouseContext;
 import com.liefeng.property.domain.household.ResidentContext;
 import com.liefeng.property.domain.household.ResidentFeedbackContext;
+import com.liefeng.property.domain.household.ResidentHouseContext;
 import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.error.HouseholdErrorCode;
 import com.liefeng.property.exception.PropertyException;
@@ -53,6 +54,7 @@ import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
 import com.liefeng.property.vo.household.ResidentFeedbackVo;
+import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
 import com.liefeng.property.vo.project.HouseVo;
 
@@ -98,8 +100,7 @@ public class HouseholdService implements IHouseholdService {
 			singleHouse.setCustGlobalId(customer.getGlobalId());
 			
 			// 校验同个OEM下，同个小区业主是否已存在
-			ProprietorContext proprietorContext = null;
-			proprietorContext = ProprietorContext.build();
+			ProprietorContext proprietorContext = ProprietorContext.build();
 			ProprietorVo proprietor = proprietorContext.get(singleHouse.getProjectId(), customer.getGlobalId());
 			
 			// 同个OEM下，同个小区保留一份业主信息，不同小区保留多份业主信息
@@ -198,7 +199,7 @@ public class HouseholdService implements IHouseholdService {
 	 * 保存住户信息
 	 */
 	@Override
-	@Transactional(rollbackOn=Exception.class)
+	@Transactional(rollbackOn = Exception.class)
 	public void saveResident(ResidentVo resident) throws LiefengException {
 		try {
 			// 住户是否存在标识
@@ -214,22 +215,26 @@ public class HouseholdService implements IHouseholdService {
 			customer = checkService.createCustomerCheck(customer);
 			
 			// 校验住户是否已存在
-			HouseContext houseContext = HouseContext.loadById(resident.getHouseId());
-			HouseVo house = houseContext.get();
 			ResidentContext residentContext = ResidentContext.build();
-			ResidentVo existedResident = residentContext.get(house.getProjectId(), customer.getGlobalId());
+			ResidentVo existedResident = residentContext.get(resident.getProjectId(), customer.getGlobalId());
 			
 			// 同个OEM下，同个小区只保存一份住户信息，不同小区保存多份住户信息
 			if(existedResident == null) { 
 				resident.setStatus(HouseholdConstants.ResidentStatus.ACTIVE); // 默认为激活状态
 				resident.setCustGlobalId(customer.getGlobalId());
 				residentContext = ResidentContext.build(resident);
-				residentContext.create();
+				existedResident = residentContext.create();
 			} else {
 				
 				isExit = true; // 同个OEM下，同个小区住户信息已存在
-				logger.info("住户信息已存在，后续将不执行住户用户创建动作");
+				logger.info("住户信息已存在，后续将不执行住户、用户创建动作");
 			}
+			
+			// 保存住户房屋信息
+			ResidentHouseVo residentHouse = resident.getResidentHouse();
+			residentHouse.setResidentId(existedResident.getId());
+			ResidentHouseContext residentHouseContext = ResidentHouseContext.build(residentHouse);
+			residentHouseContext.create();
 			
 			// 仅当同个OEM下，同个小区下住户不存在时，才做用户创建
 			// 住户信息存在时，即使传过来的手机号不同也不做用户创建，为了保证同个OEM下，同个小区住户用户信息只有一份
@@ -275,6 +280,12 @@ public class HouseholdService implements IHouseholdService {
 			// 更新住户信息
 			ResidentContext residentContext = ResidentContext.build(resident);
 			residentContext.update();
+			
+			// 更新住户房屋信息
+			ResidentHouseVo residentHouse = resident.getResidentHouse();
+			residentHouse.setResidentId(resident.getId());
+			ResidentHouseContext residentHouseContext = ResidentHouseContext.build(residentHouse);
+			residentHouseContext.update();
 			
 			// 用户更新信息设置
 			UserVo newUser = setUpUser4Update(customer); 
@@ -332,12 +343,12 @@ public class HouseholdService implements IHouseholdService {
 	}
 
 	/**
-	 * 查询住户信息
+	 * 查询某房子中某个住户信息
 	 */
 	@Override
-	public ResidentVo getResident(String residentId) {
+	public ResidentVo getResident(String residentId, String houseId) {
 		ResidentContext residentContext = ResidentContext.loadById(residentId);
-		return residentContext.get();
+		return residentContext.get(houseId);
 	}
 
 	/**
@@ -537,7 +548,8 @@ public class HouseholdService implements IHouseholdService {
 		
 		user.setCustomer(customer);
 		user.setCustGlobalId(customer.getGlobalId()); // 客户全局ID
-	    user.setName(phone + oemCode); // 默认设置的用户名为手机号+oemCode
+		String name = phone + "@" + oemCode;
+	    user.setName(name); // 默认设置的用户名为手机号+@+oemCode，用户名全局唯一
 		user.setPassword(password); // 初始密码
 		user.setMobile(phone); // 设置手机号码
 		user.setAvatarUrl(customer.getPortraitUrl());
@@ -830,8 +842,20 @@ public class HouseholdService implements IHouseholdService {
 		AppFriendContext context = AppFriendContext.build();
 		context.deleteOfStatus(appFriendVo.getUserId(), appFriendVo.getFriendId(), HouseholdConstants.AppFriendStatus.REFUSE);
 		
-		AppFriendContext appFriendContext = AppFriendContext.build(appFriendVo);
-		return appFriendContext.create();
+		//判断是否有“已添加”的记录
+		AppFriendVo appFriend = context.getAppFriend(appFriendVo.getFriendId(), appFriendVo.getUserId(), HouseholdConstants.AppFriendStatus.ASFRIEND);
+		if(appFriend == null){ //创建一个“待审核”的记录
+			AppFriendContext appFriendContext = AppFriendContext.build(appFriendVo);
+			appFriend = appFriendContext.create();
+		}else{ //创建一个“已成为好友”的记录
+			appFriendVo.setStatus(HouseholdConstants.AppFriendStatus.ASFRIEND);
+			appFriendVo.setUpdateTime(new Date());
+			
+			AppFriendContext appFriendContext = AppFriendContext.build(appFriendVo);
+			appFriend = appFriendContext.create();
+		}
+		
+		return appFriend;
 	}
 
 	@Override
@@ -841,9 +865,9 @@ public class HouseholdService implements IHouseholdService {
 	}
 
 	@Override
-	public List<AppFriendVo> getAppFriendListOfStatus(String userId, String status) {
+	public List<AppFriendVo> getAppFriendList(String userId) {
 		AppFriendContext appFriendContext = AppFriendContext.build();
-		return appFriendContext.getAppFriendListOfStatus(userId, status);
+		return appFriendContext.getAppFriendList(userId);
 	}
 
 	@Override
@@ -876,6 +900,19 @@ public class HouseholdService implements IHouseholdService {
 	public List<AppFriendVo> getUserList(String userId, String condition) {
 		AppFriendContext appFriendContext = AppFriendContext.build();
 		return appFriendContext.getUserList(userId, condition);
+	}
+
+	@Override
+	public List<AppFriendVo> getAppFriendHistoryList(String userId) {
+		AppFriendContext appFriendContext = AppFriendContext.build();
+		return appFriendContext.getAppFriendHistoryList(userId);
+	}
+
+	@Override
+	public AppFriendVo getAppFriend(String userId, String friendId,
+			String status) {
+		AppFriendContext appFriendContext = AppFriendContext.build();
+		return appFriendContext.getAppFriend(userId, friendId, status);
 	}
 
 
