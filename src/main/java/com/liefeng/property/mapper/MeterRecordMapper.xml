@@ -55,6 +55,16 @@
 				AND p.name  like CONCAT('%','${extra.proprietorName}','%' )
 			</if>
 			
+			<!-- 是否已抄  1 已抄  2 未抄-->
+			<choose>
+				<when test="extra.isRead == 1">
+					AND mr.id is not null 
+				</when>
+				<when test="extra.isRead == 2">
+					AND mr.id is  null
+				</when>
+			</choose>
+
 		</trim>
 	</sql>
 	<!-- 链接查询条件 -->

@@ -74,7 +74,7 @@ FROM
 	  FROM
 	      property.t_house h
 	      left join property.t_proprietor_house ph
-		  on h.house_num = ph.house_num
+		  on h.house_num = ph.house_num and h.project_id = ph.project_id
 		  left join property.t_proprietor p
 		  on ph.proprietor_id = p.id 
 	  <include refid="Example_Where_Clause"/>
@@ -103,7 +103,7 @@ FROM
 	  FROM
 	      property.t_house h
 	      left join property.t_proprietor_house ph
-		  on h.house_num = ph.house_num
+		  on h.house_num = ph.house_num and h.project_id = ph.project_id
 		  left join property.t_fee_setting fs
 		  on fs.project_id = ph.project_id and fs.use_type = ph.use_type and fs.fee_type = '4'
 		  left join property.t_proprietor p
@@ -139,7 +139,7 @@ FROM
 	  FROM
 	      property.t_house h
 	      left join property.t_proprietor_house ph
-		  on h.house_num = ph.house_num
+		  on h.house_num = ph.house_num and h.project_id = ph.project_id
 		  left join property.t_proprietor p
 		  on ph.proprietor_id = p.id 
 		  left join property.t_project pj

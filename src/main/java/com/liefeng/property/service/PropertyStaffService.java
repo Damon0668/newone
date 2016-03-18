@@ -110,7 +110,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 
 	@Transactional(rollbackOn=Exception.class)
 	@Override
-	public void updateStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo){
+	public void updateStaff(PropertyStaffDetailInfoVo propertyStaffDetailInfo) throws LiefengException{
 		
 		logger.info("updateStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
 		

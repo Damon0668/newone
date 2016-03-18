@@ -59,6 +59,11 @@ public class MeterRecordBo extends BaseValue {
 	 * 1：WEB；2：Android；3：IOS
 	 */
 	private String from;
+	
+	/**
+	 * 是否已读
+	 */
+	private String isRead;
 
 	public String getPropertyId() {
 		return propertyId;
@@ -138,5 +143,13 @@ public class MeterRecordBo extends BaseValue {
 
 	public void setFrom(String from) {
 		this.from = from;
+	}
+
+	public String getIsRead() {
+		return isRead;
+	}
+
+	public void setIsRead(String isRead) {
+		this.isRead = isRead;
 	}
 }

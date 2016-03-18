@@ -17,20 +17,19 @@
 		where 1=1
 		<trim suffixOverrides=",">
 			<if test="extra.eventType != null and extra.eventType != ''">
-				AND #{extra.eventType} = fi.event_type
+				AND #{extra.eventType} = er.event_type
 			</if>
 			<if
 				test="extra.startDate != null and extra.startDate != '' and 
 					extra.endDate != null and extra.endDate != ''">
-				AND fi.create_time between #{extra.startDate} And
-				#{extra.endDate}
+				AND er.report_time between FROM_UNIXTIME(#{extra.startDate}/1000,"%Y-%m-%d") And
+				FROM_UNIXTIME(#{extra.endDate}/1000,"%Y-%m-%d")
 			</if>
 			<if test="extra.status != null and extra.status != ''">
-				AND #{extra.status} = fi.status
+				AND #{extra.status} = er.status
 			</if>
 			<if test="extra.location != null and extra.location != ''">
-				AND fi.location like CONCAT('%','#{extra.location}','%'
-				);
+				AND er.location  like CONCAT('%', #{extra.location},'%')
 			</if>
 			
 		</trim>

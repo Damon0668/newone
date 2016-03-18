@@ -180,6 +180,11 @@ public class WorkbenchConstants {
 		public static final String STATUS_ALREADYWORKERS = "1"; 
 		
 		/**
+		 * 报事状态 归档
+		 */
+		public static final String STATUS_FILE = "2";
+		
+		/**
 		 * 报事状态 已反馈
 		 */
 		public static final String STATUS_ALREADYFEEDBACK = "2";
@@ -207,7 +212,31 @@ public class WorkbenchConstants {
 		/**
 		 * 附件类型 图片
 		 */
-		public static final String EVENTPROCATTACH_PIC = "2"; 
+		public static final String EVENTPROCATTACH_PIC = "2";
+
+		/**
+		 * 部门审核通过 
+		 */
+		public static final String AUDITSTATUS_YES = "1"; 
+		
+		/**
+		 * 部门审核不通过
+		 */
+		public static final String AUDITSTATUS_NO = "0";
+		
+		/**
+		 * 是 抢单
+		 */
+		public static final String GRAB_YES = "1"; 
+		
+		/**
+		 * 不 抢单
+		 */
+		public static final String GRAB_NO = "0";
+		
+		
+		
+		
 	}
 	
 	/**

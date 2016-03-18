@@ -669,6 +669,13 @@ public interface IWorkbenchService {
 	 * 
 	 */
 	public Map<String, Long> eventReporNoRead(EventReportBo eventReportBo);
+
+
+	/**
+	 * 删除报事
+	 * @param id
+	 */
+	public void deleteEventReport(String id);
 	
 
 	/**
