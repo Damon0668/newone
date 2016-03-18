@@ -1075,6 +1075,18 @@ public class WorkbenchService implements IWorkbenchService {
 		return string;
 	}
 
+	@Override
+	public void deleteEventReport(String id){
+		EventReportVo reportVo = EventReportContext.loadById(id).get();
+		
+		if(reportVo == null){
+			throw new WorkbenchException(WorkbenchErrorCode.EVENTREPORT_NON_EXISTENT);
+		}else if(ValidateHelper.isNotEmptyString(reportVo.getWfOrderId())){
+			throw new WorkbenchException(WorkbenchErrorCode.EVENTREPORT_CANNOT_DELETE);
+		}
+		
+		EventReportContext.loadById(id).delete();
+	}
 	
 	@Override
 	public void createAppEventReport(EventReportBo bo) throws LiefengException {
@@ -1103,18 +1115,5 @@ public class WorkbenchService implements IWorkbenchService {
 		
 		EventReportContext eventReportContext = EventReportContext.build(eventReportVo);
 		eventReportContext.create();
-	}
-	
-	@Override
-	public void deleteEventReport(String id){
-		EventReportVo reportVo = EventReportContext.loadById(id).get();
-		
-		if(reportVo == null){
-			throw new WorkbenchException(WorkbenchErrorCode.EVENTREPORT_NON_EXISTENT);
-		}else if(ValidateHelper.isNotEmptyString(reportVo.getWfOrderId())){
-			throw new WorkbenchException(WorkbenchErrorCode.EVENTREPORT_CANNOT_DELETE);
-		}
-		
-		EventReportContext.loadById(id).delete();
 	}
 }

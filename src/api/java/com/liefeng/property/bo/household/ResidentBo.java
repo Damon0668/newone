@@ -71,6 +71,11 @@ public class ResidentBo extends BaseValue {
 	 * 客户全局唯一标识
 	 */
 	private String custGlobalId;
+	
+	/**
+	 * 项目id
+	 */
+	private String projectId;
 
 	public String getResidentId() {
 		return residentId;
@@ -166,6 +171,14 @@ public class ResidentBo extends BaseValue {
 
 	public void setCustGlobalId(String custGlobalId) {
 		this.custGlobalId = custGlobalId;
+	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
 	}
 
 }

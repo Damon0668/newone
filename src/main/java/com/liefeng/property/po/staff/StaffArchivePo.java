@@ -30,7 +30,7 @@ public class StaffArchivePo extends BaseValue {
 	/**
 	 * 客户全局唯一标识
 	 */
-	@Column(name = "cust_global_id")
+	@Column(name = "cust_global_id", updatable = false)
 	private String custGlobalId;
 	
 	/**
