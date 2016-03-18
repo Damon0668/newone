@@ -50,12 +50,12 @@ public class AuthController {
 		
 		try{
 			//统一鉴权登陆
-			//UserLoginBo userLoginBo = MyBeanUtil.createBean(authLogin, UserLoginBo.class);
+			UserLoginBo userLoginBo = MyBeanUtil.createBean(authLogin, UserLoginBo.class);
 			
-			//UserVo user = userService.login(userLoginBo);
+			UserVo user = userService.login(userLoginBo);
 			
 			//获取物业系统用户信息
-			loginUser = loginUserService.findLoginUser("C1603161803278af41b8e398146");
+			loginUser = loginUserService.findLoginUser(user.getCustGlobalId());
 
 		}catch(LiefengException e){
 			logger.info("鉴权失败 {}", e);
