@@ -42,7 +42,9 @@ where 1=1
 	FROM
 	    t_property_department d
 	LEFT JOIN t_property_staff s ON d.director_id = s.id
+    
     <include refid="Example_Where_Clause"/>
+
 	<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
 	    ${pager.mysqlQueryCondition}
 	</if>

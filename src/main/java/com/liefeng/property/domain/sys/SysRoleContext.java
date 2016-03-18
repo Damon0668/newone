@@ -16,6 +16,8 @@ import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.property.error.SecurityErrorCode;
+import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.sys.SysRolePo;
 import com.liefeng.property.repository.sys.SysRoleRepository;
 import com.liefeng.property.vo.sys.SysRoleUserVo;
@@ -87,6 +89,13 @@ public class SysRoleContext {
 	 * 创建
 	 */
 	public void create() {
+		
+		SysRolePo existRole = sysRoleRepository.findByName(role.getName().trim());
+		
+		if(existRole != null){
+			throw new PropertyException(SecurityErrorCode.ROLE_HAS_EXIST);
+		}
+		
 		SysRolePo sysRolePo = MyBeanUtil.createBean(role, SysRolePo.class);
 		sysRolePo.setOemCode(ContextManager.getInstance().getOemCode());
 		sysRoleRepository.save(sysRolePo);
@@ -98,6 +107,12 @@ public class SysRoleContext {
 	public void update(){
 		
 		if(role !=null && role.getId() != null){
+			
+			SysRolePo existRole = sysRoleRepository.findByName(role.getName().trim());
+			
+			if(existRole != null){
+				throw new PropertyException(SecurityErrorCode.ROLE_HAS_EXIST);
+			}
 			
 			SysRolePo sysRolePo = sysRoleRepository.findOne(role.getId());
 			

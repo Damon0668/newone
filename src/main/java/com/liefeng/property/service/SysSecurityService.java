@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.ISysSecurityService;
 import com.liefeng.property.domain.sys.SysMenuContext;
 import com.liefeng.property.domain.sys.SysRoleContext;
@@ -33,7 +34,7 @@ public class SysSecurityService implements ISysSecurityService{
 	}
 
 	@Override
-	public void createRole(SysRoleVo sysRole) {
+	public void createRole(SysRoleVo sysRole) throws LiefengException{
 		SysRoleContext.build(sysRole).create();
 	}
 
@@ -122,7 +123,7 @@ public class SysSecurityService implements ISysSecurityService{
 	}
 
 	@Override
-	public void updateRole(SysRoleVo sysRole) {
+	public void updateRole(SysRoleVo sysRole) throws LiefengException{
 		SysRoleContext.build(sysRole).update();
 	}
 

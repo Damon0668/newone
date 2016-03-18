@@ -3,6 +3,7 @@ package com.liefeng.intf.property;
 import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.vo.sys.SysMenuVo;
 import com.liefeng.property.vo.sys.SysRoleVo;
 
@@ -49,14 +50,14 @@ public interface ISysSecurityService {
 	 * @param sysRole
 	 * @return
 	 */
-	public void createRole(SysRoleVo sysRole);
+	public void createRole(SysRoleVo sysRole) throws LiefengException;
 	
 	/**
 	 * 更新系统角色
 	 * @param sysRole
 	 * @return
 	 */
-	public void updateRole(SysRoleVo sysRole);
+	public void updateRole(SysRoleVo sysRole) throws LiefengException;;
 	
 	/**
 	 * 删除系统角色

@@ -115,14 +115,18 @@ public class PropertyDepartmentContext {
 	 */
 	public void create() {
 		if(propertyDepartment != null) {
-			String departName = propertyDepartment.getName();
+			
+			String departName = propertyDepartment.getName().trim();
+			
 			String oemCode = ContextManager.getInstance().getOemCode();
+			
 			if (ValidateHelper.isEmptyString(departName)) {
 				throw new PropertyException(StaffErrorCode.DEPARTMENT_NAME_NULL);
 			}
 			
 			PropertyDepartmentPo departmentWithSameName = 
 					propertyDepartmentRepository.findDepartmentByNameAndOemCode(departName, oemCode);
+			
 			if (departmentWithSameName != null) {
 				throw new PropertyException(StaffErrorCode.DEPARTMENT_ALREADY_EXIST, departName);
 			}
