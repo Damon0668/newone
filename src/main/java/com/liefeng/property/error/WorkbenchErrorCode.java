@@ -37,7 +37,17 @@ public enum WorkbenchErrorCode implements IErrorCode {
 	/**
 	 * 操作失败,该任务已经被退回
 	 */
-	ALREADY_SENDBACK("操作失败,该任务已经被退回");
+	ALREADY_SENDBACK("操作失败,该任务已经被退回"), 
+	
+	/**
+	 * 该报事不存在
+	 */
+	EVENTREPORT_NON_EXISTENT("该报事不存在"),
+	
+	/**
+	 * 该报事已进入流程无法删除
+	 */
+	EVENTREPORT_CANNOT_DELETE("该报事已进入流程无法删除");
 	
 	private String desc;
 	

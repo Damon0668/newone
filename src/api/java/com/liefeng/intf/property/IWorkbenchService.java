@@ -678,5 +678,11 @@ public interface IWorkbenchService {
 	 * @date 2016年3月15日 下午6:26:10
 	 */
 	public void createAppEventReport(EventReportBo bo) throws LiefengException;
+
+	/**
+	 * 删除报事
+	 * @param id
+	 */
+	public void deleteEventReport(String id);
 	
 }

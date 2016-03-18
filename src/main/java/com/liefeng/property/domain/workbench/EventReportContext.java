@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
+import com.liefeng.common.util.UUIDGenerator;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.workbench.EventReportBo;
@@ -73,18 +75,15 @@ public class EventReportContext {
 
 	public void create() {
 		if (eventReport != null) {
+			eventReport.setId(UUIDGenerator.generate());
+			eventReport.setOemCode(ContextManager.getInstance().getOemCode());
 			eventReportRepository.save(MyBeanUtil.createBean(eventReport,
 					EventReportPo.class));
 		}
 	}
 	
 	public void update(){
-		EventReportPo eventReportPo = eventReportRepository.findOne(eventReport.getId());
-		
-		/*if(eventReportPo.getStatus().equals(WorkbenchConstants.EventReport.STATUS_ALREADYWORKERS)){
-			throw new WorkbenchException(en)
-		}*/
-		
+		eventReport.setOemCode(ContextManager.getInstance().getOemCode());
 		eventReportRepository.save(MyBeanUtil.createBean(eventReport,
 				EventReportPo.class));
 	}
@@ -92,6 +91,11 @@ public class EventReportContext {
 	public EventReportVo get() {
 		EventReportPo eventReportPo = eventReportRepository.findOne(id);
 		return MyBeanUtil.createBean(eventReportPo, EventReportVo.class);
+	}
+	
+	public void delete(){
+		logger.info("delete eventReport id is {}",id);
+		eventReportRepository.delete(id);
 	}
 	
 	public EventReportVo findByWfOrderId(String wfOrderId){
