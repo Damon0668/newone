@@ -189,4 +189,20 @@ public class HouseSpecContext {
 		
 		return returnPage;
 	}
+	
+	/**
+	 * 获取房型的数量
+	 * @param params 查询过滤参数
+	 * @return
+	 */
+	public Long getHouseSpecCount(HouseSpecBo params) {
+		// 参数拷贝
+		Map<String, String> extra = MyBeanUtil.bean2Map(params);
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		
+		Long count = houseSpecQueryRepository.queryByCount(param);
+		
+		return count;
+	}
 }

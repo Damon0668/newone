@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.project;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,7 @@ import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.po.project.HousePo;
 import com.liefeng.property.repository.mybatis.HouseQueryRepository;
 import com.liefeng.property.repository.project.HouseRepository;
+import com.liefeng.property.vo.household.HouseGraphVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.project.HouseVo;
 import com.liefeng.property.vo.project.ProjectVo;
@@ -220,6 +222,13 @@ public class HouseContext {
 		return house;
 	}
 
+	/**
+	 * 分页查询房子信息
+	 * @param houseBo 查询参数封装对象
+	 * @param page 分页当前页
+	 * @param size 分页大小
+	 * @return
+	 */
 	public DataPageValue<ProprietorSingleHouseVo> listHouse4Page(HouseBo houseBo, Integer page, Integer size) {
 		// 参数拷贝
 		Map<String, String> extra = MyBeanUtil.bean2Map(houseBo);
@@ -252,6 +261,45 @@ public class HouseContext {
 		List<HousePo> projectVos = houseRepository.findAll();
 		return MyBeanUtil.createList(projectVos, ProjectVo.class);
 	}
+	
+	/**
+	 * 获取房产图形中某楼栋中所有房子
+	 * @param params 查询过滤参数
+	 * @return 房子列表
+	 */
+	public List<ProprietorSingleHouseVo> getHouseGraphs(HouseBo params) {
+		logger.info("getHouseGraph() 查询参数params={}", params);
+		// 参数拷贝
+		Map<String, String> extra = MyBeanUtil.bean2Map(params);
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		
+		List<ProprietorSingleHouseVo> houses = houseQueryRepository.queryGraphData(param);
+		
+		return houses;
+	}
+	
+	/**
+	 * 获取房产图形中合计数据
+	 * @param params 查询过滤参数
+	 * @return 图形界面合计数据
+	 */
+	public HouseGraphVo getHouseGraphsCount(HouseBo params) {
+		logger.info("getHouseGraphsCount() 查询参数params={}", params);
+		// 参数拷贝
+		Map<String, String> extra = MyBeanUtil.bean2Map(params);
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		
+		Map<String,BigDecimal> counts = houseQueryRepository.queryGraphCount(param);
+		
+		HouseGraphVo houseGraph = new HouseGraphVo();
+		houseGraph.setInitializedCount(counts.get("initializedCount").intValue());
+		houseGraph.setNoInitializeCount(counts.get("noInitializeCount").intValue());
+		
+		return houseGraph;
+	}
+	
 
 	protected String getProjectId() {
 		return projectId;

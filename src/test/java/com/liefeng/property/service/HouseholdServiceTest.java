@@ -64,5 +64,4 @@ public class HouseholdServiceTest {
 		ResidentVo resident = householdService.getResident("1","1");
 		System.out.println(resident);
 	}
-
 }
