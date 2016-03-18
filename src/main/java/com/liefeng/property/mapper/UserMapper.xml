@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.api.UserQueryRepository" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.api.LoginUserVo" >
+
+</resultMap>
+
+<select id="findLoginUser" resultMap="BaseResultMap">
+	SELECT
+	    t.id,
+	    t.cust_global_id globalId,
+	    t.project_id projectId,
+	    t.`name`,
+	    t.phone mobile,
+	    t.`status`,
+	    t.pic_url pic,
+	    t.oem_code oemCode
+	FROM
+	    (
+	        SELECT
+	            p.id,
+	            p.cust_global_id,
+	            p.project_id,
+	            p.`name`,
+	            p.phone,
+	            p.`status`,
+	            p.pic_url,
+	            p.oem_code
+	        FROM
+	            t_proprietor p
+	        UNION
+	            SELECT
+	                r.id,
+	                r.cust_global_id,
+	                r.project_id,
+	                r.`name`,
+	                r.mobile,
+	                r.`status`,
+	                r.pic,
+	                r.oem_code
+	            FROM
+	                t_resident r
+	    ) t
+	where t.cust_global_id = #{custGlobalId}
+
+</select>
+
+</mapper>
