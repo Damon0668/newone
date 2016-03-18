@@ -66,6 +66,10 @@ public interface ISysSecurityService {
 	 */
 	public void delRole(Long id);
 	
+	/*
+	 * ****************** 菜单相关 ******************
+	 */
+	
 	/**
 	 * 查询菜单树
 	 * @return
@@ -105,6 +109,14 @@ public interface ISysSecurityService {
 	public DataPageValue<SysMenuVo> listMenus(Long parentId, boolean isIgnoreButton, int page, int size);
 	
 	/**
+	 * 查找菜单
+	 * @param userId 用户ID
+	 * @param parentId 父菜单ID
+	 * @return
+	 */
+	public List<SysMenuVo> listMenus(String userId, Long parentId);
+	
+	/**
 	 * 根据用户ID查询此用户拥有按钮的code编码
 	 * @param userId 用户Id
 	 * @return
@@ -112,7 +124,7 @@ public interface ISysSecurityService {
 	public List<String> listButtonsCodeByUserId(String userId);
 	
 	/**
-	 * 根据用户ID查询此用户拥有按钮的code编码
+	 * 根据用户ID查询菜单
 	 * @param userId 用户Id
 	 * @return
 	 */

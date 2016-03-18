@@ -38,7 +38,7 @@
 		    )
     </select>
     
-    <select id="queryMenusByUserId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="queryMenus" resultMap="BaseResultMap">
         SELECT
             distinct sm.*
         FROM
@@ -47,15 +47,18 @@
         WHERE
             1=1 
             AND sm.type != 2 
+            <if test="extra.parentId != null">
+            AND sm.parent_id = #{extra.parentId}
+            </if>
             AND srm.role_id IN (
                 SELECT
                     role_id
                 FROM
                     t_sys_role_user sru
                 WHERE
-                    sru.user_id = #{userId}
+                    sru.user_id = #{extra.userId}
             )
             order by sm.parent_id,sm.ord
     </select>
-    
+
 </mapper>

@@ -1,7 +1,9 @@
 package com.liefeng.property.domain.sys;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -19,6 +21,7 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.po.sys.SysMenuPo;
 import com.liefeng.property.repository.mybatis.SysMenuQueryRepository;
 import com.liefeng.property.repository.sys.SysMenuRepository;
@@ -362,17 +365,50 @@ public class SysMenuContext {
 		
 		logger.info("findMenusByUserId userId = {}", userId);
 		
-		List<SysMenuVo> menuList = null;
-		
-		List<SysMenuVo> userMenuList = sysMenuQueryRepository.queryMenusByUserId(userId);
+		PagingParamVo param = new PagingParamVo();
+		Map<String,String> paramMap = new HashMap<String,String>();
+		paramMap.put("userId", userId);
+
+		param.setExtra(paramMap);
+
+		List<SysMenuVo> userMenuList = sysMenuQueryRepository.queryMenus(param);
 		
 		logger.info("userMenuList = {}", userMenuList);
 		
+		List<SysMenuVo> menuList = null;
+		
 		if(ValidateHelper.isNotEmptyCollection(userMenuList)){
-			
 			menuList = buildSubMenu(MyBeanUtil.createList(userMenuList, SysMenuVo.class));
-			
 		}
+		return menuList;
+	}
+	
+	/**
+	 * 查找菜单
+	 * @param userId 用户ID
+	 * @param parentId 父菜单ID 可以为null
+	 * @return
+	 */
+	public List<SysMenuVo> findMenusByUserIdAndParentId(String userId, Long parentId){
+		
+		logger.info("findMenusByUserIdAndParentId userId = {}, parentId = {}", userId, parentId);
+		
+		PagingParamVo param = new PagingParamVo();
+		Map<String,String> paramMap = new HashMap<String,String>();
+		paramMap.put("userId", userId);
+		paramMap.put("parentId", parentId.toString());
+		param.setExtra(paramMap);
+
+		List<SysMenuVo> userMenuList = sysMenuQueryRepository.queryMenus(param);
+		
+		logger.info("userMenuList = {}", userMenuList);
+		
+		List<SysMenuVo> menuList = null;
+		
+		if(ValidateHelper.isNotEmptyCollection(userMenuList)){
+			menuList = MyBeanUtil.createList(userMenuList, SysMenuVo.class);
+		}
+		
 		return menuList;
 	}
 	

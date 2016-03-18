@@ -149,6 +149,10 @@ public class SysSecurityService implements ISysSecurityService{
 		logger.info("findRolesByRoleId roleId = {}", roleId);
 		return SysRoleContext.loadById(roleId).get();
 	}
-	
 
+	@Override
+	public List<SysMenuVo> listMenus(String userId, Long parentId) {
+		logger.info("listMenus userId = {}, parentId = {}", userId, parentId);
+		return SysMenuContext.build().findMenusByUserIdAndParentId(userId, parentId);
+	}
 }

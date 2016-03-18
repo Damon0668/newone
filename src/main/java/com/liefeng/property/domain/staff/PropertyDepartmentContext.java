@@ -118,21 +118,15 @@ public class PropertyDepartmentContext {
 			
 			String departName = propertyDepartment.getName().trim();
 			
-			String oemCode = ContextManager.getInstance().getOemCode();
-			
 			if (ValidateHelper.isEmptyString(departName)) {
 				throw new PropertyException(StaffErrorCode.DEPARTMENT_NAME_NULL);
 			}
 			
-			PropertyDepartmentPo departmentWithSameName = 
-					propertyDepartmentRepository.findDepartmentByNameAndOemCode(departName, oemCode);
-			
-			if (departmentWithSameName != null) {
-				throw new PropertyException(StaffErrorCode.DEPARTMENT_ALREADY_EXIST, departName);
-			}
+			isExit(propertyDepartment);
 			
 			propertyDepartment.setId(UUIDGenerator.generate());
-			propertyDepartment.setOemCode(oemCode);
+			
+			propertyDepartment.setOemCode(ContextManager.getInstance().getOemCode());
 			
 			PropertyDepartmentPo propertyDepartmentPo = MyBeanUtil.createBean(propertyDepartment, PropertyDepartmentPo.class);
 			propertyDepartmentRepository.save(propertyDepartmentPo);
@@ -146,6 +140,9 @@ public class PropertyDepartmentContext {
 	 */
 	public void update() {
 		if(propertyDepartment != null) {
+			
+			isExit(propertyDepartment);
+			
 			PropertyDepartmentPo propertyDepartmentPo = 
 					propertyDepartmentRepository.findOne(propertyDepartment.getId());
 			
@@ -228,6 +225,25 @@ public class PropertyDepartmentContext {
 		List<PropertyDepartmentPo> departmentPoList = 
 				propertyDepartmentRepository.findDepartmentsByOemCode(oemCode);
 		return MyBeanUtil.createList(departmentPoList, PropertyDepartmentVo.class);
+	}
+	
+	/**
+	 * 判断部门是否已经存在
+	 * @param propertyDepartment
+	 */
+	private void isExit(PropertyDepartmentVo propertyDepartment){
+		
+		String departName = propertyDepartment.getName().trim();
+		
+		String oemCode = ContextManager.getInstance().getOemCode();
+		
+		PropertyDepartmentPo departmentWithSameName = 
+				propertyDepartmentRepository.findDepartmentByNameAndOemCode(departName, oemCode);
+		
+		if (departmentWithSameName != null) {
+			throw new PropertyException(StaffErrorCode.DEPARTMENT_ALREADY_EXIST, departName);
+		}
+		
 	}
 	
 	protected void setPropertyDepartmentId(String propertyDepartmentId) {
