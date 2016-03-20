@@ -6,6 +6,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.bo.project.HouseSpecBo;
+import com.liefeng.property.vo.household.HouseGraphVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.project.AppHomeImageVo;
 import com.liefeng.property.vo.project.HouseSpecVo;
@@ -314,5 +315,14 @@ public interface IProjectService {
 	 * @return 轮播图分页信息
 	 */
 	public DataPageValue<AppHomeImageVo> findAppHomeImages(String projectId, Integer currentPage, Integer pageSize);
+	
+	/**
+	 * 查询房产视图数据
+	 * @param param 查询过滤参数
+	 * @return 房产数据
+	 */
+	public List<HouseGraphVo> getHouseGraphs(HouseBo param);
+	
+	public HouseGraphVo getHouseGraphCount(HouseBo param);
 	
 }

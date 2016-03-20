@@ -1,6 +1,11 @@
 package com.liefeng.property.repository.mybatis;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+
 import com.liefeng.core.mybatis.repository.BaseRepository;
+import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 
 /**
@@ -12,4 +17,17 @@ import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
  */
 public interface HouseQueryRepository extends BaseRepository<ProprietorSingleHouseVo>{
 	
+	/**
+	 * 获取房产图形界面数据
+	 * @param param 查询过滤参数
+	 * @return 房子列表
+	 */
+	public List<ProprietorSingleHouseVo> queryGraphData(PagingParamVo param);
+	
+	/**
+	 * 获取房产图形界面统计数据
+	 * @param param 查询过滤参数
+	 * @return 已录入数和未录入数
+	 */
+	public Map<String, BigDecimal> queryGraphCount(PagingParamVo param);
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
@@ -17,6 +18,7 @@ import com.liefeng.property.domain.project.HouseSpecContext;
 import com.liefeng.property.domain.project.ProjectBuildingContext;
 import com.liefeng.property.domain.project.ProjectContext;
 import com.liefeng.property.domain.project.ProjectNoticeContext;
+import com.liefeng.property.vo.household.HouseGraphVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.project.AppHomeImageVo;
 import com.liefeng.property.vo.project.HouseSpecVo;
@@ -130,10 +132,10 @@ public class ProjectService implements IProjectService {
 		HouseVo house = houseContext.get();
 		
 		ProjectBuildingContext buildingContext = ProjectBuildingContext.loadById(house.getBuildingId());
-		ProjectBuildingVo building = buildingContext.getProjectBuilding();
+		ProjectBuildingVo building = buildingContext.get();
 		
 		ProjectBuildingContext floorContext = ProjectBuildingContext.loadById(house.getFloorId());
-		ProjectBuildingVo floor = floorContext.getProjectBuilding();
+		ProjectBuildingVo floor = floorContext.get();
 		
 		house.setBuildingName(building.getName());
 		house.setFloorName(floor.getName());
@@ -163,7 +165,7 @@ public class ProjectService implements IProjectService {
 	@Override
 	public ProjectBuildingVo findProjectBuildingById(String projectBuildingId) {
 		ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.loadById(projectBuildingId);
-		ProjectBuildingVo projectBuildingVo = projectBuildingContext.getProjectBuilding();
+		ProjectBuildingVo projectBuildingVo = projectBuildingContext.get();
 		return projectBuildingVo;
 	}
 
@@ -321,5 +323,67 @@ public class ProjectService implements IProjectService {
 		DataPageValue<AppHomeImageVo> dataPage = appHomeImageContext.findAppHomeImages(projectId, currentPage, pageSize);
 		
 		return dataPage;
+	}
+	
+	@Override
+	public List<HouseGraphVo> getHouseGraphs(HouseBo param) {
+		List<HouseGraphVo> dataList = new ArrayList<HouseGraphVo>();
+		
+		String projectId = param.getProjectId();
+		String buildingId = param.getBuildingId();
+		
+		if(ValidateHelper.isNotEmptyString(buildingId)) { // 仅查单个楼栋的
+			
+			ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.loadById(buildingId);
+			ProjectBuildingVo building = projectBuildingContext.get();
+			
+			if(building != null) {
+				HouseGraphVo houseGraph = initHouseGraph(param, building);
+				dataList.add(houseGraph);
+			}
+		} else if(ValidateHelper.isNotEmptyString(projectId)) { // 查询所有楼栋的
+			
+			ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.loadByProjectId(projectId);
+			DataPageValue<ProjectBuildingVo> dataPage = projectBuildingContext.findBuildingsByProjectId(1, 1000);
+			if(dataPage != null && ValidateHelper.isNotEmptyCollection(dataPage.getDataList())) {
+				for(ProjectBuildingVo building : dataPage.getDataList()) {
+					HouseGraphVo houseGraph = initHouseGraph(param, building);
+					dataList.add(houseGraph);
+				}
+			}
+		}
+		
+		return dataList;
+	}
+
+	/**
+	 * 初始化房产视图对象
+	 * @param param 查询参数
+	 * @param building 楼栋对象
+	 * @return 房产视图对象
+	 */
+	private HouseGraphVo initHouseGraph(HouseBo param, ProjectBuildingVo building) {
+		// 查询楼栋中房子
+		HouseContext houseContext = HouseContext.build();
+		param.setBuildingId(building.getId());
+		List<ProprietorSingleHouseVo> houses = houseContext.getHouseGraphs(param);
+		
+		// 查询楼栋中房产模型数量
+		HouseSpecBo houseSpecBo = MyBeanUtil.createBean(param, HouseSpecBo.class);
+		HouseSpecContext houseSpecContext = HouseSpecContext.build();
+		Long houseSpecCount = houseSpecContext.getHouseSpecCount(houseSpecBo);
+		
+		// 初始化视图模型设值
+		HouseGraphVo houseGraph = new HouseGraphVo();
+		houseGraph.setHouses(houses);
+		houseGraph.setBuildingName(building.getName());
+		houseGraph.setHouseSpecCount(houseSpecCount); 
+		return houseGraph;
+	}
+
+	@Override
+	public HouseGraphVo getHouseGraphCount(HouseBo param) {
+		HouseContext houseContext = HouseContext.build();
+		return houseContext.getHouseGraphsCount(param);
 	}
 }

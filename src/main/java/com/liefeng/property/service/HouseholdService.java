@@ -915,6 +915,4 @@ public class HouseholdService implements IHouseholdService {
 		ResidentHouseContext residentHouseContext = ResidentHouseContext.build();
 		return residentHouseContext.getResidentHouse(residentId, houseId);
 	}
-
-
 }

@@ -1,5 +1,7 @@
 package com.liefeng.property.service;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.liefeng.Application;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.intf.property.IProjectService;
+import com.liefeng.property.bo.project.HouseBo;
+import com.liefeng.property.vo.household.HouseGraphVo;
 
 /**
  * 
@@ -26,11 +31,22 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 public class ProjectServiceTest {
 
 	@Autowired
-	private ProjectService projectService;
+	private IProjectService projectService;
 	
 	@Test
 	public void listProjects(){
 		ContextManager.getInstance().setOemCode("liefeng");
 		System.out.println(projectService.listProjects());
+	}
+	
+	@Test
+	public void getHouseGraphs() {
+		HouseBo param = new HouseBo();
+		param.setOemCode("property");
+		param.setProjectId("0000000052a7943f0152a7943fc00000");
+		
+		List<HouseGraphVo> dataList = projectService.getHouseGraphs(param);
+		
+		System.out.println(dataList);
 	}
 }
