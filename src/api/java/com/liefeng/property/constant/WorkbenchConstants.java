@@ -203,6 +203,16 @@ public class WorkbenchConstants {
 		 * 已经签收
 		 */
 		public static final String SIGNFOR_YES = "1";
+		
+		/**
+		 * 退回
+		 */
+		public static final String SIGNFOR_SENDBACK = "2";
+		
+		/**
+		 * 办结
+		 */
+		public static final String SIGNFOR_FINISH = "3";
 
 		/**
 		 * 附件类型 附件
@@ -233,10 +243,7 @@ public class WorkbenchConstants {
 		 * 不 抢单
 		 */
 		public static final String GRAB_NO = "0";
-		
-		
-		
-		
+
 	}
 	
 	/**

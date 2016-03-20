@@ -171,9 +171,14 @@ public class EventReportVo extends BaseValue {
 	private String taskName;
 	
 	/**
-	 * 状态
+	 * 审核状态
 	 */
 	private String auditStatus;
+	
+	/**
+	 * 处理状态 0：未签收；1：已签收 2:退回 3：办结
+	 */
+	private String processStatus;
 	
 	/**
 	 * 是否是上一步骤处理人 0 不是     1 是
@@ -458,6 +463,14 @@ public class EventReportVo extends BaseValue {
 
 	public void setIsBack(String isBack) {
 		this.isBack = isBack;
+	}
+
+	public String getProcessStatus() {
+		return processStatus;
+	}
+
+	public void setProcessStatus(String processStatus) {
+		this.processStatus = processStatus;
 	}
 
 }

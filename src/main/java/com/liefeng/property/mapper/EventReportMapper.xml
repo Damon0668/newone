@@ -61,9 +61,14 @@
 		er.accepter_id as accepterId,
 		er.accept_time as acceptTime,
 		er.create_time as createTime,
-		er.oem_code as oemCode
-		from t_event_report er
+		er.oem_code as oemCode,
+		
+		ho.order_No as orderNo,
+		ho.id as orderId
+		from property.t_event_report er
+		left join service.wf_hist_order ho on er.wf_order_id= ho.id
 		<include refid="Example_Where_Clause" />
+		order by er.report_time desc
 		<if
 			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
 			${pager.mysqlQueryCondition}
@@ -133,6 +138,9 @@
 		er.create_time as createTime,
 		er.oem_code as oemCode,
 		
+		ep.status as processStatus,
+		ep.id as processId,
+		
 		o.process_Id as processId,
 		t.order_Id as orderId,
 		t.id AS taskId,
@@ -148,6 +156,7 @@
 		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
 		<include refid="Waiting_Where_Clause" />
 		AND ep.`status`=1 
+		order by t.create_Time desc
 		<if
 			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
 			${pager.mysqlQueryCondition}
@@ -199,6 +208,9 @@
 		er.create_time as createTime,
 		er.oem_code as oemCode,
 		
+		ep.status as processStatus,
+		ep.id as processId,
+		
 		o.process_Id as processId,
 		t.order_Id as orderId,
 		t.id AS taskId,
@@ -231,6 +243,7 @@
 			#{extra.actor}
 		)
 		)
+		order by wht.create_Time desc
 		<if
 			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
 			${pager.mysqlQueryCondition}
@@ -292,7 +305,10 @@
 		er.accept_time as acceptTime,
 		er.create_time as createTime,
 		er.oem_code as oemCode,
-	
+		
+		ep.status as processStatus,
+		ep.id as processId,
+		
    		o.process_Id as processId,
 		t.order_Id as orderId,
 		t.id AS taskId,
@@ -360,6 +376,9 @@
 		er.create_time as createTime,
 		er.oem_code as oemCode,
 		
+		ep.status as processStatus,
+		ep.id as processId,
+		
 		o.process_Id as processId,
 		t.order_Id as orderId,
 		t.id AS taskId,
@@ -374,8 +393,9 @@
 		LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
 		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
 		<include refid="Waiting_Where_Clause" />
-		AND (ep.`status`=0 or ep.`status` is null)
-		AND (ep.grab != 1 or ep.grab is null)
+		AND (ep.`status`=0 or ep.`status` is null or ep.`status`=2)
+		AND ((ep.grab != 1 AND t.task_Name !='handle') or ep.grab is null)
+		order by t.create_Time desc
 		<if
 			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
 			${pager.mysqlQueryCondition}
@@ -394,7 +414,7 @@
 		LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
 		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
 		<include refid="Waiting_Where_Clause" />
-		AND (ep.`status`=0 or ep.`status` is null)
+		AND (ep.`status`=0 or ep.`status` is null  or ep.`status`=2)
 		AND (ep.grab != 1 or ep.grab is null)
 		) t
 	</select>
@@ -428,6 +448,9 @@
 		er.create_time as createTime,
 		er.oem_code as oemCode,
 		
+		ep.status as processStatus,
+		ep.id as processId,
+		
 		o.process_Id as processId,
 		t.order_Id as orderId,
 		t.id AS taskId,
@@ -442,8 +465,9 @@
 		LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
 		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
 		<include refid="Waiting_Where_Clause" />
-		AND (ep.`status`=0 or ep.`status` is null)
-		AND ep.grab = 1
+		AND (ep.`status`=0 or ep.`status` is null  or ep.`status`=2)
+		AND ep.grab = 1 AND t.task_Name='handle'
+		order by t.create_Time desc
 		<if
 			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
 			${pager.mysqlQueryCondition}
@@ -462,8 +486,8 @@
 		LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
 		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
 		<include refid="Waiting_Where_Clause" />
-		AND (ep.`status`=0 or ep.`status` is null)
-		AND ep.grab = 1
+		AND (ep.`status`=0 or ep.`status` is null  or ep.`status`=2)
+		AND ep.grab = 1 AND t.task_Name='handle'
 		) t
 	</select>
 	

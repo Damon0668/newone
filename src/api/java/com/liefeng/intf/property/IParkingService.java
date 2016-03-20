@@ -49,7 +49,7 @@ public interface IParkingService {
 	 * @param startNum
 	 * @param endNum
 	 */
-	public void createManyParking(ParkingVo parkingVo, Integer startNum, Integer endNum);
+	public void createManyParking(ParkingVo parkingVo, String startNum, String endNum);
 
 	/**
 	 * 创建附件

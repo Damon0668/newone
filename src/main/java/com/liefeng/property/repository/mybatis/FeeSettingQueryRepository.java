@@ -2,6 +2,8 @@ package com.liefeng.property.repository.mybatis;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
+
 import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.property.vo.fee.FeeSettingVo;
 
@@ -13,4 +15,5 @@ import com.liefeng.property.vo.fee.FeeSettingVo;
 public interface FeeSettingQueryRepository extends BaseRepository<FeeSettingVo>{
 
 	public List<FeeSettingVo> findByProjectIdAndChargeable(String projectId);
+	
 }

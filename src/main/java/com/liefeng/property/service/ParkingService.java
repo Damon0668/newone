@@ -48,7 +48,7 @@ public class ParkingService implements IParkingService {
 	}
 	
 	@Override
-	public void createManyParking(ParkingVo parkingVo,Integer startNum,Integer endNum) {
+	public void createManyParking(ParkingVo parkingVo,String startNum,String endNum) {
 		
 		ProjectContext projectContext =ProjectContext.loadById(parkingVo.getProjectId());
 		ProjectVo projectVo = projectContext.getProject();
