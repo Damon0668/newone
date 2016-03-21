@@ -85,26 +85,6 @@ public class StaffArchiveVo extends BaseValue {
 	private String emergencyPhone;
 	
 	/**
-	 * 身份证扫描件
-	 */
-	private String idPic;
-	
-	/**
-	 * 毕业证扫描件
-	 */
-	private String diplomaPic;
-	
-	/**
-	 * 学位证扫描件
-	 */
-	private String degreePic;
-	
-	/**
-	 * 其他证件扫描件
-	 */
-	private String otherPic;
-	
-	/**
 	 * OEM编码
 	 */
 	private String oemCode;
@@ -221,38 +201,6 @@ public class StaffArchiveVo extends BaseValue {
 		this.emergencyPhone = emergencyPhone;
 	}
 
-	public String getIdPic() {
-		return idPic;
-	}
-
-	public void setIdPic(String idPic) {
-		this.idPic = idPic;
-	}
-
-	public String getDiplomaPic() {
-		return diplomaPic;
-	}
-
-	public void setDiplomaPic(String diplomaPic) {
-		this.diplomaPic = diplomaPic;
-	}
-
-	public String getDegreePic() {
-		return degreePic;
-	}
-
-	public void setDegreePic(String degreePic) {
-		this.degreePic = degreePic;
-	}
-
-	public String getOtherPic() {
-		return otherPic;
-	}
-
-	public void setOtherPic(String otherPic) {
-		this.otherPic = otherPic;
-	}
-
 	public String getOemCode() {
 		return oemCode;
 	}
@@ -261,5 +209,4 @@ public class StaffArchiveVo extends BaseValue {
 		this.oemCode = oemCode;
 	}
 	
-
 }

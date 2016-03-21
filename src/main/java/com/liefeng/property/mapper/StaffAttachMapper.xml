@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.StaffAttachQueryRepository" > 
+    
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.staff.StaffAttachVo" >
+    <result column="staff_id" property="staffId"/>
+    <result column="creator_id" property="creatorId"/>
+    <result column="create_time" property="createTime"/>
+</resultMap>
+    
+<select id="findByStaffId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT
+	    ps. NAME creatorName,
+	    sa.*
+    FROM
+        t_staff_attach sa
+    LEFT JOIN t_property_staff ps ON sa.creator_id = ps.id
+    where 1=1
+    AND sa.staff_id = #{staffId}
+</select>
+
+</mapper>

@@ -1,5 +1,7 @@
 package com.liefeng.property.vo.staff;
 
+import java.util.List;
+
 import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.core.entity.BaseValue;
 
@@ -9,42 +11,47 @@ import com.liefeng.core.entity.BaseValue;
  * @date 2016年2月22日
  */
 public class PropertyStaffDetailInfoVo extends BaseValue{
-	
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7345349887080603663L;
+	private static final long serialVersionUID = 6339014585411695312L;
 
 	/**
 	 * 员工信息
 	 */
-	public PropertyStaffVo propertyStaffVo;
+	private PropertyStaffVo propertyStaffVo;
 	
 	/**
 	 * 员工档案
 	 */
-	public StaffArchiveVo staffArchiveVo;
+	private StaffArchiveVo staffArchiveVo;
 	
 	/**
 	 * 用户信息
 	 */
-	public CustomerVo customerVo;
+	private CustomerVo customerVo;
 	
 	/**
 	 * 角色ID数组
 	 */
-	public Long[] roleIds;
+	private Long[] roleIds;
 	
 	/**
 	 * 员工管理相关项目ID
 	 */
-	public String[] manageProjects;
+	private String[] manageProjects;
 	
 	/**
 	 * 员工通讯录中部门ID
 	 */
-	public String[] contactProjects;
-
+	private String[] contactProjects;
+	
+	/**
+	 * 员工附件
+	 */
+	private List<StaffAttachVo> staffAttachs;
+	
 	public PropertyStaffVo getPropertyStaffVo() {
 		return propertyStaffVo;
 	}
@@ -91,6 +98,14 @@ public class PropertyStaffDetailInfoVo extends BaseValue{
 
 	public void setContactProjects(String[] contactProjects) {
 		this.contactProjects = contactProjects;
+	}
+
+	public List<StaffAttachVo> getStaffAttachs() {
+		return staffAttachs;
+	}
+
+	public void setStaffAttachs(List<StaffAttachVo> staffAttachs) {
+		this.staffAttachs = staffAttachs;
 	}
 
 }
