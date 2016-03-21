@@ -39,6 +39,7 @@ import com.liefeng.property.domain.household.CheckinQueueContext;
 import com.liefeng.property.domain.household.CheckinScheduleContext;
 import com.liefeng.property.domain.household.ProprietorContext;
 import com.liefeng.property.domain.household.ProprietorHouseContext;
+import com.liefeng.property.domain.household.ResidentCarContext;
 import com.liefeng.property.domain.household.ResidentContext;
 import com.liefeng.property.domain.household.ResidentFeedbackContext;
 import com.liefeng.property.domain.household.ResidentHouseContext;
@@ -53,6 +54,7 @@ import com.liefeng.property.vo.household.CheckinScheduleVo;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
+import com.liefeng.property.vo.household.ResidentCarVo;
 import com.liefeng.property.vo.household.ResidentFeedbackVo;
 import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
@@ -915,4 +917,22 @@ public class HouseholdService implements IHouseholdService {
 		ResidentHouseContext residentHouseContext = ResidentHouseContext.build();
 		return residentHouseContext.getResidentHouse(residentId, houseId);
 	}
+	
+	@Override
+	public ProprietorVo findProprietor(String projectId,String proprietorName){
+		return ProprietorContext.build().findByProjectIdAndName(projectId,proprietorName);
+	}
+	
+	@Override
+	public void createResidentCar(ResidentCarVo residentCarVo){
+		ResidentCarVo carVo = ResidentCarContext.build().findByPlateNum(residentCarVo.getPlateNum());
+		if(carVo == null)
+		ResidentCarContext.build(residentCarVo).create();
+	}
+	
+	@Override
+	public void updateResidentCar(ResidentCarVo residentCarVo){
+		ResidentCarContext.build(residentCarVo).update();
+	}
+	
 }

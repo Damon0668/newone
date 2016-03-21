@@ -4,21 +4,30 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.intf.property.IParkingService;
+import com.liefeng.intf.property.IProjectService;
 import com.liefeng.property.bo.parking.ParkingBo;
+import com.liefeng.property.domain.household.ResidentCarContext;
 import com.liefeng.property.domain.parking.ParkingAttachmentContext;
 import com.liefeng.property.domain.parking.ParkingContext;
 import com.liefeng.property.domain.parking.ParkingRentalContext;
 import com.liefeng.property.domain.project.ProjectContext;
+import com.liefeng.property.error.ParkingErrorCode;
+import com.liefeng.property.exception.ParkingException;
+import com.liefeng.property.vo.household.ProprietorHouseVo;
+import com.liefeng.property.vo.household.ResidentCarVo;
 import com.liefeng.property.vo.parking.ParkingAttachmentVo;
 import com.liefeng.property.vo.parking.ParkingRentalVo;
 import com.liefeng.property.vo.parking.ParkingSingleRentalVo;
 import com.liefeng.property.vo.parking.ParkingVo;
+import com.liefeng.property.vo.project.HouseVo;
 import com.liefeng.property.vo.project.ProjectVo;
 
 /**
@@ -35,7 +44,13 @@ import com.liefeng.property.vo.project.ProjectVo;
 public class ParkingService implements IParkingService {
 
 	private static Logger logger = LoggerFactory.getLogger(ParkingService.class);
-
+	
+	@Autowired
+	private IHouseholdService householdService;
+	
+	@Autowired
+	private IProjectService projectService;
+	
 	@Override
 	public void createParking(ParkingVo parkingVo) {
 
@@ -71,14 +86,40 @@ public class ParkingService implements IParkingService {
 		parkingRentalVo.setParkingId(parkingVo.getId());
 		ParkingRentalContext parkingRentalContext = ParkingRentalContext.build(parkingRentalVo);
 		
+		
+		HouseVo houseVo = projectService.findHouse(parkingSingleRentalVo.getProjectId(),parkingSingleRentalVo.getHouseNum());
+
+		//保存租售信息
 		if(ValidateHelper.isNotEmptyString(parkingRentalVo.getId())){
 			parkingRentalContext.update();
+			//保存车俩信息
+			if(ValidateHelper.isNotEmptyString(parkingSingleRentalVo.getPlateNum())){
+				ResidentCarVo residentCarVo = ResidentCarContext.build().findByPlateNum(parkingSingleRentalVo.getPlateNum());
+				if(residentCarVo == null){
+					createResidentCar(parkingSingleRentalVo,houseVo.getId());
+				}else{
+					if(residentCarVo.getHouseId().equals(houseVo.getId())){
+						residentCarVo.setPlateNum(parkingSingleRentalVo.getPlateNum());
+						ResidentCarContext.build(residentCarVo).update();
+					}
+				}
+			}
 		}else{
 			if(ValidateHelper.isNotEmptyString(parkingRentalVo.getCustomerName()))
 			parkingRentalContext.create();
+			createResidentCar(parkingSingleRentalVo,houseVo.getId());
 		}
 		
-		
+	}
+	
+	private void createResidentCar(ParkingSingleRentalVo parkingSingleRentalVo,String houseId){
+		//保存车俩信息
+		if(ValidateHelper.isNotEmptyString(parkingSingleRentalVo.getPlateNum())){
+			ResidentCarVo residentCarVo = new ResidentCarVo();
+			residentCarVo.setPlateNum(parkingSingleRentalVo.getPlateNum());
+			residentCarVo.setHouseId(houseId);
+			householdService.createResidentCar(residentCarVo);
+		}
 	}
 	
 	@Override
@@ -89,6 +130,12 @@ public class ParkingService implements IParkingService {
 
 	@Override
 	public void deleteParking(String parkingId) {
+		List<ParkingRentalVo> es = ParkingRentalContext.build().list(parkingId);
+		
+		if(es != null && es.size() > 0){
+			throw new ParkingException(ParkingErrorCode.CANNOT_DELETE);
+		}
+		
 		ParkingContext parkingContext = ParkingContext.loadById(parkingId);
 		parkingContext.delete();
 	}

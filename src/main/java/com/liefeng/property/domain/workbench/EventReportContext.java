@@ -106,8 +106,9 @@ public class EventReportContext {
 	}
 	
 	public DataPageValue<EventReportVo> list(EventReportBo eventReportBo,Integer currentPage,Integer pageSize) {
+		eventReportBo.setOemCode(ContextManager.getInstance().getOemCode());
 		Map<String, String> extra = MyBeanUtil.bean2Map(eventReportBo);
-
+		
 		PagingParamVo param = new PagingParamVo();
 		param.setExtra(extra);
 		param.setPage(currentPage);
@@ -133,6 +134,7 @@ public class EventReportContext {
 	 * @return
 	 */
 	public DataPageValue<EventReportVo> getWaitingForList(EventReportBo eventReportBo,Integer currentPage,Integer pageSize){
+		eventReportBo.setOemCode(ContextManager.getInstance().getOemCode());
 		Map<String, String> extra = MyBeanUtil.bean2Map(eventReportBo);
 
 		PagingParamVo param = new PagingParamVo();
@@ -161,6 +163,7 @@ public class EventReportContext {
 	 */
 	public DataPageValue<EventReportVo> getSignForList(
 			EventReportBo eventReportBo, Integer page, Integer size) {
+		eventReportBo.setOemCode(ContextManager.getInstance().getOemCode());
 		Map<String, String> extra = MyBeanUtil.bean2Map(eventReportBo);
 
 		PagingParamVo param = new PagingParamVo();
@@ -190,6 +193,7 @@ public class EventReportContext {
 	 */
 	public DataPageValue<EventReportVo> getGrabList(
 			EventReportBo eventReportBo, Integer page, Integer size) {
+		eventReportBo.setOemCode(ContextManager.getInstance().getOemCode());
 		Map<String, String> extra = MyBeanUtil.bean2Map(eventReportBo);
 
 		PagingParamVo param = new PagingParamVo();
@@ -218,6 +222,7 @@ public class EventReportContext {
 	 */
 	public DataPageValue<EventReportVo> getFlowingList(
 			EventReportBo eventReportBo, Integer page, Integer size) {
+		eventReportBo.setOemCode(ContextManager.getInstance().getOemCode());
 		Map<String, String> extra = MyBeanUtil.bean2Map(eventReportBo);
 
 		PagingParamVo param = new PagingParamVo();
@@ -243,6 +248,7 @@ public class EventReportContext {
 	 * @return
 	 */
 	public Map<String, Long> noRead(EventReportBo eventReportBo) {
+		eventReportBo.setOemCode(ContextManager.getInstance().getOemCode());
 		Map<String, String> extra = MyBeanUtil.bean2Map(eventReportBo);
 		PagingParamVo param = new PagingParamVo();
 		param.setExtra(extra);
@@ -265,6 +271,7 @@ public class EventReportContext {
 	 */
 	public DataPageValue<EventReportVo> getCompleteList(
 			EventReportBo eventReportBo, Integer page, Integer size) {
+		eventReportBo.setOemCode(ContextManager.getInstance().getOemCode());
 		Map<String, String> extra = MyBeanUtil.bean2Map(eventReportBo);
 
 		PagingParamVo param = new PagingParamVo();

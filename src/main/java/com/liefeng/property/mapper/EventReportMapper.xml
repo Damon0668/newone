@@ -31,7 +31,9 @@
 			<if test="extra.location != null and extra.location != ''">
 				AND er.location  like CONCAT('%', #{extra.location},'%')
 			</if>
-			
+			<if test="extra.oemCode != null and extra.oemCode != ''">
+				AND er.oem_code  = #{extra.oemCode}
+			</if>
 		</trim>
 	</sql>
 
@@ -106,6 +108,9 @@
 			</if>
 			<if test="extra.location != null and extra.location != ''">
 				AND er.location like CONCAT('%','#{extra.location}','%');
+			</if>
+			<if test="extra.oemCode != null and extra.oemCode != ''">
+				AND er.oem_code  = #{extra.oemCode}
 			</if>
 		</trim>
 	</sql>

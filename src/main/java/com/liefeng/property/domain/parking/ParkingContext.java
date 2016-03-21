@@ -198,11 +198,7 @@ public class ParkingContext {
 	
 	public void delete() {
 		logger.info("delete parking id :{0}",parkingId);
-		/*ParkingPo parkingPoExist = parkingRepository.findByProjectIdAndNum(parking.getProjectId(),parking.getNum());
-		//判断是否存在
-		if(parkingPoExist == null){
-			throw new ParkingException(ParkingErrorCode.PARKING_ALREADY_NOT_EXIST);
-		}*/
+		
 		parkingRepository.delete(parkingId);
 	}
 	

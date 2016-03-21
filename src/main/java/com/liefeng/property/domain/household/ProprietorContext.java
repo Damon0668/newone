@@ -257,6 +257,18 @@ public class ProprietorContext {
 		
 		return userPage;
 	}
+	
+	/**
+	 * 根据项目id和业主项目查询业主信息
+	 * @param projectId 项目id
+	 * @param proprietorName 业主姓名
+	 * @return
+	 */
+	public ProprietorVo findByProjectIdAndName(String projectId,
+			String proprietorName) {
+		ProprietorPo proprietorPo = proprietorRepository.findByProjectIdAndName(projectId,proprietorName);
+		return MyBeanUtil.createBean(proprietorPo, ProprietorVo.class);
+	}
 
 	protected void setProprietorId(String proprietorId) {
 		this.proprietorId = proprietorId;
@@ -265,4 +277,6 @@ public class ProprietorContext {
 	protected void setProprietor(ProprietorVo proprietor) {
 		this.proprietor = proprietor;
 	}
+
+	
 }

@@ -56,7 +56,7 @@ public class ResidentCarContext {
 	 */
 	public static ResidentCarContext build(ResidentCarVo residentCar) {
 		ResidentCarContext residentCarContext = getInstance();
-		residentCarContext.residentCar = residentCar;
+		residentCarContext.setResidentCar(residentCar);
 
 		return residentCarContext;
 	}
@@ -80,7 +80,7 @@ public class ResidentCarContext {
 	 */
 	public static ResidentCarContext loadById(String residentCarId) {
 		ResidentCarContext residentCarContext = getInstance();
-		residentCarContext.residentCarId = residentCarId;
+		residentCarContext.setResidentCarId(residentCarId);
 
 		return residentCarContext;
 	}
@@ -116,5 +116,24 @@ public class ResidentCarContext {
 			residentCarRepository.save(residentCarPo);
 		}
 	}
+	
+	public void update() {
+		residentCarRepository.save(MyBeanUtil.createBean(residentCar, ResidentCarPo.class));
+	}
 
+	public ResidentCarVo findByPlateNum(String plateNum) {
+		logger.info("plateNum is {}",plateNum);
+		ResidentCarPo residentCarPo = residentCarRepository.findByPlateNum(plateNum);
+		return MyBeanUtil.createBean(residentCarPo, ResidentCarVo.class);
+	}
+	
+	protected void setResidentCar(ResidentCarVo residentCar) {
+		this.residentCar = residentCar;
+	}
+	
+	protected void setResidentCarId(String residentCarId) {
+		this.residentCarId = residentCarId;
+	}
+
+	
 }

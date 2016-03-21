@@ -17,6 +17,7 @@ import com.liefeng.property.vo.household.CheckinScheduleVo;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
+import com.liefeng.property.vo.household.ResidentCarVo;
 import com.liefeng.property.vo.household.ResidentFeedbackVo;
 import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
@@ -412,5 +413,25 @@ public interface IHouseholdService {
 	 * @date 2016年3月17日 下午5:34:52
 	 */
 	public ResidentHouseVo getResidentHouse(String residentId, String houseId);
+	
+	/**
+	 * 根据项目id和业主项目查询业主信息
+	 * @param projectId 项目id
+	 * @param proprietorName 业主姓名
+	 * @return 业主信息
+	 */
+	public ProprietorVo findProprietor(String projectId, String proprietorName);
+	
+	/***
+	 * 创建业主车俩
+	 * @param residentCarVo
+	 */
+	public void createResidentCar(ResidentCarVo residentCarVo);
+	
+	/**
+	 * 修改业主车俩
+	 * @param residentCarVo
+	 */
+	public void updateResidentCar(ResidentCarVo residentCarVo);
 	
 }

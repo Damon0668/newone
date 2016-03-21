@@ -98,6 +98,11 @@ public class EventReportBo  extends BaseValue {
 	 */
 	private String proprietorName;
 	
+	/**
+	 * oem
+	 */
+	private String oemCode;
+	
 	public String getProjectId() {
 		return projectId;
 	}
@@ -232,5 +237,13 @@ public class EventReportBo  extends BaseValue {
 
 	public void setProprietorName(String proprietorName) {
 		this.proprietorName = proprietorName;
+	}
+
+	public String getOemCode() {
+		return oemCode;
+	}
+
+	public void setOemCode(String oemCode) {
+		this.oemCode = oemCode;
 	}
 }

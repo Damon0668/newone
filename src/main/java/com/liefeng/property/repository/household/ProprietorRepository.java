@@ -22,4 +22,12 @@ public interface ProprietorRepository extends JpaRepository<ProprietorPo, String
 	 * @return
 	 */
 	public ProprietorPo findByProjectIdAndCustGlobalId(String projectId, String custGlobalId);
+	
+	/**
+	 * 根据项目id和业主项目查询业主信息
+	 * @param projectId 项目id
+	 * @param proprietorName 业主姓名
+	 * @return
+	 */
+	public ProprietorPo findByProjectIdAndName(String projectId, String proprietorName);
 }

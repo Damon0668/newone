@@ -15,4 +15,6 @@ import com.liefeng.property.po.household.ResidentCarPo;
 @Transactional
 public interface ResidentCarRepository extends JpaRepository<ResidentCarPo, String> {
 
+	public ResidentCarPo findByPlateNum(String plateNum);
+
 }

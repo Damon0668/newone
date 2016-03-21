@@ -20,6 +20,11 @@ public enum ParkingErrorCode implements IErrorCode {
 	PARKING_ALREADY_NOT_EXIST("车位不存在"), 
 	
 	/**
+	 * 车位不存在
+	 */
+	CANNOT_DELETE("无法删除,该车位存在租售信息"), 
+	
+	/**
 	 * 参数格式错误
 	 */
 	PARAMETER_FORMAT_ERROR("参数格式错误;如：A001至A010"),
