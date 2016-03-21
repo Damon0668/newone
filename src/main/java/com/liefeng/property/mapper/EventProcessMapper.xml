@@ -10,6 +10,13 @@
 
 	</resultMap>
 	
+	<resultMap id="BaseResultMap2" type="com.liefeng.property.vo.workbench.EventProcessVo" >
+		<result column="next_accepter_id" property="nextAccepterId"/>
+		<result column="result" property="result"/>
+		<result column="pic_urls" property="picUrls"/>
+		<result column="accept_time" property="acceptTime"/>
+	</resultMap>
+
 	<select id="getHisEventProcess" resultMap="BaseResultMap" parameterType="java.lang.String">
 		SELECT
 		ep.id,
@@ -66,4 +73,21 @@
 		Where t.order_id = #{0}
 		And ta.actor_Id = #{1}
 	</select>
+	
+	<select id="findEventProcess" resultMap="BaseResultMap2" >
+		SELECT
+			t.next_accepter_id,
+			t.result,
+			t.pic_urls,
+			t.accept_time
+		FROM
+			property.t_event_process t,
+			service.wf_hist_task s
+		WHERE
+			t.event_id = #{extra.eventId}
+		AND t. STATUS = '1'
+		AND t.wf_task_id = s.id
+		AND s.task_Name = #{extra.taskName}
+	</select>
+	
 </mapper>   

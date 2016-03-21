@@ -686,4 +686,15 @@ public interface IWorkbenchService {
 	 */
 	public void createAppEventReport(EventReportBo bo) throws LiefengException;
 	
+	/**
+	 * 获取历史报事
+	 * @param projectId 项目id
+	 * @param houseNum 房间号
+	 * @param phone 手机号码
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月18日 下午4:40:05
+	 */
+	public List<EventReportVo> getEventReportList(String projectId, String houseNum, String phone);
+	
 }

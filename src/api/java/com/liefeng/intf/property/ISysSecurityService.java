@@ -3,6 +3,7 @@ package com.liefeng.intf.property;
 import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.vo.sys.SysMenuVo;
 import com.liefeng.property.vo.sys.SysRoleVo;
 
@@ -49,14 +50,14 @@ public interface ISysSecurityService {
 	 * @param sysRole
 	 * @return
 	 */
-	public void createRole(SysRoleVo sysRole);
+	public void createRole(SysRoleVo sysRole) throws LiefengException;
 	
 	/**
 	 * 更新系统角色
 	 * @param sysRole
 	 * @return
 	 */
-	public void updateRole(SysRoleVo sysRole);
+	public void updateRole(SysRoleVo sysRole) throws LiefengException;;
 	
 	/**
 	 * 删除系统角色
@@ -64,6 +65,10 @@ public interface ISysSecurityService {
 	 * @return
 	 */
 	public void delRole(Long id);
+	
+	/*
+	 * ****************** 菜单相关 ******************
+	 */
 	
 	/**
 	 * 查询菜单树
@@ -104,6 +109,14 @@ public interface ISysSecurityService {
 	public DataPageValue<SysMenuVo> listMenus(Long parentId, boolean isIgnoreButton, int page, int size);
 	
 	/**
+	 * 查找菜单
+	 * @param userId 用户ID
+	 * @param parentId 父菜单ID
+	 * @return
+	 */
+	public List<SysMenuVo> listMenus(String userId, Long parentId);
+	
+	/**
 	 * 根据用户ID查询此用户拥有按钮的code编码
 	 * @param userId 用户Id
 	 * @return
@@ -111,7 +124,7 @@ public interface ISysSecurityService {
 	public List<String> listButtonsCodeByUserId(String userId);
 	
 	/**
-	 * 根据用户ID查询此用户拥有按钮的code编码
+	 * 根据用户ID查询菜单
 	 * @param userId 用户Id
 	 * @return
 	 */

@@ -120,7 +120,7 @@ public class ParkingServiceTest {
 		parkingVo.setPreSalePrice(231.00);
 		parkingVo.setStatus("0");
 		parkingVo.setSuitableCar("1");
-		parkingService.createManyParking(parkingVo,1,10);
+		parkingService.createManyParking(parkingVo,"A100","A200");
 	}
 
 }

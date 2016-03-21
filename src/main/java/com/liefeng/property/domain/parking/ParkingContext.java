@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
+import com.liefeng.common.util.StringUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
@@ -148,20 +149,44 @@ public class ParkingContext {
 	 * @param startNum
 	 * @param endNum
 	 */
-	public void createMany(Integer startNum, Integer endNum) {
+	public void createMany(String startString, String endString) {
+		String prefix = StringUtil.getSamePrefix(startString, endString);
+		Integer startNum = 0;
+		Integer endNum = 0;
+		
+		try {
+			if (prefix.equals("")) {
+				startNum = Integer.parseInt(startString);
+				endNum = Integer.parseInt(endString);
+			} else {
+				startNum = Integer.parseInt(startString.substring(prefix
+						.length()));
+				endNum = Integer.parseInt(endString.substring(prefix.length()));
+			}
+		} catch (Exception e) {
+			throw new ParkingException(ParkingErrorCode.PARAMETER_FORMAT_ERROR);
+		}
 		String existNum = "";
 		for(int num=startNum; num<=endNum;num++){
-			ParkingPo parkingPoExist = parkingRepository.findByProjectIdAndNum(parking.getProjectId(),String.valueOf(num));
+			String zero="";
+			if(num+"".length() < startString.length() - prefix.length()){
+				for(int i = num+"".length();i< startString.length() - prefix.length();i++){
+					zero+="0";
+				}
+			}
+			String parkNum=prefix+zero+num;
+			ParkingPo parkingPoExist = parkingRepository.findByProjectIdAndNum(parking.getProjectId(),parkNum);
 			//判断是否存在
 			if(parkingPoExist != null){
-				existNum+=num+",";		
+				existNum+=parkNum+",";		
 			}else{
+				logger.info("create parking num is {}", parkNum);
 				ParkingPo parkingPo = MyBeanUtil.createBean(parking,
 						ParkingPo.class);
-				parkingPo.setCode(parkingPo.getCode()+num);
+				parkingPo.setCode(parkingPo.getCode()+parkNum);
 				parkingPo.setId(UUIDGenerator.generate());
 				parkingPo.setOemCode(ContextManager.getInstance().getOemCode());
-				parkingPo.setNum(String.valueOf(num));
+				parkingPo.setNum(parkNum);
 				parkingRepository.save(parkingPo);
 			}
 		}

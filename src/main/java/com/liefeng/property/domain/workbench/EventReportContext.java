@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
@@ -26,6 +27,7 @@ import com.liefeng.property.vo.workbench.EventReportVo;
  * 报事领域模型
  * 
  * @author Huangama
+ * @author xhw
  * @date 2016-3-3
  */
 @Service
@@ -282,7 +284,24 @@ public class EventReportContext {
 		return new DataPageValue<EventReportVo>(eventReportVos, total, page, size);
 
 	}
-	
+	/**
+	 * 获取用户的所有报事
+	 * @param projectId
+	 * @param houseNum
+	 * @param phone
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月18日 下午4:45:52
+	 */
+	public List<EventReportVo> getHistoryEventReport(String projectId, String houseNum, String phone){
+		List<EventReportVo> eventReportVoList = null;
+		if(ValidateHelper.isNotEmptyString(projectId) && ValidateHelper.isNotEmptyString(houseNum) && ValidateHelper.isNotEmptyString(phone)){
+			List<EventReportPo> eventReportPoList = eventReportRepository.findByProjectIdAndHouseNumAndPhone(projectId, houseNum, phone);
+			
+			eventReportVoList = MyBeanUtil.createList(eventReportPoList, EventReportVo.class);
+		}
+		return eventReportVoList;
+	}
 	protected void setId(String id) {
 		this.id = id;
 	}

@@ -17,7 +17,7 @@ public enum StaffErrorCode implements IErrorCode {
 	/**
 	 * 部门已存在
 	 */
-	DEPARTMENT_ALREADY_EXIST("部门'{}'已存在"),
+	DEPARTMENT_ALREADY_EXIST("部门\"{0}\"已存在"),
 	
 	/**
 	 * 部门名字为空

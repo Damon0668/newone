@@ -3,6 +3,7 @@ package com.liefeng.property.repository.mybatis;
 import java.util.List;
 
 import com.liefeng.core.mybatis.repository.BaseRepository;
+import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.vo.sys.SysMenuVo;
 
 
@@ -26,6 +27,13 @@ public interface SysMenuQueryRepository extends BaseRepository<SysMenuVo>{
 	 * @param userId
 	 * @return
 	 */
-	public List<SysMenuVo> queryMenusByUserId(String userId);
+	/**
+	 * 根据用户ID查询此用户拥有的菜单
+	 * 不包含按钮级别
+	 * @param userId 用户ID
+	 * @param parentId 父菜单ID 可以为null
+	 * @return
+	 */
+	public List<SysMenuVo> queryMenus(PagingParamVo param);
 	
 }

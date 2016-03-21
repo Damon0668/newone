@@ -208,13 +208,13 @@ public class PropertyStaffService implements IPropertyStaffService {
 	/*********************** 部门相关接口 **********************/
 	
 	@Override
-	public void createDepartment(PropertyDepartmentVo department) {
+	public void createDepartment(PropertyDepartmentVo department) throws LiefengException{
 		PropertyDepartmentContext departContext = PropertyDepartmentContext.build(department);
 		departContext.create();
 	}
 
 	@Override
-	public void updateDepartment(PropertyDepartmentVo department) {
+	public void updateDepartment(PropertyDepartmentVo department) throws LiefengException{
 		PropertyDepartmentContext departContext = PropertyDepartmentContext.build(department);
 		departContext.update();
 	}

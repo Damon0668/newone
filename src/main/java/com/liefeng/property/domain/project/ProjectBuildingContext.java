@@ -119,7 +119,7 @@ public class ProjectBuildingContext {
 	 * 
 	 * @return 楼栋楼层信息
 	 */
-	public ProjectBuildingVo getProjectBuilding() {
+	public ProjectBuildingVo get() {
 		if (projectBuilding == null) {
 			ProjectBuildingPo projectBuildingPo = null;
 			if (ValidateHelper.isNotEmptyString(projectBuildingId)) {

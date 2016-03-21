@@ -154,4 +154,69 @@ FROM
 	     h.id = #{id}
 </select>
 
+<sql id="base_view">
+	(SELECT
+		p.id AS projectId,
+		p.full_name AS projectName,
+		pb.id AS buildingId,
+		pb.name AS buildingName,
+		pf.id AS floorId,
+		pf.name AS floorName,
+		CONCAT(pb.code, pf.code, hs.num) AS houseNum,
+		h.id AS houseId,
+		sd.name AS houseType,
+		pro.name AS name,
+		p.oem_code AS oemCode
+	FROM
+		property.t_project p
+	LEFT JOIN property.t_project_building pb ON pb.project_id = p.id
+	LEFT JOIN property.t_project_building pf ON pf.parent_id = pb.id
+	LEFT JOIN property.t_house_spec hs ON hs.building_id = pb.id
+	LEFT JOIN property.t_house h ON h.house_num = CONCAT(pb.code,pf.code,hs.num) AND h.project_id = p.id
+	LEFT JOIN property.t_proprietor_house phs ON phs.house_num = h.house_num AND phs.project_id = h.project_id
+	LEFT JOIN property.t_proprietor pro ON pro.id = phs.proprietor_id
+	LEFT JOIN property.t_sys_dict sd ON sd.group_code = 'HOUSE_TYPE' AND sd.value = hs.house_type
+	WHERE
+		CONCAT(pb.code,pf.code,hs.num) IS NOT NULL
+	ORDER BY
+		p.id)
+</sql>
+
+<sql id="base_view_clause">
+	WHERE 1=1 
+	<trim  suffixOverrides="," >
+		<if test="extra.oemCode != null and extra.oemCode != ''" >
+		    AND v.oemCode = #{extra.oemCode}
+		</if>
+		
+		<if test="extra.projectId != null and extra.projectId != ''" >
+		    AND v.projectId =  #{extra.projectId}
+		</if>
+		
+		<if test="extra.buildingId != null and extra.buildingId != ''" >
+		    AND v.buildingId = #{extra.buildingId}
+		</if>
+	</trim>
+</sql>
+
+<!-- 查询图形界面数据 -->
+<select id="queryGraphData" resultMap="BaseResultMap">
+	SELECT 
+		v.* 
+	FROM 
+		<include refid="base_view"/> AS v 
+	<include refid="base_view_clause"/>
+	ORDER BY
+		v.houseNum
+</select>
+
+<!-- 查询图形界面合计数据 -->
+<select id="queryGraphCount" resultType="java.util.Map">
+	SELECT 
+		SUM(IF(v.houseId IS NOT NULL, 1, 0)) AS initializedCount, SUM(IF(v.houseId IS NULL, 1, 0)) AS noInitializeCount
+	FROM 
+		<include refid="base_view"/> AS v 
+	<include refid="base_view_clause"/>
+</select>
+
 </mapper>   

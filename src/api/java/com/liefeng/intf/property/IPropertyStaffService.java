@@ -126,13 +126,13 @@ public interface IPropertyStaffService {
 	 * 创建部门
 	 * @param department 部门VO
 	 */
-	public void createDepartment(PropertyDepartmentVo department);
+	public void createDepartment(PropertyDepartmentVo department) throws LiefengException;
 	
 	/**
 	 * 更新部门
 	 * @param department 部门VO
 	 */
-	public void updateDepartment(PropertyDepartmentVo department);
+	public void updateDepartment(PropertyDepartmentVo department) throws LiefengException;
 	
 	/**
 	 * 删除部门

@@ -17,7 +17,12 @@ public enum ParkingErrorCode implements IErrorCode {
 	/**
 	 * 车位不存在
 	 */
-	PARKING_ALREADY_NOT_EXIST("车位不存在"),
+	PARKING_ALREADY_NOT_EXIST("车位不存在"), 
+	
+	/**
+	 * 参数格式错误
+	 */
+	PARAMETER_FORMAT_ERROR("参数格式错误;如：A001至A010"),
 	;
 	private String desc;
 	

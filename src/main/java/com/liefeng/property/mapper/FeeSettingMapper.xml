@@ -44,7 +44,7 @@
 		fs.oem_code
 	 from t_fee_setting fs 
 	left join  t_sys_dict sd on sd.group_code ='FEE_TYPE' and fs.fee_type = sd.value
-	where fs.project_id=#{projectId} AND chargeable=1
+	where fs.project_id=#{projectId} AND chargeable=1 group by fs.fee_type
 	</select>
 	
 	
