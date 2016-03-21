@@ -1,5 +1,8 @@
 package com.liefeng.property.vo.household;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,6 +15,7 @@ import com.liefeng.core.entity.BaseValue;
  * @author ZhenTingJun
  * @date 2016年3月6日
  */
+@ApiModel(value="入住办理排队信息")
 @JsonInclude(Include.NON_NULL)
 public class CheckinQueueVo extends BaseValue {
 
@@ -20,46 +24,55 @@ public class CheckinQueueVo extends BaseValue {
 	/**
 	 * 主键
 	 */
+	@ApiModelProperty(value="主键")
 	private String id;
 
 	/**
 	 * 业主手机端用户ID
 	 */
+	@ApiModelProperty(value="业主手机端用户ID")
 	private String userId;
 
 	/**
 	 * 项目ID
 	 */
+	@ApiModelProperty(value="项目ID")
 	private String projectId;
 
 	/**
 	 * 房子ID
 	 */
+	@ApiModelProperty(value="房子ID")
 	private String houseId;
 
 	/**
 	 * 排队序号
 	 */
+	@ApiModelProperty(value="排队序号")
 	private Integer seq;
 
 	/**
 	 * 办理状态。0：未办理；1：办理中；2：办理完成
 	 */
+	@ApiModelProperty(value="办理状态【0：未办理；1：办理中；2：办理完成】")
 	private String status;
 
 	/**
 	 * 创建时间
 	 */
+	@ApiModelProperty(value="创建时间")
 	private Date createTime;
 
 	/**
 	 * 办理时间
 	 */
+	@ApiModelProperty(value="办理时间")
 	private Date tranTime;
 
 	/**
 	 * OEM编码
 	 */
+	@ApiModelProperty(value="OEM编码")
 	private String oemCode;
 	
 	/*============== 附加字段 ==================*/
@@ -67,41 +80,49 @@ public class CheckinQueueVo extends BaseValue {
 	/**
 	 * 业主ID
 	 */
+	@ApiModelProperty(value="业主ID")
 	private String proprietorId;
 	
 	/**
 	 * 业主房产ID
 	 */
+	@ApiModelProperty(value="业主房产ID")
 	private String proprietorHouseId;
 	
 	/**
 	 * 业主名称
 	 */
+	@ApiModelProperty(value="业主名称")
 	private String proprietorName;
 	
 	/**
 	 * 房号
 	 */
+	@ApiModelProperty(value="房号")
 	private String houseNum;
 	
 	/**
 	 * 手机号
 	 */
+	@ApiModelProperty(value="手机号")
 	private String mobile;
 	
 	/**
 	 * 当前办理排号
 	 */
+	@ApiModelProperty(value="当前办理排号")
 	private Integer nowSeq;
 	
 	/**
 	 * 还差多人号
 	 */
+	@ApiModelProperty(value="还差多人号")
 	private Integer number;
 	
 	/**
 	 * 页面状态（1：没有排号； 2：有排号  3：已经办理）
 	 */
+	@ApiModelProperty(value="页面状态【1：没有排号； 2：有排号；  3：已经办理】")
 	private String pageStatus;
 	
 	public String getId() {

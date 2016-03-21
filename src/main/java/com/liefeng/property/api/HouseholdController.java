@@ -1,10 +1,17 @@
 package com.liefeng.property.api;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +29,20 @@ import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
+import com.liefeng.property.api.ro.AppMsgSettingRo;
+import com.liefeng.property.api.ro.CheckinQueueListRo;
+import com.liefeng.property.api.ro.CheckinQueueRo;
+import com.liefeng.property.api.ro.CustGlobalIdRo;
+import com.liefeng.property.api.ro.HouseIdRo;
+import com.liefeng.property.api.ro.ProprietorIdRo;
+import com.liefeng.property.api.ro.ProprietorRo;
+import com.liefeng.property.api.ro.ProprietorStatusRo;
+import com.liefeng.property.api.ro.ResidentFeedbackRo;
+import com.liefeng.property.api.ro.ResidentIdHouseIdRo;
+import com.liefeng.property.api.ro.ResidentRo;
+import com.liefeng.property.api.ro.ResidentUpdateRo;
+import com.liefeng.property.api.ro.UserIdRo;
+import com.liefeng.property.api.ro.UserRo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
@@ -32,10 +53,11 @@ import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
 
 /**
- * 入住办理公共服务类（app） 
+ * 业主、住户公共服务类（app） 
  * @author xhw
  * @date 2016年3月8日 下午1:45:25
  */
+@Api(value="业主、住户相关接口")
 @RestController
 @RequestMapping(value = "/api/household")
 public class HouseholdController {
@@ -62,12 +84,13 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月8日 下午5:12:08
 	 */
-	@RequestMapping("createCheckinQueue")
+	@ApiOperation(value="扫二维码，获取排队号")
+	@RequestMapping(value="/createCheckinQueue", method=RequestMethod.POST)
 	@ResponseBody
-	public DataValue<CheckinQueueVo> createCheckinQueue(String projectId, String houseId, String userId) {
+	public DataValue<CheckinQueueVo> createCheckinQueue(@Valid @ModelAttribute CheckinQueueRo checkinQueueRo) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
 		
-		CheckinQueueVo queueVo = householdService.createCheckinQueue(projectId, houseId, userId);
+		CheckinQueueVo queueVo = householdService.createCheckinQueue(checkinQueueRo.getProjectId(), checkinQueueRo.getHouseId(), checkinQueueRo.getUserId());
 		
 		return DataValue.success(queueVo);
 	}
@@ -81,12 +104,13 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月9日 上午11:00:23
 	 */
-	@RequestMapping("getCheckinQueue")
+	@ApiOperation(value="获取排队详情页面的头部信息")
+	@RequestMapping(value="/getCheckinQueue", method=RequestMethod.POST)
 	@ResponseBody
-	public DataValue<CheckinQueueVo> getCheckinQueue(String projectId, String houseId, String userId) {
+	public DataValue<CheckinQueueVo> getCheckinQueue(@Valid @ModelAttribute CheckinQueueRo checkinQueueRo) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
 		
-		CheckinQueueVo queueVo = householdService.getCheckinQueue(projectId, houseId, userId);
+		CheckinQueueVo queueVo = householdService.getCheckinQueue(checkinQueueRo.getProjectId(), checkinQueueRo.getHouseId(), checkinQueueRo.getUserId());
 		
 		return DataValue.success(queueVo);
 	}
@@ -100,12 +124,13 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月9日 上午11:19:50
 	 */
-	@RequestMapping("getCheckinQueueList")
+	@ApiOperation(value="获取排队页面的列表详情")
+	@RequestMapping(value="/getCheckinQueueList", method=RequestMethod.POST)
 	@ResponseBody
-	public DataPageValue<CheckinQueueVo> getCheckinQueueList(String projectId, Integer page, Integer size) {
+	public DataPageValue<CheckinQueueVo> getCheckinQueueList(@Valid @ModelAttribute CheckinQueueListRo checkinQueueListRo) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
 		
-		DataPageValue<CheckinQueueVo> queDataPageValue = householdService.getCheckinQueueOfNotStatus(projectId, HouseholdConstants.CheckinQueueStatus.UNTREATED, TimeUtil.format(new Date(), "yyyy-MM-dd"), page, size);
+		DataPageValue<CheckinQueueVo> queDataPageValue = householdService.getCheckinQueueOfNotStatus(checkinQueueListRo.getProjectId(), HouseholdConstants.CheckinQueueStatus.UNTREATED, TimeUtil.format(new Date(), "yyyy-MM-dd"), checkinQueueListRo.getPage(), checkinQueueListRo.getSize());
 		
 		return queDataPageValue;
 	}
@@ -120,12 +145,13 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月9日 下午4:53:34
 	 */
-	@RequestMapping("checkProrietorStatus")
+	@ApiOperation(value="检测业主登记的状态")
+	@RequestMapping(value="/checkProrietorStatus", method=RequestMethod.POST)
 	@ResponseBody
-	public ReturnValue checkProrietorStatus(String proprietorId, String userId, String projectId, String houseId) {
+	public ReturnValue checkProrietorStatus(@Valid @ModelAttribute ProprietorStatusRo proprietorStatusRo) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
 		
-		householdService.checkProrietorStatus(proprietorId, userId, projectId, houseId);
+		householdService.checkProrietorStatus(proprietorStatusRo.getProprietorId(), proprietorStatusRo.getUserId(), proprietorStatusRo.getProjectId(), proprietorStatusRo.getHouseId());
 		
 		return ReturnValue.success();
 	}
@@ -142,17 +168,18 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月9日 下午7:02:26
 	 */
-	@RequestMapping("registerProprietor")
+	@ApiOperation(value="登记业主资料")
+	@RequestMapping(value="/registerProprietor", method=RequestMethod.POST)
 	@ResponseBody
-	public ReturnValue registerProprietor(String proprietorId, String picUrl, String sex, String workUnit, String emergencyContact, String emergencyPhone) {
+	public ReturnValue registerProprietor(@Valid @ModelAttribute ProprietorRo proprietorRo) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
 		ProprietorSingleHouseVo singleHouse = new ProprietorSingleHouseVo();
-		singleHouse.setProprietorId(proprietorId);
-		singleHouse.setPicUrl(picUrl);
-		singleHouse.setWorkUnit(workUnit);
-		singleHouse.setEmergencyContact(emergencyContact);
-		singleHouse.setEmergencyPhone(emergencyPhone);
-		singleHouse.setSex(sex);
+		singleHouse.setProprietorId(proprietorRo.getProprietorId());
+		singleHouse.setPicUrl(proprietorRo.getPicUrl());
+		singleHouse.setWorkUnit(proprietorRo.getWorkUnit());
+		singleHouse.setEmergencyContact(proprietorRo.getEmergencyContact());
+		singleHouse.setEmergencyPhone(proprietorRo.getEmergencyPhone());
+		singleHouse.setSex(proprietorRo.getSex());
 		
 		householdService.registerProprietor(singleHouse);
 		
@@ -161,17 +188,18 @@ public class HouseholdController {
 	
 	/**
 	 * 获取业主的登记情况
-	 * @param proprietorId
+	 * @param id 业主id
 	 * @return 
 	 * @author xhw
 	 * @date 2016年3月9日 下午7:58:34
 	 */
-	@RequestMapping("getProprietorOfRegister")
+	@ApiOperation(value="获取业主登记资料")
+	@RequestMapping(value="/getProprietorOfRegister", method=RequestMethod.POST)
 	@ResponseBody
-	public DataValue<ProprietorSingleHouseVo> getProprietorOfRegister(String proprietorId) {
+	public DataValue<ProprietorSingleHouseVo> getProprietorOfRegister(@Valid @ModelAttribute ProprietorIdRo proprietorIdRo) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
 		
-		ProprietorSingleHouseVo singleHouseVo =  householdService.getProprietorOfRegister(proprietorId);
+		ProprietorSingleHouseVo singleHouseVo =  householdService.getProprietorOfRegister(proprietorIdRo.getId());
 		
 		return DataValue.success(singleHouseVo);
 	}
@@ -183,13 +211,14 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月9日 下午9:13:46
 	 */
-	@RequestMapping("getResidentList")
+	@ApiOperation(value="获取住户列表")
+	@RequestMapping(value="/getResidentList", method=RequestMethod.POST)
 	@ResponseBody
-	public DataListValue<ResidentVo> getResidentList(String houseId) {
+	public DataListValue<ResidentVo> getResidentList(@Valid @ModelAttribute HouseIdRo houseIdRo) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		ResidentBo params = new ResidentBo();
-		params.setHouseId(houseId);
+		params.setHouseId(houseIdRo.getHouseId());
 		DataPageValue<ResidentVo> dataPage = householdService.listResident4Page(params, 1000, 1);
 		List<ResidentVo> residentVoList= dataPage.getDataList();
 		return DataListValue.success(residentVoList);
@@ -209,10 +238,13 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月10日 下午1:59:08
 	 */
-	@RequestMapping("registerResident")
+	@ApiOperation(value="登记住户资料")
+	@RequestMapping(value="/registerResident", method=RequestMethod.POST)
 	@ResponseBody
-	public ReturnValue registerResident(ResidentBo residentBo) {
+	public ReturnValue registerResident(@Valid @ModelAttribute ResidentRo residentRo) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
+		
+		ResidentBo residentBo = MyBeanUtil.createBean(residentRo, ResidentBo.class);
 		// 住户信息
 		ResidentVo residentVo = new ResidentVo();
 		// 住户房屋信息
@@ -244,19 +276,20 @@ public class HouseholdController {
 	}
 	
 	/**
-	 * 获取房子的详情
+	 * 获取住户的详情
 	 * @param residentId
 	 * @param houseId
 	 * @return 
 	 * @author xhw
 	 * @date 2016年3月10日 下午4:17:19
 	 */
-	@RequestMapping("getResident")
+	@ApiOperation(value="获取住户资料")
+	@RequestMapping(value="/getResident", method=RequestMethod.POST)
 	@ResponseBody
-	public DataValue<ResidentVo> getResident(String residentId, String houseId) {
+	public DataValue<ResidentVo> getResident(@Valid @ModelAttribute ResidentIdHouseIdRo residentIdHouseIdRo) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
 		
-		ResidentVo residentVo = householdService.getResident(residentId, houseId);
+		ResidentVo residentVo = householdService.getResident(residentIdHouseIdRo.getResidentId(), residentIdHouseIdRo.getHouseId());
 		//用户信息
 		CustomerVo customer = userService.getCustomerByGlobalId(residentVo.getCustGlobalId());
 		
@@ -272,11 +305,13 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月10日 下午4:36:32
 	 */
-	@RequestMapping("updateResident")
+	@ApiOperation(value="修改住户资料")
+	@RequestMapping(value="/updateResident", method=RequestMethod.POST)
 	@ResponseBody
-	public ReturnValue updateResident(ResidentBo residentBo) {
+	public ReturnValue updateResident(@Valid @ModelAttribute ResidentUpdateRo residentUpdateRo) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
 		
+		ResidentBo residentBo = MyBeanUtil.createBean(residentUpdateRo, ResidentBo.class);
 		ResidentVo residentVo = new ResidentVo();
 		CustomerVo customer = new CustomerVo();
 		ResidentHouseVo residentHouseVo = new ResidentHouseVo();
@@ -313,12 +348,13 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月11日 下午2:16:48
 	 */
-	@RequestMapping("getUser")
+	@ApiOperation(value="获取用户信息")
+	@RequestMapping(value="/getUser", method=RequestMethod.POST)
 	@ResponseBody
-	public DataValue<UserVo> getUser(String custGlobalId) {
+	public DataValue<UserVo> getUser(@Valid @ModelAttribute CustGlobalIdRo custGlobalIdRo) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
 		
-		UserVo user = userService.getUserByCustGlobalId(custGlobalId);
+		UserVo user = userService.getUserByCustGlobalId(custGlobalIdRo.getCustGlobalId());
 		return DataValue.success(user);
 	}
 	
@@ -329,13 +365,27 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月11日 下午2:01:53
 	 */
-	@RequestMapping("updateUser")
+	@ApiOperation(value="修改用户信息")
+	@RequestMapping(value="/updateUser", method=RequestMethod.POST)
 	@ResponseBody
-	public ReturnValue updateUser(UserVo userVo) {
+	public ReturnValue updateUser(@Valid @ModelAttribute UserRo userRo) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
 		
-		UserVo user = userService.getUserByCustGlobalId(userVo.getCustGlobalId());
-		MyBeanUtil.copyBeanNotNull2Bean(userVo, user);
+		UserVo user = userService.getUserByCustGlobalId(userRo.getCustGlobalId());
+		CustomerVo customerVo = user.getCustomer();
+		
+		user.setNickName(userRo.getNickName());
+		user.setAvatarUrl(userRo.getAvatarUrl());
+		user.setEmail(userRo.getEmail());
+		
+		customerVo.setSex(userRo.getSex());
+		customerVo.setMaritalStatus(userRo.getMaritalStatus());
+		customerVo.setHeight(userRo.getHeight());
+		customerVo.setStep(userRo.getStep());
+		customerVo.setWeight(userRo.getWeight());
+		customerVo.setBirthday(userRo.getBirthday());
+		
+		user.setCustomer(customerVo);
 		// 校验用户信息
 		user = checkService.updateUserCheck(user);
 		// 发送TCC消息，更新用户信息
@@ -354,16 +404,17 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月14日 上午11:02:05
 	 */
-	@RequestMapping("createResidentFeedback")
+	@ApiOperation(value="创建用户反馈")
+	@RequestMapping(value="/createResidentFeedback", method=RequestMethod.POST)
 	@ResponseBody
-	public ReturnValue createResidentFeedback(String houseId, String residentId, String isProprietor, String content) {
+	public ReturnValue createResidentFeedback(@Valid @ModelAttribute ResidentFeedbackRo residentFeedbackRo) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		ResidentFeedbackVo residentFeedbackVo = new ResidentFeedbackVo();
-		residentFeedbackVo.setContent(content);
-		residentFeedbackVo.setHouseId(houseId);
-		residentFeedbackVo.setResidentId(residentId);
-		residentFeedbackVo.setIsProprietor(isProprietor);
+		residentFeedbackVo.setContent(residentFeedbackRo.getContent());
+		residentFeedbackVo.setHouseId(residentFeedbackRo.getHouseId());
+		residentFeedbackVo.setResidentId(residentFeedbackRo.getResidentId());
+		residentFeedbackVo.setIsProprietor(residentFeedbackRo.getIsProprietor());
 		householdService.createResidentFeedback(residentFeedbackVo);
 		
 		return ReturnValue.success();
@@ -380,28 +431,29 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月14日 下午3:06:51
 	 */
-	@RequestMapping("saveAppMsgSetting")
+	@ApiOperation(value="保存用户手机端消息设置")
+	@RequestMapping(value="/saveAppMsgSetting", method=RequestMethod.POST)
 	@ResponseBody
-	public ReturnValue saveAppMsgSetting(String userId, String sound, String popFlag, String floatFlag, String lockFlag) {
+	public ReturnValue saveAppMsgSetting(@Valid @ModelAttribute AppMsgSettingRo appMsgSettingRo) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
 		
-		AppMsgSettingVo appMsgSettingVo = householdService.getAppMsgSetting(userId);
+		AppMsgSettingVo appMsgSettingVo = householdService.getAppMsgSetting(appMsgSettingRo.getUserId());
 		if(appMsgSettingVo == null){  //创建
 			AppMsgSettingVo appMsgSetting = new AppMsgSettingVo();
-			appMsgSetting.setFloatFlag(floatFlag);
-			appMsgSetting.setLockFlag(lockFlag);
-			appMsgSetting.setPopFlag(popFlag);			
-			appMsgSetting.setSound(sound);
+			appMsgSetting.setFloatFlag(appMsgSettingRo.getFloatFlag());
+			appMsgSetting.setLockFlag(appMsgSettingRo.getLockFlag());
+			appMsgSetting.setPopFlag(appMsgSettingRo.getPopFlag());			
+			appMsgSetting.setSound(appMsgSettingRo.getSound());
 			
-			appMsgSetting.setUserId(userId);
+			appMsgSetting.setUserId(appMsgSettingRo.getUserId());
 			
 			householdService.createAppMsgSetting(appMsgSetting);
 		}else{ //更新
-			appMsgSettingVo.setFloatFlag(floatFlag);
-			appMsgSettingVo.setLockFlag(lockFlag);
-			appMsgSettingVo.setPopFlag(popFlag);			
-			appMsgSettingVo.setSound(sound);
-			appMsgSettingVo.setUserId(userId);
+			appMsgSettingVo.setFloatFlag(appMsgSettingRo.getFloatFlag());
+			appMsgSettingVo.setLockFlag(appMsgSettingRo.getLockFlag());
+			appMsgSettingVo.setPopFlag(appMsgSettingRo.getPopFlag());			
+			appMsgSettingVo.setSound(appMsgSettingRo.getSound());
+			appMsgSettingVo.setUserId(appMsgSettingRo.getUserId());
 			appMsgSettingVo.setUpdateTime(new Date());
 			
 			householdService.updateAppMsgSetting(appMsgSettingVo);
@@ -417,12 +469,13 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月14日 下午3:17:45
 	 */
-	@RequestMapping("getAppMsgSetting")
+	@ApiOperation(value="获取用户手机端消息设置")
+	@RequestMapping(value="/getAppMsgSetting", method=RequestMethod.POST)
 	@ResponseBody
-	public DataValue<AppMsgSettingVo> getAppMsgSetting(String userId) {
+	public DataValue<AppMsgSettingVo> getAppMsgSetting(@Valid @ModelAttribute UserIdRo userIdRo) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
 		
-		AppMsgSettingVo appMsgSettingVo = householdService.getAppMsgSetting(userId);
+		AppMsgSettingVo appMsgSettingVo = householdService.getAppMsgSetting(userIdRo.getUserId());
 		return DataValue.success(appMsgSettingVo);
 	}
 	

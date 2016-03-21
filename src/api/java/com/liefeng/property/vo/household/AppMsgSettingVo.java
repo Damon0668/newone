@@ -1,5 +1,8 @@
 package com.liefeng.property.vo.household;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 import com.liefeng.core.entity.BaseValue;
@@ -10,6 +13,7 @@ import com.liefeng.core.entity.BaseValue;
  * @author xhw
  * @date 2016年3月14日 上午11:33:38
  */
+@ApiModel(value="用户手机端消息设置")
 public class AppMsgSettingVo extends BaseValue{
 
 	private static final long serialVersionUID = -6554763660577695490L;
@@ -17,41 +21,49 @@ public class AppMsgSettingVo extends BaseValue{
 	/**
 	 * 主键
 	 */
+	@ApiModelProperty(value="主键")
 	private String id;
 
 	/**
 	 * 用户ID
 	 */
+	@ApiModelProperty(value="用户ID")
 	private String userId;
 
 	/**
 	 * 声音提醒。0：关；1：开
 	 */
+	@ApiModelProperty(value="声音提醒【0：关；1：开】")
 	private String sound;
 
 	/**
 	 * 弹屏通知。0：关；1：开
 	 */
+	@ApiModelProperty(value="弹屏通知【0：关；1：开】")
 	private String popFlag;
 
 	/**
 	 * 悬浮框通知。0：关；1：开
 	 */
+	@ApiModelProperty(value="悬浮框通知【0：关；1：开】")
 	private String floatFlag;
 
 	/**
 	 * 悬浮框通知。0：关；1：开
 	 */
+	@ApiModelProperty(value="悬浮框通知【0：关；1：开】")
 	private String lockFlag;
 	
 	/**
 	 * 创建时间
 	 */
+	@ApiModelProperty(value="创建时间")
 	private Date updateTime;
 
 	/**
 	 * oem编码
 	 */
+	@ApiModelProperty(value="oem编码")
 	private String oemCode;
 
 	public String getId() {

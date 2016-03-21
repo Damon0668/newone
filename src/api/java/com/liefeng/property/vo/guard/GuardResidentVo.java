@@ -14,11 +14,6 @@ public class GuardResidentVo extends ResidentVo{
 	 * 
 	 */
 	private static final long serialVersionUID = -8727900934197883423L;
-
-	/**
-	 * 项目ID
-	 */
-	private String projectId;
 	
 	/**
 	 * 门禁卡ID
@@ -75,14 +70,6 @@ public class GuardResidentVo extends ResidentVo{
 
 	public void setGuardCardStatus(String guardCardStatus) {
 		this.guardCardStatus = guardCardStatus;
-	}
-
-	public String getProjectId() {
-		return projectId;
-	}
-
-	public void setProjectId(String projectId) {
-		this.projectId = projectId;
 	}
 
 	public String getUserType() {

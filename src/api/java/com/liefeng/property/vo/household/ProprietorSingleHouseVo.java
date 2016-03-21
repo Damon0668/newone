@@ -1,5 +1,8 @@
 package com.liefeng.property.vo.household;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,6 +16,7 @@ import com.liefeng.core.entity.BaseValue;
  * @author xhw
  * @date 2015-12-28
  */
+@ApiModel(value="业主资料")
 @JsonInclude(Include.NON_NULL)
 public class ProprietorSingleHouseVo extends BaseValue {
 
@@ -23,76 +27,91 @@ public class ProprietorSingleHouseVo extends BaseValue {
 	/**
 	 * 业主信息ID
 	 */
+	@ApiModelProperty(value="业主信息ID")
 	private String proprietorId;
 	
 	/**
 	 * 客户全局ID
 	 */
+	@ApiModelProperty(value="客户全局ID")
 	private String custGlobalId;
 	
 	/**
 	 * 项目ID
 	 */
+	@ApiModelProperty(value="项目ID")
 	private String projectId;
 	
 	/**
 	 * 项目名称
 	 */
+	@ApiModelProperty(value="项目名称")
 	private String projectName;
 	
 	/**
 	 * 业主姓名，产权人
 	 */
+	@ApiModelProperty(value="业主姓名，产权人")
 	private String name;
 	
 	/**
 	 * 手机号码
 	 */
+	@ApiModelProperty(value="手机号码")
 	private String phone;
 	
 	/**
 	 * 电子邮件
 	 */
+	@ApiModelProperty(value="电子邮件")
 	private String email;
 	
 	/**
 	 * 工作单位
 	 */
+	@ApiModelProperty(value="工作单位")
 	private String workUnit;
 	
 	/**
 	 * 通讯地址
 	 */
+	@ApiModelProperty(value="通讯地址")
 	private String address;
 	
 	/**
 	 * 邮政编码
 	 */
+	@ApiModelProperty(value="邮政编码")
 	private String zipCode;
 	
 	/**
 	 * 紧急联系人
 	 */
+	@ApiModelProperty(value="紧急联系人")
 	private String emergencyContact;
 	
 	/**
 	 * 紧急联系电话
 	 */
+	@ApiModelProperty(value="紧急联系电话")
 	private String emergencyPhone;
 	
 	/**
 	 * 业主照片URL
 	 */
+	@ApiModelProperty(value="业主照片URL")
 	private String picUrl;
 	
 	/**
 	 * 备注
 	 */
+	@ApiModelProperty(value="备注")
 	private String remark;
 	
 	/**
 	 * 录入员工ID
 	 */
+	@ApiModelProperty(value="录入员工ID")
 	private String staffId;
 	
 	/********************************* 业主房产相关字段 *********************************/
@@ -100,67 +119,80 @@ public class ProprietorSingleHouseVo extends BaseValue {
 	/**
 	 * 业主房产信息ID
 	 */
+	@ApiModelProperty(value="业主房产信息ID")
 	private String proprietorHouseId;
 	
 	
 	/**
 	 * 合同编号
 	 */
+	@ApiModelProperty(value="合同编号")
 	private String contractCode;
 	
 	/**
 	 * 房屋使用性质
 	 */
+	@ApiModelProperty(value="房屋使用性质")
 	private String useType;
 
 	/**
 	 * 付款方式
 	 */
+	@ApiModelProperty(value="付款方式")
 	private String payType;
 
 	/**
 	 * 办理方式：1、业主办理，2、委托办理
 	 */
+	@ApiModelProperty(value="办理方式：1、业主办理，2、委托办理")
 	private String checkinMode;
 
 	/**
 	 * 办理入住时间
 	 */
+	@ApiModelProperty(value="办理入住时间")
 	private Date checkinDate;
 
 	/**
 	 * 委托人与业主关系
 	 */
+	@ApiModelProperty(value="委托人与业主关系")
 	private String mandataryRelation;
 
 	/**
 	 * 委托人姓名
 	 */
+	@ApiModelProperty(value="委托人姓名")
 	private String mandataryName;
 
 	/**
 	 * 委托人性别
 	 */
+	@ApiModelProperty(value="委托人性别")
 	private String mandatarySex;
 
 	/**
 	 * 委托人电话
 	 */
+	@ApiModelProperty(value="委托人电话")
 	private String mandataryPhone;
 
 	/**
 	 * 委托人身份证号
 	 */
+	@ApiModelProperty(value="委托人身份证号")
 	private String mandataryIdNum;
 
 	/**
 	 * 委托人工作单位
 	 */
+	@ApiModelProperty(value="委托人工作单位")
 	private String mandataryWorkUnit;
 
 	/**
 	 * 委托人户口所在地
 	 */
+	@ApiModelProperty(value="委托人户口所在地")
 	private String mandataryAddress;
 
 	
@@ -169,41 +201,49 @@ public class ProprietorSingleHouseVo extends BaseValue {
 	/**
 	 * 客户ID
 	 */
+	@ApiModelProperty(value="客户ID")
 	private String customerId;
 	
 	/**
 	 * 身份证号码
 	 */
+	@ApiModelProperty(value="身份证号码")
 	private String idNum;
 	
 	/**
 	 * 手机号码
 	 */
+	@ApiModelProperty(value="手机号码")
 	private String mobile;
 	
 	/**
 	 * 真实姓名
 	 */
+	@ApiModelProperty(value="真实姓名")
 	private String realName;
 	
 	/**
 	 * 性别。0：未知；1：男；2：女
 	 */
+	@ApiModelProperty(value="性别。0：未知；1：男；2：女")
 	private String sex;
 	
 	/**
 	 * 出生日期
 	 */
+	@ApiModelProperty(value="出生日期")
 	private Date birthday;
 	
 	/**
 	 * 婚姻状况。0：未知；1：未婚；2：已婚。
 	 */
+	@ApiModelProperty(value="婚姻状况。0：未知；1：未婚；2：已婚。")
 	private String maritalStatus;
 	
 	/**
 	 * 客户状态
 	 */
+	@ApiModelProperty(value="客户状态")
 	private String status;
 	
 	/********************************* 房产相关字段 *********************************/
@@ -211,73 +251,87 @@ public class ProprietorSingleHouseVo extends BaseValue {
 	/**
 	 * 房产ID
 	 */
+	@ApiModelProperty(value="房产ID")
 	private String houseId;
 	
 	/**
 	 * 房产编码
 	 */
+	@ApiModelProperty(value="房产编码")
 	private String houseNum;
 
 	/**
 	 * 楼栋ID
 	 */
+	@ApiModelProperty(value="楼栋ID")
 	private String buildingId;
 	
 	/**
 	 * 楼栋名称
 	 */
+	@ApiModelProperty(value="楼栋名称")
 	private String buildingName;
 
 	/**
 	 * 楼层ID
 	 */
+	@ApiModelProperty(value="楼层ID")
 	private String floorId;
 	
 	/**
 	 * 楼层名称
 	 */
+	@ApiModelProperty(value="楼层名称")
 	private String floorName;
 
 	/**
 	 * 户型
 	 */
+	@ApiModelProperty(value="户型")
 	private String houseType;
 
 	/**
 	 * 实际面积
 	 */
+	@ApiModelProperty(value="实际面积")
 	private Double actualArea;
 
 	/**
 	 * 建筑面积
 	 */
+	@ApiModelProperty(value="建筑面积")
 	private Double grossArea;
 
 	/**
 	 * 使用面积
 	 */
+	@ApiModelProperty(value="使用面积")
 	private Double usableArea;
 
 	/**
 	 * 分摊面积
 	 */
+	@ApiModelProperty(value="分摊面积")
 	private Double apportionArea;
 
 	/**
 	 * 物业管理费单价
 	 */
+	@ApiModelProperty(value="物业管理费单价")
 	private Double propertyFee;
 
 	/**
 	 * 销售状态
 	 * 0：未出售 1：待售 2：已售
 	 */
+	@ApiModelProperty(value="销售状态0：未出售 1：待售 2：已售")
 	private String saleStatus;
 
 	/**
 	 * 产权归属
 	 * 1：商品房；2：小产权；3：大产权；4：集资房；5：安居房。
 	 */
+	@ApiModelProperty(value="产权归属1：商品房；2：小产权；3：大产权；4：集资房；5：安居房")
 	private String ownership;
 
 
