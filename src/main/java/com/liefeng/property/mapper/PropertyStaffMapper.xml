@@ -99,7 +99,9 @@
         stf.* 
     from
         t_property_staff stf
-    left join t_manage_project mp on stf.id = mp.staff_id
+    <if test="extra.projectId != null and extra.projectId != ''" >
+        left join t_manage_project mp on stf.id = mp.staff_id
+    </if>
     where 1=1 
     <if test="extra.projectId != null and extra.projectId != ''" >
         AND mp.project_id =  #{extra.projectId}
