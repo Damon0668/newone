@@ -109,6 +109,8 @@ FROM
 		  left join property.t_proprietor p
 		  on ph.proprietor_id = p.id 
 	  <include refid="Example_Where_Clause"/>
+	  ORDER BY
+	  	  h.register_time DESC 
       <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
           ${pager.mysqlQueryCondition}
       </if>

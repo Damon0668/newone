@@ -6,6 +6,7 @@ import java.util.Map;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.workbench.EventReportBo;
+import com.liefeng.property.bo.workbench.NoticeBo;
 import com.liefeng.property.vo.workbench.EventProcAttachVo;
 import com.liefeng.property.vo.workbench.EventProcessVo;
 import com.liefeng.property.vo.workbench.EventReportVo;
@@ -500,7 +501,7 @@ public interface IWorkbenchService {
 	 * @author xhw
 	 * @2016年3月7日 下午3:24:55
 	 */
-	public DataPageValue<NoticeVo> findNoticeOfPublished(String terminal, String noticeType, String projectId, String groupId, String privilegeType, Integer page, Integer size);
+	public DataPageValue<NoticeVo> findNoticeOfPublished(NoticeBo noticeBo);
 
 
 	/**
