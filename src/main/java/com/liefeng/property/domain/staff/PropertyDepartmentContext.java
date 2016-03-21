@@ -122,7 +122,7 @@ public class PropertyDepartmentContext {
 				throw new PropertyException(StaffErrorCode.DEPARTMENT_NAME_NULL);
 			}
 			
-			isExit(propertyDepartment);
+			isExitByDepartName(propertyDepartment);
 			
 			propertyDepartment.setId(UUIDGenerator.generate());
 			
@@ -141,10 +141,21 @@ public class PropertyDepartmentContext {
 	public void update() {
 		if(propertyDepartment != null) {
 			
-			isExit(propertyDepartment);
+			String departName = propertyDepartment.getName().trim();
 			
-			PropertyDepartmentPo propertyDepartmentPo = 
-					propertyDepartmentRepository.findOne(propertyDepartment.getId());
+			String oemCode = ContextManager.getInstance().getOemCode();
+			
+			PropertyDepartmentPo propertyDepartmentPo = propertyDepartmentRepository.findDepartmentByNameAndOemCode(departName, oemCode);
+
+			if(propertyDepartmentPo == null){
+				propertyDepartmentPo = propertyDepartmentRepository.findOne(propertyDepartment.getId());
+			}
+			
+			if(propertyDepartmentPo != null){
+				if(!propertyDepartmentPo.getId().equals(propertyDepartment.getId())){
+					throw new PropertyException(StaffErrorCode.DEPARTMENT_ALREADY_EXIST, departName);
+				}
+			}
 			
 			if (ValidateHelper.isNotEmptyString(propertyDepartment.getDirectorId())) {
 				propertyDepartmentPo.setDirectorId(propertyDepartment.getDirectorId());
@@ -229,9 +240,10 @@ public class PropertyDepartmentContext {
 	
 	/**
 	 * 判断部门是否已经存在
+	 * 根据名字判断
 	 * @param propertyDepartment
 	 */
-	private void isExit(PropertyDepartmentVo propertyDepartment){
+	private void isExitByDepartName(PropertyDepartmentVo propertyDepartment){
 		
 		String departName = propertyDepartment.getName().trim();
 		

@@ -110,8 +110,14 @@ public class SysRoleContext {
 			
 			SysRolePo existRole = sysRoleRepository.findByName(role.getName().trim());
 			
+			if(existRole == null){
+				existRole = sysRoleRepository.findOne(role.getId());
+			}
+			
 			if(existRole != null){
-				throw new PropertyException(SecurityErrorCode.ROLE_HAS_EXIST);
+				if(existRole.getId().longValue() != role.getId().longValue()){
+					throw new PropertyException(SecurityErrorCode.ROLE_HAS_EXIST);
+				}
 			}
 			
 			SysRolePo sysRolePo = sysRoleRepository.findOne(role.getId());
