@@ -31,6 +31,7 @@ import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.intf.service.workflow.IWorkflowService;
 import com.liefeng.mq.type.MessageEvent;
 import com.liefeng.property.bo.workbench.EventReportBo;
+import com.liefeng.property.bo.workbench.NoticeBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
@@ -742,11 +743,9 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
-	public DataPageValue<NoticeVo> findNoticeOfPublished(String terminal,
-			String noticeType, String projectId, String groupId,
-			String privilegeType, Integer page, Integer size) {
+	public DataPageValue<NoticeVo> findNoticeOfPublished(NoticeBo noticeBo) {
 		NoticeContext noticeContext = NoticeContext.build();
-		return noticeContext.findOfPublished(terminal, noticeType, projectId, groupId, privilegeType, page, size);
+		return noticeContext.findOfPublished(noticeBo.getTerminal(), noticeBo.getNoticeType(), noticeBo.getProjectId(), noticeBo.getGroupId(), noticeBo.getPrivilegeType(), noticeBo.getPage(), noticeBo.getSize());
 	}
 	
 	/**************报事工单处理******************/

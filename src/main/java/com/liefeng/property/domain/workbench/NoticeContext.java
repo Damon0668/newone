@@ -311,10 +311,10 @@ public class NoticeContext {
 	 * @author xhw
 	 * @2016年3月7日 下午3:24:55
 	 */
-	public DataPageValue<NoticeVo> findOfPublished(String terminal, String naticeType, String projectId, String groupId, String privilegeType, Integer page, Integer size) {
+	public DataPageValue<NoticeVo> findOfPublished(String terminal, String noticeType, String projectId, String groupId, String privilegeType, Integer page, Integer size) {
 		HashMap<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("terminal", terminal);
-		paramMap.put("naticeType", naticeType);
+		paramMap.put("noticeType", noticeType);
 		paramMap.put("projectId", projectId);
 		paramMap.put("groupId", groupId);
 		paramMap.put("privilegeType", privilegeType);

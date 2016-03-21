@@ -5,10 +5,10 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper
 	namespace="com.liefeng.property.repository.mybatis.EventProcessQueryRepository">
-	<resultMap id="BaseResultMap"
+	<!-- <resultMap id="BaseResultMap"
 		type="com.liefeng.property.vo.workbench.EventProcessVo">
 
-	</resultMap>
+	</resultMap> -->
 	
 	<resultMap id="BaseResultMap2" type="com.liefeng.property.vo.workbench.EventProcessVo" >
 		<result column="next_accepter_id" property="nextAccepterId"/>
@@ -17,7 +17,7 @@
 		<result column="accept_time" property="acceptTime"/>
 	</resultMap>
 
-	<select id="getHisEventProcess" resultMap="BaseResultMap" parameterType="java.lang.String">
+	<!-- <select id="getHisEventProcess" resultMap="BaseResultMap" parameterType="java.lang.String">
 		SELECT
 		ep.id,
 		ep.event_id as eventId,
@@ -72,7 +72,7 @@
 		left join property.t_event_process ep on t.id = ep.wf_task_id
 		Where t.order_id = #{0}
 		And ta.actor_Id = #{1}
-	</select>
+	</select> -->
 	
 	<select id="findEventProcess" resultMap="BaseResultMap2" >
 		SELECT

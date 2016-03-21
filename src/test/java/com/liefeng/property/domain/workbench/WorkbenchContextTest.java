@@ -15,6 +15,7 @@ import com.liefeng.Application;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.bo.workbench.NoticeBo;
 import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.vo.workbench.NoticePrivilegeVo;
@@ -624,7 +625,15 @@ public class WorkbenchContextTest {
 	 */
 	@Test
 	public void findNoticeOfPublished(){
-		DataPageValue<NoticeVo> noticeDataPageValue = workbenchService.findNoticeOfPublished("0", "1", "0000000052a7943f0152a7943fc00000", "1123456789", WorkbenchConstants.NoticePrivilegeType.RESIDENT, 1, 30);
+		NoticeBo noticeBo = new NoticeBo();
+		noticeBo.setTerminal("0");
+		noticeBo.setNoticeType("1");
+		noticeBo.setProjectId("0000000052a7943f0152a7943fc00000");
+		noticeBo.setGroupId("1123456789");
+		noticeBo.setPrivilegeType(WorkbenchConstants.NoticePrivilegeType.RESIDENT);
+		noticeBo.setPage(1);
+		noticeBo.setSize(30);
+		DataPageValue<NoticeVo> noticeDataPageValue = workbenchService.findNoticeOfPublished(noticeBo);
 		System.out.println(noticeDataPageValue);
 	}
 	

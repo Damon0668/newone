@@ -12,9 +12,9 @@ import com.liefeng.property.vo.workbench.EventProcessVo;
  */
 public interface EventProcessQueryRepository extends BaseRepository<EventProcessVo>{
 	
-	public List<EventProcessVo> getHisEventProcess(String orderId);
-
-	public EventProcessVo getActiveEventProcess(String orderId,String staffid);
+//	public List<EventProcessVo> getHisEventProcess(String orderId);
+//
+//	public EventProcessVo getActiveEventProcess(String orderId,String staffid);
 	
 	/**
 	 * 获取某个已经完成的任务流程

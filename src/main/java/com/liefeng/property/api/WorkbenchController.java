@@ -1,19 +1,29 @@
 package com.liefeng.property.api;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.api.ro.NoticeRo;
 import com.liefeng.property.bo.workbench.EventReportBo;
+import com.liefeng.property.bo.workbench.NoticeBo;
 import com.liefeng.property.vo.workbench.EventReportVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
 
@@ -22,6 +32,7 @@ import com.liefeng.property.vo.workbench.NoticeVo;
  * @author xhw
  * @2016年3月7日 下午3:54:17
  */
+@Api(value="工作台模块")
 @RestController
 @RequestMapping(value = "/api/workbench")
 public class WorkbenchController {
@@ -42,10 +53,12 @@ public class WorkbenchController {
 	 * @author xhw
 	 * @2016年3月7日 下午3:58:45
 	 */
-	@RequestMapping("getNoticeList")
+	@ApiOperation(value="通知", notes="社区通告、温馨提醒、通知、社区动态公用接口")
+	@RequestMapping(value="/getNoticeList", method=RequestMethod.GET)
 	@ResponseBody
-	public DataPageValue<NoticeVo> getNoticeList(String terminal, String noticeType, String projectId, String groupId, String privilegeType, Integer page, Integer size){
-		DataPageValue<NoticeVo> noticeDataPage = workbenchService.findNoticeOfPublished(terminal, noticeType, projectId, groupId, privilegeType, page, size);
+	public DataPageValue<NoticeVo> getNoticeList(@Valid @ModelAttribute NoticeRo noticeRo){
+		NoticeBo noticeBo = MyBeanUtil.createBean(noticeRo, NoticeBo.class);
+		DataPageValue<NoticeVo> noticeDataPage = workbenchService.findNoticeOfPublished(noticeBo);
 		return noticeDataPage;
 	}
 	
