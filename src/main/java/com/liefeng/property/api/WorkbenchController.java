@@ -21,6 +21,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.api.ro.NoticeIdRo;
 import com.liefeng.property.api.ro.NoticeRo;
 import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.bo.workbench.NoticeBo;
@@ -53,7 +54,7 @@ public class WorkbenchController {
 	 * @author xhw
 	 * @2016年3月7日 下午3:58:45
 	 */
-	@ApiOperation(value="通知", notes="社区通告、温馨提醒、通知、社区动态公用接口")
+	@ApiOperation(value="通知列表【社区通告、温馨提醒、通知、社区动态公用接口】")
 	@RequestMapping(value="/getNoticeList", method=RequestMethod.GET)
 	@ResponseBody
 	public DataPageValue<NoticeVo> getNoticeList(@Valid @ModelAttribute NoticeRo noticeRo){
@@ -69,10 +70,11 @@ public class WorkbenchController {
 	 * @author xhw
 	 * @2016年3月7日 下午7:08:08
 	 */
-	@RequestMapping("getNotice")
+	@ApiOperation(value="通知信息")
+	@RequestMapping(value="/getNotice", method=RequestMethod.GET)
 	@ResponseBody
-	public DataValue<NoticeVo> getNotice(String id){
-		NoticeVo noticeVo = workbenchService.getNoticeById(id);
+	public DataValue<NoticeVo> getNotice(@Valid @ModelAttribute NoticeIdRo noticeIdRo){
+		NoticeVo noticeVo = workbenchService.getNoticeById(noticeIdRo.getId());
 		return DataValue.success(noticeVo);
 	}
 	
