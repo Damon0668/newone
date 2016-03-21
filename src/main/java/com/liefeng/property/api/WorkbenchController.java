@@ -1,11 +1,14 @@
 package com.liefeng.property.api;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
@@ -74,5 +77,22 @@ public class WorkbenchController {
 		workbenchService.createAppEventReport(bo);
 		
 		return ReturnValue.success();
+	}
+	
+	/**
+	 * 获取用户的历史宝石
+	 * @param projectId 项目id
+	 * @param houseNum 房间号
+	 * @param phone 手机号码
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月20日 上午9:58:29
+	 */
+	@RequestMapping("getEventReportList")
+	@ResponseBody
+	public DataListValue<EventReportVo> getEventReportList(String projectId, String houseNum, String phone) {
+		ContextManager.getInstance().setOemCode("property"); //TODO
+		List<EventReportVo> eventReportVoList = workbenchService.getEventReportList(projectId, houseNum, phone);
+		return DataListValue.success(eventReportVoList);
 	}
 }

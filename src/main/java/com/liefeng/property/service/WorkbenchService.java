@@ -50,6 +50,7 @@ import com.liefeng.property.domain.workbench.WebsiteMsgPrivilegeContext;
 import com.liefeng.property.error.WorkbenchErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.exception.WorkbenchException;
+import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.workbench.EventProcAttachVo;
 import com.liefeng.property.vo.workbench.EventProcessVo;
@@ -89,6 +90,7 @@ public class WorkbenchService implements IWorkbenchService {
 	
 	@Autowired
 	private IPropertyStaffService propertyStaffService;
+	
 	
 	
 	@Override
@@ -800,7 +802,7 @@ public class WorkbenchService implements IWorkbenchService {
 		List<Task> tasks = workflowService.getActiveTasks(new QueryFilter().setOrderId(order.getId()));
 		workflowService.execute(tasks.get(0).getId(), staffid, arg);
 		eventReportVo.setWfOrderId(order.getId());
-		
+		eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_FINISH);
 		if(ValidateHelper.isEmptyString(eventReportVo.getId()))
 			EventReportContext.build(eventReportVo).create();
 		else
@@ -909,6 +911,7 @@ public class WorkbenchService implements IWorkbenchService {
 			EventProcAttachContext.build(eventProcAttachVo).create();
 		}
 		
+		eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_FINISH);
 		eventProcessVo.setEventId(eventReportVo.getId());
 		EventProcessContext eventProcessContext = EventProcessContext.build(eventProcessVo);
 		//创建或者修改
@@ -938,6 +941,8 @@ public class WorkbenchService implements IWorkbenchService {
 			fileEventReport.setStatus(WorkbenchConstants.EventReport.STATUS_FILE);
 			fileEventReport.setResult(eventReportVo.getContent());
 			EventReportContext.build(fileEventReport).update();
+		}else{
+			
 		}
 		
 		if(eventProcessVo.getGrab()!=null && eventProcessVo.getGrab().equals(WorkbenchConstants.EventReport.GRAB_YES)){ //是否抢单
@@ -980,7 +985,7 @@ public class WorkbenchService implements IWorkbenchService {
 		}
 		
 		//判断是否已经签收
-		if(eventProcessVo.getStatus() == null || eventProcessVo.getStatus().equals(WorkbenchConstants.EventReport.SIGNFOR_NO)){
+		if(eventProcessVo.getStatus() == null || !eventProcessVo.getStatus().equals(WorkbenchConstants.EventReport.SIGNFOR_YES)){
 			eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_YES);
 			
 			List<String> removeStaffid = compare(actorIds,new String[]{staffid});
@@ -1008,12 +1013,16 @@ public class WorkbenchService implements IWorkbenchService {
 			throw new WorkbenchException(WorkbenchErrorCode.TASK_NOT_EXIST);
 		}
 		if(eventProcessVo.getStatus() != null && eventProcessVo.getStatus().equals(WorkbenchConstants.EventReport.SIGNFOR_YES)){
-			eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_NO); //将以签收改为待签收
+			eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_SENDBACK); //将以签收改为待签收
 			EventProcessContext.build(eventProcessVo).update();
-			List<String> removeStaffid = compare(actorIds,eventProcessVo.getNextAccepterId().split(","));
+		/*	List<String> removeStaffid = compare(actorIds,eventProcessVo.getNextAccepterId().split(","));
 			//判断是否需要添加其他人
 			if(removeStaffid.size()>0)
 			workflowService.addTaskActor(wfTaskId, (String[])removeStaffid.toArray(new String[removeStaffid.size()]));
+*/			
+			Map<String, Object> arg = new HashMap<String, Object>();
+			arg.put(task.getTaskName(), eventProcessVo.getNextAccepterId());
+			workflowService.executeAndJumpTask(task.getId(), "40282081531cf49b01531d3f4e1c0006",arg,task.getTaskName());
 		}else{
 			throw new WorkbenchException(WorkbenchErrorCode.ALREADY_SENDBACK);
 		}
@@ -1041,7 +1050,7 @@ public class WorkbenchService implements IWorkbenchService {
 		}
 		
 		//判断是否已经签收,签收了则无法撤回
-		if(eventProcessVo.getStatus() == null || eventProcessVo.getStatus().equals(WorkbenchConstants.EventReport.SIGNFOR_NO)){
+		if(eventProcessVo.getStatus() == null || !eventProcessVo.getStatus().equals(WorkbenchConstants.EventReport.SIGNFOR_YES)){
 			eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_YES);
 			workflowService.withdrawTask(task.getParentTaskId(), staffid);
 			EventProcessContext.build(eventProcessVo).update();
@@ -1115,5 +1124,49 @@ public class WorkbenchService implements IWorkbenchService {
 		
 		EventReportContext eventReportContext = EventReportContext.build(eventReportVo);
 		eventReportContext.create();
+	}
+
+	@Override
+	public List<EventReportVo> getEventReportList(String projectId,
+			String houseNum, String phone) {
+		EventReportContext eventReportContext = EventReportContext.build();
+		List<EventReportVo> eventReportVoList = eventReportContext.getHistoryEventReport(projectId, houseNum, phone);
+		
+		for(EventReportVo eventReportVo : eventReportVoList){
+			//报事的“已派工”相当app的“未处理”
+			if(WorkbenchConstants.EventReport.STATUS_ALREADYWORKERS.equals(eventReportVo.getStatus())){
+				eventReportVo.setStatus(WorkbenchConstants.EventStatusAPP.UNTREATED);
+			}
+			
+			EventProcessContext eventProcessContext = EventProcessContext.build();
+			
+			//app的“已派工”
+			EventProcessVo eventProcessVo = eventProcessContext.getEventProcess(eventReportVo.getId(), WorkbenchConstants.EventProcessStatus.DISPATCHING);
+			if(eventProcessVo != null){
+				eventReportVo.setWorkTime(eventProcessVo.getAcceptTime());
+				PropertyStaffDetailInfoVo propertyStaffVo	= propertyStaffService.findStaffDetailInfo(eventProcessVo.getNextAccepterId()); 
+				if(propertyStaffVo != null){
+					eventReportVo.setWorkerName(propertyStaffVo.getStaffArchiveVo().getName());
+					eventReportVo.setWorkerPhone(propertyStaffVo.getStaffArchiveVo().getPhone());
+				}
+				eventReportVo.setStatus(WorkbenchConstants.EventStatusAPP.ALREADYWORKERS);
+			}
+			
+			//app的“未评价”
+			EventProcessVo eventProcessVo2 = eventProcessContext.getEventProcess(eventReportVo.getId(), WorkbenchConstants.EventProcessStatus.AUDIT);
+			if(eventProcessVo2 != null){
+				eventReportVo.setOverTime(eventProcessVo2.getAcceptTime());
+				eventReportVo.setRemark(eventProcessVo2.getResult());
+				eventReportVo.setRebackPic(eventProcessVo2.getPicUrls());
+				eventReportVo.setStatus(WorkbenchConstants.EventStatusAPP.NOTEVALUATE);
+			}
+			
+			//app的“完成”
+			if(WorkbenchConstants.EventReport.STATUS_ALREADYFEEDBACK.equals(eventReportVo.getStatus())){
+				eventReportVo.setStatus(WorkbenchConstants.EventStatusAPP.OVER);
+			}
+		}
+		
+		return eventReportVoList;
 	}
 }

@@ -308,7 +308,7 @@ public class FeeService implements IFeeService {
 						.loadById(houseContext.get().getId());
 				ProprietorSingleHouseVo houseVo = houseContext.getSingleHouse();
 
-				Double price = houseVo.getPropertyFee();
+				Double price = feeSettingVo.getPrice();
 				Double sum = houseVo.getGrossArea() * price;
 				logger.info("总金额：" + sum);
 				FeeItemVo feeItemVo = new FeeItemVo();

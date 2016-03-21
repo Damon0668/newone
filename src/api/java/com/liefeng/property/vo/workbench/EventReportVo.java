@@ -171,14 +171,49 @@ public class EventReportVo extends BaseValue {
 	private String taskName;
 	
 	/**
-	 * 状态
+	 * 审核状态
 	 */
 	private String auditStatus;
+	
+	/**
+	 * 处理状态 0：未签收；1：已签收 2:退回 3：办结
+	 */
+	private String processStatus;
 	
 	/**
 	 * 是否是上一步骤处理人 0 不是     1 是
 	 */
 	private String isBack;
+	
+	/**
+	 * 负责人姓名
+	 */
+	private String workerName;
+	
+	/**
+	 * 负责人手机号码
+	 */
+	private String workerPhone;
+	
+	/**
+	 * 派工时间
+	 */
+	private Date workTime;
+	
+	/**
+	 * 完成时间
+	 */
+	private Date overTime;
+	
+	/**
+	 * 结果描述
+	 */
+	private String remark;
+	
+	/**
+	 * 结果图片
+	 */
+	private String rebackPic;
 	
 	public Character getImportant() {
 		return priority.charAt(1);
@@ -458,6 +493,63 @@ public class EventReportVo extends BaseValue {
 
 	public void setIsBack(String isBack) {
 		this.isBack = isBack;
+	}
+
+	public String getProcessStatus() {
+		return processStatus;
+	}
+
+	public void setProcessStatus(String processStatus) {
+		this.processStatus = processStatus;
+	}
+
+	
+	public String getWorkerName() {
+		return workerName;
+	}
+
+	public void setWorkerName(String workerName) {
+		this.workerName = workerName;
+	}
+
+	public String getWorkerPhone() {
+		return workerPhone;
+	}
+
+	public void setWorkerPhone(String workerPhone) {
+		this.workerPhone = workerPhone;
+	}
+
+	public Date getWorkTime() {
+		return workTime;
+	}
+
+	public void setWorkTime(Date workTime) {
+		this.workTime = workTime;
+	}
+
+	public Date getOverTime() {
+		return overTime;
+	}
+
+	public void setOverTime(Date overTime) {
+		this.overTime = overTime;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getRebackPic() {
+		return rebackPic;
+	}
+
+	public void setRebackPic(String rebackPic) {
+		this.rebackPic = rebackPic;
 	}
 
 }

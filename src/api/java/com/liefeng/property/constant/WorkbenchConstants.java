@@ -203,6 +203,16 @@ public class WorkbenchConstants {
 		 * 已经签收
 		 */
 		public static final String SIGNFOR_YES = "1";
+		
+		/**
+		 * 退回
+		 */
+		public static final String SIGNFOR_SENDBACK = "2";
+		
+		/**
+		 * 办结
+		 */
+		public static final String SIGNFOR_FINISH = "3";
 
 		/**
 		 * 附件类型 附件
@@ -233,10 +243,7 @@ public class WorkbenchConstants {
 		 * 不 抢单
 		 */
 		public static final String GRAB_NO = "0";
-		
-		
-		
-		
+
 	}
 	
 	/**
@@ -275,4 +282,63 @@ public class WorkbenchConstants {
 		public static final String VISIT = "3"; 
 	}
 	
+	/**
+	 * app报事状态
+	 * @author xhw
+	 * @date 2016年3月18日 下午5:06:50
+	 */
+	public static interface EventStatusAPP{
+		/**
+		 * 未处理：0
+		 */
+		public static final String UNTREATED = "0"; 
+		
+		/**
+		 * 已派工：1
+		 */
+		public static final String ALREADYWORKERS = "1"; 
+		
+		/**
+		 * 未评价：2
+		 */
+		public static final String NOTEVALUATE = "2"; 
+		
+		/**
+		 * 已完成：3
+		 */
+		public static final String OVER = "3"; 
+	}
+	
+	/**
+	 * 流程管理步骤
+	 * @author xhw
+	 * @date 2016年3月20日 上午9:55:13
+	 */
+	public static interface EventProcessStatus{
+		
+		/**
+		 * 派单
+		 */
+		public static final String DISTRIBUTELEAFLETS = "distributeLeaflets"; 
+		
+		/**
+		 * 派工
+		 */
+		public static final String DISPATCHING = "dispatching"; 
+		
+		/**
+		 * 办理
+		 */
+		public static final String HANDLE = "handle"; 
+		
+		/**
+		 * 审核
+		 */
+		public static final String AUDIT = "audit"; 
+		
+		/**
+		 * 客服回访
+		 */
+		public static final String RETURNVISIT = "returnVisit";
+	}
 }
