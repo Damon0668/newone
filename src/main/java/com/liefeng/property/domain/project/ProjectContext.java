@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.PinyinUtil;
 import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
@@ -141,7 +142,9 @@ public class ProjectContext {
 			}
 			
 			project.setId(UUIDGenerator.generate());
-            project.setOemCode(ContextManager.getInstance().getOemCode()); 
+            project.setOemCode(ContextManager.getInstance().getOemCode());
+            // 设置项目编码，编码为项目中文名称中各个拼音的首字母
+            project.setCode(PinyinUtil.getFirstLetters(project.getFullName())); 
             project.setCreateTime(new Date());
 
             ProjectPo projectPo = MyBeanUtil.createBean(project, ProjectPo.class);

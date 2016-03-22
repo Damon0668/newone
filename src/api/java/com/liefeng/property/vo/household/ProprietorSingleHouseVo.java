@@ -255,6 +255,12 @@ public class ProprietorSingleHouseVo extends BaseValue {
 	private String houseId;
 	
 	/**
+	 * 房型ID
+	 */
+	@ApiModelProperty(value="房型ID")
+	private String houseSpecId;
+	
+	/**
 	 * 房产编码
 	 */
 	@ApiModelProperty(value="房产编码")
@@ -629,6 +635,14 @@ public class ProprietorSingleHouseVo extends BaseValue {
 
 	public void setHouseId(String houseId) {
 		this.houseId = houseId;
+	}
+
+	public String getHouseSpecId() {
+		return houseSpecId;
+	}
+
+	public void setHouseSpecId(String houseSpecId) {
+		this.houseSpecId = houseSpecId;
 	}
 
 	public String getHouseNum() {

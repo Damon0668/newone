@@ -112,8 +112,8 @@ public class ParkingService implements IParkingService {
 		
 	}
 	
+	//保存车俩信息
 	private void createResidentCar(ParkingSingleRentalVo parkingSingleRentalVo,String houseId){
-		//保存车俩信息
 		if(ValidateHelper.isNotEmptyString(parkingSingleRentalVo.getPlateNum())){
 			ResidentCarVo residentCarVo = new ResidentCarVo();
 			residentCarVo.setPlateNum(parkingSingleRentalVo.getPlateNum());

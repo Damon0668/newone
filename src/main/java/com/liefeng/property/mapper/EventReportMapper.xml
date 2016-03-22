@@ -70,7 +70,7 @@
 		from property.t_event_report er
 		left join service.wf_hist_order ho on er.wf_order_id= ho.id
 		<include refid="Example_Where_Clause" />
-		order by er.report_time desc
+		order by er.create_time desc
 		<if
 			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
 			${pager.mysqlQueryCondition}

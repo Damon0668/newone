@@ -45,9 +45,14 @@ public enum WorkbenchErrorCode implements IErrorCode {
 	EVENTREPORT_NON_EXISTENT("该报事不存在"),
 	
 	/**
-	 * 该报事已进入流程无法删除
+	 * 无法删除,该报事已进入流程
 	 */
-	EVENTREPORT_CANNOT_DELETE("该报事已进入流程无法删除");
+	EVENTREPORT_CANNOT_DELETE("无法删除,该报事已进入流程"),
+	
+	/**
+	 * 无法删除,该报事不是当前用户创建
+	 */
+	EVENTREPORT_CANNOT_DELETE_NOT_CURRENTLY_CREATED("无法删除,该报事不是当前用户创建");
 	
 	private String desc;
 	
