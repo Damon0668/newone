@@ -2,6 +2,9 @@ package com.liefeng.property.api.ro;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.databind.deser.Deserializers.Base;
+import com.liefeng.core.entity.BaseValue;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -12,8 +15,10 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2016年3月18日
  */
 @ApiModel
-public class AuthLoginRo {
+public class AuthLoginRo extends BaseValue{
 	
+	private static final long serialVersionUID = -8706002992060339936L;
+
 	@ApiModelProperty(value="手机号码",required=true)
 	@NotNull
 	private String mobile;
