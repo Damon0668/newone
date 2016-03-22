@@ -1,16 +1,19 @@
 package com.liefeng.property.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Task;
@@ -797,6 +800,7 @@ public class WorkbenchService implements IWorkbenchService {
 		Map<String, Object> arg = new HashMap<String, Object>();
 		arg.put("distributeLeaflets", staffid);
 		arg.put("dispatching", eventProcessVo.getNextAccepterId());
+		arg.put(SnakerEngine.ID, createOrderNo());
 		Order order = workflowService.startInstanceByName(WorkbenchConstants.EventReport.EVENT_REPORT_FLOW_NAME, 0, staffid,arg);
 		List<Task> tasks = workflowService.getActiveTasks(new QueryFilter().setOrderId(order.getId()));
 		workflowService.execute(tasks.get(0).getId(), staffid, arg);
@@ -1084,13 +1088,15 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	@Override
-	public void deleteEventReport(String id){
+	public void deleteEventReport(String id,String staffId){
 		EventReportVo reportVo = EventReportContext.loadById(id).get();
 		
 		if(reportVo == null){
 			throw new WorkbenchException(WorkbenchErrorCode.EVENTREPORT_NON_EXISTENT);
 		}else if(ValidateHelper.isNotEmptyString(reportVo.getWfOrderId())){
 			throw new WorkbenchException(WorkbenchErrorCode.EVENTREPORT_CANNOT_DELETE);
+		}else if(!reportVo.getStaffId().equals(staffId)){
+			throw new WorkbenchException(WorkbenchErrorCode.EVENTREPORT_CANNOT_DELETE_NOT_CURRENTLY_CREATED);
 		}
 		
 		EventReportContext.loadById(id).delete();
@@ -1167,5 +1173,38 @@ public class WorkbenchService implements IWorkbenchService {
 		}
 		
 		return eventReportVoList;
+	}
+	
+	/**
+	 * 生成流程订单号
+	 */
+	public static String createOrderNo() {
+		/* 流程订单号 */
+		StringBuffer orderNo = new StringBuffer("");
+
+		/* 获取当前时间 */
+		SimpleDateFormat dateFormator = new SimpleDateFormat("yyyyMMddHHmmss");
+		orderNo.append(dateFormator.format(new Date()));
+
+		/* 获取2位随机数 */
+		String randomNumber = generateRandomNum();
+
+		orderNo.append(randomNumber);
+
+		return orderNo.toString();
+	}
+	
+	/**
+	 * 生成两位随机数
+	 */
+	private static String generateRandomNum() {
+		Random rand = new Random();
+		/* 第一个随机数 */
+		int num1 = rand.nextInt();
+		/* 第二个随机数 */
+		int num2 = rand.nextInt();
+		int tmp = Math.abs(num1 + num2);
+
+		return Integer.valueOf((tmp % 90 + 10)).toString();
 	}
 }

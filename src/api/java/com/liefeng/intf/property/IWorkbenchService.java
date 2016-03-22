@@ -676,7 +676,7 @@ public interface IWorkbenchService {
 	 * 删除报事
 	 * @param id
 	 */
-	public void deleteEventReport(String id);
+	public void deleteEventReport(String id,String staffId);
 	
 
 	/**
