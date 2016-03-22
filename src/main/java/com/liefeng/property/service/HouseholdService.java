@@ -885,6 +885,7 @@ public class HouseholdService implements IHouseholdService {
 			appFriend.setFriendId(appFriendVo.getUserId());
 			appFriend.setUserId(appFriendVo.getFriendId());
 			appFriend.setStatus(HouseholdConstants.AppFriendStatus.ASFRIEND);
+			appFriend.setCreateTime(new Date());
 			appFriend.setUpdateTime(new Date());
 			
 			AppFriendContext friendContext = AppFriendContext.build(appFriend);
