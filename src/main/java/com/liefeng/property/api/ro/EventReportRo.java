@@ -3,11 +3,7 @@ package com.liefeng.property.api.ro;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotNull;
-
-import com.liefeng.core.entity.BaseValue;
 
 /**
  * 报事

@@ -1,4 +1,4 @@
-package com.liefeng.property.api.ro;
+package com.liefeng.property.api.ro.id;
 
 import javax.validation.constraints.NotNull;
 
@@ -6,14 +6,14 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * 通知id
+ * 业主id
  * @author xhw
  * @date 2016年3月21日 下午3:48:19
  */
 @ApiModel
-public class NoticeIdRo {
+public class ProprietorIdRo {
 	
-	@ApiModelProperty(value="通知主键【id】", required=true)
+	@ApiModelProperty(value="业主主键【id】", required=true)
 	@NotNull
 	private String id;
 
