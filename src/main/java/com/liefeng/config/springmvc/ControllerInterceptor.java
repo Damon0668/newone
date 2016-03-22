@@ -26,7 +26,7 @@ public class ControllerInterceptor implements HandlerInterceptor{
 		
 		if(ValidateHelper.isEmptyString(token)){
 			logger.info("ControllerInterceptor get token is null");
-			return false;
+			//return false;
 		}
 		
 		String oemCode = SysConstants.DEFAULT_OEM_CODE;
