@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.base.vo.UserVo;
-import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
@@ -28,12 +27,12 @@ import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.api.ro.AppFriendIdAndStatusRo;
 import com.liefeng.property.api.ro.AppMsgSettingRo;
-import com.liefeng.property.api.ro.CustGlobalIdRo;
 import com.liefeng.property.api.ro.ResidentFeedbackRo;
 import com.liefeng.property.api.ro.UserIdConditionRo;
 import com.liefeng.property.api.ro.UserIdFriendIdRo;
-import com.liefeng.property.api.ro.UserIdRo;
 import com.liefeng.property.api.ro.UserRo;
+import com.liefeng.property.api.ro.id.CustGlobalIdRo;
+import com.liefeng.property.api.ro.id.UserIdRo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.vo.household.AppFriendVo;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
@@ -72,7 +71,6 @@ public class UserController {
 	@RequestMapping(value="/getUserByCustGlobalId", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<UserVo> getUserByCustGlobalId(@Valid @ModelAttribute CustGlobalIdRo custGlobalIdRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		UserVo user = userService.getUserByCustGlobalId(custGlobalIdRo.getCustGlobalId());
 		return DataValue.success(user);
@@ -89,7 +87,6 @@ public class UserController {
 	@RequestMapping(value="/updateUser", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue updateUser(@Valid @ModelAttribute UserRo userRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		UserVo user = userService.getUserByCustGlobalId(userRo.getCustGlobalId());
 		CustomerVo customerVo = user.getCustomer();
@@ -128,7 +125,6 @@ public class UserController {
 	@RequestMapping(value="/createResidentFeedback", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue createResidentFeedback(@Valid @ModelAttribute ResidentFeedbackRo residentFeedbackRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		ResidentFeedbackVo residentFeedbackVo = new ResidentFeedbackVo();
 		residentFeedbackVo.setContent(residentFeedbackRo.getContent());
@@ -155,7 +151,6 @@ public class UserController {
 	@RequestMapping(value="/saveAppMsgSetting", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue saveAppMsgSetting(@Valid @ModelAttribute AppMsgSettingRo appMsgSettingRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		AppMsgSettingVo appMsgSettingVo = householdService.getAppMsgSetting(appMsgSettingRo.getUserId());
 		if(appMsgSettingVo == null){  //创建
@@ -193,7 +188,6 @@ public class UserController {
 	@RequestMapping(value="/getAppMsgSetting", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<AppMsgSettingVo> getAppMsgSetting(@Valid @ModelAttribute UserIdRo userIdRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		AppMsgSettingVo appMsgSettingVo = householdService.getAppMsgSetting(userIdRo.getUserId());
 		return DataValue.success(appMsgSettingVo);
@@ -211,7 +205,6 @@ public class UserController {
 	@RequestMapping(value="/createAppFriend", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue createAppFriend(@Valid @ModelAttribute UserIdFriendIdRo userIdFriendIdRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		AppFriendVo friendVo = new AppFriendVo();
 		friendVo.setFriendId(userIdFriendIdRo.getFriendId());
@@ -235,7 +228,6 @@ public class UserController {
 	@RequestMapping(value="/respondAppFriendApply", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue respondAppFriendApply(@Valid @ModelAttribute AppFriendIdAndStatusRo appFriendIdAndStatusRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		householdService.updateAppFriend(appFriendIdAndStatusRo.getId(), appFriendIdAndStatusRo.getStatus());
 		
@@ -254,7 +246,6 @@ public class UserController {
 	@RequestMapping(value="/deleteAppFriend", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue deleteAppFriend(@Valid @ModelAttribute UserIdFriendIdRo userIdFriendIdRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		householdService.deleteAppFriend(userIdFriendIdRo.getUserId(), userIdFriendIdRo.getFriendId());
 		
@@ -273,7 +264,6 @@ public class UserController {
 	@RequestMapping(value="/getUserList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<AppFriendVo> getUserList(@Valid @ModelAttribute UserIdConditionRo userIdConditionRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		List<AppFriendVo> appFriendVoList = householdService.getUserList(userIdConditionRo.getUserId(), userIdConditionRo.getConditon());
 		
@@ -291,7 +281,6 @@ public class UserController {
 	@RequestMapping(value="/getAppFriendList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<AppFriendVo> getAppFriendList(@Valid @ModelAttribute UserIdRo userIdRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		List<AppFriendVo> appFriendVoList = householdService.getAppFriendList(userIdRo.getUserId());
 		
@@ -309,7 +298,6 @@ public class UserController {
 	@RequestMapping(value="/getAppFriendHistoryList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<AppFriendVo> getAppFriendHistoryList(@Valid @ModelAttribute UserIdRo userIdRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		List<AppFriendVo> appFriendVoList = householdService.getAppFriendHistoryList(userIdRo.getUserId());
 		
@@ -327,7 +315,6 @@ public class UserController {
 	@RequestMapping(value="/getUserById", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<UserVo> getUserById(@Valid @ModelAttribute UserIdRo userIdRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		UserVo user = userService.getUserById(userIdRo.getUserId());
 		return DataValue.success(user);
