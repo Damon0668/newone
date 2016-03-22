@@ -87,14 +87,12 @@ public class EventProcessContext {
 	
 	public List<EventProcessVo> getHis(String orderId){
 		logger.info("exe method getHis orderId eq {}",orderId);
-		//return eventProcessQueryRepository.getHisEventProcess(orderId);
-		return null;
+		return eventProcessQueryRepository.getHisEventProcess(orderId);
 	}
 	
 	public EventProcessVo getActive(String orderId,String staffid) {
 		logger.info("exe method getActive orderId eq {}",orderId);
-		//return eventProcessQueryRepository.getActiveEventProcess(orderId,staffid);
-		return null;
+		return eventProcessQueryRepository.getActiveEventProcess(orderId,staffid);
 	}
 	
 	public void update(){

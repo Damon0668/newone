@@ -21,8 +21,10 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.api.ro.EventReportRo;
 import com.liefeng.property.api.ro.NoticeIdRo;
 import com.liefeng.property.api.ro.NoticeRo;
+import com.liefeng.property.api.ro.ProjectIdHouseNumPhoneRo;
 import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.bo.workbench.NoticeBo;
 import com.liefeng.property.vo.workbench.EventReportVo;
@@ -85,10 +87,12 @@ public class WorkbenchController {
 	 * @author xhw
 	 * @date 2016年3月15日 下午6:03:49
 	 */
-	@RequestMapping("createEventReport")
+	@ApiOperation(value="创建报事")
+	@RequestMapping(value="/createEventReport", method=RequestMethod.POST)
 	@ResponseBody
-	public ReturnValue createEventReport(EventReportBo bo) {
+	public ReturnValue createEventReport(@Valid @ModelAttribute EventReportRo eventReportRo) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
+		EventReportBo bo = MyBeanUtil.createBean(eventReportRo, EventReportBo.class);
 		workbenchService.createAppEventReport(bo);
 		
 		return ReturnValue.success();
@@ -103,11 +107,12 @@ public class WorkbenchController {
 	 * @author xhw
 	 * @date 2016年3月20日 上午9:58:29
 	 */
-	@RequestMapping("getEventReportList")
+	@ApiOperation(value="获取用户的历史报事")
+	@RequestMapping(value="/getEventReportList", method=RequestMethod.POST)
 	@ResponseBody
-	public DataListValue<EventReportVo> getEventReportList(String projectId, String houseNum, String phone) {
+	public DataListValue<EventReportVo> getEventReportList(@Valid @ModelAttribute ProjectIdHouseNumPhoneRo projectIdHouseNumPhoneRo) {
 		ContextManager.getInstance().setOemCode("property"); //TODO
-		List<EventReportVo> eventReportVoList = workbenchService.getEventReportList(projectId, houseNum, phone);
+		List<EventReportVo> eventReportVoList = workbenchService.getEventReportList(projectIdHouseNumPhoneRo.getProjectId(), projectIdHouseNumPhoneRo.getHouseNum(), projectIdHouseNumPhoneRo.getPhone());
 		return DataListValue.success(eventReportVoList);
 	}
 }

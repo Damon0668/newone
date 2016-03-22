@@ -1,5 +1,8 @@
 package com.liefeng.property.vo.household;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,6 +16,7 @@ import com.liefeng.core.entity.BaseValue;
  * @author xhw
  * @date 2016年3月16日 下午1:58:34
  */
+@ApiModel(value="好友信息")
 @JsonInclude(Include.NON_EMPTY)
 public class AppFriendVo extends BaseValue{
 	
@@ -21,51 +25,61 @@ public class AppFriendVo extends BaseValue{
 	/**
 	 * 主键
 	 */
+	@ApiModelProperty(value="主键")
 	private String id;
 
 	/**
 	 * 用户ID。对应t_user表的ID
 	 */
+	@ApiModelProperty(value="用户ID【t_user表的ID】")
 	private String userId;
 
 	/**
 	 * 好友ID。对应t_user表的ID
 	 */
+	@ApiModelProperty(value="好友ID【t_user表的ID】")
 	private String friendId;
 
 	/**
 	 * 状态。0：等待验证；1：已为好友；2：拒绝
 	 */
+	@ApiModelProperty(value="状态【0：等待验证；1：已为好友；2：已拒绝】")
 	private String status;
 
 	/**
 	 * 创建时间
 	 */
+	@ApiModelProperty(value="创建时间")
 	private Date createTime;
 
 	/**
 	 * 更新时间
 	 */
+	@ApiModelProperty(value="更新时间")
 	private Date updateTime;
 	
 	/**
 	 * oem编码
 	 */
+	@ApiModelProperty(value="oem编码")
 	private String oemCode;
 	
 	/**
 	 * 好友姓名
 	 */
+	@ApiModelProperty(value="好友姓名")
 	private String friendName;
 	
 	/**
 	 * 手机号码
 	 */
+	@ApiModelProperty(value="手机号码")
 	private String phone;
 	
 	/**
 	 * 好友头像
 	 */
+	@ApiModelProperty(value="好友头像")
 	private String avatarUrl;
 	
 	

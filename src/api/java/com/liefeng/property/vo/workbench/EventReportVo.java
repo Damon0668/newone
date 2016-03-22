@@ -1,9 +1,14 @@
 package com.liefeng.property.vo.workbench;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 import javax.persistence.Column;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.liefeng.core.entity.BaseValue;
 
 /**
@@ -11,6 +16,8 @@ import com.liefeng.core.entity.BaseValue;
  * @author Huangama
  * @date 2016-3-3
  */
+@ApiModel(value="报事")
+@JsonInclude(Include.NON_EMPTY)
 public class EventReportVo extends BaseValue {
 
 	private static final long serialVersionUID = -2581787604165953419L;
@@ -18,201 +25,241 @@ public class EventReportVo extends BaseValue {
 	/**
 	 * 主键
 	 */
+	@ApiModelProperty(value="主键")
 	private String id;
 
 	/**
 	 * 流程实例id
 	 */
+	@ApiModelProperty(value="流程实例id")
 	private String wfOrderId;
 	
 	/**
 	 * 项目ID
 	 */
+	@ApiModelProperty(value="项目ID")
 	private String projectId;
 
 	/**
 	 * 房间号
 	 */
+	@ApiModelProperty(value="房间号")
 	private String houseNum;
 
 	/**
 	 * 业主姓名
 	 */
+	@ApiModelProperty(value="业主姓名")
 	private String proprietorName;
 
 	/**
 	 * 报事人姓名
 	 */
+	@ApiModelProperty(value="报事人姓名")
 	private String reporterName;
 
 	/**
 	 * 报事人电话
 	 */
+	@ApiModelProperty(value="报事人电话")
 	private String phone;
 
 	/**
 	 * 报事时间
 	 */
+	@ApiModelProperty(value="报事时间")
 	private Date reportTime;
 
 	/**
 	 * 报事方式。1：来电；2：APP客户端；3：上门。
 	 */
+	@ApiModelProperty(value="报事方式【1：来电；2：APP客户端；3：上门】")
 	private String reportMode;
 
 	/**
 	 * 事件类型
 	 */
+	@ApiModelProperty(value="事件类型")
 	private String eventType;
 
 	/**
 	 * 事件具体类别
 	 */
+	@ApiModelProperty(value="事件具体类别")
 	private String category;
 
 	/**
 	 * 位置
 	 */
+	@ApiModelProperty(value="位置")
 	private String location;
 
 	/**
 	 * 事件主题
 	 */
+	@ApiModelProperty(value="事件主题")
 	private String title;
 	
 	/**
 	 * 事件内容
 	 */
+	@ApiModelProperty(value="事件内容")
 	private String content;
 	
 	/**
-	 * 状态。0：未处理；1：已派工；2：已反馈。
+	 * 状态。0：未处理；1：已派工；2：已反馈。【app：0：未处理，1：已派工，2：未评价，3：已完成】
 	 */
+	@ApiModelProperty(value="当前状态【0：未处理，1：已派工，2：未评价，3：已完成】")
 	private String status;
 	
 	/**
 	 * 优先级。高位表示紧急程度，低位表示重要程度，如：10表示紧急不重要；11表示紧急重要。
 	 */
+	@ApiModelProperty(value="高位表示紧急程度，低位表示重要程度，如：10表示紧急不重要；11表示紧急重要")
 	private String priority = "00";
 	
 	/**
 	 * 服务类型。0：免费；1：收费
 	 */
+	@ApiModelProperty(value="服务类型【0：免费；1：收费】")
 	private String serviceType;
 	
 	/**
 	 * 照片URL
 	 */
+	@ApiModelProperty(value="照片URL")
 	private String picUrl;
 	
 	/**
 	 * 预约时间
 	 */
+	@ApiModelProperty(value="预约时间")
 	private Date orderTime;
 	
 	/**
 	 * 处理结果
 	 */
+	@ApiModelProperty(value="处理结果")
 	private String result;
 	
 	/**
 	 * 录入员工ID
 	 */
+	@ApiModelProperty(value="录入员工ID")
 	private String staffId;
 	
 	/**
 	 * 受理人ID
 	 */
+	@ApiModelProperty(value="受理人ID")
 	private String accepterId;
 	
 	/**
 	 * 受理时间
 	 */
+	@ApiModelProperty(value="受理时间")
 	private Date acceptTime;
 
 	/**
 	 * 创建时间
 	 */
+	@ApiModelProperty(value="创建时间")
 	private Date createTime;
 
 	/**
 	 * OEM编码
 	 */
+	@ApiModelProperty(value="OEM编码")
 	private String oemCode;
 	
 	/**
 	 * 任务id
 	 */
+	@ApiModelProperty(value="任务id")
 	private String taskId;
 	
 	/**
 	 * 流程id
 	 */
+	@ApiModelProperty(value="流程id")
 	private String processId;
 	
 	/**
 	 * 工单id
 	 */
+	@ApiModelProperty(value="工单id")
 	private String orderId;
 	
 	/**
 	 * 任务显示名称
 	 */
+	@ApiModelProperty(value="任务显示名称")
 	private String taskDisplayName;
 	
 	/**
 	 * 工单号
 	 */
+	@ApiModelProperty(value="工单号")
 	private String orderNo;
 	
 	/**
 	 *	当前任务
 	 */
+	@ApiModelProperty(value="当前任务")
 	private String taskName;
 	
 	/**
 	 * 审核状态
 	 */
+	@ApiModelProperty(value="审核状态")
 	private String auditStatus;
 	
 	/**
 	 * 处理状态 0：未签收；1：已签收 2:退回 3：办结
 	 */
+	@ApiModelProperty(value="处理状态【 0：未签收；1：已签收 2:退回 3：办结】")
 	private String processStatus;
 	
 	/**
 	 * 是否是上一步骤处理人 0 不是     1 是
 	 */
+	@ApiModelProperty(value="是否是上一步骤处理人 0 不是     1 是")
 	private String isBack;
 	
 	/**
 	 * 负责人姓名
 	 */
+	@ApiModelProperty(value="负责人姓名")
 	private String workerName;
 	
 	/**
 	 * 负责人手机号码
 	 */
+	@ApiModelProperty(value="负责人手机号码")
 	private String workerPhone;
 	
 	/**
 	 * 派工时间
 	 */
+	@ApiModelProperty(value="派工时间")
 	private Date workTime;
 	
 	/**
 	 * 完成时间
 	 */
+	@ApiModelProperty(value="完成时间")
 	private Date overTime;
 	
 	/**
 	 * 结果描述
 	 */
+	@ApiModelProperty(value="结果描述")
 	private String remark;
 	
 	/**
 	 * 结果图片
 	 */
+	@ApiModelProperty(value="结果图片")
 	private String rebackPic;
 	
 	public Character getImportant() {
