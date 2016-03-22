@@ -16,10 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.base.vo.CustomerVo;
-import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.TimeUtil;
-import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
@@ -28,27 +26,19 @@ import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
-import com.liefeng.mq.type.TccBasicEvent;
-import com.liefeng.property.api.ro.AppMsgSettingRo;
 import com.liefeng.property.api.ro.CheckinQueueListRo;
 import com.liefeng.property.api.ro.CheckinQueueRo;
-import com.liefeng.property.api.ro.CustGlobalIdRo;
-import com.liefeng.property.api.ro.HouseIdRo;
-import com.liefeng.property.api.ro.ProprietorIdRo;
 import com.liefeng.property.api.ro.ProprietorRo;
 import com.liefeng.property.api.ro.ProprietorStatusRo;
-import com.liefeng.property.api.ro.ResidentFeedbackRo;
 import com.liefeng.property.api.ro.ResidentIdHouseIdRo;
 import com.liefeng.property.api.ro.ResidentRo;
 import com.liefeng.property.api.ro.ResidentUpdateRo;
-import com.liefeng.property.api.ro.UserIdRo;
-import com.liefeng.property.api.ro.UserRo;
+import com.liefeng.property.api.ro.id.HouseIdRo;
+import com.liefeng.property.api.ro.id.ProprietorIdRo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.constant.HouseholdConstants;
-import com.liefeng.property.vo.household.AppMsgSettingVo;
 import com.liefeng.property.vo.household.CheckinQueueVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
-import com.liefeng.property.vo.household.ResidentFeedbackVo;
 import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
 
@@ -88,7 +78,6 @@ public class HouseholdController {
 	@RequestMapping(value="/createCheckinQueue", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<CheckinQueueVo> createCheckinQueue(@Valid @ModelAttribute CheckinQueueRo checkinQueueRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		CheckinQueueVo queueVo = householdService.createCheckinQueue(checkinQueueRo.getProjectId(), checkinQueueRo.getHouseId(), checkinQueueRo.getUserId());
 		
@@ -108,7 +97,6 @@ public class HouseholdController {
 	@RequestMapping(value="/getCheckinQueue", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<CheckinQueueVo> getCheckinQueue(@Valid @ModelAttribute CheckinQueueRo checkinQueueRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		CheckinQueueVo queueVo = householdService.getCheckinQueue(checkinQueueRo.getProjectId(), checkinQueueRo.getHouseId(), checkinQueueRo.getUserId());
 		
@@ -128,7 +116,6 @@ public class HouseholdController {
 	@RequestMapping(value="/getCheckinQueueList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataPageValue<CheckinQueueVo> getCheckinQueueList(@Valid @ModelAttribute CheckinQueueListRo checkinQueueListRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		DataPageValue<CheckinQueueVo> queDataPageValue = householdService.getCheckinQueueOfNotStatus(checkinQueueListRo.getProjectId(), HouseholdConstants.CheckinQueueStatus.UNTREATED, TimeUtil.format(new Date(), "yyyy-MM-dd"), checkinQueueListRo.getPage(), checkinQueueListRo.getSize());
 		
@@ -149,7 +136,6 @@ public class HouseholdController {
 	@RequestMapping(value="/checkProrietorStatus", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue checkProrietorStatus(@Valid @ModelAttribute ProprietorStatusRo proprietorStatusRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		householdService.checkProrietorStatus(proprietorStatusRo.getProprietorId(), proprietorStatusRo.getUserId(), proprietorStatusRo.getProjectId(), proprietorStatusRo.getHouseId());
 		
@@ -172,7 +158,6 @@ public class HouseholdController {
 	@RequestMapping(value="/registerProprietor", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue registerProprietor(@Valid @ModelAttribute ProprietorRo proprietorRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		ProprietorSingleHouseVo singleHouse = new ProprietorSingleHouseVo();
 		singleHouse.setProprietorId(proprietorRo.getProprietorId());
 		singleHouse.setPicUrl(proprietorRo.getPicUrl());
@@ -197,7 +182,6 @@ public class HouseholdController {
 	@RequestMapping(value="/getProprietorOfRegister", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<ProprietorSingleHouseVo> getProprietorOfRegister(@Valid @ModelAttribute ProprietorIdRo proprietorIdRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		ProprietorSingleHouseVo singleHouseVo =  householdService.getProprietorOfRegister(proprietorIdRo.getId());
 		
@@ -215,7 +199,6 @@ public class HouseholdController {
 	@RequestMapping(value="/getResidentList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<ResidentVo> getResidentList(@Valid @ModelAttribute HouseIdRo houseIdRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		ResidentBo params = new ResidentBo();
 		params.setHouseId(houseIdRo.getHouseId());
@@ -242,7 +225,6 @@ public class HouseholdController {
 	@RequestMapping(value="/registerResident", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue registerResident(@Valid @ModelAttribute ResidentRo residentRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		ResidentBo residentBo = MyBeanUtil.createBean(residentRo, ResidentBo.class);
 		// 住户信息
@@ -287,7 +269,6 @@ public class HouseholdController {
 	@RequestMapping(value="/getResident", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<ResidentVo> getResident(@Valid @ModelAttribute ResidentIdHouseIdRo residentIdHouseIdRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		ResidentVo residentVo = householdService.getResident(residentIdHouseIdRo.getResidentId(), residentIdHouseIdRo.getHouseId());
 		//用户信息
@@ -309,7 +290,6 @@ public class HouseholdController {
 	@RequestMapping(value="/updateResident", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue updateResident(@Valid @ModelAttribute ResidentUpdateRo residentUpdateRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		
 		ResidentBo residentBo = MyBeanUtil.createBean(residentUpdateRo, ResidentBo.class);
 		ResidentVo residentVo = new ResidentVo();
@@ -329,7 +309,7 @@ public class HouseholdController {
 		residentVo.setWorkUnit(residentBo.getWorkUnit());
 		residentVo.setId(residentBo.getResidentId());
 		
-		// TODO 需要拿到residentHouseId，接口入参需带上这个参数
+		//  需要拿到residentHouseId，接口入参需带上这个参数
 		ResidentHouseVo residentHouse = householdService.getResidentHouse(residentBo.getResidentId(), residentBo.getHouseId());
 		residentHouseVo.setResidentRelation(residentBo.getResidentRelation());
 		residentHouseVo.setId(residentHouse.getId());
