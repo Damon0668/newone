@@ -15,16 +15,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.common.util.MyBeanUtil;
-import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.property.api.ro.EventReportRo;
-import com.liefeng.property.api.ro.NoticeIdRo;
 import com.liefeng.property.api.ro.NoticeRo;
 import com.liefeng.property.api.ro.ProjectIdHouseNumPhoneRo;
+import com.liefeng.property.api.ro.id.NoticeIdRo;
 import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.bo.workbench.NoticeBo;
 import com.liefeng.property.vo.workbench.EventReportVo;
@@ -91,7 +90,6 @@ public class WorkbenchController {
 	@RequestMapping(value="/createEventReport", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue createEventReport(@Valid @ModelAttribute EventReportRo eventReportRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		EventReportBo bo = MyBeanUtil.createBean(eventReportRo, EventReportBo.class);
 		workbenchService.createAppEventReport(bo);
 		
@@ -111,7 +109,6 @@ public class WorkbenchController {
 	@RequestMapping(value="/getEventReportList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<EventReportVo> getEventReportList(@Valid @ModelAttribute ProjectIdHouseNumPhoneRo projectIdHouseNumPhoneRo) {
-		ContextManager.getInstance().setOemCode("property"); //TODO
 		List<EventReportVo> eventReportVoList = workbenchService.getEventReportList(projectIdHouseNumPhoneRo.getProjectId(), projectIdHouseNumPhoneRo.getHouseNum(), projectIdHouseNumPhoneRo.getPhone());
 		return DataListValue.success(eventReportVoList);
 	}
