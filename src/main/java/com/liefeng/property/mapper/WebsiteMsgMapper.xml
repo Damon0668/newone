@@ -26,12 +26,12 @@ and(
 		and FIND_IN_SET(p.project_id, #{extra.manageProject})
 	)
 	or(
-		p.department_id = #{extra.deptid}
+		p.department_id = #{extra.deptId}
 		and p.staff_id = '-1'
 		and FIND_IN_SET(p.project_id, #{extra.manageProject})
 	)
 	or(
-	    p.department_id = #{extra.deptid}
+	    p.department_id = #{extra.deptId}
 		and p.staff_id = #{extra.staffId}
 		and FIND_IN_SET(p.project_id, #{extra.manageProject})
 	)

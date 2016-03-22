@@ -166,6 +166,7 @@ FROM
 		pf.name AS floorName,
 		CONCAT(pb.code, pf.code, hs.num) AS houseNum,
 		h.id AS houseId,
+		hs.id AS houseSpecId,
 		sd.name AS houseType,
 		pro.name AS name,
 		p.oem_code AS oemCode

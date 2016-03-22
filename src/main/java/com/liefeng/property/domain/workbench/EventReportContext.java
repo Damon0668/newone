@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.workbench;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,6 +79,7 @@ public class EventReportContext {
 	public void create() {
 		if (eventReport != null) {
 			eventReport.setId(UUIDGenerator.generate());
+			eventReport.setCreateTime(new Date());
 			eventReport.setOemCode(ContextManager.getInstance().getOemCode());
 			eventReportRepository.save(MyBeanUtil.createBean(eventReport,
 					EventReportPo.class));
@@ -86,6 +88,7 @@ public class EventReportContext {
 	
 	public void update(){
 		eventReport.setOemCode(ContextManager.getInstance().getOemCode());
+		eventReport.setCreateTime(new Date());
 		eventReportRepository.save(MyBeanUtil.createBean(eventReport,
 				EventReportPo.class));
 	}
