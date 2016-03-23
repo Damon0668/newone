@@ -20,82 +20,97 @@ public class ProjectVo extends BaseValue {
 	/**
 	 * 主键
 	 */
-	@ApiModelProperty(value="主键",required=true)
+	@ApiModelProperty(value="主键")
 	private String id;
 	
 	/**
 	 * 项目编码
 	 */
+	@ApiModelProperty(value="项目编码")
 	private String code;
 	
 	/**
 	 * 项目简称
 	 */
+	@ApiModelProperty(value="项目简称")
 	private String shortName;
 	
 	/**
 	 * 项目全称
 	 */
+	@ApiModelProperty(value="项目全称")
 	private String fullName;
 	
 	/**
 	 * 省份
 	 */
+	@ApiModelProperty(value="省份")
 	private String province;
 	
 	/**
 	 * 市
 	 */
+	@ApiModelProperty(value="市")
 	private String city;
 	
 	/**
 	 * 区县
 	 */
+	@ApiModelProperty(value="区")
 	private String zone;
 	
 	/**
 	 * 项目地址
 	 */
+	@ApiModelProperty(value="项目地址")
 	private String address;
 	
 	/**
 	 * 项目电话
 	 */
+	@ApiModelProperty(value="项目电话")
 	private String tel;
 	
 	/**
 	 * 项目简介
 	 */
+	@ApiModelProperty(value="项目简介")
 	private String introduce;
 	
 	/**
 	 * 总户数
 	 */
+	@ApiModelProperty(value="总户数")
 	private Integer totalHouseholds;
 	
 	/**
 	 * 开盘日期
 	 */
+	@ApiModelProperty(value="开盘日期")
 	private Date openingDate;
 	
 	/**
 	 * 项目坐标（longitude,latitude）
 	 */
+	@ApiModelProperty(value="项目坐标")
 	private String coordinate;
 	
 	/**
 	 * 备注
 	 */
+	@ApiModelProperty(value="备注")
 	private String remark;
 	
 	/**
 	 * 创建时间
 	 */
+	@ApiModelProperty(value="创建时间")
 	private Date createTime;
 	
 	/**
 	 * OEM编码
 	 */
+	@ApiModelProperty(value="OEM编码")
 	private String oemCode;
 
 	public String getId() {

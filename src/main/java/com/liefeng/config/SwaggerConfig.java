@@ -14,16 +14,56 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 	
+	/**
+	 * 指点
+	 * @return
+	 */
 	@Bean
-	public Docket api() {
+	public Docket finger() {
 		return new Docket(DocumentationType.SWAGGER_2)
-				.groupName("api")
+				.groupName("finger")
 				.genericModelSubstitutes(DeferredResult.class)
 				.useDefaultResponseMessages(false)
 				.forCodeGeneration(true)
 				.pathMapping("/")
 				.select()
-				.paths(PathSelectors.regex("/api/.*"))
+				.paths(PathSelectors.regex("/api/finger/.*"))
+				.build()
+				.apiInfo(apiInfo());
+	}
+	
+	/**
+	 * 工作台
+	 * @return
+	 */
+	@Bean
+	public Docket work() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("work")
+				.genericModelSubstitutes(DeferredResult.class)
+				.useDefaultResponseMessages(false)
+				.forCodeGeneration(true)
+				.pathMapping("/")
+				.select()
+				.paths(PathSelectors.regex("/api/work/.*"))
+				.build()
+				.apiInfo(apiInfo());
+	}
+	
+	/**
+	 * 通用
+	 * @return
+	 */
+	@Bean
+	public Docket common() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("common")
+				.genericModelSubstitutes(DeferredResult.class)
+				.useDefaultResponseMessages(false)
+				.forCodeGeneration(true)
+				.pathMapping("/")
+				.select()
+				.paths(PathSelectors.regex("/api/common/.*"))
 				.build()
 				.apiInfo(apiInfo());
 	}

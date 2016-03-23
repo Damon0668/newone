@@ -1,11 +1,11 @@
-package com.liefeng.property.api.ro;
+package com.liefeng.property.api.ro.finger.auth;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 
 import com.liefeng.core.entity.BaseValue;
-
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 权限模块
@@ -16,9 +16,6 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class AuthLoginRo extends BaseValue{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8706002992060339936L;
 
 	@ApiModelProperty(value="手机号码",required=true)

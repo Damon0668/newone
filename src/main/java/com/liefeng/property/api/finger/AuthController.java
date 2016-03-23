@@ -1,4 +1,4 @@
-package com.liefeng.property.api;
+package com.liefeng.property.api.finger;
 
 import javax.validation.Valid;
 
@@ -14,13 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.liefeng.base.bo.UserLoginBo;
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.MyBeanUtil;
-import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataValue;
+import com.liefeng.core.error.IErrorCode;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.api.ILoginUserService;
-import com.liefeng.property.api.ro.AuthLoginRo;
-import com.liefeng.property.constant.SysConstants;
+import com.liefeng.intf.service.msg.ISmsService;
+import com.liefeng.mq.type.SMSMsgEvent;
+import com.liefeng.property.api.ro.finger.auth.AuthLoginRo;
+import com.liefeng.property.api.ro.finger.auth.UpdatePwdRo;
 import com.liefeng.property.vo.api.LoginUserVo;
 
 import io.swagger.annotations.Api;
@@ -28,7 +30,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api(value="权限模块")
 @RestController
-@RequestMapping(value = "/api/auth")
+@RequestMapping(value = "/api/finger/auth")
 public class AuthController {
 	
 	private static Logger logger = LoggerFactory.getLogger(AuthController.class);
@@ -37,15 +39,16 @@ public class AuthController {
 	private IUserService userService;
 	
 	@Autowired
+	private ISmsService smsService;
+	
+	@Autowired
 	private ILoginUserService loginUserService;
 
-	@ApiOperation(value="登陆", notes="登陆接口")
+	@ApiOperation(value="用户登陆", notes="用户登陆接口")
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
-	public DataValue<LoginUserVo> login(@Valid @ModelAttribute AuthLoginRo authLogin){
-		
-		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
-		
+	public DataValue<LoginUserVo> userLogin(@Valid @ModelAttribute AuthLoginRo authLogin){
+
 		LoginUserVo loginUser = null;
 		
 		try{
@@ -58,10 +61,29 @@ public class AuthController {
 			loginUser = loginUserService.findLoginUser(user.getCustGlobalId());
 
 		}catch(LiefengException e){
-			logger.info("鉴权失败 {}", e);
+			logger.error("鉴权失败 {}", e);
 			throw e;
 		}
 		
 		return DataValue.success(loginUser);
+	}
+	
+	@ApiOperation(value="忘记密码-修改密码", notes="忘记密码后,修改密码")
+	@RequestMapping(value="/updatePwdByForget", method=RequestMethod.POST)
+	@ResponseBody
+	public DataValue<Boolean> updatePwdByForget(@Valid @ModelAttribute UpdatePwdRo updatePwdRo){
+		
+		Boolean result = smsService.verifySMSCode(updatePwdRo.getMobile(), SMSMsgEvent.SD_UPDATAPWD_MSG.getEventCode(), updatePwdRo.getCode());
+		
+		if(!result){
+			DataValue<Boolean> dataValue = new DataValue<Boolean>();
+			dataValue.setCode(IErrorCode.SYSTEM_ERROR);
+			dataValue.setDesc("验证码错误");
+			return dataValue;
+		}
+		
+		userService.updatePassword(updatePwdRo.getMobile(), updatePwdRo.getPassword());
+		
+		return DataValue.success(Boolean.TRUE);
 	}
 }

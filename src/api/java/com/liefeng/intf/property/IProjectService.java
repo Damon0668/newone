@@ -202,17 +202,16 @@ public interface IProjectService {
 
 	/**
 	 * 更新房产规格
-	 * 
 	 * @param houseSpec 房产规格值对象
 	 */
 	public void upateHouseSpec(HouseSpecVo houseSpec);
 	
 	/**
-	 * 更新房产规格
-	 * 
+	 * 删除房产规格
 	 * @param houseSpecId 房产规格ID 或 以“,”分隔的ID串
+	 * @return 删除信息
 	 */
-	public void deleteHouseSpec(String houseSpecId);
+	public String deleteHouseSpec(String houseSpecId);
 
 	/**
 	 * 分页查询房产规格

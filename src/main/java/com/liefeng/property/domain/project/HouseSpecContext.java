@@ -151,15 +151,31 @@ public class HouseSpecContext {
 	/**
 	 * 更新房产规格
 	 */
-	public void delete() {
+	public String delete() {
+		// 返回信息
+		StringBuffer message = new StringBuffer("");
+		
 		if(ValidateHelper.isNotEmptyString(houseSpecId)) {
 			String[] ids = houseSpecId.split(",");
 			if(ids != null && ids.length > 0) {
 				for(int i=0; i<ids.length; i++) {
-					houseSpecRepository.delete(ids[i]);
+					if(houseSpecQueryRepository.queryRelatedHouseCount(ids[i]) == 0) {
+						houseSpecRepository.delete(ids[i]);
+						logger.info("主键为'{}'的房型删除成功！");
+					} else {
+						houseSpec = houseSpecQueryRepository.queryById(ids[i]);
+						message.append(houseSpec.getBuildingName())
+							   .append("尾号为【")
+							   .append(houseSpec.getNum())
+							   .append("】的房型已关联数据，无法删除")
+							   .append("\n");
+						logger.info("主键为'{}'的房型已关联房产数据，无法删除！");
+					}
 				}
 			}
 		}
+		
+		return message.toString();
 	}
 	
 	/**
