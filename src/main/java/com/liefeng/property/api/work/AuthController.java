@@ -1,7 +1,5 @@
 package com.liefeng.property.api.work;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.error.IErrorCode;
@@ -98,7 +95,7 @@ public class AuthController {
 	}
 	
 	@ApiOperation(value="登陆后-修改密码", notes="登陆后,修改密码")
-	@RequestMapping(value="/updatePwdByForget", method=RequestMethod.POST)
+	@RequestMapping(value="/updateStaffPassword", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue updatePwdAfterLogin(@Valid @ModelAttribute UpdatePwdLoginRo updatePwdLoginRo){
 		propertyStaffService.updateStaffPassword(updatePwdLoginRo.getStaffId(), updatePwdLoginRo.getOldpaswword(), updatePwdLoginRo.getNewpaswword());
