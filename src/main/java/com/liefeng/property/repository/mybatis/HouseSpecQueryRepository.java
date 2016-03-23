@@ -11,4 +11,11 @@ import com.liefeng.property.vo.project.HouseSpecVo;
  */
 public interface HouseSpecQueryRepository extends BaseRepository<HouseSpecVo>{
 	
+	/**
+	 * 查询已关联房型的房产数量
+	 * @param houseSpecId 房型ID
+	 * @return 房产数量
+	 */
+	public Long queryRelatedHouseCount(String houseSpecId);
+	
 }
