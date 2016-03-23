@@ -97,7 +97,11 @@ public class GuardService implements IGuardService{
 				GuardDeviceVo guardDeviceVo = GuardDeviceContext.loadById(guardDeviceId).get();
 				
 				checkService.deleteDeviceCheck(guardDeviceVo);
+				
 				GuardDeviceContext.loadById(guardDeviceId).delete();
+				
+				GuardCardPrivilegeContext.loadByDeviceId(guardDeviceId).deleteByGuardDeviceId();
+				
 				tccMsgService.sendTccMsg(TccBasicEvent.DELETE_DEVICE, guardDeviceVo.toString());
 			}
 		}

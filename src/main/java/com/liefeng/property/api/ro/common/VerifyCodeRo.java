@@ -19,7 +19,7 @@ public class VerifyCodeRo extends BaseValue{
 	@NotNull
 	public String phoneNum;
 	
-	@ApiModelProperty(value="相关事件", required=true)
+	@ApiModelProperty(value="相关事件[SD_REGISTER_MSG-注册;SD_REGISTER_MSG-忘记密码]", required=true)
 	@NotNull
 	public String action;
 

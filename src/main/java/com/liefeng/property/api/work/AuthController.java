@@ -85,11 +85,7 @@ public class AuthController {
 	@ResponseBody
 	public ReturnValue updatePwdByForget(@Valid @ModelAttribute UpdatePwdRo updatePwdRo){
 		
-		Boolean result = smsService.verifySMSCode(updatePwdRo.getMobile(), SMSMsgEvent.SD_UPDATAPWD_MSG.getEventCode(), updatePwdRo.getCode());
-		
-		if(!result){
-			return new ReturnValue(IErrorCode.SYSTEM_ERROR,"验证码错误");
-		}
+		smsService.verifySMSCode(updatePwdRo.getMobile(), SMSMsgEvent.SD_UPDATAPWD_MSG.getEventCode(), updatePwdRo.getCode());
 		
 		return ReturnValue.success();
 	}

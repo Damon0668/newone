@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.bouncycastle.jcajce.provider.asymmetric.dsa.DSASigner.detDSA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,6 +113,13 @@ public class GuardCardPrivilegeContext {
 		if(ValidateHelper.isNotEmptyString(cardId)){
 			logger.info("deleteByCardId cardId = {}", cardId);
 			guardCardPrivilegeRepository.deleteByCardId(cardId);
+		}
+	}
+	
+	public void deleteByGuardDeviceId(){
+		if(ValidateHelper.isNotEmptyString(guardDeviceId)){
+			logger.info("deleteByGuardDeviceId guardDeviceId = {}", cardId);
+			guardCardPrivilegeRepository.deleteByGuardDeviceId(guardDeviceId);
 		}
 	}
 	

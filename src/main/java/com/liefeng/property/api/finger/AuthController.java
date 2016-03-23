@@ -15,6 +15,7 @@ import com.liefeng.base.bo.UserLoginBo;
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.core.entity.DataValue;
+import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.error.IErrorCode;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.user.IUserService;
@@ -23,7 +24,9 @@ import com.liefeng.intf.service.msg.ISmsService;
 import com.liefeng.mq.type.SMSMsgEvent;
 import com.liefeng.property.api.ro.finger.auth.AuthLoginRo;
 import com.liefeng.property.api.ro.finger.auth.UpdatePwdRo;
+import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.vo.api.LoginUserVo;
+import com.liefeng.service.constant.PushMsgConstants;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -55,6 +58,10 @@ public class AuthController {
 			//统一鉴权登陆
 			UserLoginBo userLoginBo = MyBeanUtil.createBean(authLogin, UserLoginBo.class);
 			
+			userLoginBo.setAppCode(SysConstants.DEFAULT_APP_CODE);
+			userLoginBo.setAppType(PushMsgConstants.AppType.MOBILE);
+			userLoginBo.setTerminalType(PushMsgConstants.TerminalType.MOBILE_PROPERTY);
+			
 			UserVo user = userService.login(userLoginBo);
 			
 			//获取物业系统用户信息
@@ -71,19 +78,12 @@ public class AuthController {
 	@ApiOperation(value="忘记密码-修改密码", notes="忘记密码后,修改密码")
 	@RequestMapping(value="/updatePwdByForget", method=RequestMethod.POST)
 	@ResponseBody
-	public DataValue<Boolean> updatePwdByForget(@Valid @ModelAttribute UpdatePwdRo updatePwdRo){
+	public ReturnValue updatePwdByForget(@Valid @ModelAttribute UpdatePwdRo updatePwdRo){
 		
-		Boolean result = smsService.verifySMSCode(updatePwdRo.getMobile(), SMSMsgEvent.SD_UPDATAPWD_MSG.getEventCode(), updatePwdRo.getCode());
-		
-		if(!result){
-			DataValue<Boolean> dataValue = new DataValue<Boolean>();
-			dataValue.setCode(IErrorCode.SYSTEM_ERROR);
-			dataValue.setDesc("验证码错误");
-			return dataValue;
-		}
-		
+		smsService.verifySMSCode(updatePwdRo.getMobile(), SMSMsgEvent.SD_UPDATAPWD_MSG.getEventCode(), updatePwdRo.getCode());
+
 		userService.updatePassword(updatePwdRo.getMobile(), updatePwdRo.getPassword());
 		
-		return DataValue.success(Boolean.TRUE);
+		return ReturnValue.success();
 	}
 }

@@ -2,8 +2,6 @@ package com.liefeng.property.vo.staff;
 
 import java.util.Date;
 
-import javax.validation.constraints.NotNull;
-
 import com.liefeng.core.entity.BaseValue;
 import com.liefeng.property.annotation.Dict;
 

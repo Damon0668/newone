@@ -15,6 +15,12 @@ public class SysConstants {
 	public static final String DEFAULT_OEM_CODE = "property";
 	
 	/**
+	 * 默认app_code
+	 */
+	public static final String DEFAULT_APP_CODE = "property";
+	
+	
+	/**
 	 * 字典缓存后缀
 	 */
 	public static final String DICT_CACHE_KEY_SUFFIX = "@DICT_PROPERTY";

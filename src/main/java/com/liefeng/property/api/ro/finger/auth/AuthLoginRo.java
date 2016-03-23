@@ -26,9 +26,20 @@ public class AuthLoginRo extends BaseValue{
 	@NotNull
 	private String password;
 	
-	@ApiModelProperty(value="应用编码",required=true)
+	@ApiModelProperty(value="验证码")
+	private String verifyCode;
+	
+	@ApiModelProperty(value="手机识别码",required=true)
 	@NotNull
-	private String appCode;
+	private String mobileId;
+
+	@ApiModelProperty(value="手机型号",required=true)
+	@NotNull
+	private String mobileModel;
+	
+	@ApiModelProperty(value="个推客户端ID",required=true)
+	@NotNull
+	private String clientId;
 
 	public String getMobile() {
 		return mobile;
@@ -46,11 +57,35 @@ public class AuthLoginRo extends BaseValue{
 		this.password = password;
 	}
 
-	public String getAppCode() {
-		return appCode;
+	public String getMobileId() {
+		return mobileId;
 	}
 
-	public void setAppCode(String appCode) {
-		this.appCode = appCode;
+	public void setMobileId(String mobileId) {
+		this.mobileId = mobileId;
+	}
+
+	public String getMobileModel() {
+		return mobileModel;
+	}
+
+	public void setMobileModel(String mobileModel) {
+		this.mobileModel = mobileModel;
+	}
+
+	public String getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
+
+	public String getVerifyCode() {
+		return verifyCode;
+	}
+
+	public void setVerifyCode(String verifyCode) {
+		this.verifyCode = verifyCode;
 	}
 }

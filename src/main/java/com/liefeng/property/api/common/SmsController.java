@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.core.entity.DataValue;
+import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.service.msg.ISmsService;
 import com.liefeng.property.api.ro.common.VerifyCodeRo;
 import com.liefeng.property.api.ro.common.VerifyRo;
@@ -40,8 +41,8 @@ public class SmsController {
 	@ApiOperation(value="校验验证码", notes="校验验证码")
 	@RequestMapping(value="/verifySmsCode", method=RequestMethod.POST)
 	@ResponseBody
-	public DataValue<Boolean> verifySmsCode(@Valid @ModelAttribute VerifyRo verifyRo){
-		Boolean result = smsService.verifySMSCode(verifyRo.getPhoneNum(), verifyRo.getAction(), verifyRo.getCode());
-		return DataValue.success(result);
+	public ReturnValue verifySmsCode(@Valid @ModelAttribute VerifyRo verifyRo){
+		smsService.verifySMSCode(verifyRo.getPhoneNum(), verifyRo.getAction(), verifyRo.getCode());
+		return ReturnValue.success();
 	}
 }
