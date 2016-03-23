@@ -334,8 +334,14 @@ public class PropertyStaffService implements IPropertyStaffService {
 		logger.info("select PropertyStaff by id is {}",staffId);
 		return PropertyStaffContext.loadById(staffId).findPropertyStaffById4DP();
 	}
+	
+	@Override
 	public void updateStaffPassword(String staffId, String oldPassword, String newPassword) {
 		PropertyStaffContext.loadById(staffId).updataPassword(oldPassword, newPassword);
 	}
 
+	@Override
+	public StaffArchiveVo findStaffArchByStaffId(String staffId) {
+		return StaffArchiveContext.loadByStaffId(staffId).getStaffArchive();
+	}
 }

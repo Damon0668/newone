@@ -273,7 +273,6 @@ public class PropertyStaffContext {
 		return propertyStaffQueryRepository.queryByRoleId(pagingParamVo);
 	}
 	
-	
 	/**
 	 * 根据部门ID查询员工 
 	 * 员工必须是在职并且激活的
@@ -288,7 +287,14 @@ public class PropertyStaffContext {
 		return new ArrayList<PropertyStaffVo>();
 	}
 	
-	
+	/**
+	 * 根据手机号码查询员工 
+	 * 员工必须是在职并且激活的
+	 * @return
+	 */
+	public List<PropertyStaffVo> findByMobile(String mobile){
+		return null;
+	}
 	
 	/**
 	 * 更新密码

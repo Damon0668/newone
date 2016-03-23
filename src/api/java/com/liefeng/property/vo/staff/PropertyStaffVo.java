@@ -2,8 +2,13 @@ package com.liefeng.property.vo.staff;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 import com.liefeng.core.entity.BaseValue;
 import com.liefeng.property.annotation.Dict;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 物业员工值对象
@@ -11,6 +16,7 @@ import com.liefeng.property.annotation.Dict;
  * @author ZhenTingJun
  * @date 2015-12-24
  */
+@ApiModel
 public class PropertyStaffVo extends BaseValue {
 
 	private static final long serialVersionUID = 4284129283467742818L;
@@ -18,83 +24,99 @@ public class PropertyStaffVo extends BaseValue {
 	/**
 	 * 主键
 	 */
+	@ApiModelProperty(value="员工ID")
 	private String id;
 	
 	/**
 	 * 登陆账号
 	 */
+	@ApiModelProperty(value="登陆账号")
 	private String account;
 	
 	/**
 	 * 登陆密码
 	 */
+	@ApiModelProperty(value="登陆密码")
 	private String password;
 	
 	/**
 	 * 员工姓名
 	 */
+	@ApiModelProperty(value="名字")
 	private String name;
 	
 	/**
 	 * 员工工号
 	 */
+	@ApiModelProperty(value="员工工号")
 	private String number;
 	
 	/**
 	 * 入职时间
 	 */
+	@ApiModelProperty(value="入职时间")
 	private Date entryTime;
 	
 	/**
 	 * 在职状态
 	 * 1：在职；2：离职
 	 */
+	@ApiModelProperty(value="在职状态[1：在职；2：离职]")
 	private String workStatus;
 	
 	/**
 	 * 所属部门ID
 	 */
+	@ApiModelProperty(value="所属部门ID")
 	private String departmentId;
 	
 	/**
 	 * 上级领导
 	 */
+	@ApiModelProperty(value="上级领导")
 	private String director;
 	
 	/**
 	 * 职位
 	 */
 	@Dict(group="POSITION")
+	@ApiModelProperty(value="职位")
 	private String position;
 	
 	/**
 	 * 创建时间
 	 */
+	@ApiModelProperty(value="创建时间")
 	private Date createTime;
 	
 	/**
 	 * 创建者ID
 	 */
+	@ApiModelProperty(value="创建者ID")
 	private String creatorId;
 	
 	/**
 	 * OEM编码
 	 */
+	@ApiModelProperty(value="OEM编码")
 	private String oemCode;
 	
 	/**
 	 * 状态
 	 */
+	@ApiModelProperty(value="状态")
 	private String status;
 	
 	/**
 	 * 部门名称
 	 */
+	@ApiModelProperty(value="部门名称")
 	private String departmentName;
 	
 	/**
 	 * 职位名称
 	 */
+	@ApiModelProperty(value="职位名称")
 	private String positionName;
 
 	public String getId() {

@@ -10,6 +10,7 @@ import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.property.vo.staff.StaffArchiveVo;
 
 /**
  * 物业员工服务
@@ -113,6 +114,13 @@ public interface IPropertyStaffService {
 	 * @return
 	 */
 	public List<PropertyDepartmentVo> findStaffContactPrivilege(String staffId);
+	
+	/**
+	 * 查询物业员工档案
+	 * @param staffId 员工ID
+	 * @return
+	 */
+	public StaffArchiveVo findStaffArchByStaffId(String staffId);
 	
 	/**
 	 * 查询物业员工  包含部门名称，职位名称
