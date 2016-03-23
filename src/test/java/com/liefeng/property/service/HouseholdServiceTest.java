@@ -1,5 +1,7 @@
 package com.liefeng.property.service;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,9 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
+import com.liefeng.property.domain.household.ResidentCarContext;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
+import com.liefeng.property.vo.household.ResidentCarVo;
 import com.liefeng.property.vo.household.ResidentVo;
 
 /**
@@ -63,5 +67,11 @@ public class HouseholdServiceTest {
 		
 		ResidentVo resident = householdService.getResident("1","1");
 		System.out.println(resident);
+	}
+	
+	@Test
+	public void findResidentCarByPakingId(){
+		List<ResidentCarVo> residentCarVos = householdService.findResidentCarByPakingId("4028895e533a668401533a6ec0660140");
+		System.out.println(residentCarVos);
 	}
 }

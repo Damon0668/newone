@@ -433,5 +433,12 @@ public interface IHouseholdService {
 	 * @param residentCarVo
 	 */
 	public void updateResidentCar(ResidentCarVo residentCarVo);
+
+	/**
+	 * 根据车位id查询车俩信息
+	 * @param pakingId 车位id
+	 * @return
+	 */
+	public List<ResidentCarVo> findResidentCarByPakingId(String pakingId);
 	
 }

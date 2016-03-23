@@ -936,4 +936,8 @@ public class HouseholdService implements IHouseholdService {
 		ResidentCarContext.build(residentCarVo).update();
 	}
 	
+	@Override
+	public List<ResidentCarVo> findResidentCarByPakingId(String pakingId){
+		return ResidentCarContext.build().findResidentCarByPakingId(pakingId);
+	}
 }
