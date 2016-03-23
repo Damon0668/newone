@@ -1,4 +1,4 @@
-package com.liefeng.property.api;
+package com.liefeng.property.api.finger;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -49,7 +49,7 @@ import com.liefeng.property.vo.household.ResidentVo;
  */
 @Api(value="业主、住户相关接口")
 @RestController
-@RequestMapping(value = "/api/household")
+@RequestMapping(value = "/api/finger/household")
 public class HouseholdController {
 
 	@Autowired
