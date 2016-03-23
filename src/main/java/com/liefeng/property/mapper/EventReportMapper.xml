@@ -36,6 +36,32 @@
 			</if>
 		</trim>
 	</sql>
+	
+	<!-- 流转中查询条件 -->
+	<sql id="Flow_Where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="extra.processId !=null and extra.processId !=''">
+				AND  o.process_Id = #{extra.processId}
+			</if>
+			<if test="extra.startDate != null and extra.startDate != '' 
+				and extra.endDate != null and extra.endDate != ''">
+				ANd er.create_time between #{extra.startDate} AND #{extra.endDate}
+			</if>
+			<if test="extra.taskName != null and extra.taskName != ''">
+				ANd t.task_Name = #{extra.taskName} 
+			</if>
+			<if test="extra.orderNo != null and extra.orderNo != ''">
+				AND o.order_No like CONCAT('%',#{extra.orderNo},'%')
+			</if>
+			<if test="extra.location != null and extra.location != ''">
+				AND er.location like CONCAT('%',#{extra.location},'%')
+			</if>
+			<if test="extra.oemCode != null and extra.oemCode != ''">
+				AND er.oem_code  = #{extra.oemCode}
+			</if>
+		</trim>
+	</sql>
 
 	<select id="queryByPage" resultMap="BaseResultMap">
 		select
@@ -103,11 +129,11 @@
 			<if test="extra.taskName != null and extra.taskName != ''">
 				ANd t.task_Name = #{extra.taskName} 
 			</if>
-			<if test="extra.orderNum != null and extra.orderNum != ''">
-				AND o.order_No like CONCAT('%','#{extra.orderNum}','%');
+			<if test="extra.orderNo != null and extra.orderNo != ''">
+				AND o.order_No like CONCAT('%',#{extra.orderNo},'%')
 			</if>
 			<if test="extra.location != null and extra.location != ''">
-				AND er.location like CONCAT('%','#{extra.location}','%');
+				AND er.location like CONCAT('%',#{extra.location},'%')
 			</if>
 			<if test="extra.oemCode != null and extra.oemCode != ''">
 				AND er.oem_code  = #{extra.oemCode}
@@ -235,8 +261,8 @@
 		AND whta.actor_Id = #{extra.actor}
 		LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
 		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
-		WHERE
-		EXISTS(
+		<include refid="Flow_Where_Clause" />
+		AND EXISTS(
 		SELECT
 			ht.id
 		FROM
@@ -266,8 +292,9 @@
 		LEFT JOIN service.wf_hist_task_actor whta ON wht.id = whta.task_Id
 		AND whta.actor_Id = #{extra.actorId}
 		LEFT JOIN service.wf_process p ON p.id = o.process_id
-		WHERE
-		EXISTS(
+		LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
+		<include refid="Flow_Where_Clause" />
+		AND EXISTS(
 		SELECT
 			ht.id
 		FROM
@@ -330,6 +357,8 @@
     
 		<include refid="Waiting_Where_Clause" />
 		AND o.order_state = '0'
+		AND ep.status = '3'  
+		And t.task_name='returnVisit'
 		AND ta.actor_id in (#{extra.actor})
 		group by o.id
 	ORDER BY
@@ -345,6 +374,7 @@
 	LEFT JOIN service.wf_hist_order o ON t.order_id = o.id
 	LEFT JOIN service.wf_hist_task_actor ta ON ta.task_id = t.id
 	LEFT JOIN service.wf_process p ON p.id = o.process_id
+	LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
 		<include refid="Waiting_Where_Clause" />
 		AND o.order_state = '0'
 		AND ta.actor_id in (#{extra.actorId})
@@ -494,6 +524,40 @@
 		AND (ep.`status`=0 or ep.`status` is null  or ep.`status`=2)
 		AND ep.grab = 1 AND t.task_Name='handle'
 		) t
+	</select>
+	
+	<select  id="findByWfOrderId" resultMap="BaseResultMap">
+	SELECT
+	p.full_name as projectName,
+	er.accepter_id as accepterId,
+	er.accept_time as acceptTime,
+	er.category as category,
+	er.content as content,
+	er.create_time as createTime,
+	er.event_type as eventType,
+	er.house_num as houseNum,
+	er.id as id,
+	er.location as location,
+	er.oem_code as oemCode,
+	er.order_time as orderTime,
+	er.phone as phone,
+	er.pic_url as picUrl,
+	er.priority as priority,
+	er.project_id as projectId,
+	er.proprietor_name as proprietorName,
+	er.reporter_name as reporterName,
+	er.report_mode as reportMode,
+	er.report_time,
+	er.result,
+	er.service_type,
+	er.staff_id,
+	er.`status`,
+	er.title,
+	er.wf_order_id
+	FROM
+	property.t_event_report er
+	left join property.t_project p on p.id = er.project_id
+	where er.wf_order_id=#{wfOrderId}
 	</select>
 	
 </mapper>   

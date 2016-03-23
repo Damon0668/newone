@@ -104,8 +104,8 @@ public class EventReportContext {
 	}
 	
 	public EventReportVo findByWfOrderId(String wfOrderId){
-		EventReportPo eventReportPo = eventReportRepository.findByWfOrderId(wfOrderId);
-		return MyBeanUtil.createBean(eventReportPo, EventReportVo.class);
+		EventReportVo eventReportVo = eventReportQueryRepository.findByWfOrderId(wfOrderId);
+		return eventReportVo;
 	}
 	
 	public DataPageValue<EventReportVo> list(EventReportBo eventReportBo,Integer currentPage,Integer pageSize) {

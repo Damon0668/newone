@@ -30,17 +30,20 @@
 		ep.grab,
 		ep.accept_time as acceptTime,
 		ep.status,
-		ep.consumptions,
-		ep.timeliness,
-		ep.level,
-		ep.attitude,
 		ep.pic_urls as picUrls,
-		ep.revisit_mode as revisitMode,
+		ep.consumptions,
+		
+		er.revisit_mode as revisitMode,
+		er.attitude,
+		er.timeliness,
+		er.level,
+		
 		t.display_Name as taskDisplayName,
 		t.task_Name as taskName
 		FROM
 		service.wf_hist_task t
 		left join property.t_event_process ep on t.id = ep.wf_task_id
+		left join property.t_event_report er on ep.event_id = er.id
 		Where t.order_id=#{orderId}
 	</select>
 	
@@ -59,17 +62,20 @@
 		ep.accept_time as acceptTime,
 		ep.status,
 		ep.consumptions,
-		ep.timeliness,
-		ep.level,
-		ep.attitude,
 		ep.pic_urls as picUrls,
-		ep.revisit_mode as revisitMode,
+		
+		er.revisit_mode as revisitMode,
+		er.attitude,
+		er.timeliness,
+		er.level,
+		
 		t.display_Name as taskDisplayName,
 		t.task_Name as taskName
 		FROM
 		service.wf_task t
 		left join service.wf_task_actor ta on t.id = ta.task_Id
 		left join property.t_event_process ep on t.id = ep.wf_task_id
+		left join property.t_event_report er on ep.event_id = er.id
 		Where t.order_id = #{0}
 		And ta.actor_Id = #{1}
 	</select> 

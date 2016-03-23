@@ -170,6 +170,31 @@ public class EventReportPo extends BaseValue {
 	@Column(name = "oem_code", updatable = false)
 	private String oemCode;
 
+	/**
+	 * 服务及时性。0：不及时；1：及时
+	 */
+	@Column(name = "timeliness")
+	private String timeliness;
+	
+	/**
+	 * 服务水准。0：差；1：一般；2：好
+	 */
+	@Column(name = "level")
+	private String level;
+	
+	/**
+	 * 服务态度。0：差；1：一般；2：好
+	 */
+	@Column(name = "attitude")
+	private String attitude;
+	
+	/**
+	 * 回访方式。1：电话；2：上门
+	 */
+	@Column(name = "revisit_mode")
+	private String revisitMode;
+	
+	
 	public String getId() {
 		return id;
 	}
@@ -368,6 +393,38 @@ public class EventReportPo extends BaseValue {
 
 	public void setWfOrderId(String wfOrderId) {
 		this.wfOrderId = wfOrderId;
+	}
+
+	public String getTimeliness() {
+		return timeliness;
+	}
+
+	public void setTimeliness(String timeliness) {
+		this.timeliness = timeliness;
+	}
+
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
+	}
+
+	public String getAttitude() {
+		return attitude;
+	}
+
+	public void setAttitude(String attitude) {
+		this.attitude = attitude;
+	}
+
+	public String getRevisitMode() {
+		return revisitMode;
+	}
+
+	public void setRevisitMode(String revisitMode) {
+		this.revisitMode = revisitMode;
 	}
 
 }
