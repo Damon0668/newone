@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.ResidentCarQueryRepository" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.household.ResidentCarVo" >
+</resultMap>
+
+
+
+<select id="findResidentCarByPakingId"  resultMap="BaseResultMap">
+	select 
+		rc.id as id,
+		rc.house_id as houseId,
+		rc.plate_num as plateNum,
+		rc.brand as brand,
+		rc.color as color,
+		rc.remark as remark,
+		pr.customer_name as customerName
+	from t_parking_rental pr 
+	LEFT join t_resident_car rc on rc.plate_num=pr.plate_num  
+	where pr.parking_id = #{parkingId} and rc.id is not null
+</select>
+
+</mapper>   

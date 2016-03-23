@@ -1,5 +1,7 @@
 package com.liefeng.property.domain.household;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,9 +106,12 @@ public class VisitorContext {
 	}
 	
 	/**
-	 * 保存访客信息
+	 * 添加访客
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月23日 上午11:44:36
 	 */
-	public void create() {
+	public VisitorVo create() {
 		if(visitor != null) {
 			visitor.setId(UUIDGenerator.generate());
 			visitor.setOemCode(ContextManager.getInstance().getOemCode());
@@ -115,6 +120,41 @@ public class VisitorContext {
 			logger.info("create visitor = {}", visitor);
 			visitorRepository.save(visitorPo);
 		}
+		return visitor;
+	}
+	
+	/**
+	 * 获取用户的访客列表
+	 * @param userId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月23日 下午2:50:29
+	 */
+	public List<VisitorVo> getVisitorList(String userId){
+		List<VisitorVo> visitorVoList = null;
+		if(ValidateHelper.isNotEmptyString(userId)){
+			List<VisitorPo> visitorPoList = visitorRepository.getVisitorPOList(userId);
+			
+			visitorVoList = MyBeanUtil.createList(visitorPoList, VisitorVo.class);
+		}
+		return visitorVoList;
+	}
+	
+	/**
+	 * 获取访客的访问记录
+	 * @param phone 手机号码
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月23日 下午3:22:36
+	 */
+	public List<VisitorVo> getVisitor(String phone){
+		List<VisitorVo> visitorVoList = null;
+		if(ValidateHelper.isNotEmptyString(phone)){
+			List<VisitorPo> visitorPoList = visitorRepository.findByPhoneOrderByInTimeDesc(phone);
+			
+			visitorVoList = MyBeanUtil.createList(visitorPoList, VisitorVo.class);
+		}
+		return visitorVoList;
 	}
 	
 }

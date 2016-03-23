@@ -802,8 +802,23 @@ public class WorkbenchService implements IWorkbenchService {
 		arg.put("dispatching", eventProcessVo.getNextAccepterId());
 		arg.put(SnakerEngine.ID, createOrderNo());
 		Order order = workflowService.startInstanceByName(WorkbenchConstants.EventReport.EVENT_REPORT_FLOW_NAME, 0, staffid,arg);
+		
+		//启动时的task
 		List<Task> tasks = workflowService.getActiveTasks(new QueryFilter().setOrderId(order.getId()));
-		workflowService.execute(tasks.get(0).getId(), staffid, arg);
+		eventProcessVo.setEventId(eventReportVo.getId());
+		eventProcessVo.setWfTaskId(tasks.get(0).getId());
+		eventProcessVo.setCurrAccepterId(staffid);
+		eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_FINISH);
+		EventProcessContext.build(eventProcessVo).create();
+		
+		//执行是的task
+		List<Task> executeTasks = workflowService.execute(tasks.get(0).getId(), staffid, arg);
+		EventProcessVo executeEventProcessVo = new EventProcessVo();
+		executeEventProcessVo.setEventId(eventReportVo.getId());
+		executeEventProcessVo.setWfTaskId(executeTasks.get(0).getId());
+		executeEventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_NO);
+		EventProcessContext.build(executeEventProcessVo).create();
+		
 		eventReportVo.setWfOrderId(order.getId());
 		eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_FINISH);
 		if(ValidateHelper.isEmptyString(eventReportVo.getId()))
@@ -811,9 +826,7 @@ public class WorkbenchService implements IWorkbenchService {
 		else
 			EventReportContext.build(eventReportVo).update();
 		
-		eventProcessVo.setEventId(eventReportVo.getId());
-		eventProcessVo.setWfTaskId(tasks.get(0).getId());
-		EventProcessContext.build(eventProcessVo).create();
+		
 	}
 	
 	
@@ -948,14 +961,16 @@ public class WorkbenchService implements IWorkbenchService {
 			
 		}
 		
+		if(tasks!=null && tasks.size()>0){
+			EventProcessVo eventProcess = new EventProcessVo();
 		if(eventProcessVo.getGrab()!=null && eventProcessVo.getGrab().equals(WorkbenchConstants.EventReport.GRAB_YES)){ //是否抢单
-			if(tasks!=null && tasks.size()>0){
-				EventProcessVo eventProcess = new EventProcessVo();
-				eventProcess.setEventId(eventReportVo.getId());
-				eventProcess.setGrab(WorkbenchConstants.EventReport.GRAB_YES);
-				eventProcess.setWfTaskId(tasks.get(0).getId());
-				EventProcessContext.build(eventProcess).create();;
-			}
+			eventProcess.setGrab(WorkbenchConstants.EventReport.GRAB_YES);
+		}
+			eventProcess.setEventId(eventReportVo.getId());
+			eventProcess.setWfTaskId(tasks.get(0).getId());
+			eventProcess.setStatus(WorkbenchConstants.EventReport.SIGNFOR_NO);
+			EventProcessContext.build(eventProcess).create();;
+			
 		}
 	}
 	
@@ -982,8 +997,6 @@ public class WorkbenchService implements IWorkbenchService {
 			eventProcessVo = new EventProcessVo();
 			eventProcessVo.setWfTaskId(wfTaskId);
 			eventProcessVo.setEventId(eventReportVo.getId());
-			eventProcessVo.setNextAccepterId(arrayToString(actorIds));
-			eventProcessVo.setCurrAccepterId(staffid);
 			EventProcessContext.build(eventProcessVo).create();
 		}
 		
@@ -991,11 +1004,11 @@ public class WorkbenchService implements IWorkbenchService {
 		if(eventProcessVo.getStatus() == null || !eventProcessVo.getStatus().equals(WorkbenchConstants.EventReport.SIGNFOR_YES)){
 			eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_YES);
 			
-			List<String> removeStaffid = compare(actorIds,new String[]{staffid});
+			List<String> removeStaffid = compare(new String[]{staffid},actorIds);
 			
 			//判断是否需要移除其他人
 			if(removeStaffid.size()>0)
-			workflowService.removeTaskActor(wfTaskId, (String[]) removeStaffid.toArray());
+			workflowService.removeTaskActor(wfTaskId,listToArray(removeStaffid) );
 			
 			EventProcessContext.build(eventProcessVo).update();
 		}else{
@@ -1006,26 +1019,37 @@ public class WorkbenchService implements IWorkbenchService {
 	//退回
 	@Override
 	@Transactional
-	public void eventReporSendBack(String wfTaskId){
+	public void eventReporSendBack(String wfTaskId,String staffid){
 		EventProcessContext eventProcessContext = EventProcessContext.build();
 		EventProcessVo eventProcessVo = eventProcessContext.findByWfTaskId(wfTaskId);
 		
 		Task task = workflowService.findTaskById(wfTaskId);
-		String[] actorIds = workflowService.getTaskActorsByTaskId(wfTaskId);
-		if(task == null ){
-			throw new WorkbenchException(WorkbenchErrorCode.TASK_NOT_EXIST);
-		}
+		String[] actorIds = workflowService.getTaskActorsByTaskId(task.getId());
+		
 		if(eventProcessVo.getStatus() != null && eventProcessVo.getStatus().equals(WorkbenchConstants.EventReport.SIGNFOR_YES)){
-			eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_SENDBACK); //将以签收改为待签收
-			EventProcessContext.build(eventProcessVo).update();
-		/*	List<String> removeStaffid = compare(actorIds,eventProcessVo.getNextAccepterId().split(","));
-			//判断是否需要添加其他人
-			if(removeStaffid.size()>0)
-			workflowService.addTaskActor(wfTaskId, (String[])removeStaffid.toArray(new String[removeStaffid.size()]));
-*/			
+			//获取上一步骤的操作信息
+			EventProcessVo preEventProcessVo =  EventProcessContext.build().findByWfTaskId(task.getParentTaskId());
+			
 			Map<String, Object> arg = new HashMap<String, Object>();
 			arg.put(task.getTaskName(), eventProcessVo.getNextAccepterId());
-			workflowService.executeAndJumpTask(task.getId(), "40282081531cf49b01531d3f4e1c0006",arg,task.getTaskName());
+			List<Task> tasks = workflowService.executeAndJumpTask(task.getId(), staffid,arg,task.getTaskName());
+			List<String> removeStaffid = compare(tasks.get(0).getActorIds(),preEventProcessVo.getNextAccepterId().split(","));
+			if(removeStaffid.size()>0)
+			workflowService.addTaskActor(tasks.get(0).getId(), listToArray(removeStaffid));
+			
+			eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_SENDBACK); //将以签收改为待签收
+			eventProcessVo.setNextAccepterId(preEventProcessVo.getNextAccepterId());
+			eventProcessVo.setCurrAccepterId(staffid);
+			EventProcessContext.build(eventProcessVo).update();
+			
+			EventProcessVo processVo = new EventProcessVo();
+			processVo.setGrab(eventProcessVo.getGrab());
+			processVo.setEventId(eventProcessVo.getEventId());
+			processVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_SENDBACK);
+			processVo.setCurrAccepterId(null);
+			processVo.setNextAccepterId(null);
+			processVo.setWfTaskId(tasks.get(0).getId());
+			EventProcessContext.build(processVo).create();
 		}else{
 			throw new WorkbenchException(WorkbenchErrorCode.ALREADY_SENDBACK);
 		}
@@ -1066,7 +1090,10 @@ public class WorkbenchService implements IWorkbenchService {
 	
 	//TODO 字符串 移至core
 	public static <T> List<T> compare(T[] t1, T[] t2) {
-	    List<T> list1 = Arrays.asList(t1);
+		 List<T> list1 = new ArrayList<T>();
+		if(t1 != null){
+			list1 =  Arrays.asList(t1);
+		}
 	    List<T> list2 = new ArrayList<T>();
 	    for (T t : t2) {
 	      if (!list1.contains(t)) {
@@ -1083,6 +1110,14 @@ public class WorkbenchService implements IWorkbenchService {
 			if(array.length-1 < i){
 				string += ",";
 			}
+		}
+		return string;
+	}
+	
+	public static  String[] listToArray(List<String> list){
+		String[] string = new String[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			string[i] = list.get(i);
 		}
 		return string;
 	}

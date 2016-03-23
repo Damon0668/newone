@@ -129,4 +129,23 @@ public class HouseholdConstants {
 		
 	}
 	
+	/**
+	 * 访客录入类型
+	 * @author xhw
+	 * @date 2016年3月23日 下午1:56:40
+	 */
+	public static interface VisitorType {
+		
+		/**
+		 * 0：物业录入
+		 */
+		public String STAFF_CHECKIN = "0";
+		
+		/**
+		 * 1：业主/住户用APP申请录入
+		 */
+		public String USER_CHECKIN = "1";
+		
+	}
+	
 }
