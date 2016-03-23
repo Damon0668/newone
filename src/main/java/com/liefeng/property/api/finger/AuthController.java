@@ -1,4 +1,4 @@
-package com.liefeng.property.api;
+package com.liefeng.property.api.finger;
 
 import javax.validation.Valid;
 
@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api(value="权限模块")
 @RestController
-@RequestMapping(value = "/api/auth")
+@RequestMapping(value = "/api/finger/auth")
 public class AuthController {
 	
 	private static Logger logger = LoggerFactory.getLogger(AuthController.class);

@@ -1,10 +1,9 @@
-package com.liefeng.property.api.sms;
+package com.liefeng.property.api.finger;
 
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.core.entity.ReturnValue;
-import com.liefeng.intf.service.msg.ISmsService;
 import com.liefeng.property.api.ro.sms.SmsSendRo;
 import com.liefeng.service.vo.SMSMsgVo;
 
@@ -22,7 +20,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api(value="短信模块")
 @RestController
-@RequestMapping(value = "/api/sms")
+@RequestMapping(value = "/api/finger/sms")
 public class SmsController {
 	
 	private static Logger logger = LoggerFactory.getLogger(SmsController.class);

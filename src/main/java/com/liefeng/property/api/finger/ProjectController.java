@@ -1,4 +1,4 @@
-package com.liefeng.property.api;
+package com.liefeng.property.api.finger;
 
 import javax.validation.Valid;
 
@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api(value="小区模块")
 @RestController
-@RequestMapping(value = "/api/project")
+@RequestMapping(value = "/api/finger/project")
 public class ProjectController {
 
 	@Autowired
