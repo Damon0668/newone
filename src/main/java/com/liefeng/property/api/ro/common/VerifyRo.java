@@ -1,4 +1,4 @@
-package com.liefeng.property.api.ro.sms;
+package com.liefeng.property.api.ro.common;
 
 import javax.validation.constraints.NotNull;
 
@@ -8,12 +8,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel
-public class SmsSendRo extends BaseValue{
-	
+public class VerifyRo extends BaseValue{
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2198637575067797897L;
+	private static final long serialVersionUID = -7920390802582811449L;
 	
 	@ApiModelProperty(value="手机号码", required=true)
 	@NotNull
@@ -23,8 +23,9 @@ public class SmsSendRo extends BaseValue{
 	@NotNull
 	public String action;
 	
-	@ApiModelProperty(value="模板数据(JSON)")
-	public String paramString;
+	@ApiModelProperty(value="验证码", required=true)
+	@NotNull
+	public String code;
 
 	public String getPhoneNum() {
 		return phoneNum;
@@ -42,11 +43,11 @@ public class SmsSendRo extends BaseValue{
 		this.action = action;
 	}
 
-	public String getParamString() {
-		return paramString;
+	public String getCode() {
+		return code;
 	}
 
-	public void setParamString(String paramString) {
-		this.paramString = paramString;
+	public void setCode(String code) {
+		this.code = code;
 	}
 }

@@ -50,6 +50,24 @@ public class SwaggerConfig {
 				.apiInfo(apiInfo());
 	}
 	
+	/**
+	 * 通用
+	 * @return
+	 */
+	@Bean
+	public Docket common() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("common")
+				.genericModelSubstitutes(DeferredResult.class)
+				.useDefaultResponseMessages(false)
+				.forCodeGeneration(true)
+				.pathMapping("/")
+				.select()
+				.paths(PathSelectors.regex("/api/common/.*"))
+				.build()
+				.apiInfo(apiInfo());
+	}
+	
 	private ApiInfo apiInfo(){
 		return new ApiInfo("列丰-物业系统API", "物业系统API", "1.0", "cock burst!", "@liefeng.com", "", "http://liefeng.com");
 	}

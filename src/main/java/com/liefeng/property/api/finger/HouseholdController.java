@@ -28,19 +28,24 @@ import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.property.api.ro.CheckinQueueListRo;
 import com.liefeng.property.api.ro.CheckinQueueRo;
+import com.liefeng.property.api.ro.PhoneRo;
 import com.liefeng.property.api.ro.ProprietorRo;
 import com.liefeng.property.api.ro.ProprietorStatusRo;
 import com.liefeng.property.api.ro.ResidentIdHouseIdRo;
 import com.liefeng.property.api.ro.ResidentRo;
 import com.liefeng.property.api.ro.ResidentUpdateRo;
+import com.liefeng.property.api.ro.VisitorRo;
 import com.liefeng.property.api.ro.id.HouseIdRo;
 import com.liefeng.property.api.ro.id.ProprietorIdRo;
+import com.liefeng.property.api.ro.id.UserIdRo;
+import com.liefeng.property.api.ro.id.VisitorIdRo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.vo.household.CheckinQueueVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
+import com.liefeng.property.vo.household.VisitorVo;
 
 /**
  * 业主、住户公共服务类（app） 
@@ -321,4 +326,77 @@ public class HouseholdController {
 		return ReturnValue.success();
 	}
 
+	/**
+	 * 添加住户
+	 * @param visitorRo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月23日 下午1:52:53
+	 */
+	@ApiOperation(value="添加访客")
+	@RequestMapping(value="/addVisitor", method=RequestMethod.POST)
+	@ResponseBody
+	public DataValue<String> addVisitor(@Valid @ModelAttribute VisitorRo visitorRo) {
+		
+		VisitorVo visitorVo = new VisitorVo();
+		MyBeanUtil.copyBeanNotNull2Bean(visitorRo, visitorVo);
+		visitorVo.setType(HouseholdConstants.VisitorType.USER_CHECKIN);
+		visitorVo.setInTime(TimeUtil.format(visitorRo.getVisitDate(), "yyyy-MM-dd"));
+		householdService.createVisitor(visitorVo);
+		
+		//TODO
+		String password = "123456";
+		return DataValue.success(password);
+	}
+	
+	/**
+	 * 获取用户的访客列表
+	 * @param userIdRo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月23日 下午2:57:43
+	 */
+	@ApiOperation(value="获取用户的访客列表")
+	@RequestMapping(value="/getVisitorList", method=RequestMethod.POST)
+	@ResponseBody
+	public DataListValue<VisitorVo> getVisitorList(@Valid @ModelAttribute UserIdRo userIdRo) {
+		
+		List<VisitorVo> visitorVoList = householdService.getVisitorList(userIdRo.getUserId());
+		
+		return DataListValue.success(visitorVoList);
+	}
+	
+	/**
+	 * 获取访客的访问记录
+	 * @param phoneRo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月23日 下午3:33:38
+	 */
+	@ApiOperation(value="获取访客的访问记录")
+	@RequestMapping(value="/getVisitorHistory", method=RequestMethod.POST)
+	@ResponseBody
+	public DataListValue<VisitorVo> getVisitorHistory(@Valid @ModelAttribute PhoneRo phoneRo) {
+		
+		List<VisitorVo> visitorVoList = householdService.getVisitorHistory(phoneRo.getPhone());
+		
+		return DataListValue.success(visitorVoList);
+	}
+	
+	/**
+	 * 获取访客的信息
+	 * @param visitorIdRo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月23日 下午4:11:05
+	 */
+	@ApiOperation(value="获取访客的信息")
+	@RequestMapping(value="/getVisitor", method=RequestMethod.POST)
+	@ResponseBody
+	public DataValue<VisitorVo> getVisitor(@Valid @ModelAttribute VisitorIdRo visitorIdRo) {
+		
+		VisitorVo visitorVo = householdService.getVisitor(visitorIdRo.getVisitorId());
+		
+		return DataValue.success(visitorVo);
+	}
 }

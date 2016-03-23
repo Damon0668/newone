@@ -581,7 +581,7 @@ public interface IWorkbenchService {
 	 * 退回
 	 * @param wfTaskId
 	 */
-	public void eventReporSendBack(String wfTaskId);
+	public void eventReporSendBack(String wfTaskId,String staffid);
 
 	/**
 	 * 获取当前活动的任务

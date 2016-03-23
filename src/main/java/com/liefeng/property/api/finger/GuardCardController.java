@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IGuardService;
-import com.liefeng.property.api.ro.guard.GuardCardStatusRo;
+import com.liefeng.property.api.ro.finger.guard.GuardCardStatusRo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
