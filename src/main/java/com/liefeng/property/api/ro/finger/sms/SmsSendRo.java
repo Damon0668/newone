@@ -1,4 +1,4 @@
-package com.liefeng.property.api.ro.sms;
+package com.liefeng.property.api.ro.finger.sms;
 
 import javax.validation.constraints.NotNull;
 

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.core.entity.ReturnValue;
-import com.liefeng.property.api.ro.sms.SmsSendRo;
+import com.liefeng.property.api.ro.finger.sms.SmsSendRo;
 import com.liefeng.service.vo.SMSMsgVo;
 
 import io.swagger.annotations.Api;
