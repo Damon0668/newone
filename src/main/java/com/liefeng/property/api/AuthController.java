@@ -39,13 +39,11 @@ public class AuthController {
 	@Autowired
 	private ILoginUserService loginUserService;
 
-	@ApiOperation(value="登陆", notes="登陆接口")
-	@RequestMapping(value="/login", method=RequestMethod.POST)
+	@ApiOperation(value="用户登陆", notes="用户登陆接口")
+	@RequestMapping(value="/user/login", method=RequestMethod.POST)
 	@ResponseBody
-	public DataValue<LoginUserVo> login(@Valid @ModelAttribute AuthLoginRo authLogin){
-		
-		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
-		
+	public DataValue<LoginUserVo> userLogin(@Valid @ModelAttribute AuthLoginRo authLogin){
+
 		LoginUserVo loginUser = null;
 		
 		try{
@@ -58,10 +56,17 @@ public class AuthController {
 			loginUser = loginUserService.findLoginUser(user.getCustGlobalId());
 
 		}catch(LiefengException e){
-			logger.info("鉴权失败 {}", e);
+			logger.error("鉴权失败 {}", e);
 			throw e;
 		}
 		
 		return DataValue.success(loginUser);
+	}
+	
+	@ApiOperation(value="员工登陆", notes="员工登陆接口")
+	@RequestMapping(value="/staff/login", method=RequestMethod.POST)
+	@ResponseBody
+	public void staffLogin(){
+		
 	}
 }
