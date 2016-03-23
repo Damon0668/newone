@@ -203,9 +203,9 @@ public class ProjectService implements IProjectService {
 	}
 
 	@Override
-	public void deleteHouseSpec(String houseSpecId) {
+	public String deleteHouseSpec(String houseSpecId) {
 		HouseSpecContext houseSpecContext = HouseSpecContext.loadById(houseSpecId);
-		houseSpecContext.delete();
+		return houseSpecContext.delete();
 	}
 
 	@Override
