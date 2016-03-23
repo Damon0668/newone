@@ -21,6 +21,7 @@ import com.liefeng.property.vo.household.ResidentCarVo;
 import com.liefeng.property.vo.household.ResidentFeedbackVo;
 import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
+import com.liefeng.property.vo.household.VisitorVo;
 
 /**
  * household包相关表接口类
@@ -433,5 +434,48 @@ public interface IHouseholdService {
 	 * @param residentCarVo
 	 */
 	public void updateResidentCar(ResidentCarVo residentCarVo);
+
+	/**
+	 * 根据车位id查询车俩信息
+	 * @param pakingId 车位id
+	 * @return
+	 */
+	public List<ResidentCarVo> findResidentCarByPakingId(String pakingId);
+	
+	/**
+	 * 添加访客
+	 * @param visitorVo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月23日 上午11:42:11
+	 */
+	public VisitorVo createVisitor(VisitorVo visitorVo);
+	
+	/**
+	 * 获取用户的访客列表
+	 * @param userId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月23日 下午2:53:58
+	 */
+	public List<VisitorVo> getVisitorList(String userId);
+	
+	/**
+	 * 获取访客的访问记录
+	 * @param phone 手机号码
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月23日 下午3:22:36
+	 */
+	public List<VisitorVo> getVisitorHistory(String phone);
+	
+	/**
+	 * 获取访客的信息
+	 * @param visitorId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月23日 下午4:07:12
+	 */
+	public VisitorVo getVisitor(String visitorId);
 	
 }

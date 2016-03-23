@@ -122,5 +122,6 @@ public class ParkingServiceTest {
 		parkingVo.setSuitableCar("1");
 		parkingService.createManyParking(parkingVo,"A100","A200");
 	}
-
+	
+	
 }

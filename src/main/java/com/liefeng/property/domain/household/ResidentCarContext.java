@@ -1,5 +1,7 @@
 package com.liefeng.property.domain.household;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.property.po.household.ResidentCarPo;
 import com.liefeng.property.repository.household.ResidentCarRepository;
+import com.liefeng.property.repository.mybatis.ResidentCarQueryRepository;
 import com.liefeng.property.vo.household.ResidentCarVo;
 
 /**
@@ -28,7 +31,10 @@ public class ResidentCarContext {
 
 	@Autowired
 	private ResidentCarRepository residentCarRepository;
-
+	
+	@Autowired
+	private ResidentCarQueryRepository residentCarQueryRepository;
+	
 	/**
 	 * 住户车辆信息ID
 	 */
@@ -120,7 +126,11 @@ public class ResidentCarContext {
 	public void update() {
 		residentCarRepository.save(MyBeanUtil.createBean(residentCar, ResidentCarPo.class));
 	}
-
+	
+	public List<ResidentCarVo> findResidentCarByPakingId(String pakingId) {
+		return residentCarQueryRepository.findResidentCarByPakingId(pakingId);
+	}
+	
 	public ResidentCarVo findByPlateNum(String plateNum) {
 		logger.info("plateNum is {}",plateNum);
 		ResidentCarPo residentCarPo = residentCarRepository.findByPlateNum(plateNum);
@@ -134,6 +144,4 @@ public class ResidentCarContext {
 	protected void setResidentCarId(String residentCarId) {
 		this.residentCarId = residentCarId;
 	}
-
-	
 }

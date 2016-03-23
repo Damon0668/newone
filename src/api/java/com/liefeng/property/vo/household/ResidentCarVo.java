@@ -41,6 +41,11 @@ public class ResidentCarVo extends BaseValue {
 	 * 备注
 	 */
 	private String remark;
+	
+	/**
+	 * 租售时的客户名称
+	 */
+	private String customerName;
 
 	public String getId() {
 		return id;
@@ -88,6 +93,14 @@ public class ResidentCarVo extends BaseValue {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
 	}
 
 }

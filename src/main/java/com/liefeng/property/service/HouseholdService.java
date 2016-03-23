@@ -43,6 +43,7 @@ import com.liefeng.property.domain.household.ResidentCarContext;
 import com.liefeng.property.domain.household.ResidentContext;
 import com.liefeng.property.domain.household.ResidentFeedbackContext;
 import com.liefeng.property.domain.household.ResidentHouseContext;
+import com.liefeng.property.domain.household.VisitorContext;
 import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.error.HouseholdErrorCode;
 import com.liefeng.property.exception.PropertyException;
@@ -58,6 +59,7 @@ import com.liefeng.property.vo.household.ResidentCarVo;
 import com.liefeng.property.vo.household.ResidentFeedbackVo;
 import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
+import com.liefeng.property.vo.household.VisitorVo;
 import com.liefeng.property.vo.project.HouseVo;
 
 /**
@@ -935,5 +937,33 @@ public class HouseholdService implements IHouseholdService {
 	public void updateResidentCar(ResidentCarVo residentCarVo){
 		ResidentCarContext.build(residentCarVo).update();
 	}
+
+	@Override
+	public VisitorVo createVisitor(VisitorVo visitorVo) {
+		VisitorContext visitorContext = VisitorContext.build(visitorVo);
+		return visitorContext.create();
+	}
+
+	@Override
+	public List<VisitorVo> getVisitorList(String userId) {
+		VisitorContext visitorContext = VisitorContext.build();
+		return visitorContext.getVisitorList(userId);
+	}
+
+	@Override
+	public List<VisitorVo> getVisitorHistory(String phone) {
+		VisitorContext visitorContext = VisitorContext.build();
+		return visitorContext.getVisitor(phone);
+	}
+
+	@Override
+	public VisitorVo getVisitor(String visitorId) {
+		VisitorContext visitorContext = VisitorContext.loadById(visitorId);
+		return visitorContext.getVisitor();
+	}
 	
+	@Override
+	public List<ResidentCarVo> findResidentCarByPakingId(String pakingId){
+		return ResidentCarContext.build().findResidentCarByPakingId(pakingId);
+	}
 }

@@ -15,10 +15,14 @@ import com.liefeng.base.bo.UserLoginBo;
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.core.entity.DataValue;
+import com.liefeng.core.error.IErrorCode;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.api.ILoginUserService;
+import com.liefeng.intf.service.msg.ISmsService;
+import com.liefeng.mq.type.SMSMsgEvent;
 import com.liefeng.property.api.ro.finger.auth.AuthLoginRo;
+import com.liefeng.property.api.ro.finger.auth.UpdatePwdRo;
 import com.liefeng.property.vo.api.LoginUserVo;
 
 import io.swagger.annotations.Api;
@@ -33,6 +37,9 @@ public class AuthController {
 	
 	@Autowired
 	private IUserService userService;
+	
+	@Autowired
+	private ISmsService smsService;
 	
 	@Autowired
 	private ILoginUserService loginUserService;
@@ -59,5 +66,24 @@ public class AuthController {
 		}
 		
 		return DataValue.success(loginUser);
+	}
+	
+	@ApiOperation(value="忘记密码-修改密码", notes="忘记密码后,修改密码")
+	@RequestMapping(value="/updatePwdByForget", method=RequestMethod.POST)
+	@ResponseBody
+	public DataValue<Boolean> updatePwdByForget(@Valid @ModelAttribute UpdatePwdRo updatePwdRo){
+		
+		Boolean result = smsService.verifySMSCode(updatePwdRo.getMobile(), SMSMsgEvent.SD_UPDATAPWD_MSG.getEventCode(), updatePwdRo.getCode());
+		
+		if(!result){
+			DataValue<Boolean> dataValue = new DataValue<Boolean>();
+			dataValue.setCode(IErrorCode.SYSTEM_ERROR);
+			dataValue.setDesc("验证码错误");
+			return dataValue;
+		}
+		
+		userService.updatePassword(updatePwdRo.getMobile(), updatePwdRo.getPassword());
+		
+		return DataValue.success(Boolean.TRUE);
 	}
 }
