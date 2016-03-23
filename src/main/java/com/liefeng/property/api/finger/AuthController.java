@@ -40,7 +40,7 @@ public class AuthController {
 	private ILoginUserService loginUserService;
 
 	@ApiOperation(value="用户登陆", notes="用户登陆接口")
-	@RequestMapping(value="/user/login", method=RequestMethod.POST)
+	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<LoginUserVo> userLogin(@Valid @ModelAttribute AuthLoginRo authLogin){
 
@@ -61,12 +61,5 @@ public class AuthController {
 		}
 		
 		return DataValue.success(loginUser);
-	}
-	
-	@ApiOperation(value="员工登陆", notes="员工登陆接口")
-	@RequestMapping(value="/staff/login", method=RequestMethod.POST)
-	@ResponseBody
-	public void staffLogin(){
-		
 	}
 }
