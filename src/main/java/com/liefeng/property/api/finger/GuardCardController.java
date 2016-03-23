@@ -1,4 +1,4 @@
-package com.liefeng.property.api;
+package com.liefeng.property.api.finger;
 
 import javax.validation.Valid;
 
@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api(value="门禁磁卡模块")
 @RestController
-@RequestMapping(value = "/api/guard/car")
+@RequestMapping(value = "/api/finger/guard/car")
 public class GuardCardController {
 	
 	@Autowired
