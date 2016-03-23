@@ -15,7 +15,6 @@ import com.liefeng.Application;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.property.IHouseholdService;
-import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.property.bo.household.ResidentFeedbackBo;
 import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
@@ -45,7 +44,7 @@ public class ResidentContextTest {
 	public void getResidents() {
 		
 		ResidentContext residentContext = ResidentContext.build();
-		List<ResidentVo> dataList = residentContext.getResidentsInProprietorHouse("0000000052a7943f0152a7943fc00000", "C1602271525558af41b8e436795");
+		List<ResidentVo> dataList = residentContext.queryRelatedHouse("0000000052a7943f0152a7943fc00000", "C1602271525558af41b8e436795");
 		
 		System.out.println(dataList);
 	}

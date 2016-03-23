@@ -220,10 +220,12 @@
 		u.create_time AS createTime
 	FROM
 		basic.t_user u
-	LEFT JOIN property.t_proprietor p 
-	ON p.cust_global_id = u.cust_global_id AND p.phone = u.mobile AND p.oem_code = u.oem_code
-	LEFT JOIN property.t_proprietor_house ph ON ph.proprietor_id = p.id
-	LEFT JOIN property.t_house h ON h.project_id = ph.project_id AND h.house_num = ph.house_num
+		LEFT JOIN property.t_proprietor p 
+		ON p.cust_global_id = u.cust_global_id AND p.phone = u.mobile AND p.oem_code = u.oem_code
+		LEFT JOIN property.t_proprietor_house ph ON ph.proprietor_id = p.id
+		LEFT JOIN property.t_house h ON h.project_id = ph.project_id AND h.house_num = ph.house_num
+	WHERE
+		h.house_num IS NOT NULL
 </sql>
 
 <!-- 住户用户 -->
@@ -245,11 +247,13 @@
 		u.create_time AS createTime
 	FROM
 		basic.t_user u
-	LEFT JOIN property.t_resident r ON r.cust_global_id = u.cust_global_id
-	AND r.mobile = u.mobile
-	AND r.oem_code = u.oem_code
-	LEFT JOIN property.t_resident_house rh ON rh.resident_id = r.id
-	LEFT JOIN property.t_house h ON h.id = rh.house_id
+		LEFT JOIN property.t_resident r ON r.cust_global_id = u.cust_global_id
+		AND r.mobile = u.mobile
+		AND r.oem_code = u.oem_code
+		LEFT JOIN property.t_resident_house rh ON rh.resident_id = r.id
+		LEFT JOIN property.t_house h ON h.id = rh.house_id
+	WHERE
+		h.house_num IS NOT NULL
 </sql>
 
 <!-- 查询用户列表 -->

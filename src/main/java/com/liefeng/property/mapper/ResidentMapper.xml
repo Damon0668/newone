@@ -158,7 +158,7 @@ FROM
 </select>
 
 <!-- 查询账号关联房子中的住户或业主-->
-<select id="queryRelatedHouse" resultMap="BaseResultMap">
+<select id="queryRelatedHouses" resultMap="BaseResultMap">
 SELECT DISTINCT
 	houseNum,
 	projectName,
