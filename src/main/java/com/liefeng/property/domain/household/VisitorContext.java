@@ -20,6 +20,7 @@ import com.liefeng.property.vo.household.VisitorVo;
  * 
  * @author ZhenTingJun
  * @author 蔡少东
+ * @author xhw
  * @date 2015-12-23
  */
 @Service
