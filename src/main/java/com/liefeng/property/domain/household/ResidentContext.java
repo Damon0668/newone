@@ -258,14 +258,14 @@ public class ResidentContext {
 	 * @param custGlobalId 业主关联的全局客户ID
 	 * @return 住户列表
 	 */
-	public List<ResidentVo> getResidentsInProprietorHouse(String projectId, String custGlobalId) {
+	public List<ResidentVo> queryRelatedHouse(String projectId, String custGlobalId) {
 		PagingParamVo pagingParamVo = new PagingParamVo();
 		Map<String, String> extra = new HashMap<String ,String>();
 		extra.put("projectId", projectId);
 		extra.put("custGlobalId", custGlobalId);
 		pagingParamVo.setExtra(extra);
 		
-		return residentQueryRepository.queryResidentInProprietorHouse(pagingParamVo);
+		return residentQueryRepository.queryRelatedHouses(pagingParamVo);
 	}
 
 	

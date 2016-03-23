@@ -43,7 +43,7 @@ public class ProprietorContextTest {
 		proprietorBo.setOemCode("property");
 		
 		ProprietorContext proprietorContext = ProprietorContext.build();
-		DataPageValue<UserVo> dataPage = proprietorContext.listProprietorUser(proprietorBo, 1, 10);
+		DataPageValue<UserVo> dataPage = proprietorContext.listUsers(proprietorBo, 1, 10);
 		System.out.println(dataPage);
 	}
 	

@@ -322,6 +322,11 @@ public interface IProjectService {
 	 */
 	public List<HouseGraphVo> getHouseGraphs(HouseBo param);
 	
+	/**
+	 * 查询房产视图合计数据
+	 * @param param 查询过滤参数
+	 * @return 房产合计数据
+	 */
 	public HouseGraphVo getHouseGraphCount(HouseBo param);
 	
 }

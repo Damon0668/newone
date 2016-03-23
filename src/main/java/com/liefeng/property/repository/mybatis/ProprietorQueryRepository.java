@@ -27,13 +27,13 @@ public interface ProprietorQueryRepository extends BaseRepository<ProprietorSing
 	 * @param param 查询过滤参数
 	 * @return 
 	 */
-	public List<UserVo> queryProprietorUser(PagingParamVo param);
+	public List<UserVo> queryUserByPage(PagingParamVo param);
 	
 	/**
 	 * 查询业主用户信息总数
 	 * @param param 查询过滤参数 
 	 * @return
 	 */
-	public Long queryProprietorUserCount(PagingParamVo param);
+	public Long queryUserByCount(PagingParamVo param);
 	
 }

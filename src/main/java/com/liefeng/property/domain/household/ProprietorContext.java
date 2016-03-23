@@ -232,7 +232,7 @@ public class ProprietorContext {
 	 * @param pageSize 分页大小
 	 * @return
 	 */
-	public DataPageValue<UserVo> listProprietorUser(ProprietorBo params, Integer currentPage, Integer pageSize) {
+	public DataPageValue<UserVo> listUsers(ProprietorBo params, Integer currentPage, Integer pageSize) {
 		logger.info("查询参数为{}，分页当前页为{}，分页大小为{}", params, currentPage, pageSize);
 		// 查询参数拷贝
 		Map<String, String> extra = MyBeanUtil.bean2Map(params);
@@ -242,13 +242,13 @@ public class ProprietorContext {
 		pagingParamVo.setRows(pageSize);
 		pagingParamVo.setPage(currentPage);
 
-		Long count = proprietorQueryRepository.queryProprietorUserCount(pagingParamVo);
+		Long count = proprietorQueryRepository.queryUserByCount(pagingParamVo);
 		count = (count == null ? 0 : count);
 		logger.info("总数量：count=" + count);
 		
 		// 设置数据总行数，用于计算偏移量
 		pagingParamVo.getPager().setRowCount(count);
-		List<UserVo> userList = proprietorQueryRepository.queryProprietorUser(pagingParamVo);
+		List<UserVo> userList = proprietorQueryRepository.queryUserByPage(pagingParamVo);
 		userList = (ValidateHelper.isEmptyCollection(userList) ? 
 				new ArrayList<UserVo>() : userList);
 

@@ -141,7 +141,7 @@ public class HouseholdService implements IHouseholdService {
 					// 用户信息校验
 					user = checkService.createUserCheck(user);
 				} catch (UserException e) {
-					logger.error("创建用户出现异常，异常编码为({})，异常信息为({})", e.getCode(), e.getMessage());
+					logger.error("创建用户信息校验出现异常，异常编码为({})，异常信息为({})", e.getCode(), e.getMessage());
 					return;
 				}
 				
@@ -408,19 +408,19 @@ public class HouseholdService implements IHouseholdService {
 	 * 分页查询业主用户信息
 	 */
 	@Override
-	public DataPageValue<UserVo> listProprietorUser(ProprietorBo params, Integer currentPage, Integer pageSize) {
+	public DataPageValue<UserVo> listUsers(ProprietorBo params, Integer currentPage, Integer pageSize) {
 		ProprietorContext proprietorContext = ProprietorContext.build();
 		
-		return proprietorContext.listProprietorUser(params, currentPage, pageSize);
+		return proprietorContext.listUsers(params, currentPage, pageSize);
 	}
 	
 	/**
-	 * 获取业主所有房产中的住户
+	 * 获取账号关联房子中的住户或业主
 	 */
 	@Override
-	public List<ResidentVo> getResidentsInProprietorHouse(String projectId, String custGlobalId) {
+	public List<ResidentVo> queryRelatedHouses(String projectId, String custGlobalId) {
 		ResidentContext residentContext = ResidentContext.build();
-		return residentContext.getResidentsInProprietorHouse(projectId, custGlobalId);
+		return residentContext.queryRelatedHouse(projectId, custGlobalId);
 	}
 	
 	/**

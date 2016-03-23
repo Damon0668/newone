@@ -132,15 +132,15 @@ public interface IHouseholdService {
 	 * @param pageSize 分页大小
 	 * @return
 	 */
-	public DataPageValue<UserVo> listProprietorUser(ProprietorBo params, Integer currentPage, Integer pageSize);
+	public DataPageValue<UserVo> listUsers(ProprietorBo params, Integer currentPage, Integer pageSize);
 	
 	/**
-	 * 获取业主所有房产中的住户
+	 * 获取账号关联房子中的住户或业主
 	 * @param projectId 项目ID
 	 * @param custGlobalId 业主关联客户全局ID
-	 * @return 住户信息列表
+	 * @return 住户或业主信息列表
 	 */
-	public List<ResidentVo> getResidentsInProprietorHouse(String projectId, String custGlobalId);
+	public List<ResidentVo> queryRelatedHouses(String projectId, String custGlobalId);
 	
 	/**
 	 * 分页查询入住排队信息
