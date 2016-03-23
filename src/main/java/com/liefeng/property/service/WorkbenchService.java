@@ -231,9 +231,9 @@ public class WorkbenchService implements IWorkbenchService {
 		NoticeContext noticeContext = NoticeContext.build(notice);
 		NoticeVo noticeVo =  noticeContext.create();
 		
-		if(noticeVo.getStaffMessage().trim().length()>0){   //通知的员工权限
+		if(notice.getStaffMessage().trim().length()>0){   //通知的员工权限
 			//每个权限使用逗号隔开，权限的具体信息使用|隔开
-			String[] staffArray = noticeVo.getStaffMessage().split(",");
+			String[] staffArray = notice.getStaffMessage().split(",");
 			
 			for(int i=0; i<staffArray.length; i++){
 				String[] staff = staffArray[i].split("\\|");
@@ -255,9 +255,9 @@ public class WorkbenchService implements IWorkbenchService {
 			}
 		}
 		
-		if(noticeVo.getProprietorMessage().trim().length()>0){  //业主、住户
+		if(notice.getProprietorMessage().trim().length()>0){  //业主、住户
 			//每个权限使用逗号隔开，权限的具体信息使用|隔开
-			String[] proprietorArray = noticeVo.getProprietorMessage().split(",");
+			String[] proprietorArray = notice.getProprietorMessage().split(",");
 			for(int i=0; i<proprietorArray.length; i++){
 				String[] proprietor = proprietorArray[i].split("\\|");
 				NoticePrivilegeVo noticePrivilegeVo = new NoticePrivilegeVo();
@@ -285,9 +285,9 @@ public class WorkbenchService implements IWorkbenchService {
 		NoticeContext noticeContext = NoticeContext.build(notice);
 		NoticeVo noticeVo = noticeContext.update();
 		
-		if(ValidateHelper.isNotEmptyString(noticeVo.getStaffMessage())){   //员工
+		if(ValidateHelper.isNotEmptyString(notice.getStaffMessage())){   //员工
 			//每个权限使用逗号隔开，权限的具体信息使用|隔开
-			String[] staffArray = noticeVo.getStaffMessage().split(",");
+			String[] staffArray = notice.getStaffMessage().split(",");
 			for(int i=0; i<staffArray.length; i++){
 				String[] staff = staffArray[i].split("\\|");
 				NoticePrivilegeVo noticePrivilegeVo = new NoticePrivilegeVo();
@@ -306,9 +306,9 @@ public class WorkbenchService implements IWorkbenchService {
 				
 			}
 		}
-		if(ValidateHelper.isNotEmptyString(noticeVo.getProprietorMessage())){  //业主、住户
+		if(ValidateHelper.isNotEmptyString(notice.getProprietorMessage())){  //业主、住户
 			//每个权限使用逗号隔开，权限的具体信息使用|隔开
-			String[] proprietorArray = noticeVo.getProprietorMessage().split(",");
+			String[] proprietorArray = notice.getProprietorMessage().split(",");
 			for(int i=0; i<proprietorArray.length; i++){
 				String[] proprietor = proprietorArray[i].split("\\|");
 				NoticePrivilegeVo noticePrivilegeVo = new NoticePrivilegeVo();
