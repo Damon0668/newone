@@ -27,7 +27,7 @@ public class SwaggerConfig {
 				.forCodeGeneration(true)
 				.pathMapping("/")
 				.select()
-				.paths(PathSelectors.regex("/api/.*"))
+				.paths(PathSelectors.regex("/api/finger/.*"))
 				.build()
 				.apiInfo(apiInfo());
 	}
@@ -45,7 +45,7 @@ public class SwaggerConfig {
 				.forCodeGeneration(true)
 				.pathMapping("/")
 				.select()
-				.paths(PathSelectors.regex("/api/auth/.*"))
+				.paths(PathSelectors.regex("/api/work/.*"))
 				.build()
 				.apiInfo(apiInfo());
 	}
