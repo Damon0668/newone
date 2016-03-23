@@ -157,51 +157,76 @@ FROM
 	      AND r.status != '2'
 </select>
 
-<!-- 查询业主房产中住户 -->
-<select id="queryResidentInProprietorHouse" resultMap="BaseResultMap">
-	select
-		pj.full_name as projectName,
-		h.house_num as houseNum,
-		r.name as name,
-		rh.resident_relation as residentRelation
-	from
-		property.t_resident r
-		left join property.t_resident_house rh
-		on rh.resident_id = r.id and rh.oem_code = r.oem_code 
-		left join property.t_proprietor p
-		on p.id = rh.proprietor_id
-		left join property.t_house h
-		on h.id = rh.house_id ,
-		property.t_project pj
-	where
-		p.project_id = pj.id
-		and p.project_id = #{extra.projectId} 
-		and p.cust_global_id = #{extra.custGlobalId}
-	order by
-		h.house_num
+<!-- 查询账号关联房子中的住户或业主-->
+<select id="queryRelatedHouse" resultMap="BaseResultMap">
+SELECT DISTINCT
+	houseNum,
+	projectName,
+	name,
+	residentRelation
+FROM (
+	(SELECT
+		pj.full_name AS projectName,
+		h.house_num AS houseNum,
+		p.name AS name,
+		'01' AS residentRelation,
+		p.project_id AS projectId,
+		p.cust_global_id AS custGlobalId
+	FROM
+		property.t_proprietor p
+		LEFT JOIN property.t_proprietor_house ph 
+		ON ph.proprietor_id = p.id
+		LEFT JOIN property.t_house h 
+		ON h.project_id = ph.project_id AND h.house_num = ph.house_num
+		LEFT JOIN property.t_project pj 
+		ON pj.id = p.project_id)
+	UNION ALL
+	(SELECT 
+		pj.full_name AS projectName,
+		h.house_num AS houseNum,
+		p.name AS name,
+		rh.resident_relation AS residentRelation,
+		r.project_id AS projectId,
+		r.cust_global_id AS custGlobalId
+	FROM
+		property.t_resident r 
+		LEFT JOIN property.t_resident_house rh 
+		ON rh.resident_id = r.id
+		LEFT JOIN property.t_house h 
+		ON h.id = rh.house_id 
+		LEFT JOIN property.t_project pj 
+		ON pj.id = r.project_id 
+		LEFT JOIN property.t_proprietor_house ph 
+		ON ph.project_id = h.project_id AND ph.house_num = h.house_num
+		LEFT JOIN property.t_proprietor p 
+		ON p.id = ph.proprietor_id)
+	) AS v
+WHERE
+	v.projectId = #{extra.projectId}
+	AND v.custGlobalId = #{extra.custGlobalId}
+ORDER BY
+	v.houseNum
 </select>
 
 <sql id="GuardResident_Where_Clause">
     WHERE 1=1 
-<trim  suffixOverrides="," >
-    <if test="extra.projectId != null and extra.projectId != ''" >
-        AND t.projectId =  #{extra.projectId}
-    </if>
-
-    <if test="extra.houseNum != null and extra.houseNum != ''" >
-        AND t.houseNum =  #{extra.houseNum}
-    </if>
-    
-     <if test="extra.name != null and extra.name != ''" >
-        AND t.name like CONCAT('%',#{extra.name},'%')
-    </if>
-    
-    <if test="extra.buildingId != null and extra.buildingId != ''" >
-        AND t.building_id =  #{extra.buildingId}
-    </if>
-
-    
-</trim>
+	<trim  suffixOverrides="," >
+	    <if test="extra.projectId != null and extra.projectId != ''" >
+	        AND t.projectId =  #{extra.projectId}
+	    </if>
+	
+	    <if test="extra.houseNum != null and extra.houseNum != ''" >
+	        AND t.houseNum =  #{extra.houseNum}
+	    </if>
+	    
+	     <if test="extra.name != null and extra.name != ''" >
+	        AND t.name like CONCAT('%',#{extra.name},'%')
+	    </if>
+	    
+	    <if test="extra.buildingId != null and extra.buildingId != ''" >
+	        AND t.building_id =  #{extra.buildingId}
+	    </if>
+	</trim>
 </sql>
 
 <select id="queryGuardResidents" resultMap="GuardResidentVo">

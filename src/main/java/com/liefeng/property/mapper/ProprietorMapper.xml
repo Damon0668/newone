@@ -63,34 +63,34 @@
 
 <!-- 用户查询条件 -->
 <sql id="User_Where_Clause">
-	where 1=1 
+	WHERE 1=1 
 <trim  suffixOverrides="," >
 	<if test="extra.projectId != null and extra.projectId != ''" >
-	    and p.project_id =  #{extra.projectId}
+	    AND v.projectId =  #{extra.projectId}
 	</if>
 	
 	<if test="extra.oemCode != null and extra.oemCode != ''" >
-	    and u.oem_code = #{extra.oemCode}
+	    AND v.oemCode = #{extra.oemCode}
 	</if>
 	
 	<if test="extra.buildingId != null and extra.buildingId != ''" >
-	    and h.building_id = #{extra.buildingId}
+	    AND v.buildingId = #{extra.buildingId}
 	</if>
 	
 	<if test="extra.floorId != null and extra.floorId != ''" >
-	    and h.floor_id = #{extra.floorId}
+	    AND v.floorId = #{extra.floorId}
 	</if>
 	
 	<if test="extra.phone != null and extra.phone != ''" >
-	    and u.mobile like concat('%',#{extra.phone},'%')
+	    AND v.mobile LIKE CONCAT('%',#{extra.phone},'%')
 	</if>
 	
 	<if test="extra.proprietorName != null and extra.proprietorName != ''" >
-	    and p.name like concat('%',#{extra.proprietorName},'%')
+	    AND c.real_name LIKE CONCAT('%',#{extra.proprietorName},'%')
 	</if>
 	
 	<if test="extra.houseNum != null and extra.houseNum != ''" >
-	    and h.house_num like concat('%',#{extra.houseNum},'%')
+	    AND v.houseNum LIKE CONCAT('%',#{extra.houseNum},'%')
 	</if>
 </trim>
 </sql>
@@ -201,49 +201,101 @@
 	    a.id = #{proprietorHouseId}
 </select>
 
-
-<select id="queryProprietorUser" resultMap="UserResultMap">
-	select 
-		distinct u.id as id,
-		u.user_global_id as userGlobalId,
-		u.cust_global_id as custGlobalId,
-		u.register_type as registerType,
-		u.mobile as mobile,
-		u.activate_time as activateTime,
-		u.last_login_time as lastLoginTime,
-		u.status as status,
-		u.oem_code as oemCode,
-		p.name as customerName
-	from
+<!-- 业主用户 -->
+<sql id="proprietor_user">
+	SELECT
+		u.id AS id,
+		u.user_global_id AS userGlobalId,
+		u.cust_global_id AS custGlobalId,
+		u.register_type AS registerType,
+		u.mobile AS mobile,
+		u.activate_time AS activateTime,
+		u.last_login_time AS lastLoginTime,
+		u.status AS status,
+		u.oem_code AS oemCode,
+		p.project_id AS projectId,
+		h.building_id AS buildingId,
+		h.floor_id AS floorId,
+		h.house_num AS houseNum,
+		u.create_time AS createTime
+	FROM
 		basic.t_user u
-		left join property.t_proprietor p
-		on p.cust_global_id = u.cust_global_id and p.phone = u.mobile and p.oem_code = u.oem_code
-		left join property.t_proprietor_house ph
-		on ph.proprietor_id = p.id
-		left join property.t_house h
-		on h.project_id = ph.project_id and h.house_num = ph.house_num	
+	LEFT JOIN property.t_proprietor p 
+	ON p.cust_global_id = u.cust_global_id AND p.phone = u.mobile AND p.oem_code = u.oem_code
+	LEFT JOIN property.t_proprietor_house ph ON ph.proprietor_id = p.id
+	LEFT JOIN property.t_house h ON h.project_id = ph.project_id AND h.house_num = ph.house_num
+</sql>
+
+<!-- 住户用户 -->
+<sql id="resident_user">
+	SELECT
+		u.id AS id,
+		u.user_global_id AS userGlobalId,
+		u.cust_global_id AS custGlobalId,
+		u.register_type AS registerType,
+		u.mobile AS mobile,
+		u.activate_time AS activateTime,
+		u.last_login_time AS lastLoginTime,
+		u.status AS status,
+		u.oem_code AS oemCode,
+		r.project_id AS projectId,
+		h.building_id AS buildingId,
+		h.floor_id AS floorId,
+		h.house_num AS houseNum,
+		u.create_time AS createTime
+	FROM
+		basic.t_user u
+	LEFT JOIN property.t_resident r ON r.cust_global_id = u.cust_global_id
+	AND r.mobile = u.mobile
+	AND r.oem_code = u.oem_code
+	LEFT JOIN property.t_resident_house rh ON rh.resident_id = r.id
+	LEFT JOIN property.t_house h ON h.id = rh.house_id
+</sql>
+
+<!-- 查询用户列表 -->
+<select id="queryUserByPage" resultMap="UserResultMap">
+	SELECT DISTINCT
+		v.id,
+		v.userGlobalId,
+		v.custGlobalId,
+		v.registerType,
+		v.mobile,
+		v.activateTime,
+		v.lastLoginTime,
+		v.status,
+		v.oemCode,
+		c.real_name AS customerName
+	FROM
+		(
+			(<include refid="proprietor_user"/>)
+			UNION ALL
+			(<include refid="resident_user"/>)
+		) AS v
+	LEFT JOIN basic.t_customer c 
+	ON c.global_id = v.custGlobalId
 	<include refid="User_Where_Clause"/>
+	ORDER BY v.createTime DESC
 	<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
 		${pager.mysqlQueryCondition}
 	</if>
 </select>
 
-<select id="queryProprietorUserCount"  resultType="java.lang.Long">
-	select
-	  count(1)
-	from (
-		select 
-			distinct u.id as id
-		from
-			basic.t_user u
-			left join property.t_proprietor p
-			on p.cust_global_id = u.cust_global_id and p.phone = u.mobile and p.oem_code = u.oem_code
-			left join property.t_proprietor_house ph
-			on ph.proprietor_id = p.id
-			left join property.t_house h
-			on h.project_id = ph.project_id and h.house_num = ph.house_num	
+<!-- 查询用户数量 -->
+<select id="queryUserByCount" resultType="java.lang.Long">
+	SELECT
+	  COUNT(1)
+	FROM (
+		SELECT DISTINCT
+			v.id
+		FROM
+			(
+				(<include refid="proprietor_user"/>)
+				UNION ALL
+				(<include refid="resident_user"/>)
+			) AS v
+		LEFT JOIN basic.t_customer c 
+		ON c.global_id = v.custGlobalId
 		<include refid="User_Where_Clause"/>
-	) as ttt
+	) AS ttt
 </select>
-
 </mapper>   

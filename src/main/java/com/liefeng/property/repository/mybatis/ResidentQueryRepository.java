@@ -30,11 +30,11 @@ public interface ResidentQueryRepository extends BaseRepository<ResidentVo> {
 	public ResidentVo queryByCustGlobalIdAndProjectId(PagingParamVo param);
 	
 	/**
-	 * 查询业主所有房产中的住户
+	 * 获取账号关联房子中的住户或业主
 	 * @param param 查询过滤参数
 	 * @return 住户列表
 	 */
-	public List<ResidentVo> queryResidentInProprietorHouse(PagingParamVo param);
+	public List<ResidentVo> queryRelatedHouses(PagingParamVo param);
 
 	/**
 	 * 门禁模块
