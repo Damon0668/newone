@@ -119,7 +119,13 @@ public class PropertyStaffService implements IPropertyStaffService {
 		
 		logger.info("updateStaff PropertyStaffDetailInfoVo = {}", propertyStaffDetailInfo);
 		
-		CustomerVo customerVo = checkService.updateCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
+		CustomerVo customerVo = propertyStaffDetailInfo.getCustomerVo();
+		
+		if(ValidateHelper.isEmptyString(customerVo.getId())){
+			customerVo = checkService.createCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
+		}else{
+			customerVo = checkService.updateCustomerCheck(propertyStaffDetailInfo.getCustomerVo());
+		}
 		
 		logger.info("updateStaff createCustomerCheck customerVo = {}", customerVo);
 		
@@ -129,14 +135,21 @@ public class PropertyStaffService implements IPropertyStaffService {
 		PropertyStaffContext.build(propertyStaffVo).update();
 		
 		logger.info("updateStaff propertyStaff update success");
+		
+		StaffArchiveVo staffArchiveVo = propertyStaffDetailInfo.getStaffArchiveVo();
 				
-		propertyStaffDetailInfo.getStaffArchiveVo().setStaffId(propertyStaffVo.getId());
+		staffArchiveVo.setStaffId(propertyStaffVo.getId());
 				
-		propertyStaffDetailInfo.getStaffArchiveVo().setCustGlobalId(customerVo.getGlobalId());
-				
-		//更新员工档案
-		StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).update();
-				
+		staffArchiveVo.setCustGlobalId(customerVo.getGlobalId());
+		
+		if(ValidateHelper.isEmptyString(staffArchiveVo.getId())){
+			//新建员工档案
+			StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).create();
+		}else{
+			//更新员工档案
+			StaffArchiveContext.build(propertyStaffDetailInfo.getStaffArchiveVo()).update();
+		}
+		
 		//员工授权
 		sysSecurityService.grantRoleUser(propertyStaffVo.getId(), propertyStaffDetailInfo.getRoleIds());
 				
@@ -149,10 +162,17 @@ public class PropertyStaffService implements IPropertyStaffService {
 		//员工附件
 		StaffAttachContext.loadByStaffId(propertyStaffVo.getId()).createAttachs(propertyStaffDetailInfo.getStaffAttachs());
 		
-		logger.info("updateStaff sendTccMsg event = {} , content = {}", TccBasicEvent.UPDATE_CUSTOMER, customerVo);
+		
+		TccBasicEvent event = TccBasicEvent.UPDATE_CUSTOMER;
+		
+		if(ValidateHelper.isEmptyString(customerVo.getId())){
+			event = TccBasicEvent.CREATE_CUSTOMER;
+		}
+		
+		logger.info("updateStaff sendTccMsg event = {} , content = {}", event, customerVo);
 		
 		//发送tcc消息
-		tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_CUSTOMER, customerVo.toString());
+		tccMsgService.sendTccMsg(event, customerVo.toString());
 		
 		logger.info("updateStaff sendTccMsg success");
 	}
