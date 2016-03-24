@@ -16,12 +16,8 @@ import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
-import com.liefeng.core.error.IErrorCode;
-import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.api.ILoginUserService;
-import com.liefeng.intf.service.msg.ISmsService;
-import com.liefeng.mq.type.SMSMsgEvent;
 import com.liefeng.property.api.ro.finger.auth.AuthLoginRo;
 import com.liefeng.property.api.ro.finger.auth.UpdatePwdRo;
 import com.liefeng.property.constant.SysConstants;
@@ -40,38 +36,29 @@ public class AuthController {
 	
 	@Autowired
 	private IUserService userService;
-	
-	@Autowired
-	private ISmsService smsService;
-	
+
 	@Autowired
 	private ILoginUserService loginUserService;
 
-	@ApiOperation(value="用户登陆", notes="用户登陆接口")
+	@ApiOperation(value="用户登陆", notes="用户登陆接口,当用户没有激活或者更换手机登陆时需要申请验证码并填入,短信事件为SD_LOGIN_MSG")
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<LoginUserVo> userLogin(@Valid @ModelAttribute AuthLoginRo authLogin){
 
 		LoginUserVo loginUser = null;
-		
-		try{
-			//统一鉴权登陆
-			UserLoginBo userLoginBo = MyBeanUtil.createBean(authLogin, UserLoginBo.class);
-			
-			userLoginBo.setAppCode(SysConstants.DEFAULT_APP_CODE);
-			userLoginBo.setAppType(PushMsgConstants.AppType.MOBILE);
-			userLoginBo.setTerminalType(PushMsgConstants.TerminalType.MOBILE_PROPERTY);
-			
-			UserVo user = userService.login(userLoginBo);
-			
-			//获取物业系统用户信息
-			loginUser = loginUserService.findLoginUser(user.getCustGlobalId());
 
-		}catch(LiefengException e){
-			logger.error("鉴权失败 {}", e);
-			throw e;
-		}
+		//统一鉴权登陆
+		UserLoginBo userLoginBo = MyBeanUtil.createBean(authLogin, UserLoginBo.class);
+
+		userLoginBo.setAppCode(SysConstants.DEFAULT_APP_CODE);
+		userLoginBo.setAppType(PushMsgConstants.AppType.MOBILE);
+		userLoginBo.setTerminalType(PushMsgConstants.TerminalType.MOBILE_PROPERTY);
 		
+		UserVo user = userService.login(userLoginBo);
+		
+		//获取物业系统用户信息
+		loginUser = loginUserService.findLoginUser(user.getCustGlobalId());
+
 		return DataValue.success(loginUser);
 	}
 	
@@ -80,9 +67,7 @@ public class AuthController {
 	@ResponseBody
 	public ReturnValue updatePwdByForget(@Valid @ModelAttribute UpdatePwdRo updatePwdRo){
 		
-		smsService.verifySMSCode(updatePwdRo.getMobile(), SMSMsgEvent.SD_UPDATAPWD_MSG.getEventCode(), updatePwdRo.getCode());
-
-		userService.updatePassword(updatePwdRo.getMobile(), updatePwdRo.getPassword());
+		userService.updatePwdByForget(updatePwdRo.getMobile(), updatePwdRo.getPassword(), updatePwdRo.getCode());
 		
 		return ReturnValue.success();
 	}

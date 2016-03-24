@@ -23,7 +23,10 @@
             and gd.oem_code = #{extra.oemCode}
         </if>
         <if test="extra.projectId != null and extra.projectId != ''" >
-            AND gd.project_id =  #{extra.projectId}
+            AND gd.project_id = #{extra.projectId}
+        </if>
+        <if test="extra.projectIds != null and extra.projectIds != ''" >
+            AND gd.project_id in ${extra.projectIds}
         </if>
         <if test="extra.installPosition != null and extra.installPosition != ''" >
             AND d.install_position like CONCAT('%',#{extra.installPosition},'%')

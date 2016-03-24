@@ -38,16 +38,11 @@ public class SmsController {
 	@ApiOperation(value="发送短信", notes="发送短信")
 	@RequestMapping(value="/send", method=RequestMethod.POST)
 	@ResponseBody
-	public ReturnValue send(@Valid @ModelAttribute SmsSendRo smsSend){
+	public ReturnValue send(@Valid @ModelAttribute SmsSendRo smsSend) throws Exception{
 		SMSMsgVo smsMsg = MyBeanUtil.createBean(smsSend, SMSMsgVo.class);
 		Map<String,String> data = JSON.parseObject(smsSend.getParamString(),new TypeReference<Map<String,String>>(){});
 		smsMsg.setData(data);
-		try {
-			smsService.sendSMSMsg(smsMsg);
-		} catch (Exception e) {
-			logger.error("send error ", e);
-			return new ReturnValue(IErrorCode.SYSTEM_ERROR, e.getMessage());
-		}
+		smsService.sendSMSMsg(smsMsg);
 		return ReturnValue.success();
 	}
 }

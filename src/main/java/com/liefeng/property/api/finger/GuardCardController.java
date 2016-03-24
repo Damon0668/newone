@@ -24,6 +24,14 @@ public class GuardCardController {
 	@Autowired
 	private IGuardService guardService;
 	
+	@ApiOperation(value="门禁磁卡申请")
+	@RequestMapping(value="/applyGuardCard", method=RequestMethod.POST)
+	@ResponseBody
+	public ReturnValue applyGuardCard(){
+		//TODO
+		return ReturnValue.success();
+	}
+	
 	@ApiOperation(value="磁卡状态修改")
 	@RequestMapping(value="/updateCardStatus", method=RequestMethod.POST)
 	@ResponseBody

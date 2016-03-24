@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
+import com.liefeng.common.util.StringUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
@@ -143,10 +144,14 @@ public class GuardDeviceContext {
 	public DataPageValue<GuardDeviceVo> listGuardDevice4Page(GuardDeviceBo guardDeviceBo, Integer currentPage,Integer pageSize){
 		
 		guardDeviceBo.setOemCode(ContextManager.getInstance().getOemCode());
+		
 		currentPage = currentPage == null ? 1 : currentPage;
 		pageSize = pageSize == null ? 10 : pageSize;
 		
 		Map<String, String> extra = MyBeanUtil.bean2Map(guardDeviceBo);
+		if(ValidateHelper.isNotEmptyCollection(guardDeviceBo.getProjectIds())){
+			extra.put("projectIds", StringUtil.fmtToSqlInCondition(guardDeviceBo.getProjectIds()));
+		}
 		PagingParamVo param = new PagingParamVo();
 		param.setExtra(extra);
 		param.setPage(currentPage);

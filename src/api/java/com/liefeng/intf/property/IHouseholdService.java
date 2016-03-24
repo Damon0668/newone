@@ -193,6 +193,13 @@ public interface IHouseholdService {
 	 */
 	public CheckinQueueVo createCheckinQueue(String projectId, String houseId, String userId) throws LiefengException;
 	
+	/**
+	 * 创建入住排队信息（PC端使用）
+	 * @param checkinQueue 入住排队值对象
+	 * @return 入住排队信息
+	 * @throws LiefengException
+	 */
+	public CheckinQueueVo createCheckinQueue(CheckinQueueVo checkinQueue) throws LiefengException;
 	
 	/**
 	 * 获取今天用户某状态的排队
@@ -478,4 +485,17 @@ public interface IHouseholdService {
 	 */
 	public VisitorVo getVisitor(String visitorId);
 	
+	/**
+	 * 通过房产id获取车俩信息
+	 * @param houseId
+	 * @return
+	 */
+	public List<ResidentCarVo> findResidentCarByHouseId(String houseId);
+	
+	/**
+	 * 根据ID查询住户车辆信息
+	 * @param carId 住户车辆ID
+	 * @return 住户车辆信息
+	 */
+	public ResidentCarVo findResidentCarById(String carId);
 }

@@ -96,7 +96,7 @@ public class ResidentCarContext {
 	 * 
 	 * @return 住户车辆信息值对象
 	 */
-	public ResidentCarVo getResidentCar() {
+	public ResidentCarVo get() {
 		if (residentCar == null) {
 			ResidentCarPo residentCarPo = null;
 			if (ValidateHelper.isNotEmptyString(residentCarId)) {
@@ -137,6 +137,11 @@ public class ResidentCarContext {
 		return MyBeanUtil.createBean(residentCarPo, ResidentCarVo.class);
 	}
 	
+	public List<ResidentCarVo> findResidentCarByHouseId(String houseId) {
+		List<ResidentCarPo> residentCarPos = residentCarRepository.findByHouseId(houseId);
+		return MyBeanUtil.createList(residentCarPos, ResidentCarVo.class);
+	}
+	
 	protected void setResidentCar(ResidentCarVo residentCar) {
 		this.residentCar = residentCar;
 	}
@@ -144,4 +149,6 @@ public class ResidentCarContext {
 	protected void setResidentCarId(String residentCarId) {
 		this.residentCarId = residentCarId;
 	}
+
+	
 }

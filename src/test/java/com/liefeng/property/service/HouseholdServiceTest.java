@@ -74,4 +74,9 @@ public class HouseholdServiceTest {
 		List<ResidentCarVo> residentCarVos = householdService.findResidentCarByPakingId("4028895e533a668401533a6ec0660140");
 		System.out.println(residentCarVos);
 	}
+	
+	@Test
+	public void findResidentCarByHouseId(){
+		householdService.findResidentCarByHouseId("402889f952fd79a60152fd79a6820000");
+	}
 }

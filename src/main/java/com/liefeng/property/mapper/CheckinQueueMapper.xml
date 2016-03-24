@@ -51,8 +51,8 @@
 		((select
 			cq.id as id,
 			cq.user_id as userId,
-			cq.project_id as projectId,
-			cq.house_id as houseId,
+			ph.project_id as projectId,
+			h.id as houseId,
 			cq.seq as seq,
 			cq.status as status,
 			cq.create_time as createTime,
@@ -81,15 +81,15 @@
 		union all 
 		(select
 			cq.id as id,
-			cq.user_id as userId,
-			cq.project_id as projectId,
+			u.id as userId,
+			ph.project_id as projectId,
 			h.id as houseId,
 			cq.seq as seq,
 			cq.status as status,
 			cq.create_time as createTime,
 			cq.tran_time as tranTime,
 			cq.oem_code as oemCode,
-			ph.id as proprietorHouseId,
+			ph.id as proprietorHouseId, 
 			ph.house_num as houseNum,
 			p.id as proprietorId,
 			p.name as proprietorName,
@@ -100,6 +100,8 @@
 			on h.project_id = ph.project_id and h.house_num = ph.house_num
 			left join property.t_proprietor p 
 			on p.id = ph.proprietor_id 
+			left join basic.t_user u 
+			on u.cust_global_id = p.cust_global_id and u.mobile = p.phone and u.oem_code = p.oem_code
 			left join property.t_checkin_queue cq
 			on cq.project_id = h.project_id and cq.house_id = h.id
 		where
