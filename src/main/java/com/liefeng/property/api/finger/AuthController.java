@@ -58,11 +58,7 @@ public class AuthController {
 		try{
 			//统一鉴权登陆
 			UserLoginBo userLoginBo = MyBeanUtil.createBean(authLogin, UserLoginBo.class);
-			
-			if(ValidateHelper.isNotEmptyString(userLoginBo.getVerifyCode())){
-				userLoginBo.setCheckMobileId(Boolean.TRUE);
-			}
-			
+
 			userLoginBo.setAppCode(SysConstants.DEFAULT_APP_CODE);
 			userLoginBo.setAppType(PushMsgConstants.AppType.MOBILE);
 			userLoginBo.setTerminalType(PushMsgConstants.TerminalType.MOBILE_PROPERTY);
@@ -85,9 +81,7 @@ public class AuthController {
 	@ResponseBody
 	public ReturnValue updatePwdByForget(@Valid @ModelAttribute UpdatePwdRo updatePwdRo){
 		
-		smsService.verifySMSCode(updatePwdRo.getMobile(), SMSMsgEvent.SD_UPDATAPWD_MSG.getEventCode(), updatePwdRo.getCode());
-
-		userService.updatePassword(updatePwdRo.getMobile(), updatePwdRo.getPassword());
+		userService.updatePwdByForget(updatePwdRo.getMobile(), updatePwdRo.getPassword(), updatePwdRo.getCode());
 		
 		return ReturnValue.success();
 	}

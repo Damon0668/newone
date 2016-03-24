@@ -102,7 +102,7 @@ public class PropertyStaffVo extends BaseValue {
 	/**
 	 * 状态
 	 */
-	@ApiModelProperty(value="状态")
+	@ApiModelProperty(value="状态[1:激活;2:注销]")
 	private String status;
 	
 	/**

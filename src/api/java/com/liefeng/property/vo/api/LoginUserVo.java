@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author 蔡少东
  * @date 2016年3月18日
  */
-@ApiModel(value="登陆账户信息")
+@ApiModel(value="登陆账户信息",parent=BaseValue.class)
 public class LoginUserVo extends BaseValue{
 	
 	/**

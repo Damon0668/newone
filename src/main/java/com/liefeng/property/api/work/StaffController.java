@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.core.entity.DataValue;
+import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.property.api.ro.id.StaffIdRo;
+import com.liefeng.property.api.ro.work.staff.UpdateStaffRo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 
 import io.swagger.annotations.Api;
@@ -37,4 +39,11 @@ public class StaffController {
 		return DataValue.success(propertyStaff);
 	}
 	
+	@ApiOperation(value="更新员工信息", notes="更新员工信息")
+	@RequestMapping(value="/updateStaff", method=RequestMethod.POST)
+	@ResponseBody
+	public ReturnValue updateStaff(@Valid @ModelAttribute UpdateStaffRo updateStaffRo){
+		
+		return ReturnValue.success();
+	}
 }
