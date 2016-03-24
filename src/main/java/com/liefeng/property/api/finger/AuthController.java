@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.liefeng.base.bo.UserLoginBo;
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.error.IErrorCode;
@@ -47,7 +48,7 @@ public class AuthController {
 	@Autowired
 	private ILoginUserService loginUserService;
 
-	@ApiOperation(value="用户登陆", notes="用户登陆接口")
+	@ApiOperation(value="用户登陆", notes="用户登陆接口,当用户没有激活或者更换手机登陆时需要申请验证码并填入,短信事件为SD_LOGIN_MSG")
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<LoginUserVo> userLogin(@Valid @ModelAttribute AuthLoginRo authLogin){
@@ -57,6 +58,10 @@ public class AuthController {
 		try{
 			//统一鉴权登陆
 			UserLoginBo userLoginBo = MyBeanUtil.createBean(authLogin, UserLoginBo.class);
+			
+			if(ValidateHelper.isNotEmptyString(userLoginBo.getVerifyCode())){
+				userLoginBo.setCheckMobileId(Boolean.TRUE);
+			}
 			
 			userLoginBo.setAppCode(SysConstants.DEFAULT_APP_CODE);
 			userLoginBo.setAppType(PushMsgConstants.AppType.MOBILE);
