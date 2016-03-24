@@ -14,15 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.liefeng.base.bo.UserLoginBo;
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.MyBeanUtil;
-import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
-import com.liefeng.core.error.IErrorCode;
-import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.api.ILoginUserService;
-import com.liefeng.intf.service.msg.ISmsService;
-import com.liefeng.mq.type.SMSMsgEvent;
 import com.liefeng.property.api.ro.finger.auth.AuthLoginRo;
 import com.liefeng.property.api.ro.finger.auth.UpdatePwdRo;
 import com.liefeng.property.constant.SysConstants;
@@ -41,10 +36,7 @@ public class AuthController {
 	
 	@Autowired
 	private IUserService userService;
-	
-	@Autowired
-	private ISmsService smsService;
-	
+
 	@Autowired
 	private ILoginUserService loginUserService;
 
@@ -54,25 +46,19 @@ public class AuthController {
 	public DataValue<LoginUserVo> userLogin(@Valid @ModelAttribute AuthLoginRo authLogin){
 
 		LoginUserVo loginUser = null;
-		
-		try{
-			//统一鉴权登陆
-			UserLoginBo userLoginBo = MyBeanUtil.createBean(authLogin, UserLoginBo.class);
 
-			userLoginBo.setAppCode(SysConstants.DEFAULT_APP_CODE);
-			userLoginBo.setAppType(PushMsgConstants.AppType.MOBILE);
-			userLoginBo.setTerminalType(PushMsgConstants.TerminalType.MOBILE_PROPERTY);
-			
-			UserVo user = userService.login(userLoginBo);
-			
-			//获取物业系统用户信息
-			loginUser = loginUserService.findLoginUser(user.getCustGlobalId());
+		//统一鉴权登陆
+		UserLoginBo userLoginBo = MyBeanUtil.createBean(authLogin, UserLoginBo.class);
 
-		}catch(LiefengException e){
-			logger.error("鉴权失败 {}", e);
-			throw e;
-		}
+		userLoginBo.setAppCode(SysConstants.DEFAULT_APP_CODE);
+		userLoginBo.setAppType(PushMsgConstants.AppType.MOBILE);
+		userLoginBo.setTerminalType(PushMsgConstants.TerminalType.MOBILE_PROPERTY);
 		
+		UserVo user = userService.login(userLoginBo);
+		
+		//获取物业系统用户信息
+		loginUser = loginUserService.findLoginUser(user.getCustGlobalId());
+
 		return DataValue.success(loginUser);
 	}
 	
