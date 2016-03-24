@@ -962,8 +962,9 @@ public class HouseholdService implements IHouseholdService {
 	@Override
 	public void createResidentCar(ResidentCarVo residentCarVo){
 		ResidentCarVo carVo = ResidentCarContext.build().findByPlateNum(residentCarVo.getPlateNum());
-		if(carVo == null)
-		ResidentCarContext.build(residentCarVo).create();
+		if(carVo == null) {
+			ResidentCarContext.build(residentCarVo).create();
+		}
 	}
 	
 	@Override
@@ -1003,5 +1004,11 @@ public class HouseholdService implements IHouseholdService {
 	@Override
 	public List<ResidentCarVo> findResidentCarByHouseId(String houseId){
 		return ResidentCarContext.build().findResidentCarByHouseId(houseId);
+	}
+
+	@Override
+	public ResidentCarVo findResidentCarById(String carId) {
+		ResidentCarContext residentCarContext = ResidentCarContext.loadById(carId);
+		return residentCarContext.get();
 	}
 }
