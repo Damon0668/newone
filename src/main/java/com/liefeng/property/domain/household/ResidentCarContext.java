@@ -137,6 +137,11 @@ public class ResidentCarContext {
 		return MyBeanUtil.createBean(residentCarPo, ResidentCarVo.class);
 	}
 	
+	public List<ResidentCarVo> findResidentCarByHouseId(String houseId) {
+		List<ResidentCarPo> residentCarPos = residentCarRepository.findByHouseId(houseId);
+		return MyBeanUtil.createList(residentCarPos, ResidentCarVo.class);
+	}
+	
 	protected void setResidentCar(ResidentCarVo residentCar) {
 		this.residentCar = residentCar;
 	}
@@ -144,4 +149,6 @@ public class ResidentCarContext {
 	protected void setResidentCarId(String residentCarId) {
 		this.residentCarId = residentCarId;
 	}
+
+	
 }
