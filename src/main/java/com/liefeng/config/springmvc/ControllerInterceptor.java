@@ -33,6 +33,8 @@ public class ControllerInterceptor implements HandlerInterceptor{
 		
 		ContextManager.getInstance().setOemCode(oemCode);
 		
+		response.setHeader("Access-Control-Allow-Origin", "*");  
+		
 		return true;//只有返回true才会继续向下执行，返回false取消当前请求
 	}
 
