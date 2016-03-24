@@ -485,4 +485,11 @@ public interface IHouseholdService {
 	 */
 	public VisitorVo getVisitor(String visitorId);
 	
+	/**
+	 * 通过房产id获取车俩信息
+	 * @param houseId
+	 * @return
+	 */
+	public List<ResidentCarVo> findResidentCarByHouseId(String houseId);
+	
 }
