@@ -615,40 +615,73 @@ public class HouseholdService implements IHouseholdService {
 		CheckinQueueVo queueVo = null;
 		//查用户“已经办理”的排队
 		queueVo = getCheckinQueueOfStatus(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.FINISHED);
-		if(queueVo != null){
-			if(HouseholdConstants.CheckinQueueStatus.FINISHED.equals(queueVo.getStatus())){
+		if(queueVo != null) {
+			if(HouseholdConstants.CheckinQueueStatus.FINISHED.equals(queueVo.getStatus())) {
 				throw new PropertyException(HouseholdErrorCode.CHECKIN_QUEUE_FINISHED);
 			}
-			
-			
 		}
+		
 		//查用户今天“在办理中”的排队
 		queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.HANDLING, TimeUtil.format(date, "yyyy-MM-dd"));
-		if(queueVo != null){
+		if(queueVo != null) {
 			if(queueVo.getStatus().equals(HouseholdConstants.CheckinQueueStatus.HANDLING)){
 				throw new PropertyException(HouseholdErrorCode.CHECKIN_QUEUE_HANDLING);
 			}
 		}
+		
 		//查用户今天“尚未办理”的排队
 		queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.UNTREATED, TimeUtil.format(date, "yyyy-MM-dd"));
-		if(queueVo == null){
+		if(queueVo == null) {
 			CheckinQueueVo queue = new CheckinQueueVo();
-			queue.setCreateTime(new Date());
 			queue.setHouseId(houseId);
 			queue.setProjectId(projectId);
 			queue.setUserId(userId);
 			List<CheckinQueueVo> queueVoList = getAllOfTody(projectId, TimeUtil.format(new Date(), "yyyy-MM-dd"));
 			if(queueVoList == null || queueVoList.size() <= 0){
 				queue.setSeq(1); 
-			}else{
+			} else {
 				queue.setSeq(queueVoList.size() + 1);
 			}
-			queue.setStatus(HouseholdConstants.CheckinQueueStatus.UNTREATED);
-			CheckinQueueContext checkinQueueContext = CheckinQueueContext.build(queue);
 			
+			CheckinQueueContext checkinQueueContext = CheckinQueueContext.build(queue);
 			queueVo = checkinQueueContext.create();
 		}
+		
 		return queueVo;
+	}
+	
+	@Override
+	public CheckinQueueVo createCheckinQueue(CheckinQueueVo checkinQueue) throws LiefengException {
+		String projectId = checkinQueue.getProjectId();
+		String hosueId = checkinQueue.getHouseId();
+		
+		HouseVo houseVo = projectService.findHouseById(hosueId);
+		String buildingId = houseVo.getBuildingId();
+		CheckinScheduleVo schedule = getCheckinSchedule(projectId, buildingId);
+		
+		// 校验是否有安排入住办理时间
+		if(schedule == null) {
+			throw new PropertyException(HouseholdErrorCode.CHECKIN_SCHEDULE_INFO_NULL);
+		}
+		
+		// 校验是否已经到了入住办理开始时间
+		Date date = new Date();
+		if(date.before(schedule.getStartDate())) {
+			throw new PropertyException(HouseholdErrorCode.CHECKIN_SCHEDULE_NOT_START);
+		}
+		
+		// 查询当前最大排队号
+		List<CheckinQueueVo> queueList = getAllOfTody(projectId, TimeUtil.format(new Date(), "yyyy-MM-dd"));
+		if(ValidateHelper.isEmptyCollection(queueList)) {
+			checkinQueue.setSeq(1); 
+		} else {
+			checkinQueue.setSeq(queueList.size() + 1);
+		}
+		
+		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build(checkinQueue);
+		checkinQueue = checkinQueueContext.create();
+		
+		return checkinQueue;
 	}
 
 
