@@ -492,4 +492,10 @@ public interface IHouseholdService {
 	 */
 	public List<ResidentCarVo> findResidentCarByHouseId(String houseId);
 	
+	/**
+	 * 根据ID查询住户车辆信息
+	 * @param carId 住户车辆ID
+	 * @return 住户车辆信息
+	 */
+	public ResidentCarVo findResidentCarById(String carId);
 }
