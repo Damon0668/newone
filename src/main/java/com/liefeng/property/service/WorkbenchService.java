@@ -951,6 +951,12 @@ public class WorkbenchService implements IWorkbenchService {
 		//执行
 		List<Task> tasks = workflowService.execute(eventProcessVo.getWfTaskId(), staffid, arg);
 		
+		//不同意 工作流引擎不处理，只能自己手动处理
+		if(eventProcessVo.getAuditStatus().equals(WorkbenchConstants.EventReport.AUDITSTATUS_NO)){
+			EventProcessVo vo = EventProcessContext.build().findByWfTaskId(tasks.get(0).getParentTaskId());
+			workflowService.addTaskActor(tasks.get(0).getId(), vo.getCurrAccepterId().split(","));
+		}
+		
 		//最好一步 客服回访 更新 报事为 归档,设置回访结果到报事
 		if(eventProcessVo.getTaskName().equals("returnVisit")){
 			EventReportVo fileEventReport = EventReportContext.loadById(eventReportVo.getId()).get();

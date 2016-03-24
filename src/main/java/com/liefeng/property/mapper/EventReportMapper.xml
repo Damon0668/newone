@@ -44,9 +44,11 @@
 			<if test="extra.processId !=null and extra.processId !=''">
 				AND  o.process_Id = #{extra.processId}
 			</if>
-			<if test="extra.startDate != null and extra.startDate != '' 
-				and extra.endDate != null and extra.endDate != ''">
-				ANd er.create_time between #{extra.startDate} AND #{extra.endDate}
+			<if
+				test="extra.startDate != null and extra.startDate != '' and 
+					extra.endDate != null and extra.endDate != ''">
+				AND er.report_time between FROM_UNIXTIME(#{extra.startDate}/1000,"%Y-%m-%d") And
+				FROM_UNIXTIME(#{extra.endDate}/1000,"%Y-%m-%d")
 			</if>
 			<if test="extra.taskName != null and extra.taskName != ''">
 				ANd t.task_Name = #{extra.taskName} 
@@ -122,9 +124,11 @@
 			<if test="extra.actor != null and extra.actor != ''">
 				AND  ta.actor_Id = #{extra.actor}
 			</if>
-			<if test="extra.startDate != null and extra.startDate != '' 
-				and extra.endDate != null and extra.endDate != ''">
-				ANd er.create_time between #{extra.startDate} AND #{extra.endDate}
+			<if
+				test="extra.startDate != null and extra.startDate != '' and 
+					extra.endDate != null and extra.endDate != ''">
+				AND er.report_time between FROM_UNIXTIME(#{extra.startDate}/1000,"%Y-%m-%d") And
+				FROM_UNIXTIME(#{extra.endDate}/1000,"%Y-%m-%d")
 			</if>
 			<if test="extra.taskName != null and extra.taskName != ''">
 				ANd t.task_Name = #{extra.taskName} 
@@ -550,6 +554,8 @@
 	er.report_time,
 	er.result,
 	er.service_type,
+	er.service_type as serviceType,
+	er.report_time as reportTime,
 	er.staff_id,
 	er.`status`,
 	er.title,
