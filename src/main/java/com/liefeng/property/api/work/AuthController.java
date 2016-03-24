@@ -90,7 +90,7 @@ public class AuthController {
 	}
 	
 	@ApiOperation(value="登陆后-修改密码", notes="登陆后,修改密码")
-	@RequestMapping(value="/updateStaffPassword", method=RequestMethod.POST)
+	@RequestMapping(value="/updatePwdAfterLogin", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue updatePwdAfterLogin(@Valid @ModelAttribute UpdatePwdLoginRo updatePwdLoginRo){
 		propertyStaffService.updateStaffPassword(updatePwdLoginRo.getStaffId(), updatePwdLoginRo.getOldpaswword(), updatePwdLoginRo.getNewpaswword());
