@@ -956,9 +956,11 @@ public class WorkbenchService implements IWorkbenchService {
 			EventReportVo fileEventReport = EventReportContext.loadById(eventReportVo.getId()).get();
 			fileEventReport.setStatus(WorkbenchConstants.EventReport.STATUS_FILE);
 			fileEventReport.setResult(eventReportVo.getContent());
+			fileEventReport.setLevel(eventProcessVo.getLevel());
+			fileEventReport.setAttitude(eventProcessVo.getAttitude());
+			fileEventReport.setReportMode(eventProcessVo.getRevisitMode());
+			fileEventReport.setTimeliness(eventProcessVo.getTimeliness());
 			EventReportContext.build(fileEventReport).update();
-		}else{
-			
 		}
 		
 		if(tasks!=null && tasks.size()>0){

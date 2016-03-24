@@ -77,4 +77,11 @@ public interface EventReportQueryRepository extends BaseRepository<EventReportVo
 	 * 抢单列表总数
 	 */
 	public Long grabQueryByCount(PagingParamVo param);
+	
+	/**
+	 * 获取报事信息
+	 * @param wfOrderId 实例id
+	 * @return
+	 */
+	public EventReportVo findByWfOrderId(String wfOrderId);
 }

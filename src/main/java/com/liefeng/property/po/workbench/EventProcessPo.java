@@ -93,29 +93,6 @@ public class EventProcessPo extends BaseValue{
 	@Column(name = "consumptions")
 	private String consumptions;
 	
-	/**
-	 * 服务及时性。0：不及时；1：及时
-	 */
-	@Column(name = "timeliness")
-	private String timeliness;
-	
-	/**
-	 * 服务水准。0：差；1：一般；2：好
-	 */
-	@Column(name = "level")
-	private String level;
-	
-	/**
-	 * 服务态度。0：差；1：一般；2：好
-	 */
-	@Column(name = "attitude")
-	private String attitude;
-	
-	/**
-	 * 回访方式。1：电话；2：上门
-	 */
-	@Column(name = "revisit_mode")
-	private String revisitMode;
 	
 	/**
 	 * 图片地址
@@ -232,37 +209,6 @@ public class EventProcessPo extends BaseValue{
 		this.consumptions = consumptions;
 	}
 
-	public String getTimeliness() {
-		return timeliness;
-	}
-
-	public void setTimeliness(String timeliness) {
-		this.timeliness = timeliness;
-	}
-
-	public String getLevel() {
-		return level;
-	}
-
-	public void setLevel(String level) {
-		this.level = level;
-	}
-
-	public String getAttitude() {
-		return attitude;
-	}
-
-	public void setAttitude(String attitude) {
-		this.attitude = attitude;
-	}
-
-	public String getRevisitMode() {
-		return revisitMode;
-	}
-
-	public void setRevisitMode(String revisitMode) {
-		this.revisitMode = revisitMode;
-	}
 
 	public String getPicUrls() {
 		return picUrls;

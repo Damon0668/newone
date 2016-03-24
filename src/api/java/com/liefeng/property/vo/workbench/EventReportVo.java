@@ -262,6 +262,33 @@ public class EventReportVo extends BaseValue {
 	@ApiModelProperty(value="结果图片")
 	private String rebackPic;
 	
+	/**
+	 * 项目名称
+	 */
+	@ApiModelProperty(value="项目名称")
+	private String projectName;
+	
+	/**
+	 * 服务及时性。0：不及时；1：及时
+	 */
+	private String timeliness;
+	
+	/**
+	 * 服务水准。0：差；1：一般；2：好
+	 */
+	private String level;
+	
+	/**
+	 * 服务态度。0：差；1：一般；2：好
+	 */
+	private String attitude;
+	
+	/**
+	 * 回访方式。1：电话；2：上门
+	 */
+	private String revisitMode;
+	
+	
 	public Character getImportant() {
 		return priority.charAt(1);
 	}
@@ -597,6 +624,46 @@ public class EventReportVo extends BaseValue {
 
 	public void setRebackPic(String rebackPic) {
 		this.rebackPic = rebackPic;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getTimeliness() {
+		return timeliness;
+	}
+
+	public void setTimeliness(String timeliness) {
+		this.timeliness = timeliness;
+	}
+
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
+	}
+
+	public String getAttitude() {
+		return attitude;
+	}
+
+	public void setAttitude(String attitude) {
+		this.attitude = attitude;
+	}
+
+	public String getRevisitMode() {
+		return revisitMode;
+	}
+
+	public void setRevisitMode(String revisitMode) {
+		this.revisitMode = revisitMode;
 	}
 
 }
