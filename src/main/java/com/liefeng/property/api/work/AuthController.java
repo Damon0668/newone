@@ -75,7 +75,7 @@ public class AuthController {
 			}
 		}
 
-		throw new LiefengException(PropertyStaffErrorCode.PASSWORD_ERROR);
+		throw new LiefengException(PropertyStaffErrorCode.Mobile_NOT_MATCHING);
 	}
 	
 	

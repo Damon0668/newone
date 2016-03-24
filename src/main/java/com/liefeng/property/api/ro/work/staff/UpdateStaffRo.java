@@ -1,7 +1,10 @@
 package com.liefeng.property.api.ro.work.staff;
 
+import java.util.Date;
+
 import javax.validation.constraints.NotNull;
 
+import com.liefeng.common.util.TimeUtil;
 import com.liefeng.core.entity.BaseValue;
 
 import io.swagger.annotations.ApiModel;
@@ -28,8 +31,8 @@ public class UpdateStaffRo extends BaseValue{
 	@ApiModelProperty(value="性别[0：未知；1：男；2：女]")
 	private String sex;
 	
-	@ApiModelProperty(value="年龄")
-	private Integer age;
+	@ApiModelProperty(value="出身时间[yyyy-MM-dd]")
+	private String birthday;
 	
 	@ApiModelProperty(value="手机")
 	private String phone;
@@ -66,19 +69,19 @@ public class UpdateStaffRo extends BaseValue{
 		this.sex = sex;
 	}
 
-	public Integer getAge() {
-		return age;
-	}
-
-	public void setAge(Integer age) {
-		this.age = age;
-	}
-
 	public String getPhone() {
 		return phone;
 	}
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public String getBirthday() {
+		return  this.birthday;
+	}
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
 	}
 }
