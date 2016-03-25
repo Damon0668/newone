@@ -7,7 +7,7 @@ import com.liefeng.property.domain.api.UserContext;
 import com.liefeng.property.vo.api.LoginUserVo;
 
 /**
- * 
+ * api中获取登陆用户数据
  * @author 蔡少东
  * @date 2016年3月18日
  */
