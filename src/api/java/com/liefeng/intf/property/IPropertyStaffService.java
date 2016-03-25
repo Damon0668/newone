@@ -134,7 +134,7 @@ public interface IPropertyStaffService {
 	 * @param staffId 员工ID
 	 * @return
 	 */
-	public String findStaffClientId(String staffId);
+	public String findStaffMgClientId(String staffId);
 	/*********************** 部门相关接口 **********************/
 	
 	/**
