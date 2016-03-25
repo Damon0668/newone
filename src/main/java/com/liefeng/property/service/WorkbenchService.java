@@ -962,7 +962,7 @@ public class WorkbenchService implements IWorkbenchService {
 		if(eventProcessVo.getTaskName().equals("returnVisit")){
 			EventReportVo fileEventReport = EventReportContext.loadById(eventReportVo.getId()).get();
 			fileEventReport.setStatus(WorkbenchConstants.EventReport.STATUS_FILE);
-			fileEventReport.setResult(eventReportVo.getContent());
+			fileEventReport.setResult(eventReportVo.getResult());
 			fileEventReport.setLevel(eventProcessVo.getLevel());
 			fileEventReport.setAttitude(eventProcessVo.getAttitude());
 			fileEventReport.setReportMode(eventProcessVo.getRevisitMode());

@@ -77,7 +77,9 @@
 		left join property.t_event_process ep on t.id = ep.wf_task_id
 		left join property.t_event_report er on ep.event_id = er.id
 		Where t.order_id = #{0}
+		<if test="#{1} != null and #{1} != ''">
 		And ta.actor_Id = #{1}
+		</if>
 	</select> 
 	
 	<select id="findEventProcess" resultMap="BaseResultMap2" >
