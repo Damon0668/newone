@@ -55,6 +55,13 @@ public class EventAccepterEvalRo {
 	@ApiModelProperty(value="评价内容", required=true)
 	@NotNull
 	private String result;
+	
+	/**
+	 * 流程实例id
+	 */
+	@ApiModelProperty(value="流程实例id", required=true)
+	@NotNull
+	private String wfOrderId;
 
 	public String getEventId() {
 		return eventId;
@@ -102,5 +109,13 @@ public class EventAccepterEvalRo {
 
 	public void setResult(String result) {
 		this.result = result;
+	}
+
+	public String getWfOrderId() {
+		return wfOrderId;
+	}
+
+	public void setWfOrderId(String wfOrderId) {
+		this.wfOrderId = wfOrderId;
 	}
 }
