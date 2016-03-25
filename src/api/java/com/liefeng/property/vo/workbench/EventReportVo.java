@@ -112,10 +112,7 @@ public class EventReportVo extends BaseValue {
 	@ApiModelProperty(value="当前状态【0：未处理，1：已派工，2：未评价，3：已完成】")
 	private String status;
 	
-	/**
-	 * 优先级。高位表示紧急程度，低位表示重要程度，如：10表示紧急不重要；11表示紧急重要。
-	 */
-	@ApiModelProperty(value="高位表示紧急程度，低位表示重要程度，如：10表示紧急不重要；11表示紧急重要")
+
 	private String priority = "00";
 	
 	/**
@@ -271,24 +268,28 @@ public class EventReportVo extends BaseValue {
 	/**
 	 * 服务及时性。0：不及时；1：及时
 	 */
+	@ApiModelProperty("服务及时性【0：不及时；1：及时】")
 	private String timeliness;
 	
 	/**
 	 * 服务水准。0：差；1：一般；2：好
 	 */
+	@ApiModelProperty("服务水准【0：差；1：一般；2：好】")
 	private String level;
 	
 	/**
 	 * 服务态度。0：差；1：一般；2：好
 	 */
+	@ApiModelProperty("服务态度【0：差；1：一般；2：好】")
 	private String attitude;
 	
 	/**
 	 * 回访方式。1：电话；2：上门
 	 */
+	@ApiModelProperty("回访方式【1：电话；2：上门】")
 	private String revisitMode;
 	
-	
+	@ApiModelProperty(value="重要程度【1：重要、0：非重要】")
 	public Character getImportant() {
 		return priority.charAt(1);
 	}
@@ -297,6 +298,7 @@ public class EventReportVo extends BaseValue {
 		priority = Character.valueOf(priority.charAt(0)).toString() + important.toString();
 	}
 
+	@ApiModelProperty(value="紧急程度【1：紧急、0：非紧急】")
 	public Character getEmergency() {
 		return priority.charAt(0);
 	}
