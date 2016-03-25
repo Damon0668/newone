@@ -10,6 +10,7 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.staff.StaffMsgClientPo;
 import com.liefeng.property.repository.staff.StaffMsgClientRepository;
 import com.liefeng.property.vo.staff.StaffMsgClientVo;
@@ -79,6 +80,7 @@ public class StaffMsgClientContext {
 			StaffMsgClientPo staffMsgClientPo = MyBeanUtil.createBean(staffMsgClient, StaffMsgClientPo.class);
 			staffMsgClientPo.setId(UUIDGenerator.generate());
 			staffMsgClientPo.setUpdateTime(new Date());
+			staffMsgClientPo.setOemCode(ContextManager.getInstance().getOemCode());
 			staffMsgClientRepository.save(staffMsgClientPo);
 		}
 	}
