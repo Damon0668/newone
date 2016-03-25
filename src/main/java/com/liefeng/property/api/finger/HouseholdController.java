@@ -1,8 +1,5 @@
 package com.liefeng.property.api.finger;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 import java.util.Date;
 import java.util.List;
 
@@ -22,10 +19,8 @@ import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
-import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
-import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.property.api.ro.CheckinQueueListRo;
 import com.liefeng.property.api.ro.CheckinQueueRo;
 import com.liefeng.property.api.ro.PhoneRo;
@@ -47,12 +42,15 @@ import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
 import com.liefeng.property.vo.household.VisitorVo;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 /**
  * 业主、住户公共服务类（app） 
  * @author xhw
  * @date 2016年3月8日 下午1:45:25
  */
-@Api(value="业主、住户相关接口")
+@Api(value="[业主|住户]模块")
 @RestController
 @RequestMapping(value = "/api/finger/household")
 public class HouseholdController {
@@ -62,13 +60,7 @@ public class HouseholdController {
 	
 	@Autowired
 	private IUserService userService;
-	
-	@Autowired
-	private ICheckService checkService;
-	
-	@Autowired
-	private ITccMsgService tccMsgService;
-	
+
 	/**
 	 * 通过扫二维码，获取排队号
 	 * @param projectId 项目id

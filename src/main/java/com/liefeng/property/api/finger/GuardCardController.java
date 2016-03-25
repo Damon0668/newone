@@ -16,7 +16,7 @@ import com.liefeng.property.api.ro.finger.guard.GuardCardStatusRo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api(value="门禁磁卡模块")
+@Api(value="门禁[磁卡]模块")
 @RestController
 @RequestMapping(value = "/api/finger/guard/car")
 public class GuardCardController {

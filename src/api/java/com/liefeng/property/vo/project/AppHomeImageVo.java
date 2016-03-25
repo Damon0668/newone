@@ -4,12 +4,16 @@ import java.util.Date;
 
 import com.liefeng.core.entity.BaseValue;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 业主手机端首页轮播图值对象
  * 
  * @author ZhenTingJun
  * @date 2016年3月11日
  */
+@ApiModel(parent=BaseValue.class)
 public class AppHomeImageVo extends BaseValue {
 
 	private static final long serialVersionUID = 7050275557476695011L;
@@ -17,46 +21,55 @@ public class AppHomeImageVo extends BaseValue {
 	/**
 	 * 主键
 	 */
+	@ApiModelProperty(value="主键")
 	private String id;
 
 	/**
 	 * 小区ID
 	 */
+	@ApiModelProperty(value="小区ID")
 	private String projectId;
 
 	/**
 	 * 小区名称
 	 */
+	@ApiModelProperty(value="小区名称")
 	private String projectName;
 
 	/**
 	 * 图片路径
 	 */
+	@ApiModelProperty(value="图片路径")
 	private String imageUrl;
 
 	/**
 	 * 状态。0：未审核；1：审核通过；2：审核未通过
 	 */
+	@ApiModelProperty(value="状态。0：未审核；1：审核通过；2：审核未通过")
 	private String status;
 
 	/**
 	 * 顺序
 	 */
+	@ApiModelProperty(value="顺序")
 	private Integer seq;
 
 	/**
 	 * 开始生效时间
 	 */
+	@ApiModelProperty(value="开始生效时间")
 	private Date startDate;
 
 	/**
 	 * 结束生效时间
 	 */
+	@ApiModelProperty(value="结束生效时间")
 	private Date endDate;
 
 	/**
 	 * 创建时间
 	 */
+	@ApiModelProperty(value="创建时间")
 	private Date createTime;
 
 	public String getId() {

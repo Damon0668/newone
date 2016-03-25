@@ -43,7 +43,7 @@ import com.liefeng.property.vo.household.ResidentFeedbackVo;
  * @author xhw
  * @date 2016年3月11日 下午2:58:28
  */
-@Api(value="手机端用户相关接口")
+@Api(value="用户模块")
 @RestController
 @RequestMapping(value = "/api/finger/user")
 public class UserController {
