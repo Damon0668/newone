@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
@@ -25,9 +26,15 @@ import com.liefeng.property.api.ro.CountsToHeadRo;
 import com.liefeng.property.api.ro.EventReportDataPageRo;
 import com.liefeng.property.api.ro.EventReportDetailRo;
 import com.liefeng.property.api.ro.EventReportFlowWorkRo;
+import com.liefeng.property.api.ro.common.EventAccepterEvalRo;
+import com.liefeng.property.api.ro.common.PhoneRo;
+import com.liefeng.property.api.ro.id.EventIdRo;
+import com.liefeng.property.api.ro.work.event.EventReportRo;
 import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.domain.workbench.EventReportContext;
+import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.property.vo.workbench.EventAccepterEvalVo;
 import com.liefeng.property.vo.workbench.EventProcessVo;
 import com.liefeng.property.vo.workbench.EventReportVo;
 import com.liefeng.property.vo.workbench.HeadCountVo;
@@ -109,5 +116,91 @@ public class EventReportController {
 		HeadCountVo headCount = reportContext.getCountsToHead(eventReportBo);
 		
 		return DataValue.success(headCount);
+	}
+	
+	/**
+	 * 创建报事
+	 * @param bo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月15日 下午6:03:49
+	 */
+	@ApiOperation(value="创建报事")
+	@RequestMapping(value="/createEventReport", method=RequestMethod.POST)
+	@ResponseBody
+	public ReturnValue createEventReport(@Valid @ModelAttribute EventReportRo eventReportRo) {
+		EventReportBo bo = MyBeanUtil.createBean(eventReportRo, EventReportBo.class);
+		workbenchService.createAppEventReport(bo);
+		
+		return ReturnValue.success();
+	}
+	
+	/**
+	 * 获取员工的所有报事
+	 * @param phoneRo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月25日 下午7:41:04
+	 */
+	@ApiOperation(value="获取员工的历史报事")
+	@RequestMapping(value="/getEventReportList", method=RequestMethod.POST)
+	@ResponseBody
+	public DataListValue<EventReportVo> getEventReportList(@Valid @ModelAttribute PhoneRo phoneRo) {
+		List<EventReportVo> eventReportVoList = workbenchService.getEventReportList("", "", phoneRo.getPhone());
+		return DataListValue.success(eventReportVoList);
+	}
+	
+	/**
+	 * 获取报事办理人
+	 * @param eventAccepterEvalRo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月25日 下午2:28:29
+	 */
+	@ApiOperation(value="获取报事办理人")
+	@RequestMapping(value="/getEventStaffList", method=RequestMethod.POST)
+	@ResponseBody
+	public DataListValue<PropertyStaffVo> getEventStaffList(@Valid @ModelAttribute EventIdRo eventIdRo) {
+		List<PropertyStaffVo> staffVoList = workbenchService.getStaffList(eventIdRo.getEventId());
+		
+		return DataListValue.success(staffVoList);
+	}
+	
+	/**
+	 * 报事评价
+	 * @param eventAccepterEvalRo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月25日 下午2:28:29
+	 */
+	@ApiOperation(value="报事评价")
+	@RequestMapping(value="/createEventAccepterEval", method=RequestMethod.POST)
+	@ResponseBody
+	public ReturnValue createEventAccepterEval(@Valid @ModelAttribute EventAccepterEvalRo eventAccepterEvalRo) {
+	
+		
+		EventProcessVo eventProcessVo = workbenchService.getActiveEventProcess(eventAccepterEvalRo.getWfOrderId(), eventAccepterEvalRo.getUserId());
+		eventProcessVo.setRevisitMode("4"); //TODO
+		eventProcessVo.setTimeliness(eventAccepterEvalRo.getTimeliness());
+		eventProcessVo.setLevel(eventAccepterEvalRo.getLevel());
+		eventProcessVo.setAttitude(eventAccepterEvalRo.getAttitude());
+		eventProcessVo.setResult(eventAccepterEvalRo.getResult());
+		
+		EventReportVo eventReportVo = new EventReportVo();
+		eventReportVo.setId(eventAccepterEvalRo.getEventId());
+		workbenchService.executeEventReporFlow(eventReportVo, eventProcessVo, eventAccepterEvalRo.getUserId(), "");
+		
+		String[] accpterLikes = eventAccepterEvalRo.getAccepterLikes().split(",");
+		
+		for(int i = 0; i < accpterLikes.length; i++){
+			String[] likes = accpterLikes[i].split("-");
+			EventAccepterEvalVo eventAccepterEvalVo = new EventAccepterEvalVo();
+			eventAccepterEvalVo.setAccepterId(likes[0]);
+			eventAccepterEvalVo.setLikes(likes[1]);
+			eventAccepterEvalVo.setEventId(eventAccepterEvalRo.getEventId());
+			
+			workbenchService.createEventAccepterEval(eventAccepterEvalVo);
+		}
+		return ReturnValue.success();
 	}
 }

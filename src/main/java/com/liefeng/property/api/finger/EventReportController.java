@@ -19,7 +19,7 @@ import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IWorkbenchService;
-import com.liefeng.property.api.ro.finger.event.EventAccepterEvalRo;
+import com.liefeng.property.api.ro.common.EventAccepterEvalRo;
 import com.liefeng.property.api.ro.finger.event.EventReportDataPageRo;
 import com.liefeng.property.api.ro.finger.event.EventReportFlowWorkRo;
 import com.liefeng.property.api.ro.finger.event.EventReportRo;

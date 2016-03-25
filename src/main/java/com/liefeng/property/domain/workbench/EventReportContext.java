@@ -347,6 +347,23 @@ public class EventReportContext {
 		return headCount;
 	}
 	
+	/**
+	 * 通过手机号码，获取报事
+	 * @param phone
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月25日 下午7:37:10
+	 */
+	public List<EventReportVo> getHistoryEventReportOfPhone(String phone){
+		List<EventReportVo> eventReportVoList = null;
+		if(ValidateHelper.isNotEmptyString(phone)){
+			List<EventReportPo> eventReportPoList = eventReportRepository.findByPhone(phone);
+			
+			eventReportVoList = MyBeanUtil.createList(eventReportPoList, EventReportVo.class);
+		}
+		return eventReportVoList;
+	}
+	
 	protected void setId(String id) {
 		this.id = id;
 	}

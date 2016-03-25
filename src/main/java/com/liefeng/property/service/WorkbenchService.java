@@ -1180,7 +1180,12 @@ public class WorkbenchService implements IWorkbenchService {
 	public List<EventReportVo> getEventReportList(String projectId,
 			String houseNum, String phone) {
 		EventReportContext eventReportContext = EventReportContext.build();
-		List<EventReportVo> eventReportVoList = eventReportContext.getHistoryEventReport(projectId, houseNum, phone);
+		List<EventReportVo> eventReportVoList = new ArrayList<EventReportVo>();
+		if(ValidateHelper.isNotEmptyString(projectId) && ValidateHelper.isNotEmptyString(houseNum) && ValidateHelper.isNotEmptyString(phone)){
+			eventReportVoList = eventReportContext.getHistoryEventReport(projectId, houseNum, phone);
+		}else{
+			eventReportVoList = eventReportContext.getHistoryEventReportOfPhone(phone);
+		}
 		
 		for(EventReportVo eventReportVo : eventReportVoList){
 			
