@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.error.IErrorCode;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.service.msg.ISmsService;
 import com.liefeng.mq.type.SMSMsgEvent;
@@ -21,6 +22,8 @@ import com.liefeng.property.api.ro.finger.auth.UpdatePwdRo;
 import com.liefeng.property.api.ro.work.auth.CheckMobileRo;
 import com.liefeng.property.api.ro.work.auth.StaffLoginRo;
 import com.liefeng.property.api.ro.work.auth.UpdatePwdLoginRo;
+import com.liefeng.property.error.PropertyStaffErrorCode;
+import com.liefeng.property.error.StaffErrorCode;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffArchiveVo;
 
@@ -44,19 +47,15 @@ public class AuthController {
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<PropertyStaffVo> login(@Valid @ModelAttribute StaffLoginRo staffLoginRo){
-		
-		DataValue<PropertyStaffVo> dataValue = null;
-		
+
 		PropertyStaffVo staff = propertyStaffService.findPropertyStaffByAccount(staffLoginRo.getAccount());
 		
 		if(staff == null){
-			dataValue = new DataValue<PropertyStaffVo>(IErrorCode.SYSTEM_ERROR,"账户不存在");
-			return dataValue;
+			throw new LiefengException(PropertyStaffErrorCode.STAFF_NOT_EXIST);
 		}
 		
 		if(!staff.getPassword().equals(staffLoginRo.getPassword())){
-			dataValue = new DataValue<PropertyStaffVo>(IErrorCode.SYSTEM_ERROR,"密码错误");
-			return dataValue;
+			throw new LiefengException(PropertyStaffErrorCode.PASSWORD_ERROR);
 		}
 		
 		return DataValue.success(staff);
@@ -76,7 +75,7 @@ public class AuthController {
 			}
 		}
 
-		return new ReturnValue(IErrorCode.SYSTEM_ERROR,"手机不匹配");
+		throw new LiefengException(PropertyStaffErrorCode.Mobile_NOT_MATCHING);
 	}
 	
 	
@@ -91,7 +90,7 @@ public class AuthController {
 	}
 	
 	@ApiOperation(value="登陆后-修改密码", notes="登陆后,修改密码")
-	@RequestMapping(value="/updateStaffPassword", method=RequestMethod.POST)
+	@RequestMapping(value="/updatePwdAfterLogin", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue updatePwdAfterLogin(@Valid @ModelAttribute UpdatePwdLoginRo updatePwdLoginRo){
 		propertyStaffService.updateStaffPassword(updatePwdLoginRo.getStaffId(), updatePwdLoginRo.getOldpaswword(), updatePwdLoginRo.getNewpaswword());

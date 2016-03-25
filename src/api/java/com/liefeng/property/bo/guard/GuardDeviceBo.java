@@ -1,5 +1,7 @@
 package com.liefeng.property.bo.guard;
 
+import java.util.List;
+
 import com.liefeng.core.entity.BaseValue;
 
 /**
@@ -15,6 +17,8 @@ public class GuardDeviceBo extends BaseValue{
 	private static final long serialVersionUID = -3534863940338880953L;
 
 	private String projectId;
+	
+	private List<String> projectIds;
 	
 	private String installPosition;
 	
@@ -75,5 +79,13 @@ public class GuardDeviceBo extends BaseValue{
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public List<String> getProjectIds() {
+		return projectIds;
+	}
+
+	public void setProjectIds(List<String> projectIds) {
+		this.projectIds = projectIds;
 	}
 }

@@ -10,8 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
-import com.liefeng.core.entity.ReturnValue;
-import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.constant.SysConstants;
 
 public class ControllerInterceptor implements HandlerInterceptor{
@@ -32,7 +30,7 @@ public class ControllerInterceptor implements HandlerInterceptor{
 		String oemCode = SysConstants.DEFAULT_OEM_CODE;
 		
 		ContextManager.getInstance().setOemCode(oemCode);
-		
+
 		return true;//只有返回true才会继续向下执行，返回false取消当前请求
 	}
 

@@ -128,6 +128,13 @@ public interface IPropertyStaffService {
 	 * @return
 	 */
 	public PropertyStaffVo findPropertyStaffById4DP(String staffId);
+	
+	/**
+	 * 查询员工的个推ID
+	 * @param staffId 员工ID
+	 * @return
+	 */
+	public String findStaffMsgClientId(String staffId);
 	/*********************** 部门相关接口 **********************/
 	
 	/**

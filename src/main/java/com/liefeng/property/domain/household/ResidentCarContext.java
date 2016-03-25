@@ -96,7 +96,7 @@ public class ResidentCarContext {
 	 * 
 	 * @return 住户车辆信息值对象
 	 */
-	public ResidentCarVo getResidentCar() {
+	public ResidentCarVo get() {
 		if (residentCar == null) {
 			ResidentCarPo residentCarPo = null;
 			if (ValidateHelper.isNotEmptyString(residentCarId)) {

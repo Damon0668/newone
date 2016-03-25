@@ -20,9 +20,25 @@ public enum PropertyStaffErrorCode implements IErrorCode{
 	STAFF_ALREADY_EXIST("员工已存在"),
 	
 	/**
+	 * 员工已存在
+	 */
+	STAFF_NOT_EXIST("员工不存在"),
+	
+	/**
+	 * 密码错误
+	 */
+	PASSWORD_ERROR("密码错误"),
+	
+	/**
 	 * 旧密码错误
 	 */
 	OLD_PASSWORD_ERROR("旧密码错误"),
+	
+	
+	/**
+	 * 手机号不匹配
+	 */
+	Mobile_NOT_MATCHING("手机号不匹配"),
 	
 	;
 	

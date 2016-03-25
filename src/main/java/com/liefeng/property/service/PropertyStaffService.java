@@ -28,6 +28,7 @@ import com.liefeng.property.domain.staff.PropertyStaffContext;
 import com.liefeng.property.domain.staff.StaffArchiveContext;
 import com.liefeng.property.domain.staff.StaffAttachContext;
 import com.liefeng.property.domain.staff.StaffContactPrivilegeContext;
+import com.liefeng.property.domain.staff.StaffMsgClientContext;
 import com.liefeng.property.domain.sys.SysRoleContext;
 import com.liefeng.property.error.StaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
@@ -343,5 +344,10 @@ public class PropertyStaffService implements IPropertyStaffService {
 	@Override
 	public StaffArchiveVo findStaffArchByStaffId(String staffId) {
 		return StaffArchiveContext.loadByStaffId(staffId).getStaffArchive();
+	}
+
+	@Override
+	public String findStaffMsgClientId(String staffId) {
+		return StaffMsgClientContext.loadByStaffId(staffId).get().getClientId();
 	}
 }

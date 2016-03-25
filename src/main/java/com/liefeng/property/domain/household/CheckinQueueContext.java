@@ -124,6 +124,11 @@ public class CheckinQueueContext {
 	public CheckinQueueVo create() {
 		if(checkinQueue != null) {
 			checkinQueue.setId(UUIDGenerator.generate());
+			// 当状态为空时才给状态赋值，默认为0（未处理）
+			if(ValidateHelper.isEmptyString(checkinQueue.getStatus())) {
+				checkinQueue.setStatus(HouseholdConstants.CheckinQueueStatus.UNTREATED);
+			}
+			checkinQueue.setCreateTime(new Date());
 			checkinQueue.setOemCode(ContextManager.getInstance().getOemCode());
 			
 			CheckinQueuePo checkinQueuePo = MyBeanUtil.createBean(checkinQueue, CheckinQueuePo.class);

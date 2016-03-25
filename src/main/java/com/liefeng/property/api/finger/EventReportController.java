@@ -27,11 +27,11 @@ import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.vo.workbench.EventReportVo;
 
 /**
- * 工作台服务类（app）
+ * 报事服务类（app）
  * @author xhw
  * @2016年3月7日 下午3:54:17
  */
-@Api(value="工作台模块")
+@Api(value="报事模块")
 @RestController
 @RequestMapping(value = "/api/finger/event")
 public class EventReportController {
