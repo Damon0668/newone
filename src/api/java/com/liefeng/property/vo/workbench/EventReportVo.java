@@ -271,21 +271,25 @@ public class EventReportVo extends BaseValue {
 	/**
 	 * 服务及时性。0：不及时；1：及时
 	 */
+	@ApiModelProperty("服务及时性【0：不及时；1：及时】")
 	private String timeliness;
 	
 	/**
 	 * 服务水准。0：差；1：一般；2：好
 	 */
+	@ApiModelProperty("服务水准【0：差；1：一般；2：好】")
 	private String level;
 	
 	/**
 	 * 服务态度。0：差；1：一般；2：好
 	 */
+	@ApiModelProperty("服务态度【0：差；1：一般；2：好】")
 	private String attitude;
 	
 	/**
 	 * 回访方式。1：电话；2：上门
 	 */
+	@ApiModelProperty("回访方式【1：电话；2：上门】")
 	private String revisitMode;
 	
 	

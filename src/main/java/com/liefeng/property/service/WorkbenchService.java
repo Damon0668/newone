@@ -780,6 +780,7 @@ public class WorkbenchService implements IWorkbenchService {
 		return EventReportContext.build().getFlowingList(eventReportBo, page, size);
 	}
 	
+	//已完成
 	@Override
 	public DataPageValue<EventReportVo> getCompleteEventReporList(
 			EventReportBo eventReportBo, Integer page, Integer size) {
@@ -1032,7 +1033,6 @@ public class WorkbenchService implements IWorkbenchService {
 		EventProcessVo eventProcessVo = eventProcessContext.findByWfTaskId(wfTaskId);
 		
 		Task task = workflowService.findTaskById(wfTaskId);
-		String[] actorIds = workflowService.getTaskActorsByTaskId(task.getId());
 		
 		if(eventProcessVo.getStatus() != null && eventProcessVo.getStatus().equals(WorkbenchConstants.EventReport.SIGNFOR_YES)){
 			//获取上一步骤的操作信息
