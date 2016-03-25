@@ -10,6 +10,7 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.staff.StaffMsgClientPo;
 import com.liefeng.property.repository.staff.StaffMsgClientRepository;
 import com.liefeng.property.vo.staff.StaffMsgClientVo;
@@ -75,16 +76,32 @@ public class StaffMsgClientContext {
 	}
 	
 	public void create(){
-		StaffMsgClientPo staffMsgClientPo = MyBeanUtil.createBean(staffMsgClient, StaffMsgClientPo.class);
-		staffMsgClientPo.setId(UUIDGenerator.generate());
-		staffMsgClientPo.setUpdateTime(new Date());
-		staffMsgClientRepository.save(staffMsgClientPo);
+		if(staffMsgClient != null){
+			StaffMsgClientPo staffMsgClientPo = MyBeanUtil.createBean(staffMsgClient, StaffMsgClientPo.class);
+			staffMsgClientPo.setId(UUIDGenerator.generate());
+			staffMsgClientPo.setUpdateTime(new Date());
+			staffMsgClientPo.setOemCode(ContextManager.getInstance().getOemCode());
+			staffMsgClientRepository.save(staffMsgClientPo);
+		}
+	}
+	
+	public void update(String clientId){
+		if(ValidateHelper.isNotEmptyString(staffId)){
+			StaffMsgClientPo staffMsgClientPo =  staffMsgClientRepository.findByStaffId(staffId);
+			if(staffMsgClientPo != null){
+				staffMsgClientPo.setClientId(clientId);
+				staffMsgClientPo.setUpdateTime(new Date());
+				staffMsgClientRepository.save(staffMsgClientPo);
+			}
+		}
 	}
 	
 	public StaffMsgClientVo get(){
 		if(ValidateHelper.isNotEmptyString(staffId)){
 			StaffMsgClientPo staffMsgClientPo = staffMsgClientRepository.findByStaffId(staffId);
-			staffMsgClient = MyBeanUtil.createBean(staffMsgClientPo, StaffMsgClientVo.class);
+			if(staffMsgClientPo != null){
+				staffMsgClient = MyBeanUtil.createBean(staffMsgClientPo, StaffMsgClientVo.class);
+			}
 		}
 		return staffMsgClient;
 	}

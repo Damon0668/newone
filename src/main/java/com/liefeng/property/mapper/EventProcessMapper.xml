@@ -15,6 +15,7 @@
 		<result column="result" property="result"/>
 		<result column="pic_urls" property="picUrls"/>
 		<result column="accept_time" property="acceptTime"/>
+		<result column="assist_accepter_ids" property="assistAccepterIds"/>
 	</resultMap>
 
 	<select id="getHisEventProcess" resultMap="BaseResultMap" parameterType="java.lang.String">
@@ -76,8 +77,10 @@
 		left join service.wf_task_actor ta on t.id = ta.task_Id
 		left join property.t_event_process ep on t.id = ep.wf_task_id
 		left join property.t_event_report er on ep.event_id = er.id
-		Where t.order_id = #{0}
-		And ta.actor_Id = #{1}
+		Where t.order_id = #{extra.orderId}
+		<if test="extra.staffid != null and extra.staffid != ''">
+		And ta.actor_Id = #{extra.staffid}
+		</if>
 	</select> 
 	
 	<select id="findEventProcess" resultMap="BaseResultMap2" >
@@ -85,13 +88,14 @@
 			t.next_accepter_id,
 			t.result,
 			t.pic_urls,
-			t.accept_time
+			t.accept_time,
+			t.assist_accepter_ids
 		FROM
 			property.t_event_process t,
 			service.wf_hist_task s
 		WHERE
 			t.event_id = #{extra.eventId}
-		AND t. STATUS = '1'
+		AND t. STATUS = '3'
 		AND t.wf_task_id = s.id
 		AND s.task_Name = #{extra.taskName}
 	</select>

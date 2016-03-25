@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.liefeng.Application;
 import com.liefeng.core.dubbo.filter.ContextManager;
@@ -30,6 +30,7 @@ import com.liefeng.property.vo.staff.PropertyStaffVo;
 @ActiveProfiles("dev")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
+@WebAppConfiguration 
 public class PropertyStaffServiceTest {
 	@Autowired
 	private IPropertyStaffService propertyStaffService;
@@ -120,6 +121,6 @@ public class PropertyStaffServiceTest {
 	
 	@Test
 	public void getClientId(){
-		System.out.println(propertyStaffService.findStaffMsgClientId("40282081531cf49b01531d4c72a80009"));
+		System.out.println(propertyStaffService.findStaffMsgClientId("1"));
 	}
 }

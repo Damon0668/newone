@@ -22,19 +22,17 @@ import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
-import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
-import com.liefeng.intf.service.tcc.ITccMsgService;
-import com.liefeng.property.api.ro.CheckinQueueListRo;
-import com.liefeng.property.api.ro.CheckinQueueRo;
-import com.liefeng.property.api.ro.PhoneRo;
-import com.liefeng.property.api.ro.ProprietorRo;
-import com.liefeng.property.api.ro.ProprietorStatusRo;
-import com.liefeng.property.api.ro.ResidentIdHouseIdRo;
-import com.liefeng.property.api.ro.ResidentRo;
-import com.liefeng.property.api.ro.ResidentUpdateRo;
-import com.liefeng.property.api.ro.VisitorRo;
+import com.liefeng.property.api.ro.common.PhoneRo;
+import com.liefeng.property.api.ro.finger.household.CheckinQueueListRo;
+import com.liefeng.property.api.ro.finger.household.CheckinQueueRo;
+import com.liefeng.property.api.ro.finger.household.ProprietorRo;
+import com.liefeng.property.api.ro.finger.household.ProprietorStatusRo;
+import com.liefeng.property.api.ro.finger.household.ResidentIdHouseIdRo;
+import com.liefeng.property.api.ro.finger.household.ResidentRo;
+import com.liefeng.property.api.ro.finger.household.ResidentUpdateRo;
+import com.liefeng.property.api.ro.finger.user.VisitorRo;
 import com.liefeng.property.api.ro.id.HouseIdRo;
 import com.liefeng.property.api.ro.id.ProprietorIdRo;
 import com.liefeng.property.api.ro.id.UserIdRo;
@@ -52,7 +50,7 @@ import com.liefeng.property.vo.household.VisitorVo;
  * @author xhw
  * @date 2016年3月8日 下午1:45:25
  */
-@Api(value="业主、住户相关接口")
+@Api(value="[业主|住户]模块")
 @RestController
 @RequestMapping(value = "/api/finger/household")
 public class HouseholdController {
@@ -62,13 +60,7 @@ public class HouseholdController {
 	
 	@Autowired
 	private IUserService userService;
-	
-	@Autowired
-	private ICheckService checkService;
-	
-	@Autowired
-	private ITccMsgService tccMsgService;
-	
+
 	/**
 	 * 通过扫二维码，获取排队号
 	 * @param projectId 项目id

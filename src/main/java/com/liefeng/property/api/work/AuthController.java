@@ -58,6 +58,8 @@ public class AuthController {
 			throw new LiefengException(PropertyStaffErrorCode.PASSWORD_ERROR);
 		}
 		
+		propertyStaffService.settIngStaffMsgClientId(staff.getId(), staffLoginRo.getClientId());
+
 		return DataValue.success(staff);
 	}
 	

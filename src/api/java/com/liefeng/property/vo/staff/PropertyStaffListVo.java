@@ -2,6 +2,10 @@ package com.liefeng.property.vo.staff;
 
 import java.util.Date;
 
+import org.springframework.validation.annotation.Validated;
+
+import com.liefeng.common.util.EncryptionUtil;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.BaseValue;
 
 /**
@@ -14,13 +18,15 @@ public class PropertyStaffListVo extends BaseValue{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -1513175768476188186L;
-	
+	private static final long serialVersionUID = -203552099872011992L;
+
 	private String id;
 	
 	private String number;
 	
 	private String name;
+	
+	private String encryptIdNum;
 	
 	private String idNum;
 	
@@ -59,13 +65,25 @@ public class PropertyStaffListVo extends BaseValue{
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String getEncryptIdNum() {
+		return encryptIdNum;
+	}
+
+	public void setEncryptIdNum(String encryptIdNum) {
+		this.encryptIdNum = encryptIdNum;
+	}
 
 	public String getIdNum() {
-		return idNum;
+		if(ValidateHelper.isNotEmptyString(encryptIdNum)){
+			return EncryptionUtil.decryptCustIdNum(encryptIdNum);
+		}
+		return this.idNum;
 	}
 
 	public void setIdNum(String idNum) {
 		this.idNum = idNum;
+		this.encryptIdNum = EncryptionUtil.encryptCustIdNum(idNum);
 	}
 
 	public Date getEntryTime() {

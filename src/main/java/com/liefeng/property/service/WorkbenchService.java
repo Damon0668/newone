@@ -38,6 +38,7 @@ import com.liefeng.property.bo.workbench.NoticeBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
+import com.liefeng.property.domain.workbench.EventAccepterEvalContext;
 import com.liefeng.property.domain.workbench.EventProcAttachContext;
 import com.liefeng.property.domain.workbench.EventProcessContext;
 import com.liefeng.property.domain.workbench.EventReportContext;
@@ -56,6 +57,7 @@ import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.exception.WorkbenchException;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.property.vo.workbench.EventAccepterEvalVo;
 import com.liefeng.property.vo.workbench.EventProcAttachVo;
 import com.liefeng.property.vo.workbench.EventProcessVo;
 import com.liefeng.property.vo.workbench.EventReportVo;
@@ -780,7 +782,6 @@ public class WorkbenchService implements IWorkbenchService {
 		return EventReportContext.build().getFlowingList(eventReportBo, page, size);
 	}
 	
-	//已完成
 	@Override
 	public DataPageValue<EventReportVo> getCompleteEventReporList(
 			EventReportBo eventReportBo, Integer page, Integer size) {
@@ -1033,6 +1034,7 @@ public class WorkbenchService implements IWorkbenchService {
 		EventProcessVo eventProcessVo = eventProcessContext.findByWfTaskId(wfTaskId);
 		
 		Task task = workflowService.findTaskById(wfTaskId);
+		String[] actorIds = workflowService.getTaskActorsByTaskId(task.getId());
 		
 		if(eventProcessVo.getStatus() != null && eventProcessVo.getStatus().equals(WorkbenchConstants.EventReport.SIGNFOR_YES)){
 			//获取上一步骤的操作信息
@@ -1181,6 +1183,9 @@ public class WorkbenchService implements IWorkbenchService {
 		List<EventReportVo> eventReportVoList = eventReportContext.getHistoryEventReport(projectId, houseNum, phone);
 		
 		for(EventReportVo eventReportVo : eventReportVoList){
+			
+			String status = eventReportVo.getStatus();
+					
 			//报事的“已派工”相当app的“未处理”
 			if(WorkbenchConstants.EventReport.STATUS_ALREADYWORKERS.equals(eventReportVo.getStatus())){
 				eventReportVo.setStatus(WorkbenchConstants.EventStatusAPP.UNTREATED);
@@ -1210,7 +1215,7 @@ public class WorkbenchService implements IWorkbenchService {
 			}
 			
 			//app的“完成”
-			if(WorkbenchConstants.EventReport.STATUS_ALREADYFEEDBACK.equals(eventReportVo.getStatus())){
+			if(WorkbenchConstants.EventReport.STATUS_ALREADYFEEDBACK.equals(status)){
 				eventReportVo.setStatus(WorkbenchConstants.EventStatusAPP.OVER);
 			}
 		}
@@ -1249,5 +1254,46 @@ public class WorkbenchService implements IWorkbenchService {
 		int tmp = Math.abs(num1 + num2);
 
 		return Integer.valueOf((tmp % 90 + 10)).toString();
+	}
+
+	@Override
+	public EventAccepterEvalVo createEventAccepterEval(
+			EventAccepterEvalVo eventAccepterEvalVo) {
+		EventAccepterEvalContext eventAccepterEvalContext = EventAccepterEvalContext.build(eventAccepterEvalVo);
+		return eventAccepterEvalContext.create();
+	}
+
+	@Override
+	public List<PropertyStaffVo> getStaffList(String eventId) {
+		EventProcessContext eventProcessContext = EventProcessContext.build();
+		EventProcessVo eventProcessVo = eventProcessContext.getEventProcess(eventId, WorkbenchConstants.EventProcessStatus.HANDLE);
+		List<PropertyStaffVo> staffList = new ArrayList<PropertyStaffVo>();
+		if(eventProcessVo != null){ 
+			//负责人
+			if(ValidateHelper.isNotEmptyString(eventProcessVo.getNextAccepterId())){
+				PropertyStaffVo propertyStaffVo	= propertyStaffService.findPropertyStaffById(eventProcessVo.getNextAccepterId()); 
+				if(propertyStaffVo != null){
+					PropertyStaffVo staff = new PropertyStaffVo();
+					staff.setId(propertyStaffVo.getId());
+					staff.setName(propertyStaffVo.getName());
+					staffList.add(staff);
+				}
+			}
+			
+			//协助办理人
+			if(ValidateHelper.isNotEmptyString(eventProcessVo.getAssistAccepterIds())){
+				String[] staffIds = eventProcessVo.getAssistAccepterIds().split(",");
+				for(int i = 0; i < staffIds.length; i++){
+					PropertyStaffVo propertyStaffVo	= propertyStaffService.findPropertyStaffById(staffIds[i]); 
+					if(propertyStaffVo != null){
+						PropertyStaffVo staff = new PropertyStaffVo();
+						staff.setId(propertyStaffVo.getId());
+						staff.setName(propertyStaffVo.getName());
+						staffList.add(staff);
+					}
+				}
+			}
+		}
+		return staffList;
 	}
 }

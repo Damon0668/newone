@@ -39,6 +39,7 @@ import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffArchiveVo;
 import com.liefeng.property.vo.staff.StaffAttachVo;
 import com.liefeng.property.vo.staff.StaffContactPrivilegeVo;
+import com.liefeng.property.vo.staff.StaffMsgClientVo;
 
 /**
  * 物业员工服务
@@ -348,6 +349,24 @@ public class PropertyStaffService implements IPropertyStaffService {
 
 	@Override
 	public String findStaffMsgClientId(String staffId) {
-		return StaffMsgClientContext.loadByStaffId(staffId).get().getClientId();
+		StaffMsgClientVo staffMsgClient = StaffMsgClientContext.loadByStaffId(staffId).get();
+		if(staffMsgClient != null){
+			return staffMsgClient.getClientId();
+		}
+		return null;
+	}
+
+	@Override
+	public void settIngStaffMsgClientId(String staffId, String clientId) {
+		StaffMsgClientVo staffMsgClient = StaffMsgClientContext.loadByStaffId(staffId).get();
+		
+		if(staffMsgClient == null){
+			staffMsgClient = new StaffMsgClientVo();
+			staffMsgClient.setStaffId(staffId);
+			staffMsgClient.setClientId(clientId);
+			StaffMsgClientContext.build(staffMsgClient).create();
+		}else{
+			StaffMsgClientContext.loadByStaffId(staffId).update(clientId);
+		}
 	}
 }
