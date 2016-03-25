@@ -2,6 +2,8 @@ package com.liefeng.property.vo.staff;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.liefeng.core.entity.BaseValue;
 import com.liefeng.property.annotation.Dict;
 
@@ -15,6 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2015-12-24
  */
 @ApiModel
+@JsonInclude(Include.NON_EMPTY)
 public class PropertyStaffVo extends BaseValue {
 
 	private static final long serialVersionUID = 4284129283467742818L;

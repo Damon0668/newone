@@ -44,7 +44,7 @@ public class UserRo {
 	private Double weight;
 	
 	@ApiModelProperty(value="出生日期")
-	private Date birthday;
+	private String birthday;
 
 	public String getCustGlobalId() {
 		return custGlobalId;
@@ -118,13 +118,12 @@ public class UserRo {
 		this.weight = weight;
 	}
 
-	public Date getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(Date birthday) {
+	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
-
 
 }

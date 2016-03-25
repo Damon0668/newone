@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.intf.property.IProjectService;
@@ -18,6 +19,7 @@ import com.liefeng.property.api.ro.NoticeRo;
 import com.liefeng.property.api.ro.id.NoticeIdRo;
 import com.liefeng.property.api.ro.id.ProjectIdRo;
 import com.liefeng.property.bo.workbench.NoticeBo;
+import com.liefeng.property.vo.project.AppHomeImageVo;
 import com.liefeng.property.vo.project.ProjectVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
 
@@ -35,12 +37,19 @@ public class ProjectController {
 	@Autowired
 	private IWorkbenchService workbenchService;
 	
-	@ApiOperation(value="获取项目信息")
+	@ApiOperation(value="获取小区信息")
 	@RequestMapping(value="/getProject", method=RequestMethod.GET)
 	@ResponseBody
 	public DataValue<ProjectVo> getProject(@Valid @ModelAttribute ProjectIdRo id){
 		ProjectVo project = projectService.findProjectById(id.getId());
 		return DataValue.success(project);
+	}
+
+	@ApiOperation(value="获取小区轮播图")
+	@RequestMapping(value="/getHomeImages", method=RequestMethod.GET)
+	@ResponseBody
+	public DataListValue<AppHomeImageVo> getHomeImages(@Valid @ModelAttribute ProjectIdRo id){
+		return DataListValue.success(projectService.findAppHomeImages(id.getId(), 1, Integer.MAX_VALUE).getDataList());
 	}
 	
 	/**

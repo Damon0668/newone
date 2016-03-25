@@ -28,6 +28,7 @@ import com.liefeng.property.domain.staff.PropertyStaffContext;
 import com.liefeng.property.domain.staff.StaffArchiveContext;
 import com.liefeng.property.domain.staff.StaffAttachContext;
 import com.liefeng.property.domain.staff.StaffContactPrivilegeContext;
+import com.liefeng.property.domain.staff.StaffMsgClientContext;
 import com.liefeng.property.domain.sys.SysRoleContext;
 import com.liefeng.property.error.StaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
@@ -38,6 +39,7 @@ import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffArchiveVo;
 import com.liefeng.property.vo.staff.StaffAttachVo;
 import com.liefeng.property.vo.staff.StaffContactPrivilegeVo;
+import com.liefeng.property.vo.staff.StaffMsgClientVo;
 
 /**
  * 物业员工服务
@@ -343,5 +345,28 @@ public class PropertyStaffService implements IPropertyStaffService {
 	@Override
 	public StaffArchiveVo findStaffArchByStaffId(String staffId) {
 		return StaffArchiveContext.loadByStaffId(staffId).getStaffArchive();
+	}
+
+	@Override
+	public String findStaffMsgClientId(String staffId) {
+		StaffMsgClientVo staffMsgClient = StaffMsgClientContext.loadByStaffId(staffId).get();
+		if(staffMsgClient != null){
+			return staffMsgClient.getClientId();
+		}
+		return null;
+	}
+
+	@Override
+	public void settIngStaffMsgClientId(String staffId, String clientId) {
+		StaffMsgClientVo staffMsgClient = StaffMsgClientContext.loadByStaffId(staffId).get();
+		
+		if(staffMsgClient == null){
+			staffMsgClient = new StaffMsgClientVo();
+			staffMsgClient.setStaffId(staffId);
+			staffMsgClient.setClientId(clientId);
+			StaffMsgClientContext.build(staffMsgClient).create();
+		}else{
+			StaffMsgClientContext.loadByStaffId(staffId).update(clientId);
+		}
 	}
 }
