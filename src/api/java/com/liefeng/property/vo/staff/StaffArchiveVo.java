@@ -4,12 +4,16 @@ import java.util.Date;
 
 import com.liefeng.core.entity.BaseValue;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 员工档案值对象
  * 
  * @author ZhenTingJun
  * @date 2015-12-24
  */
+@ApiModel
 public class StaffArchiveVo extends BaseValue {
 
 	private static final long serialVersionUID = -3212942678576706332L;
@@ -17,76 +21,91 @@ public class StaffArchiveVo extends BaseValue {
 	/**
 	 * 主键
 	 */
+	@ApiModelProperty(value="档案ID")
 	private String id;
 	
 	/**
 	 * 客户全局唯一标识
 	 */
+	@ApiModelProperty(value="客户全局唯一标识")
 	private String custGlobalId;
 	
 	/**
 	 * 员工ID
 	 */
+	@ApiModelProperty(value="员工ID")
 	private String staffId;
 	
 	/**
 	 * 员工姓名
 	 */
+	@ApiModelProperty(value="员工姓名")
 	private String name;
 	
 	/**
 	 * 手机号码
 	 */
+	@ApiModelProperty(value="手机号码")
 	private String phone;
 	
 	/**
 	 * 毕业学校
 	 */
+	@ApiModelProperty(value="毕业学校")
 	private String school;
 	
 	/**
 	 * 毕业时间
 	 */
+	@ApiModelProperty(value="毕业时间")
 	private Date  graduateTime;
 	
 	/**
 	 * 专业
 	 */
+	@ApiModelProperty(value="专业")
 	private String major;
 	
 	/**
 	 * 语言能力：多选用“,”分隔
 	 */
+	@ApiModelProperty(value="多选用“,”分隔")
 	private String language;
 	
 	/**
 	 * 健康状况
 	 */
+	@ApiModelProperty(value="健康状况")
 	private String health;
 	
 	/**
 	 * 现住地址
 	 */
+	@ApiModelProperty(value="现住地址")
 	private String address;
 	
 	/**
 	 * 电子邮件
 	 */
+	@ApiModelProperty(value="电子邮件")
 	private String email;
 	
 	/**
 	 * 紧急联系人
 	 */
+	@ApiModelProperty(value="紧急联系人")
 	private String emergencyContact;
 	
 	/**
 	 * 紧急联系电话
 	 */
+	@ApiModelProperty(value="紧急联系电话")
 	private String emergencyPhone;
 	
 	/**
 	 * OEM编码
 	 */
+	@ApiModelProperty(value="OEM编码")
 	private String oemCode;
 
 	public String getId() {
