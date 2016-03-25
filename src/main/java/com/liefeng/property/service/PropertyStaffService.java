@@ -347,7 +347,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 	}
 
 	@Override
-	public String findStaffMgClientId(String staffId) {
+	public String findStaffMsgClientId(String staffId) {
 		return StaffMsgClientContext.loadByStaffId(staffId).get().getClientId();
 	}
 }

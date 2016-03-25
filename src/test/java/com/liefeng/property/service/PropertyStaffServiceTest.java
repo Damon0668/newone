@@ -120,6 +120,6 @@ public class PropertyStaffServiceTest {
 	
 	@Test
 	public void getClientId(){
-		System.out.println(propertyStaffService.findStaffClientId("40282081531cf49b01531d4c72a80009"));
+		System.out.println(propertyStaffService.findStaffMsgClientId("40282081531cf49b01531d4c72a80009"));
 	}
 }
