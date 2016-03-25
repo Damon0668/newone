@@ -9,7 +9,7 @@
     <result column="id" property="id"/>
     <result column="number" property="number"/>
     <result column="name" property="name"/>
-    <result column="id_num" property="idNum"/>
+    <result column="id_num" property="encryptIdNum"/>
     <result column="entry_time" property="entryTime"/>
     <result column="phone" property="phone"/>
     <result column="department" property="department"/>
