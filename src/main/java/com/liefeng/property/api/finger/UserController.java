@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.base.vo.UserVo;
+import com.liefeng.common.util.TimeUtil;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
@@ -100,7 +101,7 @@ public class UserController {
 		customerVo.setHeight(userRo.getHeight());
 		customerVo.setStep(userRo.getStep());
 		customerVo.setWeight(userRo.getWeight());
-		customerVo.setBirthday(userRo.getBirthday());
+		customerVo.setBirthday(TimeUtil.format(userRo.getBirthday(), "yyyy-MM-dd"));
 		
 		user.setCustomer(customerVo);
 		// 校验用户信息
