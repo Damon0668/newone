@@ -4,8 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
-
-import javax.persistence.Column;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -288,6 +287,12 @@ public class EventReportVo extends BaseValue {
 	 */
 	@ApiModelProperty("回访方式【1：电话；2：上门】")
 	private String revisitMode;
+
+	/**
+	 * 报事处理过程列表
+	 */
+	@ApiModelProperty("报事处理过程列表")
+	private List<EventProcessVo> eventProcessList; 
 	
 	@ApiModelProperty(value="重要程度【1：重要、0：非重要】")
 	public Character getImportant() {
@@ -666,6 +671,14 @@ public class EventReportVo extends BaseValue {
 
 	public void setRevisitMode(String revisitMode) {
 		this.revisitMode = revisitMode;
+	}
+
+	public List<EventProcessVo> getEventProcessList() {
+		return eventProcessList;
+	}
+
+	public void setEventProcessList(List<EventProcessVo> eventProcessList) {
+		this.eventProcessList = eventProcessList;
 	}
 
 }

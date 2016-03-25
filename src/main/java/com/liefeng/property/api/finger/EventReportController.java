@@ -175,6 +175,4 @@ public class EventReportController {
 		}
 		return ReturnValue.success();
 	}
-	
-	
 }

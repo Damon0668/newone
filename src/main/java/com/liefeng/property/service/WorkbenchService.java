@@ -699,7 +699,7 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 	
 	@Override
-	public EventReportVo findEventReportByWfTaskId(String wfOrderId){
+	public EventReportVo findEventReportByWfOrderId(String wfOrderId){
 		return EventReportContext.build().findByWfOrderId(wfOrderId);
 	}
 	
