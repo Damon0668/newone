@@ -15,6 +15,7 @@
 		<result column="result" property="result"/>
 		<result column="pic_urls" property="picUrls"/>
 		<result column="accept_time" property="acceptTime"/>
+		<result column="assist_accepter_ids" property="assistAccepterIds"/>
 	</resultMap>
 
 	<select id="getHisEventProcess" resultMap="BaseResultMap" parameterType="java.lang.String">
@@ -85,13 +86,14 @@
 			t.next_accepter_id,
 			t.result,
 			t.pic_urls,
-			t.accept_time
+			t.accept_time,
+			t.assist_accepter_ids
 		FROM
 			property.t_event_process t,
 			service.wf_hist_task s
 		WHERE
 			t.event_id = #{extra.eventId}
-		AND t. STATUS = '1'
+		AND t. STATUS = '3'
 		AND t.wf_task_id = s.id
 		AND s.task_Name = #{extra.taskName}
 	</select>
