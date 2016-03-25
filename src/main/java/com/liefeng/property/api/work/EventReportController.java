@@ -1,4 +1,4 @@
-package com.liefeng.property.api.finger;
+package com.liefeng.property.api.work;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,7 +38,7 @@ import com.liefeng.property.vo.workbench.EventReportVo;
  */
 @Api(value="报事模块")
 @RestController
-@RequestMapping(value = "/api/finger/event")
+@RequestMapping(value = "/api/work/event")
 public class EventReportController {
 
 	@Autowired

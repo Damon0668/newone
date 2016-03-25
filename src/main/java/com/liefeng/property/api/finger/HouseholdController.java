@@ -1,5 +1,8 @@
 package com.liefeng.property.api.finger;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import java.util.Date;
 import java.util.List;
 
@@ -21,15 +24,15 @@ import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
-import com.liefeng.property.api.ro.CheckinQueueListRo;
-import com.liefeng.property.api.ro.CheckinQueueRo;
-import com.liefeng.property.api.ro.PhoneRo;
-import com.liefeng.property.api.ro.ProprietorRo;
-import com.liefeng.property.api.ro.ProprietorStatusRo;
-import com.liefeng.property.api.ro.ResidentIdHouseIdRo;
-import com.liefeng.property.api.ro.ResidentRo;
-import com.liefeng.property.api.ro.ResidentUpdateRo;
-import com.liefeng.property.api.ro.VisitorRo;
+import com.liefeng.property.api.ro.common.PhoneRo;
+import com.liefeng.property.api.ro.finger.household.CheckinQueueListRo;
+import com.liefeng.property.api.ro.finger.household.CheckinQueueRo;
+import com.liefeng.property.api.ro.finger.household.ProprietorRo;
+import com.liefeng.property.api.ro.finger.household.ProprietorStatusRo;
+import com.liefeng.property.api.ro.finger.household.ResidentIdHouseIdRo;
+import com.liefeng.property.api.ro.finger.household.ResidentRo;
+import com.liefeng.property.api.ro.finger.household.ResidentUpdateRo;
+import com.liefeng.property.api.ro.finger.user.VisitorRo;
 import com.liefeng.property.api.ro.id.HouseIdRo;
 import com.liefeng.property.api.ro.id.ProprietorIdRo;
 import com.liefeng.property.api.ro.id.UserIdRo;
@@ -41,9 +44,6 @@ import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
 import com.liefeng.property.vo.household.VisitorVo;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
 /**
  * 业主、住户公共服务类（app） 

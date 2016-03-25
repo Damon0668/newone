@@ -1,4 +1,4 @@
-package com.liefeng.property.api.ro;
+package com.liefeng.property.api.ro.common;
 
 import javax.validation.constraints.NotNull;
 

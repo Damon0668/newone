@@ -1,5 +1,8 @@
 package com.liefeng.property.api.finger;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +18,13 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.intf.property.IProjectService;
 import com.liefeng.intf.property.IWorkbenchService;
-import com.liefeng.property.api.ro.NoticeRo;
+import com.liefeng.property.api.ro.finger.household.NoticeRo;
 import com.liefeng.property.api.ro.id.NoticeIdRo;
 import com.liefeng.property.api.ro.id.ProjectIdRo;
 import com.liefeng.property.bo.workbench.NoticeBo;
 import com.liefeng.property.vo.project.AppHomeImageVo;
 import com.liefeng.property.vo.project.ProjectVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
 @Api(value="小区模块")
 @RestController
