@@ -530,7 +530,7 @@ public interface IWorkbenchService {
 	 * @param wfOrderId
 	 * @return
 	 */
-	public EventReportVo findEventReportByWfTaskId(String wfOrderId);
+	public EventReportVo findEventReportByWfOrderId(String wfOrderId);
 
 	
 	/**

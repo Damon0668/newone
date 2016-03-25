@@ -24,6 +24,7 @@ import com.liefeng.property.api.ro.EventReportFlowWorkRo;
 import com.liefeng.property.api.ro.EventReportRo;
 import com.liefeng.property.api.ro.ProjectIdHouseNumPhoneRo;
 import com.liefeng.property.bo.workbench.EventReportBo;
+import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.vo.workbench.EventReportVo;
 
 /**
@@ -98,21 +99,34 @@ public class EventReportController {
 		return ReturnValue.success();
 	}
 	
-	@ApiOperation(value="获取待签收列表")
-	@RequestMapping(value="/getSignForEventReporList", method=RequestMethod.GET)
+	@ApiOperation(value="根据类型获取对应工单列表")
+	@RequestMapping(value="/getEventReporListByType", method=RequestMethod.GET)
 	@ResponseBody
-	public DataPageValue<EventReportVo> getSignForEventReporList(@Valid @ModelAttribute EventReportDataPageRo eventReportDataPageRo){
-		EventReportBo eventReportBo = MyBeanUtil.createBean(eventReportDataPageRo, EventReportBo.class);
-		DataPageValue<EventReportVo> DataPageValue = workbenchService.getSignForEventReporList(eventReportBo, eventReportDataPageRo.getPage(),eventReportDataPageRo.getSize());
-		return DataPageValue;
-	}
-	
-	@ApiOperation(value="获取抢单列表")
-	@RequestMapping(value="/getGrabEventReporList", method=RequestMethod.GET)
-	@ResponseBody
-	public DataPageValue<EventReportVo> getGrabEventReporList(@Valid @ModelAttribute EventReportDataPageRo eventReportDataPageRo){
-		EventReportBo eventReportBo = MyBeanUtil.createBean(eventReportDataPageRo, EventReportBo.class);
-		DataPageValue<EventReportVo> DataPageValue = workbenchService.getGrabEventReporList(eventReportBo, eventReportDataPageRo.getPage(),eventReportDataPageRo.getSize());
-		return DataPageValue;
+	public DataPageValue<EventReportVo> getEventReporListByType(@Valid @ModelAttribute EventReportDataPageRo params) {
+		DataPageValue<EventReportVo> dataPage = new DataPageValue<EventReportVo>();
+		
+		String type = params.getType(); // 查询类型
+		Integer page = params.getPage(); // 分页当前页
+		Integer size = params.getSize(); // 分页大小
+		EventReportBo eventReportBo = MyBeanUtil.createBean(params, EventReportBo.class);
+		
+		if(WorkbenchConstants.EventListType.WAIT_SIGNIN.equals(type)) {
+			 // 待签收
+			dataPage= workbenchService.getSignForEventReporList(eventReportBo, page, size);
+		} else if(WorkbenchConstants.EventListType.GRAB_SINGLE.equals(type)) { 
+			// 抢单
+			dataPage= workbenchService.getGrabEventReporList(eventReportBo, page, size);
+		} else if(WorkbenchConstants.EventListType.WAIT_DEAL.equals(type)) { 
+			// 待处理
+			dataPage= workbenchService.getWaitingForEventReportList(eventReportBo, params.getPage(), params.getSize());
+		} else if(WorkbenchConstants.EventListType.FLOWING.equals(type)) {
+			// 待处理
+			dataPage= workbenchService.getFlowingEventReporList(eventReportBo, params.getPage(), params.getSize());
+		} else if(WorkbenchConstants.EventListType.COMPLETED.equals(type)) {
+			 // 已完成
+			dataPage= workbenchService.getCompleteEventReporList(eventReportBo, params.getPage(), params.getSize());
+		}
+		
+		return dataPage;
 	}
 }
