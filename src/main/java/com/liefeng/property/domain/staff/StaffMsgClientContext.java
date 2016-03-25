@@ -75,16 +75,31 @@ public class StaffMsgClientContext {
 	}
 	
 	public void create(){
-		StaffMsgClientPo staffMsgClientPo = MyBeanUtil.createBean(staffMsgClient, StaffMsgClientPo.class);
-		staffMsgClientPo.setId(UUIDGenerator.generate());
-		staffMsgClientPo.setUpdateTime(new Date());
-		staffMsgClientRepository.save(staffMsgClientPo);
+		if(staffMsgClient != null){
+			StaffMsgClientPo staffMsgClientPo = MyBeanUtil.createBean(staffMsgClient, StaffMsgClientPo.class);
+			staffMsgClientPo.setId(UUIDGenerator.generate());
+			staffMsgClientPo.setUpdateTime(new Date());
+			staffMsgClientRepository.save(staffMsgClientPo);
+		}
+	}
+	
+	public void update(String clientId){
+		if(ValidateHelper.isNotEmptyString(staffId)){
+			StaffMsgClientPo staffMsgClientPo =  staffMsgClientRepository.findByStaffId(staffId);
+			if(staffMsgClientPo != null){
+				staffMsgClientPo.setClientId(clientId);
+				staffMsgClientPo.setUpdateTime(new Date());
+				staffMsgClientRepository.save(staffMsgClientPo);
+			}
+		}
 	}
 	
 	public StaffMsgClientVo get(){
 		if(ValidateHelper.isNotEmptyString(staffId)){
 			StaffMsgClientPo staffMsgClientPo = staffMsgClientRepository.findByStaffId(staffId);
-			staffMsgClient = MyBeanUtil.createBean(staffMsgClientPo, StaffMsgClientVo.class);
+			if(staffMsgClientPo != null){
+				staffMsgClient = MyBeanUtil.createBean(staffMsgClientPo, StaffMsgClientVo.class);
+			}
 		}
 		return staffMsgClient;
 	}

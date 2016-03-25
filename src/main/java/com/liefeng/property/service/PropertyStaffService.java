@@ -355,4 +355,18 @@ public class PropertyStaffService implements IPropertyStaffService {
 		}
 		return null;
 	}
+
+	@Override
+	public void settIngStaffMsgClientId(String staffId, String clientId) {
+		StaffMsgClientVo staffMsgClient = StaffMsgClientContext.loadByStaffId(staffId).get();
+		
+		if(staffMsgClient == null){
+			staffMsgClient = new StaffMsgClientVo();
+			staffMsgClient.setStaffId(staffId);
+			staffMsgClient.setClientId(clientId);
+			StaffMsgClientContext.build(staffMsgClient).create();
+		}else{
+			StaffMsgClientContext.loadByStaffId(staffId).update(clientId);
+		}
+	}
 }
