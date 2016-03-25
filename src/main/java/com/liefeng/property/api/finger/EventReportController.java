@@ -19,15 +19,16 @@ import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.api.ro.EventAccepterEvalRo;
 import com.liefeng.property.api.ro.EventReportDataPageRo;
 import com.liefeng.property.api.ro.EventReportFlowWorkRo;
-import com.liefeng.property.api.ro.EventAccepterEvalRo;
 import com.liefeng.property.api.ro.EventReportRo;
 import com.liefeng.property.api.ro.ProjectIdHouseNumPhoneRo;
 import com.liefeng.property.api.ro.id.EventIdRo;
 import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.workbench.EventAccepterEvalVo;
+import com.liefeng.property.vo.workbench.EventProcessVo;
 import com.liefeng.property.vo.workbench.EventReportVo;
 
 /**
@@ -148,6 +149,19 @@ public class EventReportController {
 	@RequestMapping(value="/createEventAccepterEval", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue createEventAccepterEval(@Valid @ModelAttribute EventAccepterEvalRo eventAccepterEvalRo) {
+	
+		
+		EventProcessVo eventProcessVo = workbenchService.getActiveEventProcess(eventAccepterEvalRo.getWfOrderId(), "");
+		eventProcessVo.setRevisitMode("03");
+		eventProcessVo.setTimeliness(eventAccepterEvalRo.getTimeliness());
+		eventProcessVo.setLevel(eventAccepterEvalRo.getLevel());
+		eventProcessVo.setAttitude(eventAccepterEvalRo.getAttitude());
+		eventProcessVo.setResult(eventAccepterEvalRo.getResult());
+		
+		EventReportVo eventReportVo = new EventReportVo();
+		eventProcessVo.setId(eventAccepterEvalRo.getEventId());
+		workbenchService.executeEventReporFlow(eventReportVo, eventProcessVo, "returnVisit", "");
+		
 		String[] accpterLikes = eventAccepterEvalRo.getAccepterLikes().split(",");
 		
 		for(int i = 0; i < accpterLikes.length; i++){
@@ -159,7 +173,6 @@ public class EventReportController {
 			
 			workbenchService.createEventAccepterEval(eventAccepterEvalVo);
 		}
-		
 		return ReturnValue.success();
 	}
 	
