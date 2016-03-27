@@ -908,19 +908,17 @@ public class WorkbenchService implements IWorkbenchService {
 	@Transactional
 	public void executeEventReporFlow(EventReportVo eventReportVo,EventProcessVo eventProcessVo,String staffid,String nextAccepterId){
 		
-		if(ValidateHelper.isEmptyString(eventProcessVo.getTaskName())){
-			logger.error("executeEventReporFlow taskName is Null or Empty");
-			throw  new WorkbenchException(WorkbenchErrorCode.PARAM_IS_NULL);
-		}
 		if(ValidateHelper.isEmptyString(eventProcessVo.getWfTaskId())){
 			logger.error("executeEventReporFlow taskId is Null or Empty");
 			throw  new WorkbenchException(WorkbenchErrorCode.PARAM_IS_NULL);
 		}
 		
-		//设置默认审核状态为通过
+		Task task = workflowService.findTaskById(eventProcessVo.getWfTaskId());
+		
+		/*//设置默认审核状态为通过
 		if(eventProcessVo.getAuditStatus()==null){
 			eventProcessVo.setAuditStatus(WorkbenchConstants.EventReport.AUDITSTATUS_YES);
-		}
+		}*/
 		
 		//保存 附件
 		if(ValidateHelper.isNotEmptyCollection(eventProcessVo.getAttachs()))
@@ -946,23 +944,23 @@ public class WorkbenchService implements IWorkbenchService {
 		arg.put(role, nextAccepterId);
 		//流程决策使用 该步骤主要使用在部门审批
 		arg.put("auditStatus", eventProcessVo.getAuditStatus());
-		if(eventProcessVo.getAuditStatus().equals(WorkbenchConstants.EventReport.AUDITSTATUS_YES)){
+		if(eventProcessVo.getAuditStatus() != null && eventProcessVo.getAuditStatus().equals(WorkbenchConstants.EventReport.AUDITSTATUS_YES)){
 			arg.put("returnVisit", nextAccepterId);
 		}
 		//执行
 		List<Task> tasks = workflowService.execute(eventProcessVo.getWfTaskId(), staffid, arg);
 		
 		//不同意 工作流引擎不处理，只能自己手动处理
-		if(eventProcessVo.getAuditStatus().equals(WorkbenchConstants.EventReport.AUDITSTATUS_NO)){
+		if(eventProcessVo.getAuditStatus() != null && eventProcessVo.getAuditStatus().equals(WorkbenchConstants.EventReport.AUDITSTATUS_NO)){
 			EventProcessVo vo = EventProcessContext.build().findByWfTaskId(tasks.get(0).getParentTaskId());
 			workflowService.addTaskActor(tasks.get(0).getId(), vo.getCurrAccepterId().split(","));
 		}
 		
 		//最好一步 客服回访 更新 报事为 归档,设置回访结果到报事
-		if(eventProcessVo.getTaskName().equals("returnVisit")){
+		if(task.getTaskName().equals("returnVisit")){
 			EventReportVo fileEventReport = EventReportContext.loadById(eventReportVo.getId()).get();
 			fileEventReport.setStatus(WorkbenchConstants.EventReport.STATUS_FILE);
-			fileEventReport.setResult(eventReportVo.getResult());
+			fileEventReport.setResult(eventProcessVo.getResult());
 			fileEventReport.setLevel(eventProcessVo.getLevel());
 			fileEventReport.setAttitude(eventProcessVo.getAttitude());
 			fileEventReport.setReportMode(eventProcessVo.getRevisitMode());
@@ -1037,13 +1035,14 @@ public class WorkbenchService implements IWorkbenchService {
 		if(eventProcessVo.getStatus() != null && eventProcessVo.getStatus().equals(WorkbenchConstants.EventReport.SIGNFOR_YES)){
 			//获取上一步骤的操作信息
 			EventProcessVo preEventProcessVo =  EventProcessContext.build().findByWfTaskId(task.getParentTaskId());
+			Task preTask = workflowService.findTaskById(task.getParentTaskId());
 			
 			Map<String, Object> arg = new HashMap<String, Object>();
-			arg.put(task.getTaskName(), eventProcessVo.getNextAccepterId());
-			List<Task> tasks = workflowService.executeAndJumpTask(task.getId(), staffid,arg,task.getTaskName());
-			List<String> removeStaffid = compare(tasks.get(0).getActorIds(),preEventProcessVo.getNextAccepterId().split(","));
-			if(removeStaffid.size()>0)
-			workflowService.addTaskActor(tasks.get(0).getId(), listToArray(removeStaffid));
+			//arg.put(task.getTaskName(), eventProcessVo.getNextAccepterId());
+			List<Task> tasks = workflowService.executeAndJumpTask(task.getId(), staffid,null,null);
+		//	List<String> removeStaffid = compare(tasks.get(0).getActorIds(),preEventProcessVo.getNextAccepterId().split(","));
+		//	if(removeStaffid.size()>0)
+		//	workflowService.addTaskActor(tasks.get(0).getId(), listToArray(removeStaffid));
 			
 			eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_SENDBACK); //将以签收改为待签收
 			eventProcessVo.setNextAccepterId(preEventProcessVo.getNextAccepterId());

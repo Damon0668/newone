@@ -22,8 +22,10 @@ import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.property.api.ro.EventReportDataPageRo;
 import com.liefeng.property.api.ro.EventReportFlowWorkRo;
 import com.liefeng.property.api.ro.EventReportRo;
+import com.liefeng.property.api.ro.ExecuteEventReporRo;
 import com.liefeng.property.api.ro.ProjectIdHouseNumPhoneRo;
 import com.liefeng.property.bo.workbench.EventReportBo;
+import com.liefeng.property.vo.workbench.EventProcessVo;
 import com.liefeng.property.vo.workbench.EventReportVo;
 
 /**
@@ -95,6 +97,19 @@ public class EventReportController {
 	@ResponseBody
 	public ReturnValue eventReporWithdraw(@Valid @ModelAttribute EventReportFlowWorkRo reportFlowWorkRo){
 		workbenchService.eventReporSendBack(reportFlowWorkRo.getWfTaskId(), reportFlowWorkRo.getStaffid());
+		return ReturnValue.success();
+	}
+	
+	@ApiOperation(value="执行报事流程/领导审核通过/领导审核不通过/办理/派工")
+	@RequestMapping(value="/executeEventReporFlow", method=RequestMethod.POST)
+	@ResponseBody
+	public ReturnValue executeEventReporFlow(@Valid @ModelAttribute ExecuteEventReporRo executeEventReporRo){
+		EventReportVo eventReportVo = new EventReportVo();
+		eventReportVo.setId(executeEventReporRo.getEventId());
+		
+		EventProcessVo eventProcessVo = MyBeanUtil.createBean(executeEventReporRo, EventProcessVo.class);
+		
+		workbenchService.executeEventReporFlow(eventReportVo, eventProcessVo,eventProcessVo.getCurrAccepterId(),eventProcessVo.getNextAccepterId());
 		return ReturnValue.success();
 	}
 	

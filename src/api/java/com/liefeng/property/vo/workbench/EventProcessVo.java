@@ -129,6 +129,9 @@ public class EventProcessVo extends BaseValue{
 	 */
 	private List<EventProcAttachVo> attachs;
 	
+	/**
+	 * 图片
+	 */
 	private String picUrls;
 	
 	public String getId() {

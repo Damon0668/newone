@@ -381,7 +381,7 @@
 	LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
 		<include refid="Waiting_Where_Clause" />
 		AND o.order_state = '0'
-		AND ta.actor_id in (#{extra.actorId})
+		AND ta.actor_id in (#{extra.actor})
 		group by o.id
 		) t
 	</select>
