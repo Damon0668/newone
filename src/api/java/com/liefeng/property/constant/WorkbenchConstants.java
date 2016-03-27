@@ -341,4 +341,36 @@ public class WorkbenchConstants {
 		 */
 		public static final String RETURNVISIT = "returnVisit";
 	}
+	
+	/**
+	 * 工单列表类型
+	 * @author ZhenTingJun
+	 * @date 2016-03-25
+	 */
+	public static interface EventListType {
+		/**
+		 * 待签收
+		 */
+		public static final String WAIT_SIGNIN = "0";
+		
+		/**
+		 * 抢单
+		 */
+		public static final String GRAB_SINGLE = "1";
+		
+		/**
+		 * 待处理
+		 */
+		public static final String WAIT_DEAL = "2";
+		
+		/**
+		 * 流转中
+		 */
+		public static final String FLOWING = "3";
+		
+		/**
+		 * 已完成
+		 */
+		public static final String COMPLETED = "4";
+	}
 }

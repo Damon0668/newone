@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.base.vo.UserVo;
+import com.liefeng.common.util.TimeUtil;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
@@ -25,12 +26,12 @@ import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
-import com.liefeng.property.api.ro.AppFriendIdAndStatusRo;
-import com.liefeng.property.api.ro.AppMsgSettingRo;
-import com.liefeng.property.api.ro.ResidentFeedbackRo;
-import com.liefeng.property.api.ro.UserIdConditionRo;
-import com.liefeng.property.api.ro.UserIdFriendIdRo;
-import com.liefeng.property.api.ro.UserRo;
+import com.liefeng.property.api.ro.finger.user.AppFriendIdAndStatusRo;
+import com.liefeng.property.api.ro.finger.user.AppMsgSettingRo;
+import com.liefeng.property.api.ro.finger.user.ResidentFeedbackRo;
+import com.liefeng.property.api.ro.finger.user.UserIdConditionRo;
+import com.liefeng.property.api.ro.finger.user.UserIdFriendIdRo;
+import com.liefeng.property.api.ro.finger.user.UserRo;
 import com.liefeng.property.api.ro.id.CustGlobalIdRo;
 import com.liefeng.property.api.ro.id.UserIdRo;
 import com.liefeng.property.constant.HouseholdConstants;
@@ -43,7 +44,7 @@ import com.liefeng.property.vo.household.ResidentFeedbackVo;
  * @author xhw
  * @date 2016年3月11日 下午2:58:28
  */
-@Api(value="手机端用户相关接口")
+@Api(value="用户模块")
 @RestController
 @RequestMapping(value = "/api/finger/user")
 public class UserController {
@@ -100,7 +101,7 @@ public class UserController {
 		customerVo.setHeight(userRo.getHeight());
 		customerVo.setStep(userRo.getStep());
 		customerVo.setWeight(userRo.getWeight());
-		customerVo.setBirthday(userRo.getBirthday());
+		customerVo.setBirthday(TimeUtil.format(userRo.getBirthday(), "yyyy-MM-dd"));
 		
 		user.setCustomer(customerVo);
 		// 校验用户信息

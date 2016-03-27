@@ -1,4 +1,4 @@
-package com.liefeng.property.api.ro;
+package com.liefeng.property.api.ro.work.event;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -26,12 +26,6 @@ public class EventReportRo {
 	@NotNull
 	private String location;
 	
-	/**
-	 * 房间号
-	 */
-	@ApiModelProperty(value="房间号", required=true)
-	@NotNull
-	private String houseNum;
 	
 	/**
 	 * 内容
@@ -61,13 +55,6 @@ public class EventReportRo {
 	@NotNull
 	private String reporterName;
 	
-	/**
-	 * 业主姓名
-	 */
-	@ApiModelProperty(value="业主姓名", required=true)
-	@NotNull
-	private String proprietorName;
-
 	public String getProjectId() {
 		return projectId;
 	}
@@ -82,14 +69,6 @@ public class EventReportRo {
 
 	public void setLocation(String location) {
 		this.location = location;
-	}
-
-	public String getHouseNum() {
-		return houseNum;
-	}
-
-	public void setHouseNum(String houseNum) {
-		this.houseNum = houseNum;
 	}
 
 	public String getContent() {
@@ -122,14 +101,6 @@ public class EventReportRo {
 
 	public void setReporterName(String reporterName) {
 		this.reporterName = reporterName;
-	}
-
-	public String getProprietorName() {
-		return proprietorName;
-	}
-
-	public void setProprietorName(String proprietorName) {
-		this.proprietorName = proprietorName;
 	}
 	
 }

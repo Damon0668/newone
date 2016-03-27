@@ -23,6 +23,7 @@ import com.liefeng.property.po.workbench.EventReportPo;
 import com.liefeng.property.repository.mybatis.EventReportQueryRepository;
 import com.liefeng.property.repository.workbench.EventReportRepository;
 import com.liefeng.property.vo.workbench.EventReportVo;
+import com.liefeng.property.vo.workbench.HeadCountVo;
 
 /**
  * 报事领域模型
@@ -294,6 +295,7 @@ public class EventReportContext {
 		return new DataPageValue<EventReportVo>(eventReportVos, total, page, size);
 
 	}
+	
 	/**
 	 * 获取用户的所有报事
 	 * @param projectId
@@ -312,6 +314,56 @@ public class EventReportContext {
 		}
 		return eventReportVoList;
 	}
+	
+	/**
+	 * 获取各列表数量
+	 * @param eventReportBo 查询参数
+	 * @return
+	 */
+	public HeadCountVo getCountsToHead(EventReportBo eventReportBo) {
+		Map<String, String> extra = MyBeanUtil.bean2Map(eventReportBo);
+
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		
+		// 待签收数量
+		Long waitSignCount = eventReportQueryRepository.signForQueryByCount(param);
+		// 抢单数量
+		Long grabCount = eventReportQueryRepository.grabQueryByCount(param);
+		// 待办理数量
+		Long waitDealCount = eventReportQueryRepository.waitingForQueryByCount(param);
+		// 流转中数量
+		Long flowingCount = eventReportQueryRepository.flowingQueryByCount(param);
+		// 已完成数量
+		Long completeCount = eventReportQueryRepository.completeQueryByCount(param);
+		
+		HeadCountVo headCount = new HeadCountVo();
+		headCount.setWaitSignCount(waitSignCount);
+		headCount.setGrabCount(grabCount);
+		headCount.setWaitDealCount(waitDealCount);
+		headCount.setFlowingCount(flowingCount);
+		headCount.setCompleteCount(completeCount);
+		
+		return headCount;
+	}
+	
+	/**
+	 * 通过手机号码，获取报事
+	 * @param phone
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月25日 下午7:37:10
+	 */
+	public List<EventReportVo> getHistoryEventReportOfPhone(String phone){
+		List<EventReportVo> eventReportVoList = null;
+		if(ValidateHelper.isNotEmptyString(phone)){
+			List<EventReportPo> eventReportPoList = eventReportRepository.findByPhone(phone);
+			
+			eventReportVoList = MyBeanUtil.createList(eventReportPoList, EventReportVo.class);
+		}
+		return eventReportVoList;
+	}
+	
 	protected void setId(String id) {
 		this.id = id;
 	}
@@ -320,12 +372,4 @@ public class EventReportContext {
 		this.eventReport = eventReport;
 	}
 
-	
-
-	
-	
-
-	
-
-	
 }

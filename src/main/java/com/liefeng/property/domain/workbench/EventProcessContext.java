@@ -92,7 +92,13 @@ public class EventProcessContext {
 	
 	public EventProcessVo getActive(String orderId,String staffid) {
 		logger.info("exe method getActive orderId eq {}",orderId);
-		return eventProcessQueryRepository.getActiveEventProcess(orderId,staffid);
+		HashMap<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("orderId", orderId);
+		paramMap.put("staffid", staffid);
+		
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(paramMap);
+		return eventProcessQueryRepository.getActiveEventProcess(param);
 	}
 	
 	public void update(){
