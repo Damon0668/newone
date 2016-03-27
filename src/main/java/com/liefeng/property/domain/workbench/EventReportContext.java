@@ -336,13 +336,16 @@ public class EventReportContext {
 		Long flowingCount = eventReportQueryRepository.flowingQueryByCount(param);
 		// 已完成数量
 		Long completeCount = eventReportQueryRepository.completeQueryByCount(param);
-		
+		//本月已处理
+		Long monthCompleteCount = eventReportQueryRepository.monthCompleteQueryByCount(param);
+	
 		HeadCountVo headCount = new HeadCountVo();
 		headCount.setWaitSignCount(waitSignCount);
 		headCount.setGrabCount(grabCount);
 		headCount.setWaitDealCount(waitDealCount);
 		headCount.setFlowingCount(flowingCount);
 		headCount.setCompleteCount(completeCount);
+		headCount.setMonthCompleteCount(monthCompleteCount);
 		
 		return headCount;
 	}

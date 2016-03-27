@@ -26,6 +26,7 @@ import com.liefeng.property.api.ro.CountsToHeadRo;
 import com.liefeng.property.api.ro.EventReportDataPageRo;
 import com.liefeng.property.api.ro.EventReportDetailRo;
 import com.liefeng.property.api.ro.EventReportFlowWorkRo;
+import com.liefeng.property.api.ro.ExecuteEventReporRo;
 import com.liefeng.property.api.ro.common.EventAccepterEvalRo;
 import com.liefeng.property.api.ro.common.PhoneRo;
 import com.liefeng.property.api.ro.id.EventIdRo;
@@ -236,5 +237,18 @@ public class EventReportController {
 		EventReportBo eventReportBo = MyBeanUtil.createBean(eventReportDataPageRo, EventReportBo.class);
 		DataPageValue<EventReportVo> DataPageValue = workbenchService.getGrabEventReporList(eventReportBo, eventReportDataPageRo.getPage(),eventReportDataPageRo.getSize());
 		return DataPageValue;
+	}
+	
+	@ApiOperation(value="执行报事流程/领导审核通过/领导审核不通过/办理/派工")
+	@RequestMapping(value="/executeEventReporFlow", method=RequestMethod.POST)
+	@ResponseBody
+	public ReturnValue executeEventReporFlow(@Valid @ModelAttribute ExecuteEventReporRo executeEventReporRo){
+		EventReportVo eventReportVo = new EventReportVo();
+		eventReportVo.setId(executeEventReporRo.getEventId());
+		
+		EventProcessVo eventProcessVo = MyBeanUtil.createBean(executeEventReporRo, EventProcessVo.class);
+		
+		workbenchService.executeEventReporFlow(eventReportVo, eventProcessVo,eventProcessVo.getCurrAccepterId(),eventProcessVo.getNextAccepterId());
+		return ReturnValue.success();
 	}
 }

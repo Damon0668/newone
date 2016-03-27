@@ -566,4 +566,15 @@
 	where er.wf_order_id=#{wfOrderId}
 	</select>
 	
+	<!-- 本月已处理 -->
+	<select id="monthCompleteQueryByCount" resultType="java.lang.Long">
+		SELECT
+		count(*)
+		FROM
+		service.wf_hist_task ht
+		LEFT JOIN service.wf_hist_task_actor hta ON ht.id = hta.task_Id
+		WHERE
+		hta.actor_Id =  #{extra.actor}
+		AND date_format(ht.create_Time, '%Y-%m')= date_format(now(), '%Y-%m')
+	</select>
 </mapper>   
