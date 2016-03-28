@@ -354,29 +354,19 @@ public class WorkbenchConstants {
 	 */
 	public static interface EventListType {
 		/**
-		 * 待签收
-		 */
-		public static final String WAIT_SIGNIN = "0";
-		
-		/**
-		 * 抢单
-		 */
-		public static final String GRAB_SINGLE = "1";
-		
-		/**
 		 * 待处理
 		 */
-		public static final String WAIT_DEAL = "2";
+		public static final String WAIT_DEAL = "1";
 		
 		/**
 		 * 流转中
 		 */
-		public static final String FLOWING = "3";
+		public static final String FLOWING = "2";
 		
 		/**
 		 * 已完成
 		 */
-		public static final String COMPLETED = "4";
+		public static final String COMPLETED = "3";
 	}
 	
 	public static interface ReturnVisitType {
