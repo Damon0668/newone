@@ -10,9 +10,6 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class UpdatePwdRo extends BaseValue{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 729226010558913350L;
 	
 	@ApiModelProperty(value="手机号码",required=true)

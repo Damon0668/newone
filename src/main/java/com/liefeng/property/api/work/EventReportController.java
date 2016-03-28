@@ -22,15 +22,15 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IWorkbenchService;
-import com.liefeng.property.api.ro.CountsToHeadRo;
-import com.liefeng.property.api.ro.EventReportDataPageRo;
-import com.liefeng.property.api.ro.EventReportDetailRo;
-import com.liefeng.property.api.ro.EventReportFlowWorkRo;
-import com.liefeng.property.api.ro.ExecuteEventReporRo;
 import com.liefeng.property.api.ro.common.EventAccepterEvalRo;
 import com.liefeng.property.api.ro.common.PhoneRo;
 import com.liefeng.property.api.ro.id.EventIdRo;
+import com.liefeng.property.api.ro.work.event.CountsToHeadRo;
+import com.liefeng.property.api.ro.work.event.EventReportDataPageRo;
+import com.liefeng.property.api.ro.work.event.EventReportDetailRo;
+import com.liefeng.property.api.ro.work.event.EventReportFlowWorkRo;
 import com.liefeng.property.api.ro.work.event.EventReportRo;
+import com.liefeng.property.api.ro.work.event.ExecuteEventReporRo;
 import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.domain.workbench.EventReportContext;
@@ -64,9 +64,9 @@ public class EventReportController {
 	}
 	
 	@ApiOperation(value="根据类型获取对应工单列表")
-	@RequestMapping(value="/getEventReporListByType", method=RequestMethod.GET)
+	@RequestMapping(value="/getEventReportListByType", method=RequestMethod.GET)
 	@ResponseBody
-	public DataPageValue<EventReportVo> getEventReporListByType(@Valid @ModelAttribute EventReportDataPageRo params) {
+	public DataPageValue<EventReportVo> getEventReportListByType(@Valid @ModelAttribute EventReportDataPageRo params) {
 		DataPageValue<EventReportVo> dataPage = new DataPageValue<EventReportVo>();
 		
 		String type = params.getType(); // 查询类型

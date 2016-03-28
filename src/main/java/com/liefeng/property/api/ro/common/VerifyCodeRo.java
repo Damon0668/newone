@@ -10,9 +10,6 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class VerifyCodeRo extends BaseValue{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7920390802582811449L;
 	
 	@ApiModelProperty(value="手机号码", required=true)

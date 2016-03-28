@@ -10,9 +10,6 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class StaffIdRo extends BaseValue{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1900313102263172759L;
 	
 	@ApiModelProperty(value="员工ID", required=true)
