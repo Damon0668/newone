@@ -717,4 +717,5 @@ public interface IWorkbenchService {
 	 * @date 2016年3月25日 下午3:19:01
 	 */
 	public List<PropertyStaffVo> getStaffList(String eventId);
+	
 }
