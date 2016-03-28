@@ -5,14 +5,17 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 
+import com.liefeng.core.entity.BaseValue;
+
 /**
  * 事件办理人评价参数封装类
  * @author xhw
  * @date 2016年3月25日 下午2:08:01
  */
 @ApiModel
-public class EventAccepterEvalRo {
+public class EventAccepterEvalRo extends BaseValue {
 	
+	private static final long serialVersionUID = -3908440661329953963L;
 
 	/**
 	 * userId

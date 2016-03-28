@@ -9,10 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel
 public class FeeItemByDateRo extends BaseValue{
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -8345276473678719351L;
 
 	@ApiModelProperty(value="项目ID", required=true)

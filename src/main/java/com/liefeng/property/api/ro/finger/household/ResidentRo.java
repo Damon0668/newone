@@ -5,14 +5,18 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 
+import com.liefeng.core.entity.BaseValue;
+
 /**
  * 登记住户资料参数封装类
  * @author xhw
  * @date 2016年3月21日 下午7:13:02
  */
 @ApiModel
-public class ResidentRo {
+public class ResidentRo extends BaseValue {
 	
+	private static final long serialVersionUID = 3329242939253548989L;
+
 	@ApiModelProperty(value="业主ID", required=true)
 	@NotNull
 	private String proprietorId;

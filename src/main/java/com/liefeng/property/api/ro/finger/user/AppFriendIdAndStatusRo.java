@@ -2,6 +2,8 @@ package com.liefeng.property.api.ro.finger.user;
 
 import javax.validation.constraints.NotNull;
 
+import com.liefeng.core.entity.BaseValue;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -11,8 +13,10 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2016年3月21日 下午3:48:19
  */
 @ApiModel
-public class AppFriendIdAndStatusRo {
+public class AppFriendIdAndStatusRo extends BaseValue {
 	
+	private static final long serialVersionUID = 7564219411533439538L;
+
 	@ApiModelProperty(value="好友记录的id【t_app_friend表的id】", required=true)
 	@NotNull
 	private String id;

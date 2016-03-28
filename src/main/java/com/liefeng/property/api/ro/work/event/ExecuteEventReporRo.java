@@ -5,13 +5,17 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 
+import com.liefeng.core.entity.BaseValue;
+
 /**
  * 报事工单处理执行请求类
  * @author xhw
  */
 @ApiModel
-public class ExecuteEventReporRo {
+public class ExecuteEventReporRo extends BaseValue {
 	
+	private static final long serialVersionUID = 3552346260809942769L;
+
 	/**
 	 * 工单处理id
 	 */

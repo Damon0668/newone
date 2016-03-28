@@ -2,6 +2,8 @@ package com.liefeng.property.api.ro.id;
 
 import javax.validation.constraints.NotNull;
 
+import com.liefeng.core.entity.BaseValue;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -11,7 +13,9 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2016年3月21日 下午3:48:19
  */
 @ApiModel
-public class UserIdRo {
+public class UserIdRo extends BaseValue {
+
+	private static final long serialVersionUID = -8828334500023971126L;
 	
 	@ApiModelProperty(value="用户id", required=true)
 	@NotNull

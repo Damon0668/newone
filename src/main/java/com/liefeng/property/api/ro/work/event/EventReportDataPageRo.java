@@ -4,14 +4,18 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 
+import com.liefeng.core.entity.BaseValue;
+
 /**
  * 报事工单处理 数据列表费用请求参数类
  * @author wuzhijing
  * @author ZhenTingJun
  * @date 2016-3-24 17:03:25
  */
-public class EventReportDataPageRo {
+public class EventReportDataPageRo extends BaseValue {
 	
+	private static final long serialVersionUID = 6132849490948380093L;
+
 	@ApiModelProperty(value="列表类型【0：待签收，1：抢单，2：待办理，3：流转中，4：已完成】", required=true)
 	@NotNull
 	private String type;

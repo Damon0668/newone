@@ -2,6 +2,8 @@ package com.liefeng.property.api.ro.finger.household;
 
 import javax.validation.constraints.NotNull;
 
+import com.liefeng.core.entity.BaseValue;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -11,8 +13,10 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2016年3月21日 下午2:01:02
  */
 @ApiModel
-public class CheckinQueueRo {
-	
+public class CheckinQueueRo extends BaseValue {
+
+	private static final long serialVersionUID = 8481418348917012824L;
+
 	@ApiModelProperty(value="项目id", required=true)
 	@NotNull
 	private String projectId;

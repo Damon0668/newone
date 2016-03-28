@@ -5,14 +5,18 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 
+import com.liefeng.core.entity.BaseValue;
+
 /**
  * 添加访客
  * @author xhw
  * @date 2016年3月23日 上午11:46:46
  */
 @ApiModel
-public class VisitorRo {
+public class VisitorRo extends BaseValue {
 	
+	private static final long serialVersionUID = 5320190564278007353L;
+
 	@ApiModelProperty(value="访客姓名", required=true)
 	@NotNull
 	private String name;
