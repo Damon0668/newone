@@ -321,6 +321,7 @@ public class EventReportContext {
 	 * @return
 	 */
 	public HeadCountVo getCountsToHead(EventReportBo eventReportBo) {
+		eventReportBo.setOemCode(ContextManager.getInstance().getOemCode());
 		Map<String, String> extra = MyBeanUtil.bean2Map(eventReportBo);
 
 		PagingParamVo param = new PagingParamVo();
