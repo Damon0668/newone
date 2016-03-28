@@ -12,7 +12,8 @@ public interface UserQueryRepository {
 	/**
 	 * 查找登陆用户信息
 	 * @param custGlobalId 全局ID
+	 * @param oemCode OEM编码
 	 * @return
 	 */
-	public LoginUserVo findLoginUser(String custGlobalId);
+	public LoginUserVo findLoginUser(String custGlobalId, String oemCode);
 }

@@ -57,7 +57,7 @@ public class AuthController {
 		UserVo user = userService.login(userLoginBo);
 		
 		//获取物业系统用户信息
-		loginUser = loginUserService.findLoginUser(user.getCustGlobalId());
+		loginUser = loginUserService.findLoginUser(user.getCustGlobalId(), user.getOemCode());
 
 		return DataValue.success(loginUser);
 	}

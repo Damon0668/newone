@@ -433,7 +433,7 @@
 		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
 		<include refid="Waiting_Where_Clause" />
 		AND (ep.`status`=0 or ep.`status` is null or ep.`status`=2)
-		AND ((ep.grab != 1 AND t.task_Name !='handle') or ep.grab is null)
+		AND (ep.grab != 1 or t.task_Name !='handle' or ep.grab is null)
 		order by t.create_Time desc
 		<if
 			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
@@ -454,7 +454,7 @@
 		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
 		<include refid="Waiting_Where_Clause" />
 		AND (ep.`status`=0 or ep.`status` is null  or ep.`status`=2)
-		AND (ep.grab != 1 or ep.grab is null)
+		AND (ep.grab != 1 or t.task_Name !='handle' or ep.grab is null)
 		) t
 	</select>
 	
