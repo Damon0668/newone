@@ -373,4 +373,27 @@ public class WorkbenchConstants {
 		 */
 		public static final String COMPLETED = "4";
 	}
+	
+	public static interface ReturnVisitType {
+		/**
+		 * 上门:1
+		 */
+		public static final String VISIT = "1";
+		
+		/**
+		 * 电话:2
+		 */
+		public static final String CALL = "2";
+		
+		/**
+		 * 客户app:3
+		 */
+		public static final String CUSTOMER = "3";
+		
+		/**
+		 * 员工app:4
+		 */
+		public static final String STAFF = "4";
+		
+	}
 }
