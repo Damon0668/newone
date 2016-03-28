@@ -3,6 +3,7 @@ package com.liefeng.property.api.work;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -26,7 +27,11 @@ import com.liefeng.property.api.ro.ExecuteEventReportRo;
 import com.liefeng.property.api.ro.common.EventAccepterEvalRo;
 import com.liefeng.property.api.ro.common.PhoneRo;
 import com.liefeng.property.api.ro.id.EventIdRo;
+import com.liefeng.property.api.ro.id.ProjectIdRo;
 import com.liefeng.property.api.ro.work.event.CountsToHeadRo;
+import com.liefeng.property.api.ro.work.event.DefaultAccepterRo;
+import com.liefeng.property.api.ro.work.event.DepartmentDirectorRo;
+import com.liefeng.property.api.ro.work.event.DispatchingWorkerRo;
 import com.liefeng.property.api.ro.work.event.EventReportDataPageRo;
 import com.liefeng.property.api.ro.work.event.EventReportDetailRo;
 import com.liefeng.property.api.ro.work.event.EventReportFlowWorkRo;
@@ -36,6 +41,7 @@ import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.domain.workbench.EventReportContext;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.property.vo.staff.StaffContactVo;
 import com.liefeng.property.vo.workbench.EventAccepterEvalVo;
 import com.liefeng.property.vo.workbench.EventProcessVo;
 import com.liefeng.property.vo.workbench.EventReportVo;
@@ -246,4 +252,57 @@ public class EventReportController {
 		workbenchService.executeEventReportFlow(eventReportVo, eventProcessVo,eventProcessVo.getCurrAccepterId(),eventProcessVo.getNextAccepterId());
 		return ReturnValue.success();
 	}
+	
+	@ApiOperation(value="获取派工人员列表")
+	@RequestMapping(value="/getDispatchingWorker", method=RequestMethod.GET)
+	@ResponseBody
+	public DataListValue<StaffContactVo> getDispatchingWorker(@Valid @ModelAttribute DispatchingWorkerRo dispatchingWorkerRo){
+		List<StaffContactVo> contactVos = workbenchService.findDispatchingWorker(dispatchingWorkerRo.getProjectId(),dispatchingWorkerRo.getStaffId());
+		DataListValue<StaffContactVo> dataListValue = new DataListValue<StaffContactVo>();
+		dataListValue.setDataList(contactVos);
+		return  dataListValue;
+	}
+	
+	@ApiOperation(value="获取默认办理人")
+	@RequestMapping(value="/getDefaultAccepter", method=RequestMethod.GET)
+	@ResponseBody
+	public PropertyStaffVo getDefaultAccepter(@Valid @ModelAttribute DefaultAccepterRo defaultAccepterRo ){
+		PropertyStaffVo propertyStaffVo = workbenchService.getTaskAccepter(defaultAccepterRo.getEventId(), defaultAccepterRo.getTaskName());
+		return  propertyStaffVo;
+	}
+	
+	@ApiOperation(value="获取所有部门领导")
+	@RequestMapping(value="/getDepartmentDirectorList", method=RequestMethod.GET)
+	@ResponseBody
+	public DataListValue<StaffContactVo> getDepartmentDirectorList(@Valid @ModelAttribute ProjectIdRo projectIdRo ){
+		List<PropertyStaffVo> propertyStaffVos = workbenchService.getDepartmentDirectorList(projectIdRo.getId());
+		List<StaffContactVo> contactVos = new ArrayList<StaffContactVo>();
+		for (PropertyStaffVo propertyStaffVo : propertyStaffVos) {
+			StaffContactVo contactVo = new StaffContactVo();
+			
+			contactVo.setDepartmentId(propertyStaffVo.getDepartmentId());
+			contactVo.setDepartmentName(propertyStaffVo.getName());
+			List<PropertyStaffVo> staffContactVos = new ArrayList<PropertyStaffVo>();
+			staffContactVos.add(propertyStaffVo);
+			contactVo.setStaffList(staffContactVos);
+			
+			contactVos.add(contactVo);
+		}
+		DataListValue<StaffContactVo> dataListValue = new DataListValue<StaffContactVo>();
+		dataListValue.setDataList(contactVos);
+		return dataListValue;
+	}
+	
+	@ApiOperation(value="获取某个步骤的执行人的部门所有人")
+	@RequestMapping(value="/getDepartmentWorker", method=RequestMethod.GET)
+	@ResponseBody
+	public DataListValue<StaffContactVo> getDepartmentWorker(@Valid @ModelAttribute DefaultAccepterRo defaultAccepterRo){
+		PropertyStaffVo propertyStaffVo = workbenchService.getTaskAccepter(defaultAccepterRo.getEventId(), defaultAccepterRo.getTaskName());
+		EventReportVo eventReportVo = workbenchService.getEventReport(defaultAccepterRo.getEventId());
+		List<StaffContactVo> contactVos = workbenchService.findDispatchingWorker(eventReportVo.getProjectId(),propertyStaffVo.getId());
+		DataListValue<StaffContactVo> dataListValue = new DataListValue<StaffContactVo>();
+		dataListValue.setDataList(contactVos);
+		return  dataListValue;
+	}
+	
 }

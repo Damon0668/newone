@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.access.QueryFilter;
+import org.snaker.engine.entity.HistoryTask;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,6 @@ import com.liefeng.property.bo.workbench.NoticeBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
-import com.liefeng.property.constant.WorkbenchConstants.EventReport;
 import com.liefeng.property.domain.workbench.EventAccepterEvalContext;
 import com.liefeng.property.domain.workbench.EventProcAttachContext;
 import com.liefeng.property.domain.workbench.EventProcessContext;
@@ -56,8 +56,10 @@ import com.liefeng.property.domain.workbench.WebsiteMsgPrivilegeContext;
 import com.liefeng.property.error.WorkbenchErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.exception.WorkbenchException;
+import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.property.vo.staff.StaffContactVo;
 import com.liefeng.property.vo.workbench.EventAccepterEvalVo;
 import com.liefeng.property.vo.workbench.EventProcAttachVo;
 import com.liefeng.property.vo.workbench.EventProcessVo;
@@ -1522,24 +1524,52 @@ public class WorkbenchService implements IWorkbenchService {
 	
 	/**
 	 * 获取领导派工 要选择的人员
+	 * @param projectId 项目id
+	 * @param staffId 当前登录人id
+	 * @return
 	 */
-	public List<PropertyStaffVo> findDispatchingWorker(String staffId){
+	@Override
+	public List<StaffContactVo> findDispatchingWorker(String projectId,String staffId){
 		
 		logger.info("领导派工获取人员，领导id为："+staffId);
 		
 		PropertyStaffVo propertyStaffVo= propertyStaffService.findPropertyStaffById(staffId);
 		
+		PropertyDepartmentVo departmentVo = propertyStaffService.getDepartment(propertyStaffVo.getDepartmentId());
+		
 		logger.info("领导派工获取人员，领导的部门id为："+propertyStaffVo.getDepartmentId());
 		
-		return propertyStaffService.findPropertyStaff(propertyStaffVo.getDepartmentId());
+		StaffContactVo  staffContactVo = new StaffContactVo();
+		staffContactVo.setDepartmentId(departmentVo.getId());
+		staffContactVo.setDepartmentName(departmentVo.getName());
+		staffContactVo.setStaffList(propertyStaffService.findPropertyStaff(propertyStaffVo.getDepartmentId(), projectId));
+		
+		List<StaffContactVo> contactVos = new ArrayList<StaffContactVo>(); 
+		contactVos.add(staffContactVo);
+		
+		return contactVos ;
 	}
 	
 	/**
-	 * 获取某个不步骤的办理人
+	 * 获取某个步骤的办理人
+	 * @param eventId 报事id
+	 * @param taskName 任务名称/步骤名称
+	 * @return
 	 */
+	@Override
 	public PropertyStaffVo getTaskAccepter(String eventId,String taskName){
 		EventReportVo eventReportVo = EventReportContext.loadById(eventId).get();
-		workflowService.getHistoryTasks(new QueryFilter().setOrderId(eventReportVo.getOrderId()).setName(taskName));
+		List<HistoryTask> historyTasks = workflowService.getHistoryTasks(new QueryFilter().setOrderId(eventReportVo.getOrderId()).setName(taskName));
+		if( historyTasks != null && historyTasks.size() > 0 ){
+			EventProcessVo eventProcessVo = EventProcessContext.build().findByWfTaskId(historyTasks.get(0).getId());
+			return propertyStaffService.findPropertyStaffById(eventProcessVo.getCurrAccepterId());
+		}
 		return null;
 	}
+	
+	@Override
+	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId){
+		 return propertyStaffService.getDepartmentDirectorList(projectId);
+	}
+	
 }

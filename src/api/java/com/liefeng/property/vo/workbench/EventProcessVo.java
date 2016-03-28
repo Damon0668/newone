@@ -83,7 +83,7 @@ public class EventProcessVo extends BaseValue{
 	private Date acceptTime;
 	
 	/**
-	 * 状态。0：未签收；1：待签收；2:退回；3：办结
+	 * 状态。0：未签收；1：待处理；2:退回；3：办结
 	 */
 	@ApiModelProperty(value="状态【0：未签收；1：待签收；2:退回；3：办结】")
 	private String status;
