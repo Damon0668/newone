@@ -24,6 +24,9 @@ public class LoginUserVo extends BaseValue{
 	@ApiModelProperty(value="全局ID")
 	private String globalId;
 	
+	@ApiModelProperty(value="手机用户ID")
+	private String userId;
+	
 	@ApiModelProperty(value="项目ID")
 	private String projectId;
 	
@@ -115,5 +118,13 @@ public class LoginUserVo extends BaseValue{
 
 	public void setHouseholdType(String householdType) {
 		this.householdType = householdType;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 }
