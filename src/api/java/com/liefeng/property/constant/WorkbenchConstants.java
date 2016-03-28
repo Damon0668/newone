@@ -243,6 +243,11 @@ public class WorkbenchConstants {
 		 * 不 抢单
 		 */
 		public static final String GRAB_NO = "0";
+		
+		/**
+		 * 用户评价
+		 */
+		public static final String RETURNVISIT_OWNER = "owner";
 
 	}
 	
