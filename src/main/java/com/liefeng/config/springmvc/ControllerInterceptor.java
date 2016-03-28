@@ -27,7 +27,7 @@ public class ControllerInterceptor implements HandlerInterceptor{
 			//return false;
 		}
 		
-		String oemCode = SysConstants.DEFAULT_OEM_CODE;
+		String oemCode = "hzwy_property";
 		
 		ContextManager.getInstance().setOemCode(oemCode);
 
