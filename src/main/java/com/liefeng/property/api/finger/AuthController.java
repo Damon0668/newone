@@ -58,6 +58,8 @@ public class AuthController {
 		
 		//获取物业系统用户信息
 		loginUser = loginUserService.findLoginUser(user.getCustGlobalId(), user.getOemCode());
+		
+		loginUser.setUserId(user.getId());
 
 		return DataValue.success(loginUser);
 	}
