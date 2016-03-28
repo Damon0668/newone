@@ -15,7 +15,7 @@ import com.liefeng.property.vo.workbench.EventProcAttachVo;
  * @author xhw
  */
 @ApiModel
-public class ExecuteEventReporRo {
+public class ExecuteEventReportRo {
 	
 	/**
 	 * 工单处理id

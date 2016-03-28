@@ -552,7 +552,7 @@ public interface IWorkbenchService {
 	 * @param staffid 当前办理人id
 	 * @param nextAccepterId 下一步办理人id
 	 */
-	public void eventReporDistribute(EventReportVo eventReportVo,
+	public void eventReportDistribute(EventReportVo eventReportVo,
 			EventProcessVo eventProcessVo, String staffid, String nextAccepterId);
 
 	/**
@@ -569,7 +569,7 @@ public interface IWorkbenchService {
 	 * @param staffid 当前办理人id
 	 * @param nextAccepterId 下一步办理人id
 	 */
-	public void executeEventReporFlow(EventReportVo eventReportVo,
+	public void executeEventReportFlow(EventReportVo eventReportVo,
 			EventProcessVo eventProcessVo, String staffid, String nextAccepterId);
 
 	/**
@@ -577,13 +577,13 @@ public interface IWorkbenchService {
 	 * @param wfTaskId
 	 * @param staffid
 	 */
-	public void eventReporSignfor(String wfTaskId, String staffid);
+	public void eventReportSignfor(String wfTaskId, String staffid);
 
 	/**
 	 * 退回
 	 * @param wfTaskId
 	 */
-	public void eventReporSendBack(String wfTaskId,String staffid);
+	public void eventReportSendBack(String wfTaskId,String staffid);
 
 	/**
 	 * 获取当前活动的任务
@@ -623,7 +623,7 @@ public interface IWorkbenchService {
 	 * @param size
 	 * @return
 	 */
-	public DataPageValue<EventReportVo> getSignForEventReporList(
+	public DataPageValue<EventReportVo> getSignForEventReportList(
 			EventReportBo eventReportBo, Integer page, Integer size);
 
 	/**
@@ -633,7 +633,7 @@ public interface IWorkbenchService {
 	 * @param size
 	 * @return
 	 */
-	public DataPageValue<EventReportVo> getGrabEventReporList(
+	public DataPageValue<EventReportVo> getGrabEventReportList(
 			EventReportBo eventReportBo, Integer page, Integer size);
 
 	/**
@@ -643,7 +643,7 @@ public interface IWorkbenchService {
 	 * @param size
 	 * @return
 	 */
-	public DataPageValue<EventReportVo> getFlowingEventReporList(
+	public DataPageValue<EventReportVo> getFlowingEventReportList(
 			EventReportBo eventReportBo, Integer page, Integer size);
 	
 	/**
@@ -653,7 +653,7 @@ public interface IWorkbenchService {
 	 * @param size
 	 * @return
 	 */
-	public DataPageValue<EventReportVo> getCompleteEventReporList(
+	public DataPageValue<EventReportVo> getCompleteEventReportList(
 			EventReportBo eventReportBo, Integer page, Integer size);
 	
 	/**
@@ -671,7 +671,7 @@ public interface IWorkbenchService {
 	 * 		   waitingFor:待办理
 	 * 
 	 */
-	public Map<String, Long> eventReporNoRead(EventReportBo eventReportBo);
+	public Map<String, Long> eventReportNoRead(EventReportBo eventReportBo);
 
 
 	/**

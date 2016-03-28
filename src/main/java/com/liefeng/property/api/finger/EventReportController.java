@@ -117,7 +117,7 @@ public class EventReportController {
 		
 		EventReportVo eventReportVo = new EventReportVo();
 		eventProcessVo.setId(eventAccepterEvalRo.getEventId());
-		workbenchService.executeEventReporFlow(eventReportVo, eventProcessVo, "returnVisit", "");
+		workbenchService.executeEventReportFlow(eventReportVo, eventProcessVo, "returnVisit", "");
 		
 		String[] accpterLikes = eventAccepterEvalRo.getAccepterLikes().split(",");
 		
