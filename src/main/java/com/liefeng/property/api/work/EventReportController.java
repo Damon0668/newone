@@ -30,6 +30,7 @@ import com.liefeng.property.api.ro.work.event.CountsToHeadRo;
 import com.liefeng.property.api.ro.work.event.EventReportDataPageRo;
 import com.liefeng.property.api.ro.work.event.EventReportDetailRo;
 import com.liefeng.property.api.ro.work.event.EventReportFlowWorkRo;
+import com.liefeng.property.api.ro.work.event.EventReportListByTypeRo;
 import com.liefeng.property.api.ro.work.event.EventReportRo;
 import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.constant.WorkbenchConstants;
@@ -66,7 +67,7 @@ public class EventReportController {
 	@ApiOperation(value="根据类型获取对应工单列表")
 	@RequestMapping(value="/getEventReportListByType", method=RequestMethod.GET)
 	@ResponseBody
-	public DataPageValue<EventReportVo> getEventReportListByType(@Valid @ModelAttribute EventReportDataPageRo params) {
+	public DataPageValue<EventReportVo> getEventReportListByType(@Valid @ModelAttribute EventReportListByTypeRo params) {
 		DataPageValue<EventReportVo> dataPage = new DataPageValue<EventReportVo>();
 		
 		String type = params.getType(); // 查询类型
@@ -74,21 +75,15 @@ public class EventReportController {
 		Integer size = params.getSize(); // 分页大小
 		EventReportBo eventReportBo = MyBeanUtil.createBean(params, EventReportBo.class);
 		
-		if(WorkbenchConstants.EventListType.WAIT_SIGNIN.equals(type)) {
-			// 待签收
-			dataPage= workbenchService.getSignForEventReportList(eventReportBo, page, size);
-		} else if(WorkbenchConstants.EventListType.GRAB_SINGLE.equals(type)) { 
-			// 抢单
-			dataPage= workbenchService.getGrabEventReportList(eventReportBo, page, size);
-		} else if(WorkbenchConstants.EventListType.WAIT_DEAL.equals(type)) { 
+		if(WorkbenchConstants.EventListType.WAIT_DEAL.equals(type)) { 
 			// 待处理
-			dataPage= workbenchService.getWaitingForEventReportList(eventReportBo, params.getPage(), params.getSize());
+			dataPage= workbenchService.getWaitingForEventReportList(eventReportBo, page, size);
 		} else if(WorkbenchConstants.EventListType.FLOWING.equals(type)) {
 			// 流转中
-			dataPage= workbenchService.getFlowingEventReportList(eventReportBo, params.getPage(), params.getSize());
+			dataPage= workbenchService.getFlowingEventReportList(eventReportBo, page, size);
 		} else if(WorkbenchConstants.EventListType.COMPLETED.equals(type)) {
 			 // 已完成
-			dataPage= workbenchService.getCompleteEventReportList(eventReportBo, params.getPage(), params.getSize());
+			dataPage= workbenchService.getCompleteEventReportList(eventReportBo, page, size);
 		}
 		
 		return dataPage;
