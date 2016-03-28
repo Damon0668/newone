@@ -74,7 +74,7 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月8日 下午5:12:08
 	 */
-	@ApiOperation(value="扫二维码，获取排队号")
+	@ApiOperation(value="扫二维码，获取排队号", notes="扫二维码，获取排队号")
 	@RequestMapping(value="/createCheckinQueue", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<CheckinQueueVo> createCheckinQueue(@Valid @ModelAttribute CheckinQueueRo checkinQueueRo) {
@@ -93,7 +93,7 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月9日 上午11:00:23
 	 */
-	@ApiOperation(value="获取排队详情页面的头部信息")
+	@ApiOperation(value="获取排队详情页面的头部信息", notes="当前办理号，自己的排号")
 	@RequestMapping(value="/getCheckinQueue", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<CheckinQueueVo> getCheckinQueue(@Valid @ModelAttribute CheckinQueueRo checkinQueueRo) {
@@ -112,7 +112,7 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月9日 上午11:19:50
 	 */
-	@ApiOperation(value="获取排队页面的列表详情")
+	@ApiOperation(value="获取排队页面的列表详情", notes="今天办理的情况")
 	@RequestMapping(value="/getCheckinQueueList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataPageValue<CheckinQueueVo> getCheckinQueueList(@Valid @ModelAttribute CheckinQueueListRo checkinQueueListRo) {
@@ -132,7 +132,7 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月9日 下午4:53:34
 	 */
-	@ApiOperation(value="检测业主登记的状态")
+	@ApiOperation(value="检测业主登记的状态", notes="根据不同的状态，显示不同的内容（情况登记页面）")
 	@RequestMapping(value="/checkProrietorStatus", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue checkProrietorStatus(@Valid @ModelAttribute ProprietorStatusRo proprietorStatusRo) {
@@ -154,7 +154,7 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月9日 下午7:02:26
 	 */
-	@ApiOperation(value="登记业主资料")
+	@ApiOperation(value="登记业主资料", notes="登记业主资料")
 	@RequestMapping(value="/registerProprietor", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue registerProprietor(@Valid @ModelAttribute ProprietorRo proprietorRo) {
@@ -178,7 +178,7 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月9日 下午7:58:34
 	 */
-	@ApiOperation(value="获取业主登记资料")
+	@ApiOperation(value="获取业主登记资料", notes="修改业主资料时，获取业主旧资料")
 	@RequestMapping(value="/getProprietorOfRegister", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<ProprietorSingleHouseVo> getProprietorOfRegister(@Valid @ModelAttribute ProprietorIdRo proprietorIdRo) {
@@ -195,7 +195,7 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月9日 下午9:13:46
 	 */
-	@ApiOperation(value="获取住户列表")
+	@ApiOperation(value="获取住户列表", notes="住户列表")
 	@RequestMapping(value="/getResidentList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<ResidentVo> getResidentList(@Valid @ModelAttribute HouseIdRo houseIdRo) {
@@ -221,7 +221,7 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月10日 下午1:59:08
 	 */
-	@ApiOperation(value="登记住户资料")
+	@ApiOperation(value="登记住户资料", notes="保存住户资料")
 	@RequestMapping(value="/registerResident", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue registerResident(@Valid @ModelAttribute ResidentRo residentRo) {
@@ -265,7 +265,7 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月10日 下午4:17:19
 	 */
-	@ApiOperation(value="获取住户资料")
+	@ApiOperation(value="获取住户资料", notes="住户详情页面")
 	@RequestMapping(value="/getResident", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<ResidentVo> getResident(@Valid @ModelAttribute ResidentIdHouseIdRo residentIdHouseIdRo) {
@@ -286,7 +286,7 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月10日 下午4:36:32
 	 */
-	@ApiOperation(value="修改住户资料")
+	@ApiOperation(value="修改住户资料", notes="修改住户资料")
 	@RequestMapping(value="/updateResident", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue updateResident(@Valid @ModelAttribute ResidentUpdateRo residentUpdateRo) {
@@ -328,7 +328,7 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月23日 下午1:52:53
 	 */
-	@ApiOperation(value="添加访客")
+	@ApiOperation(value="添加访客", notes="添加访客")
 	@RequestMapping(value="/addVisitor", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<String> addVisitor(@Valid @ModelAttribute VisitorRo visitorRo) {
@@ -351,7 +351,7 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月23日 下午2:57:43
 	 */
-	@ApiOperation(value="获取用户的访客列表")
+	@ApiOperation(value="获取用户的访客列表", notes="用户的访客列表")
 	@RequestMapping(value="/getVisitorList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<VisitorVo> getVisitorList(@Valid @ModelAttribute UserIdRo userIdRo) {
@@ -368,7 +368,7 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月23日 下午3:33:38
 	 */
-	@ApiOperation(value="获取访客的访问记录")
+	@ApiOperation(value="获取访客的访问记录", notes="访客的访问记录详情")
 	@RequestMapping(value="/getVisitorHistory", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<VisitorVo> getVisitorHistory(@Valid @ModelAttribute PhoneRo phoneRo) {
@@ -385,7 +385,7 @@ public class HouseholdController {
 	 * @author xhw
 	 * @date 2016年3月23日 下午4:11:05
 	 */
-	@ApiOperation(value="获取访客的信息")
+	@ApiOperation(value="获取访客的信息", notes="访客的信息")
 	@RequestMapping(value="/getVisitor", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<VisitorVo> getVisitor(@Valid @ModelAttribute VisitorIdRo visitorIdRo) {

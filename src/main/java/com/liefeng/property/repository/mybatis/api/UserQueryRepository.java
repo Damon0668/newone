@@ -1,5 +1,7 @@
 package com.liefeng.property.repository.mybatis.api;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.liefeng.property.vo.api.LoginUserVo;
 
 /**
@@ -12,7 +14,8 @@ public interface UserQueryRepository {
 	/**
 	 * 查找登陆用户信息
 	 * @param custGlobalId 全局ID
+	 * @param oemCode OEM编码
 	 * @return
 	 */
-	public LoginUserVo findLoginUser(String custGlobalId);
+	public LoginUserVo findLoginUser(@Param("custGlobalId") String custGlobalId, @Param("oemCode") String oemCode);
 }

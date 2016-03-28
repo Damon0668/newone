@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
-import com.liefeng.property.constant.SysConstants;
 
 public class ControllerInterceptor implements HandlerInterceptor{
 	
@@ -20,14 +19,18 @@ public class ControllerInterceptor implements HandlerInterceptor{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		
-		String token = request.getHeader("token");
+		String auth = request.getHeader("Authorization");
 		
-		if(ValidateHelper.isEmptyString(token)){
-			logger.info("ControllerInterceptor get token is null");
+		String remoteAddr = request.getRemoteAddr();
+		
+		logger.info("ControllerInterceptor auth = {}, remoteAddr = {}", auth, remoteAddr);
+		
+		if(ValidateHelper.isEmptyString(auth)){
+			auth = "hzwy_property";
 			//return false;
 		}
 		
-		String oemCode = "hzwy_property";
+		String oemCode = auth;
 		
 		ContextManager.getInstance().setOemCode(oemCode);
 

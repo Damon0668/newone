@@ -24,12 +24,18 @@ public class LoginUserVo extends BaseValue{
 	@ApiModelProperty(value="全局ID")
 	private String globalId;
 	
+	@ApiModelProperty(value="手机用户ID")
+	private String userId;
+	
 	@ApiModelProperty(value="项目ID")
 	private String projectId;
 	
 	@ApiModelProperty(value="名字")
 	private String name;
-	
+
+	@ApiModelProperty(value="住户类型[1：业主；2：住户]")
+	private String householdType;
+
 	@ApiModelProperty(value="电话")
 	private String mobile;
 	
@@ -104,5 +110,21 @@ public class LoginUserVo extends BaseValue{
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getHouseholdType() {
+		return householdType;
+	}
+
+	public void setHouseholdType(String householdType) {
+		this.householdType = householdType;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 }

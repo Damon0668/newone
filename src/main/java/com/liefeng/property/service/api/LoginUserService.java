@@ -15,8 +15,8 @@ import com.liefeng.property.vo.api.LoginUserVo;
 public class LoginUserService implements ILoginUserService{
 
 	@Override
-	public LoginUserVo findLoginUser(String custGlobalId) {
-		return UserContext.loadByCustGlobalId(custGlobalId).findLoginUser();
+	public LoginUserVo findLoginUser(String custGlobalId,String omeCode) {
+		return UserContext.loadByCustGlobalId(custGlobalId).findLoginUser(omeCode);
 	}
 
 }
