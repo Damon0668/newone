@@ -69,7 +69,7 @@ public class EventReportController {
 	 * @date 2016年3月20日 上午9:58:29
 	 */
 	@ApiOperation(value="获取用户的历史报事", notes="用户(业主、住户）获取历史报事")
-	@RequestMapping(value="/getEventReportList", method=RequestMethod.GET)
+	@RequestMapping(value="/getEventReportList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<EventReportVo> getEventReportList(@Valid @ModelAttribute ProjectIdHouseNumPhoneRo projectIdHouseNumPhoneRo) {
 		List<EventReportVo> eventReportVoList = workbenchService.getEventReportList(projectIdHouseNumPhoneRo.getProjectId(), projectIdHouseNumPhoneRo.getHouseNum(), projectIdHouseNumPhoneRo.getPhone());
@@ -118,7 +118,7 @@ public class EventReportController {
 		
 		EventReportVo eventReportVo = new EventReportVo();
 		eventProcessVo.setId(eventAccepterEvalRo.getEventId());
-		workbenchService.executeEventReportFlow(eventReportVo, eventProcessVo, WorkbenchConstants.EventReport.RETURNVISIT_OWNER, "");
+		workbenchService.executeEventReportFlow(eventReportVo, eventProcessVo, "returnVisit", "");
 		
 		String[] accpterLikes = eventAccepterEvalRo.getAccepterLikes().split(",");
 		
