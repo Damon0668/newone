@@ -38,6 +38,7 @@ import com.liefeng.property.bo.workbench.NoticeBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
+import com.liefeng.property.constant.WorkbenchConstants.EventReport;
 import com.liefeng.property.domain.workbench.EventAccepterEvalContext;
 import com.liefeng.property.domain.workbench.EventProcAttachContext;
 import com.liefeng.property.domain.workbench.EventProcessContext;
@@ -1533,4 +1534,12 @@ public class WorkbenchService implements IWorkbenchService {
 		return propertyStaffService.findPropertyStaff(propertyStaffVo.getDepartmentId());
 	}
 	
+	/**
+	 * 获取某个不步骤的办理人
+	 */
+	public PropertyStaffVo getTaskAccepter(String eventId,String taskName){
+		EventReportVo eventReportVo = EventReportContext.loadById(eventId).get();
+		workflowService.getHistoryTasks(new QueryFilter().setOrderId(eventReportVo.getOrderId()).setName(taskName));
+		return null;
+	}
 }
