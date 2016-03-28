@@ -22,6 +22,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IWorkbenchService;
+import com.liefeng.property.api.ro.ExecuteEventReportRo;
 import com.liefeng.property.api.ro.common.EventAccepterEvalRo;
 import com.liefeng.property.api.ro.common.PhoneRo;
 import com.liefeng.property.api.ro.id.EventIdRo;
@@ -30,7 +31,6 @@ import com.liefeng.property.api.ro.work.event.EventReportDataPageRo;
 import com.liefeng.property.api.ro.work.event.EventReportDetailRo;
 import com.liefeng.property.api.ro.work.event.EventReportFlowWorkRo;
 import com.liefeng.property.api.ro.work.event.EventReportRo;
-import com.liefeng.property.api.ro.work.event.ExecuteEventReporRo;
 import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.domain.workbench.EventReportContext;
@@ -59,7 +59,7 @@ public class EventReportController {
 	@RequestMapping(value="/signforEventReport", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue signforEventReport(@Valid @ModelAttribute EventReportFlowWorkRo reportFlowWorkRo){
-		workbenchService.eventReporSignfor(reportFlowWorkRo.getWfTaskId(), reportFlowWorkRo.getStaffid());
+		workbenchService.eventReportSignfor(reportFlowWorkRo.getWfTaskId(), reportFlowWorkRo.getStaffid());
 		return ReturnValue.success();
 	}
 	
@@ -76,19 +76,19 @@ public class EventReportController {
 		
 		if(WorkbenchConstants.EventListType.WAIT_SIGNIN.equals(type)) {
 			// 待签收
-			dataPage= workbenchService.getSignForEventReporList(eventReportBo, page, size);
+			dataPage= workbenchService.getSignForEventReportList(eventReportBo, page, size);
 		} else if(WorkbenchConstants.EventListType.GRAB_SINGLE.equals(type)) { 
 			// 抢单
-			dataPage= workbenchService.getGrabEventReporList(eventReportBo, page, size);
+			dataPage= workbenchService.getGrabEventReportList(eventReportBo, page, size);
 		} else if(WorkbenchConstants.EventListType.WAIT_DEAL.equals(type)) { 
 			// 待处理
 			dataPage= workbenchService.getWaitingForEventReportList(eventReportBo, params.getPage(), params.getSize());
 		} else if(WorkbenchConstants.EventListType.FLOWING.equals(type)) {
 			// 流转中
-			dataPage= workbenchService.getFlowingEventReporList(eventReportBo, params.getPage(), params.getSize());
+			dataPage= workbenchService.getFlowingEventReportList(eventReportBo, params.getPage(), params.getSize());
 		} else if(WorkbenchConstants.EventListType.COMPLETED.equals(type)) {
 			 // 已完成
-			dataPage= workbenchService.getCompleteEventReporList(eventReportBo, params.getPage(), params.getSize());
+			dataPage= workbenchService.getCompleteEventReportList(eventReportBo, params.getPage(), params.getSize());
 		}
 		
 		return dataPage;
@@ -189,7 +189,7 @@ public class EventReportController {
 		
 		EventReportVo eventReportVo = new EventReportVo();
 		eventReportVo.setId(eventAccepterEvalRo.getEventId());
-		workbenchService.executeEventReporFlow(eventReportVo, eventProcessVo, eventAccepterEvalRo.getUserId(), "");
+		workbenchService.executeEventReportFlow(eventReportVo, eventProcessVo, eventAccepterEvalRo.getUserId(), "");
 		
 		String[] accpterLikes = eventAccepterEvalRo.getAccepterLikes().split(",");
 		
@@ -208,47 +208,47 @@ public class EventReportController {
 	@ApiOperation(value="退回")
 	@RequestMapping(value="/sendBackEventReport", method=RequestMethod.POST)
 	@ResponseBody
-	public ReturnValue eventReporSendBack(@Valid @ModelAttribute EventReportFlowWorkRo reportFlowWorkRo){
-		workbenchService.eventReporSendBack(reportFlowWorkRo.getWfTaskId(), reportFlowWorkRo.getStaffid());
+	public ReturnValue eventReportSendBack(@Valid @ModelAttribute EventReportFlowWorkRo reportFlowWorkRo){
+		workbenchService.eventReportSendBack(reportFlowWorkRo.getWfTaskId(), reportFlowWorkRo.getStaffid());
 		return ReturnValue.success();
 	}
 	
 	@ApiOperation(value="撤回")
 	@RequestMapping(value="/withdrawEventReport", method=RequestMethod.POST)
 	@ResponseBody
-	public ReturnValue eventReporWithdraw(@Valid @ModelAttribute EventReportFlowWorkRo reportFlowWorkRo){
-		workbenchService.eventReporSendBack(reportFlowWorkRo.getWfTaskId(), reportFlowWorkRo.getStaffid());
+	public ReturnValue eventReportWithdraw(@Valid @ModelAttribute EventReportFlowWorkRo reportFlowWorkRo){
+		workbenchService.eventReportSendBack(reportFlowWorkRo.getWfTaskId(), reportFlowWorkRo.getStaffid());
 		return ReturnValue.success();
 	}
 	
 	@ApiOperation(value="获取待签收列表")
-	@RequestMapping(value="/getSignForEventReporList", method=RequestMethod.GET)
+	@RequestMapping(value="/getSignForEventReportList", method=RequestMethod.GET)
 	@ResponseBody
-	public DataPageValue<EventReportVo> getSignForEventReporList(@Valid @ModelAttribute EventReportDataPageRo eventReportDataPageRo){
+	public DataPageValue<EventReportVo> getSignForEventReportList(@Valid @ModelAttribute EventReportDataPageRo eventReportDataPageRo){
 		EventReportBo eventReportBo = MyBeanUtil.createBean(eventReportDataPageRo, EventReportBo.class);
-		DataPageValue<EventReportVo> DataPageValue = workbenchService.getSignForEventReporList(eventReportBo, eventReportDataPageRo.getPage(),eventReportDataPageRo.getSize());
+		DataPageValue<EventReportVo> DataPageValue = workbenchService.getSignForEventReportList(eventReportBo, eventReportDataPageRo.getPage(),eventReportDataPageRo.getSize());
 		return DataPageValue;
 	}
 	
 	@ApiOperation(value="获取抢单列表")
-	@RequestMapping(value="/getGrabEventReporList", method=RequestMethod.GET)
+	@RequestMapping(value="/getGrabEventReportList", method=RequestMethod.GET)
 	@ResponseBody
-	public DataPageValue<EventReportVo> getGrabEventReporList(@Valid @ModelAttribute EventReportDataPageRo eventReportDataPageRo){
+	public DataPageValue<EventReportVo> getGrabEventReportList(@Valid @ModelAttribute EventReportDataPageRo eventReportDataPageRo){
 		EventReportBo eventReportBo = MyBeanUtil.createBean(eventReportDataPageRo, EventReportBo.class);
-		DataPageValue<EventReportVo> DataPageValue = workbenchService.getGrabEventReporList(eventReportBo, eventReportDataPageRo.getPage(),eventReportDataPageRo.getSize());
+		DataPageValue<EventReportVo> DataPageValue = workbenchService.getGrabEventReportList(eventReportBo, eventReportDataPageRo.getPage(),eventReportDataPageRo.getSize());
 		return DataPageValue;
 	}
 	
 	@ApiOperation(value="执行报事流程/领导审核通过/领导审核不通过/办理/派工")
-	@RequestMapping(value="/executeEventReporFlow", method=RequestMethod.POST)
+	@RequestMapping(value="/executeEventReportFlow", method=RequestMethod.POST)
 	@ResponseBody
-	public ReturnValue executeEventReporFlow(@Valid @ModelAttribute ExecuteEventReporRo executeEventReporRo){
+	public ReturnValue executeEventReportFlow(@Valid @ModelAttribute ExecuteEventReportRo executeEventReportRo){
 		EventReportVo eventReportVo = new EventReportVo();
-		eventReportVo.setId(executeEventReporRo.getEventId());
+		eventReportVo.setId(executeEventReportRo.getEventId());
 		
-		EventProcessVo eventProcessVo = MyBeanUtil.createBean(executeEventReporRo, EventProcessVo.class);
+		EventProcessVo eventProcessVo = MyBeanUtil.createBean(executeEventReportRo, EventProcessVo.class);
 		
-		workbenchService.executeEventReporFlow(eventReportVo, eventProcessVo,eventProcessVo.getCurrAccepterId(),eventProcessVo.getNextAccepterId());
+		workbenchService.executeEventReportFlow(eventReportVo, eventProcessVo,eventProcessVo.getCurrAccepterId(),eventProcessVo.getNextAccepterId());
 		return ReturnValue.success();
 	}
 }

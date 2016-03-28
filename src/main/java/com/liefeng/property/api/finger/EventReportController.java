@@ -109,7 +109,7 @@ public class EventReportController {
 	
 		
 		EventProcessVo eventProcessVo = workbenchService.getActiveEventProcess(eventAccepterEvalRo.getWfOrderId(), "");
-		eventProcessVo.setRevisitMode("03");
+		eventProcessVo.setRevisitMode("3");
 		eventProcessVo.setTimeliness(eventAccepterEvalRo.getTimeliness());
 		eventProcessVo.setLevel(eventAccepterEvalRo.getLevel());
 		eventProcessVo.setAttitude(eventAccepterEvalRo.getAttitude());
@@ -117,7 +117,7 @@ public class EventReportController {
 		
 		EventReportVo eventReportVo = new EventReportVo();
 		eventProcessVo.setId(eventAccepterEvalRo.getEventId());
-		workbenchService.executeEventReporFlow(eventReportVo, eventProcessVo, "returnVisit", "");
+		workbenchService.executeEventReportFlow(eventReportVo, eventProcessVo, "returnVisit", "");
 		
 		String[] accpterLikes = eventAccepterEvalRo.getAccepterLikes().split(",");
 		
