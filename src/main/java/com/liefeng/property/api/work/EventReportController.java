@@ -64,9 +64,9 @@ public class EventReportController {
 	}
 	
 	@ApiOperation(value="根据类型获取对应工单列表")
-	@RequestMapping(value="/getEventReporListByType", method=RequestMethod.GET)
+	@RequestMapping(value="/getEventReportListByType", method=RequestMethod.GET)
 	@ResponseBody
-	public DataPageValue<EventReportVo> getEventReporListByType(@Valid @ModelAttribute EventReportDataPageRo params) {
+	public DataPageValue<EventReportVo> getEventReportListByType(@Valid @ModelAttribute EventReportDataPageRo params) {
 		DataPageValue<EventReportVo> dataPage = new DataPageValue<EventReportVo>();
 		
 		String type = params.getType(); // 查询类型
