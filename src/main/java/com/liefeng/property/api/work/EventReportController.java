@@ -127,7 +127,7 @@ public class EventReportController {
 	 * @author xhw
 	 * @date 2016年3月15日 下午6:03:49
 	 */
-	@ApiOperation(value="创建报事")
+	@ApiOperation(value="创建报事", notes="员工创建报事")
 	@RequestMapping(value="/createEventReport", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue createEventReport(@Valid @ModelAttribute EventReportRo eventReportRo) {
@@ -144,8 +144,8 @@ public class EventReportController {
 	 * @author xhw
 	 * @date 2016年3月25日 下午7:41:04
 	 */
-	@ApiOperation(value="获取员工的历史报事")
-	@RequestMapping(value="/getEventReportList", method=RequestMethod.POST)
+	@ApiOperation(value="获取员工的历史报事", notes="员工获取员工的历史报事")
+	@RequestMapping(value="/getEventReportList", method=RequestMethod.GET)
 	@ResponseBody
 	public DataListValue<EventReportVo> getEventReportList(@Valid @ModelAttribute PhoneRo phoneRo) {
 		List<EventReportVo> eventReportVoList = workbenchService.getEventReportList("", "", phoneRo.getPhone());
@@ -159,7 +159,7 @@ public class EventReportController {
 	 * @author xhw
 	 * @date 2016年3月25日 下午2:28:29
 	 */
-	@ApiOperation(value="获取报事办理人")
+	@ApiOperation(value="获取报事办理人", notes="获取报事办理人（移动办公）")
 	@RequestMapping(value="/getEventStaffList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<PropertyStaffVo> getEventStaffList(@Valid @ModelAttribute EventIdRo eventIdRo) {
@@ -175,14 +175,14 @@ public class EventReportController {
 	 * @author xhw
 	 * @date 2016年3月25日 下午2:28:29
 	 */
-	@ApiOperation(value="报事评价")
+	@ApiOperation(value="报事评价", notes="报事评价（移动办公）")
 	@RequestMapping(value="/createEventAccepterEval", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue createEventAccepterEval(@Valid @ModelAttribute EventAccepterEvalRo eventAccepterEvalRo) {
 	
 		
 		EventProcessVo eventProcessVo = workbenchService.getActiveEventProcess(eventAccepterEvalRo.getWfOrderId(), eventAccepterEvalRo.getUserId());
-		eventProcessVo.setRevisitMode("4"); //TODO
+		eventProcessVo.setRevisitMode(WorkbenchConstants.ReturnVisitType.STAFF); //TODO
 		eventProcessVo.setTimeliness(eventAccepterEvalRo.getTimeliness());
 		eventProcessVo.setLevel(eventAccepterEvalRo.getLevel());
 		eventProcessVo.setAttitude(eventAccepterEvalRo.getAttitude());

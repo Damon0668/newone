@@ -68,7 +68,7 @@ public class UserController {
 	 * @author xhw
 	 * @date 2016年3月11日 下午2:16:48
 	 */
-	@ApiOperation(value="根据custGlobalId，获取用户信息")
+	@ApiOperation(value="根据custGlobalId，获取用户信息", notes="个人资料页面")
 	@RequestMapping(value="/getUserByCustGlobalId", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<UserVo> getUserByCustGlobalId(@Valid @ModelAttribute CustGlobalIdRo custGlobalIdRo) {
@@ -84,7 +84,7 @@ public class UserController {
 	 * @author xhw
 	 * @date 2016年3月11日 下午2:01:53
 	 */
-	@ApiOperation(value="修改用户信息")
+	@ApiOperation(value="修改用户信息", notes="修改个人资料")
 	@RequestMapping(value="/updateUser", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue updateUser(@Valid @ModelAttribute UserRo userRo) {
@@ -122,7 +122,7 @@ public class UserController {
 	 * @author xhw
 	 * @date 2016年3月14日 上午11:02:05
 	 */
-	@ApiOperation(value="创建用户反馈")
+	@ApiOperation(value="创建用户反馈", notes="创建用户反馈")
 	@RequestMapping(value="/createResidentFeedback", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue createResidentFeedback(@Valid @ModelAttribute ResidentFeedbackRo residentFeedbackRo) {
@@ -148,7 +148,7 @@ public class UserController {
 	 * @author xhw
 	 * @date 2016年3月14日 下午3:06:51
 	 */
-	@ApiOperation(value="保存用户手机端消息设置")
+	@ApiOperation(value="保存用户手机端消息设置", notes="保存用户手机端消息设置")
 	@RequestMapping(value="/saveAppMsgSetting", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue saveAppMsgSetting(@Valid @ModelAttribute AppMsgSettingRo appMsgSettingRo) {
@@ -185,7 +185,7 @@ public class UserController {
 	 * @author xhw
 	 * @date 2016年3月14日 下午3:17:45
 	 */
-	@ApiOperation(value="获取用户手机端消息设置")
+	@ApiOperation(value="获取用户手机端消息设置", notes="获取用户手机端消息设置")
 	@RequestMapping(value="/getAppMsgSetting", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<AppMsgSettingVo> getAppMsgSetting(@Valid @ModelAttribute UserIdRo userIdRo) {
@@ -202,7 +202,7 @@ public class UserController {
 	 * @author xhw
 	 * @date 2016年3月16日 下午4:31:30
 	 */
-	@ApiOperation(value="添加通讯录好友")
+	@ApiOperation(value="添加通讯录好友", notes="添加通讯录好友")
 	@RequestMapping(value="/createAppFriend", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue createAppFriend(@Valid @ModelAttribute UserIdFriendIdRo userIdFriendIdRo) {
@@ -225,7 +225,7 @@ public class UserController {
 	 * @author xhw
 	 * @date 2016年3月16日 下午5:26:07
 	 */
-	@ApiOperation(value="对加为好友的请求做出回应")
+	@ApiOperation(value="对加为好友的请求做出回应", notes="对加为好友的请求做出回应")
 	@RequestMapping(value="/respondAppFriendApply", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue respondAppFriendApply(@Valid @ModelAttribute AppFriendIdAndStatusRo appFriendIdAndStatusRo) {
@@ -243,7 +243,7 @@ public class UserController {
 	 * @author xhw
 	 * @date 2016年3月16日 下午5:40:18
 	 */
-	@ApiOperation(value="删除通讯录好友")
+	@ApiOperation(value="删除通讯录好友", notes="删除通讯录好友")
 	@RequestMapping(value="/deleteAppFriend", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue deleteAppFriend(@Valid @ModelAttribute UserIdFriendIdRo userIdFriendIdRo) {
@@ -261,7 +261,7 @@ public class UserController {
 	 * @author xhw
 	 * @date 2016年3月16日 下午8:31:54
 	 */
-	@ApiOperation(value="查询用户列表")
+	@ApiOperation(value="查询用户列表", notes="查询用户列表")
 	@RequestMapping(value="/getUserList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<AppFriendVo> getUserList(@Valid @ModelAttribute UserIdConditionRo userIdConditionRo) {
@@ -278,7 +278,7 @@ public class UserController {
 	 * @author xhw
 	 * @date 2016年3月17日 上午9:53:24
 	 */
-	@ApiOperation(value="获取通讯录好友列表")
+	@ApiOperation(value="获取通讯录好友列表", notes="获取通讯录好友列表")
 	@RequestMapping(value="/getAppFriendList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<AppFriendVo> getAppFriendList(@Valid @ModelAttribute UserIdRo userIdRo) {
@@ -295,7 +295,7 @@ public class UserController {
 	 * @author xhw
 	 * @date 2016年3月17日 上午10:57:37
 	 */
-	@ApiOperation(value="获取通讯录好友操作历史")
+	@ApiOperation(value="获取通讯录好友操作历史", notes="获取通讯录好友操作历史")
 	@RequestMapping(value="/getAppFriendHistoryList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<AppFriendVo> getAppFriendHistoryList(@Valid @ModelAttribute UserIdRo userIdRo) {
@@ -312,7 +312,7 @@ public class UserController {
 	 * @author xhw
 	 * @date 2016年3月17日 上午11:06:39
 	 */
-	@ApiOperation(value="根据用户id，获取用户信息")
+	@ApiOperation(value="根据用户id，获取用户信息",notes="通讯录聊天页面，对方的信息")
 	@RequestMapping(value="/getUserById", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<UserVo> getUserById(@Valid @ModelAttribute UserIdRo userIdRo) {
