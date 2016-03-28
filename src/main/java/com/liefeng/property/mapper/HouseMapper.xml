@@ -23,11 +23,12 @@
 	<result column="name" property="name"/>
 	<result column="proprietorId" property="proprietorId"/>
 	<result column="useType" property="useType"/>
-	<result column="useType" property="useType"/>
 	<result column="projectName" property="projectName"/>
 	<result column="buildingName" property="buildingName"/>
 	<result column="floorName" property="floorName"/>
 </resultMap>
+
+<resultMap  id="UserHouseMap" type="com.liefeng.property.vo.api.UserHouseVo"></resultMap>
 
 <!-- 查询条件 -->
 <sql id="Example_Where_Clause">
@@ -220,6 +221,61 @@ FROM
 	FROM 
 		<include refid="base_view"/> AS v 
 	<include refid="base_view_clause"/>
+</select>
+
+<select id="queryUserHouses" resultMap="UserHouseMap">
+SELECT
+	v.projectId,
+	v.projectName,
+	v.houseId,
+	v.houseNum
+FROM
+	((
+		SELECT
+			p.id AS loginId,
+			h.project_id AS projectId,
+			pj.full_name AS projectName,
+			h.id AS houseId,
+			h.house_num AS houseNum,
+			h.oem_code AS oemCode,
+			'user' AS type
+		FROM
+			property.t_house h
+			LEFT JOIN property.t_proprietor_house ph ON ph.house_num = h.house_num
+			AND ph.project_id = h.project_id
+			LEFT JOIN property.t_proprietor p ON p.id = ph.proprietor_id
+			LEFT JOIN property.t_project pj ON pj.id = h.project_id
+	)
+	UNION ALL
+	(
+		SELECT
+			r.id AS loginId,
+			h.project_id AS projectId,
+			pj.full_name AS projectName,
+			h.id AS houseId,
+			h.house_num AS houseNum,
+			h.oem_code AS oemCode,
+			'resident' AS type
+		FROM
+			property.t_house h
+			LEFT JOIN property.t_resident_house rh ON rh.house_id = h.id
+			LEFT JOIN property.t_resident r ON r.id = rh.resident_id
+			LEFT JOIN property.t_project pj ON pj.id = h.project_id
+	)) AS v
+WHERE v.loginId = #{loginId} 
+	AND v.oemCode = #{oemCode}
+	<choose>
+		<!-- 业主 -->
+		<when test="type != null and type = '1'">
+			AND v.type = 'user'
+		</when>
+		<!-- 住户 -->
+		<when test="">
+			AND v.type = 'resident'
+		</when>
+	</choose>
+ORDER BY
+	v.houseNum
 </select>
 
 </mapper>   

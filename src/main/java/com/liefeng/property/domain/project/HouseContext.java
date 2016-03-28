@@ -23,6 +23,7 @@ import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.po.project.HousePo;
 import com.liefeng.property.repository.mybatis.HouseQueryRepository;
 import com.liefeng.property.repository.project.HouseRepository;
+import com.liefeng.property.vo.api.UserHouseVo;
 import com.liefeng.property.vo.household.HouseGraphVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.project.HouseVo;
@@ -300,6 +301,17 @@ public class HouseContext {
 		return houseGraph;
 	}
 	
+	/**
+	 * 根据登陆ID和类型查询用户房产
+	 * @param loginId 用户登陆ID
+	 * @param type 类型。1:业主，2:住户
+	 * @return 房产列表
+	 */
+	public List<UserHouseVo> getUserHouses(String loginId, String type) {
+		String oemCode = ContextManager.getInstance().getOemCode();
+		List<UserHouseVo> dataList = houseQueryRepository.queryUserHouses(loginId, type, oemCode);
+		return dataList;
+	}
 
 	protected String getProjectId() {
 		return projectId;
@@ -316,7 +328,4 @@ public class HouseContext {
 	protected void setBuildingId(String buildingId) {
 		this.buildingId = buildingId;
 	}
-
-
-	
 }

@@ -27,6 +27,7 @@ import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.property.api.ro.common.PhoneRo;
 import com.liefeng.property.api.ro.finger.household.CheckinQueueListRo;
 import com.liefeng.property.api.ro.finger.household.CheckinQueueRo;
+import com.liefeng.property.api.ro.finger.household.GetUserHousesRo;
 import com.liefeng.property.api.ro.finger.household.ProprietorRo;
 import com.liefeng.property.api.ro.finger.household.ProprietorStatusRo;
 import com.liefeng.property.api.ro.finger.household.ResidentIdHouseIdRo;
@@ -39,6 +40,8 @@ import com.liefeng.property.api.ro.id.UserIdRo;
 import com.liefeng.property.api.ro.id.VisitorIdRo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.constant.HouseholdConstants;
+import com.liefeng.property.domain.project.HouseContext;
+import com.liefeng.property.vo.api.UserHouseVo;
 import com.liefeng.property.vo.household.CheckinQueueVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ResidentHouseVo;
@@ -390,5 +393,20 @@ public class HouseholdController {
 		VisitorVo visitorVo = householdService.getVisitor(visitorIdRo.getVisitorId());
 		
 		return DataValue.success(visitorVo);
+	}
+	
+	/**
+	 * 获取用户房产列表
+	 */
+	@ApiOperation(value="获取登陆用户房产列表")
+	@RequestMapping(value="/getUserHouses", method=RequestMethod.GET)
+	@ResponseBody
+	public DataListValue<UserHouseVo> getUserHouses(@Valid @ModelAttribute GetUserHousesRo params) {
+		
+		HouseContext houseContext = HouseContext.build();
+		
+		List<UserHouseVo> dataList = houseContext.getUserHouses(params.getLoginId(), params.getHouseholdType());
+		
+		return DataListValue.success(dataList);
 	}
 }
