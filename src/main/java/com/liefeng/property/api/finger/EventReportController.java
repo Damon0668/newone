@@ -23,6 +23,7 @@ import com.liefeng.property.api.ro.finger.event.EventReportRo;
 import com.liefeng.property.api.ro.finger.household.ProjectIdHouseNumPhoneRo;
 import com.liefeng.property.api.ro.id.EventIdRo;
 import com.liefeng.property.bo.workbench.EventReportBo;
+import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.workbench.EventAccepterEvalVo;
 import com.liefeng.property.vo.workbench.EventProcessVo;
@@ -48,7 +49,7 @@ public class EventReportController {
 	 * @author xhw
 	 * @date 2016年3月15日 下午6:03:49
 	 */
-	@ApiOperation(value="创建报事")
+	@ApiOperation(value="创建报事", notes="用户（业主、住户）创建报事")
 	@RequestMapping(value="/createEventReport", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue createEventReport(@Valid @ModelAttribute EventReportRo eventReportRo) {
@@ -67,7 +68,7 @@ public class EventReportController {
 	 * @author xhw
 	 * @date 2016年3月20日 上午9:58:29
 	 */
-	@ApiOperation(value="获取用户的历史报事")
+	@ApiOperation(value="获取用户的历史报事", notes="用户(业主、住户）获取历史报事")
 	@RequestMapping(value="/getEventReportList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<EventReportVo> getEventReportList(@Valid @ModelAttribute ProjectIdHouseNumPhoneRo projectIdHouseNumPhoneRo) {
@@ -86,7 +87,7 @@ public class EventReportController {
 	 * @author xhw
 	 * @date 2016年3月25日 下午2:28:29
 	 */
-	@ApiOperation(value="获取报事办理人")
+	@ApiOperation(value="获取报事办理人", notes="用户（业主、住户）对报事进行评价时，获取报事的办理人")
 	@RequestMapping(value="/getEventStaffList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<PropertyStaffVo> getEventStaffList(@Valid @ModelAttribute EventIdRo eventIdRo) {
@@ -102,14 +103,14 @@ public class EventReportController {
 	 * @author xhw
 	 * @date 2016年3月25日 下午2:28:29
 	 */
-	@ApiOperation(value="报事评价")
+	@ApiOperation(value="报事评价", notes="用户（业主、住户）对报事进行评价")
 	@RequestMapping(value="/createEventAccepterEval", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue createEventAccepterEval(@Valid @ModelAttribute EventAccepterEvalRo eventAccepterEvalRo) {
 	
 		
 		EventProcessVo eventProcessVo = workbenchService.getActiveEventProcess(eventAccepterEvalRo.getWfOrderId(), "");
-		eventProcessVo.setRevisitMode("3");
+		eventProcessVo.setRevisitMode(WorkbenchConstants.ReturnVisitType.CUSTOMER);
 		eventProcessVo.setTimeliness(eventAccepterEvalRo.getTimeliness());
 		eventProcessVo.setLevel(eventAccepterEvalRo.getLevel());
 		eventProcessVo.setAttitude(eventAccepterEvalRo.getAttitude());
