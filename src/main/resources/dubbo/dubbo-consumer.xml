@@ -44,4 +44,8 @@
     <dubbo:reference id="smsService"
         interface="com.liefeng.intf.service.msg.ISmsService" check="false" />
         
+    <!-- 文件上传下载 -->
+    <dubbo:reference id="fileService"
+        interface="com.liefeng.intf.service.ftp.IFileService" check="false" />
+        
 </beans>
