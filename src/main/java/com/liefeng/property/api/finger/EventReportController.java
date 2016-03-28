@@ -109,7 +109,7 @@ public class EventReportController {
 	
 		
 		EventProcessVo eventProcessVo = workbenchService.getActiveEventProcess(eventAccepterEvalRo.getWfOrderId(), "");
-		eventProcessVo.setRevisitMode("03");
+		eventProcessVo.setRevisitMode("3");
 		eventProcessVo.setTimeliness(eventAccepterEvalRo.getTimeliness());
 		eventProcessVo.setLevel(eventAccepterEvalRo.getLevel());
 		eventProcessVo.setAttitude(eventAccepterEvalRo.getAttitude());

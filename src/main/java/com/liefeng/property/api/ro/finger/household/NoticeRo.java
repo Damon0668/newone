@@ -2,6 +2,8 @@ package com.liefeng.property.api.ro.finger.household;
 
 import javax.validation.constraints.NotNull;
 
+import com.liefeng.core.entity.BaseValue;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -12,7 +14,10 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2016年3月21日 下午2:01:02
  */
 @ApiModel
-public class NoticeRo {
+public class NoticeRo extends BaseValue {
+
+	private static final long serialVersionUID = -6939350928959032246L;
+
 	@ApiModelProperty(value="接收端裂隙【1：电视； 2：电脑； 3：移动设备】")
 	private String terminal;
 	

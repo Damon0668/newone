@@ -2,6 +2,8 @@ package com.liefeng.property.api.ro.finger.user;
 
 import javax.validation.constraints.NotNull;
 
+import com.liefeng.core.entity.BaseValue;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -11,7 +13,10 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2016年3月21日 下午8:44:07
  */
 @ApiModel
-public class AppMsgSettingRo {
+public class AppMsgSettingRo extends BaseValue {
+	
+	private static final long serialVersionUID = -3863388629795057918L;
+
 	@ApiModelProperty(value="手机端用户id", required=true)
 	@NotNull
 	private String userId;

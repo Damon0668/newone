@@ -1,6 +1,8 @@
-package com.liefeng.property.api.ro;
+package com.liefeng.property.api.ro.work.event;
 
 import javax.validation.constraints.NotNull;
+
+import com.liefeng.core.entity.BaseValue;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,8 +14,10 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2016年3月24日13:53:09
  */
 @ApiModel
-public class EventReportFlowWorkRo {
-	
+public class EventReportFlowWorkRo extends BaseValue {
+
+	private static final long serialVersionUID = 1529112508504326695L;
+
 	@ApiModelProperty(value="任务id", required=true)
 	@NotNull
 	public String wfTaskId;

@@ -1,5 +1,11 @@
 package com.liefeng.property.api.work;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -13,18 +19,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.common.util.TimeUtil;
+import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.property.api.ro.id.StaffIdRo;
 import com.liefeng.property.api.ro.work.staff.UpdateStaffRo;
+import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffArchiveVo;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import com.liefeng.property.vo.staff.StaffContactVo;
 
 @Api(value="物业员工模块")
 @RestController
@@ -92,5 +98,34 @@ public class StaffController {
 		propertyStaffService.updateStaff(propertyStaffDetailInfo);
 		
 		return ReturnValue.success();
+	}
+	
+	/**
+	 * 获取员工通讯录
+	 * @param staffIdRo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月28日 上午10:58:44
+	 */
+	@ApiOperation(value="获取员工通讯录", notes="员工通讯录")
+	@RequestMapping(value="/getStaffContact", method=RequestMethod.POST)
+	@ResponseBody
+	public DataListValue<StaffContactVo> getStaffContact(@Valid @ModelAttribute StaffIdRo staffIdRo){
+		List<StaffContactVo> staffContactList = new ArrayList<StaffContactVo>();
+		//获取部门权限
+		List<PropertyDepartmentVo>  departmentVos = propertyStaffService.findStaffContactPrivilege(staffIdRo.getId());
+		
+		for(PropertyDepartmentVo departmentVo : departmentVos){
+			StaffContactVo staffContactVo = new StaffContactVo();
+			staffContactVo.setDepartmentId(departmentVo.getId());
+			staffContactVo.setDepartmentName(departmentVo.getName());
+			
+			//获取部门的员工
+			List<PropertyStaffVo> staffVoList = propertyStaffService.findPropertyStaff(departmentVo.getId());
+			
+			staffContactVo.setStaffList(staffVoList);
+			staffContactList.add(staffContactVo);
+		}
+		return DataListValue.success(staffContactList);
 	}
 }

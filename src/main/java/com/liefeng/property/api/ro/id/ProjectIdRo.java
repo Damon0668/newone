@@ -8,13 +8,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel
-public class ProjectIdRo extends BaseValue{
+public class ProjectIdRo extends BaseValue {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4645423875267725969L;
-	
 
 	@ApiModelProperty(value="项目ID", required=true)
 	@NotNull

@@ -9,10 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel
 public class GuardCardStatusRo extends BaseValue{
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 7195818209895587740L;
 
 	@ApiModelProperty(value="磁卡ID", required=true)

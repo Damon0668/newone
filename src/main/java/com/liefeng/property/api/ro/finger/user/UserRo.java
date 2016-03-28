@@ -3,9 +3,9 @@ package com.liefeng.property.api.ro.finger.user;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotNull;
+
+import com.liefeng.core.entity.BaseValue;
 
 /**
  * 修改用户资料参数封装类
@@ -13,8 +13,10 @@ import javax.validation.constraints.NotNull;
  * @date 2016年3月21日 下午7:13:02
  */
 @ApiModel
-public class UserRo {
+public class UserRo extends BaseValue {
 	
+	private static final long serialVersionUID = 8749690235336466229L;
+
 	@ApiModelProperty(value="关联客户全局唯一标识", required=true)
 	@NotNull
 	private String custGlobalId;
