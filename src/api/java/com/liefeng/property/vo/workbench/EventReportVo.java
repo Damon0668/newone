@@ -211,9 +211,9 @@ public class EventReportVo extends BaseValue {
 	private String auditStatus;
 	
 	/**
-	 * 处理状态 0：未签收；1：已签收 2:退回 3：办结
+	 * 当前处理状态 0：未签收；1：待处理 2:退回 3：办结
 	 */
-	@ApiModelProperty(value="处理状态【 0：未签收；1：已签收 2:退回 3：办结】")
+	@ApiModelProperty(value="处理状态【 0：未签收；1：待处理 2:退回 3：办结】")
 	private String processStatus;
 	
 	/**

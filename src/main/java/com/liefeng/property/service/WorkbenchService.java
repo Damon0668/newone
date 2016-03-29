@@ -29,6 +29,7 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.user.IUserService;
+import com.liefeng.intf.property.IProjectService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.intf.service.msg.IPushMsgService;
@@ -100,7 +101,10 @@ public class WorkbenchService implements IWorkbenchService {
 
 	@Autowired
 	private IPropertyStaffService propertyStaffService;
-
+	
+	@Autowired
+	private IProjectService projectService;
+	
 	@Override
 	public TaskVo findTaskById(String taskId) {
 		TaskContext taskContext = TaskContext.loadById(taskId);
@@ -677,6 +681,10 @@ public class WorkbenchService implements IWorkbenchService {
 	public DataPageValue<EventReportVo> listEventReport(
 			EventReportBo eventReportBo, Integer page, Integer size) {
 		EventReportContext eventReportContext = EventReportContext.build();
+		
+		if(eventReportBo.getActor() != null){
+			eventReportBo.setProjectIds(projectService.findProjectIdByStaffId(eventReportBo.getActor()));
+		}
 		return eventReportContext.list(eventReportBo, page, size);
 	}
 
@@ -1559,7 +1567,8 @@ public class WorkbenchService implements IWorkbenchService {
 	@Override
 	public PropertyStaffVo getTaskAccepter(String eventId,String taskName){
 		EventReportVo eventReportVo = EventReportContext.loadById(eventId).get();
-		List<HistoryTask> historyTasks = workflowService.getHistoryTasks(new QueryFilter().setOrderId(eventReportVo.getOrderId()).setName(taskName));
+		QueryFilter queryFilter = new QueryFilter().setOrderId(eventReportVo.getWfOrderId()).setName(taskName);
+		List<HistoryTask> historyTasks = workflowService.getHistoryTasks(queryFilter);
 		if( historyTasks != null && historyTasks.size() > 0 ){
 			EventProcessVo eventProcessVo = EventProcessContext.build().findByWfTaskId(historyTasks.get(0).getId());
 			return propertyStaffService.findPropertyStaffById(eventProcessVo.getCurrAccepterId());

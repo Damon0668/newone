@@ -26,7 +26,7 @@ public class FeeItemTask {
 	private IProjectService projectService;
 	
 	public void generateFeeItem() {
-		List<ProjectVo> projectVos = projectService.findAll();
+		List<ProjectVo> projectVos = projectService.findAllProject();
 		logger.info("**********开始生成费用************");
 		for (ProjectVo projectvo : projectVos) {
 			ContextManager.getInstance().setOemCode(projectvo.getOemCode());

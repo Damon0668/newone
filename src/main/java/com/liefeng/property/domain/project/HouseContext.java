@@ -255,15 +255,6 @@ public class HouseContext {
 	}
 	
 	/**
-	 * 查询所有项目
-	 * @return
-	 */
-	public List<ProjectVo> findAll() {
-		List<HousePo> projectVos = houseRepository.findAll();
-		return MyBeanUtil.createList(projectVos, ProjectVo.class);
-	}
-	
-	/**
 	 * 获取房产图形中某楼栋中所有房子
 	 * @param params 查询过滤参数
 	 * @return 房子列表

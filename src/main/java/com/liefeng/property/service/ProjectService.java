@@ -230,12 +230,6 @@ public class ProjectService implements IProjectService {
 	}
 
 	@Override
-	public List<ProjectVo> findAll() {
-		HouseContext houseContext = HouseContext.build();
-		return houseContext.findAll();
-	}
-
-	@Override
 	public ProjectNoticeVo createProjectNotice(ProjectNoticeVo projectNotice) {
 		ProjectNoticeContext projectNoticeContext = ProjectNoticeContext.build(projectNotice);
 		return projectNoticeContext.create();
@@ -385,5 +379,10 @@ public class ProjectService implements IProjectService {
 	public HouseGraphVo getHouseGraphCount(HouseBo param) {
 		HouseContext houseContext = HouseContext.build();
 		return houseContext.getHouseGraphsCount(param);
+	}
+	
+	@Override
+	public List<ProjectVo> findAllProject(){
+		return ProjectContext.build().findAll();
 	}
 }

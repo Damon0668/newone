@@ -212,5 +212,11 @@ public class ProjectContext {
 		List<ProjectPo> projectPoList = projectRepository.findByOemCode(oemCode);
 		return MyBeanUtil.createList(projectPoList, ProjectVo.class);
 	}
+
+	public List<ProjectVo> findAll() {
+		List<ProjectPo> projectPoList = projectRepository.findAll();
+		return MyBeanUtil.createList(projectPoList, ProjectVo.class);
+
+	}
 	
 }
