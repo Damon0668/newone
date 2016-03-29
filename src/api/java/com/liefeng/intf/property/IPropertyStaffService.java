@@ -197,4 +197,11 @@ public interface IPropertyStaffService {
 	 * @return 部门信息
 	 */
 	public PropertyDepartmentVo getDepartment(String departmentId);
+	
+	/**
+	 * 获取部门及部门负责人
+	 * @param projectId
+	 * @return
+	 */
+	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId);
 }

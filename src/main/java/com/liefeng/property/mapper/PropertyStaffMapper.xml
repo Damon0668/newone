@@ -9,7 +9,7 @@
     <result column="id" property="id"/>
     <result column="number" property="number"/>
     <result column="name" property="name"/>
-    <result column="id_num" property="idNum"/>
+    <result column="id_num" property="encryptIdNum"/>
     <result column="entry_time" property="entryTime"/>
     <result column="phone" property="phone"/>
     <result column="department" property="department"/>
@@ -136,7 +136,7 @@
 	    sru.role_id = #{extra.roleId}
 </select>
 
-<select id="findPropertyStaffById4DP"  resultMap="PropertyStaffVo" >
+	<select id="findPropertyStaffById4DP"  resultMap="PropertyStaffVo" >
 	select 
 	 ps.*,
 	 pd.name as departmentName,
@@ -146,6 +146,21 @@
 	 left join property.t_property_department pd on pd.id = ps.department_id 
 	 left join t_sys_dict sd on sd.`value`=ps.position and sd.group_code ='POSITION'  
 	 where ps.id = #{propertyStaffId}
-</select>
+	</select>
 
+
+	<select id="getDepartmentDirectorList"  resultMap="PropertyStaffVo" >
+	SELECT
+	ts.*,
+	pd.name as departmentName
+	FROM
+	t_property_department pd
+	LEFT JOIN t_property_staff ts ON pd.director_id = ts.id
+	LEFT JOIN t_manage_project mp ON ts.id = mp.staff_id
+	WHERE
+	mp.project_id = #{projectId}
+	AND ts.id IS NOT NULL
+	GROUP BY
+	ts.id
+	</select>
 </mapper>

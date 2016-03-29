@@ -243,6 +243,11 @@ public class WorkbenchConstants {
 		 * 不 抢单
 		 */
 		public static final String GRAB_NO = "0";
+		
+		/**
+		 * 用户评价
+		 */
+		public static final String RETURNVISIT_OWNER = "owner";
 
 	}
 	
@@ -340,5 +345,50 @@ public class WorkbenchConstants {
 		 * 客服回访
 		 */
 		public static final String RETURNVISIT = "returnVisit";
+	}
+	
+	/**
+	 * 工单列表类型
+	 * @author ZhenTingJun
+	 * @date 2016-03-25
+	 */
+	public static interface EventListType {
+		/**
+		 * 待处理
+		 */
+		public static final String WAIT_DEAL = "1";
+		
+		/**
+		 * 流转中
+		 */
+		public static final String FLOWING = "2";
+		
+		/**
+		 * 已完成
+		 */
+		public static final String COMPLETED = "3";
+	}
+	
+	public static interface ReturnVisitType {
+		/**
+		 * 上门:1
+		 */
+		public static final String VISIT = "1";
+		
+		/**
+		 * 电话:2
+		 */
+		public static final String CALL = "2";
+		
+		/**
+		 * 客户app:3
+		 */
+		public static final String CUSTOMER = "3";
+		
+		/**
+		 * 员工app:4
+		 */
+		public static final String STAFF = "4";
+		
 	}
 }

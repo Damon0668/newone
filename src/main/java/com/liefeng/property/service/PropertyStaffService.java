@@ -39,6 +39,7 @@ import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffArchiveVo;
 import com.liefeng.property.vo.staff.StaffAttachVo;
 import com.liefeng.property.vo.staff.StaffContactPrivilegeVo;
+import com.liefeng.property.vo.staff.StaffContactVo;
 import com.liefeng.property.vo.staff.StaffMsgClientVo;
 
 /**
@@ -368,5 +369,10 @@ public class PropertyStaffService implements IPropertyStaffService {
 		}else{
 			StaffMsgClientContext.loadByStaffId(staffId).update(clientId);
 		}
+	}
+	
+	@Override
+	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId){
+		return PropertyStaffContext.build().getDepartmentDirectorList(projectId);
 	}
 }

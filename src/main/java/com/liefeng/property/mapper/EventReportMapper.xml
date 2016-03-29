@@ -381,7 +381,7 @@
 	LEFT JOIN property.t_event_report er ON er.wf_order_id = o.id
 		<include refid="Waiting_Where_Clause" />
 		AND o.order_state = '0'
-		AND ta.actor_id in (#{extra.actorId})
+		AND ta.actor_id in (#{extra.actor})
 		group by o.id
 		) t
 	</select>
@@ -433,7 +433,7 @@
 		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
 		<include refid="Waiting_Where_Clause" />
 		AND (ep.`status`=0 or ep.`status` is null or ep.`status`=2)
-		AND ((ep.grab != 1 AND t.task_Name !='handle') or ep.grab is null)
+		AND (ep.grab != 1 or t.task_Name !='handle' or ep.grab is null)
 		order by t.create_Time desc
 		<if
 			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
@@ -454,7 +454,7 @@
 		LEFT JOIN property.t_event_process ep ON ep.wf_task_id = t.id
 		<include refid="Waiting_Where_Clause" />
 		AND (ep.`status`=0 or ep.`status` is null  or ep.`status`=2)
-		AND (ep.grab != 1 or ep.grab is null)
+		AND (ep.grab != 1 or t.task_Name !='handle' or ep.grab is null)
 		) t
 	</select>
 	
@@ -566,4 +566,15 @@
 	where er.wf_order_id=#{wfOrderId}
 	</select>
 	
+	<!-- 本月已处理 -->
+	<select id="monthCompleteQueryByCount" resultType="java.lang.Long">
+		SELECT
+		count(*)
+		FROM
+		service.wf_hist_task ht
+		LEFT JOIN service.wf_hist_task_actor hta ON ht.id = hta.task_Id
+		WHERE
+		hta.actor_Id =  #{extra.actor}
+		AND date_format(ht.create_Time, '%Y-%m')= date_format(now(), '%Y-%m')
+	</select>
 </mapper>   

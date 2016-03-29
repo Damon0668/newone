@@ -325,4 +325,12 @@ public class PropertyStaffContext {
 	public PropertyStaffVo findPropertyStaffById4DP() {
 		return propertyStaffQueryRepository.findPropertyStaffById4DP(propertyStaffId);
 	}
+	
+	/**
+	 * 获取部门负责人信息列表
+	 * @param projectId
+	 */
+	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId) {
+		return propertyStaffQueryRepository.getDepartmentDirectorList(projectId);
+	}
 }

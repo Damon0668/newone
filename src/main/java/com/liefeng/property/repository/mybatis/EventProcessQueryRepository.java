@@ -14,7 +14,7 @@ public interface EventProcessQueryRepository extends BaseRepository<EventProcess
 	
 	public List<EventProcessVo> getHisEventProcess(String orderId);
 
-	public EventProcessVo getActiveEventProcess(String orderId,String staffid);
+	public EventProcessVo getActiveEventProcess(PagingParamVo param);
 	
 	/**
 	 * 获取某个已经完成的任务流程

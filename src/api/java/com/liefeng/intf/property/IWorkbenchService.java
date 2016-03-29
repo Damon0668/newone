@@ -7,6 +7,9 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.bo.workbench.NoticeBo;
+import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.property.vo.staff.StaffContactVo;
+import com.liefeng.property.vo.workbench.EventAccepterEvalVo;
 import com.liefeng.property.vo.workbench.EventProcAttachVo;
 import com.liefeng.property.vo.workbench.EventProcessVo;
 import com.liefeng.property.vo.workbench.EventReportVo;
@@ -530,7 +533,7 @@ public interface IWorkbenchService {
 	 * @param wfOrderId
 	 * @return
 	 */
-	public EventReportVo findEventReportByWfTaskId(String wfOrderId);
+	public EventReportVo findEventReportByWfOrderId(String wfOrderId);
 
 	
 	/**
@@ -550,7 +553,7 @@ public interface IWorkbenchService {
 	 * @param staffid 当前办理人id
 	 * @param nextAccepterId 下一步办理人id
 	 */
-	public void eventReporDistribute(EventReportVo eventReportVo,
+	public void eventReportDistribute(EventReportVo eventReportVo,
 			EventProcessVo eventProcessVo, String staffid, String nextAccepterId);
 
 	/**
@@ -567,7 +570,7 @@ public interface IWorkbenchService {
 	 * @param staffid 当前办理人id
 	 * @param nextAccepterId 下一步办理人id
 	 */
-	public void executeEventReporFlow(EventReportVo eventReportVo,
+	public void executeEventReportFlow(EventReportVo eventReportVo,
 			EventProcessVo eventProcessVo, String staffid, String nextAccepterId);
 
 	/**
@@ -575,13 +578,13 @@ public interface IWorkbenchService {
 	 * @param wfTaskId
 	 * @param staffid
 	 */
-	public void eventReporSignfor(String wfTaskId, String staffid);
+	public void eventReportSignfor(String wfTaskId, String staffid);
 
 	/**
 	 * 退回
 	 * @param wfTaskId
 	 */
-	public void eventReporSendBack(String wfTaskId,String staffid);
+	public void eventReportSendBack(String wfTaskId,String staffid);
 
 	/**
 	 * 获取当前活动的任务
@@ -621,7 +624,7 @@ public interface IWorkbenchService {
 	 * @param size
 	 * @return
 	 */
-	public DataPageValue<EventReportVo> getSignForEventReporList(
+	public DataPageValue<EventReportVo> getSignForEventReportList(
 			EventReportBo eventReportBo, Integer page, Integer size);
 
 	/**
@@ -631,7 +634,7 @@ public interface IWorkbenchService {
 	 * @param size
 	 * @return
 	 */
-	public DataPageValue<EventReportVo> getGrabEventReporList(
+	public DataPageValue<EventReportVo> getGrabEventReportList(
 			EventReportBo eventReportBo, Integer page, Integer size);
 
 	/**
@@ -641,7 +644,7 @@ public interface IWorkbenchService {
 	 * @param size
 	 * @return
 	 */
-	public DataPageValue<EventReportVo> getFlowingEventReporList(
+	public DataPageValue<EventReportVo> getFlowingEventReportList(
 			EventReportBo eventReportBo, Integer page, Integer size);
 	
 	/**
@@ -651,7 +654,7 @@ public interface IWorkbenchService {
 	 * @param size
 	 * @return
 	 */
-	public DataPageValue<EventReportVo> getCompleteEventReporList(
+	public DataPageValue<EventReportVo> getCompleteEventReportList(
 			EventReportBo eventReportBo, Integer page, Integer size);
 	
 	/**
@@ -669,7 +672,7 @@ public interface IWorkbenchService {
 	 * 		   waitingFor:待办理
 	 * 
 	 */
-	public Map<String, Long> eventReporNoRead(EventReportBo eventReportBo);
+	public Map<String, Long> eventReportNoRead(EventReportBo eventReportBo);
 
 
 	/**
@@ -698,4 +701,44 @@ public interface IWorkbenchService {
 	 */
 	public List<EventReportVo> getEventReportList(String projectId, String houseNum, String phone);
 	
+	/**
+	 * 创建“事件办理人评价”
+	 * @param eventAccepterEvalVo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月25日 下午1:55:53
+	 */
+	public EventAccepterEvalVo createEventAccepterEval(EventAccepterEvalVo eventAccepterEvalVo);
+	
+	/**
+	 * 获取事件办理人
+	 * @param eventId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月25日 下午3:19:01
+	 */
+	public List<PropertyStaffVo> getStaffList(String eventId);
+
+	/**
+	 * 获取领导派工 要选择的人员
+	 * @param projectId 项目id
+	 * @param staffId 当前登录人id
+	 * @return
+	 */
+	public List<StaffContactVo> findDispatchingWorker(String projectId, String staffId);
+
+	/**
+	 * 获取某个步骤的办理人
+	 * @param eventId 报事id
+	 * @param taskName 任务名称/步骤名称
+	 * @return
+	 */
+	public PropertyStaffVo getTaskAccepter(String eventId, String taskName);
+
+	/**
+	 * 获取部门及部门负责人
+	 * @param projectId
+	 * @return
+	 */
+	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId);
 }

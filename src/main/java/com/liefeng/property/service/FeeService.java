@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.TimeUtil;
@@ -17,6 +18,7 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IFeeService;
+import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.property.bo.fee.FeeItemBo;
 import com.liefeng.property.bo.fee.MeterRecordBo;
 import com.liefeng.property.bo.parking.ParkingBo;
@@ -39,6 +41,7 @@ import com.liefeng.property.vo.fee.MeterRecordVo;
 import com.liefeng.property.vo.fee.MeterSettingVo;
 import com.liefeng.property.vo.household.ProprietorHouseVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
+import com.liefeng.property.vo.household.ProprietorVo;
 import com.liefeng.property.vo.parking.ParkingSingleRentalVo;
 import com.liefeng.property.vo.project.HouseVo;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
@@ -59,10 +62,16 @@ import com.liefeng.property.vo.project.ProjectBuildingVo;
 public class FeeService implements IFeeService {
 
 	private static Logger logger = LoggerFactory.getLogger(FeeService.class);
-
+	
+	@Autowired
+	private IHouseholdService householdService;
+	
 	@Override
 	public void createMeterRecord(MeterRecordVo meterRecordVo) {
-
+		
+		ProprietorHouseVo proprietorHouseVo = householdService.getProprietorHouse(meterRecordVo.getProjectId(), meterRecordVo.getHouseNum());
+		ProprietorVo proprietorVo = householdService.getProprietorById(proprietorHouseVo.getProprietorId());
+		meterRecordVo.setProprietorName(proprietorVo.getName());
 		MeterRecordContext meterRecordContext = MeterRecordContext
 				.build(meterRecordVo);
 		meterRecordContext.create();

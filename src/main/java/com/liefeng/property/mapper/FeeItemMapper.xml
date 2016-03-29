@@ -70,6 +70,10 @@
 		fi.project_id = #{extra.projectId}
 		AND fi.house_num = #{extra.houseNum}
 		AND fi.status = #{extra.status}
+		<if test="extra.startDate != null and extra.startDate != '' ">
+			AND #{extra.startDate} &lt;= fi.start_date
+			AND #{extra.startDate} &gt;= fi.end_date
+		</if>
 	</sql>
 
 	<select id="queryByPage" resultMap="BaseResultMap">
@@ -130,8 +134,9 @@
 		(total_fee *(case when datediff(fi.deadline,NOW())>0 then
 		datediff(fi.deadline,NOW()) else 0 end) * fi.late_fee_rate)) as
 		receivableAmount
-		from t_fee_item fi
+		from t_fee_item fi 
 		<include refid="Example_Where_Clause" />
+		And fi.status = 0
 		GROUP BY fi.project_id,fi.house_num
 		<if
 			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
@@ -178,7 +183,9 @@
 		fr.create_time as recordCreateTime
 		from t_fee_item fi left join t_fee_record fr on fr.fee_item_id=fi.id
 		<include refid="Personal_Where_Clause" />
-		group by fi.fee_type
+		<if test="extra.isSum !='' and extra.isSum == true">
+			group by fi.fee_type
+		</if>
 		order by fi.create_time desc
 		<if
 			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">

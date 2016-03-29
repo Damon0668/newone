@@ -16,14 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.core.entity.DataListValue;
-import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IWorkbenchService;
-import com.liefeng.property.api.ro.EventReportDataPageRo;
-import com.liefeng.property.api.ro.EventReportFlowWorkRo;
-import com.liefeng.property.api.ro.EventReportRo;
-import com.liefeng.property.api.ro.ProjectIdHouseNumPhoneRo;
+import com.liefeng.property.api.ro.common.EventAccepterEvalRo;
+import com.liefeng.property.api.ro.finger.event.EventReportRo;
+import com.liefeng.property.api.ro.finger.household.ProjectIdHouseNumPhoneRo;
+import com.liefeng.property.api.ro.id.EventIdRo;
 import com.liefeng.property.bo.workbench.EventReportBo;
+import com.liefeng.property.constant.WorkbenchConstants;
+import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.property.vo.workbench.EventAccepterEvalVo;
+import com.liefeng.property.vo.workbench.EventProcessVo;
 import com.liefeng.property.vo.workbench.EventReportVo;
 
 /**
@@ -46,7 +49,7 @@ public class EventReportController {
 	 * @author xhw
 	 * @date 2016年3月15日 下午6:03:49
 	 */
-	@ApiOperation(value="创建报事")
+	@ApiOperation(value="创建报事", notes="用户（业主、住户）创建报事")
 	@RequestMapping(value="/createEventReport", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue createEventReport(@Valid @ModelAttribute EventReportRo eventReportRo) {
@@ -65,7 +68,7 @@ public class EventReportController {
 	 * @author xhw
 	 * @date 2016年3月20日 上午9:58:29
 	 */
-	@ApiOperation(value="获取用户的历史报事")
+	@ApiOperation(value="获取用户的历史报事", notes="用户(业主、住户）获取历史报事")
 	@RequestMapping(value="/getEventReportList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<EventReportVo> getEventReportList(@Valid @ModelAttribute ProjectIdHouseNumPhoneRo projectIdHouseNumPhoneRo) {
@@ -74,45 +77,60 @@ public class EventReportController {
 	}
 	
 	
-	@ApiOperation(value="签收或抢单")
-	@RequestMapping(value="/signforEventReport", method=RequestMethod.POST)
+	
+	
+	
+	/**
+	 * 报事评价
+	 * @param eventAccepterEvalRo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月25日 下午2:28:29
+	 */
+	@ApiOperation(value="获取报事办理人", notes="用户（业主、住户）对报事进行评价时，获取报事的办理人")
+	@RequestMapping(value="/getEventStaffList", method=RequestMethod.POST)
 	@ResponseBody
-	public ReturnValue signforEventReport(@Valid @ModelAttribute EventReportFlowWorkRo reportFlowWorkRo){
-		workbenchService.eventReporSignfor(reportFlowWorkRo.getWfTaskId(), reportFlowWorkRo.getStaffid());
+	public DataListValue<PropertyStaffVo> getEventStaffList(@Valid @ModelAttribute EventIdRo eventIdRo) {
+		List<PropertyStaffVo> staffVoList = workbenchService.getStaffList(eventIdRo.getEventId());
+		
+		return DataListValue.success(staffVoList);
+	}
+	
+	/**
+	 * 报事评价
+	 * @param eventAccepterEvalRo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月25日 下午2:28:29
+	 */
+	@ApiOperation(value="报事评价", notes="用户（业主、住户）对报事进行评价")
+	@RequestMapping(value="/createEventAccepterEval", method=RequestMethod.POST)
+	@ResponseBody
+	public ReturnValue createEventAccepterEval(@Valid @ModelAttribute EventAccepterEvalRo eventAccepterEvalRo) {
+	
+		
+		EventProcessVo eventProcessVo = workbenchService.getActiveEventProcess(eventAccepterEvalRo.getWfOrderId(), "");
+		eventProcessVo.setRevisitMode(WorkbenchConstants.ReturnVisitType.CUSTOMER);
+		eventProcessVo.setTimeliness(eventAccepterEvalRo.getTimeliness());
+		eventProcessVo.setLevel(eventAccepterEvalRo.getLevel());
+		eventProcessVo.setAttitude(eventAccepterEvalRo.getAttitude());
+		eventProcessVo.setResult(eventAccepterEvalRo.getResult());
+		
+		EventReportVo eventReportVo = new EventReportVo();
+		eventProcessVo.setId(eventAccepterEvalRo.getEventId());
+		workbenchService.executeEventReportFlow(eventReportVo, eventProcessVo, "returnVisit", "");
+		
+		String[] accpterLikes = eventAccepterEvalRo.getAccepterLikes().split(",");
+		
+		for(int i = 0; i < accpterLikes.length; i++){
+			String[] likes = accpterLikes[i].split("-");
+			EventAccepterEvalVo eventAccepterEvalVo = new EventAccepterEvalVo();
+			eventAccepterEvalVo.setAccepterId(likes[0]);
+			eventAccepterEvalVo.setLikes(likes[1]);
+			eventAccepterEvalVo.setEventId(eventAccepterEvalRo.getEventId());
+			
+			workbenchService.createEventAccepterEval(eventAccepterEvalVo);
+		}
 		return ReturnValue.success();
-	}
-	
-	@ApiOperation(value="退回")
-	@RequestMapping(value="/sendBackEventReport", method=RequestMethod.POST)
-	@ResponseBody
-	public ReturnValue eventReporSendBack(@Valid @ModelAttribute EventReportFlowWorkRo reportFlowWorkRo){
-		workbenchService.eventReporSendBack(reportFlowWorkRo.getWfTaskId(), reportFlowWorkRo.getStaffid());
-		return ReturnValue.success();
-	}
-	
-	@ApiOperation(value="撤回")
-	@RequestMapping(value="/withdrawEventReport", method=RequestMethod.POST)
-	@ResponseBody
-	public ReturnValue eventReporWithdraw(@Valid @ModelAttribute EventReportFlowWorkRo reportFlowWorkRo){
-		workbenchService.eventReporSendBack(reportFlowWorkRo.getWfTaskId(), reportFlowWorkRo.getStaffid());
-		return ReturnValue.success();
-	}
-	
-	@ApiOperation(value="获取待签收列表")
-	@RequestMapping(value="/getSignForEventReporList", method=RequestMethod.GET)
-	@ResponseBody
-	public DataPageValue<EventReportVo> getSignForEventReporList(@Valid @ModelAttribute EventReportDataPageRo eventReportDataPageRo){
-		EventReportBo eventReportBo = MyBeanUtil.createBean(eventReportDataPageRo, EventReportBo.class);
-		DataPageValue<EventReportVo> DataPageValue = workbenchService.getSignForEventReporList(eventReportBo, eventReportDataPageRo.getPage(),eventReportDataPageRo.getSize());
-		return DataPageValue;
-	}
-	
-	@ApiOperation(value="获取抢单列表")
-	@RequestMapping(value="/getGrabEventReporList", method=RequestMethod.GET)
-	@ResponseBody
-	public DataPageValue<EventReportVo> getGrabEventReporList(@Valid @ModelAttribute EventReportDataPageRo eventReportDataPageRo){
-		EventReportBo eventReportBo = MyBeanUtil.createBean(eventReportDataPageRo, EventReportBo.class);
-		DataPageValue<EventReportVo> DataPageValue = workbenchService.getGrabEventReporList(eventReportBo, eventReportDataPageRo.getPage(),eventReportDataPageRo.getSize());
-		return DataPageValue;
 	}
 }

@@ -4,8 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
-
-import javax.persistence.Column;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -112,10 +111,7 @@ public class EventReportVo extends BaseValue {
 	@ApiModelProperty(value="当前状态【0：未处理，1：已派工，2：未评价，3：已完成】")
 	private String status;
 	
-	/**
-	 * 优先级。高位表示紧急程度，低位表示重要程度，如：10表示紧急不重要；11表示紧急重要。
-	 */
-	@ApiModelProperty(value="高位表示紧急程度，低位表示重要程度，如：10表示紧急不重要；11表示紧急重要")
+
 	private String priority = "00";
 	
 	/**
@@ -291,8 +287,14 @@ public class EventReportVo extends BaseValue {
 	 */
 	@ApiModelProperty("回访方式【1：电话；2：上门】")
 	private String revisitMode;
+
+	/**
+	 * 报事处理过程列表
+	 */
+	@ApiModelProperty("报事处理过程列表")
+	private List<EventProcessVo> eventProcessList; 
 	
-	
+	@ApiModelProperty(value="重要程度【1：重要、0：非重要】")
 	public Character getImportant() {
 		return priority.charAt(1);
 	}
@@ -301,6 +303,7 @@ public class EventReportVo extends BaseValue {
 		priority = Character.valueOf(priority.charAt(0)).toString() + important.toString();
 	}
 
+	@ApiModelProperty(value="紧急程度【1：紧急、0：非紧急】")
 	public Character getEmergency() {
 		return priority.charAt(0);
 	}
@@ -668,6 +671,14 @@ public class EventReportVo extends BaseValue {
 
 	public void setRevisitMode(String revisitMode) {
 		this.revisitMode = revisitMode;
+	}
+
+	public List<EventProcessVo> getEventProcessList() {
+		return eventProcessList;
+	}
+
+	public void setEventProcessList(List<EventProcessVo> eventProcessList) {
+		this.eventProcessList = eventProcessList;
 	}
 
 }

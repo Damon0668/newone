@@ -51,8 +51,8 @@ public class FeeItemBo extends BaseValue {
 	private Date endDate;
 	
 	/**
-	 * 是否需要总和
-	 * 空 为 算出总和
+	 * 是否需要分费用类型计算总和
+	 * 默认没有分类
 	 */
 	private Boolean isSum;
 

@@ -12,7 +12,8 @@ public interface ILoginUserService {
 	/**
 	 * 查找登陆用户信息
 	 * @param custGlobalId 用户全局ID
+	 * @param oemCode oem编码
 	 * @return
 	 */
-	LoginUserVo findLoginUser(String custGlobalId);
+	LoginUserVo findLoginUser(String custGlobalId, String oemCode);
 }

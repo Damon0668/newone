@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
-import com.liefeng.property.constant.SysConstants;
 
 public class ControllerInterceptor implements HandlerInterceptor{
 	
@@ -20,14 +19,18 @@ public class ControllerInterceptor implements HandlerInterceptor{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		
-		String token = request.getHeader("token");
+		String auth = request.getHeader("Authorization");
 		
-		if(ValidateHelper.isEmptyString(token)){
-			logger.info("ControllerInterceptor get token is null");
+		String remoteAddr = request.getRemoteAddr();
+		
+		logger.info("ControllerInterceptor auth = {}, remoteAddr = {}", auth, remoteAddr);
+		
+		if(ValidateHelper.isEmptyString(auth)){
+			auth = "hzwy_property";
 			//return false;
 		}
 		
-		String oemCode = SysConstants.DEFAULT_OEM_CODE;
+		String oemCode = auth;
 		
 		ContextManager.getInstance().setOemCode(oemCode);
 
@@ -46,7 +49,7 @@ public class ControllerInterceptor implements HandlerInterceptor{
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
 		//在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）
-		System.out.println("postHandle");
+		System.out.println("afterCompletion");
 	}
 
 }

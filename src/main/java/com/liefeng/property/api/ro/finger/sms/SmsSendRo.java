@@ -10,9 +10,6 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class SmsSendRo extends BaseValue{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2198637575067797897L;
 	
 	@ApiModelProperty(value="手机号码", required=true)

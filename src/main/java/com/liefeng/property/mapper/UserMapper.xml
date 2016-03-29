@@ -9,7 +9,7 @@
 
 </resultMap>
 
-<select id="findLoginUser" resultMap="BaseResultMap">
+<select id="findLoginUser" resultMap="BaseResultMap" >
 	SELECT
 	    t.id,
 	    t.cust_global_id globalId,
@@ -18,7 +18,8 @@
 	    t.phone mobile,
 	    t.`status`,
 	    t.pic_url pic,
-	    t.oem_code oemCode
+	    t.oem_code oemCode,
+	    t.householdType householdType
 	FROM
 	    (
 	        SELECT
@@ -29,7 +30,8 @@
 	            p.phone,
 	            p.`status`,
 	            p.pic_url,
-	            p.oem_code
+	            p.oem_code,
+	            "1" householdType
 	        FROM
 	            t_proprietor p
 	        UNION
@@ -41,12 +43,14 @@
 	                r.mobile,
 	                r.`status`,
 	                r.pic,
-	                r.oem_code
+	                r.oem_code,
+	                "2" householdType
 	            FROM
 	                t_resident r
 	    ) t
-	where t.cust_global_id = #{custGlobalId}
-
+	where 1=1
+	and t.cust_global_id = #{custGlobalId}
+    and t.oem_code = #{oemCode}
 </select>
 
 </mapper>

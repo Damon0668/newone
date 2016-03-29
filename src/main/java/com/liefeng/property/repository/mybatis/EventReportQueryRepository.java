@@ -84,4 +84,11 @@ public interface EventReportQueryRepository extends BaseRepository<EventReportVo
 	 * @return
 	 */
 	public EventReportVo findByWfOrderId(String wfOrderId);
+	
+	/**
+	 * 本月已处理数量
+	 * @param param
+	 * @return
+	 */
+	public Long monthCompleteQueryByCount(PagingParamVo param);
 }
