@@ -95,7 +95,7 @@ public class AuthController {
 	@RequestMapping(value="/updatePwdAfterLogin", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue updatePwdAfterLogin(@Valid @ModelAttribute UpdatePwdLoginRo updatePwdLoginRo){
-		propertyStaffService.updateStaffPassword(updatePwdLoginRo.getStaffId(), updatePwdLoginRo.getOldpaswword(), updatePwdLoginRo.getNewpaswword());
+		propertyStaffService.updateStaffPassword(updatePwdLoginRo.getStaffId(), updatePwdLoginRo.getOldpassword(), updatePwdLoginRo.getNewpassword());
 		return ReturnValue.success();
 	}
 }

@@ -21,11 +21,11 @@ public class UpdatePwdLoginRo extends BaseValue{
 	
 	@ApiModelProperty(value="旧密码",required=true)
 	@NotNull
-	private String oldpaswword;
+	private String oldpassword;
 	
 	@ApiModelProperty(value="新密码",required=true)
 	@NotNull
-	private String newpaswword;
+	private String newpassword;
 
 	public String getStaffId() {
 		return staffId;
@@ -35,20 +35,19 @@ public class UpdatePwdLoginRo extends BaseValue{
 		this.staffId = staffId;
 	}
 
-	public String getOldpaswword() {
-		return oldpaswword;
+	public String getOldpassword() {
+		return oldpassword;
 	}
 
-	public void setOldpaswword(String oldpaswword) {
-		this.oldpaswword = oldpaswword;
+	public void setOldpassword(String oldpassword) {
+		this.oldpassword = oldpassword;
 	}
 
-	public String getNewpaswword() {
-		return newpaswword;
+	public String getNewpassword() {
+		return newpassword;
 	}
 
-	public void setNewpaswword(String newpaswword) {
-		this.newpaswword = newpaswword;
+	public void setNewpassword(String newpassword) {
+		this.newpassword = newpassword;
 	}
-
 }

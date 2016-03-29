@@ -8,8 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.liefeng.common.util.CommonUtil;
+import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.intf.service.cache.IRedisService;
+import com.liefeng.property.constant.SysConstants;
 
 public class ControllerInterceptor implements HandlerInterceptor{
 	
@@ -19,22 +23,38 @@ public class ControllerInterceptor implements HandlerInterceptor{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		
-		String auth = request.getHeader("Authorization");
+		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
 		
-		String remoteAddr = request.getRemoteAddr();
+		String authorization = request.getHeader("Authorization");
+
+		String env = CommonUtil.getActiveProfile().toLowerCase();
 		
-		logger.info("ControllerInterceptor auth = {}, remoteAddr = {}", auth, remoteAddr);
-		
-		if(ValidateHelper.isEmptyString(auth)){
-			auth = "hzwy_property";
-			//return false;
+		if("test".equals(env) || "dev".equals(env)){
+			
+			String oemCode = (String) SpringBeanUtil.getBean(IRedisService.class).getValue("Authorization_" + env);
+			
+			if(ValidateHelper.isNotEmptyString(oemCode)){
+				ContextManager.getInstance().setOemCode(oemCode);
+			}
+			
+			return Boolean.TRUE;
 		}
 		
-		String oemCode = auth;
+		if(ValidateHelper.isEmptyString(authorization)){
+			return Boolean.FALSE;
+		}
 		
+		String oemCode = (String) SpringBeanUtil.getBean(IRedisService.class).getValue(authorization);
+		
+		if(ValidateHelper.isEmptyString(oemCode)){
+			return Boolean.FALSE;
+		}
+		
+		logger.info("ControllerInterceptor authorization = {}, oemCode = {}", authorization, oemCode);
+			
 		ContextManager.getInstance().setOemCode(oemCode);
-
-		return true;//只有返回true才会继续向下执行，返回false取消当前请求
+			
+		return Boolean.TRUE;//只有返回true才会继续向下执行，返回false取消当前请求
 	}
 
 	@Override
