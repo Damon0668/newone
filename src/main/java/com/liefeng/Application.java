@@ -46,7 +46,7 @@ public class Application {
 		
 		logger.info("Prepare to launch spring boot...");
 		logger.info("Launch args are: " + JSON.toJSONString(args));
-		
+
 		SpringApplication.run(Application.class, args);
 	}
 }
