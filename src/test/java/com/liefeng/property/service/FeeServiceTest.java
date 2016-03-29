@@ -373,7 +373,7 @@ public class FeeServiceTest {
 
 	@Test
 	public void createFee(){
-		List<ProjectVo> projectDataPageValue = projectService.findAll();
+		List<ProjectVo> projectDataPageValue = projectService.findAllProject();
 		
 		for (ProjectVo projectvo : projectDataPageValue) {
 			ContextManager.getInstance().setOemCode(projectvo.getOemCode());
