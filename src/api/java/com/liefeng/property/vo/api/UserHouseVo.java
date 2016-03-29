@@ -27,6 +27,9 @@ public class UserHouseVo extends BaseValue {
 
 	@ApiModelProperty(value = "房号")
 	private String houseNum;
+	
+	@ApiModelProperty(value = "OEM编码")
+	private String oemCode;
 
 	public String getProjectId() {
 		return projectId;
@@ -58,6 +61,14 @@ public class UserHouseVo extends BaseValue {
 
 	public void setHouseNum(String houseNum) {
 		this.houseNum = houseNum;
+	}
+
+	public String getOemCode() {
+		return oemCode;
+	}
+
+	public void setOemCode(String oemCode) {
+		this.oemCode = oemCode;
 	}
 
 }
