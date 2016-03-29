@@ -20,6 +20,10 @@ public class EventReportDetailRo extends BaseValue {
 	@ApiModelProperty(value="流程实例ID", required=true)
 	@NotNull
 	private String orderId;
+	
+	@ApiModelProperty(value="员工ID", required=true)
+	@NotNull
+	private String staffId;
 
 	public String getOrderId() {
 		return orderId;
@@ -27,5 +31,13 @@ public class EventReportDetailRo extends BaseValue {
 
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
+	}
+
+	public String getStaffId() {
+		return staffId;
+	}
+
+	public void setStaffId(String staffId) {
+		this.staffId = staffId;
 	}
 }
