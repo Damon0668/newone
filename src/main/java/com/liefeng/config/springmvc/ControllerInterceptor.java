@@ -22,6 +22,7 @@ public class ControllerInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		IRedisService redisService = SpringBeanUtil.getBean(IRedisService.class);
 		
 		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
 		
@@ -29,14 +30,23 @@ public class ControllerInterceptor implements HandlerInterceptor{
 
 		String env = CommonUtil.getActiveProfile().toLowerCase();
 		
+		//开发环境和测试环境设置。
 		if("test".equals(env) || "dev".equals(env)){
-			
-			String oemCode = (String) SpringBeanUtil.getBean(IRedisService.class).getValue("Authorization_" + env);
-			
-			if(ValidateHelper.isNotEmptyString(oemCode)){
-				ContextManager.getInstance().setOemCode(oemCode);
+			if(ValidateHelper.isEmptyString(authorization)){
+				String oemCode = (String) redisService.getValue("Authorization_" + env);
+				
+				if(ValidateHelper.isNotEmptyString(oemCode)){
+					ContextManager.getInstance().setOemCode(oemCode);
+				}else{
+					if("test".equals(env)){
+						redisService.setValue("Authorization_" + env, "hzwy_property");
+					}
+					
+					if("dev".equals(env)){
+						redisService.setValue("Authorization_" + env, "property");
+					}
+				}
 			}
-			
 			return Boolean.TRUE;
 		}
 		
@@ -44,7 +54,7 @@ public class ControllerInterceptor implements HandlerInterceptor{
 			return Boolean.FALSE;
 		}
 		
-		String oemCode = (String) SpringBeanUtil.getBean(IRedisService.class).getValue(authorization);
+		String oemCode = (String) redisService.getValue(authorization);
 		
 		if(ValidateHelper.isEmptyString(oemCode)){
 			return Boolean.FALSE;
