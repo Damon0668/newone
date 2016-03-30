@@ -242,8 +242,7 @@ select * from (
             r.mobile,
             gc.id guardCardId,
             gc.sn guardCardSn,
-            gc.status guardCardStatus,
-            rc.plate_num plateNum
+            gc.status guardCardStatus
         FROM
             t_resident r 
             LEFT JOIN t_resident_house rh on r.id = rh.resident_id
@@ -251,7 +250,6 @@ select * from (
         LEFT JOIN t_project p ON h.project_id = p.id
         LEFT JOIN t_guard_card_user gcu ON r.id = gcu.user_id
         LEFT JOIN t_guard_card gc ON gcu.card_id = gc.id
-        LEFT JOIN t_resident_car rc on h.id = rc.house_id
         where 1=1
         <if test="extra.oemCode != null and extra.oemCode != ''" >
             AND r.oem_code =  #{extra.oemCode}
@@ -270,8 +268,7 @@ select * from (
             p.phone mobile,
             gc.id guardCardId,
             gc.sn guardCardSn,
-            gc.status guardCardStatus,
-            rc.plate_num plateNum
+            gc.status guardCardStatus
         FROM
             property.t_proprietor p
         LEFT JOIN property.t_proprietor_house ph ON p.id = ph.proprietor_id
@@ -279,7 +276,6 @@ select * from (
         LEFT JOIN property.t_guard_card_user gcu ON p.id = gcu.user_id
         LEFT JOIN property.t_guard_card gc ON gcu.card_id = gc.id
         LEFT JOIN property.t_house h on prj.id = ph.project_id and ph.house_num = h.house_num
-        LEFT JOIN property.t_resident_car rc on h.id = rc.house_id
         where 1=1 
         <if test="extra.oemCode != null and extra.oemCode != ''" >
             AND p.oem_code =  #{extra.oemCode}
@@ -307,8 +303,7 @@ select count(*) from (
             r.mobile,
             gc.id guardCardId,
             gc.sn guardCardSn,
-            gc.status guardCardStatus,
-            rc.plate_num plateNum
+            gc.status guardCardStatus
         FROM
             t_resident r 
             LEFT JOIN t_resident_house rh on r.id = rh.resident_id
@@ -316,7 +311,6 @@ select count(*) from (
         LEFT JOIN t_project p ON h.project_id = p.id
         LEFT JOIN t_guard_card_user gcu ON r.id = gcu.user_id
         LEFT JOIN t_guard_card gc ON gcu.card_id = gc.id
-        LEFT JOIN t_resident_car rc on h.id = rc.house_id
         where 1=1 
         <if test="extra.oemCode != null and extra.oemCode != ''" >
             AND r.oem_code = #{extra.oemCode}
@@ -335,8 +329,7 @@ select count(*) from (
             p.phone mobile,
             gc.id guardCardId,
             gc.sn guardCardSn,
-            gc.status guardCardStatus,
-            rc.plate_num plateNum
+            gc.status guardCardStatus
         FROM
             property.t_proprietor p
         LEFT JOIN property.t_proprietor_house ph ON p.id = ph.proprietor_id
@@ -344,7 +337,6 @@ select count(*) from (
         LEFT JOIN property.t_guard_card_user gcu ON p.id = gcu.user_id
         LEFT JOIN property.t_guard_card gc ON gcu.card_id = gc.id
         LEFT JOIN property.t_house h on prj.id = ph.project_id and ph.house_num = h.house_num
-        LEFT JOIN property.t_resident_car rc on h.id = rc.house_id
         where 1=1 
         <if test="extra.oemCode != null and extra.oemCode != ''" >
             AND p.oem_code =  #{extra.oemCode}
