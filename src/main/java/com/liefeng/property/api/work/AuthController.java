@@ -2,8 +2,6 @@ package com.liefeng.property.api.work;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,11 +9,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
-import com.liefeng.core.error.IErrorCode;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IPropertyStaffService;
+import com.liefeng.intf.service.cache.IRedisService;
 import com.liefeng.intf.service.msg.ISmsService;
 import com.liefeng.mq.type.SMSMsgEvent;
 import com.liefeng.property.api.ro.finger.auth.UpdatePwdRo;
@@ -23,7 +22,6 @@ import com.liefeng.property.api.ro.work.auth.CheckMobileRo;
 import com.liefeng.property.api.ro.work.auth.StaffLoginRo;
 import com.liefeng.property.api.ro.work.auth.UpdatePwdLoginRo;
 import com.liefeng.property.error.PropertyStaffErrorCode;
-import com.liefeng.property.error.StaffErrorCode;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffArchiveVo;
 
@@ -35,13 +33,14 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping(value = "/api/work/auth")
 public class AuthController {
 	
-	private static Logger logger = LoggerFactory.getLogger(AuthController.class);
-
 	@Autowired
 	private IPropertyStaffService propertyStaffService;
 	
 	@Autowired
 	private ISmsService smsService;
+	
+	@Autowired
+	private IRedisService redisService;
 	
 	@ApiOperation(value="登陆", notes="登陆接口")
 	@RequestMapping(value="/login", method=RequestMethod.POST)
@@ -58,7 +57,12 @@ public class AuthController {
 			throw new LiefengException(PropertyStaffErrorCode.PASSWORD_ERROR);
 		}
 		
+		//更新个推clientId
 		propertyStaffService.settIngStaffMsgClientId(staff.getId(), staffLoginRo.getClientId());
+		
+		//刷新缓存中的oemCode
+		String openId = "openId_" + staff.getId();
+		redisService.setValue(openId, staff.getOemCode());
 
 		return DataValue.success(staff);
 	}
@@ -87,6 +91,10 @@ public class AuthController {
 	public ReturnValue updatePwdByForget(@Valid @ModelAttribute UpdatePwdRo updatePwdRo){
 		
 		smsService.verifySMSCode(updatePwdRo.getMobile(), SMSMsgEvent.SD_UPDATAPWD_MSG.getEventCode(), updatePwdRo.getCode());
+		
+		PropertyStaffVo staff = propertyStaffService.findPropertyStaffByAccount(updatePwdRo.getAccount());
+		
+		propertyStaffService.updateStaffPassword(staff.getId(), staff.getPassword(), updatePwdRo.getPassword());
 		
 		return ReturnValue.success();
 	}

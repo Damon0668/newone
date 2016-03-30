@@ -46,12 +46,17 @@ public class ControllerInterceptor implements HandlerInterceptor{
 						redisService.setValue("openId_" + env, "property");
 					}
 				}
+				return Boolean.TRUE;
 			}
-			return Boolean.TRUE;
 		}
 		
 		if(ValidateHelper.isEmptyString(openId)){
 			return Boolean.FALSE;
+		}
+		
+		if("default".equals(openId)){
+			ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
+			return Boolean.TRUE;
 		}
 		
 		String oemCode = (String) redisService.getValue("openId_" + openId);

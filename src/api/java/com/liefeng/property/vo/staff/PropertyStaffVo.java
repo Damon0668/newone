@@ -25,7 +25,7 @@ public class PropertyStaffVo extends BaseValue {
 	/**
 	 * 主键
 	 */
-	@ApiModelProperty(value="员工ID")
+	@ApiModelProperty(value="员工ID（=openId）")
 	private String id;
 	
 	/**
