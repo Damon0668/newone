@@ -1373,6 +1373,7 @@ public class WorkbenchService implements IWorkbenchService {
 		eventReportVo.setOemCode(ContextManager.getInstance().getOemCode());
 		eventReportVo.setCreateTime(new Date());
 		eventReportVo.setReportTime(new Date());
+		eventReportVo.setEventType(WorkbenchConstants.EventReport.EVENTTYPE_NORMAL);
 
 		EventReportContext eventReportContext = EventReportContext
 				.build(eventReportVo);

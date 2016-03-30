@@ -578,7 +578,7 @@ public class FeeService implements IFeeService {
 						.loadByProjectId(projectId);
 				FeeSettingVo feeSettingVo = feeSettingContext.findChargeable(
 						proprietorHouseVo.getUseType(),
-						FeeConstants.FeeSetting.FEE_GARBAGE);
+						FeeConstants.FeeSetting.FEE_POLLU);
 
 				MeterRecordContext meterRecordContext = MeterRecordContext
 						.loadByProjectId(proprietorHouseVo.getProjectId());
@@ -594,7 +594,7 @@ public class FeeService implements IFeeService {
 						.loadByProjectId(proprietorHouseVo.getProjectId());
 				FeeItemVo feeItem = feeItemContext.getPreFeeItem(
 						proprietorHouseVo.getHouseNum(),
-						FeeConstants.FeeSetting.FEE_GARBAGE);
+						FeeConstants.FeeSetting.FEE_POLLU);
 				if (feeItem != null) {
 					logger.info("已经存在该费用项");
 					return;

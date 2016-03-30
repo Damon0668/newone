@@ -22,4 +22,20 @@ public interface SysDictRepository extends JpaRepository<SysDictPo, Long>{
 	 * @return 字典列表
 	 */
 	public List<SysDictPo> findByGroupCode(String groupCode);
+	
+	/**
+	 * 根据字典组编码和字典值获取字典
+	 * @param groupCode 字典组编码
+	 * @param value 字典值
+	 * @return 字典对象
+	 */
+	public SysDictPo findByGroupCodeAndValue(String groupCode, String value);
+	
+	/**
+	 * 根据字典组编码和字典名称获取字典
+	 * @param groupCode 字典组编码
+	 * @param name 字典名称
+	 * @return 字典对象
+	 */
+	public SysDictPo findByGroupCodeAndName(String groupCode, String name);
 }
