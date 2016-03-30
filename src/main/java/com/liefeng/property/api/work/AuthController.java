@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.exception.LiefengException;
@@ -67,7 +66,7 @@ public class AuthController {
 		return DataValue.success(staff);
 	}
 	
-	@ApiOperation(value="手机号码有效性", notes="手机号码是否存在员工表中且激活在职")
+	@ApiOperation(value="手机号码有效性", notes="手机号码是否和员工匹配")
 	@RequestMapping(value="/checkMobileAvailable", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue checkMobileAvailable(@Valid @ModelAttribute CheckMobileRo checkMobileRo){
@@ -90,13 +89,23 @@ public class AuthController {
 	@ResponseBody
 	public ReturnValue updatePwdByForget(@Valid @ModelAttribute UpdatePwdRo updatePwdRo){
 		
-		smsService.verifySMSCode(updatePwdRo.getMobile(), SMSMsgEvent.SD_UPDATAPWD_MSG.getEventCode(), updatePwdRo.getCode());
-		
 		PropertyStaffVo staff = propertyStaffService.findPropertyStaffByAccount(updatePwdRo.getAccount());
 		
-		propertyStaffService.updateStaffPassword(staff.getId(), staff.getPassword(), updatePwdRo.getPassword());
-		
-		return ReturnValue.success();
+		if(staff != null){
+			StaffArchiveVo staffArchive = propertyStaffService.findStaffArchByStaffId(staff.getId());
+			if(staffArchive == null || !updatePwdRo.getMobile().equals(staffArchive.getPhone())){
+				throw new LiefengException(PropertyStaffErrorCode.Mobile_NOT_MATCHING);
+			}
+			
+			smsService.verifySMSCode(updatePwdRo.getMobile(), SMSMsgEvent.SD_UPDATAPWD_MSG.getEventCode(), updatePwdRo.getCode());
+			
+			propertyStaffService.updateStaffPassword(staff.getId(), staff.getPassword(), updatePwdRo.getPassword());
+			
+			return ReturnValue.success();
+		}else{
+			
+			throw new LiefengException(PropertyStaffErrorCode.STAFF_NOT_EXIST);
+		}
 	}
 	
 	@ApiOperation(value="登陆后-修改密码", notes="登陆后,修改密码")
@@ -106,4 +115,5 @@ public class AuthController {
 		propertyStaffService.updateStaffPassword(updatePwdLoginRo.getStaffId(), updatePwdLoginRo.getOldpassword(), updatePwdLoginRo.getNewpassword());
 		return ReturnValue.success();
 	}
+
 }
