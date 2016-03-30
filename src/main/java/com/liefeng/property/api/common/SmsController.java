@@ -4,8 +4,6 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,9 +29,7 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping(value = "/api/common/sms")
 public class SmsController {
-	
-	private static Logger logger = LoggerFactory.getLogger(SmsController.class);
-	
+		
 	@Autowired
 	private ISmsService smsService;
 	

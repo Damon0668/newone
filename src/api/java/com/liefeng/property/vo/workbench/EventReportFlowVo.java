@@ -2,8 +2,6 @@ package com.liefeng.property.vo.workbench;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-
 import com.liefeng.core.entity.BaseValue;
 
 /**

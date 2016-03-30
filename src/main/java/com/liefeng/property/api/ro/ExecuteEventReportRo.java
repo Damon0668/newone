@@ -1,14 +1,9 @@
 package com.liefeng.property.api.ro;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
-import java.util.Date;
-import java.util.List;
-
 import javax.validation.constraints.NotNull;
 
-import com.liefeng.property.vo.workbench.EventProcAttachVo;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 报事工单处理执行请求类
