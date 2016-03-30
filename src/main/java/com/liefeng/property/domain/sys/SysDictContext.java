@@ -49,6 +49,26 @@ public class SysDictContext {
 		return MyBeanUtil.createList(dictPoList, SysDictVo.class);
 	}
 	
+	/**
+	 * 根据字典组编码和字典值获取指定字典
+	 * @return 字典对象
+	 */
+	public SysDictVo getByValue(String value) {
+		SysDictPo sysDictPo = sysDictRepository.findByGroupCodeAndValue(groupCode, value);
+		return MyBeanUtil.createBean(sysDictPo, SysDictVo.class);
+	}
+	
+	/**
+	 * 根据字典组编码和字典值获取指定字典
+	 * @return 字典对象
+	 */
+	public SysDictVo getByName(String name) {
+		SysDictPo sysDictPo = sysDictRepository.findByGroupCodeAndName(groupCode, name);
+		return MyBeanUtil.createBean(sysDictPo, SysDictVo.class);
+	}
+	
+	
+	
 	protected void setGroupCode(String groupCode) {
 		this.groupCode = groupCode;
 	}
