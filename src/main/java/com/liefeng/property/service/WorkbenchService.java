@@ -1026,9 +1026,9 @@ public class WorkbenchService implements IWorkbenchService {
 
 	// 当前活动的任务
 	@Override
-	public EventProcessVo getActiveEventProcess(String orderId, String staffid) {
+	public EventProcessVo getActiveEventProcess(String orderId, String staffId) {
 		EventProcessVo eventProcessVo = EventProcessContext.build().getActive(
-				orderId, staffid);
+				orderId, staffId);
 
 		// 设置附件
 		eventProcessVo.setAttachs(EventProcAttachContext.build()

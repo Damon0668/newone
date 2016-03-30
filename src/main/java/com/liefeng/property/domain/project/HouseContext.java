@@ -27,7 +27,6 @@ import com.liefeng.property.vo.api.UserHouseVo;
 import com.liefeng.property.vo.household.HouseGraphVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.project.HouseVo;
-import com.liefeng.property.vo.project.ProjectVo;
 
 /**
  * 房产信息领域模型

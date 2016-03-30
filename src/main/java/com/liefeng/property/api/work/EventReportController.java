@@ -30,7 +30,6 @@ import com.liefeng.property.api.ro.id.EventIdRo;
 import com.liefeng.property.api.ro.id.ProjectIdRo;
 import com.liefeng.property.api.ro.work.event.CountsToHeadRo;
 import com.liefeng.property.api.ro.work.event.DefaultAccepterRo;
-import com.liefeng.property.api.ro.work.event.DepartmentDirectorRo;
 import com.liefeng.property.api.ro.work.event.DispatchingWorkerRo;
 import com.liefeng.property.api.ro.work.event.EventReportDataPageRo;
 import com.liefeng.property.api.ro.work.event.EventReportDetailRo;
@@ -99,13 +98,21 @@ public class EventReportController {
 	@RequestMapping(value="/getEventReportDetail", method=RequestMethod.GET)
 	@ResponseBody
 	public DataValue<EventReportVo> getEventReportDetail(@Valid @ModelAttribute EventReportDetailRo params) {
-		EventReportVo eventReport =  workbenchService.findEventReportByWfOrderId(params.getOrderId()); 
+		String orderId = params.getOrderId();
+		String staffId = params.getStaffId();
+		logger.info("查询工单详情，orderId={}，staffId={}", orderId, staffId);
 		
+		EventReportVo eventReport =  workbenchService.findEventReportByWfOrderId(orderId); // 工单详情信息
+		
+		List<EventProcessVo> dataList = new ArrayList<EventProcessVo>();
 		if(eventReport != null) {
-			List<EventProcessVo> dataList = workbenchService.getHisEventProcess(params.getOrderId());
-			eventReport.setEventProcessList(dataList);
+			dataList = workbenchService.getHisEventProcess(params.getOrderId()); // 工单处理历史信息
 		}
 		
+		EventProcessVo currentEventProcess = workbenchService.getActiveEventProcess(orderId, staffId); // 工单当前任务信息
+		dataList.add(currentEventProcess);
+		
+		eventReport.setEventProcessList(dataList);
 		return DataValue.success(eventReport);
 	}
 	

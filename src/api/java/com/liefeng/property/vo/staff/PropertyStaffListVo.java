@@ -2,8 +2,6 @@ package com.liefeng.property.vo.staff;
 
 import java.util.Date;
 
-import org.springframework.validation.annotation.Validated;
-
 import com.liefeng.common.util.EncryptionUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.BaseValue;

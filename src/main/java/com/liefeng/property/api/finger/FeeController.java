@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.common.util.TimeUtil;
-import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IFeeService;
@@ -36,7 +33,6 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping(value = "/api/finger/fee")
 public class FeeController {
-	private static Logger logger = LoggerFactory.getLogger(FeeController.class);
 
 	@Autowired
 	private IFeeService feeService;

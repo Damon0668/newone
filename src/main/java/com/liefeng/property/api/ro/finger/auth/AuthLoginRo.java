@@ -1,11 +1,11 @@
 package com.liefeng.property.api.ro.finger.auth;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
 import javax.validation.constraints.NotNull;
 
 import com.liefeng.core.entity.BaseValue;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 权限模块

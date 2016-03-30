@@ -2,10 +2,9 @@ package com.liefeng.property.api.finger;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,10 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.liefeng.base.bo.UserLoginBo;
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.api.ILoginUserService;
+import com.liefeng.intf.service.cache.IRedisService;
 import com.liefeng.property.api.ro.finger.auth.AuthLoginRo;
 import com.liefeng.property.api.ro.finger.auth.UpdatePwdRo;
 import com.liefeng.property.constant.SysConstants;
@@ -31,14 +32,15 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping(value = "/api/finger/auth")
 public class AuthController {
-	
-	private static Logger logger = LoggerFactory.getLogger(AuthController.class);
-	
+
 	@Autowired
 	private IUserService userService;
 
 	@Autowired
 	private ILoginUserService loginUserService;
+	
+	@Autowired
+	private IRedisService redisService;
 
 	@ApiOperation(value="用户登陆", notes="用户登陆接口,当用户没有激活[USER_UNBIND_MOBILE]或者更换手机[USER_LOGIN_MOBILE_CHANGED]登陆时需要申请验证码并填入,短信事件为SD_LOGIN_MSG")
 	@RequestMapping(value="/login", method=RequestMethod.POST)
@@ -60,6 +62,14 @@ public class AuthController {
 		loginUser = loginUserService.findLoginUser(user.getCustGlobalId(), user.getOemCode());
 		
 		loginUser.setUserId(user.getId());
+		
+		loginUser.setOpenId(user.getUserGlobalId());
+		
+		//刷新缓存中的oemCode
+		if(ValidateHelper.isNotEmptyString(user.getUserGlobalId())){
+			String openId = "openId_" + user.getUserGlobalId();
+			redisService.setValue(openId, loginUser.getOemCode());
+		}
 
 		return DataValue.success(loginUser);
 	}
