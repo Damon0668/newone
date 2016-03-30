@@ -26,41 +26,41 @@ public class ControllerInterceptor implements HandlerInterceptor{
 		
 		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
 		
-		String authorization = request.getHeader("Authorization");
+		String openId = request.getHeader("openId");
 
 		String env = CommonUtil.getActiveProfile().toLowerCase();
 		
 		//开发环境和测试环境设置。
 		if("test".equals(env) || "dev".equals(env)){
-			if(ValidateHelper.isEmptyString(authorization)){
-				String oemCode = (String) redisService.getValue("Authorization_" + env);
+			if(ValidateHelper.isEmptyString(openId)){
+				String oemCode = (String) redisService.getValue("openId_" + env);
 				
 				if(ValidateHelper.isNotEmptyString(oemCode)){
 					ContextManager.getInstance().setOemCode(oemCode);
 				}else{
 					if("test".equals(env)){
-						redisService.setValue("Authorization_" + env, "hzwy_property");
+						redisService.setValue("openId_" + env, "hzwy_property");
 					}
 					
 					if("dev".equals(env)){
-						redisService.setValue("Authorization_" + env, "property");
+						redisService.setValue("openId_" + env, "property");
 					}
 				}
 			}
 			return Boolean.TRUE;
 		}
 		
-		if(ValidateHelper.isEmptyString(authorization)){
+		if(ValidateHelper.isEmptyString(openId)){
 			return Boolean.FALSE;
 		}
 		
-		String oemCode = (String) redisService.getValue(authorization);
+		String oemCode = (String) redisService.getValue("openId_" + openId);
 		
 		if(ValidateHelper.isEmptyString(oemCode)){
 			return Boolean.FALSE;
 		}
 		
-		logger.info("ControllerInterceptor authorization = {}, oemCode = {}", authorization, oemCode);
+		logger.info("ControllerInterceptor openId = {}, oemCode = {}", openId, oemCode);
 			
 		ContextManager.getInstance().setOemCode(oemCode);
 			

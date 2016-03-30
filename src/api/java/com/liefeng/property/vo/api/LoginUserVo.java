@@ -21,10 +21,13 @@ public class LoginUserVo extends BaseValue{
 	@ApiModelProperty(value="主键")
 	private String id;
 	
-	@ApiModelProperty(value="全局ID")
+	@ApiModelProperty(value="全局ID,cust_global_id")
 	private String globalId;
 	
-	@ApiModelProperty(value="手机用户ID")
+	@ApiModelProperty(value="手机用户全局ID")
+	private String openId;
+	
+	@ApiModelProperty(value="手机用户ID,t_user表ID")
 	private String userId;
 	
 	@ApiModelProperty(value="项目ID")
@@ -126,5 +129,13 @@ public class LoginUserVo extends BaseValue{
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
 	}
 }

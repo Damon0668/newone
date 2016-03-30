@@ -45,7 +45,7 @@ public class AuthController {
 	@ApiOperation(value="用户登陆", notes="用户登陆接口,当用户没有激活[USER_UNBIND_MOBILE]或者更换手机[USER_LOGIN_MOBILE_CHANGED]登陆时需要申请验证码并填入,短信事件为SD_LOGIN_MSG")
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
-	public DataValue<LoginUserVo> userLogin(@Valid @ModelAttribute AuthLoginRo authLogin, @RequestHeader("Authorization") String authorization){
+	public DataValue<LoginUserVo> userLogin(@Valid @ModelAttribute AuthLoginRo authLogin){
 
 		LoginUserVo loginUser = null;
 
@@ -63,9 +63,12 @@ public class AuthController {
 		
 		loginUser.setUserId(user.getId());
 		
+		loginUser.setOpenId(user.getUserGlobalId());
+		
 		//刷新缓存中的oemCode
-		if(ValidateHelper.isNotEmptyString(authorization)){
-			redisService.setValue(authorization, loginUser.getOemCode());
+		if(ValidateHelper.isNotEmptyString(user.getUserGlobalId())){
+			String openId = "openId_" + user.getUserGlobalId();
+			redisService.setValue(openId, loginUser.getOemCode());
 		}
 
 		return DataValue.success(loginUser);
