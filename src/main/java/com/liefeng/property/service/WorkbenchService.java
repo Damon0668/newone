@@ -1046,6 +1046,7 @@ public class WorkbenchService implements IWorkbenchService {
 					+ "--"
 					+ propertyStaffVo.getName());
 		}
+		
 		// 设置下一步办理人显示名称
 		eventProcessVo.setNextAccepterName(" ");
 		if (ValidateHelper.isNotEmptyString(eventProcessVo.getNextAccepterId()))
