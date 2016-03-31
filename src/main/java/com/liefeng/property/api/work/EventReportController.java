@@ -275,9 +275,9 @@ public class EventReportController {
 	}
 	
 	@ApiOperation(value="获取默认办理人")
-	@RequestMapping(value="/getDefaultAccepter", method=RequestMethod.GET)
+	@RequestMapping(value="/getDefaultAcceptor", method=RequestMethod.GET)
 	@ResponseBody
-	public PropertyStaffVo getDefaultAccepter(@Valid @ModelAttribute DefaultAccepterRo defaultAccepterRo ){
+	public PropertyStaffVo getDefaultAcceptor(@Valid @ModelAttribute DefaultAccepterRo defaultAccepterRo ){
 		PropertyStaffVo propertyStaffVo = workbenchService.getTaskAccepter(defaultAccepterRo.getEventId(), defaultAccepterRo.getTaskName());
 		return  propertyStaffVo;
 	}
