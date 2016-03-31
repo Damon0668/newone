@@ -96,9 +96,10 @@
 			service.wf_hist_task s
 		WHERE
 			t.event_id = #{extra.eventId}
-		AND t. STATUS = '3'
 		AND t.wf_task_id = s.id
 		AND s.task_Name = #{extra.taskName}
+		ORDER BY s.create_Time
+		LIMIT 0,1
 	</select>
 	
 </mapper>   

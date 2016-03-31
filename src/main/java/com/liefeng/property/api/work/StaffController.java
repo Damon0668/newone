@@ -3,13 +3,8 @@ package com.liefeng.property.api.work;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +27,9 @@ import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffArchiveVo;
 import com.liefeng.property.vo.staff.StaffContactVo;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @Api(value="物业员工模块")
 @RestController
 @RequestMapping(value = "/api/work/staff")
@@ -47,7 +45,7 @@ public class StaffController {
 	@RequestMapping(value="/getStaff", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<PropertyStaffVo> getStaff(@Valid @ModelAttribute StaffIdRo staffIdRo){
-		PropertyStaffVo propertyStaff = propertyStaffService.findPropertyStaffById(staffIdRo.getId());
+		PropertyStaffVo propertyStaff = propertyStaffService.findPropertyStaffById(staffIdRo.getStaffId());
 		return DataValue.success(propertyStaff);
 	}
 	
@@ -55,7 +53,7 @@ public class StaffController {
 	@RequestMapping(value="/getStaffArchive", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<StaffArchiveVo> getStaffArchive(@Valid @ModelAttribute StaffIdRo staffIdRo){
-		StaffArchiveVo staffArchive = propertyStaffService.findStaffArchByStaffId(staffIdRo.getId());
+		StaffArchiveVo staffArchive = propertyStaffService.findStaffArchByStaffId(staffIdRo.getStaffId());
 		return DataValue.success(staffArchive);
 	}
 	
@@ -63,7 +61,7 @@ public class StaffController {
 	@RequestMapping(value="/getCustomer", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<CustomerVo> getCustomer(@Valid @ModelAttribute StaffIdRo staffIdRo){
-		StaffArchiveVo staffArchive = propertyStaffService.findStaffArchByStaffId(staffIdRo.getId());
+		StaffArchiveVo staffArchive = propertyStaffService.findStaffArchByStaffId(staffIdRo.getStaffId());
 		CustomerVo customer = userService.getCustomerByGlobalId(staffArchive.getCustGlobalId());
 		return DataValue.success(customer);
 	}
@@ -111,7 +109,7 @@ public class StaffController {
 	public DataListValue<StaffContactVo> getStaffContact(@Valid @ModelAttribute StaffIdRo staffIdRo){
 		List<StaffContactVo> staffContactList = new ArrayList<StaffContactVo>();
 		//获取部门权限
-		List<PropertyDepartmentVo>  departmentVos = propertyStaffService.findStaffContactPrivilege(staffIdRo.getId());
+		List<PropertyDepartmentVo>  departmentVos = propertyStaffService.findStaffContactPrivilege(staffIdRo.getStaffId());
 		
 		for(PropertyDepartmentVo departmentVo : departmentVos){
 			StaffContactVo staffContactVo = new StaffContactVo();

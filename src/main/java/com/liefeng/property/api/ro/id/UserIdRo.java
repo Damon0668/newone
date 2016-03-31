@@ -17,7 +17,7 @@ public class UserIdRo extends BaseValue {
 
 	private static final long serialVersionUID = -8828334500023971126L;
 	
-	@ApiModelProperty(value="用户id", required=true)
+	@ApiModelProperty(value="用户ID", required=true)
 	@NotNull
 	private String userId;
 

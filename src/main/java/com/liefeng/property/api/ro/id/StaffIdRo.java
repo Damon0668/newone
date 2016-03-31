@@ -14,13 +14,13 @@ public class StaffIdRo extends BaseValue{
 	
 	@ApiModelProperty(value="员工ID", required=true)
 	@NotNull
-	private String id;
+	private String staffId;
 
-	public String getId() {
-		return id;
+	public String getStaffId() {
+		return staffId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setStaffId(String staffId) {
+		this.staffId = staffId;
 	}
 }

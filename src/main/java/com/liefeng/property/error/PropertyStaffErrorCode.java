@@ -36,9 +36,14 @@ public enum PropertyStaffErrorCode implements IErrorCode{
 	
 	
 	/**
+	 * 手机已存在
+	 */
+	MOBILE_HAS_EXIST("手机已存在"),
+	
+	/**
 	 * 手机号不匹配
 	 */
-	Mobile_NOT_MATCHING("手机号不匹配"),
+	MOBILE_NOT_MATCHING("手机号不匹配"),
 	
 	;
 	

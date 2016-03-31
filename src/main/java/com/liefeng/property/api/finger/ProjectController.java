@@ -41,7 +41,7 @@ public class ProjectController {
 	@RequestMapping(value="/getProject", method=RequestMethod.GET)
 	@ResponseBody
 	public DataValue<ProjectVo> getProject(@Valid @ModelAttribute ProjectIdRo id){
-		ProjectVo project = projectService.findProjectById(id.getId());
+		ProjectVo project = projectService.findProjectById(id.getProjectId());
 		return DataValue.success(project);
 	}
 
@@ -49,7 +49,7 @@ public class ProjectController {
 	@RequestMapping(value="/getHomeImages", method=RequestMethod.GET)
 	@ResponseBody
 	public DataListValue<AppHomeImageVo> getHomeImages(@Valid @ModelAttribute ProjectIdRo id){
-		return DataListValue.success(projectService.findAppHomeImages(id.getId(), 1, Integer.MAX_VALUE).getDataList());
+		return DataListValue.success(projectService.findAppHomeImages(id.getProjectId(), 1, Integer.MAX_VALUE).getDataList());
 	}
 	
 	/**
@@ -85,7 +85,7 @@ public class ProjectController {
 	@RequestMapping(value="/getNotice", method=RequestMethod.GET)
 	@ResponseBody
 	public DataValue<NoticeVo> getNotice(@Valid @ModelAttribute NoticeIdRo noticeIdRo){
-		NoticeVo noticeVo = workbenchService.getNoticeById(noticeIdRo.getId());
+		NoticeVo noticeVo = workbenchService.getNoticeById(noticeIdRo.getNoticeId());
 		return DataValue.success(noticeVo);
 	}
 }
