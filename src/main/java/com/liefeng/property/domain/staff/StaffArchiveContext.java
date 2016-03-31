@@ -155,19 +155,23 @@ public class StaffArchiveContext {
 	 */
 	public void update() {
 		if(staffArchive != null && ValidateHelper.isNotEmptyString(staffArchive.getId())) {
+			
 			logger.info("update id = {}", staffArchive.getId());
+			
+			String oemCode = ContextManager.getInstance().getOemCode();
+			
+			StaffArchivePo staffArchiveByPhone = staffArchiveRepository.findByPhoneAndOemCode(staffArchive.getPhone(), oemCode);
+			
+			if(staffArchiveByPhone != null && !staffArchive.getId().equals(staffArchiveByPhone.getId())){
+				throw new PropertyException(PropertyStaffErrorCode.MOBILE_HAS_EXIST);
+			}
+			
 			StaffArchivePo staffArchivePo = staffArchiveRepository.findOne(staffArchive.getId());
+			
 			if(staffArchivePo != null){
+				
 				MyBeanUtil.copyBeanNotNull2Bean(staffArchive, staffArchivePo);
 				
-				String oemCode = ContextManager.getInstance().getOemCode();
-				
-				StaffArchivePo staffArchiveByPhone = staffArchiveRepository.findByPhoneAndOemCode(staffArchive.getPhone(), oemCode);
-				
-				if(!staffArchivePo.getId().equals(staffArchiveByPhone.getId())){
-					throw new PropertyException(PropertyStaffErrorCode.MOBILE_HAS_EXIST);
-				}
-
 				staffArchiveRepository.save(staffArchivePo);
 			}
 			
