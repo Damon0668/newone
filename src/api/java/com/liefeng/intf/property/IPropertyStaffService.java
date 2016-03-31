@@ -137,6 +137,13 @@ public interface IPropertyStaffService {
 	public String findStaffMsgClientId(String staffId);
 	
 	/**
+	 * 查询员工的个推ID列表
+	 * @param staffId 员工ID列表
+	 * @return
+	 */
+	public List<String> findStaffMsgClientIds(List<String> staffIds);
+	
+	/**
 	 * 设置员工个推ID
 	 * @param staffId 员工ID
 	 * @param clientId 个推ID
