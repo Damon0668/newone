@@ -124,4 +124,12 @@ public class PropertyStaffServiceTest {
 	public void getClientId(){
 		System.out.println(propertyStaffService.findStaffMsgClientId("1"));
 	}
+	
+	@Test
+	public void getClientIds(){
+		List<String> staffIds = new ArrayList<String>();
+		staffIds.add("1");
+		staffIds.add("40282081531cf49b01531d3f4e1c0006");
+		System.out.println(propertyStaffService.findStaffMsgClientIds(staffIds));
+	}
 }

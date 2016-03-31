@@ -1,6 +1,8 @@
 package com.liefeng.property.domain.staff;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -104,5 +106,15 @@ public class StaffMsgClientContext {
 			}
 		}
 		return staffMsgClient;
+	}
+	
+	public List<StaffMsgClientVo> findStaffMsgClients(List<String> staffIds){
+		if(ValidateHelper.isNotEmptyCollection(staffIds)){
+			List<StaffMsgClientPo> staffMsgClientList = staffMsgClientRepository.findByStaffIdIn(staffIds);
+			if(ValidateHelper.isNotEmptyCollection(staffMsgClientList)){
+				return MyBeanUtil.createList(staffMsgClientList, StaffMsgClientVo.class);
+			}
+		}
+		return new ArrayList<StaffMsgClientVo>();
 	}
 }
