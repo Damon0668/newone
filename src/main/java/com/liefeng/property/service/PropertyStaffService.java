@@ -39,7 +39,6 @@ import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffArchiveVo;
 import com.liefeng.property.vo.staff.StaffAttachVo;
 import com.liefeng.property.vo.staff.StaffContactPrivilegeVo;
-import com.liefeng.property.vo.staff.StaffContactVo;
 import com.liefeng.property.vo.staff.StaffMsgClientVo;
 
 /**
@@ -374,5 +373,17 @@ public class PropertyStaffService implements IPropertyStaffService {
 	@Override
 	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId){
 		return PropertyStaffContext.build().getDepartmentDirectorList(projectId);
+	}
+
+	@Override
+	public List<String> findStaffMsgClientIds(List<String> staffIds) {
+		List<StaffMsgClientVo> staffMsgClientList = StaffMsgClientContext.build().findStaffMsgClients(staffIds);
+		List<String> clientIds = new ArrayList<String>();
+		if(ValidateHelper.isNotEmptyCollection(staffMsgClientList)){
+			for (StaffMsgClientVo staffMsgClientVo : staffMsgClientList) {
+				clientIds.add(staffMsgClientVo.getClientId());
+			}
+		}
+		return clientIds;
 	}
 }
