@@ -27,10 +27,10 @@ public class ProjectController {
 	@Autowired
 	private IProjectService projectService;
 	
-	@ApiOperation(value="获取小区信息列表")
-	@RequestMapping(value="/getProjectList", method=RequestMethod.GET)
+	@ApiOperation(value="获取员工管理的小区列表")
+	@RequestMapping(value="/getProjectByStaff", method=RequestMethod.GET)
 	@ResponseBody
-	public DataListValue<ProjectVo> getProjectList(@Valid @ModelAttribute StaffIdRo staffId){
+	public DataListValue<ProjectVo> getProjectByStaff(@Valid @ModelAttribute StaffIdRo staffId){
 		List<ProjectVo> projects = projectService.findProjectByStaffId(staffId.getStaffId());
 		return DataListValue.success(projects);
 	}
