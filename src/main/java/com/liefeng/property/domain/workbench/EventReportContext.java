@@ -361,7 +361,7 @@ public class EventReportContext {
 	public List<EventReportVo> getHistoryEventReportOfPhone(String phone){
 		List<EventReportVo> eventReportVoList = null;
 		if(ValidateHelper.isNotEmptyString(phone)){
-			List<EventReportPo> eventReportPoList = eventReportRepository.findByPhone(phone);
+			List<EventReportPo> eventReportPoList = eventReportRepository.findByPhoneAndOemCode(phone, ContextManager.getInstance().getOemCode());
 			
 			eventReportVoList = MyBeanUtil.createList(eventReportPoList, EventReportVo.class);
 		}

@@ -104,7 +104,7 @@ public class StaffController {
 	 * @date 2016年3月28日 上午10:58:44
 	 */
 	@ApiOperation(value="获取员工通讯录", notes="员工通讯录")
-	@RequestMapping(value="/getStaffContact", method=RequestMethod.POST)
+	@RequestMapping(value="/getStaffContact", method=RequestMethod.GET)
 	@ResponseBody
 	public DataListValue<StaffContactVo> getStaffContact(@Valid @ModelAttribute StaffIdRo staffIdRo){
 		List<StaffContactVo> staffContactList = new ArrayList<StaffContactVo>();

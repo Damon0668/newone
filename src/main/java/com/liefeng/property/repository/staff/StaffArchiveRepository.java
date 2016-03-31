@@ -20,4 +20,11 @@ public interface StaffArchiveRepository extends JpaRepository<StaffArchivePo, St
 	 * @return
 	 */
 	public StaffArchivePo findByStaffId(String staffId);
+	
+	/**
+	 * 根据手机号查询员工档案
+	 * @param phone
+	 * @return
+	 */
+	public StaffArchivePo findByPhoneAndOemCode(String phone,String oemCode);
 }

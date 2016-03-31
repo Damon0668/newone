@@ -1410,11 +1410,11 @@ public class WorkbenchService implements IWorkbenchService {
 			EventProcessContext eventProcessContext = EventProcessContext
 					.build();
 
+			boolean bool = false;
 			// app的“已派工”
-			EventProcessVo eventProcessVo = eventProcessContext
-					.getEventProcess(eventReportVo.getId(),
-							WorkbenchConstants.EventProcessStatus.DISPATCHING);
-			if (eventProcessVo != null) {
+			EventProcessVo eventProcessVo = eventProcessContext.getEventProcess(eventReportVo.getId(), WorkbenchConstants.EventProcessStatus.DISPATCHING);
+			if (eventProcessVo != null && ValidateHelper.isNotEmptyString(eventProcessVo.getNextAccepterId())) {
+				bool = true;
 				eventReportVo.setWorkTime(eventProcessVo.getAcceptTime());
 				PropertyStaffDetailInfoVo propertyStaffVo = propertyStaffService
 						.findStaffDetailInfo(eventProcessVo.getNextAccepterId());
@@ -1424,20 +1424,16 @@ public class WorkbenchService implements IWorkbenchService {
 					eventReportVo.setWorkerPhone(propertyStaffVo
 							.getStaffArchiveVo().getPhone());
 				}
-				eventReportVo
-						.setStatus(WorkbenchConstants.EventStatusAPP.ALREADYWORKERS);
+				eventReportVo.setStatus(WorkbenchConstants.EventStatusAPP.ALREADYWORKERS);
 			}
 
 			// app的“未评价”
-			EventProcessVo eventProcessVo2 = eventProcessContext
-					.getEventProcess(eventReportVo.getId(),
-							WorkbenchConstants.EventProcessStatus.AUDIT);
-			if (eventProcessVo2 != null) {
+			EventProcessVo eventProcessVo2 = eventProcessContext.getEventProcess(eventReportVo.getId(), WorkbenchConstants.EventProcessStatus.AUDIT);
+			if (bool && eventProcessVo2 != null && ValidateHelper.isNotEmptyString(eventProcessVo2.getNextAccepterId()) ) {
 				eventReportVo.setOverTime(eventProcessVo2.getAcceptTime());
 				eventReportVo.setRemark(eventProcessVo2.getResult());
 				eventReportVo.setRebackPic(eventProcessVo2.getPicUrls());
-				eventReportVo
-						.setStatus(WorkbenchConstants.EventStatusAPP.NOTEVALUATE);
+				eventReportVo.setStatus(WorkbenchConstants.EventStatusAPP.NOTEVALUATE);
 			}
 
 			// app的“完成”
