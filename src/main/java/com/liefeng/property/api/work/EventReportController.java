@@ -265,9 +265,7 @@ public class EventReportController {
 	@ResponseBody
 	public DataListValue<StaffContactVo> getDispatchingWorker(@Valid @ModelAttribute DispatchingWorkerRo dispatchingWorkerRo){
 		List<StaffContactVo> contactVos = workbenchService.findDispatchingWorker(dispatchingWorkerRo.getProjectId(),dispatchingWorkerRo.getStaffId());
-		DataListValue<StaffContactVo> dataListValue = new DataListValue<StaffContactVo>();
-		dataListValue.setDataList(contactVos);
-		return  dataListValue;
+		return  DataListValue.success(contactVos);
 	}
 	
 	@ApiOperation(value="获取默认办理人")
@@ -295,9 +293,7 @@ public class EventReportController {
 			
 			contactVos.add(contactVo);
 		}
-		DataListValue<StaffContactVo> dataListValue = new DataListValue<StaffContactVo>();
-		dataListValue.setDataList(contactVos);
-		return dataListValue;
+		return DataListValue.success(contactVos);
 	}
 	
 	@ApiOperation(value="获取某个步骤的执行人的部门所有人")
@@ -307,9 +303,7 @@ public class EventReportController {
 		PropertyStaffVo propertyStaffVo = workbenchService.getTaskAccepter(defaultAccepterRo.getEventId(), defaultAccepterRo.getTaskName());
 		EventReportVo eventReportVo = workbenchService.getEventReport(defaultAccepterRo.getEventId());
 		List<StaffContactVo> contactVos = workbenchService.findDispatchingWorker(eventReportVo.getProjectId(),propertyStaffVo.getId());
-		DataListValue<StaffContactVo> dataListValue = new DataListValue<StaffContactVo>();
-		dataListValue.setDataList(contactVos);
-		return  dataListValue;
+		return  DataListValue.success(contactVos);
 	}
 	
 }

@@ -739,18 +739,17 @@ public class FeeService implements IFeeService {
 					logger.info("使用阶梯计算");
 					price = LadderFeeSettingVo.getLadder1Price();
 					// 第一阶
-					if (meterRecordVo.getUseAmount() > LadderFeeSettingVo
+					if (meterRecordVo.getUseAmount() >= LadderFeeSettingVo
 							.getLadder1()) {
 						sum += LadderFeeSettingVo.getLadder1()
 								* LadderFeeSettingVo.getLadder1Price();
 					} else {
 						sum += meterRecordVo.getUseAmount()
 								* LadderFeeSettingVo.getLadder1Price();
-						;
 					}
 
 					// 第二阶
-					if (meterRecordVo.getUseAmount() > LadderFeeSettingVo
+					if (meterRecordVo.getUseAmount() >= LadderFeeSettingVo
 							.getLadder2()) {
 						sum += (LadderFeeSettingVo.getLadder2() - LadderFeeSettingVo
 								.getLadder1())
