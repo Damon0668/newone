@@ -73,9 +73,9 @@ public class FeeService implements IFeeService {
 	static {
 		String activeProfile = CommonUtil.getActiveProfile();
 		if (SystemConstants.Profile.TEST.equalsIgnoreCase(activeProfile)) {
-			feePeriod = new Date(); //为了方便测试，测试环境定时任务跑本月的费用
+			feePeriod = TimeUtil.formatDate(new Date(), TimeUtil.PATTERN_1); //为了方便测试，测试环境定时任务跑本月的费用
 		} else { //开发和生产环境跑上个月的费用
-			feePeriod = TimeUtil.getDayBeforeByMonth(new Date(), 1);
+			feePeriod = TimeUtil.formatDate(TimeUtil.getDayBeforeByMonth(new Date(), 1), TimeUtil.PATTERN_1);
 		}
 	}
 	
