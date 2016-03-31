@@ -275,9 +275,9 @@ public class EventReportController {
 	}
 	
 	@ApiOperation(value="获取默认办理人")
-	@RequestMapping(value="/getDefaultAccepter", method=RequestMethod.GET)
+	@RequestMapping(value="/getDefaultAcceptor", method=RequestMethod.GET)
 	@ResponseBody
-	public PropertyStaffVo getDefaultAccepter(@Valid @ModelAttribute DefaultAccepterRo defaultAccepterRo ){
+	public PropertyStaffVo getDefaultAcceptor(@Valid @ModelAttribute DefaultAccepterRo defaultAccepterRo ){
 		PropertyStaffVo propertyStaffVo = workbenchService.getTaskAccepter(defaultAccepterRo.getEventId(), defaultAccepterRo.getTaskName());
 		return  propertyStaffVo;
 	}
@@ -286,7 +286,7 @@ public class EventReportController {
 	@RequestMapping(value="/getDepartmentDirectorList", method=RequestMethod.GET)
 	@ResponseBody
 	public DataListValue<StaffContactVo> getDepartmentDirectorList(@Valid @ModelAttribute ProjectIdRo projectIdRo ){
-		List<PropertyStaffVo> propertyStaffVos = workbenchService.getDepartmentDirectorList(projectIdRo.getProejctId());
+		List<PropertyStaffVo> propertyStaffVos = workbenchService.getDepartmentDirectorList(projectIdRo.getProjectId());
 		List<StaffContactVo> contactVos = new ArrayList<StaffContactVo>();
 		for (PropertyStaffVo propertyStaffVo : propertyStaffVos) {
 			StaffContactVo contactVo = new StaffContactVo();
