@@ -31,7 +31,7 @@ public class ProjectController {
 	@RequestMapping(value="/getProjectList", method=RequestMethod.GET)
 	@ResponseBody
 	public DataListValue<ProjectVo> getProjectList(@Valid @ModelAttribute StaffIdRo staffId){
-		List<ProjectVo> projects = projectService.findProjectByStaffId(staffId.getId());
+		List<ProjectVo> projects = projectService.findProjectByStaffId(staffId.getStaffId());
 		return DataListValue.success(projects);
 	}
 

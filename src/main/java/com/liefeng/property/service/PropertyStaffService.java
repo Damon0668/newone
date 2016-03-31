@@ -377,13 +377,6 @@ public class PropertyStaffService implements IPropertyStaffService {
 
 	@Override
 	public List<String> findStaffMsgClientIds(List<String> staffIds) {
-		List<StaffMsgClientVo> staffMsgClientList = StaffMsgClientContext.build().findStaffMsgClients(staffIds);
-		List<String> clientIds = new ArrayList<String>();
-		if(ValidateHelper.isNotEmptyCollection(staffMsgClientList)){
-			for (StaffMsgClientVo staffMsgClientVo : staffMsgClientList) {
-				clientIds.add(staffMsgClientVo.getClientId());
-			}
-		}
-		return clientIds;
+		return StaffMsgClientContext.build().findStaffMsgClients(staffIds);
 	}
 }

@@ -138,6 +138,10 @@ public class StaffArchiveContext {
 	 */
 	public void create() {
 		if(staffArchive != null) {
+			//校验手机是否存在
+			
+			isExistPhoneNum();
+			
 			staffArchive.setId(UUIDGenerator.generate());
 			staffArchive.setOemCode(ContextManager.getInstance().getOemCode());
 			StaffArchivePo staffArchivePo = MyBeanUtil.createBean(staffArchive, StaffArchivePo.class);
@@ -160,4 +164,10 @@ public class StaffArchiveContext {
 		}
 	}
 	
+	/**
+	 * 检查手机号是否已存在
+	 */
+	public void isExistPhoneNum(){
+		
+	}
 }

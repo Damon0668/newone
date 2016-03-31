@@ -19,15 +19,15 @@ public class NoticeIdRo extends BaseValue {
 	
 	@ApiModelProperty(value="通知主键【id】", required=true)
 	@NotNull
-	private String id;
+	private String noticeId;
 
-	public String getId() {
-		return id;
+	public String getNoticeId() {
+		return noticeId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setNoticeId(String noticeId) {
+		this.noticeId = noticeId;
 	}
-	
+
 	
 }

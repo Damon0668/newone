@@ -280,7 +280,7 @@ public class EventReportController {
 	@RequestMapping(value="/getDepartmentDirectorList", method=RequestMethod.GET)
 	@ResponseBody
 	public DataListValue<StaffContactVo> getDepartmentDirectorList(@Valid @ModelAttribute ProjectIdRo projectIdRo ){
-		List<PropertyStaffVo> propertyStaffVos = workbenchService.getDepartmentDirectorList(projectIdRo.getId());
+		List<PropertyStaffVo> propertyStaffVos = workbenchService.getDepartmentDirectorList(projectIdRo.getProejctId());
 		List<StaffContactVo> contactVos = new ArrayList<StaffContactVo>();
 		for (PropertyStaffVo propertyStaffVo : propertyStaffVos) {
 			StaffContactVo contactVo = new StaffContactVo();
