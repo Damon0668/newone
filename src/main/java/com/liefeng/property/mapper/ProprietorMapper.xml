@@ -35,6 +35,10 @@
 	    AND a.project_id =  #{extra.projectId}
 	</if>
 	
+	<if test="extra.projectIds != null and extra.projectIds != ''">
+		AND a.project_id IN  ${extra.projectIds}
+	</if>
+	
 	<if test="extra.projectName != null and extra.projectName != ''" >
 	    AND c.full_name =  #{extra.projectName}
 	</if>

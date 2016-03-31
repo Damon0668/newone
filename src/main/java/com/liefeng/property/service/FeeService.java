@@ -11,9 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.liefeng.common.util.CommonUtil;
 import com.liefeng.common.util.TimeUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.constant.SystemConstants;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
@@ -62,6 +64,20 @@ import com.liefeng.property.vo.project.ProjectBuildingVo;
 public class FeeService implements IFeeService {
 
 	private static Logger logger = LoggerFactory.getLogger(FeeService.class);
+	
+	/**
+	 * 定时任务跑的费用期
+	 */
+	private static Date feePeriod;
+	
+	static {
+		String activeProfile = CommonUtil.getActiveProfile();
+		if (SystemConstants.Profile.TEST.equalsIgnoreCase(activeProfile)) {
+			feePeriod = new Date(); //为了方便测试，测试环境定时任务跑本月的费用
+		} else { //开发和生产环境跑上个月的费用
+			feePeriod = TimeUtil.getDayBeforeByMonth(new Date(), 1);
+		}
+	}
 	
 	@Autowired
 	private IHouseholdService householdService;
@@ -273,7 +289,7 @@ public class FeeService implements IFeeService {
 		try {
 
 			// 上个月日期
-			Date preDate = TimeUtil.getDayBeforeByMonth(new Date(), 1);
+			Date preDate = feePeriod;
 			ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext
 					.build();
 			List<ProprietorHouseVo> proprietorHouseVos = proprietorHouseContext
@@ -364,7 +380,7 @@ public class FeeService implements IFeeService {
 	public void createMaintenanceFee(String projectId) {
 		try {
 			// 上个月日期
-			Date preDate = TimeUtil.getDayBeforeByMonth(new Date(), 1);
+			Date preDate = feePeriod;
 			ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext
 					.build();
 			List<ProprietorHouseVo> proprietorHouseVos = proprietorHouseContext
@@ -456,7 +472,7 @@ public class FeeService implements IFeeService {
 	public void createGarbageFee(String projectId) {
 		try {
 			// 上个月日期
-			Date preDate = TimeUtil.getDayBeforeByMonth(new Date(), 1);
+			Date preDate = feePeriod;
 			ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext
 					.build();
 			List<ProprietorHouseVo> proprietorHouseVos = proprietorHouseContext
@@ -550,7 +566,7 @@ public class FeeService implements IFeeService {
 	public void createPolluFee(String projectId) {
 		try {
 			// 上个月日期
-			Date preDate = TimeUtil.getDayBeforeByMonth(new Date(), 1);
+			Date preDate = feePeriod;
 
 			ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext
 					.build();
@@ -562,7 +578,7 @@ public class FeeService implements IFeeService {
 						.loadByProjectId(projectId);
 				FeeSettingVo feeSettingVo = feeSettingContext.findChargeable(
 						proprietorHouseVo.getUseType(),
-						FeeConstants.FeeSetting.FEE_GARBAGE);
+						FeeConstants.FeeSetting.FEE_POLLU);
 
 				MeterRecordContext meterRecordContext = MeterRecordContext
 						.loadByProjectId(proprietorHouseVo.getProjectId());
@@ -578,7 +594,7 @@ public class FeeService implements IFeeService {
 						.loadByProjectId(proprietorHouseVo.getProjectId());
 				FeeItemVo feeItem = feeItemContext.getPreFeeItem(
 						proprietorHouseVo.getHouseNum(),
-						FeeConstants.FeeSetting.FEE_GARBAGE);
+						FeeConstants.FeeSetting.FEE_POLLU);
 				if (feeItem != null) {
 					logger.info("已经存在该费用项");
 					return;
@@ -667,7 +683,7 @@ public class FeeService implements IFeeService {
 
 		try {
 			// 上个月日期
-			Date preDate = TimeUtil.getDayBeforeByMonth(new Date(), 1);
+			Date preDate = feePeriod;
 			ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext
 					.build();
 			List<ProprietorHouseVo> proprietorHouseVos = proprietorHouseContext
@@ -723,18 +739,17 @@ public class FeeService implements IFeeService {
 					logger.info("使用阶梯计算");
 					price = LadderFeeSettingVo.getLadder1Price();
 					// 第一阶
-					if (meterRecordVo.getUseAmount() > LadderFeeSettingVo
+					if (meterRecordVo.getUseAmount() >= LadderFeeSettingVo
 							.getLadder1()) {
 						sum += LadderFeeSettingVo.getLadder1()
 								* LadderFeeSettingVo.getLadder1Price();
 					} else {
 						sum += meterRecordVo.getUseAmount()
 								* LadderFeeSettingVo.getLadder1Price();
-						;
 					}
 
 					// 第二阶
-					if (meterRecordVo.getUseAmount() > LadderFeeSettingVo
+					if (meterRecordVo.getUseAmount() >= LadderFeeSettingVo
 							.getLadder2()) {
 						sum += (LadderFeeSettingVo.getLadder2() - LadderFeeSettingVo
 								.getLadder1())
@@ -829,7 +844,7 @@ public class FeeService implements IFeeService {
 		}
 		try {
 			// 上个月日期
-			Date preDate = TimeUtil.getDayBeforeByMonth(new Date(), 1);
+			Date preDate = feePeriod;
 
 			FeeSettingContext feeSettingContext = FeeSettingContext
 					.loadByProjectId(projectId);
@@ -947,7 +962,7 @@ public class FeeService implements IFeeService {
 		
 		try{
 			// 上个月日期
-			Date preDate = TimeUtil.getDayBeforeByMonth(new Date(), 1);
+			Date preDate = feePeriod;
 			
 			ParkingContext parkingContext = ParkingContext.build();
 			ParkingBo parkingBo = new ParkingBo();

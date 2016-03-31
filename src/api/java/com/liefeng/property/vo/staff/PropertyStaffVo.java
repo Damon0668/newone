@@ -25,7 +25,7 @@ public class PropertyStaffVo extends BaseValue {
 	/**
 	 * 主键
 	 */
-	@ApiModelProperty(value="员工ID")
+	@ApiModelProperty(value="员工ID（=openId）")
 	private String id;
 	
 	/**
@@ -62,7 +62,8 @@ public class PropertyStaffVo extends BaseValue {
 	 * 在职状态
 	 * 1：在职；2：离职
 	 */
-	@ApiModelProperty(value="在职状态[1：在职；2：离职]")
+	@Dict(group = "WORK_STATUS")
+	@ApiModelProperty(value = "在职状态[1：在职；2：离职]")
 	private String workStatus;
 	
 	/**

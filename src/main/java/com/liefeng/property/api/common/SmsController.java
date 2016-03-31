@@ -1,11 +1,10 @@
 package com.liefeng.property.api.common;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.service.msg.ISmsService;
@@ -23,6 +23,7 @@ import com.liefeng.property.api.ro.common.VerifyCodeRo;
 import com.liefeng.property.api.ro.common.VerifyRo;
 import com.liefeng.property.api.ro.finger.sms.SmsSendRo;
 import com.liefeng.service.vo.SMSMsgVo;
+import com.liefeng.service.vo.SmsTemplateVo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,9 +32,7 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping(value = "/api/common/sms")
 public class SmsController {
-	
-	private static Logger logger = LoggerFactory.getLogger(SmsController.class);
-	
+		
 	@Autowired
 	private ISmsService smsService;
 	
@@ -62,5 +61,13 @@ public class SmsController {
 		smsMsg.setData(data);
 		smsService.sendSMSMsg(smsMsg);
 		return ReturnValue.success();
+	}
+	
+	@ApiOperation(value="获取模板列表", notes="获取模板列表")
+	@RequestMapping(value="/getTemplates", method=RequestMethod.GET)
+	@ResponseBody
+	public DataListValue<SmsTemplateVo> getTemplates(){
+		List<SmsTemplateVo> list = smsService.getAllTemplates();
+		return DataListValue.success(list);
 	}
 }

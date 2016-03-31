@@ -237,12 +237,6 @@ public interface IProjectService {
 	public ProprietorSingleHouseVo getSingleHouse(String houseId);
 
 	/**
-	 * 查询所有项目(不包含OEM)
-	 * @return
-	 */
-	public List<ProjectVo> findAll();
-	
-	/**
 	 * 保存小区通告
 	 * @param projectNotice 小区通告值对象
 	 * @return 小区通告信息
@@ -328,5 +322,11 @@ public interface IProjectService {
 	 * @return 房产合计数据
 	 */
 	public HouseGraphVo getHouseGraphCount(HouseBo param);
+	
+	/**
+	 * 获取数据库中所有项目
+	 * @return
+	 */
+	public List<ProjectVo> findAllProject();
 	
 }

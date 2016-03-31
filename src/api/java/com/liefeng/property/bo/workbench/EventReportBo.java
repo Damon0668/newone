@@ -1,6 +1,7 @@
 package com.liefeng.property.bo.workbench;
 
 import java.util.Date;
+import java.util.List;
 
 import com.liefeng.core.entity.BaseValue;
 
@@ -102,6 +103,11 @@ public class EventReportBo  extends BaseValue {
 	 * oem
 	 */
 	private String oemCode;
+	
+	/**
+	 * 要查询的项目
+	 */
+	private List<String> projectIds;
 	
 	public String getProjectId() {
 		return projectId;
@@ -246,4 +252,13 @@ public class EventReportBo  extends BaseValue {
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
 	}
+
+	public List<String> getProjectIds() {
+		return projectIds;
+	}
+
+	public void setProjectIds(List<String> projectIds) {
+		this.projectIds = projectIds;
+	}
+
 }

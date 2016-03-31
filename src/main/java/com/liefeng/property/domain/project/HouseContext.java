@@ -23,10 +23,10 @@ import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.po.project.HousePo;
 import com.liefeng.property.repository.mybatis.HouseQueryRepository;
 import com.liefeng.property.repository.project.HouseRepository;
+import com.liefeng.property.vo.api.UserHouseVo;
 import com.liefeng.property.vo.household.HouseGraphVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.project.HouseVo;
-import com.liefeng.property.vo.project.ProjectVo;
 
 /**
  * 房产信息领域模型
@@ -254,15 +254,6 @@ public class HouseContext {
 	}
 	
 	/**
-	 * 查询所有项目
-	 * @return
-	 */
-	public List<ProjectVo> findAll() {
-		List<HousePo> projectVos = houseRepository.findAll();
-		return MyBeanUtil.createList(projectVos, ProjectVo.class);
-	}
-	
-	/**
 	 * 获取房产图形中某楼栋中所有房子
 	 * @param params 查询过滤参数
 	 * @return 房子列表
@@ -300,6 +291,17 @@ public class HouseContext {
 		return houseGraph;
 	}
 	
+	/**
+	 * 根据登陆ID和类型查询用户房产
+	 * @param loginId 用户登陆ID
+	 * @param type 类型。1:业主，2:住户
+	 * @return 房产列表
+	 */
+	public List<UserHouseVo> getUserHouses(String loginId, String type) {
+		String oemCode = ContextManager.getInstance().getOemCode();
+		List<UserHouseVo> dataList = houseQueryRepository.queryUserHouses(loginId, type, oemCode);
+		return dataList;
+	}
 
 	protected String getProjectId() {
 		return projectId;
@@ -316,7 +318,4 @@ public class HouseContext {
 	protected void setBuildingId(String buildingId) {
 		this.buildingId = buildingId;
 	}
-
-
-	
 }

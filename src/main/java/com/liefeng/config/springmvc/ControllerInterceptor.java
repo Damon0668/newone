@@ -8,8 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.liefeng.common.util.CommonUtil;
+import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.intf.service.cache.IRedisService;
+import com.liefeng.property.constant.SysConstants;
 
 public class ControllerInterceptor implements HandlerInterceptor{
 	
@@ -18,23 +22,54 @@ public class ControllerInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		IRedisService redisService = SpringBeanUtil.getBean(IRedisService.class);
 		
-		String auth = request.getHeader("Authorization");
+		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
 		
-		String remoteAddr = request.getRemoteAddr();
+		String openId = request.getHeader("openId");
+
+		String env = CommonUtil.getActiveProfile().toLowerCase();
 		
-		logger.info("ControllerInterceptor auth = {}, remoteAddr = {}", auth, remoteAddr);
-		
-		if(ValidateHelper.isEmptyString(auth)){
-			auth = "hzwy_property";
-			//return false;
+		//开发环境和测试环境设置。
+		if("test".equals(env) || "dev".equals(env)){
+			if(ValidateHelper.isEmptyString(openId)){
+				String oemCode = (String) redisService.getValue("openId_" + env);
+				
+				if(ValidateHelper.isNotEmptyString(oemCode)){
+					ContextManager.getInstance().setOemCode(oemCode);
+				}else{
+					if("test".equals(env)){
+						redisService.setValue("openId_" + env, "hzwy_property");
+					}
+					
+					if("dev".equals(env)){
+						redisService.setValue("openId_" + env, "property");
+					}
+				}
+				return Boolean.TRUE;
+			}
 		}
 		
-		String oemCode = auth;
+		if(ValidateHelper.isEmptyString(openId)){
+			return Boolean.FALSE;
+		}
 		
+		if("default".equals(openId)){
+			ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
+			return Boolean.TRUE;
+		}
+		
+		String oemCode = (String) redisService.getValue("openId_" + openId);
+		
+		if(ValidateHelper.isEmptyString(oemCode)){
+			return Boolean.FALSE;
+		}
+		
+		logger.info("ControllerInterceptor openId = {}, oemCode = {}", openId, oemCode);
+			
 		ContextManager.getInstance().setOemCode(oemCode);
-
-		return true;//只有返回true才会继续向下执行，返回false取消当前请求
+			
+		return Boolean.TRUE;//只有返回true才会继续向下执行，返回false取消当前请求
 	}
 
 	@Override

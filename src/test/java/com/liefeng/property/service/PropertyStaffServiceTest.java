@@ -28,10 +28,11 @@ import com.liefeng.property.vo.staff.PropertyStaffVo;
  * @date 2016年2月22日
  */
 @ActiveProfiles("dev")
+@WebAppConfiguration 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@WebAppConfiguration 
 public class PropertyStaffServiceTest {
+	
 	@Autowired
 	private IPropertyStaffService propertyStaffService;
 	

@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.access.QueryFilter;
+import org.snaker.engine.entity.HistoryTask;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.user.IUserService;
+import com.liefeng.intf.property.IProjectService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.intf.service.msg.IPushMsgService;
@@ -38,7 +40,6 @@ import com.liefeng.property.bo.workbench.NoticeBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
-import com.liefeng.property.constant.WorkbenchConstants.EventReport;
 import com.liefeng.property.domain.workbench.EventAccepterEvalContext;
 import com.liefeng.property.domain.workbench.EventProcAttachContext;
 import com.liefeng.property.domain.workbench.EventProcessContext;
@@ -56,8 +57,10 @@ import com.liefeng.property.domain.workbench.WebsiteMsgPrivilegeContext;
 import com.liefeng.property.error.WorkbenchErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.exception.WorkbenchException;
+import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.property.vo.staff.StaffContactVo;
 import com.liefeng.property.vo.workbench.EventAccepterEvalVo;
 import com.liefeng.property.vo.workbench.EventProcAttachVo;
 import com.liefeng.property.vo.workbench.EventProcessVo;
@@ -98,7 +101,10 @@ public class WorkbenchService implements IWorkbenchService {
 
 	@Autowired
 	private IPropertyStaffService propertyStaffService;
-
+	
+	@Autowired
+	private IProjectService projectService;
+	
 	@Override
 	public TaskVo findTaskById(String taskId) {
 		TaskContext taskContext = TaskContext.loadById(taskId);
@@ -675,6 +681,10 @@ public class WorkbenchService implements IWorkbenchService {
 	public DataPageValue<EventReportVo> listEventReport(
 			EventReportBo eventReportBo, Integer page, Integer size) {
 		EventReportContext eventReportContext = EventReportContext.build();
+		
+		if(eventReportBo.getActor() != null){
+			eventReportBo.setProjectIds(projectService.findProjectIdByStaffId(eventReportBo.getActor()));
+		}
 		return eventReportContext.list(eventReportBo, page, size);
 	}
 
@@ -1016,9 +1026,9 @@ public class WorkbenchService implements IWorkbenchService {
 
 	// 当前活动的任务
 	@Override
-	public EventProcessVo getActiveEventProcess(String orderId, String staffid) {
+	public EventProcessVo getActiveEventProcess(String orderId, String staffId) {
 		EventProcessVo eventProcessVo = EventProcessContext.build().getActive(
-				orderId, staffid);
+				orderId, staffId);
 
 		// 设置附件
 		eventProcessVo.setAttachs(EventProcAttachContext.build()
@@ -1036,6 +1046,7 @@ public class WorkbenchService implements IWorkbenchService {
 					+ "--"
 					+ propertyStaffVo.getName());
 		}
+		
 		// 设置下一步办理人显示名称
 		eventProcessVo.setNextAccepterName(" ");
 		if (ValidateHelper.isNotEmptyString(eventProcessVo.getNextAccepterId()))
@@ -1363,6 +1374,7 @@ public class WorkbenchService implements IWorkbenchService {
 		eventReportVo.setOemCode(ContextManager.getInstance().getOemCode());
 		eventReportVo.setCreateTime(new Date());
 		eventReportVo.setReportTime(new Date());
+		eventReportVo.setEventType(WorkbenchConstants.EventReport.EVENTTYPE_NORMAL);
 
 		EventReportContext eventReportContext = EventReportContext
 				.build(eventReportVo);
@@ -1522,24 +1534,53 @@ public class WorkbenchService implements IWorkbenchService {
 	
 	/**
 	 * 获取领导派工 要选择的人员
+	 * @param projectId 项目id
+	 * @param staffId 当前登录人id
+	 * @return
 	 */
-	public List<PropertyStaffVo> findDispatchingWorker(String staffId){
+	@Override
+	public List<StaffContactVo> findDispatchingWorker(String projectId,String staffId){
 		
 		logger.info("领导派工获取人员，领导id为："+staffId);
 		
 		PropertyStaffVo propertyStaffVo= propertyStaffService.findPropertyStaffById(staffId);
 		
+		PropertyDepartmentVo departmentVo = propertyStaffService.getDepartment(propertyStaffVo.getDepartmentId());
+		
 		logger.info("领导派工获取人员，领导的部门id为："+propertyStaffVo.getDepartmentId());
 		
-		return propertyStaffService.findPropertyStaff(propertyStaffVo.getDepartmentId());
+		StaffContactVo  staffContactVo = new StaffContactVo();
+		staffContactVo.setDepartmentId(departmentVo.getId());
+		staffContactVo.setDepartmentName(departmentVo.getName());
+		staffContactVo.setStaffList(propertyStaffService.findPropertyStaff(propertyStaffVo.getDepartmentId(), projectId));
+		
+		List<StaffContactVo> contactVos = new ArrayList<StaffContactVo>(); 
+		contactVos.add(staffContactVo);
+		
+		return contactVos ;
 	}
 	
 	/**
-	 * 获取某个不步骤的办理人
+	 * 获取某个步骤的办理人
+	 * @param eventId 报事id
+	 * @param taskName 任务名称/步骤名称
+	 * @return
 	 */
+	@Override
 	public PropertyStaffVo getTaskAccepter(String eventId,String taskName){
 		EventReportVo eventReportVo = EventReportContext.loadById(eventId).get();
-		workflowService.getHistoryTasks(new QueryFilter().setOrderId(eventReportVo.getOrderId()).setName(taskName));
+		QueryFilter queryFilter = new QueryFilter().setOrderId(eventReportVo.getWfOrderId()).setName(taskName);
+		List<HistoryTask> historyTasks = workflowService.getHistoryTasks(queryFilter);
+		if( historyTasks != null && historyTasks.size() > 0 ){
+			EventProcessVo eventProcessVo = EventProcessContext.build().findByWfTaskId(historyTasks.get(0).getId());
+			return propertyStaffService.findPropertyStaffById(eventProcessVo.getCurrAccepterId());
+		}
 		return null;
 	}
+	
+	@Override
+	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId){
+		 return propertyStaffService.getDepartmentDirectorList(projectId);
+	}
+	
 }

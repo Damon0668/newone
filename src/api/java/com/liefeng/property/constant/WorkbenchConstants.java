@@ -248,6 +248,11 @@ public class WorkbenchConstants {
 		 * 用户评价
 		 */
 		public static final String RETURNVISIT_OWNER = "owner";
+		
+		/**
+		 * 报事方式 一般
+		 */
+		public static final String EVENTTYPE_NORMAL = "01";
 
 	}
 	

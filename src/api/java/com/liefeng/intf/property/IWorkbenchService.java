@@ -8,6 +8,7 @@ import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.bo.workbench.NoticeBo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.property.vo.staff.StaffContactVo;
 import com.liefeng.property.vo.workbench.EventAccepterEvalVo;
 import com.liefeng.property.vo.workbench.EventProcAttachVo;
 import com.liefeng.property.vo.workbench.EventProcessVo;
@@ -717,4 +718,27 @@ public interface IWorkbenchService {
 	 * @date 2016年3月25日 下午3:19:01
 	 */
 	public List<PropertyStaffVo> getStaffList(String eventId);
+
+	/**
+	 * 获取领导派工 要选择的人员
+	 * @param projectId 项目id
+	 * @param staffId 当前登录人id
+	 * @return
+	 */
+	public List<StaffContactVo> findDispatchingWorker(String projectId, String staffId);
+
+	/**
+	 * 获取某个步骤的办理人
+	 * @param eventId 报事id
+	 * @param taskName 任务名称/步骤名称
+	 * @return
+	 */
+	public PropertyStaffVo getTaskAccepter(String eventId, String taskName);
+
+	/**
+	 * 获取部门及部门负责人
+	 * @param projectId
+	 * @return
+	 */
+	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId);
 }

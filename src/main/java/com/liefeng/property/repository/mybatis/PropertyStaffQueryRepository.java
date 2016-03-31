@@ -35,4 +35,10 @@ public interface PropertyStaffQueryRepository extends BaseRepository<PropertySta
 	 * @return
 	 */
 	public PropertyStaffVo findPropertyStaffById4DP(String propertyStaffId);
+	
+	/**
+	 * 获取部门负责人信息列表
+	 * @param projectId
+	 */
+	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId);
 }

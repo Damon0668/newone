@@ -12,10 +12,14 @@ public class UpdatePwdRo extends BaseValue{
 
 	private static final long serialVersionUID = 729226010558913350L;
 	
+	@ApiModelProperty(value="员工账号",required=true)
+	@NotNull
+	private String account;
+	
 	@ApiModelProperty(value="手机号码",required=true)
 	@NotNull
 	private String mobile;
-	
+
 	@ApiModelProperty(value="密码",required=true)
 	@NotNull
 	private String password;
@@ -46,5 +50,13 @@ public class UpdatePwdRo extends BaseValue{
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public String getAccount() {
+		return account;
+	}
+
+	public void setAccount(String account) {
+		this.account = account;
 	}
 }

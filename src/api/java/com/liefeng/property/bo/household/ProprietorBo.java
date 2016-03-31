@@ -33,6 +33,11 @@ public class ProprietorBo extends BaseValue {
 	private String projectId;
 	
 	/**
+	 * 项目ID串
+	 */
+	private String projectIds;
+	
+	/**
 	 * 项目名称
 	 */
 	private String projectName;
@@ -92,6 +97,14 @@ public class ProprietorBo extends BaseValue {
 
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
+	}
+
+	public String getProjectIds() {
+		return projectIds;
+	}
+
+	public void setProjectIds(String projectIds) {
+		this.projectIds = projectIds;
 	}
 
 	public String getProjectName() {

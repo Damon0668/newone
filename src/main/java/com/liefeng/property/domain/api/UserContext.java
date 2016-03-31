@@ -44,7 +44,7 @@ public class UserContext {
 	 * 查找登陆用户信息
 	 * @return
 	 */
-	public LoginUserVo findLoginUser(){
-		return userQueryRepository.findLoginUser(custGlobalId);
+	public LoginUserVo findLoginUser(String oemCode){
+		return userQueryRepository.findLoginUser(custGlobalId,oemCode);
 	}
 }
