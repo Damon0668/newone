@@ -290,6 +290,7 @@ public class FeeService implements IFeeService {
 
 			// 上个月日期
 			Date preDate = feePeriod;
+			logger.info("《《《《《《《《费用生成期:"+preDate);
 			ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext
 					.build();
 			List<ProprietorHouseVo> proprietorHouseVos = proprietorHouseContext
@@ -381,6 +382,7 @@ public class FeeService implements IFeeService {
 		try {
 			// 上个月日期
 			Date preDate = feePeriod;
+			logger.info("《《《《《《《《费用生成期:"+preDate);
 			ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext
 					.build();
 			List<ProprietorHouseVo> proprietorHouseVos = proprietorHouseContext
@@ -473,6 +475,7 @@ public class FeeService implements IFeeService {
 		try {
 			// 上个月日期
 			Date preDate = feePeriod;
+			logger.info("《《《《《《《《费用生成期:"+preDate);
 			ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext
 					.build();
 			List<ProprietorHouseVo> proprietorHouseVos = proprietorHouseContext
@@ -567,7 +570,7 @@ public class FeeService implements IFeeService {
 		try {
 			// 上个月日期
 			Date preDate = feePeriod;
-
+			logger.info("《《《《《《《《费用生成期:"+preDate);
 			ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext
 					.build();
 			List<ProprietorHouseVo> proprietorHouseVos = proprietorHouseContext
@@ -684,6 +687,7 @@ public class FeeService implements IFeeService {
 		try {
 			// 上个月日期
 			Date preDate = feePeriod;
+			logger.info("《《《《《《《《费用生成期:"+preDate);
 			ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext
 					.build();
 			List<ProprietorHouseVo> proprietorHouseVos = proprietorHouseContext
@@ -845,7 +849,7 @@ public class FeeService implements IFeeService {
 		try {
 			// 上个月日期
 			Date preDate = feePeriod;
-
+			logger.info("《《《《《《《《费用生成期:"+preDate);
 			FeeSettingContext feeSettingContext = FeeSettingContext
 					.loadByProjectId(projectId);
 			FeeSettingVo feeSettingVo = feeSettingContext.findChargeable("1",
@@ -963,7 +967,7 @@ public class FeeService implements IFeeService {
 		try{
 			// 上个月日期
 			Date preDate = feePeriod;
-			
+			logger.info("《《《《《《《《费用生成期:"+preDate);
 			ParkingContext parkingContext = ParkingContext.build();
 			ParkingBo parkingBo = new ParkingBo();
 			parkingBo.setProjectId(projectId);

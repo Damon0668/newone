@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
@@ -189,7 +191,7 @@ public class EventReportController {
 	
 		
 		EventProcessVo eventProcessVo = workbenchService.getActiveEventProcess(eventAccepterEvalRo.getWfOrderId(), eventAccepterEvalRo.getUserId());
-		eventProcessVo.setRevisitMode(WorkbenchConstants.ReturnVisitType.STAFF); //TODO
+		eventProcessVo.setRevisitMode(WorkbenchConstants.ReturnVisitType.STAFF); 
 		eventProcessVo.setTimeliness(eventAccepterEvalRo.getTimeliness());
 		eventProcessVo.setLevel(eventAccepterEvalRo.getLevel());
 		eventProcessVo.setAttitude(eventAccepterEvalRo.getAttitude());
@@ -201,15 +203,19 @@ public class EventReportController {
 		
 		String[] accpterLikes = eventAccepterEvalRo.getAccepterLikes().split(",");
 		
+		List<EventAccepterEvalVo> eventAccepterEvalVoList = new ArrayList<EventAccepterEvalVo>();
 		for(int i = 0; i < accpterLikes.length; i++){
 			String[] likes = accpterLikes[i].split("-");
 			EventAccepterEvalVo eventAccepterEvalVo = new EventAccepterEvalVo();
+			eventAccepterEvalVo.setId(UUIDGenerator.generate());
+			eventAccepterEvalVo.setCreateTime(new Date());
 			eventAccepterEvalVo.setAccepterId(likes[0]);
 			eventAccepterEvalVo.setLikes(likes[1]);
 			eventAccepterEvalVo.setEventId(eventAccepterEvalRo.getEventId());
 			
-			workbenchService.createEventAccepterEval(eventAccepterEvalVo);
+			eventAccepterEvalVoList.add(eventAccepterEvalVo);
 		}
+		workbenchService.createEventAccpterEvalList(eventAccepterEvalVoList);
 		return ReturnValue.success();
 	}
 	

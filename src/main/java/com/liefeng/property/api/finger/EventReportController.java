@@ -3,6 +3,8 @@ package com.liefeng.property.api.finger;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IWorkbenchService;
@@ -69,7 +72,7 @@ public class EventReportController {
 	 * @date 2016年3月20日 上午9:58:29
 	 */
 	@ApiOperation(value="获取用户的历史报事", notes="用户(业主、住户）获取历史报事")
-	@RequestMapping(value="/getEventReportList", method=RequestMethod.POST)
+	@RequestMapping(value="/getEventReportList", method=RequestMethod.GET)
 	@ResponseBody
 	public DataListValue<EventReportVo> getEventReportList(@Valid @ModelAttribute ProjectIdHouseNumPhoneRo projectIdHouseNumPhoneRo) {
 		List<EventReportVo> eventReportVoList = workbenchService.getEventReportList(projectIdHouseNumPhoneRo.getProjectId(), projectIdHouseNumPhoneRo.getHouseNum(), projectIdHouseNumPhoneRo.getPhone());
@@ -117,20 +120,24 @@ public class EventReportController {
 		eventProcessVo.setResult(eventAccepterEvalRo.getResult());
 		
 		EventReportVo eventReportVo = new EventReportVo();
-		eventProcessVo.setId(eventAccepterEvalRo.getEventId());
-		workbenchService.executeEventReportFlow(eventReportVo, eventProcessVo, "returnVisit", "");
+		eventReportVo.setId(eventAccepterEvalRo.getEventId());
+		workbenchService.executeEventReportFlow(eventReportVo, eventProcessVo, WorkbenchConstants.EventReport.RETURNVISIT_OWNER, "");
 		
 		String[] accpterLikes = eventAccepterEvalRo.getAccepterLikes().split(",");
-		
+		List<EventAccepterEvalVo> eventAccepterEvalVoList = new ArrayList<EventAccepterEvalVo>();
 		for(int i = 0; i < accpterLikes.length; i++){
 			String[] likes = accpterLikes[i].split("-");
 			EventAccepterEvalVo eventAccepterEvalVo = new EventAccepterEvalVo();
+			eventAccepterEvalVo.setId(UUIDGenerator.generate());
+			eventAccepterEvalVo.setCreateTime(new Date());
 			eventAccepterEvalVo.setAccepterId(likes[0]);
 			eventAccepterEvalVo.setLikes(likes[1]);
 			eventAccepterEvalVo.setEventId(eventAccepterEvalRo.getEventId());
 			
-			workbenchService.createEventAccepterEval(eventAccepterEvalVo);
+			eventAccepterEvalVoList.add(eventAccepterEvalVo);
+			//workbenchService.createEventAccepterEval(eventAccepterEvalVo);
 		}
+		workbenchService.createEventAccpterEvalList(eventAccepterEvalVoList);
 		return ReturnValue.success();
 	}
 }

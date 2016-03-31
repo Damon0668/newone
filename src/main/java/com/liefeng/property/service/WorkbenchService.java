@@ -1582,5 +1582,12 @@ public class WorkbenchService implements IWorkbenchService {
 	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId){
 		 return propertyStaffService.getDepartmentDirectorList(projectId);
 	}
+
+	@Override
+	public void createEventAccpterEvalList(
+			List<EventAccepterEvalVo> eventAccepterEvalVoList) {
+		EventAccepterEvalContext eventAccepterEvalContext = EventAccepterEvalContext.build();
+		eventAccepterEvalContext.createList(eventAccepterEvalVoList);
+	}
 	
 }
