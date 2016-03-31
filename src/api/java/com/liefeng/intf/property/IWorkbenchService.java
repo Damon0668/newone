@@ -741,4 +741,12 @@ public interface IWorkbenchService {
 	 * @return
 	 */
 	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId);
+	
+	/**
+	 * 创建办理人评价（list）
+	 * @param eventAccepterEvalVoList 
+	 * @author xhw
+	 * @date 2016年3月31日 下午1:47:13
+	 */
+	public void createEventAccpterEvalList(List<EventAccepterEvalVo> eventAccepterEvalVoList);
 }

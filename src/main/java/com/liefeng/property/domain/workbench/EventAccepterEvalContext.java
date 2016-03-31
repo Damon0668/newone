@@ -1,6 +1,7 @@
 package com.liefeng.property.domain.workbench;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,6 +88,23 @@ public class EventAccepterEvalContext {
 		}
 
 		return eventAccepterEvalVo;
+	}
+	
+	/**
+	 * 创建“办理人评价“（list）
+	 * @param eventAccepterEvalVoList 
+	 * @author xhw
+	 * @date 2016年3月31日 下午1:52:00
+	 */
+	public void createList(List<EventAccepterEvalVo> eventAccepterEvalVoList){
+		if(eventAccepterEvalVoList != null && eventAccepterEvalVoList.size() > 0){
+			List<EventAccepterEvalPo> eventAccepterEvalPoList = MyBeanUtil.createList(eventAccepterEvalVoList, EventAccepterEvalPo.class);
+			
+			eventAccepterEvalRepository.save(eventAccepterEvalPoList);
+			
+			logger.info("Create eventAccepterEvalPoList : {} success.", eventAccepterEvalPoList);
+		}
+		
 	}
 	
 	protected void setEventAccepterEvalVo(EventAccepterEvalVo eventAccepterEvalVo) {
