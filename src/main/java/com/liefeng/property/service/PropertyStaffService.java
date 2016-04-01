@@ -19,6 +19,7 @@ import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IProjectService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.property.ISysSecurityService;
+import com.liefeng.intf.property.ISysService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.property.PropertyStaffBo;
@@ -65,7 +66,10 @@ public class PropertyStaffService implements IPropertyStaffService {
 	
 	@Autowired
 	private IProjectService projectService;
-		
+	
+	@Autowired
+	private ISysService sysService;
+
 	@Override
 	public DataPageValue<PropertyStaffListVo> listPropertyStaff4Page(PropertyStaffBo propertyStaffBo, int page, int size) {
 		return PropertyStaffContext.build().listPropertyStaff4Page(propertyStaffBo, page, size);
@@ -187,6 +191,11 @@ public class PropertyStaffService implements IPropertyStaffService {
 	@Override
 	public PropertyStaffVo findPropertyStaffById(String staffId) {
 		PropertyStaffVo propertyStaffVo = PropertyStaffContext.loadById(staffId).getPropertyStaff();
+		
+		propertyStaffVo.setDepartmentName(getDepartment(propertyStaffVo.getDepartmentId()).getName());
+		
+		propertyStaffVo.setPositionName(sysService.getDictNameByValue("POSITION", propertyStaffVo.getPosition()));
+		
 		return propertyStaffVo;
 	}
 

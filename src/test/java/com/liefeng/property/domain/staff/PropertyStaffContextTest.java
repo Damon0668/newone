@@ -3,6 +3,7 @@ package com.liefeng.property.domain.staff;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -11,14 +12,22 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.liefeng.Application;
+import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.util.DictionaryUtil;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.property.vo.staff.StaffArchiveVo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @ActiveProfiles("dev")
 @WebAppConfiguration
 public class PropertyStaffContextTest {
+	
+	@Before
+	public void Before(){
+		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
+	}
 
 	@Test
 	public void transformDicValueToDicName() {
@@ -62,6 +71,13 @@ public class PropertyStaffContextTest {
 		
 		list = DictionaryUtil.transformDicNameToDicValue(list);
 		System.out.println(list);
+	}
+	
+	@Test
+	public void archiveTest(){
+		StaffArchiveVo staffArchive = new StaffArchiveVo();
+		staffArchive.setPhone("15522510354");
+		StaffArchiveContext.build(staffArchive).isExistPhoneNum();
 	}
 
 }
