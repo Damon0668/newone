@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.common.util.TimeUtil;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
@@ -40,7 +41,7 @@ public class StaffController {
 	
 	@Autowired
 	private IUserService userService;
-	
+
 	@ApiOperation(value="获取员工信息", notes="获取员工信息")
 	@RequestMapping(value="/getStaff", method=RequestMethod.POST)
 	@ResponseBody
@@ -85,10 +86,19 @@ public class StaffController {
 		}
 	
 		if(customer != null){
+			
 			customer.setPortraitUrl(updateStaffRo.getPortraitUrl());
-			customer.setRealName(updateStaffRo.getName());
+			
+			if(ValidateHelper.isNotEmptyString(updateStaffRo.getName())){
+				customer.setRealName(updateStaffRo.getName());
+			}
+			
 			customer.setSex(updateStaffRo.getSex());
-			customer.setBirthday(TimeUtil.format(updateStaffRo.getBirthday(), TimeUtil.PATTERN_1));
+			
+			if(ValidateHelper.isNotEmptyString(updateStaffRo.getBirthday())){
+				customer.setBirthday(TimeUtil.format(updateStaffRo.getBirthday(), TimeUtil.PATTERN_1));
+			}
+			
 		}
 		
 		propertyStaffService.updateStaff(propertyStaffDetailInfo);
