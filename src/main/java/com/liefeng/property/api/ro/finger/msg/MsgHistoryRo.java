@@ -15,7 +15,7 @@ public class MsgHistoryRo extends BaseValue{
 	 */
 	private static final long serialVersionUID = 7403733157097840302L;
 	
-	@ApiModelProperty(value="手机用户ID")
+	@ApiModelProperty(value="手机用户ID",required=true)
 	@NotNull
 	private String userId;
 	
