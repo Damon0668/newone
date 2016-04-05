@@ -112,6 +112,7 @@ public class EventReportController {
 		}
 		
 		EventProcessVo currentEventProcess = workbenchService.getActiveEventProcess(orderId, staffId); // 工单当前任务信息
+		if(currentEventProcess != null)
 		dataList.add(currentEventProcess);
 		
 		eventReport.setEventProcessList(dataList);
