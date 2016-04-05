@@ -51,4 +51,8 @@
     <dubbo:reference id="customUserDetailsService"
         interface="org.springframework.security.core.userdetails.UserDetailsService" check="false" />
         
+    <!-- 消息中心服务 -->
+    <dubbo:reference id="messageCenterService"
+        interface="com.liefeng.intf.base.msg.IMessageCenterService" check="false" />
+        
 </beans>

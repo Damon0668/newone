@@ -11,6 +11,8 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.property.error.PropertyStaffErrorCode;
+import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.staff.StaffArchivePo;
 import com.liefeng.property.repository.staff.StaffArchiveRepository;
 import com.liefeng.property.vo.staff.StaffArchiveVo;
@@ -138,6 +140,9 @@ public class StaffArchiveContext {
 	 */
 	public void create() {
 		if(staffArchive != null) {
+			//校验手机是否存在
+			isExistPhoneNum();
+			
 			staffArchive.setId(UUIDGenerator.generate());
 			staffArchive.setOemCode(ContextManager.getInstance().getOemCode());
 			StaffArchivePo staffArchivePo = MyBeanUtil.createBean(staffArchive, StaffArchivePo.class);
@@ -150,14 +155,39 @@ public class StaffArchiveContext {
 	 */
 	public void update() {
 		if(staffArchive != null && ValidateHelper.isNotEmptyString(staffArchive.getId())) {
+			
 			logger.info("update id = {}", staffArchive.getId());
+			
+			String oemCode = ContextManager.getInstance().getOemCode();
+			
+			StaffArchivePo staffArchiveByPhone = staffArchiveRepository.findByPhoneAndOemCode(staffArchive.getPhone(), oemCode);
+			
+			if(staffArchiveByPhone != null && !staffArchive.getId().equals(staffArchiveByPhone.getId())){
+				throw new PropertyException(PropertyStaffErrorCode.MOBILE_HAS_EXIST);
+			}
+			
 			StaffArchivePo staffArchivePo = staffArchiveRepository.findOne(staffArchive.getId());
+			
 			if(staffArchivePo != null){
+				
 				MyBeanUtil.copyBeanNotNull2Bean(staffArchive, staffArchivePo);
+				
 				staffArchiveRepository.save(staffArchivePo);
 			}
 			
 		}
 	}
 	
+	/**
+	 * 检查手机号是否已存在
+	 */
+	public void isExistPhoneNum(){
+		if(staffArchive != null) {
+			String oemCode = ContextManager.getInstance().getOemCode();
+			StaffArchivePo staffArchivePo = staffArchiveRepository.findByPhoneAndOemCode(staffArchive.getPhone(), oemCode);
+			if(staffArchivePo != null){
+				throw new PropertyException(PropertyStaffErrorCode.MOBILE_HAS_EXIST);
+			}
+		}
+	}
 }

@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
+import com.liefeng.common.util.StringUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.staff.StaffMsgClientPo;
+import com.liefeng.property.repository.mybatis.StaffMsgClientQueryRepository;
 import com.liefeng.property.repository.staff.StaffMsgClientRepository;
 import com.liefeng.property.vo.staff.StaffMsgClientVo;
 
@@ -28,6 +30,9 @@ public class StaffMsgClientContext {
 	
 	@Autowired
 	private StaffMsgClientRepository staffMsgClientRepository;
+	
+	@Autowired
+	private StaffMsgClientQueryRepository staffMsgClientQueryRepository;
 	
 	/**
 	 * 员工ID
@@ -108,13 +113,10 @@ public class StaffMsgClientContext {
 		return staffMsgClient;
 	}
 	
-	public List<StaffMsgClientVo> findStaffMsgClients(List<String> staffIds){
+	public List<String> findStaffMsgClients(List<String> staffIds){
 		if(ValidateHelper.isNotEmptyCollection(staffIds)){
-			List<StaffMsgClientPo> staffMsgClientList = staffMsgClientRepository.findByStaffIdIn(staffIds);
-			if(ValidateHelper.isNotEmptyCollection(staffMsgClientList)){
-				return MyBeanUtil.createList(staffMsgClientList, StaffMsgClientVo.class);
-			}
+			return staffMsgClientQueryRepository.findClientIds(StringUtil.fmtToSqlInCondition(staffIds));
 		}
-		return new ArrayList<StaffMsgClientVo>();
+		return new ArrayList<String>();
 	}
 }

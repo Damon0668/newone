@@ -183,7 +183,7 @@ public class HouseholdController {
 	@ResponseBody
 	public DataValue<ProprietorSingleHouseVo> getProprietorOfRegister(@Valid @ModelAttribute ProprietorIdRo proprietorIdRo) {
 		
-		ProprietorSingleHouseVo singleHouseVo =  householdService.getProprietorOfRegister(proprietorIdRo.getId());
+		ProprietorSingleHouseVo singleHouseVo =  householdService.getProprietorOfRegister(proprietorIdRo.getProprietorId());
 		
 		return DataValue.success(singleHouseVo);
 	}

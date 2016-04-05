@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.StaffMsgClientQueryRepository" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.staff.StaffMsgClientVo" >
+
+</resultMap>
+
+<select id="findClientIds" resultType="java.lang.String">
+	select client_id from t_staff_msg_client where 1=1 and staff_id in ${staffIds}
+</select>
+
+</mapper>   

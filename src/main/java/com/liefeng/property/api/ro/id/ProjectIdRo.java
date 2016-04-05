@@ -14,15 +14,13 @@ public class ProjectIdRo extends BaseValue {
 
 	@ApiModelProperty(value="项目ID", required=true)
 	@NotNull
-	private String id;
+	private String projectId;
 
-	public String getId() {
-		return id;
+	public String getProjectId() {
+		return projectId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
 	}
-	
-	
 }

@@ -15,7 +15,7 @@ public class EventReportDataPageRo extends BaseValue {
 	
 	private static final long serialVersionUID = 6132849490948380093L;
 
-	@ApiModelProperty(value="当前登陆人id", required=true)
+	@ApiModelProperty(value="当前登陆人ID", required=true)
 	@NotNull
 	private String actor;
 	

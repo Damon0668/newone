@@ -90,7 +90,7 @@ public class SysRoleContext {
 	 */
 	public void create() {
 		
-		SysRolePo existRole = sysRoleRepository.findByName(role.getName().trim());
+		SysRolePo existRole = findExistRole();
 		
 		if(existRole != null){
 			throw new PropertyException(SecurityErrorCode.ROLE_HAS_EXIST);
@@ -108,7 +108,7 @@ public class SysRoleContext {
 		
 		if(role !=null && role.getId() != null){
 			
-			SysRolePo existRole = sysRoleRepository.findByName(role.getName().trim());
+			SysRolePo existRole = findExistRole();
 			
 			if(existRole == null){
 				existRole = sysRoleRepository.findOne(role.getId());
@@ -196,5 +196,15 @@ public class SysRoleContext {
 			roleIdList.add(sysRoleVo.getId());
 		}
 		return roleIdList;
+	}
+	
+	/**
+	 * 查找已经存的角色
+	 * @return
+	 */
+	private SysRolePo findExistRole(){
+		String oemCode = ContextManager.getInstance().getOemCode();
+		SysRolePo existRole = sysRoleRepository.findByNameAndOemCode(role.getName().trim(), oemCode);
+		return existRole;
 	}
 }

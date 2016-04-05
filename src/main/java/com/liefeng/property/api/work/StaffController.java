@@ -3,13 +3,8 @@ package com.liefeng.property.api.work;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.common.util.TimeUtil;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
@@ -32,24 +28,25 @@ import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffArchiveVo;
 import com.liefeng.property.vo.staff.StaffContactVo;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @Api(value="物业员工模块")
 @RestController
 @RequestMapping(value = "/api/work/staff")
 public class StaffController {
 	
-	private static Logger logger = LoggerFactory.getLogger(AuthController.class);
-
 	@Autowired
 	private IPropertyStaffService propertyStaffService;
 	
 	@Autowired
 	private IUserService userService;
-	
+
 	@ApiOperation(value="获取员工信息", notes="获取员工信息")
 	@RequestMapping(value="/getStaff", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<PropertyStaffVo> getStaff(@Valid @ModelAttribute StaffIdRo staffIdRo){
-		PropertyStaffVo propertyStaff = propertyStaffService.findPropertyStaffById(staffIdRo.getId());
+		PropertyStaffVo propertyStaff = propertyStaffService.findPropertyStaffById(staffIdRo.getStaffId());
 		return DataValue.success(propertyStaff);
 	}
 	
@@ -57,7 +54,7 @@ public class StaffController {
 	@RequestMapping(value="/getStaffArchive", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<StaffArchiveVo> getStaffArchive(@Valid @ModelAttribute StaffIdRo staffIdRo){
-		StaffArchiveVo staffArchive = propertyStaffService.findStaffArchByStaffId(staffIdRo.getId());
+		StaffArchiveVo staffArchive = propertyStaffService.findStaffArchByStaffId(staffIdRo.getStaffId());
 		return DataValue.success(staffArchive);
 	}
 	
@@ -65,7 +62,7 @@ public class StaffController {
 	@RequestMapping(value="/getCustomer", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<CustomerVo> getCustomer(@Valid @ModelAttribute StaffIdRo staffIdRo){
-		StaffArchiveVo staffArchive = propertyStaffService.findStaffArchByStaffId(staffIdRo.getId());
+		StaffArchiveVo staffArchive = propertyStaffService.findStaffArchByStaffId(staffIdRo.getStaffId());
 		CustomerVo customer = userService.getCustomerByGlobalId(staffArchive.getCustGlobalId());
 		return DataValue.success(customer);
 	}
@@ -89,10 +86,19 @@ public class StaffController {
 		}
 	
 		if(customer != null){
+			
 			customer.setPortraitUrl(updateStaffRo.getPortraitUrl());
-			customer.setRealName(updateStaffRo.getName());
+			
+			if(ValidateHelper.isNotEmptyString(updateStaffRo.getName())){
+				customer.setRealName(updateStaffRo.getName());
+			}
+			
 			customer.setSex(updateStaffRo.getSex());
-			customer.setBirthday(TimeUtil.format(updateStaffRo.getBirthday(), TimeUtil.PATTERN_1));
+			
+			if(ValidateHelper.isNotEmptyString(updateStaffRo.getBirthday())){
+				customer.setBirthday(TimeUtil.format(updateStaffRo.getBirthday(), TimeUtil.PATTERN_1));
+			}
+			
 		}
 		
 		propertyStaffService.updateStaff(propertyStaffDetailInfo);
@@ -108,12 +114,12 @@ public class StaffController {
 	 * @date 2016年3月28日 上午10:58:44
 	 */
 	@ApiOperation(value="获取员工通讯录", notes="员工通讯录")
-	@RequestMapping(value="/getStaffContact", method=RequestMethod.POST)
+	@RequestMapping(value="/getStaffContact", method=RequestMethod.GET)
 	@ResponseBody
 	public DataListValue<StaffContactVo> getStaffContact(@Valid @ModelAttribute StaffIdRo staffIdRo){
 		List<StaffContactVo> staffContactList = new ArrayList<StaffContactVo>();
 		//获取部门权限
-		List<PropertyDepartmentVo>  departmentVos = propertyStaffService.findStaffContactPrivilege(staffIdRo.getId());
+		List<PropertyDepartmentVo>  departmentVos = propertyStaffService.findStaffContactPrivilege(staffIdRo.getStaffId());
 		
 		for(PropertyDepartmentVo departmentVo : departmentVos){
 			StaffContactVo staffContactVo = new StaffContactVo();

@@ -36,6 +36,6 @@ public interface EventReportRepository extends JpaRepository<EventReportPo, Stri
 	 * @author xhw
 	 * @date 2016年3月25日 下午7:37:49
 	 */
-	public List<EventReportPo> findByPhone(String phone);
+	public List<EventReportPo> findByPhoneAndOemCode(String phone, String oemCode);
 
 }

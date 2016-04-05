@@ -20,7 +20,7 @@ public class DispatchingWorkerRo  extends BaseValue {
 	 */
 	private static final long serialVersionUID = -7676187145623772255L;
 
-	@ApiModelProperty(value="项目id", required=true)
+	@ApiModelProperty(value="项目ID", required=true)
 	@NotNull
 	private String projectId;
 	

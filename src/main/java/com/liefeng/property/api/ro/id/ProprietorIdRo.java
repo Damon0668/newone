@@ -17,17 +17,16 @@ public class ProprietorIdRo extends BaseValue {
 
 	private static final long serialVersionUID = 8877149417961857916L;
 	
-	@ApiModelProperty(value="业主主键【id】", required=true)
+	@ApiModelProperty(value="业主ID", required=true)
 	@NotNull
-	private String id;
+	private String proprietorId;
 
-	public String getId() {
-		return id;
+	public String getProprietorId() {
+		return proprietorId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setProprietorId(String proprietorId) {
+		this.proprietorId = proprietorId;
 	}
-	
 	
 }

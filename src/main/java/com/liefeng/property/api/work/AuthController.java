@@ -80,7 +80,7 @@ public class AuthController {
 			}
 		}
 
-		throw new LiefengException(PropertyStaffErrorCode.Mobile_NOT_MATCHING);
+		throw new LiefengException(PropertyStaffErrorCode.MOBILE_NOT_MATCHING);
 	}
 	
 	
@@ -94,7 +94,7 @@ public class AuthController {
 		if(staff != null){
 			StaffArchiveVo staffArchive = propertyStaffService.findStaffArchByStaffId(staff.getId());
 			if(staffArchive == null || !updatePwdRo.getMobile().equals(staffArchive.getPhone())){
-				throw new LiefengException(PropertyStaffErrorCode.Mobile_NOT_MATCHING);
+				throw new LiefengException(PropertyStaffErrorCode.MOBILE_NOT_MATCHING);
 			}
 			
 			smsService.verifySMSCode(updatePwdRo.getMobile(), SMSMsgEvent.SD_UPDATAPWD_MSG.getEventCode(), updatePwdRo.getCode());
