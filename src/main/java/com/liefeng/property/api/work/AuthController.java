@@ -20,7 +20,9 @@ import com.liefeng.property.api.ro.finger.auth.UpdatePwdRo;
 import com.liefeng.property.api.ro.work.auth.CheckMobileRo;
 import com.liefeng.property.api.ro.work.auth.StaffLoginRo;
 import com.liefeng.property.api.ro.work.auth.UpdatePwdLoginRo;
+import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.error.PropertyStaffErrorCode;
+import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffArchiveVo;
 
@@ -49,11 +51,15 @@ public class AuthController {
 		PropertyStaffVo staff = propertyStaffService.findPropertyStaffByAccount(staffLoginRo.getAccount());
 		
 		if(staff == null){
-			throw new LiefengException(PropertyStaffErrorCode.STAFF_NOT_EXIST);
+			throw new PropertyException(PropertyStaffErrorCode.STAFF_NOT_EXIST);
+		}
+		
+		if(StaffConstants.WorkStatus.LEAVE_OFFICE.equals(staff.getWorkStatus())){
+			throw new PropertyException(PropertyStaffErrorCode.STAFF_LEAVE_OFFICE);
 		}
 		
 		if(!staff.getPassword().equals(staffLoginRo.getPassword())){
-			throw new LiefengException(PropertyStaffErrorCode.PASSWORD_ERROR);
+			throw new PropertyException(PropertyStaffErrorCode.PASSWORD_ERROR);
 		}
 		
 		//更新个推clientId
@@ -80,7 +86,7 @@ public class AuthController {
 			}
 		}
 
-		throw new LiefengException(PropertyStaffErrorCode.MOBILE_NOT_MATCHING);
+		throw new PropertyException(PropertyStaffErrorCode.MOBILE_NOT_MATCHING);
 	}
 	
 	
@@ -91,21 +97,22 @@ public class AuthController {
 		
 		PropertyStaffVo staff = propertyStaffService.findPropertyStaffByAccount(updatePwdRo.getAccount());
 		
-		if(staff != null){
-			StaffArchiveVo staffArchive = propertyStaffService.findStaffArchByStaffId(staff.getId());
-			if(staffArchive == null || !updatePwdRo.getMobile().equals(staffArchive.getPhone())){
-				throw new LiefengException(PropertyStaffErrorCode.MOBILE_NOT_MATCHING);
-			}
-			
-			smsService.verifySMSCode(updatePwdRo.getMobile(), SMSMsgEvent.SD_UPDATAPWD_MSG.getEventCode(), updatePwdRo.getCode());
-			
-			propertyStaffService.updateStaffPassword(staff.getId(), staff.getPassword(), updatePwdRo.getPassword());
-			
-			return ReturnValue.success();
-		}else{
-			
+		if(staff == null ){
 			throw new LiefengException(PropertyStaffErrorCode.STAFF_NOT_EXIST);
 		}
+
+		StaffArchiveVo staffArchive = propertyStaffService.findStaffArchByStaffId(staff.getId());
+		
+		if(staffArchive == null || !updatePwdRo.getMobile().equals(staffArchive.getPhone())){
+			throw new LiefengException(PropertyStaffErrorCode.MOBILE_NOT_MATCHING);
+		}
+		
+		smsService.verifySMSCode(updatePwdRo.getMobile(), SMSMsgEvent.SD_UPDATAPWD_MSG.getEventCode(), updatePwdRo.getCode());
+		
+		propertyStaffService.updateStaffPassword(staff.getId(), staff.getPassword(), updatePwdRo.getPassword());
+		
+		return ReturnValue.success();
+
 	}
 	
 	@ApiOperation(value="登陆后-修改密码", notes="登陆后,修改密码")
