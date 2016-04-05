@@ -1,6 +1,7 @@
 package com.liefeng.property.repository.mybatis;
 
 import java.util.List;
+import java.util.Map;
 
 import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
@@ -40,5 +41,11 @@ public interface PropertyStaffQueryRepository extends BaseRepository<PropertySta
 	 * 获取部门负责人信息列表
 	 * @param projectId
 	 */
-	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId);
+	public List<PropertyStaffVo> getDepartmentDirectorList(Map<String, String> param);
+
+	/**
+	 * 员工信息列表，包含 名称，岗位名称
+	 * @return
+	 */
+	public List<PropertyStaffVo> findPropertyStaffById4DPList(String[] staffIds);
 }

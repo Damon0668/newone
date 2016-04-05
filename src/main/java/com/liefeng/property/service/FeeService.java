@@ -1,5 +1,6 @@
 package com.liefeng.property.service;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -335,7 +336,7 @@ public class FeeService implements IFeeService {
 				ProprietorSingleHouseVo houseVo = houseContext.getSingleHouse();
 
 				Double price = feeSettingVo.getPrice();
-				Double sum = houseVo.getGrossArea() * price;
+				Double sum = format(houseVo.getGrossArea() * price);
 				logger.info("总金额：" + sum);
 				FeeItemVo feeItemVo = new FeeItemVo();
 				feeItemVo.setUpdateTime(new Date());
@@ -427,7 +428,7 @@ public class FeeService implements IFeeService {
 				ProprietorSingleHouseVo houseVo = houseContext.getSingleHouse();
 
 				Double price = feeSettingVo.getPrice(); // 单价
-				Double sum = houseVo.getGrossArea() * price;
+				Double sum = format(houseVo.getGrossArea() * price);
 				logger.info("总金额：" + sum);
 				FeeItemVo feeItemVo = new FeeItemVo();
 				feeItemVo.setUsageAmount(houseVo.getGrossArea());
@@ -521,7 +522,7 @@ public class FeeService implements IFeeService {
 						.getSingleHouse();
 
 				Double price = feeSettingVo.getPrice(); // 单价
-				Double sum = feeSettingVo.getPrice();
+				Double sum = format(feeSettingVo.getPrice());
 				logger.info("总金额：" + sum);
 				FeeItemVo feeItemVo = new FeeItemVo();
 				feeItemVo.setCreateTime(new Date());
@@ -626,7 +627,7 @@ public class FeeService implements IFeeService {
 						.getSingleHouse();
 
 				Double price = feeSettingVo.getPrice(); // 单价
-				Double sum = price * meterRecordVo.getUseAmount();
+				Double sum = format(price * meterRecordVo.getUseAmount());
 				logger.info("总金额：" + sum);
 				FeeItemVo feeItemVo = new FeeItemVo();
 				feeItemVo.setCreateTime(new Date());
@@ -872,7 +873,7 @@ public class FeeService implements IFeeService {
 							.loadByProjectId(proprietorHouseVo.getProjectId());
 					MeterRecordVo meterRecordVo = meterRecordContext.get(
 							proprietorHouseVo.getHouseNum(), null, meterType,
-							FeeConstants.MeterRecord.METEROWNER_YSE, preDate);
+							FeeConstants.MeterRecord.METEROWNER_NO, preDate);
 
 					logger.info("开始计算生成楼栋号为" + projectBuildingVo.getName()
 							+ ",仪表id为" + feeType + "的费用项");
@@ -902,8 +903,8 @@ public class FeeService implements IFeeService {
 							feeSettingVo.getStartMonth());
 					logger.info("用量为:" + meterRecordVo.getUseAmount());
 					price = feeSettingVo.getPrice();
-					sum = price * meterRecordVo.getUseAmount()
-							/ proprietorHouseVos.size();
+					sum = format(price * meterRecordVo.getUseAmount()
+							/ proprietorHouseVos.size());
 					HouseContext houseContext = HouseContext
 							.loadByProjectIdAndHouseNum(
 									proprietorHouseVo.getProjectId(),
@@ -1029,7 +1030,7 @@ public class FeeService implements IFeeService {
 
 			
 				Double price = paSingleRentalVo.getManageFee(); // 单价
-				Double sum =  paSingleRentalVo.getManageFee();;
+				Double sum =  format(paSingleRentalVo.getManageFee());
 				logger.info("总金额：" + sum);
 				FeeItemVo feeItemVo = new FeeItemVo();
 				feeItemVo.setCreateTime(new Date());
@@ -1182,5 +1183,11 @@ public class FeeService implements IFeeService {
 			throws LiefengException {
 		FeeItemContext feeItemContext = FeeItemContext.build();
 		return feeItemContext.getFeeItemByFeedate(projectId, houseNum, startDate, endDate);
+	}
+	
+	public Double format(Double number){
+		BigDecimal f = new BigDecimal(number);  
+		double   f1   =  f.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();  
+		return f1;
 	}
 }

@@ -169,10 +169,8 @@ public class ParkingContext {
 		String existNum = "";
 		for(int num=startNum; num<=endNum;num++){
 			String zero="";
-			if(num+"".length() < startString.length() - prefix.length()){
-				for(int i = num+"".length();i< startString.length() - prefix.length();i++){
-					zero+="0";
-				}
+			for(int i = (num+"".toString()).length();i< startString.length() - prefix.length();i++){
+				zero+="0";
 			}
 			String parkNum=prefix+zero+num;
 			ParkingPo parkingPoExist = parkingRepository.findByProjectIdAndNum(parking.getProjectId(),parkNum);

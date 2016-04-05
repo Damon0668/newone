@@ -338,6 +338,12 @@ public class PropertyStaffService implements IPropertyStaffService {
 	}
 	
 	@Override
+	public List<PropertyStaffVo> findPropertyStaffById4DPList(String staffIds) {
+		logger.info("select PropertyStaff by id is {}",staffIds);
+		return PropertyStaffContext.build().findPropertyStaffById4DPList(staffIds);
+	}
+	
+	@Override
 	public void updateStaffPassword(String staffId, String oldPassword, String newPassword) {
 		PropertyStaffContext.loadById(staffId).updataPassword(oldPassword, newPassword);
 	}
@@ -371,8 +377,8 @@ public class PropertyStaffService implements IPropertyStaffService {
 	}
 	
 	@Override
-	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId){
-		return PropertyStaffContext.build().getDepartmentDirectorList(projectId);
+	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId,String departmentId){
+		return PropertyStaffContext.build().getDepartmentDirectorList(projectId,departmentId);
 	}
 
 	@Override

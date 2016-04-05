@@ -66,6 +66,16 @@ public class FeeConstants {
 		 * 公摊气表
 		 */
 		public static final String METER_PUBLIC_GAS = "3";
+		
+		/**
+		 * 是否可以抄表 可以
+		 */
+		public static final Integer READ_YES = 1;
+		
+		/**
+		 * 是否可以抄表 不可以
+		 */
+		public static final Integer READ_NO = 0;
 	}
 
 	

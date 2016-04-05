@@ -210,5 +210,12 @@ public interface IPropertyStaffService {
 	 * @param projectId
 	 * @return
 	 */
-	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId);
+	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId,String departmentId);
+
+	/**
+	 * 查询物业员工列表  包含部门名称，职位名称
+	 * @param staffIds 员工ID，逗号隔开
+	 * @return
+	 */
+	public List<PropertyStaffVo> findPropertyStaffById4DPList(String staffIds);
 }

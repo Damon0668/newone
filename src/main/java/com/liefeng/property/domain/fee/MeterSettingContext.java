@@ -218,11 +218,16 @@ public class MeterSettingContext {
 		List<MeterSettingVo> meterSettingVos = MyBeanUtil.createList(meterSettingPos, MeterSettingVo.class);
 	
 		for (MeterSettingVo meterSettingVo : meterSettingVos) {
+			//开始时间为 每个月最后一天减掉抄表天数
+			meterSettingVo.setStartDay(TimeUtil.getDayBefore(TimeUtil.getLastDayOfCurrMonth(), meterSettingVo.getLastingDay()).getDate());
+			
+			logger.info(meterSettingVo.getStartDay()+">"+TimeUtil.getCurrentDay()+"||"+(meterSettingVo.getStartDay()+meterSettingVo.getLastingDay())+"<"+TimeUtil.getCurrentDay());
+			
 			if(meterSettingVo.getStartDay()>TimeUtil.getCurrentDay()
-					||meterSettingVo.getStartDay()+meterSettingVo.getLastingDay()-1<TimeUtil.getCurrentDay()){
-				meterSettingVo.setIsRead(0);
+					||meterSettingVo.getStartDay()+meterSettingVo.getLastingDay()<TimeUtil.getCurrentDay()){
+				meterSettingVo.setIsRead(FeeConstants.MeterRecord.READ_NO);
 			}else{
-				meterSettingVo.setIsRead(1);
+				meterSettingVo.setIsRead(FeeConstants.MeterRecord.READ_YES);
 			}
 		}
 		

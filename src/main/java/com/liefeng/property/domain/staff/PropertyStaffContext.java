@@ -330,7 +330,21 @@ public class PropertyStaffContext {
 	 * 获取部门负责人信息列表
 	 * @param projectId
 	 */
-	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId) {
-		return propertyStaffQueryRepository.getDepartmentDirectorList(projectId);
+	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId,String departmentId) {
+		Map<String, String> param = new  HashMap<String, String>();
+		param.put("projectId", projectId);
+		param.put("departmentId", departmentId);
+		return propertyStaffQueryRepository.getDepartmentDirectorList(param);
+	}
+
+	/**
+	 * 员工信息列表，包含 名称，岗位名称
+	 * @return
+	 */
+	public List<PropertyStaffVo> findPropertyStaffById4DPList(String staffIds) {
+		if(ValidateHelper.isNotEmptyString(staffIds))
+		return propertyStaffQueryRepository.findPropertyStaffById4DPList(staffIds.split(","));
+		
+		return null;
 	}
 }

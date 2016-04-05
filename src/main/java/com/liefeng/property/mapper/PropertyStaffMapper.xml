@@ -152,15 +152,35 @@
 	<select id="getDepartmentDirectorList"  resultMap="PropertyStaffVo" >
 	SELECT
 	ts.*,
-	pd.name as departmentName
+	pd.name as departmentName,
+	sd.name as positionName
 	FROM
 	t_property_department pd
 	LEFT JOIN t_property_staff ts ON pd.director_id = ts.id
 	LEFT JOIN t_manage_project mp ON ts.id = mp.staff_id
+	left join t_sys_dict sd on sd.`value`=ts.position and sd.group_code ='POSITION'  
 	WHERE
 	mp.project_id = #{projectId}
+	<if test="departmentId != null and departmentId != ''">
+		AND pd.id= #{departmentId}
+	</if>
 	AND ts.id IS NOT NULL
 	GROUP BY
 	ts.id
+	</select>
+	
+	<select id="findPropertyStaffById4DPList"  resultMap="PropertyStaffVo" >
+	select 
+	 ps.*,
+	 pd.name as departmentName,
+	 sd.name as positionName
+	 from 
+	 property.t_property_staff ps 
+	 left join property.t_property_department pd on pd.id = ps.department_id 
+	 left join t_sys_dict sd on sd.`value`=ps.position and sd.group_code ='POSITION'  
+	 where ps.id in
+	 <foreach collection="array" index="index" item="staffId" open="("  separator="," close=")">
+  		#{staffId}
+  	 </foreach>
 	</select>
 </mapper>

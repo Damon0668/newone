@@ -1029,7 +1029,9 @@ public class WorkbenchService implements IWorkbenchService {
 	public EventProcessVo getActiveEventProcess(String orderId, String staffId) {
 		EventProcessVo eventProcessVo = EventProcessContext.build().getActive(
 				orderId, staffId);
-
+		if(eventProcessVo == null ){
+			return null;
+		}
 		// 设置附件
 		eventProcessVo.setAttachs(EventProcAttachContext.build()
 				.findByEventProcessId(eventProcessVo.getId()));
@@ -1579,8 +1581,8 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 	
 	@Override
-	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId){
-		 return propertyStaffService.getDepartmentDirectorList(projectId);
+	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId,String departmentId){
+		 return propertyStaffService.getDepartmentDirectorList(projectId,departmentId);
 	}
 
 	@Override

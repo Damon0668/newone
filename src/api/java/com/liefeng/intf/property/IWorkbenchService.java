@@ -737,10 +737,11 @@ public interface IWorkbenchService {
 
 	/**
 	 * 获取部门及部门负责人
-	 * @param projectId
+	 * @param projectId	项目id
+	 * @param departmentId 部门id 为空则查询所有部门
 	 * @return
 	 */
-	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId);
+	public List<PropertyStaffVo> getDepartmentDirectorList(String projectId,String departmentId);
 	
 	/**
 	 * 创建办理人评价（list）

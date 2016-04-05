@@ -157,9 +157,12 @@ public class MeterRecordContext {
 			if(meterSettingPo == null){
 				throw new FeeException(FeeErrorCode.METERSETTING_ISNULL);
 			}
-
+			
+			//开始时间为 每个月最后一天减掉抄表天数
+			meterSettingPo.setStartDay(TimeUtil.getDayBefore(TimeUtil.getLastDayOfCurrMonth(), meterSettingPo.getLastingDay()).getDate());
+			
 			if(meterSettingPo.getStartDay()>TimeUtil.getCurrentDay()
-				||meterSettingPo.getStartDay()+meterSettingPo.getLastingDay()-1<TimeUtil.getCurrentDay()){
+				||meterSettingPo.getStartDay()+meterSettingPo.getLastingDay()<TimeUtil.getCurrentDay()){
 				throw new FeeException(FeeErrorCode.METERRECORD_CURRENT_DATE_CANNOT_CREATE);
 			}
 			//读数大于回程判断
@@ -258,7 +261,7 @@ public class MeterRecordContext {
 	 * @param houseNum 房间号  查询公摊为空
 	 * @param buildingId 楼栋id 查询业主表为空
 	 * @param meterType 表类型
-	 * @param meterOwner 是否是公摊
+	 * @param meterOwner 是否是业主表
 	 * @param date 时间
 	 * @return
 	 */
