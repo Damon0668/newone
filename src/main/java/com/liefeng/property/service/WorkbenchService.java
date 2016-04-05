@@ -811,9 +811,29 @@ public class WorkbenchService implements IWorkbenchService {
 	@Override
 	public void pushMessage(String receiveUserType, String sendUserId,
 			String receiveUserId, String content) {
-		if (receiveUserType
-				.equals(WorkbenchConstants.ReceiveUserType.TYPE_STAFF)) {
+		if (receiveUserType.equals(WorkbenchConstants.ReceiveUserType.TYPE_STAFF)) { //员工
+			if (ValidateHelper.isNotEmptyString(receiveUserId)) { // 员工id字符串不为空
+				String[] userIdArray = receiveUserId.split(",");
+				if (userIdArray.length > 1) { // 推送消息给多个用户
+					List<String> receiveUserIdList = new ArrayList<String>();
 
+					for (int i = 0; i < userIdArray.length; i++) {
+						receiveUserIdList.add(userIdArray[i]);
+					}
+					ListUserMsg message = new ListUserMsg();
+					message.setContent(content);
+					message.setSendUserId(sendUserId);
+					message.setReceiveUserIdList(receiveUserIdList);
+
+					pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+				} else {
+						SingleUserMsg message = new SingleUserMsg();
+						message.setContent(content);
+						message.setSendUserId(sendUserId);
+						message.setReceiveUserId(userIdArray[0]);
+						pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+				}
+			}
 		} else {
 			if (ValidateHelper.isNotEmptyString(receiveUserId)) { // 业主id字符串不为空
 				String[] userIdArray = receiveUserId.split(",");
