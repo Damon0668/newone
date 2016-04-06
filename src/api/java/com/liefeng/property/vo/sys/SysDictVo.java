@@ -2,11 +2,15 @@ package com.liefeng.property.vo.sys;
 
 import com.liefeng.core.entity.BaseValue;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 字典对象
  * @author Huangama
  * @date 2016-2-19
  */
+@ApiModel
 public class SysDictVo extends BaseValue {
 
 	private static final long serialVersionUID = 7822997289281212266L;
@@ -16,16 +20,19 @@ public class SysDictVo extends BaseValue {
 	/**
 	 * 字典组编码
 	 */
+	@ApiModelProperty(value="字典组编码")
 	private String groupCode;
 	
 	/**
 	 * 字典名称
 	 */
+	@ApiModelProperty(value="字典名称")
 	private String name;
 	
 	/**
 	 * 字典值
 	 */
+	@ApiModelProperty(value="字典值")
 	private String value;
 
 	public Long getId() {
