@@ -944,7 +944,13 @@ public class WorkbenchService implements IWorkbenchService {
 		Order order = workflowService.startInstanceByName(
 				WorkbenchConstants.EventReport.EVENT_REPORT_FLOW_NAME, 0,
 				staffid, arg);
-
+		
+		eventReportVo.setWfOrderId(order.getId());
+		if (ValidateHelper.isEmptyString(eventReportVo.getId()))
+			EventReportContext.build(eventReportVo).create();
+		else
+			EventReportContext.build(eventReportVo).update();
+		
 		// 启动时的task
 		List<Task> tasks = workflowService.getActiveTasks(new QueryFilter()
 				.setOrderId(order.getId()));
@@ -964,13 +970,7 @@ public class WorkbenchService implements IWorkbenchService {
 				.setStatus(WorkbenchConstants.EventReport.SIGNFOR_NO);
 		EventProcessContext.build(executeEventProcessVo).create();
 
-		eventReportVo.setWfOrderId(order.getId());
 		eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_FINISH);
-		if (ValidateHelper.isEmptyString(eventReportVo.getId()))
-			EventReportContext.build(eventReportVo).create();
-		else
-			EventReportContext.build(eventReportVo).update();
-
 	}
 
 	@Override

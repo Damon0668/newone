@@ -46,7 +46,7 @@ public class FeeController {
 	 * @throws Exception
 	 */
 	@ApiOperation(value="抄表")
-	@RequestMapping(value="/抄表接口" , method=RequestMethod.POST)
+	@RequestMapping(value="/create" , method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue create(MeterRecordVo meterRecordVo) throws Exception {
 		feeService.createMeterRecord(meterRecordVo);
