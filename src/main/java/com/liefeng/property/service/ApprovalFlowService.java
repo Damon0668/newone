@@ -49,11 +49,12 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_CREATE_NAME, propertyStaffVo.getName());
 			approvalFlowBo.getParams().put(processModel.getTaskModels().get(0).getAssignee(), addUserPreixes(approvalFlowBo.getStaffId()) );
 			approvalFlowBo.getParams().put(approvalFlowBo.getRole(), addUserPreixes(approvalFlowBo.getNextOperator()));
-			workflowService.startAndExecute(approvalFlowBo.getProcessId(), approvalFlowBo.getStaffId(), approvalFlowBo.getParams());
+			workflowService.startAndExecute(approvalFlowBo.getProcessId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
 		
 		}else if(approvalFlowBo.getTaskName().equals(ApprovalFlowConstants.NODE_END)){ //结束流程
+			approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_COMPLETE, ApprovalFlowConstants.ORDER_STATUS_WAIT_SIGN);
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
-			workflowService.complete(approvalFlowBo.getOrderId());
+			workflowService.execute(approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
 		}else{ //继续执行下去
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
 			workflowService.executeAndJumpTask(approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams(), approvalFlowBo.getTaskName());
