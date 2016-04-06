@@ -19,10 +19,12 @@ import com.liefeng.core.entity.DataValue;
 import com.liefeng.intf.property.IProjectService;
 import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.property.api.ro.finger.household.NoticeRo;
+import com.liefeng.property.api.ro.finger.project.ProjectNoticeRo;
 import com.liefeng.property.api.ro.id.NoticeIdRo;
 import com.liefeng.property.api.ro.id.ProjectIdRo;
 import com.liefeng.property.bo.workbench.NoticeBo;
 import com.liefeng.property.vo.project.AppHomeImageVo;
+import com.liefeng.property.vo.project.ProjectNoticeVo;
 import com.liefeng.property.vo.project.ProjectVo;
 import com.liefeng.property.vo.workbench.NoticeVo;
 
@@ -87,5 +89,20 @@ public class ProjectController {
 	public DataValue<NoticeVo> getNotice(@Valid @ModelAttribute NoticeIdRo noticeIdRo){
 		NoticeVo noticeVo = workbenchService.getNoticeById(noticeIdRo.getNoticeId());
 		return DataValue.success(noticeVo);
+	}
+	
+	/**
+	 * 物业须知列表
+	 * @param noticeRo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月6日 下午2:18:27
+	 */
+	@ApiOperation(value="物业须知列表", notes="物业须知列表")
+	@RequestMapping(value="/getProjectNoticeList", method=RequestMethod.GET)
+	@ResponseBody
+	public DataPageValue<ProjectNoticeVo> getProjectNoticeList(@Valid @ModelAttribute ProjectNoticeRo projectNoticeRo){
+		DataPageValue<ProjectNoticeVo> projectNoticeData = projectService.findProjectNotices(projectNoticeRo.getProjectId(), projectNoticeRo.getPage(), projectNoticeRo.getSize());
+		return projectNoticeData;
 	}
 }
