@@ -1,5 +1,8 @@
 package com.liefeng.property.api.finger;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import java.util.Date;
 import java.util.List;
 
@@ -12,16 +15,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.TimeUtil;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IFeeService;
 import com.liefeng.property.api.ro.finger.fee.FeeItemByDateRo;
+import com.liefeng.property.api.ro.finger.fee.MeterRecordRo;
 import com.liefeng.property.vo.fee.FeeItemVo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
 /**
  * 客户端费用管理模块API
@@ -48,7 +50,8 @@ public class FeeController {
 	@ApiOperation(value="抄表")
 	@RequestMapping(value="/create" , method=RequestMethod.POST)
 	@ResponseBody
-	public ReturnValue create(MeterRecordVo meterRecordVo) throws Exception {
+	public ReturnValue create(@Valid @ModelAttribute MeterRecordRo meterRecordRo) throws Exception {
+		MeterRecordVo meterRecordVo = MyBeanUtil.createBean(meterRecordRo, MeterRecordVo.class);
 		feeService.createMeterRecord(meterRecordVo);
 		return ReturnValue.success();
 	}
