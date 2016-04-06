@@ -19,7 +19,8 @@
 	    t.`status`,
 	    t.pic_url pic,
 	    t.oem_code oemCode,
-	    t.householdType householdType
+	    t.household_type householdType
+	    t.resident_relation residentRelation
 	FROM
 	    (
 	        SELECT
@@ -31,7 +32,8 @@
 	            p.`status`,
 	            p.pic_url,
 	            p.oem_code,
-	            "1" householdType
+	            "1" household_type,
+	            "01" resident_relation
 	        FROM
 	            t_proprietor p
 	        UNION
@@ -44,9 +46,10 @@
 	                r.`status`,
 	                r.pic,
 	                r.oem_code,
-	                "2" householdType
+	                "2" household_type,
+	                rh.resident_relation
 	            FROM
-	                t_resident r
+	                t_resident r left join t_resident_house rh on r.id = rh.resident_id
 	    ) t
 	where 1=1
 	and t.cust_global_id = #{custGlobalId}

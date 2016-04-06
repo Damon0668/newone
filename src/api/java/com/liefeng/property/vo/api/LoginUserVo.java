@@ -38,6 +38,9 @@ public class LoginUserVo extends BaseValue{
 
 	@ApiModelProperty(value="住户类型[1：业主；2：住户]")
 	private String householdType;
+	
+	@ApiModelProperty(value="与业主关系[[字典]RESIDENT_RELATION]")
+	private String residentRelation;
 
 	@ApiModelProperty(value="电话")
 	private String mobile;
@@ -137,5 +140,13 @@ public class LoginUserVo extends BaseValue{
 
 	public void setOpenId(String openId) {
 		this.openId = openId;
+	}
+
+	public String getResidentRelation() {
+		return residentRelation;
+	}
+
+	public void setResidentRelation(String residentRelation) {
+		this.residentRelation = residentRelation;
 	}
 }
