@@ -19,6 +19,7 @@ import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.api.ILoginUserService;
 import com.liefeng.intf.service.cache.IRedisService;
 import com.liefeng.property.api.ro.finger.auth.AuthLoginRo;
+import com.liefeng.property.api.ro.finger.auth.UpdatePwdLoginRo;
 import com.liefeng.property.api.ro.finger.auth.UpdatePwdRo;
 import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.vo.api.LoginUserVo;
@@ -82,4 +83,13 @@ public class AuthController {
 		
 		return ReturnValue.success();
 	}
+	
+	@ApiOperation(value="登陆后-修改密码", notes="登陆后,修改密码")
+	@RequestMapping(value="/updatePwdAfterLogin", method=RequestMethod.POST)
+	@ResponseBody
+	public ReturnValue updatePwdAfterLogin(@Valid @ModelAttribute UpdatePwdLoginRo updatePwdLoginRo){
+		userService.updatePwdAfterLogin(updatePwdLoginRo.getMobile(), updatePwdLoginRo.getOldpassword(), updatePwdLoginRo.getNewpassword());		
+		return ReturnValue.success();
+	}
+
 }

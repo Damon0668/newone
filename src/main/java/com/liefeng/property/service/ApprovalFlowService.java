@@ -1,17 +1,18 @@
 package com.liefeng.property.service;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.HistoryTask;
+import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.model.ProcessModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.intf.property.IApprovalFlowService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.service.workflow.IWorkflowService;
@@ -49,10 +50,10 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_CREATE_NAME, propertyStaffVo.getName());
 			approvalFlowBo.getParams().put(processModel.getTaskModels().get(0).getAssignee(), addUserPreixes(approvalFlowBo.getStaffId()) );
 			approvalFlowBo.getParams().put(approvalFlowBo.getRole(), addUserPreixes(approvalFlowBo.getNextOperator()));
-			workflowService.startAndExecute(approvalFlowBo.getProcessId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
-		
-		}else if(approvalFlowBo.getTaskName().equals(ApprovalFlowConstants.NODE_END)){ //结束流程
-			approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_COMPLETE, ApprovalFlowConstants.ORDER_STATUS_WAIT_SIGN);
+			
+			Order order = workflowService.startAndExecute(approvalFlowBo.getProcessId(), approvalFlowBo.getStaffId(), approvalFlowBo.getParams());
+			approvalFlowBo.setOrderId(order.getId());
+		} else if(approvalFlowBo.getTaskName().equals(ApprovalFlowConstants.NODE_END)) { //结束流程
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
 			workflowService.execute(approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
 		}else{ //继续执行下去
@@ -60,7 +61,11 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			workflowService.executeAndJumpTask(approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams(), approvalFlowBo.getTaskName());
 		}
 		
-		
+		// 保存抄送实例ID
+		if(ValidateHelper.isNotEmptyString(approvalFlowBo.getCopyToPeopleId())) {
+			String[] idsArr = approvalFlowBo.getCopyToPeopleId().split(",");
+			workflowService.createCCOrder(approvalFlowBo.getOrderId(), approvalFlowBo.getStaffId(), idsArr);
+		}
 	}
 	
 	/**
