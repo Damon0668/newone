@@ -72,16 +72,16 @@ import com.liefeng.property.vo.project.HouseVo;
 public class HouseholdService implements IHouseholdService {
 
 	private static Logger logger = LoggerFactory.getLogger(HouseholdService.class);
-	
+
 	@Autowired
 	private ICheckService checkService;
-	
+
 	@Autowired
 	private ITccMsgService tccMsgService;
-	
+
 	@Autowired
 	private IUserService userService;
-	
+
 	@Autowired
 	private IProjectService projectService;
 
@@ -89,26 +89,26 @@ public class HouseholdService implements IHouseholdService {
 	 * 保存业主信息
 	 */
 	@Override
-	@Transactional(rollbackOn=Exception.class)
+	@Transactional(rollbackOn = Exception.class)
 	public void saveProprietor(ProprietorSingleHouseVo singleHouse) throws LiefengException {
 		try {
 			// 业主是否存在标识
 			boolean isExit = false;
-			
+
 			// 校验信息
 			validateProprietor(singleHouse);
-			
+
 			// 客户信息校验
 			CustomerVo customer = initCustomer(singleHouse);
 			customer = checkService.createCustomerCheck(customer);
 			singleHouse.setCustGlobalId(customer.getGlobalId());
-			
+
 			// 校验同个OEM下，同个小区业主是否已存在
 			ProprietorContext proprietorContext = ProprietorContext.build();
 			ProprietorVo proprietor = proprietorContext.get(singleHouse.getProjectId(), customer.getGlobalId());
-			
+
 			// 同个OEM下，同个小区保留一份业主信息，不同小区保留多份业主信息
-			if( proprietor == null) { 
+			if (proprietor == null) {
 				proprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
 				proprietor.setStatus(HouseholdConstants.ProprietorStatus.ACTIVE); // 默认为激活状态
 				proprietorContext = ProprietorContext.build(proprietor);
@@ -117,40 +117,40 @@ public class HouseholdService implements IHouseholdService {
 				isExit = true; // 同个OEM下，同个小区业主信息已存在
 				logger.info("业主信息已存在，后续将不执行业主用户创建动作");
 			}
-			
+
 			// 业主房产信息保存
 			ProprietorHouseVo proprietorHouse = MyBeanUtil.createBean(singleHouse, ProprietorHouseVo.class);
 			proprietorHouse.setProprietorId(proprietor.getId());
 			ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.build(proprietorHouse);
 			proprietorHouseContext.create();
-			
+
 			// 更新房子销售状态为售出
 			HouseVo house = new HouseVo();
 			house.setId(singleHouse.getHouseId());
 			house.setSaleStatus(ProjectConstants.HouseSaleStatus.HAD_SALE);
 			HouseContext houseContext = HouseContext.build(house);
 			houseContext.update();
-			
+
 			// 仅当同个OEM下，同个小区下业主不存在时，才做用户创建
 			// 业主信息存在时，即使传过来的手机号不同也不做用户创建，为了保证同个OEM下，同个小区业主用户信息只有一份
-			if(!isExit) {
+			if (!isExit) {
 				// 后台默认创建的手机用户信息
 				UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.PROPRIETOR);
-				
-				try { 
+
+				try {
 					// 用户信息校验
 					user = checkService.createUserCheck(user);
 				} catch (UserException e) {
 					logger.error("创建用户信息校验出现异常，异常编码为({})，异常信息为({})", e.getCode(), e.getMessage());
 					return;
 				}
-				
+
 				// 发送TCC消息，创建用户（内含创建客户或更新客户逻辑）
 				tccMsgService.sendTccMsg(TccBasicEvent.CREATE_USER, user.toString());
 			}
-			
+
 		} catch (LiefengException e) {
-			logger.error("保存业主信息出现异常,异常码（{}）,异常信息（{}）。", e.getCode() , e.getMessage());
+			logger.error("保存业主信息出现异常,异常码（{}）,异常信息（{}）。", e.getCode(), e.getMessage());
 			throw new LiefengException(e.getCode(), e.getMessage());
 		} catch (Exception e) {
 			throw new LiefengException(e);
@@ -161,44 +161,44 @@ public class HouseholdService implements IHouseholdService {
 	 * 更新业主信息
 	 */
 	@Override
-	@Transactional(rollbackOn=Exception.class)
-	public void updatePropritor(ProprietorSingleHouseVo singleHouse) throws LiefengException  {
+	@Transactional(rollbackOn = Exception.class)
+	public void updatePropritor(ProprietorSingleHouseVo singleHouse) throws LiefengException {
 		try {
 			// 校验信息
 			validateProprietor(singleHouse);
-			
+
 			// 客户信息校验
 			CustomerVo customer = initCustomer(singleHouse);
 			customer = checkService.updateCustomerCheck(customer);
-			
+
 			// 业主信息更新
 			ProprietorVo proprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
 			proprietor.setId(singleHouse.getProprietorId());
 			ProprietorContext proprietorContext = ProprietorContext.build(proprietor);
 			proprietorContext.update();
-			
+
 			// 业主房产信息更新
 			ProprietorHouseVo proprietorHouse = MyBeanUtil.createBean(singleHouse, ProprietorHouseVo.class);
 			proprietorHouse.setId(singleHouse.getProprietorHouseId());
 			ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.build(proprietorHouse);
 			proprietorHouseContext.update();
-			
+
 			// 用户更新信息设置
-			UserVo newUser = setUpUser4Update(customer); 
-			
+			UserVo newUser = setUpUser4Update(customer, UserConstants.HouseholdType.PROPRIETOR);
+
 			// 校验用户信息
 			UserVo user = checkService.updateUserCheck(newUser);
-			
+
 			// 发送TCC消息，更新用户信息
 			tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_USER, user.toString());
 		} catch (LiefengException e) {
-			logger.error("更新业主信息出现异常,异常码（{}）,异常信息（{}）", e.getCode() , e.getMessage());
+			logger.error("更新业主信息出现异常,异常码（{}）,异常信息（{}）", e.getCode(), e.getMessage());
 			throw new LiefengException(e.getCode(), e.getMessage());
 		} catch (Exception e) {
 			throw new LiefengException(e);
 		}
 	}
-	
+
 	/**
 	 * 保存住户信息
 	 */
@@ -208,57 +208,63 @@ public class HouseholdService implements IHouseholdService {
 		try {
 			// 住户是否存在标识
 			boolean isExit = false;
-			
+
 			// 校验信息
 			validateResident(resident);
-			
+
 			// 客户信息校验
 			CustomerVo customer = resident.getCustomer();
 			customer.setRealName(resident.getName());
 			customer.setMobile(resident.getMobile());
 			customer = checkService.createCustomerCheck(customer);
-			
+
 			// 校验住户是否已存在
 			ResidentContext residentContext = ResidentContext.build();
 			ResidentVo existedResident = residentContext.get(resident.getProjectId(), customer.getGlobalId());
-			
+
 			// 同个OEM下，同个小区只保存一份住户信息，不同小区保存多份住户信息
-			if(existedResident == null) { 
+			if (existedResident == null) {
 				resident.setStatus(HouseholdConstants.ResidentStatus.ACTIVE); // 默认为激活状态
 				resident.setCustGlobalId(customer.getGlobalId());
 				residentContext = ResidentContext.build(resident);
 				existedResident = residentContext.create();
 			} else {
-				
 				isExit = true; // 同个OEM下，同个小区住户信息已存在
 				logger.info("住户信息已存在，后续将不执行住户、用户创建动作");
 			}
-			
+
 			// 保存住户房屋信息
 			ResidentHouseVo residentHouse = resident.getResidentHouse();
 			residentHouse.setResidentId(existedResident.getId());
 			ResidentHouseContext residentHouseContext = ResidentHouseContext.build(residentHouse);
 			residentHouseContext.create();
-			
+
 			// 仅当同个OEM下，同个小区下住户不存在时，才做用户创建
 			// 住户信息存在时，即使传过来的手机号不同也不做用户创建，为了保证同个OEM下，同个小区住户用户信息只有一份
-			if(!isExit) {
-				// 后台默认创建的手机用户信息
-				UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.RESIDENT);
-				
-				try { 
-					// 用户信息校验
-					user = checkService.createUserCheck(user);
-				} catch (UserException e) { // 仅仅会捕获到用户存在的异常
-					logger.error("用户创建校验出现异常，异常编码为({})，异常信息为({})", e.getCode(), e.getMessage());
-					return;
+			if (!isExit) {
+				if (!ValidateHelper.isNotEmptyString(customer.getMobile())) { // 手机号为空，只保存客户信息，不保存用户信息
+						customer = checkService.createCustomerCheck(customer);
+						
+						// 发送TCC消息，创建客户
+						tccMsgService.sendTccMsg(TccBasicEvent.CREATE_CUSTOMER, customer.toString());
+				} else { 
+					// 后台默认创建的手机用户信息
+					UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.RESIDENT);
+
+					try {
+						// 用户信息校验
+						user = checkService.createUserCheck(user);
+					} catch (UserException e) { // 仅仅会捕获到用户存在的异常
+						logger.error("用户创建校验出现异常，异常编码为({})，异常信息为({})", e.getCode(), e.getMessage());
+						return;
+					}
+
+					// 发送TCC消息，创建用户（内含创建客户或更新客户逻辑）
+					tccMsgService.sendTccMsg(TccBasicEvent.CREATE_USER, user.toString());
 				}
-				
-				// 发送TCC消息，创建用户（内含创建客户或更新客户逻辑）
-				tccMsgService.sendTccMsg(TccBasicEvent.CREATE_USER, user.toString());
 			}
 		} catch (LiefengException e) {
-			logger.error("保存住户信息出现异常,异常码（{}）,异常信息（{}）", e.getCode() , e.getMessage());
+			logger.error("保存住户信息出现异常,异常码（{}）,异常信息（{}）", e.getCode(), e.getMessage());
 			throw new LiefengException(e.getCode(), e.getMessage());
 		} catch (Exception e) {
 			throw new LiefengException(e);
@@ -269,43 +275,67 @@ public class HouseholdService implements IHouseholdService {
 	 * 更新住户信息
 	 */
 	@Override
-	@Transactional(rollbackOn=Exception.class)
+	@Transactional(rollbackOn = Exception.class)
 	public void updateResident(ResidentVo resident) throws LiefengException {
 		try {
 			// 校验信息
 			validateResident(resident);
-			
+
 			// 客户信息校验
 			CustomerVo customer = resident.getCustomer();
 			customer.setRealName(resident.getName());
 			customer.setMobile(resident.getMobile());
 			checkService.updateCustomerCheck(customer);
-			
+
 			// 更新住户信息
 			ResidentContext residentContext = ResidentContext.build(resident);
 			residentContext.update();
-			
+
 			// 更新住户房屋信息
 			ResidentHouseVo residentHouse = resident.getResidentHouse();
 			residentHouse.setResidentId(resident.getId());
 			ResidentHouseContext residentHouseContext = ResidentHouseContext.build(residentHouse);
 			residentHouseContext.update();
+
 			
-			// 用户更新信息设置
-			UserVo newUser = setUpUser4Update(customer); 
+			if(!ValidateHelper.isNotEmptyString(customer.getMobile())) { // 更新客户信息
+				// 校验客户信息
+				customer = checkService.updateCustomerCheck(customer);
+				
+				// 发送Tcc消息，更新用户信息
+				tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_CUSTOMER, customer.toString());
+			} else {
+				// 用户更新信息设置
+				UserVo user = setUpUser4Update(customer, UserConstants.HouseholdType.RESIDENT);
+				
+				// 用户ID为空代表保存时没有创建用户信息，即保存的时候住户的手机号为空
+				if(!ValidateHelper.isNotEmptyString(user.getId())) {  // 新增住户信息
+					try {
+						// 用户信息校验
+						user = checkService.createUserCheck(user);
+					} catch (UserException e) { // 仅仅会捕获到用户存在的异常
+						logger.error("用户创建校验出现异常，异常编码为({})，异常信息为({})", e.getCode(), e.getMessage());
+						return;
+					}
+
+					// 发送TCC消息，创建用户（内含创建客户或更新客户逻辑）
+					tccMsgService.sendTccMsg(TccBasicEvent.CREATE_USER, user.toString());
+				} else {
+					// 校验用户信息
+					user = checkService.updateUserCheck(user);
+					
+					// 发送Tcc消息，更新用户信息
+					tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_USER, user.toString());
+				}
+			}
 			
-			// 校验用户信息
-			UserVo user = checkService.updateUserCheck(newUser);
-			
-			// 发送Tcc消息，更新用户信息
-			tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_USER, user.toString());
 		} catch (LiefengException e) {
-			logger.error("更新住户信息出现异常,异常码（{}）,异常信息（{}）", e.getCode() , e.getMessage());
+			logger.error("更新住户信息出现异常,异常码（{}）,异常信息（{}）", e.getCode(), e.getMessage());
 			throw new LiefengException(e.getCode(), e.getMessage());
 		} catch (Exception e) {
 			throw new LiefengException(e);
 		}
-		
+
 	}
 
 	/**
@@ -337,12 +367,11 @@ public class HouseholdService implements IHouseholdService {
 	 * 分页查询住户信息
 	 */
 	@Override
-	public DataPageValue<ResidentVo> listResident4Page(ResidentBo params, Integer pageSize,
-			Integer currentPage) {
+	public DataPageValue<ResidentVo> listResident4Page(ResidentBo params, Integer pageSize, Integer currentPage) {
 		logger.info("查询过滤条件 params={}, pageSize={}, currentPage={}", params, pageSize, currentPage);
 
 		ResidentContext residentContext = ResidentContext.build();
-		
+
 		return residentContext.listResident4Page(params, pageSize, currentPage);
 	}
 
@@ -360,8 +389,9 @@ public class HouseholdService implements IHouseholdService {
 	 */
 	@Override
 	public ProprietorHouseVo getProprietorHouse(String projectId, String houseNum) {
-		ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.loadByProjectIdAndHouseNum(projectId, houseNum);
-		
+		ProprietorHouseContext proprietorHouseContext = ProprietorHouseContext.loadByProjectIdAndHouseNum(projectId,
+				houseNum);
+
 		return proprietorHouseContext.getProprietorHouse();
 	}
 
@@ -370,18 +400,19 @@ public class HouseholdService implements IHouseholdService {
 	 */
 	@Override
 	public List<CheckinMaterialVo> getMaterialByProprietorHouseId(String proprietorHouseId) {
-		CheckinMaterialContext checkinMaterialContext = CheckinMaterialContext.loadByProprietorHouseId(proprietorHouseId);
-		
+		CheckinMaterialContext checkinMaterialContext = CheckinMaterialContext
+				.loadByProprietorHouseId(proprietorHouseId);
+
 		return checkinMaterialContext.getList();
 	}
-	
+
 	/**
 	 * 批量保存入住资料信息
 	 */
 	@Override
 	public void saveCheckinMaterials(List<CheckinMaterialVo> checkinMaterialList) throws Exception {
 		CheckinMaterialContext checkinMaterialContext = CheckinMaterialContext.build();
-		
+
 		checkinMaterialContext.create(checkinMaterialList);
 	}
 
@@ -390,11 +421,12 @@ public class HouseholdService implements IHouseholdService {
 	 */
 	@Override
 	public void delMaterialByProprietorHouseId(String proprietorHouseId) throws Exception {
-		CheckinMaterialContext checkinMaterialContext = CheckinMaterialContext.loadByProprietorHouseId(proprietorHouseId);
-		
+		CheckinMaterialContext checkinMaterialContext = CheckinMaterialContext
+				.loadByProprietorHouseId(proprietorHouseId);
+
 		checkinMaterialContext.delete();
 	}
-	
+
 	/**
 	 * 根据业主ID获取业主信息
 	 */
@@ -403,17 +435,17 @@ public class HouseholdService implements IHouseholdService {
 		ProprietorContext proprietorContext = ProprietorContext.loadById(id);
 		return proprietorContext.get();
 	}
-	
+
 	/**
 	 * 分页查询业主用户信息
 	 */
 	@Override
 	public DataPageValue<UserVo> listUsers(ProprietorBo params, Integer currentPage, Integer pageSize) {
 		ProprietorContext proprietorContext = ProprietorContext.build();
-		
+
 		return proprietorContext.listUsers(params, currentPage, pageSize);
 	}
-	
+
 	/**
 	 * 获取账号关联房子中的住户或业主
 	 */
@@ -422,16 +454,17 @@ public class HouseholdService implements IHouseholdService {
 		ResidentContext residentContext = ResidentContext.build();
 		return residentContext.queryRelatedHouse(projectId, custGlobalId);
 	}
-	
+
 	/**
 	 * 分页查询入住排队信息
 	 */
 	@Override
-	public DataPageValue<CheckinQueueVo> getCheckinQueues(CheckinQueueBo params, Integer pageSize, Integer currentPage) {
+	public DataPageValue<CheckinQueueVo> getCheckinQueues(CheckinQueueBo params, Integer pageSize,
+			Integer currentPage) {
 		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
 		return checkinQueueContext.getCheckinQueues(params, pageSize, currentPage);
 	}
-	
+
 	/**
 	 * 更新入住排队信息
 	 */
@@ -440,7 +473,7 @@ public class HouseholdService implements IHouseholdService {
 		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build(checkinQueue);
 		checkinQueueContext.update();
 	}
-	
+
 	/**
 	 * 根据项目ID查询入住安排时间
 	 */
@@ -458,12 +491,12 @@ public class HouseholdService implements IHouseholdService {
 		// 删除旧的入住安排时间
 		CheckinScheduleContext checkinScheduleContext = CheckinScheduleContext.loadByProjectId(projectId);
 		checkinScheduleContext.delete();
-		
+
 		// 保存新增的入住安排时间
 		checkinScheduleContext = CheckinScheduleContext.build();
 		checkinScheduleContext.create(checkinScheduleList);
 	}
-	
+
 	/**
 	 * 初始化客户信息
 	 */
@@ -475,85 +508,89 @@ public class HouseholdService implements IHouseholdService {
 		customer.setGlobalId(singleHouse.getCustGlobalId());
 		customer.setId(singleHouse.getCustomerId());
 		customer.setPortraitUrl(singleHouse.getPicUrl());
-		
+
 		return customer;
 	}
 
 	/**
 	 * 校验业主信息
-	 * @param singleHouse 业主综合信息值对象
+	 * 
+	 * @param singleHouse
+	 *            业主综合信息值对象
 	 * @throws PropertyException
 	 */
 	private void validateProprietor(ProprietorSingleHouseVo singleHouse) throws PropertyException {
-		if(ValidateHelper.isEmptyString(singleHouse.getPhone())) {
+		if (ValidateHelper.isEmptyString(singleHouse.getPhone())) {
 			logger.error("业主手机信息为空");
 			throw new PropertyException(HouseholdErrorCode.PROPRIETOR_PHONE_NULL);
 		}
-		
-		if(ValidateHelper.isEmptyString(singleHouse.getName())) {
+
+		if (ValidateHelper.isEmptyString(singleHouse.getName())) {
 			logger.error("业主名字信息为空");
 			throw new PropertyException(HouseholdErrorCode.PROPRIETOR_NAME_NULL);
-		}	
-		
+		}
+
 		// 更新不做以下校验，交由checkService校验
-		if(!ValidateHelper.isNotEmptyString(singleHouse.getProprietorId())) {
+		if (!ValidateHelper.isNotEmptyString(singleHouse.getProprietorId())) {
 			// 校验手机号是否已被其他的客户绑定，防止出现一个手机号对应多个身份证号的情况出现
 			UserVo user = userService.getUserByMobile(singleHouse.getPhone());
-			if(user != null && user.getCustomer() != null) {
-				if(!singleHouse.getIdNum().equals(user.getCustomer().getIdNum())) {
+			if (user != null && user.getCustomer() != null) {
+				if (!singleHouse.getIdNum().equals(user.getCustomer().getIdNum())) {
 					logger.error("手机号已被其他客户绑定");
 					throw new PropertyException(HouseholdErrorCode.PHONE_ALREADY_BINDING);
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * 校验住户信息
-	 * @param resident 住户信息
+	 * 
+	 * @param resident
+	 *            住户信息
 	 * @throws PropertyException
 	 */
 	private void validateResident(ResidentVo resident) throws PropertyException {
-		if(ValidateHelper.isEmptyString(resident.getMobile())) {
-			logger.error("住户手机信息为空");
-			throw new PropertyException(HouseholdErrorCode.RESIDENT_PHONE_NULL);
-		}
-		
-		if(ValidateHelper.isEmptyString(resident.getName())) {
+//		if (ValidateHelper.isEmptyString(resident.getMobile())) {
+//			logger.error("住户手机信息为空");
+//			throw new PropertyException(HouseholdErrorCode.RESIDENT_PHONE_NULL);
+//		}
+
+		if (ValidateHelper.isEmptyString(resident.getName())) {
 			logger.error("住户名字信息为空");
 			throw new PropertyException(HouseholdErrorCode.RESIDENT_NAME_NULL);
-		}	
-		
-		// 更新不做以下校验，交由checkService校验
-		if(!ValidateHelper.isNotEmptyString(resident.getId())) {
+		}
+
+		if (ValidateHelper.isNotEmptyString(resident.getMobile())) {
 			// 校验手机号是否已被其他的客户绑定，防止出现一个手机号对应多个身份证号的情况出现
 			UserVo user = userService.getUserByMobile(resident.getMobile());
-			if(user != null && user.getCustomer() != null) {
-				if(!resident.getCustomer().getIdNum().equals(user.getCustomer().getIdNum())) {
+			if (user != null && user.getCustomer() != null) {
+				if (!resident.getCustomer().getIdNum().equals(user.getCustomer().getIdNum())) {
 					logger.error("手机号已被其他客户绑定");
 					throw new PropertyException(HouseholdErrorCode.PHONE_ALREADY_BINDING);
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * 初始化用户信息
+	 * 
 	 * @param customer 客户信息
 	 * @param householdType 账号类型
 	 * @return 用户信息
 	 */
-	private UserVo setUpUser4Create(CustomerVo customer , String householdType) {
+	private UserVo setUpUser4Create(CustomerVo customer, String householdType) {
 		String oemCode = ContextManager.getInstance().getOemCode();
 		// 后台默认创建的用户信息
 		UserVo user = new UserVo();
 		String phone = customer.getMobile();
 		String password = phone.substring(phone.length() - 6); // 初始密码，默认手机后六位数字
-		
+
 		user.setCustomer(customer);
 		user.setCustGlobalId(customer.getGlobalId()); // 客户全局ID
 		String name = phone + "@" + oemCode;
-	    user.setName(name); // 默认设置的用户名为手机号+@+oemCode，用户名全局唯一
+		user.setName(name); // 默认设置的用户名为手机号+@+oemCode，用户名全局唯一
 		user.setPassword(password); // 初始密码
 		user.setMobile(phone); // 设置手机号码
 		user.setAvatarUrl(customer.getPortraitUrl());
@@ -562,23 +599,27 @@ public class HouseholdService implements IHouseholdService {
 		user.setOemCode(oemCode); // OEM编码
 		return user;
 	}
-	
+
 	/**
 	 * 初始化用户信息
+	 * 
 	 * @param customer 客户信息
+	 * @param householdType 账号类型
 	 * @return 用户信息
 	 */
-	private UserVo setUpUser4Update(CustomerVo customer) {
+	private UserVo setUpUser4Update(CustomerVo customer, String householdType) {
 		UserVo user = userService.getUserByCustGlobalId(customer.getGlobalId());
 		UserVo newUser = new UserVo();
-		newUser.setCustomer(customer);
-		if(user != null) {
+		if (user != null) {
+			newUser.setCustomer(customer);
 			newUser.setId(user.getId());
 			newUser.setName(user.getName());
 			newUser.setMobile(user.getMobile());
 			newUser.setPassword(user.getPassword());
+		} else {
+			newUser = setUpUser4Create(customer, householdType);
 		}
-		
+
 		return newUser;
 	}
 
@@ -586,8 +627,7 @@ public class HouseholdService implements IHouseholdService {
 	 * 根据项目id、楼栋id，获取入住安排时间
 	 */
 	@Override
-	public CheckinScheduleVo getCheckinSchedule(String projectId,
-			String buildingId) {
+	public CheckinScheduleVo getCheckinSchedule(String projectId, String buildingId) {
 		CheckinScheduleContext checkinScheduleContext = CheckinScheduleContext.build();
 		return checkinScheduleContext.getCheckinSchedule(projectId, buildingId);
 	}
@@ -600,94 +640,95 @@ public class HouseholdService implements IHouseholdService {
 		HouseVo houseVo = projectService.findHouseById(houseId);
 		String buildingId = houseVo.getBuildingId();
 		CheckinScheduleVo schedule = getCheckinSchedule(projectId, buildingId);
-		
-		//还没有安排入住办理时间
-		if(schedule == null){
+
+		// 还没有安排入住办理时间
+		if (schedule == null) {
 			throw new PropertyException(HouseholdErrorCode.CHECKIN_SCHEDULE_INFO_NULL);
 		}
-		
-		//还没到入住办理开始时间
+
+		// 还没到入住办理开始时间
 		Date date = new Date();
-		if(date.before(schedule.getStartDate())){
+		if (date.before(schedule.getStartDate())) {
 			throw new PropertyException(HouseholdErrorCode.CHECKIN_SCHEDULE_NOT_START);
 		}
-		
+
 		CheckinQueueVo queueVo = null;
-		//查用户“已经办理”的排队
+		// 查用户“已经办理”的排队
 		queueVo = getCheckinQueueOfStatus(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.FINISHED);
-		if(queueVo != null) {
-			if(HouseholdConstants.CheckinQueueStatus.FINISHED.equals(queueVo.getStatus())) {
+		if (queueVo != null) {
+			if (HouseholdConstants.CheckinQueueStatus.FINISHED.equals(queueVo.getStatus())) {
 				throw new PropertyException(HouseholdErrorCode.CHECKIN_QUEUE_FINISHED);
 			}
 		}
-		
-		//查用户今天“在办理中”的排队
-		queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.HANDLING, TimeUtil.format(date, "yyyy-MM-dd"));
-		if(queueVo != null) {
-			if(queueVo.getStatus().equals(HouseholdConstants.CheckinQueueStatus.HANDLING)){
+
+		// 查用户今天“在办理中”的排队
+		queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.HANDLING,
+				TimeUtil.format(date, "yyyy-MM-dd"));
+		if (queueVo != null) {
+			if (queueVo.getStatus().equals(HouseholdConstants.CheckinQueueStatus.HANDLING)) {
 				throw new PropertyException(HouseholdErrorCode.CHECKIN_QUEUE_HANDLING);
 			}
 		}
-		
-		//查用户今天“尚未办理”的排队
-		queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.UNTREATED, TimeUtil.format(date, "yyyy-MM-dd"));
-		if(queueVo == null) {
+
+		// 查用户今天“尚未办理”的排队
+		queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.UNTREATED,
+				TimeUtil.format(date, "yyyy-MM-dd"));
+		if (queueVo == null) {
 			CheckinQueueVo queue = new CheckinQueueVo();
 			queue.setHouseId(houseId);
 			queue.setProjectId(projectId);
 			queue.setUserId(userId);
 			List<CheckinQueueVo> queueVoList = getAllOfTody(projectId, TimeUtil.format(new Date(), "yyyy-MM-dd"));
-			if(queueVoList == null || queueVoList.size() <= 0){
-				queue.setSeq(1); 
+			if (queueVoList == null || queueVoList.size() <= 0) {
+				queue.setSeq(1);
 			} else {
 				queue.setSeq(queueVoList.size() + 1);
 			}
-			
+
 			CheckinQueueContext checkinQueueContext = CheckinQueueContext.build(queue);
 			queueVo = checkinQueueContext.create();
 		}
-		
+
 		return queueVo;
 	}
-	
+
 	@Override
 	public CheckinQueueVo createCheckinQueue(CheckinQueueVo checkinQueue) throws LiefengException {
 		String projectId = checkinQueue.getProjectId();
 		String hosueId = checkinQueue.getHouseId();
-		
+
 		HouseVo houseVo = projectService.findHouseById(hosueId);
 		String buildingId = houseVo.getBuildingId();
 		CheckinScheduleVo schedule = getCheckinSchedule(projectId, buildingId);
-		
+
 		// 校验是否有安排入住办理时间
-		if(schedule == null) {
+		if (schedule == null) {
 			throw new PropertyException(HouseholdErrorCode.CHECKIN_SCHEDULE_INFO_NULL);
 		}
-		
+
 		// 校验是否已经到了入住办理开始时间
 		Date date = new Date();
-		if(date.before(schedule.getStartDate())) {
+		if (date.before(schedule.getStartDate())) {
 			throw new PropertyException(HouseholdErrorCode.CHECKIN_SCHEDULE_NOT_START);
 		}
-		
+
 		// 查询当前最大排队号
 		List<CheckinQueueVo> queueList = getAllOfTody(projectId, TimeUtil.format(new Date(), "yyyy-MM-dd"));
-		if(ValidateHelper.isEmptyCollection(queueList)) {
-			checkinQueue.setSeq(1); 
+		if (ValidateHelper.isEmptyCollection(queueList)) {
+			checkinQueue.setSeq(1);
 		} else {
 			checkinQueue.setSeq(queueList.size() + 1);
 		}
-		
+
 		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build(checkinQueue);
 		checkinQueue = checkinQueueContext.create();
-		
+
 		return checkinQueue;
 	}
 
-
 	@Override
-	public CheckinQueueVo getCheckinQueueOfToday(String userId,
-			String projectId, String houseId, String status, String queryDate) {
+	public CheckinQueueVo getCheckinQueueOfToday(String userId, String projectId, String houseId, String status,
+			String queryDate) {
 		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
 		return checkinQueueContext.getOfToday(userId, projectId, houseId, status, queryDate);
 	}
@@ -699,119 +740,125 @@ public class HouseholdService implements IHouseholdService {
 	}
 
 	@Override
-	public CheckinQueueVo getCheckinQueue(String projectId, String houseId, String userId )throws LiefengException {
+	public CheckinQueueVo getCheckinQueue(String projectId, String houseId, String userId) throws LiefengException {
 		CheckinQueueVo queue = new CheckinQueueVo();
 		CheckinQueueVo queueVo = null;
 		queueVo = getCheckinQueueOfStatus(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.FINISHED);
-		if(queueVo != null){  //已经办理
+		if (queueVo != null) { // 已经办理
 			queue.setPageStatus(HouseholdConstants.CheckinPageStatus.FINISHED);
 			queue.setSeq(0);
-		}else{
-			//今天办理中
-			CheckinQueueVo queueVo2 = queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.HANDLING, TimeUtil.format(new Date(), "yyyy-MM-dd"));
-			//今天未办理
-			CheckinQueueVo queueVo3 = queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.UNTREATED, TimeUtil.format(new Date(), "yyyy-MM-dd"));
-			if(queueVo2 == null && queueVo3 == null){ //没有排号
+		} else {
+			// 今天办理中
+			CheckinQueueVo queueVo2 = queueVo = getCheckinQueueOfToday(userId, projectId, houseId,
+					HouseholdConstants.CheckinQueueStatus.HANDLING, TimeUtil.format(new Date(), "yyyy-MM-dd"));
+			// 今天未办理
+			CheckinQueueVo queueVo3 = queueVo = getCheckinQueueOfToday(userId, projectId, houseId,
+					HouseholdConstants.CheckinQueueStatus.UNTREATED, TimeUtil.format(new Date(), "yyyy-MM-dd"));
+			if (queueVo2 == null && queueVo3 == null) { // 没有排号
 				queue.setPageStatus(HouseholdConstants.CheckinPageStatus.NONUMBER);
-				queue.setSeq(0);; //排号为0，表示没有排号
-			}else{ //有排号
+				queue.setSeq(0);
+				; // 排号为0，表示没有排号
+			} else { // 有排号
 				queue.setPageStatus(HouseholdConstants.CheckinPageStatus.HASNUMBER);
-				if(queueVo2 != null){
+				if (queueVo2 != null) {
 					queue.setSeq(queueVo2.getSeq());
-				}else{
+				} else {
 					queue.setSeq(queueVo3.getSeq());
 				}
 			}
 		}
-		
-		//以小区为范围，获取最新“在办理中”的排队
-		queueVo = getLatestOfCheckinQueue(projectId, HouseholdConstants.CheckinQueueStatus.HANDLING, TimeUtil.format(new Date(), "yyyy-MM-dd"));
-		if(queueVo != null){
+
+		// 以小区为范围，获取最新“在办理中”的排队
+		queueVo = getLatestOfCheckinQueue(projectId, HouseholdConstants.CheckinQueueStatus.HANDLING,
+				TimeUtil.format(new Date(), "yyyy-MM-dd"));
+		if (queueVo != null) {
 			queue.setNowSeq(queueVo.getSeq());
 			Integer number = queue.getSeq() - queue.getNowSeq();
-			if(number < 0){
+			if (number < 0) {
 				number = 0;
 			}
 			queue.setNumber(number);
-		}else{
-			//以小区为范围，获取最新“已办理”的排队
-			queueVo = getLatestOfCheckinQueue(projectId, HouseholdConstants.CheckinQueueStatus.FINISHED, TimeUtil.format(new Date(), "yyyy-MM-dd"));
-			if(queueVo != null){
+		} else {
+			// 以小区为范围，获取最新“已办理”的排队
+			queueVo = getLatestOfCheckinQueue(projectId, HouseholdConstants.CheckinQueueStatus.FINISHED,
+					TimeUtil.format(new Date(), "yyyy-MM-dd"));
+			if (queueVo != null) {
 				queue.setNowSeq(0);
 				Integer number = queue.getSeq() - queueVo.getSeq();
-				if(number < 0){
+				if (number < 0) {
 					number = 0;
 				}
 				queue.setNumber(number);
-			}else{
+			} else {
 				queue.setNowSeq(0);
 				queue.setNumber(0);
 			}
 		}
-		
+
 		return queue;
 	}
 
 	@Override
-	public CheckinQueueVo getCheckinQueueOfStatus(String userId,
-			String projectId, String houseId, String status) {
+	public CheckinQueueVo getCheckinQueueOfStatus(String userId, String projectId, String houseId, String status) {
 		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
 		return checkinQueueContext.getOfStatus(userId, projectId, houseId, status);
 	}
 
 	@Override
-	public CheckinQueueVo getLatestOfCheckinQueue(String projectId,
-			String status, String queryDate) {
+	public CheckinQueueVo getLatestOfCheckinQueue(String projectId, String status, String queryDate) {
 		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
 		return checkinQueueContext.getLatest(projectId, status, queryDate);
 	}
 
 	@Override
-	public DataPageValue<CheckinQueueVo> getCheckinQueueOfNotStatus(String projectId,
-			String status, String queryDate, Integer page, Integer size) {
+	public DataPageValue<CheckinQueueVo> getCheckinQueueOfNotStatus(String projectId, String status, String queryDate,
+			Integer page, Integer size) {
 		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build();
 		return checkinQueueContext.getNotStatus(projectId, status, queryDate, page, size);
 	}
 
 	@Override
-	public void checkProrietorStatus(String proprietorId, String userId, String projectId, String houseId) throws LiefengException {
-		
-		//获取用户“已办理”的排队
-		CheckinQueueVo queueVo = getCheckinQueueOfStatus(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.FINISHED);
-		if(queueVo != null){
+	public void checkProrietorStatus(String proprietorId, String userId, String projectId, String houseId)
+			throws LiefengException {
+
+		// 获取用户“已办理”的排队
+		CheckinQueueVo queueVo = getCheckinQueueOfStatus(userId, projectId, houseId,
+				HouseholdConstants.CheckinQueueStatus.FINISHED);
+		if (queueVo != null) {
 			throw new PropertyException(HouseholdErrorCode.CHECKIN_PROPRIETOR_CLOSE);
 		}
-		
-		//判断是否已经过了办理时间
+
+		// 判断是否已经过了办理时间
 		HouseVo houseVo = projectService.findHouseById(houseId);
 		String buildingId = houseVo.getBuildingId();
 		CheckinScheduleVo schedule = getCheckinSchedule(projectId, buildingId);
-		if(schedule != null){
+		if (schedule != null) {
 			Date date = TimeUtil.formatDate(new Date(), "yyyy-MM-dd");
-			if(date.after(schedule.getEndDate())){
+			if (date.after(schedule.getEndDate())) {
 				throw new PropertyException(HouseholdErrorCode.CHECKIN_PROPRIETOR_CLOSE);
 			}
 		}
-		
+
 		ProprietorVo proprietorVo = getProprietorById(proprietorId);
-		//修改
-		if(ValidateHelper.isNotEmptyString(proprietorVo.getEmergencyContact()) || ValidateHelper.isNotEmptyString(proprietorVo.getEmergencyPhone())){
+		// 修改
+		if (ValidateHelper.isNotEmptyString(proprietorVo.getEmergencyContact())
+				|| ValidateHelper.isNotEmptyString(proprietorVo.getEmergencyPhone())) {
 			throw new PropertyException(HouseholdErrorCode.CHECKIN_PROPRIETOR_MODIFY);
-		}else{ //登记
+		} else { // 登记
 			throw new PropertyException(HouseholdErrorCode.CHECKIN_PROPRIETOR_CHECK);
 		}
 	}
 
 	@Override
 	public void registerProprietor(ProprietorSingleHouseVo singleHouse) throws LiefengException {
-		//更新业主信息
+		// 更新业主信息
 		ProprietorVo proprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
 		proprietor.setId(singleHouse.getProprietorId());
 		proprietor.setRegisterTime(new Date());
 		proprietor.setStatus(HouseholdConstants.ProprietorStatus.ACTIVE);
 		ProprietorContext proprietorContext = ProprietorContext.build(proprietor);
 		ProprietorVo proprietorVo = proprietorContext.update();
-		
+
 		CustomerVo customer = userService.getCustomerByGlobalId(proprietorVo.getCustGlobalId());
 		customer.setSex(singleHouse.getSex());
 		customer = checkService.updateCustomerCheck(customer);
@@ -821,24 +868,22 @@ public class HouseholdService implements IHouseholdService {
 
 	@Override
 	public ProprietorSingleHouseVo getProprietorOfRegister(String proprietorId) {
-		//业主
+		// 业主
 		ProprietorVo proprietorVo = getProprietorById(proprietorId);
 		ProprietorSingleHouseVo singleHouseVo = new ProprietorSingleHouseVo();
-		
-		//copy
+
+		// copy
 		MyBeanUtil.copyBeanNotNull2Bean(proprietorVo, singleHouseVo);
 		singleHouseVo.setProprietorId(proprietorId);
-		//用户信息
+		// 用户信息
 		CustomerVo customer = userService.getCustomerByGlobalId(proprietorVo.getCustGlobalId());
 		singleHouseVo.setSex(customer.getSex());
-		
+
 		return singleHouseVo;
 	}
 
-
 	@Override
-	public ResidentFeedbackVo createResidentFeedback(
-			ResidentFeedbackVo residentFeedbackVo) {
+	public ResidentFeedbackVo createResidentFeedback(ResidentFeedbackVo residentFeedbackVo) {
 		ResidentFeedbackContext residentFeedbackContext = ResidentFeedbackContext.build(residentFeedbackVo);
 		return residentFeedbackContext.create();
 	}
@@ -862,31 +907,33 @@ public class HouseholdService implements IHouseholdService {
 	}
 
 	@Override
-	public DataPageValue<ResidentFeedbackVo> getResidentFeedbackPage(
-			ResidentFeedbackBo params, Integer currentPage, Integer pageSize) {
+	public DataPageValue<ResidentFeedbackVo> getResidentFeedbackPage(ResidentFeedbackBo params, Integer currentPage,
+			Integer pageSize) {
 		ResidentFeedbackContext residentFeedbackContext = ResidentFeedbackContext.build();
 		return residentFeedbackContext.getResidentFeedPage(params, currentPage, pageSize);
 	}
 
 	@Override
 	public AppFriendVo createAppFriend(AppFriendVo appFriendVo) {
-		//删除“已拒绝”好友申请记录
+		// 删除“已拒绝”好友申请记录
 		AppFriendContext context = AppFriendContext.build();
-		context.deleteOfStatus(appFriendVo.getUserId(), appFriendVo.getFriendId(), HouseholdConstants.AppFriendStatus.REFUSE);
-		
-		//判断是否有“已添加”的记录
-		AppFriendVo appFriend = context.getAppFriend(appFriendVo.getFriendId(), appFriendVo.getUserId(), HouseholdConstants.AppFriendStatus.ASFRIEND);
-		if(appFriend == null){ //创建一个“待审核”的记录
+		context.deleteOfStatus(appFriendVo.getUserId(), appFriendVo.getFriendId(),
+				HouseholdConstants.AppFriendStatus.REFUSE);
+
+		// 判断是否有“已添加”的记录
+		AppFriendVo appFriend = context.getAppFriend(appFriendVo.getFriendId(), appFriendVo.getUserId(),
+				HouseholdConstants.AppFriendStatus.ASFRIEND);
+		if (appFriend == null) { // 创建一个“待审核”的记录
 			AppFriendContext appFriendContext = AppFriendContext.build(appFriendVo);
 			appFriend = appFriendContext.create();
-		}else{ //创建一个“已成为好友”的记录
+		} else { // 创建一个“已成为好友”的记录
 			appFriendVo.setStatus(HouseholdConstants.AppFriendStatus.ASFRIEND);
 			appFriendVo.setUpdateTime(new Date());
-			
+
 			AppFriendContext appFriendContext = AppFriendContext.build(appFriendVo);
 			appFriend = appFriendContext.create();
 		}
-		
+
 		return appFriend;
 	}
 
@@ -904,29 +951,29 @@ public class HouseholdService implements IHouseholdService {
 
 	@Override
 	public void updateAppFriend(String id, String status) {
-		
+
 		AppFriendVo appFriendVo = new AppFriendVo();
 		appFriendVo.setId(id);
 		appFriendVo.setStatus(status);
-		
+
 		AppFriendContext appFriendContext = AppFriendContext.build(appFriendVo);
-		//更新
-		appFriendVo  = appFriendContext.update();
-		
-		//同意成为好友
-		if(HouseholdConstants.AppFriendStatus.ASFRIEND.equals(status)){
-			//创建第二条好友
+		// 更新
+		appFriendVo = appFriendContext.update();
+
+		// 同意成为好友
+		if (HouseholdConstants.AppFriendStatus.ASFRIEND.equals(status)) {
+			// 创建第二条好友
 			AppFriendVo appFriend = new AppFriendVo();
 			appFriend.setFriendId(appFriendVo.getUserId());
 			appFriend.setUserId(appFriendVo.getFriendId());
 			appFriend.setStatus(HouseholdConstants.AppFriendStatus.ASFRIEND);
 			appFriend.setCreateTime(new Date());
 			appFriend.setUpdateTime(new Date());
-			
+
 			AppFriendContext friendContext = AppFriendContext.build(appFriend);
 			friendContext.create();
 		}
-		
+
 	}
 
 	@Override
@@ -942,8 +989,7 @@ public class HouseholdService implements IHouseholdService {
 	}
 
 	@Override
-	public AppFriendVo getAppFriend(String userId, String friendId,
-			String status) {
+	public AppFriendVo getAppFriend(String userId, String friendId, String status) {
 		AppFriendContext appFriendContext = AppFriendContext.build();
 		return appFriendContext.getAppFriend(userId, friendId, status);
 	}
@@ -953,22 +999,22 @@ public class HouseholdService implements IHouseholdService {
 		ResidentHouseContext residentHouseContext = ResidentHouseContext.build();
 		return residentHouseContext.getResidentHouse(residentId, houseId);
 	}
-	
+
 	@Override
-	public ProprietorVo findProprietor(String projectId,String proprietorName){
-		return ProprietorContext.build().findByProjectIdAndName(projectId,proprietorName);
+	public ProprietorVo findProprietor(String projectId, String proprietorName) {
+		return ProprietorContext.build().findByProjectIdAndName(projectId, proprietorName);
 	}
-	
+
 	@Override
-	public void createResidentCar(ResidentCarVo residentCarVo){
+	public void createResidentCar(ResidentCarVo residentCarVo) {
 		ResidentCarVo carVo = ResidentCarContext.build().findByPlateNum(residentCarVo.getPlateNum());
-		if(carVo == null) {
+		if (carVo == null) {
 			ResidentCarContext.build(residentCarVo).create();
 		}
 	}
-	
+
 	@Override
-	public void updateResidentCar(ResidentCarVo residentCarVo){
+	public void updateResidentCar(ResidentCarVo residentCarVo) {
 		ResidentCarContext.build(residentCarVo).update();
 	}
 
@@ -995,14 +1041,14 @@ public class HouseholdService implements IHouseholdService {
 		VisitorContext visitorContext = VisitorContext.loadById(visitorId);
 		return visitorContext.getVisitor();
 	}
-	
+
 	@Override
-	public List<ResidentCarVo> findResidentCarByPakingId(String pakingId){
+	public List<ResidentCarVo> findResidentCarByPakingId(String pakingId) {
 		return ResidentCarContext.build().findResidentCarByPakingId(pakingId);
 	}
-	
+
 	@Override
-	public List<ResidentCarVo> findResidentCarByHouseId(String houseId){
+	public List<ResidentCarVo> findResidentCarByHouseId(String houseId) {
 		return ResidentCarContext.build().findResidentCarByHouseId(houseId);
 	}
 
