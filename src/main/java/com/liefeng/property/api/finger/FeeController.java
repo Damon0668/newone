@@ -58,11 +58,12 @@ public class FeeController {
 		return ReturnValue.success();
 	}
 
-	@ApiOperation(value="是否抄表")
-	@RequestMapping(value="/isCreate" , method=RequestMethod.GET)
+	@ApiOperation(value="是否抄表[业主]")
+	@RequestMapping(value="/isCreateOnProprietor" , method=RequestMethod.GET)
 	@ResponseBody
-	public DataValue<Boolean> isCreate(@Valid @ModelAttribute FreeIsCreateRo freeIsCreateRo){
-		return DataValue.success(Boolean.FALSE);
+	public DataValue<Boolean> isCreateOnProprietor(@Valid @ModelAttribute FreeIsCreateRo freeIsCreateRo){
+		Boolean result = feeService.isCreateMeterRecordOnProprietor(freeIsCreateRo.getProjectId(), freeIsCreateRo.getHouseNum(), freeIsCreateRo.getMeterType());
+		return DataValue.success(result);
 	}
 	/**
 	 * 

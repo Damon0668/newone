@@ -402,6 +402,24 @@ public class MeterRecordContext {
 		}
 	}
 	
+	/**
+	 * 是否有抄表记录
+	 * @param houseNum
+	 * @param meterType
+	 * @param meterOwner
+	 * @return
+	 */
+	public Boolean isCreatedMeterRecord(String houseNum,String meterType,String meterOwner){
+		if(ValidateHelper.isNotEmptyString(projectId)){
+			MeterRecordPo currentMeterRecordPo = meterRecordRepository.getPreTypeAndMeterOwner(projectId,houseNum,meterType,meterOwner,new Date());
+			if(currentMeterRecordPo != null){
+				return Boolean.TRUE;
+			}
+			return Boolean.FALSE;
+		}
+		return null;
+	}
+	
 	protected void setMeterRecord(MeterRecordVo meterRecord) {
 		this.meterRecord = meterRecord;
 	}

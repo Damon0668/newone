@@ -1190,4 +1190,9 @@ public class FeeService implements IFeeService {
 		double   f1   =  f.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();  
 		return f1;
 	}
+
+	@Override
+	public Boolean isCreateMeterRecordOnProprietor(String projectId, String houseNum, String meterType) {
+		return MeterRecordContext.loadByProjectId(projectId).isCreatedMeterRecord(houseNum, meterType, FeeConstants.MeterRecord.METEROWNER_YSE);
+	}
 }
