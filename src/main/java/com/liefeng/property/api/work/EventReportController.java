@@ -232,7 +232,7 @@ public class EventReportController {
 	@RequestMapping(value="/withdrawEventReport", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue eventReportWithdraw(@Valid @ModelAttribute EventReportFlowWorkRo reportFlowWorkRo){
-		workbenchService.eventReportSendBack(reportFlowWorkRo.getWfTaskId(), reportFlowWorkRo.getStaffid());
+		workbenchService.eventReporWithdraw(reportFlowWorkRo.getWfTaskId(), reportFlowWorkRo.getStaffid());
 		return ReturnValue.success();
 	}
 	

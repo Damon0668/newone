@@ -82,6 +82,7 @@
 		left join t_parking_rental pr on pr.parking_id=p.id
 		And (((pr.start_date &lt;= Now() And pr.end_date &gt;= Now())) or pr.end_date is null)
 		<include refid="Example_Where_Clause" />
+		group by p.id desc
 		<if
 			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
 			${pager.mysqlQueryCondition}
