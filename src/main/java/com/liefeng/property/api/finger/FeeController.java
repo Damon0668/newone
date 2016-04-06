@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.common.util.TimeUtil;
 import com.liefeng.core.entity.DataListValue;
+import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IFeeService;
 import com.liefeng.property.api.ro.finger.fee.FeeItemByDateRo;
+import com.liefeng.property.api.ro.finger.fee.FreeIsCreateRo;
 import com.liefeng.property.vo.fee.FeeItemVo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
 
@@ -53,6 +55,12 @@ public class FeeController {
 		return ReturnValue.success();
 	}
 
+	@ApiOperation(value="是否抄表")
+	@RequestMapping(value="/isCreate" , method=RequestMethod.GET)
+	@ResponseBody
+	public DataValue<Boolean> isCreate(@Valid @ModelAttribute FreeIsCreateRo freeIsCreateRo){
+		return DataValue.success(Boolean.FALSE);
+	}
 	/**
 	 * 
 	 * 获取该房号的所属时间段的费用数据
