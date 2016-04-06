@@ -42,7 +42,7 @@
       <!-- 车位管理服务 -->
       <dubbo:service interface="com.liefeng.intf.property.IParkingService" ref="parkingService"/>
 
-	  <!-- 车位管理服务 -->
+	  <!-- 审批流程服务 -->
       <dubbo:service interface="com.liefeng.intf.property.IApprovalFlowService" ref="approvalFlowService"/>
 	  
 </beans>
