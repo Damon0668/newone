@@ -219,7 +219,9 @@ public class MeterSettingContext {
 	
 		for (MeterSettingVo meterSettingVo : meterSettingVos) {
 			//开始时间为 每个月最后一天减掉抄表天数
-			meterSettingVo.setStartDay(TimeUtil.getDayBefore(TimeUtil.getLastDayOfCurrMonth(), meterSettingVo.getLastingDay()).getDate());
+			Integer startDay = TimeUtil.getLastDayOfCurrMonth().getDate() - meterSettingVo.getLastingDay();
+			startDay = startDay >= 1 ? startDay : 1; 
+			meterSettingVo.setStartDay(startDay);
 			
 			logger.info(meterSettingVo.getStartDay()+">"+TimeUtil.getCurrentDay()+"||"+(meterSettingVo.getStartDay()+meterSettingVo.getLastingDay())+"<"+TimeUtil.getCurrentDay());
 			
