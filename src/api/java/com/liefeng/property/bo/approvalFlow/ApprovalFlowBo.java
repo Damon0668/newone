@@ -56,7 +56,7 @@ public class ApprovalFlowBo  extends BaseValue{
 	/**
 	 * 抄送人id
 	 */
-	private String callSendId;
+	private String copyToPeopleId;
 
 	public String getProcessId() {
 		return processId;
@@ -122,12 +122,12 @@ public class ApprovalFlowBo  extends BaseValue{
 		this.role = role;
 	}
 
-	public String getCallSendId() {
-		return callSendId;
+	public String getCopyToPeopleId() {
+		return copyToPeopleId;
 	}
 
-	public void setCallSendId(String callSendId) {
-		this.callSendId = callSendId;
+	public void setCopyToPeopleId(String copyToPeopleId) {
+		this.copyToPeopleId = copyToPeopleId;
 	}
 
 }
