@@ -27,8 +27,10 @@ public class ControllerInterceptor implements HandlerInterceptor{
 		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
 		
 		String openId = request.getHeader("openId");
-
+		
 		String env = CommonUtil.getActiveProfile().toLowerCase();
+		
+		logger.info("ControllerInterceptor openId = {} , env = {}", openId, env);
 		
 		//开发环境和测试环境设置。
 		if("test".equals(env) || "dev".equals(env)){
@@ -61,12 +63,12 @@ public class ControllerInterceptor implements HandlerInterceptor{
 		
 		String oemCode = (String) redisService.getValue("openId_" + openId);
 		
+		logger.info("ControllerInterceptor openId = {}, oemCode = {}", openId, oemCode);
+		
 		if(ValidateHelper.isEmptyString(oemCode)){
 			return Boolean.FALSE;
 		}
 		
-		logger.info("ControllerInterceptor openId = {}, oemCode = {}", openId, oemCode);
-			
 		ContextManager.getInstance().setOemCode(oemCode);
 			
 		return Boolean.TRUE;//只有返回true才会继续向下执行，返回false取消当前请求

@@ -1,8 +1,5 @@
 package com.liefeng.property.api.finger;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 import java.util.Date;
 import java.util.List;
 
@@ -18,12 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.TimeUtil;
 import com.liefeng.core.entity.DataListValue;
+import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IFeeService;
 import com.liefeng.property.api.ro.finger.fee.FeeItemByDateRo;
+import com.liefeng.property.api.ro.finger.fee.FreeIsCreateRo;
 import com.liefeng.property.api.ro.finger.fee.MeterRecordRo;
 import com.liefeng.property.vo.fee.FeeItemVo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * 客户端费用管理模块API
@@ -56,6 +58,13 @@ public class FeeController {
 		return ReturnValue.success();
 	}
 
+	@ApiOperation(value="是否抄表[业主]")
+	@RequestMapping(value="/isCreateOnProprietor" , method=RequestMethod.GET)
+	@ResponseBody
+	public DataValue<Boolean> isCreateOnProprietor(@Valid @ModelAttribute FreeIsCreateRo freeIsCreateRo){
+		Boolean result = feeService.isCreateMeterRecordOnProprietor(freeIsCreateRo.getProjectId(), freeIsCreateRo.getHouseNum(), freeIsCreateRo.getMeterType());
+		return DataValue.success(result);
+	}
 	/**
 	 * 
 	 * 获取该房号的所属时间段的费用数据

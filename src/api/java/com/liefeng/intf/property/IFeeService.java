@@ -350,6 +350,14 @@ public interface IFeeService {
 	 * @throws LiefengException
 	 */
 	public List<FeeItemVo> getFeeItemByFeedate(String projectId,
-			String houseNum, String feeType, Date startDate, Date endDate)
-			throws LiefengException;
+			String houseNum, String feeType, Date startDate, Date endDate) throws LiefengException;
+
+	/**
+	 * 判断业主是否有抄表
+	 * @param projectId 项目ID
+	 * @param houseNum 房号
+	 * @param meterType 记录类型
+	 * @return
+	 */
+	public Boolean isCreateMeterRecordOnProprietor(String projectId, String houseNum, String meterType);
 }
