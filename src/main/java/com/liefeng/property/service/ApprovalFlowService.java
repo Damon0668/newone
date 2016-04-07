@@ -40,7 +40,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 	
 	@Override
 	public void startOrExecute(ApprovalFlowBo approvalFlowBo) {
-		Process process = workflowService.findByProcesssById(approvalFlowBo.getProcessId());
+		Process process = workflowService.findByProcessId(approvalFlowBo.getProcessId());
 		PropertyStaffVo propertyStaffVo = propertyStaffService.findPropertyStaffById(approvalFlowBo.getStaffId());
 		approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_STATUS, ApprovalFlowConstants.ORDER_STATUS_WAIT_SIGN);
 		//开始并执行流程
