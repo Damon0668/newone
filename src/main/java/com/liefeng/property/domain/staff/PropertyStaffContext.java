@@ -310,7 +310,7 @@ public class PropertyStaffContext {
 	}
 
 	/**
-	 * 员工信息，包含 名称，岗位名称
+	 * 员工信息，包含 部门名称，岗位名称
 	 * @return
 	 */
 	public PropertyStaffVo findPropertyStaffById4DP() {
@@ -329,7 +329,7 @@ public class PropertyStaffContext {
 	}
 
 	/**
-	 * 员工信息列表，包含 名称，岗位名称
+	 * 员工信息列表，包含 部门名称，岗位名称
 	 * @return
 	 */
 	public List<PropertyStaffVo> findPropertyStaffById4DPList(String staffIds) {
@@ -337,5 +337,13 @@ public class PropertyStaffContext {
 		return propertyStaffQueryRepository.findPropertyStaffById4DPList(staffIds.split(","));
 		
 		return null;
+	}
+
+	/**
+	 * 根据岗位id获取员工信息 包含 部门名称，岗位名称
+	 * @return
+	 */
+	public List<PropertyStaffVo> findPropertyStaffByPosition(String positionId) {
+		return propertyStaffQueryRepository.findPropertyStaffByPosition(positionId);
 	}
 }

@@ -42,4 +42,19 @@ public class ApprovalFlowConstants {
 	 */
 	public static final String ORDER_COMPLETE = "2"; 
 	
+	public static interface AssigneeType{
+		
+		public static final String USER = "user";
+		
+		public static final String DEPT = "dept";
+		
+		public static final String ROLE = "role";
+		
+		public static final String DIRECTOR = "director";
+
+		public static final String POSTS = "posts";
+
+		public static final String ALL = "all";
+	}
+	
 }

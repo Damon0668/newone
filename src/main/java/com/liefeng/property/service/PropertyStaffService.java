@@ -394,4 +394,9 @@ public class PropertyStaffService implements IPropertyStaffService {
 	public List<String> findStaffMsgClientIds(List<String> staffIds) {
 		return StaffMsgClientContext.build().findStaffMsgClients(staffIds);
 	}
+
+	@Override
+	public List<PropertyStaffVo> findPropertyStaffByPosition(String positionId) {
+		return PropertyStaffContext.build().findPropertyStaffByPosition(positionId);
+	}
 }
