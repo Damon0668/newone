@@ -55,4 +55,9 @@ public class SysConstants {
 		 */
 		public static final String METER_TYPE = "METER_TYPE";
 	}
+	
+	/**
+	 * 默认系统发送
+	 */
+	public static final String DEFAULT_SYSTEM_SENDUSER = "-1";
 }
