@@ -218,4 +218,11 @@ public interface IPropertyStaffService {
 	 * @return
 	 */
 	public List<PropertyStaffVo> findPropertyStaffById4DPList(String staffIds);
+	
+	/**
+	 * 通过岗位获取员工信息 包含部门名称，职位名称
+	 * @param positionId
+	 * @return
+	 */
+	public List<PropertyStaffVo> findPropertyStaffByPosition(String positionId);
 }

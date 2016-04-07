@@ -32,7 +32,7 @@ public interface PropertyStaffQueryRepository extends BaseRepository<PropertySta
 	public List<PropertyStaffVo> queryByRoleId(PagingParamVo param);
 	
 	/**
-	 * 员工信息，包含 名称，岗位名称
+	 * 员工信息，包含 部门名称，岗位名称
 	 * @return
 	 */
 	public PropertyStaffVo findPropertyStaffById4DP(String propertyStaffId);
@@ -44,8 +44,14 @@ public interface PropertyStaffQueryRepository extends BaseRepository<PropertySta
 	public List<PropertyStaffVo> getDepartmentDirectorList(Map<String, String> param);
 
 	/**
-	 * 员工信息列表，包含 名称，岗位名称
+	 * 员工信息列表，包含 部门名称，岗位名称
 	 * @return
 	 */
 	public List<PropertyStaffVo> findPropertyStaffById4DPList(String[] staffIds);
+
+	/**
+	 * 根据岗位id获取员工信息 包含 部门名称，岗位名称
+	 * @return
+	 */
+	public List<PropertyStaffVo> findPropertyStaffByPosition(String positionId);
 }

@@ -39,6 +39,7 @@ import com.liefeng.property.bo.workbench.EventReportBo;
 import com.liefeng.property.bo.workbench.NoticeBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.StaffConstants;
+import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.domain.workbench.EventAccepterEvalContext;
 import com.liefeng.property.domain.workbench.EventProcAttachContext;
@@ -75,7 +76,9 @@ import com.liefeng.property.vo.workbench.TaskPrivilegeVo;
 import com.liefeng.property.vo.workbench.TaskVo;
 import com.liefeng.property.vo.workbench.WebsiteMsgPrivilegeVo;
 import com.liefeng.property.vo.workbench.WebsiteMsgVo;
+import com.liefeng.service.constant.PushActionConstants;
 import com.liefeng.service.constant.PushMsgConstants;
+import com.liefeng.service.vo.PushMsgTemplateVo;
 import com.liefeng.service.vo.msg.ListUserMsg;
 import com.liefeng.service.vo.msg.SingleUserMsg;
 
@@ -128,6 +131,41 @@ public class WorkbenchService implements IWorkbenchService {
 					privilegeVo.setStaffId(privilegeArray[i]); // 员工id
 					createTaskPrivilege(privilegeVo);
 				}
+				
+				//获取推送消息模板
+				PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.MY_TASK_TODO_ONE);
+				
+				if(pushMsgTemplateVo != null){
+					if(privilegeArray.length > 1){
+						
+						List<String> receiveUserIdList = new ArrayList<String>();
+	
+						for (int i = 0; i < privilegeArray.length; i++) {
+							receiveUserIdList.add(privilegeArray[i]);
+						}
+						ListUserMsg message = new ListUserMsg();
+						message.setAction(PushActionConstants.MY_TASK_TODO_ONE);
+						message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+						message.setTitle(pushMsgTemplateVo.getTitle());
+						message.setContent(pushMsgTemplateVo.getContent());
+						message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+						message.setReceiveUserIdList(receiveUserIdList);
+						
+						pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+						logger.info("派送任务时群推消息{}", message);
+
+					}else{
+						SingleUserMsg message = new SingleUserMsg();
+						message.setAction(PushActionConstants.MY_TASK_TODO_ONE);
+						message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+						message.setTitle(pushMsgTemplateVo.getTitle());
+						message.setContent(pushMsgTemplateVo.getContent());
+						message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+						message.setReceiveUserId(privilegeArray[0]);
+						pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+						logger.info("派送任务时单推消息{}", message);
+					}
+				}
 
 			}
 
@@ -179,6 +217,59 @@ public class WorkbenchService implements IWorkbenchService {
 
 				createTaskAttachment(taskAttachmentVo);
 
+			}
+		}
+		
+		//办理提交
+		if(WorkbenchConstants.TaskStatus.PROCESSING.equals(taskVo.getStatus())){
+			//获取推送消息模板
+			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.MY_TASK_FEEDBACK_ONE);
+			if(pushMsgTemplateVo != null){
+				SingleUserMsg message = new SingleUserMsg();
+				message.setAction(PushActionConstants.MY_TASK_FEEDBACK_ONE);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveUserId(taskVo.getCreatorId());
+				pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+				logger.info("任务办理时单推消息{}", message);
+			}
+		}
+		
+		//审核不通过
+		if(WorkbenchConstants.TaskStatus.PENDING.equals(taskVo.getStatus())){
+			//获取推送消息模板
+			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.MY_TASK_NOT_PASS);
+			
+			if(pushMsgTemplateVo != null){
+				SingleUserMsg message = new SingleUserMsg();
+				message.setAction(PushActionConstants.MY_TASK_NOT_PASS);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveUserId(taskVo.getHandlerId());
+				pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+				logger.info("任务审核不通过时单推消息{}", message);
+			}
+		}
+		
+		//审核通过
+		if(WorkbenchConstants.TaskStatus.PROCESSED.equals(taskVo.getStatus())){
+			//获取推送消息模板
+			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.MY_TASK_PASSED);
+			
+			if(pushMsgTemplateVo != null){
+				SingleUserMsg message = new SingleUserMsg();
+				message.setAction(PushActionConstants.MY_TASK_PASSED);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveUserId(taskVo.getHandlerId());
+				pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+				logger.info("任务审核通过时单推消息{}", message);
 			}
 		}
 	}
