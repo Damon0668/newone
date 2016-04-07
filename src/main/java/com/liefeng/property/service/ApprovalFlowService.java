@@ -69,7 +69,9 @@ public class ApprovalFlowService implements IApprovalFlowService{
 		
 		// 保存抄送实例ID
 		if(ValidateHelper.isNotEmptyString(approvalFlowBo.getCopyToPeopleId())) {
-			String[] idsArr = approvalFlowBo.getCopyToPeopleId().split(",");
+			String copyToPeopleId = approvalFlowBo.getCopyToPeopleId();
+			copyToPeopleId = addUserPreixes(copyToPeopleId);
+			String[] idsArr = copyToPeopleId.split(",");
 			workflowService.createCCOrder(approvalFlowBo.getOrderId(), approvalFlowBo.getStaffId(), idsArr);
 		}
 	}
