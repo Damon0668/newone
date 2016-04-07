@@ -61,9 +61,11 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			approvalFlowBo.setOrderId(order.getId());
 		} else if(approvalFlowBo.getTaskName().equals(ApprovalFlowConstants.NODE_END)) { //结束流程
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
+			approvalFlowBo.getParams().put(approvalFlowBo.getRole(), addUserPreixes(approvalFlowBo.getNextOperator()));
 			workflowService.execute(approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
 		}else{ //继续执行下去
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
+			approvalFlowBo.getParams().put(approvalFlowBo.getRole(), addUserPreixes(approvalFlowBo.getNextOperator()));
 			workflowService.executeAndJumpTask(approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams(), approvalFlowBo.getTaskName());
 		}
 		
@@ -100,7 +102,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 	public List<PropertyStaffVo> getUser(String assignee){
 		List<PropertyStaffVo> returnPropertyStaffVos = new ArrayList<PropertyStaffVo>();
 		Map<String, String> ids = new HashMap<String, String>();
-		for (String item : assignee.split(",")) {
+		for (String item : assignee.split(":")) {
 			String[] split=item.split("_");
 			if(split.length!=2)continue;
 			
