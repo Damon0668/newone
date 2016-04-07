@@ -35,6 +35,11 @@ public class ApprovalFlowConstants {
 	/**
 	 * 流程变量里的状态 处理中
 	 */
-	public static final String ORDER_STATUS_PROCESSING = "1"; 
+	public static final String ORDER_STATUS_PROCESSING = "1";
+	
+	/**
+	 * 流程变量里的状态 已完成
+	 */
+	public static final String ORDER_COMPLETE = "2"; 
 	
 }
