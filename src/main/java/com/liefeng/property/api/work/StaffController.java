@@ -89,11 +89,11 @@ public class StaffController {
 			
 			customer.setPortraitUrl(updateStaffRo.getPortraitUrl());
 			
+			customer.setSex(updateStaffRo.getSex());
+			
 			if(ValidateHelper.isNotEmptyString(updateStaffRo.getName())){
 				customer.setRealName(updateStaffRo.getName());
 			}
-			
-			customer.setSex(updateStaffRo.getSex());
 			
 			if(ValidateHelper.isNotEmptyString(updateStaffRo.getBirthday())){
 				customer.setBirthday(TimeUtil.format(updateStaffRo.getBirthday(), TimeUtil.PATTERN_1));
