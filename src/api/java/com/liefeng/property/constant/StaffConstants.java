@@ -70,4 +70,9 @@ public class StaffConstants {
 		public String FILE_TYPE_OTHER_PIC = "3";
 		
 	}
+	
+	/**
+	 * 通告审核权限
+	 */
+	public static final String NOTICE_CHECK = "ZXTG_SH";
 }

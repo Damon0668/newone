@@ -233,4 +233,14 @@ public interface IPropertyStaffService {
 	 * @return
 	 */
 	public List<PropertyStaffVo> findPropertyStaffByPosition(String positionId);
+	
+	/**
+	 * 通告projectId, departmentId获取员工的clientId
+	 * @param departmentId
+	 * @param projectId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月8日 下午6:08:08
+	 */
+	public List<PropertyStaffVo> findStaffClientIdList(String departmentId, String projectId);
 }

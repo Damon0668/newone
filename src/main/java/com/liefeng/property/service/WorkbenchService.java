@@ -392,6 +392,44 @@ public class WorkbenchService implements IWorkbenchService {
 
 			}
 		}
+		
+		//获取具有审核权限的员工
+		List<PropertyStaffVo> propertyStaffList = propertyStaffService.findStaffByMenuCode(StaffConstants.NOTICE_CHECK);
+		//获取推送消息模板
+		PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.NOTICE_TO_AUDIT);
+		
+		if(propertyStaffList != null && pushMsgTemplateVo != null){
+			if(propertyStaffList.size()>1){
+				
+				List<String> receiveUserIdList = new ArrayList<String>();
+				
+				for (int i = 0; i < propertyStaffList.size(); i++) {
+					receiveUserIdList.add(propertyStaffList.get(i).getId());
+				}
+				ListUserMsg message = new ListUserMsg();
+				message.setAction(PushActionConstants.NOTICE_TO_AUDIT);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveUserIdList(receiveUserIdList);
+				
+				pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+				logger.info("通知创建时群推消息{}", message);
+				
+			}else{
+				SingleUserMsg message = new SingleUserMsg();
+				message.setAction(PushActionConstants.NOTICE_TO_AUDIT);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveUserId(propertyStaffList.get(0).getId());
+				pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+				logger.info("通知创建时单推消息{}", message);
+			}
+		}
+		
 		return noticeVo;
 	}
 
@@ -448,6 +486,42 @@ public class WorkbenchService implements IWorkbenchService {
 			}
 		}
 
+		//审核不通过
+		if(WorkbenchConstants.NoticeStatus.NOTPASS.equals(noticeVo.getStatus())){
+			//获取推送消息模板
+			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.NOTICE_RETURNED);
+			
+			if(pushMsgTemplateVo != null){
+				SingleUserMsg message = new SingleUserMsg();
+				message.setAction(PushActionConstants.NOTICE_RETURNED);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveUserId(noticeVo.getCreatorId());
+				pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+				logger.info("通知审核不通过时单推消息{}", message);
+			}
+		}
+		
+		//审核通过
+		if(WorkbenchConstants.NoticeStatus.PUBLISHING.equals(noticeVo.getStatus())){
+			//获取推送消息模板
+			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.NOTICE_AUDIT_PASS);
+			
+			if(pushMsgTemplateVo != null){
+				SingleUserMsg message = new SingleUserMsg();
+				message.setAction(PushActionConstants.NOTICE_AUDIT_PASS);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveUserId(noticeVo.getCreatorId());
+				pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+				logger.info("通知审核通过时单推消息{}", message);
+			}
+		}
+				
 		return noticeVo;
 	}
 

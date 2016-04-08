@@ -123,6 +123,12 @@ public class PropertyStaffVo extends BaseValue {
 	@ApiModelProperty(value="职位名称")
 	private String positionName;
 
+	/**
+	 * clientId
+	 */
+	@ApiModelProperty(value="clientId")
+	private String clientId;
+	
 	public String getId() {
 		return id;
 	}
@@ -257,5 +263,13 @@ public class PropertyStaffVo extends BaseValue {
 
 	public void setOpenId(String openId) {
 		this.openId = openId;
+	}
+
+	public String getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
 	}
 }

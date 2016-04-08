@@ -64,4 +64,12 @@ public interface PropertyStaffQueryRepository extends BaseRepository<PropertySta
 	 * @return
 	 */
 	public List<PropertyStaffVo> findStaffByMenuCode(@Param("menuCode") String menuCode, @Param("oemCode") String oemCode);
+	
+	/**
+	 * 查询员工clientId
+	 * 根据部门ID和项目ID
+	 * @param param
+	 * @return
+	 */
+	public List<PropertyStaffVo> queryByProjectIdAndDeptId(PagingParamVo param);
 }

@@ -136,6 +136,6 @@ public class PropertyStaffServiceTest {
 	@Test
 	public void findStaffByMenuCode(){
 	
-		System.out.println(propertyStaffService.findStaffByMenuCode("SJZD_ADD"));
+		System.out.println(propertyStaffService.findStaffByMenuCode("zxtg_sh"));
 	}
 }

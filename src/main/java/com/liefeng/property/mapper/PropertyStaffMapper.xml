@@ -25,6 +25,7 @@
     <result column="department_id" property="departmentId"/>
     <result column="creator_id" property="creatorId"/>
     <result column="oem_code" property="oemCode"/>
+    <result column="client_id" property="clientId"/>
 </resultMap>
 
 <!-- 查询条件 -->
@@ -219,4 +220,29 @@
 		    )
 		AND ps.oem_code = #{oemCode}
     </select>
+    
+    <select id="queryByProjectIdAndDeptId" resultMap="PropertyStaffVo" >
+	  	SELECT
+			s.id,
+			c.client_id
+		FROM
+			t_property_staff s,
+			t_manage_project p,
+			t_staff_msg_client c
+		WHERE
+			s.id = p.staff_id
+		AND s.id = c.staff_id
+		AND s. STATUS = '1'
+		AND s.work_status = '1'
+		<if test="extra.projectId != null and extra.projectId != ''" >
+       	AND p.project_id = #{extra.projectId}
+   		</if>
+   		
+   		<if test="extra.departmentId != null and extra.departmentId != ''" >
+        AND s.department_id = #{extra.departmentId}
+   		</if>
+		
+	
+	</select>
+    
 </mapper>
