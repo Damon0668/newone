@@ -25,9 +25,11 @@ public class PropertyStaffVo extends BaseValue {
 	/**
 	 * 主键
 	 */
-	@ApiModelProperty(value="员工ID（=openId）")
+	@ApiModelProperty(value="员工ID=(openId)")
 	private String id;
 	
+	@ApiModelProperty(value="openId")
+	private String openId;
 	/**
 	 * 登陆账号
 	 */
@@ -247,5 +249,13 @@ public class PropertyStaffVo extends BaseValue {
 
 	public void setPositionName(String positionName) {
 		this.positionName = positionName;
+	}
+
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
 	}
 }
