@@ -72,6 +72,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_STATUS, ApprovalFlowConstants.ORDER_COMPLETE);
 			workflowService.execute(approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
 		}else{ //继续执行下去
+			System.out.println("继续执行下去:"+approvalFlowBo.getRole()+"||"+addUserPreixes(approvalFlowBo.getNextOperator()));
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
 			approvalFlowBo.getParams().put(approvalFlowBo.getRole(), addUserPreixes(approvalFlowBo.getNextOperator()));
 			workflowService.executeAndJumpTask(approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams(), approvalFlowBo.getTaskName());
