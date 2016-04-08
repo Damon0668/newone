@@ -11,6 +11,7 @@ import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.HistoryTask;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Process;
+import org.snaker.engine.entity.TaskActor;
 import org.snaker.engine.model.ProcessModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.service.workflow.IWorkflowService;
 import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
 import com.liefeng.property.constant.ApprovalFlowConstants;
+import com.liefeng.property.domain.staff.PropertyStaffContext;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 
 /**
@@ -172,5 +174,21 @@ public class ApprovalFlowService implements IApprovalFlowService{
 		return returnPropertyStaffVos;
 	}
 
-
+	@Override
+	public String getTaskActor(String taskId) {
+		StringBuilder stringBuilder = new StringBuilder("");
+		List<TaskActor> taskActors = workflowService.listTaskActors(taskId);
+		for(TaskActor taskActor : taskActors) {
+			String staffId = taskActor.getActorId().split("_")[1];
+			PropertyStaffContext propertyStaffContext = PropertyStaffContext.loadById(staffId);
+			PropertyStaffVo propertyStaff = propertyStaffContext.get();
+			stringBuilder.append(propertyStaff.getName()).append(",");
+		}
+		
+		String actorsStr = stringBuilder.toString();
+		actorsStr = actorsStr.substring(0, (actorsStr.length()-1));
+		
+		return actorsStr;
+	}
+	
 }
