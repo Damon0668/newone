@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.base.vo.CustomerVo;
+import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.TimeUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataListValue;
@@ -22,6 +23,7 @@ import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.property.api.ro.id.StaffIdRo;
 import com.liefeng.property.api.ro.work.staff.UpdateStaffRo;
+import com.liefeng.property.vo.api.StaffInfoVo;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
@@ -45,12 +47,24 @@ public class StaffController {
 	@ApiOperation(value="获取员工信息", notes="获取员工信息")
 	@RequestMapping(value="/getStaff", method=RequestMethod.POST)
 	@ResponseBody
-	public DataValue<PropertyStaffVo> getStaff(@Valid @ModelAttribute StaffIdRo staffIdRo){
+	public DataValue<StaffInfoVo> getStaff(@Valid @ModelAttribute StaffIdRo staffIdRo){
+		StaffInfoVo staffInfoVo = new StaffInfoVo();
 		PropertyStaffVo propertyStaff = propertyStaffService.findPropertyStaffById(staffIdRo.getStaffId());
-		return DataValue.success(propertyStaff);
+		if(propertyStaff != null){
+			MyBeanUtil.copyBeanNotNull2Bean(propertyStaff, staffInfoVo);
+			StaffArchiveVo staffArchive = propertyStaffService.findStaffArchByStaffId(staffIdRo.getStaffId());
+			if(staffArchive != null){
+				MyBeanUtil.copyBeanNotNull2Bean(staffArchive, staffInfoVo);
+				CustomerVo customer = userService.getCustomerByGlobalId(staffArchive.getCustGlobalId());
+				if(customer != null){
+					MyBeanUtil.copyBeanNotNull2Bean(customer, staffInfoVo);
+				}
+			}
+		}
+		return DataValue.success(staffInfoVo);
 	}
 	
-	@ApiOperation(value="获取员工档案", notes="获取员工档案")
+	/*@ApiOperation(value="获取员工档案", notes="获取员工档案")
 	@RequestMapping(value="/getStaffArchive", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<StaffArchiveVo> getStaffArchive(@Valid @ModelAttribute StaffIdRo staffIdRo){
@@ -65,7 +79,7 @@ public class StaffController {
 		StaffArchiveVo staffArchive = propertyStaffService.findStaffArchByStaffId(staffIdRo.getStaffId());
 		CustomerVo customer = userService.getCustomerByGlobalId(staffArchive.getCustGlobalId());
 		return DataValue.success(customer);
-	}
+	}*/
 	
 	@ApiOperation(value="更新员工信息", notes="更新员工信息")
 	@RequestMapping(value="/updateStaff", method=RequestMethod.POST)

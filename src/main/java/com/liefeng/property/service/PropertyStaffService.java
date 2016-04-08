@@ -191,11 +191,12 @@ public class PropertyStaffService implements IPropertyStaffService {
 	@Override
 	public PropertyStaffVo findPropertyStaffById(String staffId) {
 		PropertyStaffVo propertyStaffVo = PropertyStaffContext.loadById(staffId).getPropertyStaff();
-		
-		propertyStaffVo.setDepartmentName(getDepartment(propertyStaffVo.getDepartmentId()).getName());
-		
-		propertyStaffVo.setPositionName(sysService.getDictNameByValue("POSITION", propertyStaffVo.getPosition()));
-		
+		if(propertyStaffVo != null){
+			propertyStaffVo.setDepartmentName(getDepartment(propertyStaffVo.getDepartmentId()).getName());
+			
+			propertyStaffVo.setPositionName(sysService.getDictNameByValue("POSITION", propertyStaffVo.getPosition()));
+			
+		}
 		return propertyStaffVo;
 	}
 
