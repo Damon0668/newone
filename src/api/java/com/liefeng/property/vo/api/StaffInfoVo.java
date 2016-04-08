@@ -27,13 +27,6 @@ public class StaffInfoVo extends BaseValue{
 	 */
 	@ApiModelProperty(value="staffId")
 	private String id;
-
-	/**
-	 * 登陆账号
-	 */
-	@ApiModelProperty(value="登陆账号")
-	private String account;
-
 	/**
 	 * 员工工号
 	 */
@@ -72,18 +65,6 @@ public class StaffInfoVo extends BaseValue{
 	@Dict(group="POSITION")
 	@ApiModelProperty(value="职位")
 	private String position;
-	
-	/**
-	 * 创建时间
-	 */
-	@ApiModelProperty(value="创建时间")
-	private Date createTime;
-	
-	/**
-	 * 创建者ID
-	 */
-	@ApiModelProperty(value="创建者ID")
-	private String creatorId;
 
 	/**
 	 * 部门名称
@@ -96,13 +77,7 @@ public class StaffInfoVo extends BaseValue{
 	 */
 	@ApiModelProperty(value="职位名称")
 	private String positionName;
-	
-	/**
-	 * 员工ID
-	 */
-	@ApiModelProperty(value="员工ID")
-	private String staffId;
-	
+
 	/**
 	 * 员工姓名
 	 */
@@ -264,14 +239,6 @@ public class StaffInfoVo extends BaseValue{
 	 */
 	@ApiModelProperty(value="客户状态")
 	private String status;
-
-	public String getStaffId() {
-		return staffId;
-	}
-
-	public void setStaffId(String staffId) {
-		this.staffId = staffId;
-	}
 
 	public String getName() {
 		return name;
@@ -497,14 +464,6 @@ public class StaffInfoVo extends BaseValue{
 		this.id = id;
 	}
 
-	public String getAccount() {
-		return account;
-	}
-
-	public void setAccount(String account) {
-		this.account = account;
-	}
-
 	public String getNumber() {
 		return number;
 	}
@@ -551,22 +510,6 @@ public class StaffInfoVo extends BaseValue{
 
 	public void setPosition(String position) {
 		this.position = position;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	public String getCreatorId() {
-		return creatorId;
-	}
-
-	public void setCreatorId(String creatorId) {
-		this.creatorId = creatorId;
 	}
 
 	public String getDepartmentName() {
