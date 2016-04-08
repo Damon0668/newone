@@ -19,9 +19,9 @@ import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.service.msg.ISmsService;
+import com.liefeng.property.api.ro.common.SmsSendRo;
 import com.liefeng.property.api.ro.common.VerifyCodeRo;
 import com.liefeng.property.api.ro.common.VerifyRo;
-import com.liefeng.property.api.ro.finger.sms.SmsSendRo;
 import com.liefeng.service.vo.SMSMsgVo;
 import com.liefeng.service.vo.SmsTemplateVo;
 
