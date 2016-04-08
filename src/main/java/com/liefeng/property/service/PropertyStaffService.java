@@ -403,6 +403,12 @@ public class PropertyStaffService implements IPropertyStaffService {
 
 	@Override
 	public List<PropertyStaffVo> findStaffByMenuCode(String menuCode) {
-		return null;
+		return PropertyStaffContext.build().findStaffByMenuCode(menuCode);
+	}
+
+	@Override
+	public List<PropertyStaffVo> findStaffClientIdList(String departmentId,
+			String projectId) {
+		return PropertyStaffContext.build().listClientIdByDeptIdAndProjectId(departmentId, projectId);
 	}
 }
