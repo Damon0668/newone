@@ -359,12 +359,17 @@ public class EventReportContext {
 	 * @date 2016年3月25日 下午7:37:10
 	 */
 	public List<EventReportVo> getHistoryEventReportOfPhone(String phone){
+		String omeCode = ContextManager.getInstance().getOemCode();
+		
 		List<EventReportVo> eventReportVoList = null;
+		
 		if(ValidateHelper.isNotEmptyString(phone)){
-			List<EventReportPo> eventReportPoList = eventReportRepository.findByPhoneAndOemCode(phone, ContextManager.getInstance().getOemCode());
-			
+			List<EventReportPo> eventReportPoList = eventReportRepository.findByPhoneAndOemCode(phone, omeCode);
 			eventReportVoList = MyBeanUtil.createList(eventReportPoList, EventReportVo.class);
 		}
+		
+		logger.info("getHistoryEventReportOfPhone phone = {}, oemCode = {}, eventReportVoList = {}", phone, omeCode, eventReportVoList);
+		
 		return eventReportVoList;
 	}
 	

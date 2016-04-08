@@ -400,4 +400,9 @@ public class PropertyStaffService implements IPropertyStaffService {
 	public List<PropertyStaffVo> findPropertyStaffByPosition(String positionId) {
 		return PropertyStaffContext.build().findPropertyStaffByPosition(positionId);
 	}
+
+	@Override
+	public List<PropertyStaffVo> findStaffByMenuCode(String menuCode) {
+		return null;
+	}
 }

@@ -3,6 +3,8 @@ package com.liefeng.property.repository.mybatis;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
@@ -54,4 +56,12 @@ public interface PropertyStaffQueryRepository extends BaseRepository<PropertySta
 	 * @return
 	 */
 	public List<PropertyStaffVo> findPropertyStaffByPosition(String positionId);
+	
+	/**
+	 * 查询物业员工
+	 * 根据menu的code查询具有此权限的员工
+	 * @param menuCode
+	 * @return
+	 */
+	public List<PropertyStaffVo> findStaffByMenuCode(@Param("menuCode") String menuCode, @Param("oemCode") String oemCode);
 }

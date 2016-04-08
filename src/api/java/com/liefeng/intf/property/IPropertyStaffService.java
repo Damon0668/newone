@@ -102,6 +102,14 @@ public interface IPropertyStaffService {
 	
 	/**
 	 * 查询物业员工
+	 * 根据menu的code查询具有此权限的员工
+	 * @param menuCode
+	 * @return
+	 */
+	public List<PropertyStaffVo> findStaffByMenuCode(String menuCode);
+	
+	/**
+	 * 查询物业员工
 	 * 详细信息
 	 * @param staffId 员工ID
 	 * @return

@@ -132,4 +132,10 @@ public class PropertyStaffServiceTest {
 		staffIds.add("40282081531cf49b01531d3f4e1c0006");
 		System.out.println(propertyStaffService.findStaffMsgClientIds(staffIds));
 	}
+	
+	@Test
+	public void findStaffByMenuCode(){
+	
+		System.out.println(propertyStaffService.findStaffByMenuCode("SJZD_ADD"));
+	}
 }

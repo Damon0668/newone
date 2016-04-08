@@ -345,4 +345,15 @@ public class PropertyStaffContext {
 	public List<PropertyStaffVo> findPropertyStaffByPosition(String positionId) {
 		return propertyStaffQueryRepository.findPropertyStaffByPosition(positionId);
 	}
+	
+	/**
+	 * 查询物业员工
+	 * 根据menu的code查询具有此权限的员工
+	 * @param menuCode
+	 * @return
+	 */
+	public List<PropertyStaffVo> findStaffByMenuCode(String menuCode){
+		String oemCode = ContextManager.getInstance().getOemCode();
+		return propertyStaffQueryRepository.findStaffByMenuCode(menuCode, oemCode);
+	}
 }
