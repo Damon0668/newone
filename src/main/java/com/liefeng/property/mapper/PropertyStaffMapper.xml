@@ -214,7 +214,7 @@
 		                FROM
 		                    t_sys_role_menu rm
 		                LEFT JOIN t_sys_menu sm ON rm.menu_id = sm.id
-		                AND sm. CODE = #{menuCode}
+		                AND sm.code = #{menuCode}
 		            )
 		    )
 		AND ps.oem_code = #{oemCode}
