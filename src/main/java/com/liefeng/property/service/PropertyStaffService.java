@@ -403,6 +403,6 @@ public class PropertyStaffService implements IPropertyStaffService {
 
 	@Override
 	public List<PropertyStaffVo> findStaffByMenuCode(String menuCode) {
-		return null;
+		return PropertyStaffContext.build().findStaffByMenuCode(menuCode);
 	}
 }
