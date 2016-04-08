@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.exception.LiefengException;
@@ -22,6 +23,7 @@ import com.liefeng.property.api.ro.work.auth.UpdatePwdLoginRo;
 import com.liefeng.property.api.ro.work.auth.UpdatePwdRo;
 import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.error.PropertyStaffErrorCode;
+import com.liefeng.property.error.SecurityErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffArchiveVo;
@@ -62,13 +64,22 @@ public class AuthController {
 			throw new PropertyException(PropertyStaffErrorCode.PASSWORD_ERROR);
 		}
 		
+		String openId = staff.getOpenId();
+		
 		//更新个推clientId
 		propertyStaffService.settIngStaffMsgClientId(staff.getId(), staffLoginRo.getClientId());
 		
-		//刷新缓存中的oemCode
-		String openId = "openId_" + staff.getId();
-		redisService.setValue(openId, staff.getOemCode());
+		staff.setOpenId(openId);
 
+		//刷新缓存中的oemCode
+		if(ValidateHelper.isNotEmptyString(staff.getOpenId())){
+			if(redisService.isKeyExist(openId)){
+				throw new LiefengException(SecurityErrorCode.OPENID_HAS_EXIST);
+			}
+			openId = "openId_" + openId;
+			redisService.setValue(openId, staff.getOemCode());
+		}
+		
 		return DataValue.success(staff);
 	}
 	

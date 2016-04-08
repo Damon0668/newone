@@ -9,8 +9,9 @@ import com.liefeng.core.error.IErrorCode;
  */
 public enum SecurityErrorCode implements IErrorCode{
 	
-	ROLE_HAS_EXIST("角色已存在")
+	ROLE_HAS_EXIST("角色已存在"),
 	
+	OPENID_HAS_EXIST("OPENID已存在"),
 	;
 
 	private String desc;

@@ -15,6 +15,7 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.api.ILoginUserService;
 import com.liefeng.intf.service.cache.IRedisService;
@@ -22,6 +23,7 @@ import com.liefeng.property.api.ro.finger.auth.AuthLoginRo;
 import com.liefeng.property.api.ro.finger.auth.UpdatePwdLoginRo;
 import com.liefeng.property.api.ro.finger.auth.UpdatePwdRo;
 import com.liefeng.property.constant.SysConstants;
+import com.liefeng.property.error.SecurityErrorCode;
 import com.liefeng.property.vo.api.LoginUserVo;
 import com.liefeng.service.constant.PushMsgConstants;
 
@@ -48,6 +50,8 @@ public class AuthController {
 	public DataValue<LoginUserVo> userLogin(@Valid @ModelAttribute AuthLoginRo authLogin){
 
 		LoginUserVo loginUser = null;
+		
+		String openId ;
 
 		//统一鉴权登陆
 		UserLoginBo userLoginBo = MyBeanUtil.createBean(authLogin, UserLoginBo.class);
@@ -61,13 +65,18 @@ public class AuthController {
 		//获取物业系统用户信息
 		loginUser = loginUserService.findLoginUser(user.getCustGlobalId(), user.getOemCode());
 		
+		openId = "finger" + "_" + user.getCustGlobalId();
+		
 		loginUser.setUserId(user.getId());
 		
-		loginUser.setOpenId(user.getUserGlobalId());
+		loginUser.setOpenId(openId);
 		
 		//刷新缓存中的oemCode
 		if(ValidateHelper.isNotEmptyString(user.getUserGlobalId())){
-			String openId = "openId_" + user.getUserGlobalId();
+			if(redisService.isKeyExist(openId)){
+				throw new LiefengException(SecurityErrorCode.OPENID_HAS_EXIST);
+			}
+			openId = "openId_" + openId;
 			redisService.setValue(openId, loginUser.getOemCode());
 		}
 

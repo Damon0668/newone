@@ -34,7 +34,7 @@ public class StaffContactPrivilegeContextTest {
 	@Test
 	public void getPropertyStaffTest() {
 		PropertyStaffContext context = PropertyStaffContext.loadByAccount("admin");
-		PropertyStaffVo propertyStaff = context.getPropertyStaff();
+		PropertyStaffVo propertyStaff = context.get();
 		System.out.println("************ "+ propertyStaff);
 	}
 	

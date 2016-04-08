@@ -18,7 +18,6 @@ import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.core.exception.LiefengException;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.property.PropertyStaffBo;
 import com.liefeng.property.constant.StaffConstants;
@@ -132,7 +131,7 @@ public class PropertyStaffContext {
 	 * 查询物业员工信息
 	 * @return 物业员工值对象
 	 */
-	public PropertyStaffVo getPropertyStaff() {
+	public PropertyStaffVo get() {
 		if(propertyStaff == null) {
 			PropertyStaffPo propertyStaffPo = null;
 			

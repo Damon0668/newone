@@ -190,12 +190,13 @@ public class PropertyStaffService implements IPropertyStaffService {
 
 	@Override
 	public PropertyStaffVo findPropertyStaffById(String staffId) {
-		PropertyStaffVo propertyStaffVo = PropertyStaffContext.loadById(staffId).getPropertyStaff();
-		
-		propertyStaffVo.setDepartmentName(getDepartment(propertyStaffVo.getDepartmentId()).getName());
-		
-		propertyStaffVo.setPositionName(sysService.getDictNameByValue("POSITION", propertyStaffVo.getPosition()));
-		
+		PropertyStaffVo propertyStaffVo = PropertyStaffContext.loadById(staffId).get();
+		if(propertyStaffVo != null){
+			propertyStaffVo.setDepartmentName(getDepartment(propertyStaffVo.getDepartmentId()).getName());
+			
+			propertyStaffVo.setPositionName(sysService.getDictNameByValue("POSITION", propertyStaffVo.getPosition()));
+			
+		}
 		return propertyStaffVo;
 	}
 
@@ -204,7 +205,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 		PropertyStaffDetailInfoVo propertyStaffDetailInfo = new PropertyStaffDetailInfoVo();
 		
 		//查找员工信息
-		PropertyStaffVo propertyStaffVo = PropertyStaffContext.loadById(staffId).getPropertyStaff();
+		PropertyStaffVo propertyStaffVo = PropertyStaffContext.loadById(staffId).get();
 		
 		//查找员工档案信息
 		StaffArchiveVo staffArchiveVo = StaffArchiveContext.loadByStaffId(staffId).getStaffArchive();
@@ -246,7 +247,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 	
 	@Override
 	public PropertyStaffVo findPropertyStaffByAccount(String account) {
-		return PropertyStaffContext.loadByAccount(account).getPropertyStaff();
+		return PropertyStaffContext.loadByAccount(account).get();
 	}
 	
 	/*********************** 部门相关接口 **********************/
@@ -286,7 +287,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 		
 		String directorId = departmentVo.getDirectorId();
 		PropertyStaffContext staffContext = PropertyStaffContext.loadById(directorId);
-		return staffContext.getPropertyStaff();
+		return staffContext.get();
 	}
 
 	@Override

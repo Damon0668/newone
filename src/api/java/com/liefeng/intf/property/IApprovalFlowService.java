@@ -1,7 +1,6 @@
 package com.liefeng.intf.property;
 
 import java.util.List;
-import java.util.Map;
 
 import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
@@ -32,4 +31,11 @@ public interface IApprovalFlowService {
 	 * @return
 	 */
 	public PropertyStaffVo getDefaultUsers(String orderId, String taskName);
+	
+	/**
+	 * 获取任务ID
+	 * @param taskId
+	 * @return
+	 */
+	public String getTaskActor(String taskId);
 }

@@ -1,4 +1,4 @@
-package com.liefeng.property.api.ro.finger.sms;
+package com.liefeng.property.api.ro.common;
 
 import javax.validation.constraints.NotNull;
 
@@ -16,7 +16,7 @@ public class SmsSendRo extends BaseValue{
 	@NotNull
 	public String phoneNum;
 	
-	@ApiModelProperty(value="相关事件[SD_REGISTER_MSG-注册;SD_REGISTER_MSG-忘记密码]", required=true)
+	@ApiModelProperty(value="相关事件[相关事件[SD_REGISTER_MSG-注册;SD_UPDATAPWD_MSG-忘记密码;SD_LOGIN_MSG-登陆]]", required=true)
 	@NotNull
 	public String action;
 	
