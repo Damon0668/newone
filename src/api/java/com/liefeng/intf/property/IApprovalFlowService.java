@@ -23,5 +23,13 @@ public interface IApprovalFlowService {
 	 * @param assignee
 	 * @return
 	 */
-	public List<PropertyStaffVo> getUser(String assignee);
+	public List<PropertyStaffVo> getUser(String orderId,String assignee);
+	
+	/**
+	 * 获取某个步骤的执行人
+	 * @param orderId
+	 * @param taskName
+	 * @return
+	 */
+	public PropertyStaffVo getDefaultUsers(String orderId, String taskName);
 }

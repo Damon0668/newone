@@ -40,7 +40,21 @@ public class ApprovalFlowConstants {
 	/**
 	 * 流程变量里的状态 已完成
 	 */
-	public static final String ORDER_COMPLETE = "2"; 
+	public static final String ORDER_COMPLETE = "2";
+
+	public static interface  AssigneeOther {
+		
+		/**
+		 * 所有人
+		 */
+		public static final String ALL = "all";
+		
+		/**
+		 * 操作人
+		 */
+		public static final String OPERATOR = "op";
+		
+	}
 	
 	public static interface AssigneeType{
 		
@@ -55,6 +69,10 @@ public class ApprovalFlowConstants {
 		public static final String POSTS = "posts";
 
 		public static final String ALL = "all";
+
+		public static final String OTHER = "other";
+
+		public static final String TASKNAME = "taskname";
 	}
 	
 }

@@ -19,10 +19,13 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.intf.property.IApprovalFlowService;
 import com.liefeng.intf.property.IPropertyStaffService;
+import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.intf.service.workflow.IWorkflowService;
 import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
 import com.liefeng.property.constant.ApprovalFlowConstants;
+import com.liefeng.property.domain.workbench.EventProcessContext;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.property.vo.workbench.EventProcessVo;
 
 /**
  * 审批流程接口
@@ -37,6 +40,9 @@ public class ApprovalFlowService implements IApprovalFlowService{
 	
 	@Autowired
 	private IPropertyStaffService propertyStaffService;
+	
+	@Autowired
+	private IWorkbenchService workbenchService;
 	
 	@Override
 	public void startOrExecute(ApprovalFlowBo approvalFlowBo) {
@@ -62,6 +68,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 		} else if(approvalFlowBo.getTaskName().equals(ApprovalFlowConstants.NODE_END)) { //结束流程
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
 			approvalFlowBo.getParams().put(approvalFlowBo.getRole(), addUserPreixes(approvalFlowBo.getNextOperator()));
+			approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_STATUS, ApprovalFlowConstants.ORDER_COMPLETE);
 			workflowService.execute(approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
 		}else{ //继续执行下去
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
@@ -96,10 +103,11 @@ public class ApprovalFlowService implements IApprovalFlowService{
 	 * 			dept_123 该部门所有人
 	 * 			role_123 改角色所有人
 	 * 			director_123 部门负责人
+	 * 			taskname_task1 该步骤办理人
 	 * @return
 	 */
 	@Override
-	public List<PropertyStaffVo> getUser(String assignee){
+	public List<PropertyStaffVo> getUser(String orderId,String assignee){
 		List<PropertyStaffVo> returnPropertyStaffVos = new ArrayList<PropertyStaffVo>();
 		Map<String, String> ids = new HashMap<String, String>();
 		for (String item : assignee.split(":")) {
@@ -164,12 +172,30 @@ public class ApprovalFlowService implements IApprovalFlowService{
 					}
 				}
 				break;
+			case ApprovalFlowConstants.AssigneeType.TASKNAME: // 某步骤的办理人
+				PropertyStaffVo tasknameStaffVo = getDefaultUsers(orderId, id);
+				if(tasknameStaffVo != null && !ids.containsKey(tasknameStaffVo.getId())) {
+					ids.put(tasknameStaffVo.getId(), tasknameStaffVo.getId());
+					returnPropertyStaffVos.add(tasknameStaffVo);
+				}
+				break;
 			default:
 				break;
 			}
 		}
 		
 		return returnPropertyStaffVos;
+	}
+	
+	@Override
+	public PropertyStaffVo getDefaultUsers(String orderId,String taskName){
+		QueryFilter queryFilter = new QueryFilter().setOrderId(orderId).setName(taskName);
+		List<HistoryTask> historyTasks = workflowService.getHistoryTasks(queryFilter);
+		if( historyTasks != null && historyTasks.size() > 0 ){
+			String staffId = historyTasks.get(0).getOperator().replace(ApprovalFlowConstants.USER_PREFIXES, "");
+			return propertyStaffService.findPropertyStaffById4DP(staffId);
+		}
+		return null;
 	}
 
 
