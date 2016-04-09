@@ -36,7 +36,7 @@ public class ApprovalFlowBo  extends BaseValue{
 	/**
 	 * 处理的角色
 	 */
-	private String role;
+	private String assignee;
 	
 	/**
 	 * 当前处理人id
@@ -114,20 +114,20 @@ public class ApprovalFlowBo  extends BaseValue{
 		this.staffId = staffId;
 	}
 
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-
 	public String getCopyToPeopleId() {
 		return copyToPeopleId;
 	}
 
 	public void setCopyToPeopleId(String copyToPeopleId) {
 		this.copyToPeopleId = copyToPeopleId;
+	}
+
+	public String getAssignee() {
+		return assignee;
+	}
+
+	public void setAssignee(String assignee) {
+		this.assignee = assignee;
 	}
 
 }
