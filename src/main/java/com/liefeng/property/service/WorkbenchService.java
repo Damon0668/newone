@@ -1744,6 +1744,45 @@ public class WorkbenchService implements IWorkbenchService {
 		EventReportContext eventReportContext = EventReportContext
 				.build(eventReportVo);
 		eventReportContext.create();
+		
+		List<PropertyStaffVo> propertyStaffVos = propertyStaffService.findPropertyStaff("402820815388d35d015388d35d150000", eventReportVo.getProjectId());
+		if(propertyStaffVos != null && propertyStaffVos.size() > 0){
+			
+			//获取推送消息模板
+			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.EVENT_REPORT_RECEIVE_ONE);
+			
+			if(pushMsgTemplateVo != null){
+				if(propertyStaffVos.size() > 1){
+					
+					List<String> receiveUserIdList = new ArrayList<String>();
+
+					for (int i = 0; i < propertyStaffVos.size(); i++) {
+						receiveUserIdList.add(propertyStaffVos.get(i).getId());
+					}
+					ListUserMsg message = new ListUserMsg();
+					message.setAction(PushActionConstants.EVENT_REPORT_RECEIVE_ONE);
+					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setTitle(pushMsgTemplateVo.getTitle());
+					message.setContent(pushMsgTemplateVo.getContent());
+					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+					message.setReceiveUserIdList(receiveUserIdList);
+					
+					pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+					logger.info("创建报事时群推消息{}", message);
+
+				}else{
+					SingleUserMsg message = new SingleUserMsg();
+					message.setAction(PushActionConstants.EVENT_REPORT_RECEIVE_ONE);
+					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setTitle(pushMsgTemplateVo.getTitle());
+					message.setContent(pushMsgTemplateVo.getContent());
+					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+					message.setReceiveUserId(propertyStaffVos.get(0).getId());
+					pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+					logger.info("创建报事时单推消息{}", message);
+				}
+			}
+		}
 	}
 
 	@Override
