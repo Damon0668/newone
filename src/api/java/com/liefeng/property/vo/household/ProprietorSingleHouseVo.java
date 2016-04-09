@@ -341,6 +341,13 @@ public class ProprietorSingleHouseVo extends BaseValue {
 	private String ownership;
 
 
+	/**
+	 * clientId。
+	 */
+	@ApiModelProperty(value="clientId")
+	private String clientId;
+	
+	
 	public String getProprietorId() {
 		return proprietorId;
 	}
@@ -747,5 +754,13 @@ public class ProprietorSingleHouseVo extends BaseValue {
 
 	public void setFloorName(String floorName) {
 		this.floorName = floorName;
+	}
+
+	public String getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
 	}
 }

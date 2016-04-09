@@ -498,4 +498,14 @@ public interface IHouseholdService {
 	 * @return 住户车辆信息
 	 */
 	public ResidentCarVo findResidentCarById(String carId);
+	
+	/**
+	 * 根据projectId、buildingId获取用户的clientId
+	 * @param buildingId
+	 * @param projectId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月9日 下午1:34:03
+	 */
+	List<ProprietorSingleHouseVo> listClientIdByBuildingIdAndProjectId(String buildingId, String projectId);
 }
