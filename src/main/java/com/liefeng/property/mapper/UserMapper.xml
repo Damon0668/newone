@@ -55,5 +55,5 @@
 	and t.cust_global_id = #{custGlobalId}
     and t.oem_code = #{oemCode}
 </select>
-
+	
 </mapper>

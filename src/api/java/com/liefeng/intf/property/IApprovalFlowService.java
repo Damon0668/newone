@@ -2,7 +2,11 @@ package com.liefeng.intf.property;
 
 import java.util.List;
 
+import org.snaker.engine.model.FieldModel;
+import org.snaker.engine.model.TaskModel;
+
 import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
+import com.liefeng.property.vo.ApprovalFlow.ProcessVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.service.vo.TaskAttachVo;
 
@@ -46,4 +50,26 @@ public interface IApprovalFlowService {
 	 * @return 附件列表
 	 */
 	public List<TaskAttachVo> listTaskAttach(String orderId);
+	
+	/**
+	 * 获取流程节点的变量（表单信息）
+	 * @param processId 流程定义id
+	 * @param taskName	流程节点名称 空则默认获取第一个
+	 * @return
+	 */
+	public List<FieldModel> getFields(String processId, String taskName);
+	
+	/**
+	 * 获取审批流程的所有流程定义
+	 * @return
+	 */
+	public List<ProcessVo> getProcessList();
+	
+	/**
+	 * 获取下一步步骤
+	 * @param processId
+	 * @param taskName
+	 * @return
+	 */
+	public List<TaskModel> getNextTask(String processId, String taskName);
 }

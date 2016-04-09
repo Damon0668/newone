@@ -2,6 +2,7 @@ package com.liefeng.property.domain.household;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import com.liefeng.property.repository.household.ProprietorRepository;
 import com.liefeng.property.repository.mybatis.ProprietorQueryRepository;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
+import com.liefeng.property.vo.staff.PropertyStaffVo;
 
 /**
  * 业主信息领域模型
@@ -270,6 +272,23 @@ public class ProprietorContext {
 		return MyBeanUtil.createBean(proprietorPo, ProprietorVo.class);
 	}
 
+	/**
+	 * 根据projectId、buildingId获取用户的clientId
+	 * @param buildingId
+	 * @param projectId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月9日 下午1:33:46
+	 */
+	public List<ProprietorSingleHouseVo> listClientIdByBuildingIdAndProjectId(String buildingId, String projectId){
+		Map<String, String> extra = new HashMap<String, String>();
+		extra.put("buildingId", buildingId);
+		extra.put("projectId", projectId);
+		PagingParamVo pagingParamVo = new PagingParamVo();
+		pagingParamVo.setExtra(extra);
+		return proprietorQueryRepository.queryClientId(pagingParamVo);
+	}
+	
 	protected void setProprietorId(String proprietorId) {
 		this.proprietorId = proprietorId;
 	}

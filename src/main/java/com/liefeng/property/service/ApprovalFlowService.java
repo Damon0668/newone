@@ -12,7 +12,11 @@ import org.snaker.engine.entity.HistoryTask;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.TaskActor;
+import org.snaker.engine.model.FieldModel;
+import org.snaker.engine.model.NodeModel;
 import org.snaker.engine.model.ProcessModel;
+import org.snaker.engine.model.TaskModel;
+import org.snaker.engine.model.TransitionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +30,9 @@ import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
 import com.liefeng.property.constant.ApprovalFlowConstants;
 import com.liefeng.property.domain.staff.PropertyStaffContext;
 import com.liefeng.property.domain.worflow.TaskAttachContext;
+import com.liefeng.property.vo.ApprovalFlow.ProcessVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.service.constant.WorkflowConstants;
 import com.liefeng.service.vo.TaskAttachVo;
 
 /**
@@ -50,6 +56,9 @@ public class ApprovalFlowService implements IApprovalFlowService{
 	public void startOrExecute(ApprovalFlowBo approvalFlowBo) {
 		Process process = workflowService.findByProcessId(approvalFlowBo.getProcessId());
 		PropertyStaffVo propertyStaffVo = propertyStaffService.findPropertyStaffById(approvalFlowBo.getStaffId());
+		
+		if(approvalFlowBo.getParams() == null) approvalFlowBo.setParams(new HashMap<String, Object>());
+		
 		approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_STATUS, ApprovalFlowConstants.ORDER_STATUS_WAIT_SIGN);
 		//开始并执行流程
 		if(StringUtils.isEmpty(approvalFlowBo.getOrderId()) && StringUtils.isEmpty(approvalFlowBo.getTaskId())){
@@ -63,19 +72,19 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			approvalFlowBo.getParams().put(processModel.getTaskModels().get(0).getAssignee(), addUserPreixes(approvalFlowBo.getStaffId()) );
 			
 			Map<String, Object> arg = MyBeanUtil.createBean(approvalFlowBo.getParams(), Map.class);
-			arg.put(approvalFlowBo.getRole(), addUserPreixes(approvalFlowBo.getNextOperator()));
+			arg.put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
 			Order order = workflowService.startAndExecute(approvalFlowBo.getProcessId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams(),arg);
 			
 			approvalFlowBo.setOrderId(order.getId());
 		} else if(approvalFlowBo.getTaskName().equals(ApprovalFlowConstants.NODE_END)) { //结束流程
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
-			approvalFlowBo.getParams().put(approvalFlowBo.getRole(), addUserPreixes(approvalFlowBo.getNextOperator()));
+			approvalFlowBo.getParams().put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
 			approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_STATUS, ApprovalFlowConstants.ORDER_COMPLETE);
 			workflowService.execute(approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
 		}else{ //继续执行下去
-			System.out.println("继续执行下去:"+approvalFlowBo.getRole()+"||"+addUserPreixes(approvalFlowBo.getNextOperator()));
+			System.out.println("继续执行下去:"+approvalFlowBo.getAssignee()+"||"+addUserPreixes(approvalFlowBo.getNextOperator()));
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
-			approvalFlowBo.getParams().put(approvalFlowBo.getRole(), addUserPreixes(approvalFlowBo.getNextOperator()));
+			approvalFlowBo.getParams().put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
 			workflowService.executeAndJumpTask(approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams(), approvalFlowBo.getTaskName());
 		}
 		
@@ -223,5 +232,50 @@ public class ApprovalFlowService implements IApprovalFlowService{
 		TaskAttachContext taskAttachContext = TaskAttachContext.build(orderId);
 		return taskAttachContext.getTaskAttachs();
 	}
+	@Override
+	public List<FieldModel> getFields(String processId, String taskName) {
+		NodeModel nodeModel = null;
+		Process process = workflowService.findByProcessId(processId);
+		if(ValidateHelper.isNotEmptyString(taskName)) {	//空则取第一个节点
+			nodeModel  = process.getModel().getNode(taskName);
+		}else {
+			nodeModel  = process.getModel().getTaskModels().get(0);
+		}
+		return ((TaskModel)nodeModel).getFields();
+	}
 	
+	@Override
+	public List<ProcessVo> getProcessList(){
+		List<Process> processes = workflowService.getProcesss(new QueryFilter().setProcessType(WorkflowConstants.PROCESSTYPE.APPROVE));
+		return MyBeanUtil.createList(processes, ProcessVo.class);
+	}
+
+	@Override
+	public List<TaskModel> getNextTask(String processId, String taskName) {
+
+		//获取流程
+		Process process = workflowService.findByProcessId(processId);
+		ProcessModel processModel = process.getModel();
+		NodeModel nodeModel = null;
+
+		//判断是否是第一个任务
+		if (StringUtils.isNotEmpty(taskName)) {
+			nodeModel = processModel.getNode(taskName);
+		} else {
+			nodeModel = processModel.getTaskModels().get(0);
+		}
+
+		//获取下一个步骤的task
+		List<TaskModel> nextTasks = ((TaskModel)nodeModel).getNextTaskModels();
+		List<TransitionModel> endModel = nodeModel.getOutputs();
+		//添加结束节点
+		if(endModel.size()>0 && endModel.get(0).getTarget().getName().equals(ApprovalFlowConstants.NODE_END)){
+			TaskModel taskModel = new TaskModel();
+			taskModel.setName(ApprovalFlowConstants.NODE_END);
+			taskModel.setDisplayName("结束并归档");
+			nextTasks.add(taskModel);
+		}
+
+		return null;
+	}
 }

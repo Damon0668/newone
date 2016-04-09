@@ -58,6 +58,9 @@ import com.liefeng.property.domain.workbench.WebsiteMsgPrivilegeContext;
 import com.liefeng.property.error.WorkbenchErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.exception.WorkbenchException;
+import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
+import com.liefeng.property.vo.project.ProjectBuildingVo;
+import com.liefeng.property.vo.project.ProjectVo;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
@@ -107,6 +110,9 @@ public class WorkbenchService implements IWorkbenchService {
 	
 	@Autowired
 	private IProjectService projectService;
+	
+	@Autowired
+	private HouseholdService householdService;
 	
 	@Override
 	public TaskVo findTaskById(String taskId) {
@@ -521,7 +527,130 @@ public class WorkbenchService implements IWorkbenchService {
 				logger.info("通知审核通过时单推消息{}", message);
 			}
 		}
+		
+		//发布
+		if(WorkbenchConstants.NoticeStatus.ARCHIVING.equals(noticeVo.getStatus())){
+			
+			List<NoticePrivilegeVo> privilegeVos = getNoticePrivilegeByNoticeId(notice.getId());
+			String staffString = "";
+			String residentString = "";
+			for(NoticePrivilegeVo privilegeVo : privilegeVos){
 				
+				ProjectVo projectVo = projectService.findProjectById(privilegeVo.getProjectId());
+				if(projectVo != null){
+					
+					if(privilegeVo.getType().equals(WorkbenchConstants.NoticePrivilegeType.STAFF)){
+						staffString += privilegeVo.getProjectId();
+					}
+					
+					if(privilegeVo.getType().equals(WorkbenchConstants.NoticePrivilegeType.RESIDENT)){
+						residentString += privilegeVo.getProjectId();
+					}
+				}
+				
+				
+				
+				if(privilegeVo.getType().equals(WorkbenchConstants.NoticePrivilegeType.STAFF)){                  //员工
+					
+					if(!privilegeVo.getGroupId().equals("-1")){
+						staffString += "|"+privilegeVo.getGroupId()+",";
+					}else{
+						staffString += "|"+"0"+",";
+					}
+				}
+				
+				if(privilegeVo.getType().equals(WorkbenchConstants.NoticePrivilegeType.RESIDENT)){                  //业主
+					if(!privilegeVo.getGroupId().equals("-1")){
+						residentString += "|"+privilegeVo.getGroupId()+",";
+					}else{
+						residentString += "|"+"0"+",";
+					}
+				}
+				
+			}
+			
+			if(staffString.trim().length()>0){
+				staffString = staffString.substring(0,staffString.length()-1);
+			}
+			
+			if(residentString.trim().length()>0){
+				residentString = residentString.substring(0,residentString.length()-1);
+			}
+			
+			//获取推送消息模板
+			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.NOTICE_RECEIVE_NEW);
+			
+			List<String> clientIdList = new ArrayList<String>();
+			
+			if (ValidateHelper.isNotEmptyString(staffString)) { // 员工
+				// 每个权限使用逗号隔开，权限的具体信息使用|隔开
+				String[] staffArray = staffString.split(",");
+				for (int i = 0; i < staffArray.length; i++) {
+					String[] staff = staffArray[i].split("\\|");
+
+					if ("0".equals(staff[1])) { // 代表权限是某个项目下的所有人（包括员工、业主、住户）
+						//员工clientId
+						List<PropertyStaffVo> staffList = propertyStaffService.findStaffClientIdList("", staff[0]);
+						
+						//业主、住户clientId
+						List<ProprietorSingleHouseVo> houseList = householdService.listClientIdByBuildingIdAndProjectId("", staff[0]);
+						
+						for(PropertyStaffVo staffVo : staffList){
+							clientIdList.add(staffVo.getClientId());
+						}
+						
+						for(ProprietorSingleHouseVo houseVo : houseList){
+							clientIdList.add(houseVo.getClientId());
+						}
+						
+					} else {// 代表权限是有某个项目管理权限的，并且是某个部门的所有员工
+						//员工clientId
+						List<PropertyStaffVo> staffList = propertyStaffService.findStaffClientIdList(staff[1], staff[0]);
+						
+						for(PropertyStaffVo staffVo : staffList){
+							clientIdList.add(staffVo.getClientId());
+						}
+					}
+
+				}
+			}
+			
+			if (ValidateHelper.isNotEmptyString(residentString)) { // 业主、住户
+				// 每个权限使用逗号隔开，权限的具体信息使用|隔开
+				String[] proprietorArray = residentString.split(",");
+				for (int i = 0; i < proprietorArray.length; i++) {
+					String[] proprietor = proprietorArray[i].split("\\|");
+
+					if ("0".equals(proprietor[1])) { // 某个项目下的所有业主、住户
+						//业主、住户clientId
+						List<ProprietorSingleHouseVo> houseList = householdService.listClientIdByBuildingIdAndProjectId("", proprietor[0]);
+						
+						for(ProprietorSingleHouseVo houseVo : houseList){
+							clientIdList.add(houseVo.getClientId());
+						}
+					} else { // 某个项目、某个楼栋的所有业主、住户
+						//业主、住户clientId
+						List<ProprietorSingleHouseVo> houseList = householdService.listClientIdByBuildingIdAndProjectId(proprietor[1], proprietor[0]);
+						
+						for(ProprietorSingleHouseVo houseVo : houseList){
+							clientIdList.add(houseVo.getClientId());
+						}
+					}
+
+				}
+			}
+			
+			ListUserMsg message = new ListUserMsg();
+			message.setAction(PushActionConstants.NOTICE_RECEIVE_NEW);
+			message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+			message.setTitle(pushMsgTemplateVo.getTitle());
+			message.setContent(pushMsgTemplateVo.getContent());
+			message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+			message.setReceiveClientIdList(clientIdList);
+			
+			pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+			logger.info("通知发布时群推消息{}", message);
+		}
 		return noticeVo;
 	}
 
@@ -696,6 +825,13 @@ public class WorkbenchService implements IWorkbenchService {
 				// 每个权限使用逗号隔开，权限的具体信息使用|隔开
 				String[] privilegeArray = websiteMsgVo.getPrivilegeStr().split(
 						",");
+				
+				//获取推送消息模板
+				PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.MSG_CENTER_NEW_MSG);
+				
+				List<String> clientIdList = new ArrayList<String>();
+				List<String> userIdList = new ArrayList<String>();
+				
 				for (int i = 0; i < privilegeArray.length; i++) {
 					String[] privilege = privilegeArray[i].split("\\|");
 					WebsiteMsgPrivilegeVo websiteMsgPrivilegeVo = new WebsiteMsgPrivilegeVo();
@@ -704,21 +840,64 @@ public class WorkbenchService implements IWorkbenchService {
 					if ("0".equals(privilege[1])) { // 代表权限是某个项目下的所有人
 						websiteMsgPrivilegeVo.setProjectId(privilege[0]);
 						websiteMsgPrivilegeVo.setDepartmentId("-1");
+						
+						//员工clientId
+						List<PropertyStaffVo> staffList = propertyStaffService.findStaffClientIdList("", privilege[0]);
+						for(PropertyStaffVo staffVo : staffList){
+							clientIdList.add(staffVo.getClientId());
+						}
+						
 					} else {
 						if ("0".equals(privilege[2])) {// 代表权限是有某个项目管理权限的，并且是某个部门的所有员工
 							websiteMsgPrivilegeVo.setProjectId(privilege[0]);
 							websiteMsgPrivilegeVo.setDepartmentId(privilege[1]);
 							websiteMsgPrivilegeVo.setStaffId("-1");
+							
+							//员工clientId
+							List<PropertyStaffVo> staffList = propertyStaffService.findStaffClientIdList(privilege[1], privilege[0]);
+							
+							for(PropertyStaffVo staffVo : staffList){
+								clientIdList.add(staffVo.getClientId());
+							}
+							
 						} else {
 							websiteMsgPrivilegeVo.setProjectId(privilege[0]);
 							websiteMsgPrivilegeVo.setDepartmentId(privilege[1]);
 							websiteMsgPrivilegeVo.setStaffId(privilege[2]);
+							
+							userIdList.add(privilege[2]);
 						}
 					}
 
 					createWebsiteMsgPrivilege(websiteMsgPrivilegeVo);
 				}
-
+				
+				if(clientIdList.size() > 0){
+					
+					ListUserMsg message = new ListUserMsg();
+					message.setAction(PushActionConstants.MSG_CENTER_NEW_MSG);
+					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setTitle(pushMsgTemplateVo.getTitle());
+					message.setContent(pushMsgTemplateVo.getContent());
+					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+					message.setReceiveClientIdList(clientIdList);
+					
+					pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+					logger.info("消息中心发布时群推消息{}", message);
+				}
+				
+				if(userIdList.size() > 0){
+					ListUserMsg message = new ListUserMsg();
+					message.setAction(PushActionConstants.MSG_CENTER_NEW_MSG);
+					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setTitle(pushMsgTemplateVo.getTitle());
+					message.setContent(pushMsgTemplateVo.getContent());
+					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+					message.setReceiveUserIdList(userIdList);
+					
+					pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+					logger.info("消息中心发布时群推消息{}", message);
+				}
 			}
 
 		}
@@ -1136,6 +1315,18 @@ public class WorkbenchService implements IWorkbenchService {
 		EventProcessContext.build(executeEventProcessVo).create();
 
 		eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_FINISH);
+		
+		//获取推送消息模板
+		PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.EVENT_REPORT_RECEIVE_ONE);
+		SingleUserMsg message = new SingleUserMsg();
+		message.setAction(PushActionConstants.EVENT_REPORT_RECEIVE_ONE);
+		message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+		message.setTitle(pushMsgTemplateVo.getTitle());
+		message.setContent(pushMsgTemplateVo.getContent());
+		message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+		message.setReceiveUserId(nextAccepterId);
+		pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+		logger.info("派单时单推消息{}", message);
 	}
 
 	@Override
@@ -1363,6 +1554,45 @@ public class WorkbenchService implements IWorkbenchService {
 			EventProcessContext.build(eventProcess).create();
 
 		}
+		
+		if(ValidateHelper.isNotEmptyString(nextAccepterId)){
+			List<String> userIdList = new ArrayList<String>();
+			String[] userIdArray = nextAccepterId.split(",");
+			for(int i = 0; i < userIdArray.length; i++){
+				userIdList.add(userIdArray[i]);
+			}
+			
+			if(WorkbenchConstants.EventProcessStatus.DISPATCHING.equals(tasks.get(0).getTaskName()) && userIdList.size() > 1){
+				//获取推送消息模板
+				PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.WORK_ORDER_GRAB_ONE);
+				
+				ListUserMsg message = new ListUserMsg();
+				message.setAction(PushActionConstants.WORK_ORDER_GRAB_ONE);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveUserIdList(userIdList);
+				
+				pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+				logger.info("工单抢单时群推消息{}", message);
+				
+			}else{
+				//获取推送消息模板
+				PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.WORK_ORDER_TO_COLLECT_ONE);
+				
+				ListUserMsg message = new ListUserMsg();
+				message.setAction(PushActionConstants.WORK_ORDER_TO_COLLECT_ONE);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveUserIdList(userIdList);
+				
+				pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+				logger.info("工单需要签收时群推消息{}", message);
+			}
+		}
 	}
 
 	/*
@@ -1565,6 +1795,46 @@ public class WorkbenchService implements IWorkbenchService {
 		EventReportContext eventReportContext = EventReportContext
 				.build(eventReportVo);
 		eventReportContext.create();
+		
+		//TODO
+		List<PropertyStaffVo> propertyStaffVos = propertyStaffService.findPropertyStaff("402820815388d35d015388d35d150000", eventReportVo.getProjectId());
+		if(propertyStaffVos != null && propertyStaffVos.size() > 0){
+			
+			//获取推送消息模板
+			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.EVENT_REPORT_RECEIVE_ONE);
+			
+			if(pushMsgTemplateVo != null){
+				if(propertyStaffVos.size() > 1){
+					
+					List<String> receiveUserIdList = new ArrayList<String>();
+
+					for (int i = 0; i < propertyStaffVos.size(); i++) {
+						receiveUserIdList.add(propertyStaffVos.get(i).getId());
+					}
+					ListUserMsg message = new ListUserMsg();
+					message.setAction(PushActionConstants.EVENT_REPORT_RECEIVE_ONE);
+					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setTitle(pushMsgTemplateVo.getTitle());
+					message.setContent(pushMsgTemplateVo.getContent());
+					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+					message.setReceiveUserIdList(receiveUserIdList);
+					
+					pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+					logger.info("创建报事时群推消息{}", message);
+
+				}else{
+					SingleUserMsg message = new SingleUserMsg();
+					message.setAction(PushActionConstants.EVENT_REPORT_RECEIVE_ONE);
+					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setTitle(pushMsgTemplateVo.getTitle());
+					message.setContent(pushMsgTemplateVo.getContent());
+					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+					message.setReceiveUserId(propertyStaffVos.get(0).getId());
+					pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+					logger.info("创建报事时单推消息{}", message);
+				}
+			}
+		}
 	}
 
 	@Override
