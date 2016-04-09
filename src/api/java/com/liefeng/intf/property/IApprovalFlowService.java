@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.service.vo.TaskAttachVo;
 
 /**
  * 审批流程接口
@@ -38,4 +39,11 @@ public interface IApprovalFlowService {
 	 * @return
 	 */
 	public String getTaskActor(String taskId);
+	
+	/**
+	 * 根据流程实例ID获取附件
+	 * @param orderId 流程实例ID
+	 * @return 附件列表
+	 */
+	public List<TaskAttachVo> listTaskAttach(String orderId);
 }

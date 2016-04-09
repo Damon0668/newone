@@ -25,8 +25,9 @@ import com.liefeng.intf.service.workflow.IWorkflowService;
 import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
 import com.liefeng.property.constant.ApprovalFlowConstants;
 import com.liefeng.property.domain.staff.PropertyStaffContext;
+import com.liefeng.property.domain.worflow.TaskAttachContext;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
-import com.liefeng.property.vo.workbench.EventProcessVo;
+import com.liefeng.service.vo.TaskAttachVo;
 
 /**
  * 审批流程接口
@@ -215,6 +216,12 @@ public class ApprovalFlowService implements IApprovalFlowService{
 		actorsStr = actorsStr.substring(0, (actorsStr.length()-1));
 		
 		return actorsStr;
+	}
+
+	@Override
+	public List<TaskAttachVo> listTaskAttach(String orderId) {
+		TaskAttachContext taskAttachContext = TaskAttachContext.build(orderId);
+		return taskAttachContext.getTaskAttachs();
 	}
 	
 }
