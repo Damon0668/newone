@@ -1,4 +1,4 @@
-package com.liefeng.property.domain.worflow;
+package com.liefeng.property.domain.workflow;
 
 import java.util.ArrayList;
 import java.util.List;

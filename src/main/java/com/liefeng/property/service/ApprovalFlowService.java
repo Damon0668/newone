@@ -29,7 +29,7 @@ import com.liefeng.intf.service.workflow.IWorkflowService;
 import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
 import com.liefeng.property.constant.ApprovalFlowConstants;
 import com.liefeng.property.domain.staff.PropertyStaffContext;
-import com.liefeng.property.domain.worflow.TaskAttachContext;
+import com.liefeng.property.domain.workflow.TaskAttachContext;
 import com.liefeng.property.vo.ApprovalFlow.ProcessVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.service.constant.WorkflowConstants;
@@ -232,6 +232,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 		TaskAttachContext taskAttachContext = TaskAttachContext.build(orderId);
 		return taskAttachContext.getTaskAttachs();
 	}
+	
 	@Override
 	public List<FieldModel> getFields(String processId, String taskName) {
 		NodeModel nodeModel = null;
