@@ -59,6 +59,8 @@ import com.liefeng.property.error.WorkbenchErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.exception.WorkbenchException;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
+import com.liefeng.property.vo.project.ProjectBuildingVo;
+import com.liefeng.property.vo.project.ProjectVo;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
@@ -528,14 +530,61 @@ public class WorkbenchService implements IWorkbenchService {
 		
 		//发布
 		if(WorkbenchConstants.NoticeStatus.ARCHIVING.equals(noticeVo.getStatus())){
+			
+			List<NoticePrivilegeVo> privilegeVos = getNoticePrivilegeByNoticeId(notice.getId());
+			String staffString = "";
+			String residentString = "";
+			for(NoticePrivilegeVo privilegeVo : privilegeVos){
+				
+				ProjectVo projectVo = projectService.findProjectById(privilegeVo.getProjectId());
+				if(projectVo != null){
+					
+					if(privilegeVo.getType().equals(WorkbenchConstants.NoticePrivilegeType.STAFF)){
+						staffString += privilegeVo.getProjectId();
+					}
+					
+					if(privilegeVo.getType().equals(WorkbenchConstants.NoticePrivilegeType.RESIDENT)){
+						residentString += privilegeVo.getProjectId();
+					}
+				}
+				
+				
+				
+				if(privilegeVo.getType().equals(WorkbenchConstants.NoticePrivilegeType.STAFF)){                  //员工
+					
+					if(!privilegeVo.getGroupId().equals("-1")){
+						staffString += "|"+privilegeVo.getGroupId()+",";
+					}else{
+						staffString += "|"+"0"+",";
+					}
+				}
+				
+				if(privilegeVo.getType().equals(WorkbenchConstants.NoticePrivilegeType.RESIDENT)){                  //业主
+					if(!privilegeVo.getGroupId().equals("-1")){
+						residentString += "|"+privilegeVo.getGroupId()+",";
+					}else{
+						residentString += "|"+"0"+",";
+					}
+				}
+				
+			}
+			
+			if(staffString.trim().length()>0){
+				staffString = staffString.substring(0,staffString.length()-1);
+			}
+			
+			if(residentString.trim().length()>0){
+				residentString = residentString.substring(0,residentString.length()-1);
+			}
+			
 			//获取推送消息模板
 			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.NOTICE_RECEIVE_NEW);
 			
 			List<String> clientIdList = new ArrayList<String>();
 			
-			if (ValidateHelper.isNotEmptyString(notice.getStaffMessage())) { // 员工
+			if (ValidateHelper.isNotEmptyString(staffString)) { // 员工
 				// 每个权限使用逗号隔开，权限的具体信息使用|隔开
-				String[] staffArray = notice.getStaffMessage().split(",");
+				String[] staffArray = staffString.split(",");
 				for (int i = 0; i < staffArray.length; i++) {
 					String[] staff = staffArray[i].split("\\|");
 
@@ -566,9 +615,9 @@ public class WorkbenchService implements IWorkbenchService {
 				}
 			}
 			
-			if (ValidateHelper.isNotEmptyString(notice.getProprietorMessage())) { // 业主、住户
+			if (ValidateHelper.isNotEmptyString(residentString)) { // 业主、住户
 				// 每个权限使用逗号隔开，权限的具体信息使用|隔开
-				String[] proprietorArray = notice.getProprietorMessage().split(",");
+				String[] proprietorArray = residentString.split(",");
 				for (int i = 0; i < proprietorArray.length; i++) {
 					String[] proprietor = proprietorArray[i].split("\\|");
 
