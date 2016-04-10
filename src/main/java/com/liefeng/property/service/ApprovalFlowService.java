@@ -24,7 +24,6 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.intf.property.IApprovalFlowService;
 import com.liefeng.intf.property.IPropertyStaffService;
-import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.intf.service.workflow.IWorkflowService;
 import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
 import com.liefeng.property.constant.ApprovalFlowConstants;
@@ -32,6 +31,7 @@ import com.liefeng.property.domain.staff.PropertyStaffContext;
 import com.liefeng.property.vo.ApprovalFlow.ProcessVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.service.constant.WorkflowConstants;
+import com.liefeng.service.vo.TaskAttachVo;
 
 /**
  * 审批流程接口
@@ -46,9 +46,6 @@ public class ApprovalFlowService implements IApprovalFlowService{
 	
 	@Autowired
 	private IPropertyStaffService propertyStaffService;
-	
-	@Autowired
-	private IWorkbenchService workbenchService;
 	
 	@Override
 	public void startOrExecute(ApprovalFlowBo approvalFlowBo) {
@@ -74,12 +71,15 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			Order order = workflowService.startAndExecute(approvalFlowBo.getProcessId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams(),arg);
 			
 			approvalFlowBo.setOrderId(order.getId());
+			// 设置taskId
+			String taskId = workflowService.getHistoryTasks(new QueryFilter().setOrderId(order.getId())).get(0).getId();
+			approvalFlowBo.setTaskId(taskId);
 		} else if(approvalFlowBo.getTaskName().equals(ApprovalFlowConstants.NODE_END)) { //结束流程
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
 			approvalFlowBo.getParams().put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
 			approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_STATUS, ApprovalFlowConstants.ORDER_COMPLETE);
 			workflowService.execute(approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
-		}else{ //继续执行下去
+		} else { //继续执行下去
 			System.out.println("继续执行下去:"+approvalFlowBo.getAssignee()+"||"+addUserPreixes(approvalFlowBo.getNextOperator()));
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
 			approvalFlowBo.getParams().put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
@@ -92,6 +92,26 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			copyToPeopleId = addUserPreixes(copyToPeopleId);
 			String[] idsArr = copyToPeopleId.split(",");
 			workflowService.createCCOrder(approvalFlowBo.getOrderId(), approvalFlowBo.getStaffId(), idsArr);
+		}
+		
+		// 保存流程附件
+		if(ValidateHelper.isNotEmptyString(approvalFlowBo.getTaskAttachsJson())) {
+			List<TaskAttachVo> taskAttachVos = MyBeanUtil.str2List(approvalFlowBo.getTaskAttachsJson(), TaskAttachVo.class);
+			if(taskAttachVos != null && ValidateHelper.isNotEmptyCollection(taskAttachVos)) {
+				String orderId = approvalFlowBo.getOrderId();
+				String taskId = approvalFlowBo.getTaskId();
+				for(TaskAttachVo taskAttachVo : taskAttachVos) { // 设置附件所属流程实例ID和任务ID
+					if(ValidateHelper.isEmptyString(taskAttachVo.getOrderId())) {
+						taskAttachVo.setOrderId(orderId);
+					}
+					
+					if(ValidateHelper.isEmptyString(taskAttachVo.getTaskId())) {
+						taskAttachVo.setTaskId(taskId);
+					}
+				}
+				
+				workflowService.saveTaskAttachs(orderId, taskAttachVos);
+			}
 		}
 	}
 	
