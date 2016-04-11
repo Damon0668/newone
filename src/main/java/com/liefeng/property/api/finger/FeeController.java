@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.TimeUtil;
 import com.liefeng.core.entity.DataListValue;
+import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IFeeService;
 import com.liefeng.property.api.ro.finger.fee.FeeItemByDateRo;
 import com.liefeng.property.api.ro.finger.fee.FreeIsCreateRo;
 import com.liefeng.property.api.ro.finger.fee.MeterRecordRo;
+import com.liefeng.property.bo.fee.MeterRecordBo;
+import com.liefeng.property.constant.FeeConstants;
 import com.liefeng.property.vo.fee.FeeItemVo;
 import com.liefeng.property.vo.fee.MeterRecordVo;
 
@@ -82,7 +85,7 @@ public class FeeController {
 	 * @return
 	 * @throws Exception
 	 */
-	@ApiOperation(value="获取该房号的所属时间段的费用数据")
+	@ApiOperation(value="房号的所属时间段的费用数据")
 	@RequestMapping(value="/getFeeItemByFeedate" , method=RequestMethod.GET)
 	@ResponseBody
 	public DataListValue<FeeItemVo> getFeeItemByFeedate(@Valid @ModelAttribute FeeItemByDateRo feeItemByDateRo){
@@ -91,6 +94,19 @@ public class FeeController {
 		List<FeeItemVo> feeItemVoList = this.feeService.getFeeItemByFeedate(
 				feeItemByDateRo.getProjectId(), feeItemByDateRo.getHouseNum(), feeItemByDateRo.getFeeType(), startDate, endDate);
 		return DataListValue.success(feeItemVoList);
+	}
+	
+	
+	/**
+	 * 获取历史抄表记录
+	 */
+	@ApiOperation(value="历史抄表记录[业主]")
+	@RequestMapping(value="/getMeterRecordHistory" , method=RequestMethod.GET)
+	@ResponseBody
+	public DataPageValue<?> getMeterRecordHistory(@Valid @ModelAttribute MeterRecordRo meterRecordRo){
+		MeterRecordBo meterRecordBo = MyBeanUtil.createBean(meterRecordRo, MeterRecordBo.class);
+		meterRecordBo.setMeterOwner(FeeConstants.MeterRecord.METEROWNER_YSE);
+		return feeService.findMeterRecord4Page(meterRecordBo, meterRecordRo.getPage(), meterRecordRo.getSize());
 	}
 
 }

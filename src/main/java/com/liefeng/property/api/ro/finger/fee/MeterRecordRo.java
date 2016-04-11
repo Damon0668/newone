@@ -17,23 +17,60 @@ public class MeterRecordRo extends BaseValue{
 	@ApiModelProperty(value="项目ID", required=true)
 	@NotNull
 	private String projectId;
-	
+
 	@ApiModelProperty(value="房号", required=true)
 	@NotNull
 	private String houseNum;
-	
-	@ApiModelProperty(value="本期读数", required=true)
-	@NotNull
-	private Double currNum;
-	
-	@ApiModelProperty(value="抄表时间")
-	private Date readDate;
-	
+
 	@ApiModelProperty(value="仪表类型【1：水表；2：电表；3：燃气表】", required=true)
 	@NotNull
 	private String meterType;
 	
-	@ApiModelProperty(value="楼栋id", required=true)
+	@ApiModelProperty(value="当前页", required=true)
 	@NotNull
-	private String buildingId;
+	private Integer page;
+
+	@ApiModelProperty(value="每页数据条数", required=true)
+	@NotNull
+	private Integer size;
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getHouseNum() {
+		return houseNum;
+	}
+
+	public void setHouseNum(String houseNum) {
+		this.houseNum = houseNum;
+	}
+
+	public String getMeterType() {
+		return meterType;
+	}
+
+	public void setMeterType(String meterType) {
+		this.meterType = meterType;
+	}
+
+	public Integer getPage() {
+		return page;
+	}
+
+	public void setPage(Integer page) {
+		this.page = page;
+	}
+
+	public Integer getSize() {
+		return size;
+	}
+
+	public void setSize(Integer size) {
+		this.size = size;
+	}
 }
