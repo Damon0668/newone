@@ -5,8 +5,10 @@ import java.util.List;
 import org.snaker.engine.model.FieldModel;
 import org.snaker.engine.model.TaskModel;
 
+import com.liefeng.core.entity.DataListValue;
 import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
-import com.liefeng.property.vo.ApprovalFlow.ProcessVo;
+import com.liefeng.property.vo.approvalFlow.HistoryTaskVo;
+import com.liefeng.property.vo.approvalFlow.ProcessVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 
 /**
@@ -64,4 +66,11 @@ public interface IApprovalFlowService {
 	 * @return
 	 */
 	public List<TaskModel> getNextTask(String processId, String taskName);
+	
+	/**
+	 * 获取某个任务的历史
+	 * @param orderId
+	 * @return
+	 */
+	public DataListValue<HistoryTaskVo> getHistTaskByOrderId(String orderId);
 }

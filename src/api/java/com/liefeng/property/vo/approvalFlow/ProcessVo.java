@@ -1,4 +1,4 @@
-package com.liefeng.property.vo.ApprovalFlow;
+package com.liefeng.property.vo.approvalFlow;
 
 import io.swagger.annotations.ApiModelProperty;
 

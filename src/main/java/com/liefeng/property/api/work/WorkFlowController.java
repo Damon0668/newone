@@ -3,8 +3,6 @@ package com.liefeng.property.api.work;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +10,9 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.snaker.engine.access.QueryFilter;
+import org.snaker.engine.entity.Task;
+import org.snaker.engine.entity.WorkItem;
 import org.snaker.engine.model.FieldModel;
 import org.snaker.engine.model.TaskModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,43 +23,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.common.util.MyBeanUtil;
-import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IApprovalFlowService;
-import com.liefeng.intf.property.IWorkbenchService;
 import com.liefeng.intf.service.workflow.IWorkflowService;
-import com.liefeng.property.api.ro.ExecuteEventReportRo;
-import com.liefeng.property.api.ro.common.EventAccepterEvalRo;
-import com.liefeng.property.api.ro.common.PhoneRo;
-import com.liefeng.property.api.ro.id.EventIdRo;
-import com.liefeng.property.api.ro.id.ProjectIdRo;
-import com.liefeng.property.api.ro.work.event.CountsToHeadRo;
-import com.liefeng.property.api.ro.work.event.DefaultAccepterRo;
-import com.liefeng.property.api.ro.work.event.DispatchingWorkerRo;
-import com.liefeng.property.api.ro.work.event.EventReportDataPageRo;
-import com.liefeng.property.api.ro.work.event.EventReportDetailRo;
-import com.liefeng.property.api.ro.work.event.EventReportFlowWorkRo;
-import com.liefeng.property.api.ro.work.event.EventReportListByTypeRo;
-import com.liefeng.property.api.ro.work.event.EventReportRo;
+import com.liefeng.property.api.ro.work.workFlow.GetActiveTaskRo;
 import com.liefeng.property.api.ro.work.workFlow.GetDefaultUserRo;
 import com.liefeng.property.api.ro.work.workFlow.GetFieldsRo;
+import com.liefeng.property.api.ro.work.workFlow.GetListDataRo;
 import com.liefeng.property.api.ro.work.workFlow.GetUserRo;
 import com.liefeng.property.api.ro.work.workFlow.OrderIdRo;
 import com.liefeng.property.api.ro.work.workFlow.StartOrExecuteRo;
 import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
-import com.liefeng.property.bo.workbench.EventReportBo;
-import com.liefeng.property.constant.WorkbenchConstants;
-import com.liefeng.property.domain.workbench.EventReportContext;
-import com.liefeng.property.vo.ApprovalFlow.ProcessVo;
+import com.liefeng.property.constant.ApprovalFlowConstants;
+import com.liefeng.property.vo.approvalFlow.ProcessVo;
+import com.liefeng.property.vo.approvalFlow.HistoryTaskVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
-import com.liefeng.property.vo.staff.StaffContactVo;
-import com.liefeng.property.vo.workbench.EventAccepterEvalVo;
-import com.liefeng.property.vo.workbench.EventProcessVo;
-import com.liefeng.property.vo.workbench.EventReportVo;
-import com.liefeng.property.vo.workbench.HeadCountVo;
 
 /**
  * 工作流
@@ -126,6 +108,51 @@ public class WorkFlowController {
 		return DataValue.success(propertyStaffVo);
 	}
 	
+	@ApiOperation(value="获取列表数据")
+	@RequestMapping(value="/getListData", method=RequestMethod.GET)
+	@ResponseBody
+	public DataPageValue<WorkItem> getListData(@Valid @ModelAttribute  GetListDataRo getListDataRo){
+		
+		String operator = ApprovalFlowConstants.USER_PREFIXES+getListDataRo.getStaffId();
+		DataPageValue<WorkItem> dataPageValue = null;
+		switch (getListDataRo.getType()) {
+		
+		case "1"://待办理
+			dataPageValue = workflowService.getWorkItems(new QueryFilter().setOperator(operator), getListDataRo.getPage(),  getListDataRo.getSize());
+			break;
+		case "2"://已办结
+			dataPageValue = workflowService.listFlowingOrder(new QueryFilter().setOperator(operator), getListDataRo.getPage(),  getListDataRo.getSize());
+			break;
+		case "3"://我发起的
+			dataPageValue = workflowService.listMyCreate(new QueryFilter().setOperator(operator), getListDataRo.getPage(),  getListDataRo.getSize());
+			break;
+		default:
+			break;
+		}
+		
+		return dataPageValue;
+	}
+	
+	@ApiOperation(value="获取某个流程的历史任务")
+	@RequestMapping(value="/getHistTask", method=RequestMethod.GET)
+	@ResponseBody
+	public DataListValue<HistoryTaskVo> getHistTask(@Valid @ModelAttribute OrderIdRo orderIdRo){
+		return approvalFlowService.getHistTaskByOrderId(orderIdRo.getOrderId());
+	}
+	
+	@ApiOperation(value="获取某个流程的当前活动任务,null为无法操作当前任务")
+	@RequestMapping(value="/getActiveTask", method=RequestMethod.GET)
+	@ResponseBody
+	public DataValue<Task> getActiveTask(@Valid @ModelAttribute GetActiveTaskRo getActiveTaskRo){
+		String operator = ApprovalFlowConstants.USER_PREFIXES+getActiveTaskRo.getStaffId();
+		List<Task> tasks = workflowService.getActiveTasks(new QueryFilter().setOrderId(getActiveTaskRo.getOrderId()).setOperator(operator));
+		
+		if(tasks != null && tasks.size() > 0){
+			return DataValue.success(tasks.get(0));
+		}
+		return DataValue.success(null);
+	}
+	
 	@ApiOperation(value="开始或执行流程")
 	@RequestMapping(value="/startOrExecute", method=RequestMethod.POST)
 	@ResponseBody
@@ -134,7 +161,5 @@ public class WorkFlowController {
 		approvalFlowService.startOrExecute(approvalFlowBo);
 		return ReturnValue.success();
 	}
-	
-	
 	
 }
