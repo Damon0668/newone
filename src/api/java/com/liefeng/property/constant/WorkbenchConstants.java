@@ -401,4 +401,32 @@ public class WorkbenchConstants {
 	 * 报事直接反馈
 	 */
 	public static final String DIRECTFEEDBACK = "1";
+	
+	/**
+	 * 通知类型
+	 * @author xhw
+	 * @date 2016年4月11日 下午3:45:51
+	 */
+	public static interface NoticeType {
+		/**
+		 * 社区通告:1
+		 */
+		public static final String ONE = "1";
+		
+		/**
+		 * 温馨提醒:2
+		 */
+		public static final String TWO = "2";
+		
+		/**
+		 * 通知:3
+		 */
+		public static final String THREE = "3";
+		
+		/**
+		 * 社区动态:4
+		 */
+		public static final String FOUR = "4";
+		
+	}
 }
