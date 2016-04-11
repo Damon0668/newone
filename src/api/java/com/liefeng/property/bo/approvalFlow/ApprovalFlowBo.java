@@ -57,6 +57,11 @@ public class ApprovalFlowBo  extends BaseValue{
 	 * 抄送人id
 	 */
 	private String copyToPeopleId;
+	
+	/**
+	 * 流程附件JSON数据
+	 */
+	private String taskAttachsJson;
 
 	public String getProcessId() {
 		return processId;
@@ -128,6 +133,14 @@ public class ApprovalFlowBo  extends BaseValue{
 
 	public void setAssignee(String assignee) {
 		this.assignee = assignee;
+	}
+
+	public String getTaskAttachsJson() {
+		return taskAttachsJson;
+	}
+
+	public void setTaskAttachsJson(String taskAttachsJson) {
+		this.taskAttachsJson = taskAttachsJson;
 	}
 
 }
