@@ -9,6 +9,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.liefeng.common.util.CommonUtil;
+import com.liefeng.common.util.EncryptionUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
@@ -61,12 +62,21 @@ public class ControllerInterceptor implements HandlerInterceptor{
 			return Boolean.TRUE;
 		}
 		
-		String oemCode = (String) redisService.getValue("openId_" + openId);
+		String key = "openId_" + openId;
+		
+		String oemCode = (String) redisService.getValue(key);
 		
 		logger.info("ControllerInterceptor openId = {}, oemCode = {}", openId, oemCode);
 		
 		if(ValidateHelper.isEmptyString(oemCode)){
-			return Boolean.FALSE;
+			//从openId 解密oemCode
+			openId = EncryptionUtil.decrypt(openId, EncryptionUtil.OPEN_ID_PASSWORD);
+			String[] openIdArray = openId.split("\\|");
+			if(openIdArray.length == 2){
+				oemCode = openIdArray[1];
+			}else{
+				return Boolean.FALSE;
+			}
 		}
 		
 		ContextManager.getInstance().setOemCode(oemCode);

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.base.bo.UserLoginBo;
 import com.liefeng.base.vo.UserVo;
+import com.liefeng.common.util.EncryptionUtil;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataValue;
@@ -64,21 +65,20 @@ public class AuthController {
 		
 		loginUser.setUserId(user.getId());
 		
-		loginUser.setOpenId(user.getCustGlobalId());
+		//openId加密
+		String openId = user.getCustGlobalId() + "|" + user.getOemCode();
+		
+		openId = EncryptionUtil.encrypt(openId, EncryptionUtil.OPEN_ID_PASSWORD);
+		
+		loginUser.setOpenId(openId);
 		
 		//刷新缓存中的oemCode
-		if(ValidateHelper.isNotEmptyString(user.getUserGlobalId())){
-			String openId = "openId_finger_" + user.getCustGlobalId();
-			String existOemCode = (String) redisService.getValue(openId);
-			if(ValidateHelper.isNotEmptyString(existOemCode)){
-				if(!loginUser.getOemCode().equals(existOemCode)){
-					throw new LiefengException(SecurityErrorCode.OPENID_HAS_EXIST);
-				}
-			}else{
-				redisService.setValue(openId, loginUser.getOemCode());
-			}
+		String key = "openId_" + openId;
+		
+		if(!redisService.isKeyExist(key)){
+			redisService.setValue(key, openId);
 		}
-
+		
 		return DataValue.success(loginUser);
 	}
 	

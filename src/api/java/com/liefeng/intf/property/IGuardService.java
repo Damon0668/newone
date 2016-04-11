@@ -5,6 +5,7 @@ import java.util.List;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
 import com.liefeng.property.bo.guard.GuardResidentBo;
+import com.liefeng.property.vo.guard.DevicePositionVo;
 import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
 import com.liefeng.property.vo.guard.GuardCardUserVo;
 import com.liefeng.property.vo.guard.GuardCardVo;
@@ -21,9 +22,45 @@ import com.liefeng.property.vo.household.VisitorVo;
 public interface IGuardService {
 	
 	/*
+	 * ****************** 设备位置相关 ******************
+	 */
+	/**
+	 * 添加设备位置
+	 * @param devicePosition
+	 */
+	public void createDevicePosition(DevicePositionVo devicePosition);
+	
+	/**
+	 * 更新设备位置
+	 * @param devicePosition
+	 */
+	public void updateDevicePosition(DevicePositionVo devicePosition);
+	
+	/**
+	 * 删除设备位置
+	 * @param ID
+	 */
+	public void deleteDevicePosition(String id);
+	
+	/**
+	 * 查询项目位置
+	 * @param projectId 
+	 * @return
+	 */
+	public List<DevicePositionVo> findDevicePosition(String projectId);
+	
+	/**
+	 * 查询项目位置
+	 * @param projectId 项目ID
+	 * @param page 
+	 * @param size
+	 * @return 
+	 */
+	public DataPageValue<DevicePositionVo> findDevicePosition(String projectId,int page, int size);
+	
+	/*
 	 * ****************** 门禁设备相关 ******************
 	 */
-	
 	/**
 	 * 添加门禁设备
 	 * @param guardDevice 门禁设备信息
@@ -75,7 +112,6 @@ public interface IGuardService {
 	/*
 	 * ****************** 磁卡相关 ******************
 	 */
-	
 	/**
 	 * 查询门禁磁卡
 	 * @param cardId 门禁卡ID

@@ -22,12 +22,14 @@ import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
 import com.liefeng.property.bo.guard.GuardResidentBo;
+import com.liefeng.property.domain.guard.DevicePositionContext;
 import com.liefeng.property.domain.guard.GuardCardContext;
 import com.liefeng.property.domain.guard.GuardCardPrivilegeContext;
 import com.liefeng.property.domain.guard.GuardCardUserContext;
 import com.liefeng.property.domain.guard.GuardDeviceContext;
 import com.liefeng.property.domain.household.ResidentContext;
 import com.liefeng.property.domain.household.VisitorContext;
+import com.liefeng.property.vo.guard.DevicePositionVo;
 import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
 import com.liefeng.property.vo.guard.GuardCardUserVo;
 import com.liefeng.property.vo.guard.GuardCardVo;
@@ -205,6 +207,31 @@ public class GuardService implements IGuardService{
 	public void updateGuardCard(GuardCardVo guardCard, List<String> guardDeviceIds) {
 		GuardCardContext.build(guardCard).updata();
 		GuardCardPrivilegeContext.loadByCardId(guardCard.getId()).grantGuardCard(guardDeviceIds);
+	}
+
+	@Override
+	public void createDevicePosition(DevicePositionVo devicePosition) {
+		DevicePositionContext.build(devicePosition).create();
+	}
+
+	@Override
+	public void updateDevicePosition(DevicePositionVo devicePosition) {
+		DevicePositionContext.build(devicePosition).update();
+	}
+
+	@Override
+	public void deleteDevicePosition(String id) {
+		DevicePositionContext.loadById(id).delete();
+	}
+
+	@Override
+	public List<DevicePositionVo> findDevicePosition(String projectId) {
+		return DevicePositionContext.loadByProjectId(projectId).findDevicePosition();
+	}
+
+	@Override
+	public DataPageValue<DevicePositionVo> findDevicePosition(String projectId, int page, int size) {
+		return DevicePositionContext.loadByProjectId(projectId).findPosition4Page(page, size);
 	}
 
 }
