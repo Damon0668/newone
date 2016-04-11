@@ -4,12 +4,16 @@ import java.util.Date;
 
 import com.liefeng.core.entity.BaseValue;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 抄表记录值对象
  * 
  * @author ZhenTingJun
  * @date 2015-12-24
  */
+@ApiModel
 public class MeterRecordVo extends BaseValue {
 
 	private static final long serialVersionUID = 1542017567267693196L;
@@ -17,110 +21,131 @@ public class MeterRecordVo extends BaseValue {
 	/**
 	 * 主键
 	 */
+	@ApiModelProperty(value="主键")
 	private String id;
 
 	/**
 	 * 所属物业公司ID
 	 */
+	@ApiModelProperty(value="所属物业公司ID")
 	private String propertyId;
 
 	/**
 	 * 项目ID
 	 */
+	@ApiModelProperty(value="项目ID")
 	private String projectId;
 
 	/**
 	 * 楼栋ID
 	 */
+	@ApiModelProperty(value="楼栋ID")
 	private String buildingId;
 
 	/**
 	 * 楼层ID
 	 */
+	@ApiModelProperty(value="楼层ID")
 	private String floorId;
 
 	/**
 	 * 房号
 	 */
+	@ApiModelProperty(value="房号")
 	private String houseNum;
 
 	/**
 	 * 表类型
 	 * 1：水表；2：电表；3：燃气表
 	 */
+	@ApiModelProperty(value="[1：水表；2：电表；3：燃气表]")
 	private String meterType;
 
 	/**
 	 * 表属主
 	 * 1：业主表；2：公摊表
 	 */
+	@ApiModelProperty(value="[1：业主表；2：公摊表]")
 	private String meterOwner;
 
 	/**
 	 * 业主名称
 	 */
+	@ApiModelProperty(value="业主名称")
 	private String proprietorName;
 
 	/**
 	 * 费用所属开始日期
 	 */
+	@ApiModelProperty(value="费用所属开始日期")
 	private Date startDate;
 
 	/**
 	 * 费用所属结束日期
 	 */
+	@ApiModelProperty(value="费用所属结束日期")
 	private Date endDate;
 
 	/**
 	 * 上期表数
 	 */
+	@ApiModelProperty(value="上期表数")
 	private Double preNum;
 
 	/**
 	 * 本期表数
 	 */
+	@ApiModelProperty(value="上期表数")
 	private Double currNum;
 	
 	/**
 	 * 本期用量
 	 */
+	@ApiModelProperty(value="本期用量")
 	private Double useAmount;
 
 	/**
 	 * 抄表日期
 	 */
+	@ApiModelProperty(value="抄表日期")
 	private Date readDate;
 
 	/**
 	 * 抄表员工ID
 	 */
+	@ApiModelProperty(value="抄表员工ID")
 	private String staffId;
 
 	/**
 	 * 创建时间
 	 */
+	@ApiModelProperty(value="创建时间")
 	private Date createTime;
 
 	/**
 	 * 是否已读
 	 */
+	@ApiModelProperty(value="是否已读")
 	private Integer isRead;
 	
 	/**
 	 * 数据来源
 	 * 1：WEB；2：Android；3：IOS
 	 */
+	@ApiModelProperty(value="数据来源[1：WEB；2：Android；3：IOS]")
 	private String from;
 
 	/**
 	 * OEM编码
 	 */
+	@ApiModelProperty(value="OEM编码")
 	private String oemCode;
 	
 	/**
 	 * 分摊户数
 	 * @return
 	 */
+	@ApiModelProperty(value="分摊户数")
 	private Integer onwerCount;
 
 	public String getId() {

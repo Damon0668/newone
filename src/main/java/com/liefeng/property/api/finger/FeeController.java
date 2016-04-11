@@ -103,7 +103,7 @@ public class FeeController {
 	@ApiOperation(value="历史抄表记录[业主]")
 	@RequestMapping(value="/getMeterRecordHistory" , method=RequestMethod.GET)
 	@ResponseBody
-	public DataPageValue<?> getMeterRecordHistory(@Valid @ModelAttribute MeterRecordRo meterRecordRo){
+	public DataPageValue<MeterRecordVo> getMeterRecordHistory(@Valid @ModelAttribute MeterRecordRo meterRecordRo){
 		MeterRecordBo meterRecordBo = MyBeanUtil.createBean(meterRecordRo, MeterRecordBo.class);
 		meterRecordBo.setMeterOwner(FeeConstants.MeterRecord.METEROWNER_YSE);
 		return feeService.findMeterRecord4Page(meterRecordBo, meterRecordRo.getPage(), meterRecordRo.getSize());
