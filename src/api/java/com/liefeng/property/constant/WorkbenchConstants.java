@@ -396,4 +396,9 @@ public class WorkbenchConstants {
 		public static final String STAFF = "4";
 		
 	}
+	
+	/**
+	 * 报事直接反馈
+	 */
+	public static final String DIRECTFEEDBACK = "1";
 }

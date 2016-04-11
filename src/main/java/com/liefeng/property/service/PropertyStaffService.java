@@ -411,4 +411,9 @@ public class PropertyStaffService implements IPropertyStaffService {
 			String projectId) {
 		return PropertyStaffContext.build().listClientIdByDeptIdAndProjectId(departmentId, projectId);
 	}
+
+	@Override
+	public StaffArchiveVo findStaffArchiveByPhone(String phone) {
+		return StaffArchiveContext.build().getStaffArchiveByPhone(phone);
+	}
 }
