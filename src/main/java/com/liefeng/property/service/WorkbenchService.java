@@ -1315,6 +1315,18 @@ public class WorkbenchService implements IWorkbenchService {
 		EventProcessContext.build(executeEventProcessVo).create();
 
 		eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_FINISH);
+		
+		//获取推送消息模板
+		PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.EVENT_REPORT_RECEIVE_ONE);
+		SingleUserMsg message = new SingleUserMsg();
+		message.setAction(PushActionConstants.EVENT_REPORT_RECEIVE_ONE);
+		message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+		message.setTitle(pushMsgTemplateVo.getTitle());
+		message.setContent(pushMsgTemplateVo.getContent());
+		message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+		message.setReceiveUserId(nextAccepterId);
+		pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+		logger.info("派单时单推消息{}", message);
 	}
 
 	@Override
@@ -1542,6 +1554,45 @@ public class WorkbenchService implements IWorkbenchService {
 			EventProcessContext.build(eventProcess).create();
 
 		}
+		
+		if(ValidateHelper.isNotEmptyString(nextAccepterId)){
+			List<String> userIdList = new ArrayList<String>();
+			String[] userIdArray = nextAccepterId.split(",");
+			for(int i = 0; i < userIdArray.length; i++){
+				userIdList.add(userIdArray[i]);
+			}
+			
+			if(WorkbenchConstants.EventProcessStatus.DISPATCHING.equals(tasks.get(0).getTaskName()) && userIdList.size() > 1){
+				//获取推送消息模板
+				PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.WORK_ORDER_GRAB_ONE);
+				
+				ListUserMsg message = new ListUserMsg();
+				message.setAction(PushActionConstants.WORK_ORDER_GRAB_ONE);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveUserIdList(userIdList);
+				
+				pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+				logger.info("工单抢单时群推消息{}", message);
+				
+			}else{
+				//获取推送消息模板
+				PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.WORK_ORDER_TO_COLLECT_ONE);
+				
+				ListUserMsg message = new ListUserMsg();
+				message.setAction(PushActionConstants.WORK_ORDER_TO_COLLECT_ONE);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveUserIdList(userIdList);
+				
+				pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+				logger.info("工单需要签收时群推消息{}", message);
+			}
+		}
 	}
 
 	/*
@@ -1745,6 +1796,7 @@ public class WorkbenchService implements IWorkbenchService {
 				.build(eventReportVo);
 		eventReportContext.create();
 		
+		//TODO
 		List<PropertyStaffVo> propertyStaffVos = propertyStaffService.findPropertyStaff("402820815388d35d015388d35d150000", eventReportVo.getProjectId());
 		if(propertyStaffVos != null && propertyStaffVos.size() > 0){
 			
