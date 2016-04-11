@@ -578,8 +578,6 @@ public class WorkbenchService implements IWorkbenchService {
 				residentString = residentString.substring(0,residentString.length()-1);
 			}
 			
-			//获取推送消息模板
-			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.NOTICE_RECEIVE_NEW);
 			
 			//员工
 			List<String> staffClientIdList = new ArrayList<String>();
@@ -645,29 +643,37 @@ public class WorkbenchService implements IWorkbenchService {
 			}
 			
 			if(staffClientIdList != null && staffClientIdList.size() > 0){
-				ListUserMsg message = new ListUserMsg();
-				message.setAction(PushActionConstants.NOTICE_RECEIVE_NEW);
-				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
-				message.setTitle(pushMsgTemplateVo.getTitle());
-				message.setContent(pushMsgTemplateVo.getContent());
-				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-				message.setReceiveClientIdList(staffClientIdList);
-				
-				pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
-				logger.info("通知发布时群推消息{}", message);
+				//获取推送消息模板
+				PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.NOTICE_RECEIVE_NEW);
+				if(pushMsgTemplateVo != null){
+					ListUserMsg message = new ListUserMsg();
+					message.setAction(PushActionConstants.NOTICE_RECEIVE_NEW);
+					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setTitle(pushMsgTemplateVo.getTitle());
+					message.setContent(pushMsgTemplateVo.getContent());
+					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+					message.setReceiveClientIdList(staffClientIdList);
+					
+					pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+					logger.info("通知发布时群推消息{}", message);
+				}
 			}
 			
 			if(proprietorClientIdList != null && proprietorClientIdList.size() > 0){
-				ListUserMsg message = new ListUserMsg();
-				message.setAction(PushActionConstants.NOTICE_RECEIVE_NEW);
-				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
-				message.setTitle(pushMsgTemplateVo.getTitle());
-				message.setContent(pushMsgTemplateVo.getContent());
-				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-				message.setReceiveClientIdList(proprietorClientIdList);
-				
-				pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
-				logger.info("通知发布时群推消息{}", message);
+				//获取推送消息模板
+				PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.NOTICE_BROADCAST_NEW);
+				if(pushMsgTemplateVo != null){
+					ListUserMsg message = new ListUserMsg();
+					message.setAction(PushActionConstants.NOTICE_BROADCAST_NEW);
+					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setTitle(pushMsgTemplateVo.getTitle());
+					message.setContent(pushMsgTemplateVo.getContent());
+					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+					message.setReceiveClientIdList(proprietorClientIdList);
+					
+					pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
+					logger.info("通知发布时群推消息{}", message);
+				}
 			}
 		}
 		return noticeVo;
