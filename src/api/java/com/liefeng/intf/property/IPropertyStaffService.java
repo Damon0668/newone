@@ -243,4 +243,13 @@ public interface IPropertyStaffService {
 	 * @date 2016年4月8日 下午6:08:08
 	 */
 	public List<PropertyStaffVo> findStaffClientIdList(String departmentId, String projectId);
+	
+	/**
+	 * 通过手机号码、获取员工的档案信息
+	 * @param phone
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月11日 下午1:48:56
+	 */
+	public StaffArchiveVo findStaffArchiveByPhone(String phone);
 }

@@ -289,6 +289,12 @@ public class EventReportVo extends BaseValue {
 	private String revisitMode;
 
 	/**
+	 * 直接反馈
+	 */
+	@ApiModelProperty("直接反馈【1：是】")
+	private String directFeekback;
+	
+	/**
 	 * 报事处理过程列表
 	 */
 	@ApiModelProperty("报事处理过程列表")
@@ -679,6 +685,14 @@ public class EventReportVo extends BaseValue {
 
 	public void setEventProcessList(List<EventProcessVo> eventProcessList) {
 		this.eventProcessList = eventProcessList;
+	}
+
+	public String getDirectFeekback() {
+		return directFeekback;
+	}
+
+	public void setDirectFeekback(String directFeekback) {
+		this.directFeekback = directFeekback;
 	}
 
 }

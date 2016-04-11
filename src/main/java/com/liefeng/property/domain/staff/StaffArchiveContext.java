@@ -190,4 +190,20 @@ public class StaffArchiveContext {
 			}
 		}
 	}
+	
+	/**
+	 * 通过手机号码，获取员工的档案信息
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月11日 下午1:46:18
+	 */
+	public StaffArchiveVo getStaffArchiveByPhone(String phone){
+		if(ValidateHelper.isNotEmptyString(phone)){
+			String oemCode = ContextManager.getInstance().getOemCode();
+			StaffArchivePo staffArchivePo = staffArchiveRepository.findByPhoneAndOemCode(phone, oemCode);
+			
+			staffArchive = MyBeanUtil.createBean(staffArchivePo, StaffArchiveVo.class);
+		}
+		return staffArchive;
+	}
 }
