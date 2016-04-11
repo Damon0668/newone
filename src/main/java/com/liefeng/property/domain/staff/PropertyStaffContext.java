@@ -364,7 +364,7 @@ public class PropertyStaffContext {
 	 * @param projectId 项目ID
 	 * @return
 	 */
-	public List<PropertyStaffVo> listClientIdByDeptIdAndProjectId(String departmentId, String projectId){
+	public List<String> listClientIdByDeptIdAndProjectId(String departmentId, String projectId){
 		Map<String, String> extra = new HashMap<String, String>();
 		extra.put("departmentId", departmentId);
 		extra.put("projectId", projectId);

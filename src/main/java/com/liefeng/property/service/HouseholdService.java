@@ -1059,9 +1059,15 @@ public class HouseholdService implements IHouseholdService {
 	}
 
 	@Override
-	public List<ProprietorSingleHouseVo> listClientIdByBuildingIdAndProjectId(
+	public List<String> listClientIdByBuildingIdAndProjectId(
 			String buildingId, String projectId) {
 		ProprietorContext proprietorContext = ProprietorContext.build();
 		return proprietorContext.listClientIdByBuildingIdAndProjectId(buildingId, projectId);
+	}
+
+	@Override
+	public List<String> listClientIdByProjectId(
+			String projectId) {
+		return ProprietorContext.build().listClientIdByProjectId(projectId);
 	}
 }

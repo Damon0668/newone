@@ -507,5 +507,14 @@ public interface IHouseholdService {
 	 * @author xhw
 	 * @date 2016年4月9日 下午1:34:03
 	 */
-	List<ProprietorSingleHouseVo> listClientIdByBuildingIdAndProjectId(String buildingId, String projectId);
+	List<String> listClientIdByBuildingIdAndProjectId(String buildingId, String projectId);
+	
+	/**
+	 * 根据projectId获取用户的cleintId
+	 * @param projectId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月11日 下午5:08:26
+	 */
+	public List<String> listClientIdByProjectId(String projectId);
 }

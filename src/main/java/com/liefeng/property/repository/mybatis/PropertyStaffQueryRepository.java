@@ -71,5 +71,5 @@ public interface PropertyStaffQueryRepository extends BaseRepository<PropertySta
 	 * @param param
 	 * @return
 	 */
-	public List<PropertyStaffVo> queryByProjectIdAndDeptId(PagingParamVo param);
+	public List<String> queryByProjectIdAndDeptId(PagingParamVo param);
 }

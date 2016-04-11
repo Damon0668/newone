@@ -407,7 +407,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 	}
 
 	@Override
-	public List<PropertyStaffVo> findStaffClientIdList(String departmentId,
+	public List<String> findStaffClientIdList(String departmentId,
 			String projectId) {
 		return PropertyStaffContext.build().listClientIdByDeptIdAndProjectId(departmentId, projectId);
 	}
