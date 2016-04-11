@@ -580,7 +580,10 @@ public class WorkbenchService implements IWorkbenchService {
 			//获取推送消息模板
 			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.NOTICE_RECEIVE_NEW);
 			
-			List<String> clientIdList = new ArrayList<String>();
+			//员工
+			List<String> staffClientIdList = new ArrayList<String>();
+			//业主、住户
+			List<String> proprietorClientIdList = new ArrayList<String>();
 			
 			if (ValidateHelper.isNotEmptyString(staffString)) { // 员工
 				// 每个权限使用逗号隔开，权限的具体信息使用|隔开
@@ -596,11 +599,11 @@ public class WorkbenchService implements IWorkbenchService {
 						List<ProprietorSingleHouseVo> houseList = householdService.listClientIdByBuildingIdAndProjectId("", staff[0]);
 						
 						for(PropertyStaffVo staffVo : staffList){
-							clientIdList.add(staffVo.getClientId());
+							staffClientIdList.add(staffVo.getClientId());
 						}
 						
 						for(ProprietorSingleHouseVo houseVo : houseList){
-							clientIdList.add(houseVo.getClientId());
+							proprietorClientIdList.add(houseVo.getClientId());
 						}
 						
 					} else {// 代表权限是有某个项目管理权限的，并且是某个部门的所有员工
@@ -608,7 +611,7 @@ public class WorkbenchService implements IWorkbenchService {
 						List<PropertyStaffVo> staffList = propertyStaffService.findStaffClientIdList(staff[1], staff[0]);
 						
 						for(PropertyStaffVo staffVo : staffList){
-							clientIdList.add(staffVo.getClientId());
+							staffClientIdList.add(staffVo.getClientId());
 						}
 					}
 
@@ -626,30 +629,45 @@ public class WorkbenchService implements IWorkbenchService {
 						List<ProprietorSingleHouseVo> houseList = householdService.listClientIdByBuildingIdAndProjectId("", proprietor[0]);
 						
 						for(ProprietorSingleHouseVo houseVo : houseList){
-							clientIdList.add(houseVo.getClientId());
+							proprietorClientIdList.add(houseVo.getClientId());
 						}
 					} else { // 某个项目、某个楼栋的所有业主、住户
 						//业主、住户clientId
 						List<ProprietorSingleHouseVo> houseList = householdService.listClientIdByBuildingIdAndProjectId(proprietor[1], proprietor[0]);
 						
 						for(ProprietorSingleHouseVo houseVo : houseList){
-							clientIdList.add(houseVo.getClientId());
+							proprietorClientIdList.add(houseVo.getClientId());
 						}
 					}
 
 				}
 			}
 			
-			ListUserMsg message = new ListUserMsg();
-			message.setAction(PushActionConstants.NOTICE_RECEIVE_NEW);
-			message.setMsgCode(pushMsgTemplateVo.getMsgCode());
-			message.setTitle(pushMsgTemplateVo.getTitle());
-			message.setContent(pushMsgTemplateVo.getContent());
-			message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-			message.setReceiveClientIdList(clientIdList);
+			if(staffClientIdList != null && staffClientIdList.size() > 0){
+				ListUserMsg message = new ListUserMsg();
+				message.setAction(PushActionConstants.NOTICE_RECEIVE_NEW);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveClientIdList(staffClientIdList);
+				
+				pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+				logger.info("通知发布时群推消息{}", message);
+			}
 			
-			pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
-			logger.info("通知发布时群推消息{}", message);
+			if(proprietorClientIdList != null && proprietorClientIdList.size() > 0){
+				ListUserMsg message = new ListUserMsg();
+				message.setAction(PushActionConstants.NOTICE_RECEIVE_NEW);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveClientIdList(proprietorClientIdList);
+				
+				pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
+				logger.info("通知发布时群推消息{}", message);
+			}
 		}
 		return noticeVo;
 	}

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.HistoryTask;
@@ -24,14 +26,22 @@ import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.intf.property.IApprovalFlowService;
 import com.liefeng.intf.property.IPropertyStaffService;
+import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.intf.service.workflow.IWorkflowService;
+import com.liefeng.mq.type.MessageEvent;
 import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
 import com.liefeng.property.constant.ApprovalFlowConstants;
+import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.domain.staff.PropertyStaffContext;
 import com.liefeng.property.vo.ApprovalFlow.ProcessVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.service.constant.PushActionConstants;
+import com.liefeng.service.constant.PushMsgConstants;
 import com.liefeng.service.constant.WorkflowConstants;
+import com.liefeng.service.vo.PushMsgTemplateVo;
 import com.liefeng.service.vo.TaskAttachVo;
+import com.liefeng.service.vo.msg.ListUserMsg;
+import com.liefeng.service.vo.msg.SingleUserMsg;
 
 /**
  * 审批流程接口
@@ -40,12 +50,17 @@ import com.liefeng.service.vo.TaskAttachVo;
  */
 @Service
 public class ApprovalFlowService implements IApprovalFlowService{
+	private static Logger logger = LoggerFactory
+			.getLogger(WorkbenchService.class);
 	
 	@Autowired
 	private IWorkflowService workflowService;
 	
 	@Autowired
 	private IPropertyStaffService propertyStaffService;
+	
+	@Autowired
+	private IPushMsgService pushMsgService;
 	
 	@Override
 	public void startOrExecute(ApprovalFlowBo approvalFlowBo) {
@@ -79,11 +94,49 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			approvalFlowBo.getParams().put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
 			approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_STATUS, ApprovalFlowConstants.ORDER_COMPLETE);
 			workflowService.execute(approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
+			String staffId = workflowService.findHisOrderById(approvalFlowBo.getOrderId()).getCreator();
+			//获取推送消息模板
+			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.APPROVAL_FINISHED);
+			if(pushMsgTemplateVo != null){
+				SingleUserMsg message = new SingleUserMsg();
+				message.setAction(PushActionConstants.APPROVAL_FINISHED);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveUserId(staffId);
+				pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+				logger.info("审批完成时单推消息{}", message);
+			}
 		} else { //继续执行下去
 			System.out.println("继续执行下去:"+approvalFlowBo.getAssignee()+"||"+addUserPreixes(approvalFlowBo.getNextOperator()));
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
 			approvalFlowBo.getParams().put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
 			workflowService.executeAndJumpTask(approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams(), approvalFlowBo.getTaskName());
+			
+			if(ValidateHelper.isNotEmptyString(approvalFlowBo.getNextOperator())){
+				String[] staffIdArray = approvalFlowBo.getNextOperator().split(",");
+				
+				List<String> staffIdList = new ArrayList<String>();
+				for(int i = 0; i < staffIdArray.length; i++){
+					staffIdList.add(staffIdArray[i]);
+				}
+				
+				//获取推送消息模板
+				PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.APPROVAL_NEW);
+				if(pushMsgTemplateVo != null){
+					ListUserMsg message = new ListUserMsg();
+					message.setAction(PushActionConstants.APPROVAL_NEW);
+					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setTitle(pushMsgTemplateVo.getTitle());
+					message.setContent(pushMsgTemplateVo.getContent());
+					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+					message.setReceiveUserIdList(staffIdList);
+					
+					pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+					logger.info("有新审批时群推消息{}", message);
+				}
+			}
 		}
 		
 		// 保存抄送实例ID
