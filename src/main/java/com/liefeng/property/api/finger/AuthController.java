@@ -48,10 +48,7 @@ public class AuthController {
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<LoginUserVo> userLogin(@Valid @ModelAttribute AuthLoginRo authLogin){
-
 		LoginUserVo loginUser = null;
-		
-		String openId ;
 
 		//统一鉴权登陆
 		UserLoginBo userLoginBo = MyBeanUtil.createBean(authLogin, UserLoginBo.class);
@@ -65,19 +62,21 @@ public class AuthController {
 		//获取物业系统用户信息
 		loginUser = loginUserService.findLoginUser(user.getCustGlobalId(), user.getOemCode());
 		
-		openId = "finger" + "_" + user.getCustGlobalId();
-		
 		loginUser.setUserId(user.getId());
 		
-		loginUser.setOpenId(openId);
+		loginUser.setOpenId(user.getCustGlobalId());
 		
 		//刷新缓存中的oemCode
 		if(ValidateHelper.isNotEmptyString(user.getUserGlobalId())){
-			if(redisService.isKeyExist(openId)){
-				throw new LiefengException(SecurityErrorCode.OPENID_HAS_EXIST);
+			String openId = "openId_finger_" + user.getCustGlobalId();
+			String existOemCode = (String) redisService.getValue(openId);
+			if(ValidateHelper.isNotEmptyString(existOemCode)){
+				if(!loginUser.getOemCode().equals(existOemCode)){
+					throw new LiefengException(SecurityErrorCode.OPENID_HAS_EXIST);
+				}
+			}else{
+				redisService.setValue(openId, loginUser.getOemCode());
 			}
-			openId = "openId_" + openId;
-			redisService.setValue(openId, loginUser.getOemCode());
 		}
 
 		return DataValue.success(loginUser);

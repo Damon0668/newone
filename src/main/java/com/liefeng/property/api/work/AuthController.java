@@ -64,20 +64,22 @@ public class AuthController {
 			throw new PropertyException(PropertyStaffErrorCode.PASSWORD_ERROR);
 		}
 		
-		String openId = staff.getOpenId();
-		
 		//更新个推clientId
 		propertyStaffService.settIngStaffMsgClientId(staff.getId(), staffLoginRo.getClientId());
 		
-		staff.setOpenId(openId);
-
+		staff.setOpenId(staff.getId());
+		
 		//刷新缓存中的oemCode
 		if(ValidateHelper.isNotEmptyString(staff.getOpenId())){
-			if(redisService.isKeyExist(openId)){
-				throw new LiefengException(SecurityErrorCode.OPENID_HAS_EXIST);
+			String openId = "openId_" + staff.getOpenId();
+			String existOemCode = (String) redisService.getValue(openId);
+			if(ValidateHelper.isNotEmptyString(existOemCode)){
+				if(!staff.getOemCode().equals(existOemCode)){
+					throw new LiefengException(SecurityErrorCode.OPENID_HAS_EXIST);
+				}
+			}else{
+				redisService.setValue(openId, staff.getOemCode());
 			}
-			openId = "openId_" + openId;
-			redisService.setValue(openId, staff.getOemCode());
 		}
 		
 		return DataValue.success(staff);
