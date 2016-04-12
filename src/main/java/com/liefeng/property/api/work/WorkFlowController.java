@@ -96,7 +96,7 @@ public class WorkFlowController {
 	@RequestMapping(value="/getUser", method=RequestMethod.GET)
 	@ResponseBody
 	public DataListValue<PropertyStaffVo> getUser(@Valid @ModelAttribute GetUserRo getUserRo){
-		List<PropertyStaffVo> propertyStaffVos = approvalFlowService.getUser(getUserRo.getOrderId(), getUserRo.getAssignee());
+		List<PropertyStaffVo> propertyStaffVos = approvalFlowService.getUser(getUserRo.getOrderId(), getUserRo.getAssignee(),getUserRo.getStaffId());
 		return DataListValue.success(propertyStaffVos);
 	}
 	

@@ -160,8 +160,10 @@
 	LEFT JOIN t_property_staff ts ON pd.director_id = ts.id
 	LEFT JOIN t_manage_project mp ON ts.id = mp.staff_id
 	left join t_sys_dict sd on sd.`value`=ts.position and sd.group_code ='POSITION'  
-	WHERE
-	mp.project_id = #{projectId}
+	WHERE 1=1
+	<if test="projectId != null and projectId != ''">
+		AND mp.project_id = #{projectId}
+	</if>
 	<if test="departmentId != null and departmentId != ''">
 		AND pd.id= #{departmentId}
 	</if>
