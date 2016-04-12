@@ -17,10 +17,16 @@ public class DevicePositionVo extends BaseValue{
 	 * 主键
 	 */
 	private String id;
+	
 	/**
 	 * 项目ID
 	 */
 	private String projectId;
+	
+	/**
+	 * 项目名字
+	 */
+	private String projectName;
 	
 	/**
 	 * 位置名称
@@ -62,5 +68,13 @@ public class DevicePositionVo extends BaseValue{
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 }

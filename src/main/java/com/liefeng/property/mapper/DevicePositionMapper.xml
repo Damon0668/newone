@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.DevicePositionQueryRepository" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.guard.DevicePositionVo" >
+	<result column="id" property="id"/>
+    <result column="project_id" property="projectId"/>
+    <result column="project_name" property="projectName"/>
+    <result column="name" property="name"/>
+    <result column="oem_code" property="oemCode"/>
+</resultMap>
+
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+    where 1=1
+    <trim  suffixOverrides="," >
+        <if test="extra.oemCode != null and extra.oemCode != ''" >
+            and dp.oem_code = #{extra.oemCode}
+        </if>
+        <if test="extra.projectId != null and extra.projectId != ''" >
+            AND dp.project_id = #{extra.projectId}
+        </if>
+        <if test="extra.projectIds != null and extra.projectIds != ''" >
+            AND dp.project_id in ${extra.projectIds}
+        </if>
+    </trim>
+</sql>
+
+<select id="queryByCount"  resultType="java.lang.Long">
+    select COUNT(1) from t_device_position dp
+    <include refid="Example_Where_Clause"/>
+</select>
+
+<select id="queryByPage" resultMap="BaseResultMap">
+	SELECT
+	    p.full_name project_name ,
+	    dp.*
+	FROM
+	    t_device_position dp
+	LEFT JOIN t_project p ON dp.project_id = p.id
+	<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	</if>
+</select>
+
+
+</mapper>

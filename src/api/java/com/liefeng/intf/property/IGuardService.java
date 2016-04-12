@@ -3,6 +3,7 @@ package com.liefeng.intf.property;
 import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.property.bo.guard.DevicePositionBo;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
 import com.liefeng.property.bo.guard.GuardResidentBo;
 import com.liefeng.property.vo.guard.DevicePositionVo;
@@ -56,7 +57,7 @@ public interface IGuardService {
 	 * @param size
 	 * @return 
 	 */
-	public DataPageValue<DevicePositionVo> findDevicePosition(String projectId,int page, int size);
+	public DataPageValue<DevicePositionVo> findDevicePosition(DevicePositionBo devicePositionBo, Integer page, Integer size);
 	
 	/*
 	 * ****************** 门禁设备相关 ******************

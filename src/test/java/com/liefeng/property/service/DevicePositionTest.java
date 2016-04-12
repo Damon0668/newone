@@ -12,6 +12,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.liefeng.Application;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.intf.property.IGuardService;
+import com.liefeng.property.bo.guard.DevicePositionBo;
 import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.vo.guard.DevicePositionVo;
 
@@ -54,8 +55,12 @@ public class DevicePositionTest {
 
 	@Test
 	public void findDevicePosition(){
-		System.out.println(guardService.findDevicePosition("1"));
-		System.out.println(guardService.findDevicePosition("1",1,2));
+		//System.out.println(guardService.findDevicePosition("1"));
+		
+		
+		DevicePositionBo devicePositionBo = new DevicePositionBo();
+		devicePositionBo.setProjectId("0000000052a7943f0152a7943fc00000");
+		System.out.println(guardService.findDevicePosition(devicePositionBo,1,2));
 	}
 
 	

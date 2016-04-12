@@ -1,10 +1,8 @@
 package com.liefeng.property.vo.approvalFlow;
 
-import io.swagger.annotations.ApiModelProperty;
-
-import org.snaker.engine.model.ProcessModel;
-
 import com.liefeng.core.entity.BaseValue;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 流程定义复制类，由于一些变量无法序列化
