@@ -40,6 +40,7 @@ import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
 import com.liefeng.property.constant.ApprovalFlowConstants;
 import com.liefeng.property.vo.approvalFlow.ProcessVo;
 import com.liefeng.property.vo.approvalFlow.HistoryTaskVo;
+import com.liefeng.property.vo.approvalFlow.TaskModelVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 
 /**
@@ -87,9 +88,10 @@ public class WorkFlowController {
 	@ApiOperation(value="获取下一个步骤")
 	@RequestMapping(value="/getNextTask", method=RequestMethod.GET)
 	@ResponseBody
-	public DataListValue<TaskModel> getNextTask(@Valid @ModelAttribute GetFieldsRo getFieldsRo){
+	public DataListValue<TaskModelVo> getNextTask(@Valid @ModelAttribute GetFieldsRo getFieldsRo){
 		List<TaskModel> taskModels = approvalFlowService.getNextTask(getFieldsRo.getProcessId(),getFieldsRo.getTaskName());
-		return DataListValue.success(taskModels);
+		
+		return DataListValue.success(MyBeanUtil.createList(taskModels, TaskModelVo.class));
 	}
 	
 	@ApiOperation(value="获取办理人列表")
