@@ -242,7 +242,7 @@ public interface IPropertyStaffService {
 	 * @author xhw
 	 * @date 2016年4月8日 下午6:08:08
 	 */
-	public List<PropertyStaffVo> findStaffClientIdList(String departmentId, String projectId);
+	public List<String> findStaffClientIdList(String departmentId, String projectId);
 	
 	/**
 	 * 通过手机号码、获取员工的档案信息

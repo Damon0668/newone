@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.entity.DataListValue;
 import com.liefeng.intf.property.IApprovalFlowService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.service.msg.IPushMsgService;
@@ -33,7 +34,8 @@ import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
 import com.liefeng.property.constant.ApprovalFlowConstants;
 import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.domain.staff.PropertyStaffContext;
-import com.liefeng.property.vo.ApprovalFlow.ProcessVo;
+import com.liefeng.property.vo.approvalFlow.HistoryTaskVo;
+import com.liefeng.property.vo.approvalFlow.ProcessVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.service.constant.PushActionConstants;
 import com.liefeng.service.constant.PushMsgConstants;
@@ -81,7 +83,8 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_CREATE_NAME, propertyStaffVo.getName());
 			approvalFlowBo.getParams().put(processModel.getTaskModels().get(0).getAssignee(), addUserPreixes(approvalFlowBo.getStaffId()) );
 			
-			Map<String, Object> arg = MyBeanUtil.createBean(approvalFlowBo.getParams(), Map.class);
+			Map<String, Object> arg = MyBeanUtil.createBean(approvalFlowBo.getParams(), HashMap.class);
+			
 			arg.put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
 			Order order = workflowService.startAndExecute(approvalFlowBo.getProcessId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams(),arg);
 			
@@ -344,5 +347,13 @@ public class ApprovalFlowService implements IApprovalFlowService{
 		}
 
 		return null;
+	}
+
+	@Override
+	public DataListValue<HistoryTaskVo> getHistTaskByOrderId(String orderId) {
+		List<HistoryTask> historyTasks = workflowService.getHistoryTasks(new QueryFilter().setOrderId(orderId));
+		DataListValue<HistoryTaskVo> dataListValue = new DataListValue<HistoryTaskVo>();
+		dataListValue.setDataList(MyBeanUtil.createList(historyTasks, HistoryTaskVo.class));
+		return dataListValue;
 	}
 }

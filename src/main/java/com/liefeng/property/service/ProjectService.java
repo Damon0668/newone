@@ -3,6 +3,9 @@ package com.liefeng.property.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
@@ -10,8 +13,12 @@ import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IProjectService;
+import com.liefeng.intf.property.IPropertyStaffService;
+import com.liefeng.intf.service.msg.IPushMsgService;
+import com.liefeng.mq.type.MessageEvent;
 import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.bo.project.HouseSpecBo;
+import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.domain.project.AppHomeImageContext;
 import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.domain.project.HouseSpecContext;
@@ -26,6 +33,10 @@ import com.liefeng.property.vo.project.HouseVo;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
 import com.liefeng.property.vo.project.ProjectNoticeVo;
 import com.liefeng.property.vo.project.ProjectVo;
+import com.liefeng.service.constant.PushActionConstants;
+import com.liefeng.service.constant.PushMsgConstants;
+import com.liefeng.service.vo.PushMsgTemplateVo;
+import com.liefeng.service.vo.msg.ListUserMsg;
 
 /**
  * 项目服务实现类
@@ -38,6 +49,17 @@ import com.liefeng.property.vo.project.ProjectVo;
  */
 @Service
 public class ProjectService implements IProjectService {
+	private static Logger logger = LoggerFactory
+			.getLogger(WorkbenchService.class);
+	
+	@Autowired
+	private IPropertyStaffService propertyStaffService;
+	
+	@Autowired
+	private HouseholdService householdService;
+	
+	@Autowired
+	private IPushMsgService pushMsgService;
 	
 	@Override
 	public ProjectVo findProjectById(String projectId) {
@@ -232,7 +254,42 @@ public class ProjectService implements IProjectService {
 	@Override
 	public ProjectNoticeVo createProjectNotice(ProjectNoticeVo projectNotice) {
 		ProjectNoticeContext projectNoticeContext = ProjectNoticeContext.build(projectNotice);
-		return projectNoticeContext.create();
+		ProjectNoticeVo projectNoticeVo = projectNoticeContext.create();
+		//获取推送消息模板
+		PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.PROPERTY_NEW_NOTE);
+		
+		if(pushMsgTemplateVo != null){
+			//业主、住户clientId
+			List<String> userClientIdList = householdService.listClientIdByProjectId(projectNoticeVo.getProjectId());
+			//员工clientId
+			List<String> staffClientIdList = propertyStaffService.findStaffClientIdList("", projectNoticeVo.getProjectId());
+			
+			if(userClientIdList != null && userClientIdList.size() > 0){
+				ListUserMsg message = new ListUserMsg();
+				message.setAction(PushActionConstants.PROPERTY_NEW_NOTE);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveClientIdList(userClientIdList);
+				pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
+				logger.info("发布物业须知时群推消息{}", message);
+			}
+			
+			if(staffClientIdList != null && staffClientIdList.size() > 0){
+				ListUserMsg message = new ListUserMsg();
+				message.setAction(PushActionConstants.PROPERTY_NEW_NOTE);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveClientIdList(staffClientIdList);
+				
+				pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+				logger.info("发布物业须知时群推消息{}", message);
+			}
+		}
+		return projectNoticeVo;
 	}
 
 	@Override
@@ -244,7 +301,44 @@ public class ProjectService implements IProjectService {
 	@Override
 	public ProjectNoticeVo updateProjectNotice(ProjectNoticeVo projectNotice) {
 		ProjectNoticeContext projectNoticeContext = ProjectNoticeContext.build(projectNotice);
-		return projectNoticeContext.update();
+		ProjectNoticeVo projectNoticeVo = projectNoticeContext.update();
+		
+		//获取推送消息模板
+		PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.PROPERTY_NEW_NOTE);
+		
+		if(pushMsgTemplateVo != null){
+			//业主、住户clientId
+			List<String> userClientIdList = householdService.listClientIdByProjectId(projectNoticeVo.getProjectId());
+			//员工clientId
+			List<String> staffClientIdList = propertyStaffService.findStaffClientIdList("", projectNoticeVo.getProjectId());
+			
+			if(userClientIdList != null && userClientIdList.size() > 0){
+				ListUserMsg message = new ListUserMsg();
+				message.setAction(PushActionConstants.PROPERTY_NEW_NOTE);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveClientIdList(userClientIdList);
+				pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
+				logger.info("（更新）发布物业须知时群推消息{}", message);
+			}
+			
+			if(staffClientIdList != null && staffClientIdList.size() > 0){
+				ListUserMsg message = new ListUserMsg();
+				message.setAction(PushActionConstants.PROPERTY_NEW_NOTE);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveClientIdList(staffClientIdList);
+				
+				pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+				logger.info("（更新）发布物业须知时群推消息{}", message);
+			}
+		}
+		
+		return projectNoticeVo;
 	}
 
 	@Override

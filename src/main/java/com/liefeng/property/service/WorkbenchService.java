@@ -620,26 +620,19 @@ public class WorkbenchService implements IWorkbenchService {
 	
 						if ("0".equals(staff[1])) { // 代表权限是某个项目下的所有人（包括员工、业主、住户）
 							//员工clientId
-							List<PropertyStaffVo> staffList = propertyStaffService.findStaffClientIdList("", staff[0]);
+							List<String> staffList = propertyStaffService.findStaffClientIdList("", staff[0]);
 							
 							//业主、住户clientId
-							List<ProprietorSingleHouseVo> houseList = householdService.listClientIdByBuildingIdAndProjectId("", staff[0]);
+							List<String> houseList = householdService.listClientIdByBuildingIdAndProjectId("", staff[0]);
 							
-							for(PropertyStaffVo staffVo : staffList){
-								staffClientIdList.add(staffVo.getClientId());
-							}
-							
-							for(ProprietorSingleHouseVo houseVo : houseList){
-								proprietorClientIdList.add(houseVo.getClientId());
-							}
+							staffClientIdList.addAll(staffList);
+							proprietorClientIdList.addAll(houseList);
 							
 						} else {// 代表权限是有某个项目管理权限的，并且是某个部门的所有员工
 							//员工clientId
-							List<PropertyStaffVo> staffList = propertyStaffService.findStaffClientIdList(staff[1], staff[0]);
+							List<String> staffList = propertyStaffService.findStaffClientIdList(staff[1], staff[0]);
 							
-							for(PropertyStaffVo staffVo : staffList){
-								staffClientIdList.add(staffVo.getClientId());
-							}
+							staffClientIdList.addAll(staffList);
 						}
 	
 					}
@@ -653,18 +646,14 @@ public class WorkbenchService implements IWorkbenchService {
 	
 						if ("0".equals(proprietor[1])) { // 某个项目下的所有业主、住户
 							//业主、住户clientId
-							List<ProprietorSingleHouseVo> houseList = householdService.listClientIdByBuildingIdAndProjectId("", proprietor[0]);
+							List<String> houseList = householdService.listClientIdByBuildingIdAndProjectId("", proprietor[0]);
 							
-							for(ProprietorSingleHouseVo houseVo : houseList){
-								proprietorClientIdList.add(houseVo.getClientId());
-							}
+							proprietorClientIdList.addAll(houseList);
 						} else { // 某个项目、某个楼栋的所有业主、住户
 							//业主、住户clientId
-							List<ProprietorSingleHouseVo> houseList = householdService.listClientIdByBuildingIdAndProjectId(proprietor[1], proprietor[0]);
+							List<String> houseList = householdService.listClientIdByBuildingIdAndProjectId(proprietor[1], proprietor[0]);
 							
-							for(ProprietorSingleHouseVo houseVo : houseList){
-								proprietorClientIdList.add(houseVo.getClientId());
-							}
+							proprietorClientIdList.addAll(houseList);
 						}
 	
 					}
@@ -890,10 +879,8 @@ public class WorkbenchService implements IWorkbenchService {
 						websiteMsgPrivilegeVo.setDepartmentId("-1");
 						
 						//员工clientId
-						List<PropertyStaffVo> staffList = propertyStaffService.findStaffClientIdList("", privilege[0]);
-						for(PropertyStaffVo staffVo : staffList){
-							clientIdList.add(staffVo.getClientId());
-						}
+						List<String> staffList = propertyStaffService.findStaffClientIdList("", privilege[0]);
+						clientIdList.addAll(staffList);
 						
 					} else {
 						if ("0".equals(privilege[2])) {// 代表权限是有某个项目管理权限的，并且是某个部门的所有员工
@@ -902,12 +889,9 @@ public class WorkbenchService implements IWorkbenchService {
 							websiteMsgPrivilegeVo.setStaffId("-1");
 							
 							//员工clientId
-							List<PropertyStaffVo> staffList = propertyStaffService.findStaffClientIdList(privilege[1], privilege[0]);
+							List<String> staffList = propertyStaffService.findStaffClientIdList(privilege[1], privilege[0]);
 							
-							for(PropertyStaffVo staffVo : staffList){
-								clientIdList.add(staffVo.getClientId());
-							}
-							
+							clientIdList.addAll(staffList);
 						} else {
 							websiteMsgPrivilegeVo.setProjectId(privilege[0]);
 							websiteMsgPrivilegeVo.setDepartmentId(privilege[1]);

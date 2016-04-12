@@ -221,10 +221,9 @@
 		AND ps.oem_code = #{oemCode}
     </select>
     
-    <select id="queryByProjectIdAndDeptId" resultMap="PropertyStaffVo" >
+    <select id="queryByProjectIdAndDeptId" resultType="java.lang.String" >
 	  	SELECT
-			s.id,
-			c.client_id
+			c.client_id AS clientId
 		FROM
 			t_property_staff s,
 			t_manage_project p,

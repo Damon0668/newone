@@ -280,13 +280,30 @@ public class ProprietorContext {
 	 * @author xhw
 	 * @date 2016年4月9日 下午1:33:46
 	 */
-	public List<ProprietorSingleHouseVo> listClientIdByBuildingIdAndProjectId(String buildingId, String projectId){
+	public List<String> listClientIdByBuildingIdAndProjectId(String buildingId, String projectId){
 		Map<String, String> extra = new HashMap<String, String>();
 		extra.put("buildingId", buildingId);
 		extra.put("projectId", projectId);
+		extra.put("oemCode", ContextManager.getInstance().getOemCode());
 		PagingParamVo pagingParamVo = new PagingParamVo();
 		pagingParamVo.setExtra(extra);
 		return proprietorQueryRepository.queryClientId(pagingParamVo);
+	}
+	
+	/**
+	 * 根据projectId获取用户的cleintId
+	 * @param projectId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月11日 下午5:08:26
+	 */
+	public List<String> listClientIdByProjectId(String projectId){
+		Map<String, String> extra = new HashMap<String, String>();
+		extra.put("projectId", projectId);
+		extra.put("oemCode", ContextManager.getInstance().getOemCode());
+		PagingParamVo pagingParamVo = new PagingParamVo();
+		pagingParamVo.setExtra(extra);
+		return proprietorQueryRepository.queryAllClientIdsByProjectId(pagingParamVo);
 	}
 	
 	protected void setProprietorId(String proprietorId) {
