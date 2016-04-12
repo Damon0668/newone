@@ -18,6 +18,7 @@ import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.user.IUserService;
+import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.intf.property.api.ILoginUserService;
 import com.liefeng.intf.service.cache.IRedisService;
 import com.liefeng.property.api.ro.finger.auth.AuthLoginRo;
@@ -44,6 +45,9 @@ public class AuthController {
 	
 	@Autowired
 	private IRedisService redisService;
+	
+	@Autowired
+	private IHouseholdService householdService;
 
 	@ApiOperation(value="用户登陆", notes="用户登陆接口,当用户没有激活[USER_UNBIND_MOBILE]或者更换手机[USER_LOGIN_MOBILE_CHANGED]登陆时需要申请验证码并填入,短信事件为SD_LOGIN_MSG")
 	@RequestMapping(value="/login", method=RequestMethod.POST)
@@ -66,7 +70,7 @@ public class AuthController {
 		loginUser.setUserId(user.getId());
 		
 		//openId加密
-		String openId = user.getCustGlobalId() + "|" + user.getOemCode();
+		String openId = user.getCustGlobalId() + "|" + loginUser.getOemCode();
 		
 		openId = EncryptionUtil.encrypt(openId, EncryptionUtil.OPEN_ID_PASSWORD);
 		
@@ -76,7 +80,7 @@ public class AuthController {
 		String key = "openId_" + openId;
 		
 		if(!redisService.isKeyExist(key)){
-			redisService.setValue(key, openId);
+			redisService.setValue(key, loginUser.getOemCode());
 		}
 		
 		return DataValue.success(loginUser);
@@ -88,6 +92,8 @@ public class AuthController {
 	public ReturnValue updatePwdByForget(@Valid @ModelAttribute UpdatePwdRo updatePwdRo){
 		
 		userService.updatePwdByForget(updatePwdRo.getMobile(), updatePwdRo.getPassword(), updatePwdRo.getCode());
+		//个推提醒
+		householdService.pushMsgToUserByPhone(updatePwdRo.getMobile());
 		
 		return ReturnValue.success();
 	}
@@ -97,6 +103,9 @@ public class AuthController {
 	@ResponseBody
 	public ReturnValue updatePwdAfterLogin(@Valid @ModelAttribute UpdatePwdLoginRo updatePwdLoginRo){
 		userService.updatePwdAfterLogin(updatePwdLoginRo.getMobile(), updatePwdLoginRo.getOldpassword(), updatePwdLoginRo.getNewpassword());		
+		//个推提醒
+		householdService.pushMsgToUserByPhone(updatePwdLoginRo.getMobile());
+		
 		return ReturnValue.success();
 	}
 
