@@ -261,7 +261,7 @@ public class UserController {
 	 * @author xhw
 	 * @date 2016年3月16日 下午8:31:54
 	 */
-	@ApiOperation(value="查询用户列表", notes="查询用户列表")
+	@ApiOperation(value="查询用户列表", notes="查询用户列表(通讯录——添加中使用)")
 	@RequestMapping(value="/getUserList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<AppFriendVo> getUserList(@Valid @ModelAttribute UserIdConditionRo userIdConditionRo) {
