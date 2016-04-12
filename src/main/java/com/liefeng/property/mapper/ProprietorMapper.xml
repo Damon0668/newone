@@ -412,4 +412,54 @@ UNION
 		</if>
 	)
 </select>
+
+<select id="queryAllClientIdsByProjectIdAndHouseNum"  resultType="java.lang.String" >
+(
+	SELECT DISTINCT
+		c.client_id AS clientId
+	FROM
+		basic.t_user u,
+		property.t_proprietor p,
+		property.t_proprietor_house h,
+		basic.t_push_msg_client c
+	WHERE
+		u.cust_global_id = p.cust_global_id
+	<if test="extra.oemCode != null and extra.oemCode != ''" >
+	 AND u.oem_code = #{extra.oemCode}
+	</if>
+	AND u.id = c.user_id
+	AND p.id = h.proprietor_id
+	<if test="extra.projectId != null and extra.projectId != ''" >
+	AND h.project_id = #{extra.projectId}
+	</if>
+	<if test="extra.houseNum != null and extra.houseNum != ''" >
+	AND h.house_num = #{extra.houseNum}
+	</if>
+)
+UNION
+	(
+		SELECT DISTINCT
+			c.client_id AS clientId
+		FROM
+			basic.t_user u,
+			property.t_resident r,
+			property.t_resident_house t,
+			property.t_house h,
+			basic.t_push_msg_client c
+		WHERE
+			u.cust_global_id = r.cust_global_id
+	    <if test="extra.oemCode != null and extra.oemCode != ''" >
+	  	AND u.oem_code = #{extra.oemCode}
+	    </if>
+		AND u.id = c.user_id
+		AND r.id = t.resident_id
+		AND t.house_id = h.id
+		<if test="extra.projectId != null and extra.projectId != ''" >
+		AND h.project_id = #{extra.projectId}
+		</if>
+		<if test="extra.houseNum != null and extra.houseNum != ''" >
+		AND h.house_num = #{extra.houseNum}
+		</if>
+	)
+</select>
 </mapper>   

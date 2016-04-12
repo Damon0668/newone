@@ -526,4 +526,14 @@ public interface IHouseholdService {
 	 */
 	public void pushMsgToUserByPhone(String phone);
 	
+	/**
+	 * 根据projectId、houseNum获取用户的cleintId
+	 * @param projectId
+	 * @param houseNum
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月12日 下午2:54:21
+	 */
+	public List<String> listClientIdByProjectIdAndHouseNum(String projectId, String houseNum);
+	
 }
