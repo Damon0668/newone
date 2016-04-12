@@ -86,7 +86,12 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			
 			Map<String, Object> arg = MyBeanUtil.createBean(approvalFlowBo.getParams(), HashMap.class);
 			arg.put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
-			Order order = workflowService.startAndExecute(approvalFlowBo.getProcessId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams(),arg);
+			
+			//启动流程
+			Order order = workflowService.startInstanceById(approvalFlowBo.getProcessId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
+			
+			String activeTaskId = workflowService.getActiveTasks(new QueryFilter().setOrderId(order.getId())).get(0).getId();
+			workflowService.executeAndJumpTask(activeTaskId, addUserPreixes(approvalFlowBo.getStaffId()), arg, approvalFlowBo.getTaskName());
 			
 			approvalFlowBo.setOrderId(order.getId());
 			// 设置taskId

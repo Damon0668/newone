@@ -17,7 +17,7 @@ public class GetUserRo extends BaseValue{
 
 	private static final long serialVersionUID = -1674293274837679831L;
 	
-	@ApiModelProperty(value="处理人，从选择步骤中获取")
+	@ApiModelProperty(value="处理人，从选择步骤中获取", required=true)
 	@NotNull
 	private String assignee;
 	
@@ -25,7 +25,7 @@ public class GetUserRo extends BaseValue{
 	@NotNull
 	private String staffId;
 	
-	@ApiModelProperty(value="流程实例Id,除了开启流程外，都不能为空", required=true)
+	@ApiModelProperty(value="流程实例Id,除了开启流程外，都不能为空")
 	private String orderId;
 	
 	public String getOrderId() {
