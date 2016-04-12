@@ -78,7 +78,7 @@ public class AuthController {
 		String key = "openId_" + openId;
 		
 		if(!redisService.isKeyExist(key)){
-			redisService.setValue(key, openId);
+			redisService.setValue(key, staff.getOemCode());
 		}
 		
 		return DataValue.success(staff);
