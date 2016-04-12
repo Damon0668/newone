@@ -78,7 +78,7 @@ public class AuthController {
 		String key = "openId_" + openId;
 		
 		if(!redisService.isKeyExist(key)){
-			redisService.setValue(key, openId);
+			redisService.setValue(key, staff.getOemCode());
 		}
 		
 		return DataValue.success(staff);
@@ -123,6 +123,9 @@ public class AuthController {
 		
 		propertyStaffService.updateStaffPassword(staff.getId(), staff.getPassword(), updatePwdRo.getPassword());
 		
+		//个推提醒
+		propertyStaffService.pushMsgToStaffByStaffId(staff.getId());
+		
 		return ReturnValue.success();
 
 	}
@@ -132,6 +135,10 @@ public class AuthController {
 	@ResponseBody
 	public ReturnValue updatePwdAfterLogin(@Valid @ModelAttribute UpdatePwdLoginRo updatePwdLoginRo){
 		propertyStaffService.updateStaffPassword(updatePwdLoginRo.getStaffId(), updatePwdLoginRo.getOldpassword(), updatePwdLoginRo.getNewpassword());
+		
+		//个推提醒
+		propertyStaffService.pushMsgToStaffByStaffId(updatePwdLoginRo.getStaffId());
+		
 		return ReturnValue.success();
 	}
 
