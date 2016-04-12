@@ -89,6 +89,9 @@ public class WorkFlowController {
 	@ResponseBody
 	public DataListValue<TaskModel> getNextTask(@Valid @ModelAttribute GetFieldsRo getFieldsRo){
 		List<TaskModel> taskModels = approvalFlowService.getNextTask(getFieldsRo.getProcessId(),getFieldsRo.getTaskName());
+		for (TaskModel taskModel : taskModels) {
+			taskModel.setInputs(null);
+		}
 		return DataListValue.success(taskModels);
 	}
 	
