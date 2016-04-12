@@ -66,7 +66,7 @@ public class AuthController {
 		loginUser.setUserId(user.getId());
 		
 		//openId加密
-		String openId = user.getCustGlobalId() + "|" + user.getOemCode();
+		String openId = user.getCustGlobalId() + "|" + loginUser.getOemCode();
 		
 		openId = EncryptionUtil.encrypt(openId, EncryptionUtil.OPEN_ID_PASSWORD);
 		
@@ -76,7 +76,7 @@ public class AuthController {
 		String key = "openId_" + openId;
 		
 		if(!redisService.isKeyExist(key)){
-			redisService.setValue(key, openId);
+			redisService.setValue(key, loginUser.getOemCode());
 		}
 		
 		return DataValue.success(loginUser);

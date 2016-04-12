@@ -105,7 +105,7 @@ public class UserController {
 		
 		user.setCustomer(customerVo);
 		// 校验用户信息
-		user = checkService.updateUserCheck(user);
+		checkService.updateUserCheck(user);
 		// 发送TCC消息，更新用户信息
 		tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_USER, user.toString());
 		
