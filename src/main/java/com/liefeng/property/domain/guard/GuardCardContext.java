@@ -1,6 +1,8 @@
 package com.liefeng.property.domain.guard;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +16,13 @@ import com.liefeng.common.util.TimeUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.mybatis.vo.PagingParamVo;
+import com.liefeng.property.bo.guard.GuardCardBo;
 import com.liefeng.property.constant.GuardConstants;
 import com.liefeng.property.po.guard.GuardCardPo;
 import com.liefeng.property.repository.guard.GuardCardRepository;
+import com.liefeng.property.repository.mybatis.GuardCardQueryRepository;
 import com.liefeng.property.vo.guard.GuardCardVo;
 
 /**
@@ -31,6 +37,9 @@ public class GuardCardContext {
 	
 	@Autowired
 	private GuardCardRepository guardCardRepository;
+	
+	@Autowired
+	private GuardCardQueryRepository guardCardQueryRepository;
 	
 	/**
 	 * 磁卡ID
@@ -55,6 +64,11 @@ public class GuardCardContext {
 	public static GuardCardContext build(GuardCardVo guardCard) {
 		GuardCardContext guardCardContext = getInstance();
 		guardCardContext.setGuardCard(guardCard);
+		return guardCardContext;
+	}
+	
+	public static GuardCardContext build() {
+		GuardCardContext guardCardContext = getInstance();
 		return guardCardContext;
 	}
 	
@@ -170,6 +184,37 @@ public class GuardCardContext {
 			}
 		}
 		return result;
+	}
+	
+	/**
+	 * 分页查询磁卡信息
+	 * @param guardCardBo 查询参数
+	 * @param currentPage 当前页
+	 * @param pageSize 分页大小
+	 * @return 磁卡分页数据
+	 */
+	public DataPageValue<GuardCardVo> listGuardCard(GuardCardBo guardCardBo, Integer currentPage, Integer pageSize) {
+		// 参数拷贝
+		Map<String, String> extra = MyBeanUtil.bean2Map(guardCardBo);
+		
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		param.setPage(currentPage);
+		param.setPageSize(pageSize);
+		
+		Long count = guardCardQueryRepository.queryByCount(param);
+		count = (count == null ? 0 : count);
+		logger.info("总数量：count=" + count);
+		
+		// 设置数据总行数，用于计算偏移量
+		param.getPager().setRowCount(count);
+		
+		List<GuardCardVo> list = guardCardQueryRepository.queryByPage(param);
+
+		DataPageValue<GuardCardVo> returnPage = new DataPageValue<GuardCardVo>(
+				list, count, pageSize, currentPage);
+		
+		return returnPage;
 	}
 	
 	protected void setCardId(String cardId) {

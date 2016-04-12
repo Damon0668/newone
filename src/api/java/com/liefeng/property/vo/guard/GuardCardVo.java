@@ -60,6 +60,16 @@ public class GuardCardVo extends BaseValue {
 	 * OEM编码
 	 */
 	private String oemCode;
+	
+	/**
+	 * 项目名称
+	 */
+	private String projectName;
+	
+	/**
+	 * 持卡人名字
+	 */
+	private String userName;
 
 	public String getId() {
 		return id;
@@ -139,5 +149,21 @@ public class GuardCardVo extends BaseValue {
 
 	public void setDuration(int duration) {
 		this.duration = duration;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 }
