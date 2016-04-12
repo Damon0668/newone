@@ -833,6 +833,7 @@ public class HouseholdService implements IHouseholdService {
 
 	@Override
 	public CheckinQueueVo createCheckinQueue(CheckinQueueVo checkinQueue) throws LiefengException {
+		logger.info("createCheckinQueue 开始执行！参数为{}", checkinQueue);
 		String projectId = checkinQueue.getProjectId();
 		String hosueId = checkinQueue.getHouseId();
 
@@ -842,12 +843,14 @@ public class HouseholdService implements IHouseholdService {
 
 		// 校验是否有安排入住办理时间
 		if (schedule == null) {
+			logger.error(" ===== 没有设置入住安排时间！=====");
 			throw new PropertyException(HouseholdErrorCode.CHECKIN_SCHEDULE_INFO_NULL);
 		}
 
 		// 校验是否已经到了入住办理开始时间
 		Date date = new Date();
 		if (date.before(schedule.getStartDate())) {
+			logger.error("还没到入住安排时间！");
 			throw new PropertyException(HouseholdErrorCode.CHECKIN_SCHEDULE_NOT_START);
 		}
 
@@ -865,6 +868,7 @@ public class HouseholdService implements IHouseholdService {
 			checkinQueue = checkinQueueContext.create();
 		}
 
+		logger.info("createCheckinQueue 结束执行！");
 		return checkinQueue;
 	}
 

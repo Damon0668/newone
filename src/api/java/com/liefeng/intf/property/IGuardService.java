@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.property.bo.guard.DevicePositionBo;
+import com.liefeng.property.bo.guard.GuardCardBo;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
 import com.liefeng.property.bo.guard.GuardResidentBo;
 import com.liefeng.property.vo.guard.DevicePositionVo;
@@ -192,4 +193,13 @@ public interface IGuardService {
 	 * @return
 	 */
 	public DataPageValue<GuardResidentVo> listGuardRedisent(GuardResidentBo guardResidentBo, Integer pageSize, Integer currentPage);
+	
+	/**
+	 * 分页查询磁卡信息列表数据
+	 * @param guardCardBo 查询参数
+	 * @param pageSize 分页大小
+	 * @param currentPage 分页当前页
+	 * @return 列表数据
+	 */
+	public DataPageValue<GuardCardVo> listGuardCard(GuardCardBo guardCardBo, Integer pageSize, Integer currentPage);
 }

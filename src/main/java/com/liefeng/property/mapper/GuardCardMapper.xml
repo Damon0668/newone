@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.GuardCardQueryRepository">
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.liefeng.property.vo.guard.GuardCardVo">
+	</resultMap>
+	
+<!-- 查询条件 -->
+<sql id="Where_Clause">
+    where 1=1
+    <trim  suffixOverrides="," >
+        <if test="extra.oemCode != null and extra.oemCode != ''" >
+            and cv.oemCode = #{extra.oemCode}
+        </if>
+        
+        <if test="extra.projectId != null and extra.projectId != ''" >
+            AND cv.projectId = #{extra.projectId}
+        </if>
+        
+        <if test="extra.projectIds != null and extra.projectIds != ''" >
+            AND cv.projectId in ${extra.projectIds}
+        </if>
+        
+        <if test="extra.status != null and extra.status != ''" >
+            AND cv.status = ${extra.status}
+        </if>
+        
+        <if test="extra.userName != null and extra.userName != ''" >
+            AND cv.userName like CONCAT('%',#{extra.userName},'%')
+        </if>
+        
+        <if test="extra.searchType != null and extra.searchType != ''" >
+        
+        </if>
+    </trim>
+</sql>
+
+<select id="queryByCount"  resultType="java.lang.Long">
+	select
+		count(1)
+	from
+		(<include refid="card_view"/>) as cv
+	<include refid="Where_Clause"/>
+</select>
+
+<select id="queryByPage" resultMap="BaseResultMap">
+        SELECT
+            *
+		FROM
+		    (<include refid="card_view"/>) AS cv
+		<include refid="Where_Clause"/>
+		ORDER BY 
+			cv.createTime DESC
+		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+		    ${pager.mysqlQueryCondition}
+		</if>
+</select>
+
+<sql id="card_view">
+SELECT
+	gc.id AS id,
+	gc.sn AS sn,
+	gc.type AS type,
+	gc.status AS status,
+	gc.start_date AS startDate,
+	gc.end_date AS endDate,
+	gc.create_time AS createTime,
+	(
+		CASE
+		WHEN gcu.user_type = '0' THEN
+			(
+				SELECT
+					ps.name
+				FROM
+					t_property_staff ps
+				WHERE
+					ps.id = gcu.user_id
+			)
+		WHEN gcu.user_type = '1' THEN
+			(
+				SELECT
+					p.name
+				FROM
+					t_proprietor p
+				WHERE
+					p.id = gcu.user_id
+			)
+		WHEN gcu.user_type = '2' THEN
+			(
+				SELECT
+					r.name
+				FROM
+					t_resident r
+				WHERE
+					r.id = gcu.user_id
+			)
+		WHEN gcu.user_type = '3' THEN
+			(
+				SELECT
+					v.name
+				FROM
+					t_visitor v
+				WHERE
+					v.id = gcu.user_id
+			)
+		WHEN gcu.user_type = '4' THEN
+			(
+				SELECT
+					a.name
+				FROM
+					t_attendant a
+				WHERE
+					a.id = gcu.user_id
+			)
+		END
+	) AS userName,
+	gc.project_id AS projectId,
+	pr.full_name AS projectName,
+	gc.oem_code AS oemCode
+FROM
+	t_guard_card gc
+	LEFT JOIN t_guard_card_user gcu ON gcu.card_id = gc.id
+	LEFT JOIN t_project pr ON pr.id = gc.project_id
+</sql>
+</mapper>
