@@ -83,7 +83,8 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_CREATE_NAME, propertyStaffVo.getName());
 			approvalFlowBo.getParams().put(processModel.getTaskModels().get(0).getAssignee(), addUserPreixes(approvalFlowBo.getStaffId()) );
 			
-			Map<String, Object> arg = MyBeanUtil.createBean(approvalFlowBo.getParams(), Map.class);
+			Map<String, Object> arg = MyBeanUtil.createBean(approvalFlowBo.getParams(), HashMap.class);
+			
 			arg.put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
 			Order order = workflowService.startAndExecute(approvalFlowBo.getProcessId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams(),arg);
 			

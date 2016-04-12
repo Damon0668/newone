@@ -252,4 +252,20 @@ public interface IPropertyStaffService {
 	 * @date 2016年4月11日 下午1:48:56
 	 */
 	public StaffArchiveVo findStaffArchiveByPhone(String phone);
+	
+	/**
+	 * 根据手机号码，推送消息给员工
+	 * @param phone 
+	 * @author xhw
+	 * @date 2016年4月12日 上午9:44:52
+	 */
+	public void pushMsgToStaffByPhone(String phone);
+	
+	/**
+	 * 根据员工id，推送消息给员工
+	 * @param staffId 
+	 * @author xhw
+	 * @date 2016年4月12日 上午10:13:12
+	 */
+	public void pushMsgToStaffByStaffId(String staffId);
 }

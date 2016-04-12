@@ -517,4 +517,13 @@ public interface IHouseholdService {
 	 * @date 2016年4月11日 下午5:08:26
 	 */
 	public List<String> listClientIdByProjectId(String projectId);
+	
+	/**
+	 * 根据手机号码，推送消息给用户（业主、住户）
+	 * @param phone 
+	 * @author xhw
+	 * @date 2016年4月12日 上午9:44:52
+	 */
+	public void pushMsgToUserByPhone(String phone);
+	
 }

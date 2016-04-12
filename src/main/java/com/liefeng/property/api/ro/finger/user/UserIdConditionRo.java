@@ -21,7 +21,7 @@ public class UserIdConditionRo extends BaseValue {
 	@NotNull
 	private String userId;
 
-	@ApiModelProperty(value="过滤条件", required=true)
+	@ApiModelProperty(value="搜索内容", required=true)
 	@NotNull
 	private String conditon;
 	

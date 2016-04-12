@@ -24,7 +24,10 @@ import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.intf.property.IProjectService;
+import com.liefeng.intf.property.IPropertyStaffService;
+import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
+import com.liefeng.mq.type.MessageEvent;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.household.CheckinQueueBo;
 import com.liefeng.property.bo.household.ProprietorBo;
@@ -32,6 +35,7 @@ import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.bo.household.ResidentFeedbackBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.ProjectConstants;
+import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.domain.household.AppFriendContext;
 import com.liefeng.property.domain.household.AppMsgSettingContext;
 import com.liefeng.property.domain.household.CheckinMaterialContext;
@@ -61,6 +65,11 @@ import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
 import com.liefeng.property.vo.household.VisitorVo;
 import com.liefeng.property.vo.project.HouseVo;
+import com.liefeng.property.vo.staff.StaffArchiveVo;
+import com.liefeng.service.constant.PushActionConstants;
+import com.liefeng.service.constant.PushMsgConstants;
+import com.liefeng.service.vo.PushMsgTemplateVo;
+import com.liefeng.service.vo.msg.SingleUserMsg;
 
 /**
  * household包相关表服务类
@@ -84,6 +93,12 @@ public class HouseholdService implements IHouseholdService {
 
 	@Autowired
 	private IProjectService projectService;
+	
+	@Autowired
+	private IPushMsgService pushMsgService;
+	
+	@Autowired
+	private IPropertyStaffService propertyStaffService;
 
 	/**
 	 * 保存业主信息
@@ -1070,4 +1085,30 @@ public class HouseholdService implements IHouseholdService {
 			String projectId) {
 		return ProprietorContext.build().listClientIdByProjectId(projectId);
 	}
+
+	@Override
+	public void pushMsgToUserByPhone(String phone) {
+		//获取推送消息模板
+		PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.CHANGE_PWD_SUCCESS);
+		
+		if(pushMsgTemplateVo != null){
+			//个推给业主、住户
+			UserVo userVo = userService.getUserByMobile(phone);
+			
+			if(userVo != null){
+				SingleUserMsg message = new SingleUserMsg();
+				message.setAction(PushActionConstants.CHANGE_PWD_SUCCESS);
+				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setTitle(pushMsgTemplateVo.getTitle());
+				message.setContent(pushMsgTemplateVo.getContent());
+				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+				message.setReceiveUserId(userVo.getId());
+				pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
+				logger.info("修改密码时单推消息{}", message);
+			}
+			
+		}
+		
+	}
+		
 }
