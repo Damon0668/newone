@@ -52,6 +52,11 @@ public class GuardCardVo extends BaseValue {
 	private Date createTime;
 	
 	/**
+	 * 项目ID
+	 */
+	private String projectId;
+	
+	/**
 	 * OEM编码
 	 */
 	private String oemCode;
@@ -110,6 +115,14 @@ public class GuardCardVo extends BaseValue {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
 	}
 
 	public String getOemCode() {

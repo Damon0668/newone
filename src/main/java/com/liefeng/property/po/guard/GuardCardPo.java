@@ -60,6 +60,12 @@ public class GuardCardPo extends BaseValue {
 	private Date createTime;
 	
 	/**
+	 * 项目ID
+	 */
+	@Column(name = "project_id")
+	private String projectId;
+	
+	/**
 	 * OEM编码
 	 */
 	@Column(name = "oem_code")
@@ -119,6 +125,14 @@ public class GuardCardPo extends BaseValue {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
 	}
 
 	public String getOemCode() {
