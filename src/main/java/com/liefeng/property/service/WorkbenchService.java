@@ -2265,5 +2265,15 @@ public class WorkbenchService implements IWorkbenchService {
 		EventAccepterEvalContext eventAccepterEvalContext = EventAccepterEvalContext.build();
 		eventAccepterEvalContext.createList(eventAccepterEvalVoList);
 	}
+
+	@Override
+	public long getAllLikes(String staffId) {
+		return EventAccepterEvalContext.build().getAllLikes(staffId);
+	}
+
+	@Override
+	public long getLikesOfToday(String staffId) {
+		return EventAccepterEvalContext.build().getLikesOfToday(staffId);
+	}
 	
 }

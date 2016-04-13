@@ -26,6 +26,10 @@
     <result column="creator_id" property="creatorId"/>
     <result column="oem_code" property="oemCode"/>
     <result column="client_id" property="clientId"/>
+    <result column="phone" property="phone"/>
+    <result column="name" property="name"/>
+    <result column="number" property="number"/>
+    <result column="cust_global_id" property="custGlobalId"/>
 </resultMap>
 
 <!-- 查询条件 -->
@@ -246,4 +250,29 @@
 	
 	</select>
     
+      <select id="findPropertyStaffByDepartmentId" resultMap="PropertyStaffVo" >
+	  	SELECT
+			s.id,
+			s.name,
+			s.number,
+			a.phone,
+		  	a.cust_global_id,
+			c.client_id
+		FROM
+			t_property_staff s,
+			t_staff_archive a,
+			t_staff_msg_client c
+		WHERE
+			s.work_status = '1'
+		AND s. STATUS = '1'
+		AND s.id = a.staff_id
+		AND s.id = c.staff_id
+		<if test="extra.departmentId != null and extra.departmentId != ''" >
+       	AND s.department_id = #{extra.departmentId}
+   		</if>
+   		<if test="extra.oemCode != null and extra.oemCode != ''" >
+       	AND c.oem_code = #{extra.oemCode }
+   		</if>
+	</select>
+	
 </mapper>

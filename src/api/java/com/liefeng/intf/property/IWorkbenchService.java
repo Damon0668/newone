@@ -750,4 +750,22 @@ public interface IWorkbenchService {
 	 * @date 2016年3月31日 下午1:47:13
 	 */
 	public void createEventAccpterEvalList(List<EventAccepterEvalVo> eventAccepterEvalVoList);
+	
+	/**
+	 * 获取历史点赞
+	 * @param staffId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月13日 下午2:45:09
+	 */
+	public long getAllLikes(String staffId);
+	
+	/**
+	 * 获取今日点赞
+	 * @param staffId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月13日 下午2:45:09
+	 */
+	public long getLikesOfToday(String staffId);
 }

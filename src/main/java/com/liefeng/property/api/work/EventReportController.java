@@ -30,6 +30,7 @@ import com.liefeng.property.api.ro.common.EventAccepterEvalRo;
 import com.liefeng.property.api.ro.common.PhoneRo;
 import com.liefeng.property.api.ro.id.EventIdRo;
 import com.liefeng.property.api.ro.id.ProjectIdRo;
+import com.liefeng.property.api.ro.id.StaffIdRo;
 import com.liefeng.property.api.ro.work.event.CountsToHeadRo;
 import com.liefeng.property.api.ro.work.event.DefaultAccepterRo;
 import com.liefeng.property.api.ro.work.event.DispatchingWorkerRo;
@@ -312,4 +313,35 @@ public class EventReportController {
 		List<StaffContactVo> contactVos = workbenchService.findDispatchingWorker(eventReportVo.getProjectId(),propertyStaffVo.getId());
 		return  DataListValue.success(contactVos);
 	}
+	
+	/**
+	 * 获取今日点赞
+	 * @param dispatchingWorkerRo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月13日 下午2:59:43
+	 */
+	@ApiOperation(value="获取今日点赞")
+	@RequestMapping(value="/getLikesOfToday", method=RequestMethod.GET)
+	@ResponseBody
+	public DataValue<Long> getLikesOfToday(@Valid @ModelAttribute StaffIdRo staffIdRo){
+		long likes = workbenchService.getLikesOfToday(staffIdRo.getStaffId());
+		return  DataValue.success(likes);
+	}
+	
+	/**
+	 * 获取历史点赞
+	 * @param dispatchingWorkerRo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月13日 下午2:59:43
+	 */
+	@ApiOperation(value="获取历史点赞")
+	@RequestMapping(value="/getAllLikes", method=RequestMethod.GET)
+	@ResponseBody
+	public DataValue<Long> getAllLikes(@Valid @ModelAttribute StaffIdRo staffIdRo){
+		long likes = workbenchService.getAllLikes(staffIdRo.getStaffId());
+		return  DataValue.success(likes);
+	}
+	
 }

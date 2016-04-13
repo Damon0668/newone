@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
+import com.liefeng.common.util.TimeUtil;
 import com.liefeng.common.util.UUIDGenerator;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.property.po.workbench.EventAccepterEvalPo;
 import com.liefeng.property.repository.workbench.EventAccepterEvalRepository;
 import com.liefeng.property.vo.workbench.EventAccepterEvalVo;
@@ -105,6 +107,44 @@ public class EventAccepterEvalContext {
 			logger.info("Create eventAccepterEvalPoList : {} success.", eventAccepterEvalPoList);
 		}
 		
+	}
+	
+	/**
+	 * 获取今日点赞
+	 * @param staffId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月13日 下午2:45:09
+	 */
+	public long getLikesOfToday(String staffId){
+		long likes = 0;
+		if(ValidateHelper.isNotEmptyString(staffId)){
+			List<EventAccepterEvalPo> eventAccepterEvalPoList = eventAccepterEvalRepository.findByAccepterIdAndCreateTime(staffId, TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
+			
+			if(eventAccepterEvalPoList != null){
+				likes = eventAccepterEvalPoList.size();
+			}
+		}
+		return likes;
+	}
+	
+	/**
+	 * 获取历史点赞
+	 * @param staffId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月13日 下午2:45:09
+	 */
+	public long getAllLikes(String staffId){
+		long likes = 0;
+		if(ValidateHelper.isNotEmptyString(staffId)){
+			List<EventAccepterEvalPo> eventAccepterEvalPoList = eventAccepterEvalRepository.findByAccepterId(staffId);
+			
+			if(eventAccepterEvalPoList != null){
+				likes = eventAccepterEvalPoList.size();
+			}
+		}
+		return likes;
 	}
 	
 	protected void setEventAccepterEvalVo(EventAccepterEvalVo eventAccepterEvalVo) {
