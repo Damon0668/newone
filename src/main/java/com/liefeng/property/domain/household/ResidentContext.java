@@ -150,7 +150,7 @@ public class ResidentContext {
 			
 			ResidentPo residentPo = MyBeanUtil.createBean(resident, ResidentPo.class);
 			residentRepository.save(residentPo);
-			logger.info("保存住户信息成功，住户信息：{}", resident);
+			logger.info("保存住户信息成功，住户ID = {}", resident.getId());
 		}
 		
 		return resident;
@@ -161,13 +161,13 @@ public class ResidentContext {
 	 */
 	public ResidentVo update() {
 		if(resident != null && ValidateHelper.isNotEmptyString(resident.getId())) {
-			logger.info("更新住户信息，住户ID{}", resident.getId());
+			logger.info("更新住户信息，住户ID = {}", resident.getId());
 			ResidentPo residentPo = residentRepository.findOne(resident.getId());
 			
 			if(residentPo != null) {
 				MyBeanUtil.copyBeanNotNull2Bean(resident, residentPo);
 				residentRepository.save(residentPo);
-				logger.info("更新住户信息成功，住户信息：{}", resident);
+				logger.info("更新住户信息成功，住户ID = {}", resident);
 				
 				resident = MyBeanUtil.createBean(residentPo, ResidentVo.class);
 			}

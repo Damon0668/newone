@@ -372,4 +372,22 @@ public class PropertyStaffContext {
 		pagingParamVo.setExtra(extra);
 		return propertyStaffQueryRepository.queryByProjectIdAndDeptId(pagingParamVo);
 	}
+	
+	/**
+	 * 通过部门id，获取员工资料（id、name、number、phone、custGloalId、clientId）
+	 * @param departmentId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月13日 下午1:57:28
+	 */
+	public List<PropertyStaffVo> listPropertyStaffByDepartmentId(String departmentId){
+		String oemCode = ContextManager.getInstance().getOemCode();
+		Map<String, String> extra = new HashMap<String, String>();
+		extra.put("departmentId", departmentId);
+		extra.put("oemCode", oemCode);
+		PagingParamVo pagingParamVo = new PagingParamVo();
+		pagingParamVo.setExtra(extra);
+		return propertyStaffQueryRepository.findPropertyStaffByDepartmentId(pagingParamVo);
+	}
+	
 }

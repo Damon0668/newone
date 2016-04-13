@@ -1,8 +1,9 @@
 package com.liefeng.property.service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -162,6 +163,14 @@ public class ApprovalFlowService implements IApprovalFlowService{
 				String orderId = approvalFlowBo.getOrderId();
 				String taskId = approvalFlowBo.getTaskId();
 				for(TaskAttachVo taskAttachVo : taskAttachVos) { // 设置附件所属流程实例ID和任务ID
+					String fileName = taskAttachVo.getFileName();
+					// 修复名称中文乱码问题
+					try { 
+						fileName = URLDecoder.decode(fileName, "UTF-8");
+						taskAttachVo.setFileName(fileName);
+					} catch (UnsupportedEncodingException e) {
+						logger.error("字符串解码失败");
+					}
 					if(ValidateHelper.isEmptyString(taskAttachVo.getOrderId())) {
 						taskAttachVo.setOrderId(orderId);
 					}

@@ -268,4 +268,13 @@ public interface IPropertyStaffService {
 	 * @date 2016年4月12日 上午10:13:12
 	 */
 	public void pushMsgToStaffByStaffId(String staffId);
+	
+	/**
+	 * 通过部门id，获取员工资料（获得id、name、number、phone、custGloalId、clientId）
+	 * @param departmentId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月13日 下午1:57:28
+	 */
+	public List<PropertyStaffVo> listPropertyStaffByDepartmentId(String departmentId);
 }

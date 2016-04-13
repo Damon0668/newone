@@ -72,4 +72,13 @@ public interface PropertyStaffQueryRepository extends BaseRepository<PropertySta
 	 * @return
 	 */
 	public List<String> queryByProjectIdAndDeptId(PagingParamVo param);
+	
+	/**
+	 * 通过部门id，获取员工资料（id、name、number、phone、custGloalId、clientId）
+	 * @param param
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月13日 下午1:53:52
+	 */
+	public List<PropertyStaffVo> findPropertyStaffByDepartmentId(PagingParamVo param);
 }

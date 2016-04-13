@@ -26,7 +26,6 @@ import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.intf.property.IProjectService;
-import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.MessageEvent;
@@ -67,7 +66,6 @@ import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
 import com.liefeng.property.vo.household.VisitorVo;
 import com.liefeng.property.vo.project.HouseVo;
-import com.liefeng.property.vo.staff.StaffArchiveVo;
 import com.liefeng.service.constant.PushActionConstants;
 import com.liefeng.service.constant.PushMsgConstants;
 import com.liefeng.service.vo.PushMsgTemplateVo;
@@ -100,9 +98,6 @@ public class HouseholdService implements IHouseholdService {
 	@Autowired
 	private IPushMsgService pushMsgService;
 	
-	@Autowired
-	private IPropertyStaffService propertyStaffService;
-
 	/**
 	 * 保存业主信息
 	 */
@@ -154,6 +149,7 @@ public class HouseholdService implements IHouseholdService {
 			if (!isExit) {
 				// 后台默认创建的手机用户信息
 				UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.PROPRIETOR);
+				logger.info("用户信息组装成功！");
 
 				try {
 					// 用户信息校验
@@ -165,6 +161,7 @@ public class HouseholdService implements IHouseholdService {
 
 				// 发送TCC消息，创建用户（内含创建客户或更新客户逻辑）
 				tccMsgService.sendTccMsg(TccBasicEvent.CREATE_USER, user.toString());
+				logger.info("推送“创建用户”TCC消息成功！");
 			}
 
 		} catch (LiefengException e) {
@@ -209,6 +206,7 @@ public class HouseholdService implements IHouseholdService {
 
 			// 发送TCC消息，更新用户信息
 			tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_USER, user.toString());
+			logger.info("推送“更新用户”TCC消息成功！");
 		} catch (LiefengException e) {
 			logger.error("更新业主信息出现异常,异常码（{}）,异常信息（{}）", e.getCode(), e.getMessage());
 			throw new LiefengException(e.getCode(), e.getMessage());
@@ -265,9 +263,11 @@ public class HouseholdService implements IHouseholdService {
 						
 						// 发送TCC消息，创建客户
 						tccMsgService.sendTccMsg(TccBasicEvent.CREATE_CUSTOMER, customer.toString());
+						logger.info("保存住户【手机号为空】 --> 推送创建客户TCC消息成功！");
 				} else { 
 					// 后台默认创建的手机用户信息
 					UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.RESIDENT);
+					logger.info("保存住户 --> 组装用户信息成功！");
 
 					try {
 						// 用户信息校验
@@ -279,6 +279,7 @@ public class HouseholdService implements IHouseholdService {
 
 					// 发送TCC消息，创建用户（内含创建客户或更新客户逻辑）
 					tccMsgService.sendTccMsg(TccBasicEvent.CREATE_USER, user.toString());
+					logger.info("保存住户【手机号不为空】 --> 推送创建用户TCC消息成功！");
 				}
 			}
 		} catch (LiefengException e) {
@@ -322,6 +323,7 @@ public class HouseholdService implements IHouseholdService {
 				
 				// 发送Tcc消息，更新用户信息
 				tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_CUSTOMER, customer.toString());
+				logger.info("更新住户【手机号为空】 --> 推送更新客户TCC消息成功！");
 			} else {
 				// 用户更新信息设置
 				UserVo user = setUpUser4Update(customer, UserConstants.HouseholdType.RESIDENT);
@@ -338,12 +340,14 @@ public class HouseholdService implements IHouseholdService {
 
 					// 发送TCC消息，创建用户（内含创建客户或更新客户逻辑）
 					tccMsgService.sendTccMsg(TccBasicEvent.CREATE_USER, user.toString());
+					logger.info("更新住户【手机号不为空，用户信息不存在情况】 --> 推送创建用户TCC消息成功！");
 				} else {
 					// 校验用户信息
 					user = checkService.updateUserCheck(user);
 					
 					// 发送Tcc消息，更新用户信息
 					tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_USER, user.toString());
+					logger.info("更新住户【手机号不为空，用户信息存在情况】 --> 推送更新用户TCC消息成功！");
 				}
 			}
 			
