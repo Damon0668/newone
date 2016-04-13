@@ -55,17 +55,19 @@
 </select>
 
 <select id="queryByPage" resultMap="BaseResultMap">
-        SELECT
-            gd.id,
+		SELECT
+		    gd.id,
 		    p.full_name project_id,
-		    d.name,
+		    gd.guard_num,
+		    d. NAME,
 		    d.type,
-		    d.install_position,
+		    dp. NAME positionName,
 		    gd.guard_num,
 		    d.run_status,
 		    d.`status`
 		FROM
 		    t_guard_device gd
+		LEFT JOIN t_device_position dp ON gd.position_id = dp.id
 		LEFT JOIN t_project p ON gd.project_id = p.id
 		LEFT JOIN basic.t_device d ON gd.device_global_id = d.global_id
 		<include refid="Example_Where_Clause"/>

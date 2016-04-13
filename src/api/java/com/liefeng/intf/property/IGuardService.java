@@ -3,6 +3,7 @@ package com.liefeng.intf.property;
 import java.util.List;
 
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.guard.DevicePositionBo;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
 import com.liefeng.property.bo.guard.GuardResidentBo;
@@ -29,13 +30,13 @@ public interface IGuardService {
 	 * 添加设备位置
 	 * @param devicePosition
 	 */
-	public void createDevicePosition(DevicePositionVo devicePosition);
+	public void createDevicePosition(DevicePositionVo devicePosition) throws LiefengException;
 	
 	/**
 	 * 更新设备位置
 	 * @param devicePosition
 	 */
-	public void updateDevicePosition(DevicePositionVo devicePosition);
+	public void updateDevicePosition(DevicePositionVo devicePosition) throws LiefengException;;
 	
 	/**
 	 * 删除设备位置

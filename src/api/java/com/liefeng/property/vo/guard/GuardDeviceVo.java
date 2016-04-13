@@ -34,14 +34,29 @@ public class GuardDeviceVo extends DeviceVo {
 	private String buildingId;
 	
 	/**
-	 * 安装位置区域
+	 * 安装位置
 	 */
-	private String positionArea;
+	private String positionId;
 	
 	/**
-	 * 摄像头序列号
+	 * 安装位置名称
 	 */
-	private String cameraSn;
+	private String positionName;
+	
+	/**
+	 * 摄像头ID
+	 */
+	private String cameraId;
+	
+	/**
+	 * 门口机编号
+	 */
+	private String guardType;
+	
+	/**
+	 * 门口机编号
+	 */
+	private String guardNum;
 	
 	/**
 	 * 厂家电话
@@ -64,11 +79,6 @@ public class GuardDeviceVo extends DeviceVo {
 	 * 创建时间
 	 */
 	private Date createTime;
-	
-	/**
-	 * 门口机编号
-	 */
-	private String guardNum;
 
 	public String getDeviceGlobalId() {
 		return deviceGlobalId;
@@ -95,20 +105,28 @@ public class GuardDeviceVo extends DeviceVo {
 		this.buildingId = buildingId;
 	}
 
-	public String getPositionArea() {
-		return positionArea;
+	public String getPositionId() {
+		return positionId;
 	}
 
-	public void setPositionArea(String positionArea) {
-		this.positionArea = positionArea;
+	public void setPositionId(String positionId) {
+		this.positionId = positionId;
 	}
 
-	public String getCameraSn() {
-		return cameraSn;
+	public String getCameraId() {
+		return cameraId;
 	}
 
-	public void setCameraSn(String cameraSn) {
-		this.cameraSn = cameraSn;
+	public void setCameraId(String cameraId) {
+		this.cameraId = cameraId;
+	}
+
+	public String getGuardType() {
+		return guardType;
+	}
+
+	public void setGuardType(String guardType) {
+		this.guardType = guardType;
 	}
 
 	public String getProducerTel() {
@@ -149,5 +167,13 @@ public class GuardDeviceVo extends DeviceVo {
 
 	public void setGuardNum(String guardNum) {
 		this.guardNum = guardNum;
+	}
+
+	public String getPositionName() {
+		return positionName;
+	}
+
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
 	}
 }

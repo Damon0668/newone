@@ -18,7 +18,15 @@ public interface DevicePositionRepository extends JpaRepository<DevicePositionPo
 	 * @param projectId 项目ID
 	 * @return
 	 */
-	List<DevicePositionPo> findByProjectId(String projectId);
+	public List<DevicePositionPo> findByProjectId(String projectId);
+	
+	/**
+	 * 查找位置
+	 * @param projectId 位置名字
+	 * @param name 系统编码
+	 * @return
+	 */
+	public DevicePositionPo findByProjectIdAndName(String projectId, String name);
 	
 	/**
 	 * 查找位置列表(分页)
@@ -26,5 +34,5 @@ public interface DevicePositionRepository extends JpaRepository<DevicePositionPo
 	 * @param pageable 分页参数
 	 * @return
 	 */
-	Page<DevicePositionPo> findByProjectId(String projectId,Pageable pageable);
+	public Page<DevicePositionPo> findByProjectId(String projectId,Pageable pageable);
 }

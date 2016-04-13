@@ -46,8 +46,6 @@ public class GuardServiceTest {
 		guardDeviceVo.setProjectId("0000000052a7943f0152a7943fc00000");
 		guardDeviceVo.setBuildingId("1123456789");
 		guardDeviceVo.setInstallPosition("大门口");
-		guardDeviceVo.setPositionArea("0");
-		guardDeviceVo.setCameraSn("1");
 		guardDeviceVo.setStatus("1");
 		guardDeviceVo.setRunStatus("1");
 		guardDeviceVo.setManufacturer("测试");

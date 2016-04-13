@@ -9,8 +9,6 @@ import javax.persistence.Table;
 
 import com.liefeng.core.entity.BaseValue;
 
-import groovy.transform.stc.ClosureParams;
-
 /**
  * 门禁设备持久化对象
  * @author Huangama
@@ -46,14 +44,32 @@ public class GuardDevicePo extends BaseValue {
 	/**
 	 * 安装位置区域
 	 */
-	@Column(name = "position_area")
-	private String positionArea;
+	@Column(name = "position_id")
+	private String positionId;
 	
 	/**
 	 * 摄像头序列号
 	 */
-	@Column(name = "camera_sn")
-	private String cameraSn;
+	@Column(name = "camera_id")
+	private String cameraId;
+	
+	/**
+	 * 设备编号
+	 */
+	@Column(name = "guard_num")
+	private String guardNum;
+	
+	/**
+	 * 设备类型
+	 */
+	@Column(name = "guard_type")
+	private String guardType;
+	
+	/**
+	 * 二维码URL
+	 */
+	@Column(name = "qrcode_url")
+	private String qrCodeUrl;
 	
 	/**
 	 * 厂家电话
@@ -64,7 +80,7 @@ public class GuardDevicePo extends BaseValue {
 	/**
 	 * 保修期限
 	 */
-	@Column(name = "warrantyDate")
+	@Column(name = "warranty_date")
 	private Date warrantyDate;
 	
 	/**
@@ -78,12 +94,6 @@ public class GuardDevicePo extends BaseValue {
 	 */
 	@Column(name = "create_time", updatable = false )
 	private Date createTime;
-	
-	/**
-	 * 门口机编号
-	 */
-	@Column(name = "guard_num")
-	private String guardNum;
 	
 	/**
 	 * OEM编码
@@ -123,20 +133,36 @@ public class GuardDevicePo extends BaseValue {
 		this.buildingId = buildingId;
 	}
 
-	public String getPositionArea() {
-		return positionArea;
+	public String getPositionId() {
+		return positionId;
 	}
 
-	public void setPositionArea(String positionArea) {
-		this.positionArea = positionArea;
+	public void setPositionId(String positionId) {
+		this.positionId = positionId;
 	}
 
-	public String getCameraSn() {
-		return cameraSn;
+	public String getCameraId() {
+		return cameraId;
 	}
 
-	public void setCameraSn(String cameraSn) {
-		this.cameraSn = cameraSn;
+	public void setCameraId(String cameraId) {
+		this.cameraId = cameraId;
+	}
+
+	public String getGuardType() {
+		return guardType;
+	}
+
+	public void setGuardType(String guardType) {
+		this.guardType = guardType;
+	}
+
+	public String getQrCodeUrl() {
+		return qrCodeUrl;
+	}
+
+	public void setQrCodeUrl(String qrCodeUrl) {
+		this.qrCodeUrl = qrCodeUrl;
 	}
 
 	public String getProducerTel() {
