@@ -41,6 +41,7 @@
 	FROM
 	    t_device_position dp
 	LEFT JOIN t_project p ON dp.project_id = p.id
+	<include refid="Example_Where_Clause"/>
 	<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
 	    ${pager.mysqlQueryCondition}
 	</if>

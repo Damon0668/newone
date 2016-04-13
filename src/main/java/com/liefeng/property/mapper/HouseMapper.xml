@@ -227,6 +227,7 @@ FROM
 SELECT
 	v.projectId,
 	v.projectName,
+	v.buildingId,
 	v.houseId,
 	v.houseNum,
 	v.oemCode
@@ -237,6 +238,7 @@ FROM
 			h.project_id AS projectId,
 			pj.full_name AS projectName,
 			h.id AS houseId,
+			h.building_id AS buildingId,
 			h.house_num AS houseNum,
 			h.oem_code AS oemCode,
 			'user' AS type
@@ -254,6 +256,7 @@ FROM
 			h.project_id AS projectId,
 			pj.full_name AS projectName,
 			h.id AS houseId,
+			h.building_id AS buildingId,
 			h.house_num AS houseNum,
 			h.oem_code AS oemCode,
 			'resident' AS type

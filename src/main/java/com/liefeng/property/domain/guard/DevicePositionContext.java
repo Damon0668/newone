@@ -9,15 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.liefeng.base.vo.message.PushedMsgVo;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
+import com.liefeng.common.util.StringUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.guard.DevicePositionBo;
+import com.liefeng.property.error.GuardErrorCode;
 import com.liefeng.property.po.guard.DevicePositionPo;
 import com.liefeng.property.repository.guard.DevicePositionRepository;
 import com.liefeng.property.repository.mybatis.DevicePositionQueryRepository;
@@ -75,16 +77,34 @@ public class DevicePositionContext {
 	}
 	
 	public void create(){
+		
 		if(devicePosition != null){
+			String oemCode = ContextManager.getInstance().getOemCode();
+			
+			if(ValidateHelper.isNotEmptyString(devicePosition.getName())){
+				DevicePositionPo devicePositionPo = devicePositionRepository.findByProjectIdAndName(devicePosition.getProjectId(), devicePosition.getName());
+				if(devicePositionPo != null){
+					throw new LiefengException(GuardErrorCode.DEVICE_POSITION_HAS_EXIST, devicePosition.getName());
+				}
+			}
+			
 			DevicePositionPo devicePositionPo = MyBeanUtil.createBean(devicePosition, DevicePositionPo.class);
 			devicePositionPo.setId(UUIDGenerator.generate());
-			devicePositionPo.setOemCode(ContextManager.getInstance().getOemCode());
+			devicePositionPo.setOemCode(oemCode);
 			devicePositionRepository.save(devicePositionPo);
 		}
 	}
 	
 	public void update(){
 		if(devicePosition != null && ValidateHelper.isNotEmptyString(devicePosition.getId())){
+
+			if(ValidateHelper.isNotEmptyString(devicePosition.getName())){
+				DevicePositionPo devicePositionPo = devicePositionRepository.findByProjectIdAndName(devicePosition.getProjectId(), devicePosition.getName());
+				if(devicePositionPo != null && !devicePosition.getId().equals(devicePositionPo.getId())){
+					throw new LiefengException(GuardErrorCode.DEVICE_POSITION_HAS_EXIST, devicePosition.getName());
+				}
+			}
+			
 			DevicePositionPo devicePositionPo = devicePositionRepository.findOne(devicePosition.getId());
 			if(devicePositionPo != null){
 				MyBeanUtil.copyBeanNotNull2Bean(devicePosition, devicePositionPo);
@@ -121,15 +141,19 @@ public class DevicePositionContext {
 		
 		Map<String, String> extra = MyBeanUtil.bean2Map(devicePositionBo);
 
+		if(ValidateHelper.isNotEmptyCollection(devicePositionBo.getProjectIds())){
+			extra.put("projectIds", StringUtil.fmtToSqlInCondition(devicePositionBo.getProjectIds()));
+		}
+
 		param.setExtra(extra);
 		param.setPage(page);
 		param.setPageSize(size);
 		
 		Long total = devicePositionQueryRepository.queryByCount(param);
 		
-		List<DevicePositionVo> PushedMsgList = devicePositionQueryRepository.queryByPage(param);
+		List<DevicePositionVo> devicePositionList = devicePositionQueryRepository.queryByPage(param);
 		
-		return new DataPageValue<DevicePositionVo>(PushedMsgList, total, page, size);
+		return new DataPageValue<DevicePositionVo>(devicePositionList, total, page, size);
 	}
 
 	protected void setDevicePosition(DevicePositionVo devicePosition) {

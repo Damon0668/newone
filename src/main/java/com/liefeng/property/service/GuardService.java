@@ -212,12 +212,12 @@ public class GuardService implements IGuardService{
 	}
 
 	@Override
-	public void createDevicePosition(DevicePositionVo devicePosition) {
+	public void createDevicePosition(DevicePositionVo devicePosition) throws LiefengException{
 		DevicePositionContext.build(devicePosition).create();
 	}
 
 	@Override
-	public void updateDevicePosition(DevicePositionVo devicePosition) {
+	public void updateDevicePosition(DevicePositionVo devicePosition) throws LiefengException{
 		DevicePositionContext.build(devicePosition).update();
 	}
 

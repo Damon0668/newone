@@ -79,4 +79,16 @@ public interface CheckinQueueRepository extends JpaRepository<CheckinQueuePo, St
 	 */
 	@Query("select c from CheckinQueuePo c where c.projectId=?1 and c.status!=?2 and datediff(?3, c.createTime)=0 order by c.seq desc")
 	public Page<CheckinQueuePo> findOfProjectIdAndTodayAndNotStatus(String projectId, String status, String queryDate, Pageable pageable);
+	
+	/**
+	 * 根据项目id、状态，时间、获取最新的该状态的排队
+	 * @param projectId 项目id
+	 * @param status 状态
+	 * param queryDate 时间
+	 * @return 
+	 * @author xhw
+	 * @date 2016年3月9日 上午9:50:01
+	 */
+	@Query("select c from CheckinQueuePo c where c.projectId=?1 and c.status=?2 and c.seq>?3 and datediff(?4, c.createTime)=0 order by c.seq")
+	public List<CheckinQueuePo> findByProjectIdAndStatusAndSeqAndCreateTimeOrderBySeq(String projectId, String status, Integer seq, String queryDate);
 }

@@ -14,6 +14,9 @@ public class TaskModelVo  extends BaseValue{
 	@ApiModelProperty(value="步骤名称(taskName)")
 	private String name;
 	
+	@ApiModelProperty(value="步骤显示名称")
+	private String displayName;
+	
 	public String getAssignee() {
 		return assignee;
 	}
@@ -28,5 +31,13 @@ public class TaskModelVo  extends BaseValue{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 }
