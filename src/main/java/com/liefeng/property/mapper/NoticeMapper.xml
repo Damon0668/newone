@@ -96,7 +96,8 @@ from(
     	DISTINCT
 	    t.id, 
 	    t.title, 
-	    t.publish_time
+	    t.publish_time,
+	    t.content
 	FROM
 		t_notice t,
 		t_notice_privilege p
