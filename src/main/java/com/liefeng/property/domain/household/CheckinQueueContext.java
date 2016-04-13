@@ -142,7 +142,7 @@ public class CheckinQueueContext {
 	/**
 	 * 更新入住排队信息
 	 */
-	public void update() {
+	public CheckinQueueVo update() {
 		if(checkinQueue != null) {
 			
 			if(!ValidateHelper.isNotEmptyString(checkinQueue.getId())) {
@@ -158,11 +158,15 @@ public class CheckinQueueContext {
 			}
 			
 			checkinQueueRepository.save(checkinQueuePo);
+			
+			checkinQueue = MyBeanUtil.createBean(checkinQueuePo, CheckinQueueVo.class);
 			logger.info("更新入住排队信息成功，checkinQueueId={}",checkinQueue.getId());
 		} else {
 			
 			logger.error("更新入住排队信息失败，checkinQueue 对象为空！");
 		}
+		
+		return checkinQueue;
 	}
 	
 	/**
@@ -299,6 +303,27 @@ public class CheckinQueueContext {
 		voPage = poPage.map(new Po2VoConverter<CheckinQueuePo, CheckinQueueVo>(CheckinQueueVo.class));
 		
 		return new DataPageValue<CheckinQueueVo>(voPage.getContent(), voPage.getTotalElements(), size, page);
+	}
+	
+	/**
+	 * 根据项目id、状态，排队号，获取今天大于该排队号的该状态的排队
+	 * @param projectId
+	 * @param status
+	 * @param seq
+	 * @param queryDate
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月12日 下午6:04:36
+	 */
+	public CheckinQueueVo getLatestOfStatusAndSeq(String projectId, String status, Integer seq, String queryDate){
+		if(checkinQueue == null) {
+			List<CheckinQueuePo> queuePo = checkinQueueRepository.findByProjectIdAndStatusAndSeqAndCreateTimeOrderBySeq(projectId, status, seq, queryDate);
+			
+			if(queuePo != null){
+				checkinQueue = MyBeanUtil.createBean(queuePo.get(0), CheckinQueueVo.class);
+			}
+		}
+		return checkinQueue;
 	}
 	
 	protected void setCheckinQueueId(String checkinQueueId) {

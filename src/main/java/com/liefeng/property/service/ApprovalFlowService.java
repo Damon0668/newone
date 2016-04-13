@@ -2,6 +2,7 @@ package com.liefeng.property.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -84,9 +85,13 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			approvalFlowBo.getParams().put(processModel.getTaskModels().get(0).getAssignee(), addUserPreixes(approvalFlowBo.getStaffId()) );
 			
 			Map<String, Object> arg = MyBeanUtil.createBean(approvalFlowBo.getParams(), HashMap.class);
-			
 			arg.put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
-			Order order = workflowService.startAndExecute(approvalFlowBo.getProcessId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams(),arg);
+			
+			//启动流程
+			Order order = workflowService.startInstanceById(approvalFlowBo.getProcessId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
+			
+			String activeTaskId = workflowService.getActiveTasks(new QueryFilter().setOrderId(order.getId())).get(0).getId();
+			workflowService.executeAndJumpTask(activeTaskId, addUserPreixes(approvalFlowBo.getStaffId()), arg, approvalFlowBo.getTaskName());
 			
 			approvalFlowBo.setOrderId(order.getId());
 			// 设置taskId
@@ -193,7 +198,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 	 * @return
 	 */
 	@Override
-	public List<PropertyStaffVo> getUser(String orderId,String assignee){
+	public List<PropertyStaffVo> getUser(String orderId,String assignee,String staffId){
 		List<PropertyStaffVo> returnPropertyStaffVos = new ArrayList<PropertyStaffVo>();
 		Map<String, String> ids = new HashMap<String, String>();
 		for (String item : assignee.split(":")) {
@@ -241,10 +246,24 @@ public class ApprovalFlowService implements IApprovalFlowService{
 				}
 				break;
 			case ApprovalFlowConstants.AssigneeType.DIRECTOR: //部门领导人
-				PropertyStaffVo directorStaffVo = propertyStaffService.getDepartmentDirector(id);
-				if(directorStaffVo != null && !ids.containsKey(directorStaffVo.getId())) {
-					ids.put(directorStaffVo.getId(), directorStaffVo.getId());
-					returnPropertyStaffVos.add(directorStaffVo);
+				switch (id) {
+				case ApprovalFlowConstants.AssigneeType.ID_DIRECTORALL: //id 为all 则获取所有部门负责人
+					break;
+				case ApprovalFlowConstants.AssigneeType.ID_DIRECTORSELF: //id 为self 自己本部门的负责人
+					PropertyStaffVo propertyStaffVo = propertyStaffService.findPropertyStaffById(staffId);
+					PropertyStaffVo propertyStaff = propertyStaffService.getDepartmentDirector(propertyStaffVo.getDepartmentId());
+					if(propertyStaff != null && !ids.containsKey(propertyStaff.getId())) {
+						ids.put(propertyStaff.getId(), propertyStaff.getId());
+						returnPropertyStaffVos.add(propertyStaff);
+					}
+					break;
+				default: //默认直接部门id
+					PropertyStaffVo directorStaffVo = propertyStaffService.getDepartmentDirector(id);
+					if(directorStaffVo != null && !ids.containsKey(directorStaffVo.getId())) {
+						ids.put(directorStaffVo.getId(), directorStaffVo.getId());
+						returnPropertyStaffVos.add(directorStaffVo);
+					}
+					break;
 				}
 				break;
 			case ApprovalFlowConstants.AssigneeType.POSTS: //岗位 某岗位下的所有员工
@@ -339,14 +358,19 @@ public class ApprovalFlowService implements IApprovalFlowService{
 		List<TaskModel> nextTasks = ((TaskModel)nodeModel).getNextTaskModels();
 		List<TransitionModel> endModel = nodeModel.getOutputs();
 		//添加结束节点
-		if(endModel.size()>0 && endModel.get(0).getTarget().getName().equals(ApprovalFlowConstants.NODE_END)){
-			TaskModel taskModel = new TaskModel();
-			taskModel.setName(ApprovalFlowConstants.NODE_END);
-			taskModel.setDisplayName("结束并归档");
-			nextTasks.add(taskModel);
+		if(endModel !=null && endModel.size()>0){
+			for (int i = 0; i < endModel.size(); i++) {
+				if(endModel.get(i).getTarget().getName().equals(ApprovalFlowConstants.NODE_END)){
+					TaskModel taskModel = new TaskModel();
+					taskModel.setName(ApprovalFlowConstants.NODE_END);
+					taskModel.setDisplayName("结束并归档");
+					nextTasks.add(taskModel);
+				}
+			} 
+				
 		}
 
-		return null;
+		return nextTasks;
 	}
 
 	@Override

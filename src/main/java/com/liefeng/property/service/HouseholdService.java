@@ -1,7 +1,9 @@
 package com.liefeng.property.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -69,6 +71,7 @@ import com.liefeng.property.vo.staff.StaffArchiveVo;
 import com.liefeng.service.constant.PushActionConstants;
 import com.liefeng.service.constant.PushMsgConstants;
 import com.liefeng.service.vo.PushMsgTemplateVo;
+import com.liefeng.service.vo.msg.ListUserMsg;
 import com.liefeng.service.vo.msg.SingleUserMsg;
 
 /**
@@ -486,7 +489,83 @@ public class HouseholdService implements IHouseholdService {
 	@Override
 	public void updateCheckinQueue(CheckinQueueVo checkinQueue) throws LiefengException {
 		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build(checkinQueue);
-		checkinQueueContext.update();
+		CheckinQueueVo queueReturn = checkinQueueContext.update();
+		if(queueReturn != null){
+		
+			//办理完成时个推
+			if(HouseholdConstants.CheckinQueueStatus.FINISHED.equals(queueReturn.getStatus())){
+				HouseVo houseVo = projectService.findHouseById(queueReturn.getHouseId());
+				//获取某个房间的所有用户的clientId
+				List<String> clientIdList = listClientIdByProjectIdAndHouseNum(queueReturn.getProjectId(), houseVo.getHouseNum());
+				if(clientIdList != null && clientIdList.size() > 0){
+					//获取推送消息模板
+					PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.CHECKIN_SUCCESS);
+					
+					if(pushMsgTemplateVo != null){
+						ListUserMsg message = new ListUserMsg();
+						message.setAction(PushActionConstants.CHECKIN_SUCCESS);
+						message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+						message.setTitle(pushMsgTemplateVo.getTitle());
+						message.setContent(pushMsgTemplateVo.getContent());
+						message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+						message.setReceiveClientIdList(clientIdList);
+						
+						pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
+						logger.info("入住办理完成号时群推消息{}", message);
+					}
+				}
+				
+				//大于当前完成的排队号的排队
+			   CheckinQueueVo queueUntreated =getCheckinQueueMoreThanSeq(queueReturn.getProjectId(), HouseholdConstants.CheckinQueueStatus.UNTREATED, queueReturn.getSeq(), TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
+			   
+			   if(queueUntreated != null){
+				   HouseVo houseUntreated = projectService.findHouseById(queueUntreated.getHouseId());
+					//获取某个房间的所有用户的clientId
+					List<String> clientIdUntreatedList = listClientIdByProjectIdAndHouseNum(queueReturn.getProjectId(), houseUntreated.getHouseNum());
+					if(clientIdUntreatedList != null && clientIdUntreatedList.size() > 0){
+						//获取推送消息模板
+						PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.CHECKIN_TURN_YOU);
+						
+						if(pushMsgTemplateVo != null){
+							ListUserMsg message = new ListUserMsg();
+							message.setAction(PushActionConstants.CHECKIN_TURN_YOU);
+							message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+							message.setTitle(pushMsgTemplateVo.getTitle());
+							message.setContent(pushMsgTemplateVo.getContent());
+							message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+							message.setReceiveClientIdList(clientIdList);
+							
+							pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
+							logger.info("入住办理提醒前来办理时群推消息{}", message);
+						}
+					}
+			   }
+			}
+	
+			//开始办理时个推
+			if(HouseholdConstants.CheckinQueueStatus.HANDLING.equals(queueReturn.getStatus())){
+				HouseVo houseVo = projectService.findHouseById(queueReturn.getHouseId());
+				//获取某个房间的所有用户的clientId
+				List<String> clientIdList = listClientIdByProjectIdAndHouseNum(queueReturn.getProjectId(), houseVo.getHouseNum());
+				if(clientIdList != null && clientIdList.size() > 0){
+					//获取推送消息模板
+					PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.CHECKIN_HANDLING);
+					
+					if(pushMsgTemplateVo != null){
+						ListUserMsg message = new ListUserMsg();
+						message.setAction(PushActionConstants.CHECKIN_HANDLING);
+						message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+						message.setTitle(pushMsgTemplateVo.getTitle());
+						message.setContent(pushMsgTemplateVo.getContent());
+						message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+						message.setReceiveClientIdList(clientIdList);
+						
+						pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
+						logger.info("入住办理开始时群推消息{}", message);
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -678,7 +757,7 @@ public class HouseholdService implements IHouseholdService {
 
 		// 查用户今天“在办理中”的排队
 		queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.HANDLING,
-				TimeUtil.format(date, "yyyy-MM-dd"));
+				TimeUtil.format(date, TimeUtil.PATTERN_1));
 		if (queueVo != null) {
 			if (queueVo.getStatus().equals(HouseholdConstants.CheckinQueueStatus.HANDLING)) {
 				throw new PropertyException(HouseholdErrorCode.CHECKIN_QUEUE_HANDLING);
@@ -687,13 +766,13 @@ public class HouseholdService implements IHouseholdService {
 
 		// 查用户今天“尚未办理”的排队
 		queueVo = getCheckinQueueOfToday(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.UNTREATED,
-				TimeUtil.format(date, "yyyy-MM-dd"));
+				TimeUtil.format(date, TimeUtil.PATTERN_1));
 		if (queueVo == null) {
 			CheckinQueueVo queue = new CheckinQueueVo();
 			queue.setHouseId(houseId);
 			queue.setProjectId(projectId);
 			queue.setUserId(userId);
-			List<CheckinQueueVo> queueVoList = getAllOfTody(projectId, TimeUtil.format(new Date(), "yyyy-MM-dd"));
+			List<CheckinQueueVo> queueVoList = getAllOfTody(projectId, TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
 			if (queueVoList == null || queueVoList.size() <= 0) {
 				queue.setSeq(1);
 			} else {
@@ -702,6 +781,51 @@ public class HouseholdService implements IHouseholdService {
 
 			CheckinQueueContext checkinQueueContext = CheckinQueueContext.build(queue);
 			queueVo = checkinQueueContext.create();
+			
+			//获取某个房间的所有用户的clientId
+			List<String> clientIdList = listClientIdByProjectIdAndHouseNum(projectId, houseVo.getHouseNum());
+			if(clientIdList != null && clientIdList.size() > 0){
+				
+				//还差多少人
+				Integer number = 0;
+				// 以小区为范围，获取最新“在办理中”的排队
+				CheckinQueueVo queueHandling = getLatestOfCheckinQueue(projectId, HouseholdConstants.CheckinQueueStatus.HANDLING,
+						TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
+				if (queueHandling != null) {
+					 number = queueVo.getSeq() - queueHandling.getSeq();
+					
+				} else {
+					// 以小区为范围，获取最新“已办理”的排队
+					CheckinQueueVo queueFinished = getLatestOfCheckinQueue(projectId, HouseholdConstants.CheckinQueueStatus.FINISHED,
+							TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
+					if (queueFinished != null) {
+						 number = queueVo.getSeq() - queueFinished.getSeq();
+					}
+				}
+				
+				if(number < 0){
+					number = 0;
+				}
+				
+				Map<String,String> data = new HashMap<String,String>();
+				data.put("queueNum", String.valueOf(queueVo.getSeq()));
+				data.put("count", String.valueOf(number));
+				//获取推送消息模板
+				PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.CHECKIN_QUEUE_NUM, data);
+				
+				if(pushMsgTemplateVo != null){
+					ListUserMsg message = new ListUserMsg();
+					message.setAction(PushActionConstants.CHECKIN_QUEUE_NUM);
+					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setTitle(pushMsgTemplateVo.getTitle());
+					message.setContent(pushMsgTemplateVo.getContent());
+					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+					message.setReceiveClientIdList(clientIdList);
+					
+					pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
+					logger.info("扫描排队号时群推消息{}", message);
+				}
+			}
 		}
 
 		return queueVo;
@@ -709,6 +833,7 @@ public class HouseholdService implements IHouseholdService {
 
 	@Override
 	public CheckinQueueVo createCheckinQueue(CheckinQueueVo checkinQueue) throws LiefengException {
+		logger.info("createCheckinQueue 开始执行！参数为{}", checkinQueue);
 		String projectId = checkinQueue.getProjectId();
 		String hosueId = checkinQueue.getHouseId();
 
@@ -718,26 +843,32 @@ public class HouseholdService implements IHouseholdService {
 
 		// 校验是否有安排入住办理时间
 		if (schedule == null) {
+			logger.error(" ===== 没有设置入住安排时间！=====");
 			throw new PropertyException(HouseholdErrorCode.CHECKIN_SCHEDULE_INFO_NULL);
 		}
 
 		// 校验是否已经到了入住办理开始时间
 		Date date = new Date();
 		if (date.before(schedule.getStartDate())) {
+			logger.error("还没到入住安排时间！");
 			throw new PropertyException(HouseholdErrorCode.CHECKIN_SCHEDULE_NOT_START);
 		}
 
-		// 查询当前最大排队号
-		List<CheckinQueueVo> queueList = getAllOfTody(projectId, TimeUtil.format(new Date(), "yyyy-MM-dd"));
-		if (ValidateHelper.isEmptyCollection(queueList)) {
-			checkinQueue.setSeq(1);
-		} else {
-			checkinQueue.setSeq(queueList.size() + 1);
+		//
+		synchronized (this) {
+			// 查询当前最大排队号
+			List<CheckinQueueVo> queueList = getAllOfTody(projectId, TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
+			if (ValidateHelper.isEmptyCollection(queueList)) {
+				checkinQueue.setSeq(1);
+			} else {
+				checkinQueue.setSeq(queueList.size() + 1);
+			}
+
+			CheckinQueueContext checkinQueueContext = CheckinQueueContext.build(checkinQueue);
+			checkinQueue = checkinQueueContext.create();
 		}
 
-		CheckinQueueContext checkinQueueContext = CheckinQueueContext.build(checkinQueue);
-		checkinQueue = checkinQueueContext.create();
-
+		logger.info("createCheckinQueue 结束执行！");
 		return checkinQueue;
 	}
 
@@ -756,61 +887,62 @@ public class HouseholdService implements IHouseholdService {
 
 	@Override
 	public CheckinQueueVo getCheckinQueue(String projectId, String houseId, String userId) throws LiefengException {
-		CheckinQueueVo queue = new CheckinQueueVo();
+		//返回对象
+		CheckinQueueVo queueReturn = new CheckinQueueVo();
 		CheckinQueueVo queueVo = null;
 		queueVo = getCheckinQueueOfStatus(userId, projectId, houseId, HouseholdConstants.CheckinQueueStatus.FINISHED);
 		if (queueVo != null) { // 已经办理
-			queue.setPageStatus(HouseholdConstants.CheckinPageStatus.FINISHED);
-			queue.setSeq(0);
+			queueReturn.setPageStatus(HouseholdConstants.CheckinPageStatus.FINISHED);
+			queueReturn.setSeq(0);
 		} else {
 			// 今天办理中
-			CheckinQueueVo queueVo2 = queueVo = getCheckinQueueOfToday(userId, projectId, houseId,
-					HouseholdConstants.CheckinQueueStatus.HANDLING, TimeUtil.format(new Date(), "yyyy-MM-dd"));
+			CheckinQueueVo queueHandling = getCheckinQueueOfToday(userId, projectId, houseId,
+					HouseholdConstants.CheckinQueueStatus.HANDLING, TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
 			// 今天未办理
-			CheckinQueueVo queueVo3 = queueVo = getCheckinQueueOfToday(userId, projectId, houseId,
-					HouseholdConstants.CheckinQueueStatus.UNTREATED, TimeUtil.format(new Date(), "yyyy-MM-dd"));
-			if (queueVo2 == null && queueVo3 == null) { // 没有排号
-				queue.setPageStatus(HouseholdConstants.CheckinPageStatus.NONUMBER);
-				queue.setSeq(0);
+			CheckinQueueVo queueUntreated = getCheckinQueueOfToday(userId, projectId, houseId,
+					HouseholdConstants.CheckinQueueStatus.UNTREATED, TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
+			if (queueHandling == null && queueUntreated == null) { // 没有排号
+				queueReturn.setPageStatus(HouseholdConstants.CheckinPageStatus.NONUMBER);
+				queueReturn.setSeq(0);
 				; // 排号为0，表示没有排号
 			} else { // 有排号
-				queue.setPageStatus(HouseholdConstants.CheckinPageStatus.HASNUMBER);
-				if (queueVo2 != null) {
-					queue.setSeq(queueVo2.getSeq());
+				queueReturn.setPageStatus(HouseholdConstants.CheckinPageStatus.HASNUMBER);
+				if (queueHandling != null) {
+					queueReturn.setSeq(queueHandling.getSeq());
 				} else {
-					queue.setSeq(queueVo3.getSeq());
+					queueReturn.setSeq(queueUntreated.getSeq());
 				}
 			}
 		}
 
 		// 以小区为范围，获取最新“在办理中”的排队
 		queueVo = getLatestOfCheckinQueue(projectId, HouseholdConstants.CheckinQueueStatus.HANDLING,
-				TimeUtil.format(new Date(), "yyyy-MM-dd"));
+				TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
 		if (queueVo != null) {
-			queue.setNowSeq(queueVo.getSeq());
-			Integer number = queue.getSeq() - queue.getNowSeq();
+			queueReturn.setNowSeq(queueVo.getSeq());
+			Integer number = queueReturn.getSeq() - queueReturn.getNowSeq();
 			if (number < 0) {
 				number = 0;
 			}
-			queue.setNumber(number);
+			queueReturn.setNumber(number);
 		} else {
 			// 以小区为范围，获取最新“已办理”的排队
 			queueVo = getLatestOfCheckinQueue(projectId, HouseholdConstants.CheckinQueueStatus.FINISHED,
-					TimeUtil.format(new Date(), "yyyy-MM-dd"));
+					TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
 			if (queueVo != null) {
-				queue.setNowSeq(0);
-				Integer number = queue.getSeq() - queueVo.getSeq();
+				queueReturn.setNowSeq(0);
+				Integer number = queueReturn.getSeq() - queueVo.getSeq();
 				if (number < 0) {
 					number = 0;
 				}
-				queue.setNumber(number);
+				queueReturn.setNumber(number);
 			} else {
-				queue.setNowSeq(0);
-				queue.setNumber(0);
+				queueReturn.setNowSeq(0);
+				queueReturn.setNumber(0);
 			}
 		}
 
-		return queue;
+		return queueReturn;
 	}
 
 	@Override
@@ -848,7 +980,7 @@ public class HouseholdService implements IHouseholdService {
 		String buildingId = houseVo.getBuildingId();
 		CheckinScheduleVo schedule = getCheckinSchedule(projectId, buildingId);
 		if (schedule != null) {
-			Date date = TimeUtil.formatDate(new Date(), "yyyy-MM-dd");
+			Date date = TimeUtil.formatDate(new Date(), TimeUtil.PATTERN_1);
 			if (date.after(schedule.getEndDate())) {
 				throw new PropertyException(HouseholdErrorCode.CHECKIN_PROPRIETOR_CLOSE);
 			}
@@ -1109,6 +1241,18 @@ public class HouseholdService implements IHouseholdService {
 			
 		}
 		
+	}
+
+	@Override
+	public List<String> listClientIdByProjectIdAndHouseNum(String projectId,
+			String houseNum) {
+		return ProprietorContext.build().listClientIdByProjectIdAndHouseNum(projectId, houseNum);
+	}
+
+	@Override
+	public CheckinQueueVo getCheckinQueueMoreThanSeq(String projectId,
+			String status, Integer seq, String queryDate) {
+		return CheckinQueueContext.build().getLatestOfStatusAndSeq(projectId, status, seq, queryDate);
 	}
 		
 }

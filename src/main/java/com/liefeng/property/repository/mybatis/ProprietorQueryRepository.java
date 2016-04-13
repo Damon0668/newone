@@ -54,4 +54,13 @@ public interface ProprietorQueryRepository extends BaseRepository<ProprietorSing
 	 */
 	public List<String> queryAllClientIdsByProjectId(PagingParamVo param);
 	
+	/**
+	 * 根据projectId、houseNum获取用户的clientId
+	 * @param param
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月9日 下午1:28:39
+	 */
+	public List<String> queryAllClientIdsByProjectIdAndHouseNum(PagingParamVo param);
+	
 }

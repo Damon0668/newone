@@ -526,4 +526,26 @@ public interface IHouseholdService {
 	 */
 	public void pushMsgToUserByPhone(String phone);
 	
+	/**
+	 * 根据projectId、houseNum获取用户的cleintId
+	 * @param projectId
+	 * @param houseNum
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月12日 下午2:54:21
+	 */
+	public List<String> listClientIdByProjectIdAndHouseNum(String projectId, String houseNum);
+	
+	/**
+	 * 根据projectId、status、seq、日期，获取当天大于该排队号的排队
+	 * @param projectId
+	 * @param status
+	 * @param seq
+	 * @param queryDate
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月12日 下午6:14:37
+	 */
+	public CheckinQueueVo getCheckinQueueMoreThanSeq(String projectId, String status, Integer seq, String queryDate);
+	
 }

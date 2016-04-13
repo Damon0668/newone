@@ -21,6 +21,7 @@ import com.liefeng.intf.property.IGuardService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.guard.DevicePositionBo;
+import com.liefeng.property.bo.guard.GuardCardBo;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
 import com.liefeng.property.bo.guard.GuardResidentBo;
 import com.liefeng.property.domain.guard.DevicePositionContext;
@@ -233,6 +234,12 @@ public class GuardService implements IGuardService{
 	@Override
 	public DataPageValue<DevicePositionVo> findDevicePosition(DevicePositionBo devicePositionBo, Integer page, Integer size) {
 		return DevicePositionContext.build().findPosition4Page(devicePositionBo, page, size);
+	}
+
+	@Override
+	public DataPageValue<GuardCardVo> listGuardCard(GuardCardBo guardCardBo, Integer pageSize, Integer currentPage) {
+		GuardCardContext guardCardContext = GuardCardContext.build();
+		return guardCardContext.listGuardCard(guardCardBo, currentPage, pageSize);
 	}
 
 }

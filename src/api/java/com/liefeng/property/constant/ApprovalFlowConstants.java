@@ -73,6 +73,16 @@ public class ApprovalFlowConstants {
 		public static final String OTHER = "other";
 
 		public static final String TASKNAME = "taskname";
+
+		/**
+		 * 所有部门的负责人
+		 */
+		public static final String ID_DIRECTORALL = "all";
+		
+		/**
+		 * 自己本部门的负责人
+		 */
+		public static final String ID_DIRECTORSELF = "self";
 	}
 	
 }

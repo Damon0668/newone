@@ -281,10 +281,11 @@ public class ProprietorContext {
 	 * @date 2016年4月9日 下午1:33:46
 	 */
 	public List<String> listClientIdByBuildingIdAndProjectId(String buildingId, String projectId){
+		String oemCode = ContextManager.getInstance().getOemCode();
 		Map<String, String> extra = new HashMap<String, String>();
 		extra.put("buildingId", buildingId);
 		extra.put("projectId", projectId);
-		extra.put("oemCode", ContextManager.getInstance().getOemCode());
+		extra.put("oemCode", oemCode);
 		PagingParamVo pagingParamVo = new PagingParamVo();
 		pagingParamVo.setExtra(extra);
 		return proprietorQueryRepository.queryClientId(pagingParamVo);
@@ -298,12 +299,31 @@ public class ProprietorContext {
 	 * @date 2016年4月11日 下午5:08:26
 	 */
 	public List<String> listClientIdByProjectId(String projectId){
+		String oemCode = ContextManager.getInstance().getOemCode();
 		Map<String, String> extra = new HashMap<String, String>();
 		extra.put("projectId", projectId);
-		extra.put("oemCode", ContextManager.getInstance().getOemCode());
+		extra.put("oemCode", oemCode);
 		PagingParamVo pagingParamVo = new PagingParamVo();
 		pagingParamVo.setExtra(extra);
 		return proprietorQueryRepository.queryAllClientIdsByProjectId(pagingParamVo);
+	}
+	
+	/**
+	 * 根据projectId、houseNum获取用户的cleintId
+	 * @param projectId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月12日 下午2:52:30
+	 */
+	public List<String> listClientIdByProjectIdAndHouseNum(String projectId, String houseNum){
+		String oemCode = ContextManager.getInstance().getOemCode();
+		Map<String, String> extra = new HashMap<String, String>();
+		extra.put("projectId", projectId);
+		extra.put("houseNum", houseNum);
+		extra.put("oemCode", oemCode);
+		PagingParamVo pagingParamVo = new PagingParamVo();
+		pagingParamVo.setExtra(extra);
+		return proprietorQueryRepository.queryAllClientIdsByProjectIdAndHouseNum(pagingParamVo);
 	}
 	
 	protected void setProprietorId(String proprietorId) {
