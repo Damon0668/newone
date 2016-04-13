@@ -44,5 +44,5 @@ public interface WebsiteMsgRepository extends JpaRepository<WebsiteMsgPo, String
 	  * @author xhw
 	  * @2016年3月3日 下午2:55:41
 	  */
-    public Page<WebsiteMsgPo> findByCreatorIdAndParentIdIsNull(String creatorId, Pageable pageable);
+    public Page<WebsiteMsgPo> findByCreatorIdAndParentIdIsNullOrderByCreateTimeDesc(String creatorId, Pageable pageable);
 }

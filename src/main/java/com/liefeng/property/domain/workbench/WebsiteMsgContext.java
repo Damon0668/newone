@@ -242,7 +242,7 @@ public class WebsiteMsgContext {
 		Page<WebsiteMsgVo> voPage = null;
 
 		// spring-data 的page从0开始
-		Page<WebsiteMsgPo> poPage = websiteMsgRepository.findByCreatorIdAndParentIdIsNull(creatorId, new PageRequest(page - 1, size));
+		Page<WebsiteMsgPo> poPage = websiteMsgRepository.findByCreatorIdAndParentIdIsNullOrderByCreateTimeDesc(creatorId, new PageRequest(page - 1, size));
 		voPage = poPage.map(new Po2VoConverter<WebsiteMsgPo, WebsiteMsgVo>(WebsiteMsgVo.class));
 		
 		return new DataPageValue<WebsiteMsgVo>(voPage.getContent(), voPage.getTotalElements(), size, page);

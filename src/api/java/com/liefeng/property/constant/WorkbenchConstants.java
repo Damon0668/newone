@@ -429,4 +429,14 @@ public class WorkbenchConstants {
 		public static final String FOUR = "4";
 		
 	}
+	
+	/**
+	 * 0:系统
+	 */
+	public static final String SystemOperate = "0";
+	
+	/**
+	 * 系统名称：系统
+	 */
+	public static final String SystemName = "系统";
 }

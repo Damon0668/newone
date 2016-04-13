@@ -775,7 +775,7 @@ public class WorkbenchService implements IWorkbenchService {
 			for (NoticeVo noticeVo : noticeVos) {
 				if (WorkbenchConstants.NoticeStatus.PUBLISHING.equals(status)) { // “待发布”状态
 					if (!nowTime.before(noticeVo.getStartTime())) { // 到了发布时间，将“待发布”状态的通知发布
-						noticeVo.setPublisherId("0"); // 0代表系统自动发布
+						noticeVo.setPublisherId(WorkbenchConstants.SystemOperate); // 0代表系统自动发布
 						noticeVo.setPublishTime(new Date());
 						noticeVo.setStatus(WorkbenchConstants.NoticeStatus.ARCHIVING); // 改为“待归档”状态
 						updateNotice(noticeVo);
@@ -786,7 +786,7 @@ public class WorkbenchService implements IWorkbenchService {
 				} else if (WorkbenchConstants.NoticeStatus.ARCHIVING
 						.equals(status)) { // “待归档”状态
 					if (!nowTime.before(noticeVo.getEndTime())) { // 将过了“公布时效”的通知进行归档
-						noticeVo.setArchiverId("0"); // 0代表有系统自动归档
+						noticeVo.setArchiverId(WorkbenchConstants.SystemOperate); // 0代表有系统自动归档
 						noticeVo.setArchiveTime(new Date());
 						noticeVo.setStatus(WorkbenchConstants.NoticeStatus.ARCHIVED); // 改为“已归档”状态
 						updateNotice(noticeVo);
@@ -796,7 +796,7 @@ public class WorkbenchService implements IWorkbenchService {
 					}
 				} else { // "待审核”、“审核不通过”状态
 					if (!nowTime.before(noticeVo.getStartTime())) { // 到了发布时间、将“待审核”、“审核不通过”的通知归档
-						noticeVo.setArchiverId("0"); // 0代表系统自动归档
+						noticeVo.setArchiverId(WorkbenchConstants.SystemOperate); // 0代表系统自动归档
 						noticeVo.setArchiveTime(new Date());
 						noticeVo.setStatus(WorkbenchConstants.NoticeStatus.ARCHIVED); // 改为“已归档”状态
 						updateNotice(noticeVo);
