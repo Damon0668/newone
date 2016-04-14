@@ -37,7 +37,7 @@ public class MsgCenterController {
 		pushedMsgBo.setSendStatus(PushMsgConstants.SendStatus.SUCCESS);
 		pushedMsgBo.setTerminalType(PushMsgConstants.TerminalType.MOBILE_PROPERTY);
 		if("sys".equals(msgHistoryRo.getMsgType())){
-			pushedMsgBo.setSendUserId("property");
+			pushedMsgBo.setSendUserId("-1");
 		}
 		return messageCenterService.findPushedMsg(pushedMsgBo, msgHistoryRo.getPage(), msgHistoryRo.getSize());
 	}
