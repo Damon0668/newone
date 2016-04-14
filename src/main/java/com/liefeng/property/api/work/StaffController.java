@@ -141,7 +141,7 @@ public class StaffController {
 			staffContactVo.setDepartmentName(departmentVo.getName());
 			
 			//获取部门的员工
-			List<PropertyStaffVo> staffVoList = propertyStaffService.findPropertyStaff(departmentVo.getId());
+			List<PropertyStaffVo> staffVoList = propertyStaffService.listPropertyStaffByDepartmentId(departmentVo.getId());
 			
 			staffContactVo.setStaffList(staffVoList);
 			staffContactList.add(staffContactVo);

@@ -141,6 +141,7 @@ public class ProprietorHouseContext {
 			
 			ProprietorHousePo proprietorHousePo = MyBeanUtil.createBean(proprietorHouse, ProprietorHousePo.class);
 			proprietorHouseRepository.save(proprietorHousePo);
+			logger.info("保存业主房产信息成功，房产信息ID = {}", proprietorHousePo.getId());
 		}
 		
 		return proprietorHouse;
@@ -156,7 +157,7 @@ public class ProprietorHouseContext {
 			if(proprietorHousePo != null) {
 				MyBeanUtil.copyBeanNotNull2Bean(proprietorHouse, proprietorHousePo);
 				proprietorHouseRepository.save(proprietorHousePo);
-				logger.info("更新业主房产信息成功，业主房产ID({})", proprietorHouse.getId());
+				logger.info("更新业主房产信息成功，业主房产ID = {}", proprietorHouse.getId());
 			}
 		}
 	}

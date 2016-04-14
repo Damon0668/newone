@@ -548,4 +548,14 @@ public interface IHouseholdService {
 	 */
 	public CheckinQueueVo getCheckinQueueMoreThanSeq(String projectId, String status, Integer seq, String queryDate);
 	
+	/**
+	 * 根据projectId、houseNum获取业主资料信息
+	 * @param projectId
+	 * @param houseNum
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月14日 上午10:13:00
+	 */
+	public ProprietorSingleHouseVo findProprietorSingleHouseVo(String projectId, String houseNum);
+	
 }

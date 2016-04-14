@@ -462,4 +462,35 @@ UNION
 		</if>
 	)
 </select>
+
+<!-- 获取业主信息 -->
+<select id="queryProprietorByProjectIdAndHouseNum" resultMap="BaseResultMap">
+	SELECT
+		p.id AS proprietorId,
+		p.cust_global_id AS custGlobalId,
+		p. NAME AS NAME,
+		p.phone AS phone,
+		p.email AS email,
+		p.work_unit AS workUnit,
+		p.address AS address,
+		p.zip_code AS zipCode,
+		p.emergency_contact AS emergencyContact,
+		p.emergency_phone AS emergencyPhone,
+		p.pic_url AS picUrl
+	FROM
+		t_proprietor p,
+		t_proprietor_house h
+	WHERE
+		p.id = h.proprietor_id
+	<if test="extra.projectId != null and extra.projectId != ''" >
+	AND h.project_id = #{extra.projectId}
+	</if>
+	<if test="extra.houseNum != null and extra.houseNum != ''" >
+	AND h.house_num = #{extra.houseNum}
+	</if>
+	<if test="extra.oemCode != null and extra.oemCode != ''" >
+	AND h.oem_code = #{extra.oemCode}
+	</if>
+</select>
+
 </mapper>   

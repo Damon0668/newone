@@ -126,8 +126,20 @@ public class PropertyStaffVo extends BaseValue {
 	/**
 	 * clientId
 	 */
-	@ApiModelProperty(value="clientId")
+	@ApiModelProperty(value="手机客服端登陆id")
 	private String clientId;
+	
+	/**
+	 * 手机号码
+	 */
+	@ApiModelProperty(value="手机号码")
+	private String phone;
+	
+	/**
+	 * 客户全局唯一标识
+	 */
+	@ApiModelProperty(value="客户全局唯一标识")
+	private String custGlobalId;
 	
 	public String getId() {
 		return id;
@@ -271,5 +283,21 @@ public class PropertyStaffVo extends BaseValue {
 
 	public void setClientId(String clientId) {
 		this.clientId = clientId;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getCustGlobalId() {
+		return custGlobalId;
+	}
+
+	public void setCustGlobalId(String custGlobalId) {
+		this.custGlobalId = custGlobalId;
 	}
 }

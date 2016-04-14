@@ -3,6 +3,7 @@ package com.liefeng.property.api.work;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -90,8 +91,19 @@ public class WorkFlowController {
 	@ResponseBody
 	public DataListValue<TaskModelVo> getNextTask(@Valid @ModelAttribute GetFieldsRo getFieldsRo){
 		List<TaskModel> taskModels = approvalFlowService.getNextTask(getFieldsRo.getProcessId(),getFieldsRo.getTaskName());
+		List<TaskModelVo>  taskModelVos = new ArrayList<TaskModelVo>();
 		
-		return DataListValue.success(MyBeanUtil.createList(taskModels, TaskModelVo.class));
+		//这行注释的代码 中间会出现null 不知道为什么 ，只能自己手动赋值
+		//List<TaskModelVo>  taskModelVos = MyBeanUtil.createList(taskModels, TaskModelVo.class);
+		
+		for (TaskModel taskModelVo : taskModels) {
+			TaskModelVo modelVo = new TaskModelVo();
+			modelVo.setAssignee(taskModelVo.getAssignee());
+			modelVo.setDisplayName(taskModelVo.getDisplayName());
+			modelVo.setName(taskModelVo.getName());
+			taskModelVos.add(modelVo);
+		}
+		return DataListValue.success(taskModelVos);
 	}
 	
 	@ApiOperation(value="获取办理人列表")
@@ -164,4 +176,11 @@ public class WorkFlowController {
 		return ReturnValue.success();
 	}
 	
+	@ApiOperation(value="初始化流程定义")
+	@RequestMapping(value="/initProcess", method=RequestMethod.POST)
+	@ResponseBody
+	public ReturnValue initProcess(){
+		workflowService.initFlows();
+		return ReturnValue.success();
+	}
 }

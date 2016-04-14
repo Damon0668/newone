@@ -27,7 +27,6 @@ import com.liefeng.property.repository.household.ProprietorRepository;
 import com.liefeng.property.repository.mybatis.ProprietorQueryRepository;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
-import com.liefeng.property.vo.staff.PropertyStaffVo;
 
 /**
  * 业主信息领域模型
@@ -129,6 +128,7 @@ public class ProprietorContext {
 			
 			ProprietorPo proprietorPo = MyBeanUtil.createBean(proprietor, ProprietorPo.class);
 			proprietorRepository.save(proprietorPo);
+			logger.info("创建业主成功，业主ID = {}", proprietorPo.getId());
 		}
 		
 		return proprietor;
@@ -139,13 +139,13 @@ public class ProprietorContext {
 	 */
 	public ProprietorVo update() {
 		if(proprietor != null && ValidateHelper.isNotEmptyString(proprietor.getId())) {
-			logger.info("更新业主信息，业主ID（{}）,proprietor={}", proprietor.getId(), proprietor);
+			logger.info("更新业主信息，业主ID = {}", proprietor.getId());
 			ProprietorPo proprietorPo = proprietorRepository.findOne(proprietor.getId());
 			
 			if(proprietorPo != null) {
 				MyBeanUtil.copyBeanNotNull2Bean(proprietor, proprietorPo);
 				proprietorRepository.save(proprietorPo);
-				logger.info("更新业主信息成功，业主ID（{}", proprietor.getId());
+				logger.info("更新业主信息成功，业主ID = {}", proprietor.getId());
 				
 				proprietor = MyBeanUtil.createBean(proprietorPo, ProprietorVo.class);
 			}
@@ -324,6 +324,25 @@ public class ProprietorContext {
 		PagingParamVo pagingParamVo = new PagingParamVo();
 		pagingParamVo.setExtra(extra);
 		return proprietorQueryRepository.queryAllClientIdsByProjectIdAndHouseNum(pagingParamVo);
+	}
+	
+	/**
+	 * 根据projectId、houseNum获取业主资料信息
+	 * @param projectId
+	 * @param houseNum
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月14日 上午10:13:00
+	 */
+	public ProprietorSingleHouseVo findProprietorSingleHouseVo(String projectId, String houseNum){
+		String oemCode = ContextManager.getInstance().getOemCode();
+		Map<String, String> extra = new HashMap<String, String>();
+		extra.put("projectId", projectId);
+		extra.put("houseNum", houseNum);
+		extra.put("oemCode", oemCode);
+		PagingParamVo pagingParamVo = new PagingParamVo();
+		pagingParamVo.setExtra(extra);
+		return proprietorQueryRepository.queryProprietorByProjectIdAndHouseNum(pagingParamVo);
 	}
 	
 	protected void setProprietorId(String proprietorId) {

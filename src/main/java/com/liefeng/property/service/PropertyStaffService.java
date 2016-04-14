@@ -467,4 +467,10 @@ public class PropertyStaffService implements IPropertyStaffService {
 			logger.info("修改密码时单推消息{}", message);
 		}
 	}
+
+	@Override
+	public List<PropertyStaffVo> listPropertyStaffByDepartmentId(
+			String departmentId) {
+		return PropertyStaffContext.build().listPropertyStaffByDepartmentId(departmentId);
+	}
 }

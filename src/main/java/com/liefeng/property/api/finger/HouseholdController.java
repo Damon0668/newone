@@ -28,6 +28,7 @@ import com.liefeng.property.api.ro.common.PhoneRo;
 import com.liefeng.property.api.ro.finger.household.CheckinQueueListRo;
 import com.liefeng.property.api.ro.finger.household.CheckinQueueRo;
 import com.liefeng.property.api.ro.finger.household.GetUserHousesRo;
+import com.liefeng.property.api.ro.finger.household.ProjectIdHouseNumRo;
 import com.liefeng.property.api.ro.finger.household.ProprietorRo;
 import com.liefeng.property.api.ro.finger.household.ProprietorStatusRo;
 import com.liefeng.property.api.ro.finger.household.ResidentIdHouseIdRo;
@@ -408,5 +409,17 @@ public class HouseholdController {
 		List<UserHouseVo> dataList = houseContext.getUserHouses(params.getLoginId(), params.getHouseholdType());
 		
 		return DataListValue.success(dataList);
+	}
+	
+	/**
+	 * 获取业主资料信息
+	 */
+	@ApiOperation(value="获取业主资料信息（参数：projectId、houseNum）")
+	@RequestMapping(value="/getProprietor", method=RequestMethod.GET)
+	@ResponseBody
+	public DataValue<ProprietorSingleHouseVo> getProprietor(@Valid @ModelAttribute ProjectIdHouseNumRo ro) {
+		
+		ProprietorSingleHouseVo proprietorSingleHouseVo = householdService.findProprietorSingleHouseVo(ro.getProjectId(), ro.getHouseNum());
+		return DataValue.success(proprietorSingleHouseVo);
 	}
 }
