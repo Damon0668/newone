@@ -558,4 +558,17 @@ public interface IHouseholdService {
 	 */
 	public ProprietorSingleHouseVo findProprietorSingleHouseVo(String projectId, String houseNum);
 	
+	/**
+	 * 分页查询访客
+	 * @param projectId
+	 * @param name
+	 * @param phone
+	 * @param page
+	 * @param size
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月14日 下午3:05:01
+	 */
+	public DataPageValue<VisitorVo> findVisitorByPage(String projectId, String manageProjectIds, String name, String phone, Integer page, Integer size);
+	
 }

@@ -90,6 +90,11 @@ public class VisitorVo extends BaseValue {
 	 * OEM编码
 	 */
 	private String oemCode;
+	
+	/**
+	 * 项目名称
+	 */
+	private String fullName;
 
 	public String getId() {
 		return id;
@@ -209,6 +214,14 @@ public class VisitorVo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 	
 }
