@@ -102,7 +102,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
 			approvalFlowBo.getParams().put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
 			approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_STATUS, ApprovalFlowConstants.ORDER_COMPLETE);
-			workflowService.execute(approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
+			workflowService.complete(approvalFlowBo.getOrderId(),approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
 			String staffId = workflowService.findHisOrderById(approvalFlowBo.getOrderId()).getCreator();
 			//获取推送消息模板
 			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.APPROVAL_FINISHED);
@@ -391,4 +391,5 @@ public class ApprovalFlowService implements IApprovalFlowService{
 		dataListValue.setDataList(MyBeanUtil.createList(historyTasks, HistoryTaskVo.class));
 		return dataListValue;
 	}
+	
 }
