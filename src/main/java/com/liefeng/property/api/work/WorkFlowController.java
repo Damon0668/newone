@@ -176,4 +176,11 @@ public class WorkFlowController {
 		return ReturnValue.success();
 	}
 	
+	@ApiOperation(value="初始化流程定义")
+	@RequestMapping(value="/initProcess", method=RequestMethod.POST)
+	@ResponseBody
+	public ReturnValue initProcess(){
+		workflowService.initFlows();
+		return ReturnValue.success();
+	}
 }

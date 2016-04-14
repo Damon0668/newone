@@ -198,13 +198,14 @@ public class ApprovalFlowService implements IApprovalFlowService{
 	
 	/**
 	 * 获取用户列表
+	 * @deprecated 可在流程定义上的assignee加入更多的定义已“：”隔开
 	 * @param assignee  类型_id
 	 * 			user_123 指定用户
 	 * 			dept_123 该部门所有人
 	 * 			role_123 改角色所有人
 	 * 			director_123 部门负责人
 	 * 			director_self 我的部门负责人
-	 * 			taskname_task1 该步骤办理人
+	 * 			taskname_task1 该步骤的办理人
 	 * @return
 	 */
 	@Override
