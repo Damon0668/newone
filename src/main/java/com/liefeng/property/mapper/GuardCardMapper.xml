@@ -33,7 +33,26 @@
         </if>
         
         <if test="extra.searchType != null and extra.searchType != ''" >
-        
+        	<choose>
+        		<when test="extra.searchType == 'one_day'">
+        			AND (TO_DAYS(cv.endDate) - TO_DAYS(NOW())) = 1
+        		</when>
+        		
+        		<when test="extra.searchType == 'three_day'">
+        			AND (TO_DAYS(cv.endDate) - TO_DAYS(NOW())) > 0
+        			AND (TO_DAYS(cv.endDate) - TO_DAYS(NOW())) &lt;= 3
+        		</when>
+        		
+        		<when test="extra.searchType == 'one_week'">
+        			AND (TO_DAYS(cv.endDate) - TO_DAYS(NOW())) > 0 
+        			AND (TO_DAYS(cv.endDate) - TO_DAYS(NOW())) &lt;= 7
+        		</when>
+        		
+        		<when test="extra.searchType == 'one_month'">
+        			AND (TO_DAYS(cv.endDate) - TO_DAYS(NOW())) > 0 
+        			AND (TO_DAYS(cv.endDate) - TO_DAYS(NOW())) &lt;= 31
+        		</when>
+        	</choose>
         </if>
     </trim>
 </sql>
