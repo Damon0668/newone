@@ -1258,5 +1258,11 @@ public class HouseholdService implements IHouseholdService {
 			String status, Integer seq, String queryDate) {
 		return CheckinQueueContext.build().getLatestOfStatusAndSeq(projectId, status, seq, queryDate);
 	}
+
+	@Override
+	public ProprietorSingleHouseVo findProprietorSingleHouseVo(
+			String projectId, String houseNum) {
+		return ProprietorContext.build().findProprietorSingleHouseVo(projectId, houseNum);
+	}
 		
 }
