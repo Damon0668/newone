@@ -142,6 +142,7 @@ public class EventReportController {
 	@RequestMapping(value="/createEventReport", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue createEventReport(@Valid @ModelAttribute EventReportRo eventReportRo) {
+		logger.info("【debug】"+eventReportRo.toString());
 		EventReportBo bo = MyBeanUtil.createBean(eventReportRo, EventReportBo.class);
 		workbenchService.createAppEventReport(bo);
 		
