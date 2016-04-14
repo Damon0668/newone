@@ -158,9 +158,9 @@ public class ApprovalFlowService implements IApprovalFlowService{
 		
 		// 保存流程附件
 		if(ValidateHelper.isNotEmptyString(approvalFlowBo.getTaskAttachsJson())) {
+			String orderId = approvalFlowBo.getOrderId();
 			List<TaskAttachVo> taskAttachVos = MyBeanUtil.str2List(approvalFlowBo.getTaskAttachsJson(), TaskAttachVo.class);
 			if(taskAttachVos != null && ValidateHelper.isNotEmptyCollection(taskAttachVos)) {
-				String orderId = approvalFlowBo.getOrderId();
 				String taskId = approvalFlowBo.getTaskId();
 				for(TaskAttachVo taskAttachVo : taskAttachVos) { // 设置附件所属流程实例ID和任务ID
 					String fileName = taskAttachVo.getFileName();
@@ -171,6 +171,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 					} catch (UnsupportedEncodingException e) {
 						logger.error("字符串解码失败");
 					}
+					
 					if(ValidateHelper.isEmptyString(taskAttachVo.getOrderId())) {
 						taskAttachVo.setOrderId(orderId);
 					}
@@ -179,9 +180,11 @@ public class ApprovalFlowService implements IApprovalFlowService{
 						taskAttachVo.setTaskId(taskId);
 					}
 				}
-				
-				workflowService.saveTaskAttachs(orderId, taskAttachVos);
 			}
+			
+			// 保存附件，保存时会先删除旧附件，再保存新的附件;
+			// 如果新的附件列表为空，表示把所有的附件删除
+			workflowService.saveTaskAttachs(orderId, taskAttachVos);
 		}
 	}
 	
