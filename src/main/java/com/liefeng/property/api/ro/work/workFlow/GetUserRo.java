@@ -21,12 +21,16 @@ public class GetUserRo extends BaseValue{
 	@NotNull
 	private String assignee;
 	
-	@ApiModelProperty(value="当前登录人id")
+	@ApiModelProperty(value="当前登录人id",required=true)
 	@NotNull
 	private String staffId;
 	
 	@ApiModelProperty(value="流程实例Id,除了开启流程外，都不能为空")
 	private String orderId;
+	
+	@ApiModelProperty(value="当前步骤名称",required=true)
+	@NotNull
+	private String taskName;
 	
 	public String getOrderId() {
 		return orderId;
@@ -50,6 +54,14 @@ public class GetUserRo extends BaseValue{
 
 	public void setStaffId(String staffId) {
 		this.staffId = staffId;
+	}
+
+	public String getTaskName() {
+		return taskName;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
 	}
 
 }
