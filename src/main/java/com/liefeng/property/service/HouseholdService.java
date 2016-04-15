@@ -1270,5 +1270,10 @@ public class HouseholdService implements IHouseholdService {
 			String name, String phone, Integer page, Integer size) {
 		return VisitorContext.build().findByPage(projectId, manageProjectIds, name, phone, page, size);
 	}
+
+	@Override
+	public VisitorVo updateVisitor(VisitorVo visitorVo) {
+		return VisitorContext.build(visitorVo).update();
+	}
 		
 }

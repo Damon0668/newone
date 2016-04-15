@@ -571,4 +571,13 @@ public interface IHouseholdService {
 	 */
 	public DataPageValue<VisitorVo> findVisitorByPage(String projectId, String manageProjectIds, String name, String phone, Integer page, Integer size);
 	
+	/**
+	 * 更新访客信息
+	 * @param visitorVo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月15日 下午6:01:44
+	 */
+	public VisitorVo updateVisitor(VisitorVo visitorVo);
+	
 }
