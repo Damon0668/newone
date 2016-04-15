@@ -235,6 +235,9 @@ public class PropertyStaffContext {
 		count = (count == null ? 0 : count);
 		
 		logger.info("总数量：count=" + count);
+		
+		// 设置数据总行数，用于计算偏移量
+		param.getPager().setRowCount(count);
 
 		List<PropertyStaffListVo> list = propertyStaffQueryRepository.queryByPage(param);
 
