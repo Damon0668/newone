@@ -72,7 +72,9 @@ public class AuthController {
 		//openId加密
 		String openId = user.getCustGlobalId() + "|" + loginUser.getOemCode();
 	
-		loginUser.setOpenId(EncryptionUtil.encrypt(openId, EncryptionUtil.OPEN_ID_PASSWORD));
+		openId = EncryptionUtil.encrypt(openId, EncryptionUtil.OPEN_ID_PASSWORD);
+		
+		loginUser.setOpenId(openId);
 		
 		//刷新缓存中的oemCode
 		String key = "openId_" + openId;
