@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.household;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,11 +17,12 @@ import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
+import com.liefeng.property.po.household.ProprietorPo;
 import com.liefeng.property.po.household.VisitorPo;
 import com.liefeng.property.repository.household.VisitorRepository;
 import com.liefeng.property.repository.mybatis.VisitorQueryRepository;
+import com.liefeng.property.vo.household.ProprietorVo;
 import com.liefeng.property.vo.household.VisitorVo;
-import com.liefeng.property.vo.workbench.TaskVo;
 
 /**
  * 访客信息领域模型
@@ -123,6 +125,7 @@ public class VisitorContext {
 		if(visitor != null) {
 			visitor.setId(UUIDGenerator.generate());
 			visitor.setOemCode(ContextManager.getInstance().getOemCode());
+			visitor.setInTime(new Date());
 			VisitorPo visitorPo = MyBeanUtil.createBean(visitor, VisitorPo.class);
 			
 			logger.info("create visitor = {}", visitor);
@@ -200,5 +203,33 @@ public class VisitorContext {
 		DataPageValue<VisitorVo> returnPage = new DataPageValue<VisitorVo>(list, count, size, page);
 
 		return returnPage;
+	}
+
+	/**
+	 * 更新访客信息
+	 */
+	public VisitorVo update() {
+		if(visitor != null && ValidateHelper.isNotEmptyString(visitor.getId())) {
+			logger.info("更新访客信息，访客ID = {}", visitor.getId());
+			VisitorPo visitorPo = visitorRepository.findOne(visitor.getId());
+			
+			if(visitorPo != null) {
+				MyBeanUtil.copyBeanNotNull2Bean(visitor, visitorPo);
+				visitorRepository.save(visitorPo);
+				logger.info("更新访客信息成功，访客ID = {}", visitor.getId());
+				
+				visitor = MyBeanUtil.createBean(visitorPo, VisitorVo.class);
+			}
+		}
+		
+		return visitor;
+	}
+	
+	protected void setVisitorId(String visitorId) {
+		this.visitorId = visitorId;
+	}
+
+	protected void setVisitor(VisitorVo visitor) {
+		this.visitor = visitor;
 	}
 }

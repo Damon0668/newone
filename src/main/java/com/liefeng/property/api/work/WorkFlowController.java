@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
@@ -46,6 +48,7 @@ import com.liefeng.property.domain.workbench.EventReportContext;
 import com.liefeng.property.vo.approvalFlow.ProcessVo;
 import com.liefeng.property.vo.approvalFlow.HistoryTaskVo;
 import com.liefeng.property.vo.approvalFlow.TaskModelVo;
+import com.liefeng.property.vo.approvalFlow.ApprovalUserVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.workbench.HeadCountVo;
 import com.liefeng.service.constant.WorkflowConstants;
@@ -115,9 +118,41 @@ public class WorkFlowController {
 	@ApiOperation(value="获取办理人列表")
 	@RequestMapping(value="/getUser", method=RequestMethod.GET)
 	@ResponseBody
-	public DataListValue<PropertyStaffVo> getUser(@Valid @ModelAttribute GetUserRo getUserRo){
-		List<PropertyStaffVo> propertyStaffVos = approvalFlowService.getUser(getUserRo.getOrderId(), getUserRo.getAssignee(),getUserRo.getStaffId());
-		return DataListValue.success(propertyStaffVos);
+	public DataListValue<ApprovalUserVo> getUser(@Valid @ModelAttribute GetUserRo getUserRo){
+		List<PropertyStaffVo> users = approvalFlowService.getUser(getUserRo.getOrderId(), getUserRo.getAssignee(),getUserRo.getStaffId());
+		PropertyStaffVo defaultUser = null;
+		if(ValidateHelper.isNotEmptyString(getUserRo.getOrderId())){
+			defaultUser = approvalFlowService.getDefaultUsers(getUserRo.getOrderId(), getUserRo.getTaskName());
+		}
+		
+		if(defaultUser != null ){
+			List<ApprovalUserVo> approvalUsers = new  ArrayList<ApprovalUserVo>();
+			
+			//用来判断是否存在
+			Map<String, PropertyStaffVo> existMap = new HashMap<String, PropertyStaffVo>();
+			
+			//设置默认办理人
+			ApprovalUserVo approvalUserVo =  MyBeanUtil.createBean(defaultUser, ApprovalUserVo.class);
+			approvalUserVo.setIsDefault("1"); //默认
+			approvalUsers.add(approvalUserVo);
+			existMap.put(defaultUser.getId(),defaultUser);
+			
+			//循环去重
+			for (PropertyStaffVo propertyStaffVo : users) {
+				if(!existMap.containsKey(propertyStaffVo.getId())){
+					existMap.put(propertyStaffVo.getId(),propertyStaffVo);
+					ApprovalUserVo noApprovalUserVo = MyBeanUtil.createBean(propertyStaffVo, ApprovalUserVo.class);
+					noApprovalUserVo.setIsDefault("0");//不是默认
+					approvalUsers.add(noApprovalUserVo);
+				}
+			}
+			
+			return DataListValue.success(approvalUsers);
+		}else{
+			return DataListValue.success(MyBeanUtil.createList(users, ApprovalUserVo.class));
+		}
+		
+		
 	}
 	
 	@ApiOperation(value="获取默认办理人")

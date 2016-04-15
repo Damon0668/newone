@@ -113,6 +113,18 @@ public class VisitorPo extends BaseValue {
 	@Column(name = "oem_code")
 	private String oemCode;
 
+	/**
+	 * 车型
+	 */
+	@Column(name = "vehicle_type")
+	private String vehicleType;
+	
+	/**
+	 * 性别
+	 */
+	@Column(name = "sex")
+	private String sex;
+	
 	public String getId() {
 		return id;
 	}
@@ -231,6 +243,22 @@ public class VisitorPo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getVehicleType() {
+		return vehicleType;
+	}
+
+	public void setVehicleType(String vehicleType) {
+		this.vehicleType = vehicleType;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
 	}
 	
 }

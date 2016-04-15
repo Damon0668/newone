@@ -172,10 +172,4 @@
 			<include refid="Base_Clause"/>
 		) as ttt
 </select>
-
-<sql id="">
-
-</sql>
-
-
 </mapper>   

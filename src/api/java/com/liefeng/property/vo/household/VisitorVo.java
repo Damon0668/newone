@@ -95,6 +95,16 @@ public class VisitorVo extends BaseValue {
 	 * 项目名称
 	 */
 	private String fullName;
+	
+	/**
+	 * 车型
+	 */
+	private String vehicleType;
+	
+	/**
+	 * 性别
+	 */
+	private String sex;
 
 	public String getId() {
 		return id;
@@ -222,6 +232,22 @@ public class VisitorVo extends BaseValue {
 
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
+	}
+
+	public String getVehicleType() {
+		return vehicleType;
+	}
+
+	public void setVehicleType(String vehicleType) {
+		this.vehicleType = vehicleType;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
 	}
 	
 }
