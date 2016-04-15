@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.household;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -13,9 +14,13 @@ import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.po.household.VisitorPo;
 import com.liefeng.property.repository.household.VisitorRepository;
+import com.liefeng.property.repository.mybatis.VisitorQueryRepository;
 import com.liefeng.property.vo.household.VisitorVo;
+import com.liefeng.property.vo.workbench.TaskVo;
 
 /**
  * 访客信息领域模型
@@ -33,6 +38,9 @@ public class VisitorContext {
 	
 	@Autowired
 	private VisitorRepository visitorRepository;
+	
+	@Autowired
+	private VisitorQueryRepository visitorQueryRepository;
 	
 	/**
 	 * 访客信息ID
@@ -157,4 +165,40 @@ public class VisitorContext {
 		return visitorVoList;
 	}
 	
+	/**
+	 * 分页查询
+	 * @param projectId
+	 * @param name
+	 * @param phone
+	 * @param page
+	 * @param size
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月14日 下午3:05:01
+	 */
+	public DataPageValue<VisitorVo> findByPage(String projectId, String manageProjectIds, String name, String phone, Integer page, Integer size) {
+		String oemCode = ContextManager.getInstance().getOemCode();
+		HashMap<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("projectId", projectId);
+		paramMap.put("name", name);
+		paramMap.put("phone", phone);
+		paramMap.put("manageProjectIds", manageProjectIds);
+		paramMap.put("oemCode", oemCode);
+
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(paramMap);
+		param.setPage(page);
+		param.setPageSize(size);
+
+		Long count = visitorQueryRepository.queryByCount(param);
+		count = (count == null ? 0 : count);
+		logger.info("总数量：count=" + count);
+
+		// 设置数据总行数，用于计算偏移量
+		param.getPager().setRowCount(count);
+		List<VisitorVo> list = visitorQueryRepository.queryByPage(param);
+		DataPageValue<VisitorVo> returnPage = new DataPageValue<VisitorVo>(list, count, size, page);
+
+		return returnPage;
+	}
 }

@@ -163,14 +163,19 @@
 				left join property.t_checkin_queue cq
 				on cq.project_id = h.project_id and cq.house_id = h.id
 			 where
-				(cq.id is not null and cq.status = '2'
+				(cq.id is not null and cq.status = '2')
+				 or (cq.id is null)
 			 	 and cq.project_id = #{extra.projectId} 
-			 	 and cq.oem_code = #{extra.oemCode})
-				 or (cq.id is null))
+			 	 and cq.oem_code = #{extra.oemCode}
+				 )
 			) as un 
 			<include refid="Base_Clause"/>
 		) as ttt
 </select>
+
+<sql id="">
+
+</sql>
 
 
 </mapper>   

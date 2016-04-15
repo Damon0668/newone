@@ -1264,5 +1264,11 @@ public class HouseholdService implements IHouseholdService {
 			String projectId, String houseNum) {
 		return ProprietorContext.build().findProprietorSingleHouseVo(projectId, houseNum);
 	}
+
+	@Override
+	public DataPageValue<VisitorVo> findVisitorByPage(String projectId, String manageProjectIds,
+			String name, String phone, Integer page, Integer size) {
+		return VisitorContext.build().findByPage(projectId, manageProjectIds, name, phone, page, size);
+	}
 		
 }

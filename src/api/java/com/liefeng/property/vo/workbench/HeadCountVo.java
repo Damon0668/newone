@@ -53,7 +53,13 @@ public class HeadCountVo extends BaseValue {
 	 */
 	@ApiModelProperty(value="本月办结数量")
 	private Long monthCompleteCount;
-
+	
+	/**
+	 * 工作流待办理数量
+	 */
+	@ApiModelProperty(value="工作流待办理数量")
+	private Long workFlowWaitCount;
+	
 	public Long getWaitSignCount() {
 		return waitSignCount;
 	}
@@ -100,6 +106,14 @@ public class HeadCountVo extends BaseValue {
 
 	public void setMonthCompleteCount(Long monthCompleteCount) {
 		this.monthCompleteCount = monthCompleteCount;
+	}
+
+	public Long getWorkFlowWaitCount() {
+		return workFlowWaitCount;
+	}
+
+	public void setWorkFlowWaitCount(Long workFlowWaitCount) {
+		this.workFlowWaitCount = workFlowWaitCount;
 	}
 	
 }
