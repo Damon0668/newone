@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
@@ -119,7 +120,10 @@ public class WorkFlowController {
 	@ResponseBody
 	public DataListValue<ApprovalUserVo> getUser(@Valid @ModelAttribute GetUserRo getUserRo){
 		List<PropertyStaffVo> users = approvalFlowService.getUser(getUserRo.getOrderId(), getUserRo.getAssignee(),getUserRo.getStaffId());
-		PropertyStaffVo defaultUser = approvalFlowService.getDefaultUsers(getUserRo.getOrderId(), getUserRo.getTaskName());
+		PropertyStaffVo defaultUser = null;
+		if(ValidateHelper.isNotEmptyString(getUserRo.getOrderId())){
+			defaultUser = approvalFlowService.getDefaultUsers(getUserRo.getOrderId(), getUserRo.getTaskName());
+		}
 		
 		if(defaultUser != null ){
 			List<ApprovalUserVo> approvalUsers = new  ArrayList<ApprovalUserVo>();

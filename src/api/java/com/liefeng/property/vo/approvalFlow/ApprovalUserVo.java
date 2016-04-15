@@ -14,7 +14,7 @@ public class ApprovalUserVo extends BaseValue{
 	@ApiModelProperty(value="员工姓名")
 	private String name;
 	
-	@ApiModelProperty(value="是否是默认【0不是，1：是】")
+	@ApiModelProperty(value="是否是默认【0/null 不是，1：是】")
 	private String isDefault;
 
 	public String getId() {
