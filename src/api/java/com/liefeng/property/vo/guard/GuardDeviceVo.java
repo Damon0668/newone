@@ -49,6 +49,11 @@ public class GuardDeviceVo extends DeviceVo {
 	private String cameraId;
 	
 	/**
+	 * 摄像头类型
+	 */
+	private String cameraType;
+	
+	/**
 	 * 门口机编号
 	 */
 	private String guardType;
@@ -175,5 +180,13 @@ public class GuardDeviceVo extends DeviceVo {
 
 	public void setPositionName(String positionName) {
 		this.positionName = positionName;
+	}
+
+	public String getCameraType() {
+		return cameraType;
+	}
+
+	public void setCameraType(String cameraType) {
+		this.cameraType = cameraType;
 	}
 }

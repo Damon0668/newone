@@ -225,6 +225,9 @@ FROM
 
 <select id="queryUserHouses" resultMap="UserHouseMap">
 SELECT
+    v.id,
+    v.type,
+    v.residentRelation,
 	v.projectId,
 	v.projectName,
 	v.buildingId,
@@ -234,31 +237,34 @@ SELECT
 FROM
 	((
 		SELECT
-			p.id AS loginId,
+			p.id AS id,
+			p.cust_global_id AS custGlobalId,
 			h.project_id AS projectId,
 			pj.full_name AS projectName,
 			h.id AS houseId,
 			h.building_id AS buildingId,
 			h.house_num AS houseNum,
 			h.oem_code AS oemCode,
-			'user' AS type
+			"01" AS residentRelation,
+			'proprietor' AS type
 		FROM
 			property.t_house h
-			LEFT JOIN property.t_proprietor_house ph ON ph.house_num = h.house_num
-			AND ph.project_id = h.project_id
+			LEFT JOIN property.t_proprietor_house ph ON ph.house_num = h.house_num AND ph.project_id = h.project_id
 			LEFT JOIN property.t_proprietor p ON p.id = ph.proprietor_id
 			LEFT JOIN property.t_project pj ON pj.id = h.project_id
 	)
 	UNION ALL
 	(
 		SELECT
-			r.id AS loginId,
+			r.id AS id,
+			r.cust_global_id AS custGlobalId,
 			h.project_id AS projectId,
 			pj.full_name AS projectName,
 			h.id AS houseId,
 			h.building_id AS buildingId,
 			h.house_num AS houseNum,
 			h.oem_code AS oemCode,
+			rh.resident_relation AS residentRelation,
 			'resident' AS type
 		FROM
 			property.t_house h
@@ -266,15 +272,15 @@ FROM
 			LEFT JOIN property.t_resident r ON r.id = rh.resident_id
 			LEFT JOIN property.t_project pj ON pj.id = h.project_id
 	)) AS v
-WHERE v.loginId = #{loginId} 
+WHERE v.custGlobalId = #{custGlobalId} 
 	AND v.oemCode = #{oemCode}
 	<choose>
 		<!-- 业主 -->
-		<when test="type != null and type = '1'">
-			AND v.type = 'user'
+		<when test="type != null and type == '1'">
+			AND v.type = 'proprietor'
 		</when>
 		<!-- 住户 -->
-		<when test="">
+		<when test="type != null and type == '2'">
 			AND v.type = 'resident'
 		</when>
 	</choose>

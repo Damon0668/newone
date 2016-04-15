@@ -18,20 +18,20 @@ public class GetUserHousesRo extends BaseValue {
 
 	private static final long serialVersionUID = 337588558078193173L;
 
-	@ApiModelProperty(value = "登陆用户ID", required = true)
+	@ApiModelProperty(value = "全局ID,cust_global_id", required = true)
 	@NotNull
-	private String loginId;
+	private String globalId;
 
-	@ApiModelProperty(value = "用户类型，【1：业主，2：住户】", required = true)
+	@ApiModelProperty(value = "用户类型[1：业主，2：住户]", required = true)
 	@NotNull
 	private String householdType;
 
-	public String getLoginId() {
-		return loginId;
+	public String getGlobalId() {
+		return globalId;
 	}
 
-	public void setLoginId(String loginId) {
-		this.loginId = loginId;
+	public void setGlobalId(String globalId) {
+		this.globalId = globalId;
 	}
 
 	public String getHouseholdType() {

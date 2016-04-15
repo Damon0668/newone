@@ -242,6 +242,9 @@ public class ResidentContext {
 		
 		logger.info("总数量：count=" + count);
 		
+		// 设置数据总行数，用于计算偏移量
+		pagingParamVo.getPager().setRowCount(count);
+		
 		List<GuardResidentVo> guardResidentVoList = residentQueryRepository.queryGuardResidents(pagingParamVo);
 		guardResidentVoList = (ValidateHelper.isEmptyCollection(guardResidentVoList) ? 
 				new ArrayList<GuardResidentVo>() : guardResidentVoList);

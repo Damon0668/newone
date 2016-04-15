@@ -35,6 +35,9 @@ public class LoginUserVo extends BaseValue{
 	
 	@ApiModelProperty(value="名字")
 	private String name;
+	
+	@ApiModelProperty(value="用户昵称")
+	private String nickName;
 
 	@ApiModelProperty(value="住户类型[1：业主；2：住户]")
 	private String householdType;
@@ -148,5 +151,13 @@ public class LoginUserVo extends BaseValue{
 
 	public void setResidentRelation(String residentRelation) {
 		this.residentRelation = residentRelation;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 }

@@ -48,4 +48,16 @@ public class GuardConstants {
 		 */
 		public String LOSS = "2";
 	}
+	
+	/**
+	 * 门禁类型
+	 */
+	public static interface GuardType{
+		
+		/**
+		 * 摄像头
+		 */
+		public String CAMERA = "0";
+	
+	}
 }

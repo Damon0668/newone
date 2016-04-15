@@ -15,6 +15,15 @@ import com.liefeng.core.entity.BaseValue;
 public class UserHouseVo extends BaseValue {
 
 	private static final long serialVersionUID = 6077014962625027337L;
+	
+	@ApiModelProperty(value = "[业主|住户]ID")
+	private String id;
+	
+	@ApiModelProperty(value = "proprietor[业主]resident[住户]")
+	private String type;
+	
+	@ApiModelProperty(value="与业主关系[[字典]RESIDENT_RELATION]")
+	private String residentRelation;
 
 	@ApiModelProperty(value = "项目ID")
 	private String projectId;
@@ -81,4 +90,29 @@ public class UserHouseVo extends BaseValue {
 	public void setBuildingId(String buildingId) {
 		this.buildingId = buildingId;
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getResidentRelation() {
+		return residentRelation;
+	}
+
+	public void setResidentRelation(String residentRelation) {
+		this.residentRelation = residentRelation;
+	}
+	
 }

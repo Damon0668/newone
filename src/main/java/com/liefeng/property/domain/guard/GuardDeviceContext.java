@@ -20,6 +20,7 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
+import com.liefeng.property.constant.GuardConstants;
 import com.liefeng.property.po.guard.GuardDevicePo;
 import com.liefeng.property.repository.guard.GuardDeviceRepository;
 import com.liefeng.property.repository.mybatis.GuardDeviceQueryRepository;
@@ -96,14 +97,21 @@ public class GuardDeviceContext {
 	}
 	
 	public void create(){
-		GuardDevicePo guardDevicePo = MyBeanUtil.createBean(guardDevice, GuardDevicePo.class);
-		guardDevicePo.setId(UUIDGenerator.generate());
-		guardDevicePo.setCreateTime(new Date());
-		guardDevicePo.setOemCode(ContextManager.getInstance().getOemCode());
-		
-		logger.info("create guardDevice ={}", guardDevice);
-		guardDeviceRepository.save(guardDevicePo);
-		guardDevice = MyBeanUtil.createBean(guardDevicePo, GuardDeviceVo.class);
+		if(guardDevice != null ){
+			GuardDevicePo guardDevicePo = MyBeanUtil.createBean(guardDevice, GuardDevicePo.class);
+			guardDevicePo.setId(UUIDGenerator.generate());
+			guardDevicePo.setCreateTime(new Date());
+			guardDevicePo.setOemCode(ContextManager.getInstance().getOemCode());
+			
+			logger.info("create guardDevice ={}", guardDevice);
+			guardDeviceRepository.save(guardDevicePo);
+			
+			if(GuardConstants.GuardType.CAMERA.equals(guardDevice.getGuardType())){
+				
+			}
+			
+			guardDevice = MyBeanUtil.createBean(guardDevicePo, GuardDeviceVo.class);
+		}
 	}
 	
 	public void update(){
@@ -193,7 +201,7 @@ public class GuardDeviceContext {
 		
 		return result;
 	}
-	
+
 	protected void setId(String id) {
 		this.id = id;
 	}

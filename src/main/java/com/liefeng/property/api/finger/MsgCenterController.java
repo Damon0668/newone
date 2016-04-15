@@ -14,6 +14,7 @@ import com.liefeng.base.vo.message.PushedMsgVo;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.intf.base.msg.IMessageCenterService;
 import com.liefeng.property.api.ro.finger.msg.MsgHistoryRo;
+import com.liefeng.property.constant.SysConstants;
 import com.liefeng.service.constant.PushMsgConstants;
 
 import io.swagger.annotations.Api;
@@ -37,7 +38,7 @@ public class MsgCenterController {
 		pushedMsgBo.setSendStatus(PushMsgConstants.SendStatus.SUCCESS);
 		pushedMsgBo.setTerminalType(PushMsgConstants.TerminalType.MOBILE_PROPERTY);
 		if("sys".equals(msgHistoryRo.getMsgType())){
-			pushedMsgBo.setSendUserId("-1");
+			pushedMsgBo.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
 		}
 		return messageCenterService.findPushedMsg(pushedMsgBo, msgHistoryRo.getPage(), msgHistoryRo.getSize());
 	}

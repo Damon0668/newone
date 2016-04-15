@@ -41,6 +41,6 @@ public interface HouseQueryRepository extends BaseRepository<ProprietorSingleHou
 	 * @param oemCode OEM编码
 	 * @return 房产列表
 	 */
-	public List<UserHouseVo> queryUserHouses(@Param("loginId") String loginId, 
+	public List<UserHouseVo> queryUserHouses(@Param("custGlobalId") String custGlobalId, 
 			@Param("type") String type, @Param("oemCode") String oemCode);
 }

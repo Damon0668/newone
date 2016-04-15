@@ -45,6 +45,6 @@ public class UserContext {
 	 * @return
 	 */
 	public LoginUserVo findLoginUser(String oemCode){
-		return userQueryRepository.findLoginUser(custGlobalId,oemCode);
+		return null;
 	}
 }

@@ -13,10 +13,8 @@ import com.liefeng.base.bo.UserLoginBo;
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.EncryptionUtil;
 import com.liefeng.common.util.MyBeanUtil;
-import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
-import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.intf.property.api.ILoginUserService;
@@ -25,7 +23,6 @@ import com.liefeng.property.api.ro.finger.auth.AuthLoginRo;
 import com.liefeng.property.api.ro.finger.auth.UpdatePwdLoginRo;
 import com.liefeng.property.api.ro.finger.auth.UpdatePwdRo;
 import com.liefeng.property.constant.SysConstants;
-import com.liefeng.property.error.SecurityErrorCode;
 import com.liefeng.property.vo.api.LoginUserVo;
 import com.liefeng.service.constant.PushMsgConstants;
 
@@ -64,17 +61,18 @@ public class AuthController {
 		
 		UserVo user = userService.login(userLoginBo);
 		
-		//获取物业系统用户信息
-		loginUser = loginUserService.findLoginUser(user.getCustGlobalId(), user.getOemCode());
+		//精简信息
+		loginUser = MyBeanUtil.createBean(user, LoginUserVo.class);
 		
+		loginUser.setId(null);
+		loginUser.setGlobalId(user.getCustGlobalId());
+		loginUser.setPic(user.getAvatarUrl());
 		loginUser.setUserId(user.getId());
 		
 		//openId加密
 		String openId = user.getCustGlobalId() + "|" + loginUser.getOemCode();
-		
-		openId = EncryptionUtil.encrypt(openId, EncryptionUtil.OPEN_ID_PASSWORD);
-		
-		loginUser.setOpenId(openId);
+	
+		loginUser.setOpenId(EncryptionUtil.encrypt(openId, EncryptionUtil.OPEN_ID_PASSWORD));
 		
 		//刷新缓存中的oemCode
 		String key = "openId_" + openId;

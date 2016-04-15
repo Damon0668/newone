@@ -298,9 +298,9 @@ public class HouseContext {
 	 * @param type 类型。1:业主，2:住户
 	 * @return 房产列表
 	 */
-	public List<UserHouseVo> getUserHouses(String loginId, String type) {
+	public List<UserHouseVo> getUserHouses(String custGlobalId, String type) {
 		String oemCode = ContextManager.getInstance().getOemCode();
-		List<UserHouseVo> dataList = houseQueryRepository.queryUserHouses(loginId, type, oemCode);
+		List<UserHouseVo> dataList = houseQueryRepository.queryUserHouses(custGlobalId, type, oemCode);
 		return dataList;
 	}
 
