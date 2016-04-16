@@ -3,6 +3,8 @@ package com.liefeng.property.domain.project;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.property.domain.staff.ManageProjectContext;
 import com.liefeng.property.error.ProjectErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.project.ProjectPo;
@@ -165,12 +168,14 @@ public class ProjectContext {
 		return project;
 	}
 
+	@Transactional
 	public void delete() {
 		if(projectId != null) {
 			String[] ids = projectId.split(",");
 			if(ids != null && ids.length > 0) {
 				for(int i=0; i<ids.length; i++) {
 					projectRepository.delete(ids[i]);
+					ManageProjectContext.build().deleteByProjectId(ids[i]);
 				}
 			}
 		}

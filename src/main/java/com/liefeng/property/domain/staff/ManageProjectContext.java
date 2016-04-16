@@ -73,4 +73,8 @@ public class ManageProjectContext {
 	public void deleteAll(){
 		manageProjectRepository.deleteByStaffId(staffId);
 	}
+	
+	public  void deleteByProjectId(String projectId){
+		manageProjectRepository.deleteByProjectId(projectId);
+	}
 }
