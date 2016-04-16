@@ -170,6 +170,7 @@ public class ProjectContext {
 
 	@Transactional
 	public void delete() {
+		logger.info("delete projectId ={}", projectId);
 		if(projectId != null) {
 			String[] ids = projectId.split(",");
 			if(ids != null && ids.length > 0) {

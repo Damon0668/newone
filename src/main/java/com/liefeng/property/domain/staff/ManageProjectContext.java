@@ -1,5 +1,7 @@
 package com.liefeng.property.domain.staff;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ import com.liefeng.property.repository.staff.ManageProjectRepository;
 @Service
 @Scope("prototype")
 public class ManageProjectContext {
+	
+	private static Logger logger = LoggerFactory.getLogger(ManageProjectContext.class);
 	
 	@Autowired
 	private ManageProjectRepository manageProjectRepository;
@@ -75,6 +79,7 @@ public class ManageProjectContext {
 	}
 	
 	public  void deleteByProjectId(String projectId){
+		logger.info("deleteByProjectId projectId = {}", projectId);
 		manageProjectRepository.deleteByProjectId(projectId);
 	}
 }
