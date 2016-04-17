@@ -295,6 +295,12 @@ public class EventReportVo extends BaseValue {
 	private String directFeekback;
 	
 	/**
+	 * 是否是给我,且能马上办理（已签收） 0不是 1 是
+	 */
+	@ApiModelProperty("是否是给我,且能马上办理（已签收） 0不是 1 是")
+	private String isMe;
+	
+	/**
 	 * 报事处理过程列表
 	 */
 	@ApiModelProperty("报事处理过程列表")
@@ -693,6 +699,14 @@ public class EventReportVo extends BaseValue {
 
 	public void setDirectFeekback(String directFeekback) {
 		this.directFeekback = directFeekback;
+	}
+
+	public String getIsMe() {
+		return isMe;
+	}
+
+	public void setIsMe(String isMe) {
+		this.isMe = isMe;
 	}
 
 }
