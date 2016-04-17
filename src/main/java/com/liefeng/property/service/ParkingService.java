@@ -55,7 +55,7 @@ public class ParkingService implements IParkingService {
 	public void createParking(ParkingVo parkingVo) {
 
 		ProjectContext projectContext =ProjectContext.loadById(parkingVo.getProjectId());
-		ProjectVo projectVo = projectContext.getProject();
+		ProjectVo projectVo = projectContext.get();
 		parkingVo.setCode(projectVo.getCode()+parkingVo.getNum());
 		
 		ParkingContext parkingContext = ParkingContext.build(parkingVo);
@@ -66,7 +66,7 @@ public class ParkingService implements IParkingService {
 	public void createManyParking(ParkingVo parkingVo,String startNum,String endNum) {
 		
 		ProjectContext projectContext =ProjectContext.loadById(parkingVo.getProjectId());
-		ProjectVo projectVo = projectContext.getProject();
+		ProjectVo projectVo = projectContext.get();
 		parkingVo.setCode(projectVo.getCode());
 		
 		ParkingContext parkingContext = ParkingContext.build(parkingVo);

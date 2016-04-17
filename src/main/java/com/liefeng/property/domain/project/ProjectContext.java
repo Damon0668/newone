@@ -39,7 +39,6 @@ import com.liefeng.property.vo.project.ProjectVo;
 @Scope("prototype")
 public class ProjectContext {
 	
-	@SuppressWarnings("unused")
 	private static Logger logger = LoggerFactory.getLogger(ProjectContext.class);
 
 	@Autowired
@@ -78,7 +77,7 @@ public class ProjectContext {
 	 */
 	public static ProjectContext build(ProjectVo project) {
 		ProjectContext projectContext = getInstance();
-		projectContext.project = project;
+		projectContext.setProject(project);;
 		
 		return projectContext;
 	}
@@ -100,7 +99,7 @@ public class ProjectContext {
 	 */
 	public static ProjectContext loadById(String projectId) {
 		ProjectContext projectContext = getInstance();
-		projectContext.projectId = projectId;
+		projectContext.setProjectId(projectId);
 		
 		return projectContext;
 	}
@@ -112,12 +111,12 @@ public class ProjectContext {
 	 */
 	public static ProjectContext loadByFullName(String fullName) {
 		ProjectContext projectContext = getInstance();
-		projectContext.fullName = fullName;
+		projectContext.setFullName(fullName);
 		
 		return projectContext;
 	}
 	
-	public ProjectVo getProject() {
+	public ProjectVo get() {
 		if (project == null) {
 			ProjectPo projectPo = null;
 			if (ValidateHelper.isNotEmptyString(projectId)) {
@@ -224,5 +223,16 @@ public class ProjectContext {
 		return MyBeanUtil.createList(projectPoList, ProjectVo.class);
 
 	}
-	
+
+	protected void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	protected void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	protected void setProject(ProjectVo project) {
+		this.project = project;
+	}
 }

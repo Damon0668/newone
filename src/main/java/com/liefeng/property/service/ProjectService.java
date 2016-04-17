@@ -64,14 +64,14 @@ public class ProjectService implements IProjectService {
 	@Override
 	public ProjectVo findProjectById(String projectId) {
 		ProjectContext projectContext = ProjectContext.loadById(projectId);
-		ProjectVo projectVo = projectContext.getProject();
+		ProjectVo projectVo = projectContext.get();
 		return projectVo;
 	}
 	
 	@Override
 	public ProjectVo findProjectByFullName(String fullName) {
 		ProjectContext projectContext = ProjectContext.loadByFullName(fullName);
-		ProjectVo projectVo = projectContext.getProject();
+		ProjectVo projectVo = projectContext.get();
 		return projectVo;
 	}
 
@@ -217,7 +217,7 @@ public class ProjectService implements IProjectService {
 		
 		// 设置项目名称
 		ProjectContext projectContext = ProjectContext.loadById(houseSpecVo.getProjectId());
-		ProjectVo projectVo = projectContext.getProject();
+		ProjectVo projectVo = projectContext.get();
 		
 		houseSpecVo.setProjectName(projectVo.getFullName());
 		
@@ -349,7 +349,7 @@ public class ProjectService implements IProjectService {
 		// 设置小区名称
 		if(projectNotice != null && ValidateHelper.isNotEmptyString(projectNotice.getProjectId())) {
 			ProjectContext projectContext = ProjectContext.loadById(projectNotice.getProjectId());
-			ProjectVo project = projectContext.getProject();
+			ProjectVo project = projectContext.get();
 			
 			if(project != null) {
 				projectNotice.setProjectName(project.getFullName());
@@ -395,7 +395,7 @@ public class ProjectService implements IProjectService {
 		// 设置小区名称
 		if(appHomeImage != null && ValidateHelper.isNotEmptyString(appHomeImage.getProjectId())) {
 			ProjectContext projectContext = ProjectContext.loadById(appHomeImage.getProjectId());
-			ProjectVo project = projectContext.getProject();
+			ProjectVo project = projectContext.get();
 			
 			if(project != null) {
 				appHomeImage.setProjectName(project.getFullName());
