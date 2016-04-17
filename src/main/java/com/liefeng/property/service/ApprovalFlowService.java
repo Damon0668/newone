@@ -98,6 +98,30 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			// 设置taskId
 			String taskId = workflowService.getHistoryTasks(new QueryFilter().setOrderId(order.getId())).get(0).getId();
 			approvalFlowBo.setTaskId(taskId);
+		
+			if(ValidateHelper.isNotEmptyString(approvalFlowBo.getNextOperator())){
+				String[] staffIdArray = approvalFlowBo.getNextOperator().split(",");
+				
+				List<String> staffIdList = new ArrayList<String>();
+				for(int i = 0; i < staffIdArray.length; i++){
+					staffIdList.add(staffIdArray[i]);
+				}
+				
+				//获取推送消息模板
+				PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.APPROVAL_NEW);
+				if(pushMsgTemplateVo != null){
+					ListUserMsg message = new ListUserMsg();
+					message.setAction(PushActionConstants.APPROVAL_NEW);
+					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setTitle(pushMsgTemplateVo.getTitle());
+					message.setContent(pushMsgTemplateVo.getContent());
+					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
+					message.setReceiveUserIdList(staffIdList);
+					
+					pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
+					logger.info("有新审批时群推消息{}", message);
+				}
+			}
 		} else if(approvalFlowBo.getTaskName().equals(ApprovalFlowConstants.NODE_END)) { //结束流程
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
 			approvalFlowBo.getParams().put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
