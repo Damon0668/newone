@@ -414,9 +414,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 	@Override
 	public DataListValue<HistoryTaskVo> getHistTaskByOrderId(String orderId) {
 		List<HistoryTask> historyTasks = workflowService.getHistoryTasks(new QueryFilter().setOrderId(orderId));
-		DataListValue<HistoryTaskVo> dataListValue = new DataListValue<HistoryTaskVo>();
-		dataListValue.setDataList(MyBeanUtil.createList(historyTasks, HistoryTaskVo.class));
-		return dataListValue;
+		return DataListValue.success(MyBeanUtil.createList(historyTasks, HistoryTaskVo.class));
 	}
 	
 }
