@@ -52,7 +52,7 @@ public class EventReportController {
 	 * @author xhw
 	 * @date 2016年3月15日 下午6:03:49
 	 */
-	@ApiOperation(value="创建报事", notes="用户（业主、住户）创建报事")
+	@ApiOperation(value="创建报事", notes="用户[业主|住户]创建报事")
 	@RequestMapping(value="/createEventReport", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue createEventReport(@Valid @ModelAttribute EventReportRo eventReportRo) {
@@ -63,7 +63,7 @@ public class EventReportController {
 	}
 	
 	/**
-	 * 获取用户的历史宝石
+	 * 获取用户的历史报事
 	 * @param projectId 项目id
 	 * @param houseNum 房间号
 	 * @param phone 手机号码
@@ -71,17 +71,13 @@ public class EventReportController {
 	 * @author xhw
 	 * @date 2016年3月20日 上午9:58:29
 	 */
-	@ApiOperation(value="获取用户的历史报事", notes="用户(业主、住户）获取历史报事")
+	@ApiOperation(value="获取用户的历史报事", notes="用户[业主|住户]获取历史报事")
 	@RequestMapping(value="/getEventReportList", method=RequestMethod.GET)
 	@ResponseBody
 	public DataListValue<EventReportVo> getEventReportList(@Valid @ModelAttribute ProjectIdHouseNumPhoneRo projectIdHouseNumPhoneRo) {
 		List<EventReportVo> eventReportVoList = workbenchService.getEventReportList(projectIdHouseNumPhoneRo.getProjectId(), projectIdHouseNumPhoneRo.getHouseNum(), projectIdHouseNumPhoneRo.getPhone());
 		return DataListValue.success(eventReportVoList);
 	}
-	
-	
-	
-	
 	
 	/**
 	 * 报事评价
@@ -90,7 +86,7 @@ public class EventReportController {
 	 * @author xhw
 	 * @date 2016年3月25日 下午2:28:29
 	 */
-	@ApiOperation(value="获取报事办理人", notes="用户（业主、住户）对报事进行评价时，获取报事的办理人")
+	@ApiOperation(value="获取报事办理人", notes="用户[业主|住户]对报事进行评价时，获取报事的办理人")
 	@RequestMapping(value="/getEventStaffList", method=RequestMethod.POST)
 	@ResponseBody
 	public DataListValue<PropertyStaffVo> getEventStaffList(@Valid @ModelAttribute EventIdRo eventIdRo) {
@@ -106,7 +102,7 @@ public class EventReportController {
 	 * @author xhw
 	 * @date 2016年3月25日 下午2:28:29
 	 */
-	@ApiOperation(value="报事评价", notes="用户（业主、住户）对报事进行评价")
+	@ApiOperation(value="报事评价", notes="用户[业主|住户]对报事进行评价")
 	@RequestMapping(value="/createEventAccepterEval", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue createEventAccepterEval(@Valid @ModelAttribute EventAccepterEvalRo eventAccepterEvalRo) {

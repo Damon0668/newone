@@ -19,7 +19,7 @@ public class EventReportRo extends BaseValue {
 	/**
 	 * 项目id
 	 */
-	@ApiModelProperty(value="项目id", required=true)
+	@ApiModelProperty(value="项目Id", required=true)
 	@NotNull
 	private String projectId;
 	
