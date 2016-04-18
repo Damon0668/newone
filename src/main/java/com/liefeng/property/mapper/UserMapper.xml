@@ -52,7 +52,7 @@
                     rh.resident_relation
                 FROM
                     t_resident r left join t_resident_house rh on r.id = rh.resident_id
-        ) t left join basic.t_user u on t.cust_global_id = u.cust_global_id
+        ) t left join basic.t_user u on t.cust_global_id = u.cust_global_id and u.oem_code = #{oemCode}
     where 1=1
     AND t.id = #{loginId}
     AND t.oem_code = #{oemCode}
