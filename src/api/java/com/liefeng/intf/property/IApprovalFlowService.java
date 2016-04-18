@@ -73,4 +73,19 @@ public interface IApprovalFlowService {
 	 * @return
 	 */
 	public DataListValue<HistoryTaskVo> getHistTaskByOrderId(String orderId);
+	
+	/**
+	 * 删除流程
+	 * @param processId 流程定义id
+	 * @param orderId 流程实例id
+	 * @param loginId 当前登录人id
+	 */
+	public void deleteOrder(String processId, String orderId, String loginId);
+	
+	/**
+	 * 撤回/收回
+	 * @param taskId 当前人id
+	 * @param loginId 当前登录人id
+	 */
+	public void backTask(String taskId, String loginId);
 }

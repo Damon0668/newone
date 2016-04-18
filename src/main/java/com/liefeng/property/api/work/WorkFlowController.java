@@ -34,6 +34,8 @@ import com.liefeng.intf.property.IApprovalFlowService;
 import com.liefeng.intf.service.workflow.IWorkflowService;
 import com.liefeng.property.api.ro.id.StaffIdRo;
 import com.liefeng.property.api.ro.work.event.CountsToHeadRo;
+import com.liefeng.property.api.ro.work.workFlow.BackTaskRo;
+import com.liefeng.property.api.ro.work.workFlow.DeleteOrderRo;
 import com.liefeng.property.api.ro.work.workFlow.GetActiveTaskRo;
 import com.liefeng.property.api.ro.work.workFlow.GetDefaultUserRo;
 import com.liefeng.property.api.ro.work.workFlow.GetFieldsRo;
@@ -233,5 +235,21 @@ public class WorkFlowController {
 		HeadCountVo headCount = new HeadCountVo();
 		headCount.setWorkFlowWaitCount(pages.getMaxCount());
 		return DataValue.success(headCount);
+	}
+	
+	@ApiOperation(value="删除流程")
+	@RequestMapping(value="/deleteOrder", method=RequestMethod.POST)
+	@ResponseBody
+	public ReturnValue deleteOrder(@Valid @ModelAttribute DeleteOrderRo deleteOrderRo){
+		approvalFlowService.deleteOrder(deleteOrderRo.getProcessId(), deleteOrderRo.getOrderId(), deleteOrderRo.getStaffId());
+		return ReturnValue.success();
+	}
+	
+	@ApiOperation(value="撤回/收回")
+	@RequestMapping(value="/backTask", method=RequestMethod.POST)
+	@ResponseBody
+	public ReturnValue backTask(@Valid @ModelAttribute BackTaskRo backTaskRo){
+		approvalFlowService.backTask(backTaskRo.getTaskId(), backTaskRo.getStaffId());
+		return ReturnValue.success();
 	}
 }
