@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.base.vo.UserVo;
+import com.liefeng.common.util.EncryptionUtil;
 import com.liefeng.common.util.TimeUtil;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataValue;
@@ -22,6 +25,7 @@ import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.intf.property.api.ILoginUserService;
+import com.liefeng.intf.service.cache.IRedisService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.api.ro.finger.user.AppFriendIdAndStatusRo;
@@ -52,6 +56,8 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping(value = "/api/finger/user")
 public class UserController {
+	
+	private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	private IUserService userService;
@@ -68,11 +74,32 @@ public class UserController {
 	@Autowired
 	private ILoginUserService loginUserService;
 	
+	@Autowired
+	private IRedisService redisService;
+	
 	@ApiOperation(value="获取登陆账户信息")
 	@RequestMapping(value="/getLoginUser", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<LoginUserVo> getLoginUser(@Valid @ModelAttribute LoginUserRo loginUserRo){
+		
 		LoginUserVo loginUser = loginUserService.findLoginUser(loginUserRo.getLoginId(), loginUserRo.getHouseholdType());
+		
+		//openId加密
+		String openId = loginUser.getGlobalId() + "|" + loginUser.getOemCode();
+		
+		logger.info("getLoginUser openId = {}", openId);
+	
+		openId = EncryptionUtil.encrypt(openId, EncryptionUtil.OPEN_ID_PASSWORD);
+		
+		loginUser.setOpenId(openId);
+		
+		//刷新缓存中的oemCode
+		String key = "openId_" + openId;
+		
+		if(!redisService.isKeyExist(key)){
+			redisService.setValue(key, loginUser.getOemCode());
+		}
+				
 		return DataValue.success(loginUser);
 	}
 	
