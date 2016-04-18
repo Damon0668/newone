@@ -6,6 +6,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.property.PropertyStaffBo;
 import com.liefeng.property.exception.PropertyException;
+import com.liefeng.property.vo.household.UserClientIdVo;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
@@ -243,7 +244,7 @@ public interface IPropertyStaffService {
 	 * @author xhw
 	 * @date 2016年4月8日 下午6:08:08
 	 */
-	public List<String> findStaffClientIdList(String departmentId, String projectId);
+	public List<UserClientIdVo> findStaffClientIdList(String departmentId, String projectId);
 	
 	/**
 	 * 通过手机号码、获取员工的档案信息

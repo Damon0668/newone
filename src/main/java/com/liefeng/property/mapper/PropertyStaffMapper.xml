@@ -36,6 +36,10 @@
     <result column="cust_global_id" property="custGlobalId"/>
 </resultMap>
 
+<!-- userIdClientId -->
+<resultMap id="UserClientIdResultMap" type="com.liefeng.property.vo.household.UserClientIdVo" >
+</resultMap>
+
 <!-- 查询条件 -->
 <sql id="Example_Where_Clause">
     WHERE 1=1 
@@ -231,9 +235,10 @@
 		AND ps.oem_code = #{oemCode}
     </select>
     
-    <select id="queryByProjectIdAndDeptId" resultType="java.lang.String" >
+    <select id="queryByProjectIdAndDeptId" resultMap="UserClientIdResultMap" >
 	  	SELECT
-			c.client_id AS clientId
+			c.client_id AS clientId,
+			c.user_id AS userId
 		FROM
 			t_property_staff s,
 			t_manage_project p,

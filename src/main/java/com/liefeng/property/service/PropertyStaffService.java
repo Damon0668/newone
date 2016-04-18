@@ -37,6 +37,7 @@ import com.liefeng.property.domain.sys.SysRoleContext;
 import com.liefeng.property.error.StaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.vo.project.ProjectVo;
+import com.liefeng.property.vo.household.UserClientIdVo;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
@@ -419,7 +420,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 	}
 
 	@Override
-	public List<String> findStaffClientIdList(String departmentId,
+	public List<UserClientIdVo> findStaffClientIdList(String departmentId,
 			String projectId) {
 		return PropertyStaffContext.build().listClientIdByDeptIdAndProjectId(departmentId, projectId);
 	}
@@ -440,7 +441,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 			if(staffArchiveVo != null){
 				SingleUserMsg message = new SingleUserMsg();
 				message.setAction(PushActionConstants.CHANGE_PWD_SUCCESS);
-				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 				message.setTitle(pushMsgTemplateVo.getTitle());
 				message.setContent(pushMsgTemplateVo.getContent());
 				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -460,7 +461,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 		if(pushMsgTemplateVo != null){
 			SingleUserMsg message = new SingleUserMsg();
 			message.setAction(PushActionConstants.CHANGE_PWD_SUCCESS);
-			message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+			message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 			message.setTitle(pushMsgTemplateVo.getTitle());
 			message.setContent(pushMsgTemplateVo.getContent());
 			message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);

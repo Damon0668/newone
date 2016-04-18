@@ -26,6 +26,7 @@ import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.staff.PropertyStaffPo;
 import com.liefeng.property.repository.mybatis.PropertyStaffQueryRepository;
 import com.liefeng.property.repository.staff.PropertyStaffRepository;
+import com.liefeng.property.vo.household.UserClientIdVo;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffWorkFlowUseVo;
@@ -368,7 +369,7 @@ public class PropertyStaffContext {
 	 * @param projectId 项目ID
 	 * @return
 	 */
-	public List<String> listClientIdByDeptIdAndProjectId(String departmentId, String projectId){
+	public List<UserClientIdVo> listClientIdByDeptIdAndProjectId(String departmentId, String projectId){
 		Map<String, String> extra = new HashMap<String, String>();
 		extra.put("departmentId", departmentId);
 		extra.put("projectId", projectId);

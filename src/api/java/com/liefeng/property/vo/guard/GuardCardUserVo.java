@@ -31,9 +31,24 @@ public class GuardCardUserVo extends BaseValue {
 	private String userId;
 	
 	/**
+	 * 用户ß姓名
+	 */
+	private String userName;
+	
+	/**
+	 * 用户手机
+	 */
+	private String mobile;
+	
+	/**
 	 * 操作员工ID
 	 */
 	private String staffId;
+	
+	/**
+	 * 操作员工名称
+	 */
+	private String staffName;
 	
 	/**
 	 * 操作时间
@@ -77,12 +92,36 @@ public class GuardCardUserVo extends BaseValue {
 		this.userId = userId;
 	}
 
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
 	public String getStaffId() {
 		return staffId;
 	}
 
 	public void setStaffId(String staffId) {
 		this.staffId = staffId;
+	}
+
+	public String getStaffName() {
+		return staffName;
+	}
+
+	public void setStaffName(String staffName) {
+		this.staffName = staffName;
 	}
 
 	public Date getCreateTime() {
