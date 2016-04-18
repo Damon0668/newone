@@ -85,4 +85,28 @@ public class ApprovalFlowConstants {
 		public static final String ID_DIRECTORSELF = "self";
 	}
 	
+	/**
+	 * 表单的属性key
+	 */
+	public static interface AttrKey {
+		
+		/**
+		 * 默认值类型键
+		 */
+		public static final String DEFAULT_VALUE_TYPE = "defaultValueType";
+		
+		/**
+		 * 默认值键
+		 */
+		public static final String DEFAULT_VALUE = "defaultValue";
+		
+	}
+	
+	public static interface AttrKeySprit {
+		
+		/**
+		 * 创建人信息 creatorInfo_字段名 如：creatorInfo_name 创建人名称
+		 */
+		public static final String CREATOR_INFO  = "creatorInfo";
+	}
 }

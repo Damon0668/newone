@@ -18,6 +18,10 @@
     <result column="account" property="account"/>
 </resultMap>
 
+<resultMap id="StaffWorkFlowUseVo" type="com.liefeng.property.vo.staff.StaffWorkFlowUseVo" >
+  
+</resultMap>
+
 <resultMap id="PropertyStaffVo" type="com.liefeng.property.vo.staff.PropertyStaffVo" >
     <result column="id" property="id"/>
     <result column="entry_time" property="entryTime"/>
@@ -278,6 +282,22 @@
    		<if test="extra.oemCode != null and extra.oemCode != ''" >
        	AND c.oem_code = #{extra.oemCode }
    		</if>
+	</select>
+	
+	<select id="getStaffWorkFlowUseVo"  resultMap="StaffWorkFlowUseVo" >
+	SELECT
+	pps.`name`,
+	pps.entry_time,
+	bts.sex,
+	pd.name as departmentName,
+	sd.name as positionName
+	FROM
+	property.t_property_staff pps
+	left join property.t_property_department pd on pd.id = pps.department_id 
+	left join t_sys_dict sd on sd.`value`=pps.position and sd.group_code ='POSITION'  
+	LEFT JOIN property.t_staff_archive pta ON pta.staff_id = pps.id
+	LEFT JOIN basic.t_customer bts ON bts.global_id = pta.cust_global_id
+	WHERE pps.id=#{staffId}
 	</select>
 	
 </mapper>

@@ -77,7 +77,7 @@ public class WorkFlowController {
 	@RequestMapping(value="/getFields", method=RequestMethod.GET)
 	@ResponseBody
 	public DataListValue<FieldModel> getFields(@Valid @ModelAttribute GetFieldsRo getFieldsRo){
-		List<FieldModel> fieldModels = approvalFlowService.getFields(getFieldsRo.getProcessId(),getFieldsRo.getTaskName());
+		List<FieldModel> fieldModels = approvalFlowService.getFields(getFieldsRo.getProcessId(),getFieldsRo.getTaskName(),getFieldsRo.getStaffId());
 		return DataListValue.success(fieldModels);
 	}
 	
