@@ -41,8 +41,8 @@ public class UserContext {
 	 * 查找登陆用户信息
 	 * @return
 	 */
-	public LoginUserVo findLoginUser(String type){
-		return userQueryRepository.findLoginUser(loginId, type);
+	public LoginUserVo findLoginUser(String type, String oemCode){
+		return userQueryRepository.findLoginUser(loginId, type, oemCode);
 	}
 
 	protected void setLoginId(String loginId) {

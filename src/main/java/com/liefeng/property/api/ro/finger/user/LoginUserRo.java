@@ -27,6 +27,10 @@ public class LoginUserRo extends BaseValue {
 	@ApiModelProperty(value="用户类型[1：业主，2：住户]", required=true)
 	@NotNull
 	private String householdType;
+	
+	@ApiModelProperty(value="OEM编码", required=true)
+	@NotNull
+	private String oemCode;
 
 	public String getLoginId() {
 		return loginId;
@@ -42,5 +46,13 @@ public class LoginUserRo extends BaseValue {
 
 	public void setHouseholdType(String householdType) {
 		this.householdType = householdType;
+	}
+
+	public String getOemCode() {
+		return oemCode;
+	}
+
+	public void setOemCode(String oemCode) {
+		this.oemCode = oemCode;
 	}
 }

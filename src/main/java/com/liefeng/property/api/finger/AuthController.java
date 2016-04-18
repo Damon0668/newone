@@ -83,10 +83,9 @@ public class AuthController {
 			redisService.setValue(key, loginUser.getOemCode());
 		}
 		*/
+		
 		loginUser = new LoginUserVo();
-		
 		loginUser.setGlobalId(user.getCustGlobalId());
-		
 		loginUser.setOpenId("default");
 		
 		return DataValue.success(loginUser);

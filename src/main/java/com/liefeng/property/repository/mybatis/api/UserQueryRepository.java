@@ -17,5 +17,5 @@ public interface UserQueryRepository {
 	 * @param type 用户类型
 	 * @return
 	 */
-	public LoginUserVo findLoginUser(@Param("loginId") String loingId, @Param("type") String type);
+	public LoginUserVo findLoginUser(@Param("loginId") String loingId, @Param("type") String type, @Param("oemCode") String oemCode);
 }

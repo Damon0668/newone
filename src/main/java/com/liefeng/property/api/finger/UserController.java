@@ -82,7 +82,7 @@ public class UserController {
 	@ResponseBody
 	public DataValue<LoginUserVo> getLoginUser(@Valid @ModelAttribute LoginUserRo loginUserRo){
 		
-		LoginUserVo loginUser = loginUserService.findLoginUser(loginUserRo.getLoginId(), loginUserRo.getHouseholdType());
+		LoginUserVo loginUser = loginUserService.findLoginUser(loginUserRo.getLoginId(), loginUserRo.getHouseholdType(), loginUserRo.getOemCode());
 		
 		//openId加密
 		String openId = loginUser.getGlobalId() + "|" + loginUser.getOemCode();

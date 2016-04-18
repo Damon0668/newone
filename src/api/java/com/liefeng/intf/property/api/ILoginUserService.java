@@ -15,5 +15,5 @@ public interface ILoginUserService {
 	 * @param type 用户类型
 	 * @return
 	 */
-	LoginUserVo findLoginUser(String loginId, String type);
+	LoginUserVo findLoginUser(String loginId, String type, String oemCode);
 }

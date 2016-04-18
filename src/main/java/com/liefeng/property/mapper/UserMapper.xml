@@ -20,7 +20,9 @@
         t.pic_url pic,
         t.oem_code oemCode,
         t.household_type householdType,
-        t.resident_relation residentRelation
+        t.resident_relation residentRelation,
+        u.user_global_id userId,
+        u.nick_name nickName
     FROM
         (
             SELECT
@@ -50,9 +52,10 @@
                     rh.resident_relation
                 FROM
                     t_resident r left join t_resident_house rh on r.id = rh.resident_id
-        ) t
+        ) t left join basic.t_user u on t.globalId = u.cust_global_id
     where 1=1
     AND t.id = #{loginId}
+    AND t.oemCode = #{oemCode}
     <choose>
         <!-- 业主 -->
         <when test="type != null and type == '1'">
