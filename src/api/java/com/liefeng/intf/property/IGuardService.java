@@ -203,4 +203,11 @@ public interface IGuardService {
 	 * @return 列表数据
 	 */
 	public DataPageValue<GuardCardVo> listGuardCard(GuardCardBo guardCardBo, Integer pageSize, Integer currentPage);
+	
+	/**
+	 * 获取磁卡详细信息
+	 * @param cardId 磁卡ID
+	 * @return 磁卡信息
+	 */
+	public GuardCardVo getGuardCardDetail(String cardId);
 }
