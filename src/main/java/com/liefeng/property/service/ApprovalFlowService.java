@@ -44,6 +44,7 @@ import com.liefeng.property.exception.ApprovalFlowException;
 import com.liefeng.property.vo.approvalFlow.HistoryTaskVo;
 import com.liefeng.property.vo.approvalFlow.ProcessVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.property.vo.staff.StaffWorkFlowUseVo;
 import com.liefeng.service.constant.PushActionConstants;
 import com.liefeng.service.constant.PushMsgConstants;
 import com.liefeng.service.constant.WorkflowConstants;
@@ -118,7 +119,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 				if(pushMsgTemplateVo != null){
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(PushActionConstants.APPROVAL_NEW);
-					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -139,7 +140,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			if(pushMsgTemplateVo != null){
 				SingleUserMsg message = new SingleUserMsg();
 				message.setAction(PushActionConstants.APPROVAL_FINISHED);
-				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 				message.setTitle(pushMsgTemplateVo.getTitle());
 				message.setContent(pushMsgTemplateVo.getContent());
 				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -166,7 +167,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 				if(pushMsgTemplateVo != null){
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(PushActionConstants.APPROVAL_NEW);
-					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -366,15 +367,39 @@ public class ApprovalFlowService implements IApprovalFlowService{
 
 	
 	@Override
-	public List<FieldModel> getFields(String processId, String taskName) {
+	public List<FieldModel> getFields(String processId, String taskName,String staffId) {
 		NodeModel nodeModel = null;
+		List<FieldModel> fieldModels = new ArrayList<FieldModel>();
 		Process process = workflowService.findByProcessId(processId);
 		if(ValidateHelper.isNotEmptyString(taskName)) {	//空则取第一个节点
 			nodeModel  = process.getModel().getNode(taskName);
-		}else {
+			fieldModels = ((TaskModel)nodeModel).getFields();
+		}else { 
 			nodeModel  = process.getModel().getTaskModels().get(0);
+			Map<String, Object> staffMap = null;
+			fieldModels = ((TaskModel)nodeModel).getFields();
+			for (FieldModel fieldModel : fieldModels) {
+				//是否需要程序来设置默认值
+				if(fieldModel.getAttrMap().containsKey(ApprovalFlowConstants.AttrKey.DEFAULT_VALUE_TYPE)){
+					
+					String defaultValueType =fieldModel.getAttrMap().get(ApprovalFlowConstants.AttrKey.DEFAULT_VALUE_TYPE);
+					String type = defaultValueType.split("_")[0];
+					String id = defaultValueType.split("_")[1];
+					//默认值为创建人的信息
+					if(type.equals(ApprovalFlowConstants.AttrKeySprit.CREATOR_INFO)){
+						//null 就读取创建人信息 并转成map 以便直接用key获取
+						if(ValidateHelper.isEmptyMap(staffMap)){
+							StaffWorkFlowUseVo propertyStaffVo = propertyStaffService.getStaffWorkFlowUseVo(staffId);
+							staffMap  = MyBeanUtil.createBean(propertyStaffVo, Map.class);
+						}
+						if(staffMap.containsKey(id))
+						fieldModel.getAttrMap().put(ApprovalFlowConstants.AttrKey.DEFAULT_VALUE, staffMap.get(id).toString());
+					}
+				}
+			}
+			
 		}
-		return ((TaskModel)nodeModel).getFields();
+		return fieldModels;
 	}
 	
 	@Override

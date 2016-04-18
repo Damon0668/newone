@@ -12,6 +12,7 @@ import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffArchiveVo;
+import com.liefeng.property.vo.staff.StaffWorkFlowUseVo;
 
 /**
  * 物业员工服务
@@ -278,4 +279,11 @@ public interface IPropertyStaffService {
 	 * @date 2016年4月13日 下午1:57:28
 	 */
 	public List<PropertyStaffVo> listPropertyStaffByDepartmentId(String departmentId);
+	
+	/**
+	 * 审批流程--获取员工信息
+	 * @param staffId
+	 * @return
+	 */
+	public StaffWorkFlowUseVo getStaffWorkFlowUseVo(String staffId);
 }

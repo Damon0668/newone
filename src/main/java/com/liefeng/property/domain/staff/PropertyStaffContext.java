@@ -29,6 +29,7 @@ import com.liefeng.property.repository.staff.PropertyStaffRepository;
 import com.liefeng.property.vo.household.UserClientIdVo;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.property.vo.staff.StaffWorkFlowUseVo;
 
 /**
  * 物业员工领域模型
@@ -392,6 +393,15 @@ public class PropertyStaffContext {
 		PagingParamVo pagingParamVo = new PagingParamVo();
 		pagingParamVo.setExtra(extra);
 		return propertyStaffQueryRepository.findPropertyStaffByDepartmentId(pagingParamVo);
+	}
+	
+	/**
+	 * 审批流程员工信息
+	 * @param staffId 员工id
+	 * @return
+	 */
+	public StaffWorkFlowUseVo getStaffWorkFlowUseVo(String staffId) {
+		return propertyStaffQueryRepository.getStaffWorkFlowUseVo(staffId);
 	}
 	
 }

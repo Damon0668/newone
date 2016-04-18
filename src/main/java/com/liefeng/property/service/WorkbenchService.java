@@ -156,7 +156,7 @@ public class WorkbenchService implements IWorkbenchService {
 						}
 						ListUserMsg message = new ListUserMsg();
 						message.setAction(PushActionConstants.MY_TASK_TODO_ONE);
-						message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+						message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 						message.setTitle(pushMsgTemplateVo.getTitle());
 						message.setContent(pushMsgTemplateVo.getContent());
 						message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -168,7 +168,7 @@ public class WorkbenchService implements IWorkbenchService {
 					}else{
 						SingleUserMsg message = new SingleUserMsg();
 						message.setAction(PushActionConstants.MY_TASK_TODO_ONE);
-						message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+						message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 						message.setTitle(pushMsgTemplateVo.getTitle());
 						message.setContent(pushMsgTemplateVo.getContent());
 						message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -238,7 +238,7 @@ public class WorkbenchService implements IWorkbenchService {
 			if(pushMsgTemplateVo != null){
 				SingleUserMsg message = new SingleUserMsg();
 				message.setAction(PushActionConstants.MY_TASK_FEEDBACK_ONE);
-				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 				message.setTitle(pushMsgTemplateVo.getTitle());
 				message.setContent(pushMsgTemplateVo.getContent());
 				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -256,7 +256,7 @@ public class WorkbenchService implements IWorkbenchService {
 			if(pushMsgTemplateVo != null){
 				SingleUserMsg message = new SingleUserMsg();
 				message.setAction(PushActionConstants.MY_TASK_NOT_PASS);
-				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 				message.setTitle(pushMsgTemplateVo.getTitle());
 				message.setContent(pushMsgTemplateVo.getContent());
 				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -274,7 +274,7 @@ public class WorkbenchService implements IWorkbenchService {
 			if(pushMsgTemplateVo != null){
 				SingleUserMsg message = new SingleUserMsg();
 				message.setAction(PushActionConstants.MY_TASK_PASSED);
-				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 				message.setTitle(pushMsgTemplateVo.getTitle());
 				message.setContent(pushMsgTemplateVo.getContent());
 				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -419,7 +419,7 @@ public class WorkbenchService implements IWorkbenchService {
 				}
 				ListUserMsg message = new ListUserMsg();
 				message.setAction(PushActionConstants.NOTICE_TO_AUDIT);
-				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 				message.setTitle(pushMsgTemplateVo.getTitle());
 				message.setContent(pushMsgTemplateVo.getContent());
 				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -431,7 +431,7 @@ public class WorkbenchService implements IWorkbenchService {
 			}else{
 				SingleUserMsg message = new SingleUserMsg();
 				message.setAction(PushActionConstants.NOTICE_TO_AUDIT);
-				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 				message.setTitle(pushMsgTemplateVo.getTitle());
 				message.setContent(pushMsgTemplateVo.getContent());
 				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -505,7 +505,7 @@ public class WorkbenchService implements IWorkbenchService {
 			if(pushMsgTemplateVo != null){
 				SingleUserMsg message = new SingleUserMsg();
 				message.setAction(PushActionConstants.NOTICE_RETURNED);
-				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 				message.setTitle(pushMsgTemplateVo.getTitle());
 				message.setContent(pushMsgTemplateVo.getContent());
 				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -523,7 +523,7 @@ public class WorkbenchService implements IWorkbenchService {
 			if(pushMsgTemplateVo != null){
 				SingleUserMsg message = new SingleUserMsg();
 				message.setAction(PushActionConstants.NOTICE_AUDIT_PASS);
-				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 				message.setTitle(pushMsgTemplateVo.getTitle());
 				message.setContent(pushMsgTemplateVo.getContent());
 				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -667,7 +667,7 @@ public class WorkbenchService implements IWorkbenchService {
 					//获取推送消息模板
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(template);
-					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -686,7 +686,7 @@ public class WorkbenchService implements IWorkbenchService {
 					//获取推送消息模板
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(template);
-					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -924,7 +924,7 @@ public class WorkbenchService implements IWorkbenchService {
 					
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(PushActionConstants.MSG_CENTER_NEW_MSG);
-					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -938,7 +938,7 @@ public class WorkbenchService implements IWorkbenchService {
 				if(oneList.size() > 0){
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(PushActionConstants.MSG_CENTER_NEW_MSG);
-					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -1101,7 +1101,7 @@ public class WorkbenchService implements IWorkbenchService {
 				if(userVo != null){
 					SingleUserMsg message = new SingleUserMsg();
 					message.setAction(PushActionConstants.EVENT_REPORT_ACCEPTED);
-					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -1114,7 +1114,7 @@ public class WorkbenchService implements IWorkbenchService {
 					if(staffArchiveVo != null){
 						SingleUserMsg message = new SingleUserMsg();
 						message.setAction(PushActionConstants.EVENT_REPORT_ACCEPTED);
-						message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+						message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 						message.setTitle(pushMsgTemplateVo.getTitle());
 						message.setContent(pushMsgTemplateVo.getContent());
 						message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -1149,7 +1149,7 @@ public class WorkbenchService implements IWorkbenchService {
 				if(userVo != null){
 					SingleUserMsg message = new SingleUserMsg();
 					message.setAction(PushActionConstants.EVENT_REPORT_ACCEPTED);
-					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -1162,7 +1162,7 @@ public class WorkbenchService implements IWorkbenchService {
 					if(staffArchiveVo != null){
 						SingleUserMsg message = new SingleUserMsg();
 						message.setAction(PushActionConstants.EVENT_REPORT_ACCEPTED);
-						message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+						message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 						message.setTitle(pushMsgTemplateVo.getTitle());
 						message.setContent(pushMsgTemplateVo.getContent());
 						message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -1445,7 +1445,7 @@ public class WorkbenchService implements IWorkbenchService {
 		PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.EVENT_REPORT_RECEIVE_ONE);
 		SingleUserMsg message = new SingleUserMsg();
 		message.setAction(PushActionConstants.EVENT_REPORT_RECEIVE_ONE);
-		message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+		message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 		message.setTitle(pushMsgTemplateVo.getTitle());
 		message.setContent(pushMsgTemplateVo.getContent());
 		message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -1465,7 +1465,7 @@ public class WorkbenchService implements IWorkbenchService {
 				if(userVo != null){
 					SingleUserMsg message2 = new SingleUserMsg();
 					message2.setAction(PushActionConstants.EVENT_REPORT_ACCEPTED);
-					message2.setMsgCode(pushMsgTemplateVo2.getMsgCode());
+					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 					message2.setTitle(pushMsgTemplateVo2.getTitle());
 					message2.setContent(pushMsgTemplateVo2.getContent());
 					message2.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -1478,7 +1478,7 @@ public class WorkbenchService implements IWorkbenchService {
 					if(staffArchiveVo != null){
 						SingleUserMsg message2 = new SingleUserMsg();
 						message2.setAction(PushActionConstants.EVENT_REPORT_ACCEPTED);
-						message2.setMsgCode(pushMsgTemplateVo2.getMsgCode());
+						message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 						message2.setTitle(pushMsgTemplateVo2.getTitle());
 						message2.setContent(pushMsgTemplateVo2.getContent());
 						message2.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -1733,7 +1733,7 @@ public class WorkbenchService implements IWorkbenchService {
 					
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(PushActionConstants.WORK_ORDER_GRAB_ONE);
-					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -1748,7 +1748,7 @@ public class WorkbenchService implements IWorkbenchService {
 					
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(PushActionConstants.WORK_ORDER_TO_COLLECT_ONE);
-					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -1771,7 +1771,7 @@ public class WorkbenchService implements IWorkbenchService {
 					if(userVo != null){
 						SingleUserMsg message = new SingleUserMsg();
 						message.setAction(PushActionConstants.EVENT_REPORT_DEALING);
-						message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+						message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 						message.setTitle(pushMsgTemplateVo.getTitle());
 						message.setContent(pushMsgTemplateVo.getContent());
 						message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -1784,7 +1784,7 @@ public class WorkbenchService implements IWorkbenchService {
 						if(staffArchiveVo != null){
 							SingleUserMsg message = new SingleUserMsg();
 							message.setAction(PushActionConstants.EVENT_REPORT_DEALING);
-							message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+							message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 							message.setTitle(pushMsgTemplateVo.getTitle());
 							message.setContent(pushMsgTemplateVo.getContent());
 							message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -1808,7 +1808,7 @@ public class WorkbenchService implements IWorkbenchService {
 					if(userVo != null){
 						SingleUserMsg message = new SingleUserMsg();
 						message.setAction(PushActionConstants.EVENT_REPORT_FINISHED);
-						message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+						message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 						message.setTitle(pushMsgTemplateVo.getTitle());
 						message.setContent(pushMsgTemplateVo.getContent());
 						message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -1821,7 +1821,7 @@ public class WorkbenchService implements IWorkbenchService {
 						if(staffArchiveVo != null){
 							SingleUserMsg message = new SingleUserMsg();
 							message.setAction(PushActionConstants.EVENT_REPORT_FINISHED);
-							message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+							message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 							message.setTitle(pushMsgTemplateVo.getTitle());
 							message.setContent(pushMsgTemplateVo.getContent());
 							message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -2054,7 +2054,7 @@ public class WorkbenchService implements IWorkbenchService {
 					}
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(PushActionConstants.EVENT_REPORT_RECEIVE_ONE);
-					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -2066,7 +2066,7 @@ public class WorkbenchService implements IWorkbenchService {
 				}else{
 					SingleUserMsg message = new SingleUserMsg();
 					message.setAction(PushActionConstants.EVENT_REPORT_RECEIVE_ONE);
-					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
