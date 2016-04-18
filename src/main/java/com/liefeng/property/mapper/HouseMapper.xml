@@ -246,7 +246,7 @@ FROM
 			h.house_num AS houseNum,
 			h.oem_code AS oemCode,
 			"01" AS residentRelation,
-			'proprietor' AS type
+			'1' AS type
 		FROM
 			property.t_house h
 			LEFT JOIN property.t_proprietor_house ph ON ph.house_num = h.house_num AND ph.project_id = h.project_id
@@ -265,7 +265,7 @@ FROM
 			h.house_num AS houseNum,
 			h.oem_code AS oemCode,
 			rh.resident_relation AS residentRelation,
-			'resident' AS type
+			'2' AS type
 		FROM
 			property.t_house h
 			LEFT JOIN property.t_resident_house rh ON rh.house_id = h.id
