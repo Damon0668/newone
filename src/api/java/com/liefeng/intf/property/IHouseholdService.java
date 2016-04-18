@@ -21,6 +21,7 @@ import com.liefeng.property.vo.household.ResidentCarVo;
 import com.liefeng.property.vo.household.ResidentFeedbackVo;
 import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
+import com.liefeng.property.vo.household.UserClientIdVo;
 import com.liefeng.property.vo.household.VisitorVo;
 
 /**
@@ -507,7 +508,7 @@ public interface IHouseholdService {
 	 * @author xhw
 	 * @date 2016年4月9日 下午1:34:03
 	 */
-	List<String> listClientIdByBuildingIdAndProjectId(String buildingId, String projectId);
+	List<UserClientIdVo> listClientIdByBuildingIdAndProjectId(String buildingId, String projectId);
 	
 	/**
 	 * 根据projectId获取用户的cleintId
@@ -516,7 +517,7 @@ public interface IHouseholdService {
 	 * @author xhw
 	 * @date 2016年4月11日 下午5:08:26
 	 */
-	public List<String> listClientIdByProjectId(String projectId);
+	public List<UserClientIdVo> listClientIdByProjectId(String projectId);
 	
 	/**
 	 * 根据手机号码，推送消息给用户（业主、住户）
@@ -534,7 +535,7 @@ public interface IHouseholdService {
 	 * @author xhw
 	 * @date 2016年4月12日 下午2:54:21
 	 */
-	public List<String> listClientIdByProjectIdAndHouseNum(String projectId, String houseNum);
+	public List<UserClientIdVo> listClientIdByProjectIdAndHouseNum(String projectId, String houseNum);
 	
 	/**
 	 * 根据projectId、status、seq、日期，获取当天大于该排队号的排队

@@ -46,7 +46,12 @@ public class GuardCardContextTest {
 		
 		GuardCardContext guardCardContext = GuardCardContext.build();
 		System.out.println(guardCardContext.listGuardCard(guardCardBo, 1, 10));
-		
-		
+	}
+	
+	@Test
+	public void getCardDeatil() {
+		GuardCardContext guardCardContext = GuardCardContext.loadById("1");
+		GuardCardVo guardCard = guardCardContext.getCardDetail();
+		System.out.println(guardCard);
 	}
 }

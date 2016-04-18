@@ -257,4 +257,10 @@ public class GuardService implements IGuardService{
 		return guardCardContext.listGuardCard(guardCardBo, currentPage, pageSize);
 	}
 
+	@Override
+	public GuardCardVo getGuardCardDetail(String cardId) {
+		GuardCardContext guardCardContext = GuardCardContext.loadById(cardId);
+		return guardCardContext.getCardDetail();
+	}
+
 }

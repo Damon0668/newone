@@ -6,6 +6,7 @@ import com.liefeng.base.vo.UserVo;
 import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
+import com.liefeng.property.vo.household.UserClientIdVo;
 
 /**
  * 业主信息查询接口
@@ -43,7 +44,7 @@ public interface ProprietorQueryRepository extends BaseRepository<ProprietorSing
 	 * @author xhw
 	 * @date 2016年4月9日 下午1:28:39
 	 */
-	public List<String> queryClientId(PagingParamVo param);
+	public List<UserClientIdVo> queryClientId(PagingParamVo param);
 	
 	/**
 	 * 根据projectId获取用户的clientId
@@ -52,7 +53,7 @@ public interface ProprietorQueryRepository extends BaseRepository<ProprietorSing
 	 * @author xhw
 	 * @date 2016年4月9日 下午1:28:39
 	 */
-	public List<String> queryAllClientIdsByProjectId(PagingParamVo param);
+	public List<UserClientIdVo> queryAllClientIdsByProjectId(PagingParamVo param);
 	
 	/**
 	 * 根据projectId、houseNum获取用户的clientId
@@ -61,7 +62,7 @@ public interface ProprietorQueryRepository extends BaseRepository<ProprietorSing
 	 * @author xhw
 	 * @date 2016年4月9日 下午1:28:39
 	 */
-	public List<String> queryAllClientIdsByProjectIdAndHouseNum(PagingParamVo param);
+	public List<UserClientIdVo> queryAllClientIdsByProjectIdAndHouseNum(PagingParamVo param);
 	
 	/**
 	 * 根据projectId、houseNum获取业主资料信息

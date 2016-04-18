@@ -36,6 +36,7 @@ import com.liefeng.property.domain.staff.StaffMsgClientContext;
 import com.liefeng.property.domain.sys.SysRoleContext;
 import com.liefeng.property.error.StaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
+import com.liefeng.property.vo.household.UserClientIdVo;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
@@ -417,7 +418,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 	}
 
 	@Override
-	public List<String> findStaffClientIdList(String departmentId,
+	public List<UserClientIdVo> findStaffClientIdList(String departmentId,
 			String projectId) {
 		return PropertyStaffContext.build().listClientIdByDeptIdAndProjectId(departmentId, projectId);
 	}
