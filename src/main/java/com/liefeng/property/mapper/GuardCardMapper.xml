@@ -10,6 +10,7 @@
 		<result column="staffName" property="guardCardUser.staffName"/>
 		<result column="userType" property="guardCardUser.userType"/>
 		<result column="userId" property="guardCardUser.userId"/>
+		<result column="mobile" property="guardCardUser.mobile"/>
 	</resultMap>
 	
 <!-- 查询条件 -->
@@ -140,6 +141,57 @@ SELECT
 			)
 		END
 	) AS userName,
+	(
+		CASE
+		WHEN gcu.user_type = '0' THEN
+			(
+				SELECT
+					ps.name
+				FROM
+					property.t_property_staff ps
+					LEFT JOIN property.t_staff_archive sa 
+					ON sa.staff_id = ps.id
+				WHERE
+					ps.id = gcu.user_id
+			)
+		WHEN gcu.user_type = '1' THEN
+			(
+				SELECT
+					p.phone
+				FROM
+					property.t_proprietor p
+				WHERE
+					p.id = gcu.user_id
+			)
+		WHEN gcu.user_type = '2' THEN
+			(
+				SELECT
+					r.mobile
+				FROM
+					property.t_resident r
+				WHERE
+					r.id = gcu.user_id
+			)
+		WHEN gcu.user_type = '3' THEN
+			(
+				SELECT
+					v.phone
+				FROM
+					property.t_visitor v
+				WHERE
+					v.id = gcu.user_id
+			)
+		WHEN gcu.user_type = '4' THEN
+			(
+				SELECT
+					a.phone
+				FROM
+					property.t_attendant a
+				WHERE
+					a.id = gcu.user_id
+			)
+		END
+	) AS mobile,
 	gc.project_id AS projectId,
 	pr.full_name AS projectName,
 	gc.oem_code AS oemCode,

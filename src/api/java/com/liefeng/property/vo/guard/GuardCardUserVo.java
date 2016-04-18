@@ -36,6 +36,11 @@ public class GuardCardUserVo extends BaseValue {
 	private String userName;
 	
 	/**
+	 * 用户手机
+	 */
+	private String mobile;
+	
+	/**
 	 * 操作员工ID
 	 */
 	private String staffId;
@@ -93,6 +98,14 @@ public class GuardCardUserVo extends BaseValue {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
 	public String getStaffId() {
