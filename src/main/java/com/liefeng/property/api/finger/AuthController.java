@@ -60,30 +60,7 @@ public class AuthController {
 		userLoginBo.setTerminalType(PushMsgConstants.TerminalType.MOBILE_PROPERTY);
 		
 		UserVo user = userService.login(userLoginBo);
-		
-		/*//精简信息
-		loginUser = MyBeanUtil.createBean(user, LoginUserVo.class);
-		
-		loginUser.setId(null);
-		loginUser.setGlobalId(user.getCustGlobalId());
-		loginUser.setPic(user.getAvatarUrl());
-		loginUser.setUserId(user.getId());
-		
-		//openId加密
-		String openId = user.getCustGlobalId() + "|" + loginUser.getOemCode();
-	
-		openId = EncryptionUtil.encrypt(openId, EncryptionUtil.OPEN_ID_PASSWORD);
-		
-		loginUser.setOpenId(openId);
-		
-		//刷新缓存中的oemCode
-		String key = "openId_" + openId;
-		
-		if(!redisService.isKeyExist(key)){
-			redisService.setValue(key, loginUser.getOemCode());
-		}
-		*/
-		
+
 		loginUser = new LoginUserVo();
 		loginUser.setGlobalId(user.getCustGlobalId());
 		loginUser.setOpenId("default");
