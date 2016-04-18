@@ -11,14 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.base.bo.UserLoginBo;
 import com.liefeng.base.vo.UserVo;
-import com.liefeng.common.util.EncryptionUtil;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
-import com.liefeng.intf.property.api.ILoginUserService;
-import com.liefeng.intf.service.cache.IRedisService;
 import com.liefeng.property.api.ro.finger.auth.AuthLoginRo;
 import com.liefeng.property.api.ro.finger.auth.UpdatePwdLoginRo;
 import com.liefeng.property.api.ro.finger.auth.UpdatePwdRo;
@@ -37,12 +34,6 @@ public class AuthController {
 	@Autowired
 	private IUserService userService;
 
-	@Autowired
-	private ILoginUserService loginUserService;
-	
-	@Autowired
-	private IRedisService redisService;
-	
 	@Autowired
 	private IHouseholdService householdService;
 

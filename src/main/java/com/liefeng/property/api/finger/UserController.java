@@ -38,7 +38,6 @@ import com.liefeng.property.api.ro.finger.user.UserRo;
 import com.liefeng.property.api.ro.id.CustGlobalIdRo;
 import com.liefeng.property.api.ro.id.UserIdRo;
 import com.liefeng.property.constant.HouseholdConstants;
-import com.liefeng.property.domain.api.UserContext;
 import com.liefeng.property.vo.api.LoginUserVo;
 import com.liefeng.property.vo.household.AppFriendVo;
 import com.liefeng.property.vo.household.AppMsgSettingVo;

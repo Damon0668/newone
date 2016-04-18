@@ -70,7 +70,7 @@
 	        </when>
 	    </choose>
     ) tt left join basic.t_user u on tt.globalId = u.cust_global_id 
-    and t.householdType = u.household_type 
+    and tt.householdType = u.household_type 
     and u.oem_code = #{oemCode}
 </select>
 
