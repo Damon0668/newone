@@ -25,7 +25,7 @@
 	        t.pic_url pic,
 	        t.oem_code oemCode,
 	        t.household_type householdType,
-	        t.resident_relation residentRelation,
+	        t.resident_relation residentRelation
 	    FROM
 	        (
 	            SELECT
