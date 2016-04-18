@@ -51,7 +51,7 @@ public interface IApprovalFlowService {
 	 * @param taskName	流程节点名称 空则默认获取第一个
 	 * @return
 	 */
-	public List<FieldModel> getFields(String processId, String taskName);
+	public List<FieldModel> getFields(String processId, String taskName,String staffId);
 	
 	/**
 	 * 获取审批流程的所有流程定义

@@ -9,6 +9,7 @@ import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
+import com.liefeng.property.vo.staff.StaffWorkFlowUseVo;
 
 /**
  * 物业员工信息查询接口
@@ -81,4 +82,11 @@ public interface PropertyStaffQueryRepository extends BaseRepository<PropertySta
 	 * @date 2016年4月13日 下午1:53:52
 	 */
 	public List<PropertyStaffVo> findPropertyStaffByDepartmentId(PagingParamVo param);
+	
+	/**
+	 * 审批流程员工信息
+	 * @param staffId 员工id
+	 * @return
+	 */
+	public StaffWorkFlowUseVo getStaffWorkFlowUseVo(String staffId);
 }

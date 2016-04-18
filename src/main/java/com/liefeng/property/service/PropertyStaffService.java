@@ -36,6 +36,7 @@ import com.liefeng.property.domain.staff.StaffMsgClientContext;
 import com.liefeng.property.domain.sys.SysRoleContext;
 import com.liefeng.property.error.StaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
+import com.liefeng.property.vo.project.ProjectVo;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
@@ -44,6 +45,7 @@ import com.liefeng.property.vo.staff.StaffArchiveVo;
 import com.liefeng.property.vo.staff.StaffAttachVo;
 import com.liefeng.property.vo.staff.StaffContactPrivilegeVo;
 import com.liefeng.property.vo.staff.StaffMsgClientVo;
+import com.liefeng.property.vo.staff.StaffWorkFlowUseVo;
 import com.liefeng.service.constant.PushActionConstants;
 import com.liefeng.service.constant.PushMsgConstants;
 import com.liefeng.service.vo.PushMsgTemplateVo;
@@ -472,5 +474,21 @@ public class PropertyStaffService implements IPropertyStaffService {
 	public List<PropertyStaffVo> listPropertyStaffByDepartmentId(
 			String departmentId) {
 		return PropertyStaffContext.build().listPropertyStaffByDepartmentId(departmentId);
+	}
+	
+	@Override
+	public StaffWorkFlowUseVo getStaffWorkFlowUseVo(String staffId){
+		StaffWorkFlowUseVo staffWorkFlowUseVo = PropertyStaffContext.build().getStaffWorkFlowUseVo(staffId);
+		List<ProjectVo> projectVos = projectService.findProjectByStaffId(staffId);
+		String projectName = "";
+		for (ProjectVo projectVo : projectVos) {
+			projectName+=projectVo.getFullName()+" ";
+		}
+		staffWorkFlowUseVo.setProjectName(projectName);
+		if(staffWorkFlowUseVo.getSex() != null)
+		staffWorkFlowUseVo.setSex(staffWorkFlowUseVo.getSex().equals("1")?"男":"女");
+		else
+		staffWorkFlowUseVo.setSex("未知");
+		return staffWorkFlowUseVo;
 	}
 }

@@ -23,6 +23,10 @@ public class GetFieldsRo extends BaseValue{
 	
 	@ApiModelProperty(value="当前步骤名称，空则默认获取第一个")
 	private String taskName;
+	
+	@ApiModelProperty(value="当前登录人id", required=true)
+	@NotNull
+	private String staffId;
 
 	public String getProcessId() {
 		return processId;
@@ -38,6 +42,14 @@ public class GetFieldsRo extends BaseValue{
 
 	public void setTaskName(String taskName) {
 		this.taskName = taskName;
+	}
+
+	public String getStaffId() {
+		return staffId;
+	}
+
+	public void setStaffId(String staffId) {
+		this.staffId = staffId;
 	}
 	
 }
