@@ -27,6 +27,7 @@ import com.liefeng.property.repository.household.ProprietorRepository;
 import com.liefeng.property.repository.mybatis.ProprietorQueryRepository;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
+import com.liefeng.property.vo.household.UserClientIdVo;
 
 /**
  * 业主信息领域模型
@@ -280,7 +281,7 @@ public class ProprietorContext {
 	 * @author xhw
 	 * @date 2016年4月9日 下午1:33:46
 	 */
-	public List<String> listClientIdByBuildingIdAndProjectId(String buildingId, String projectId){
+	public List<UserClientIdVo> listClientIdByBuildingIdAndProjectId(String buildingId, String projectId){
 		String oemCode = ContextManager.getInstance().getOemCode();
 		Map<String, String> extra = new HashMap<String, String>();
 		extra.put("buildingId", buildingId);
@@ -298,7 +299,7 @@ public class ProprietorContext {
 	 * @author xhw
 	 * @date 2016年4月11日 下午5:08:26
 	 */
-	public List<String> listClientIdByProjectId(String projectId){
+	public List<UserClientIdVo> listClientIdByProjectId(String projectId){
 		String oemCode = ContextManager.getInstance().getOemCode();
 		Map<String, String> extra = new HashMap<String, String>();
 		extra.put("projectId", projectId);
@@ -315,7 +316,7 @@ public class ProprietorContext {
 	 * @author xhw
 	 * @date 2016年4月12日 下午2:52:30
 	 */
-	public List<String> listClientIdByProjectIdAndHouseNum(String projectId, String houseNum){
+	public List<UserClientIdVo> listClientIdByProjectIdAndHouseNum(String projectId, String houseNum){
 		String oemCode = ContextManager.getInstance().getOemCode();
 		Map<String, String> extra = new HashMap<String, String>();
 		extra.put("projectId", projectId);

@@ -15,6 +15,10 @@
 	<result column="customerName" property="customer.realName"/>
 </resultMap>
 
+<!-- userIdClientId -->
+<resultMap id="UserClientIdResultMap" type="com.liefeng.property.vo.household.UserClientIdVo" >
+</resultMap>
+
 <!-- 业主查询条件 -->
 <sql id="Example_Where_Clause">
 	WHERE 1=1 
@@ -307,10 +311,11 @@
 	) AS ttt
 </select>
 
-<select id="queryClientId" resultType="java.lang.String" >
+<select id="queryClientId"  resultMap="UserClientIdResultMap">
 (
 	SELECT
-		c.client_id as clientId
+		c.client_id as clientId,
+		c.user_id as userId
 	FROM
 		(
 			SELECT DISTINCT
@@ -344,7 +349,8 @@
 UNION
 (
 	SELECT
-		c.client_id as clientId
+		c.client_id as clientId,
+		c.user_id as userId
 	FROM
 		(
 			SELECT DISTINCT
@@ -375,10 +381,11 @@ UNION
 )
 </select>
 
-<select id="queryAllClientIdsByProjectId"  resultType="java.lang.String" >
+<select id="queryAllClientIdsByProjectId"  resultMap="UserClientIdResultMap" >
 (
 	SELECT DISTINCT
-		c.client_id AS clientId
+		c.client_id AS clientId,
+		c.user_id AS userId
 	FROM
 		basic.t_user u,
 		property.t_proprietor p,
@@ -396,7 +403,8 @@ UNION
 UNION
 	(
 		SELECT DISTINCT
-			c.client_id AS clientId
+			c.client_id AS clientId,
+			c.user_id AS userId
 		FROM
 			basic.t_user u,
 			property.t_resident r,
@@ -413,10 +421,11 @@ UNION
 	)
 </select>
 
-<select id="queryAllClientIdsByProjectIdAndHouseNum"  resultType="java.lang.String" >
+<select id="queryAllClientIdsByProjectIdAndHouseNum"  resultMap="UserClientIdResultMap" >
 (
 	SELECT DISTINCT
-		c.client_id AS clientId
+		c.client_id AS clientId,
+		c.user_id AS userId
 	FROM
 		basic.t_user u,
 		property.t_proprietor p,
@@ -439,7 +448,8 @@ UNION
 UNION
 	(
 		SELECT DISTINCT
-			c.client_id AS clientId
+			c.client_id AS clientId,
+			c.user_id AS userId
 		FROM
 			basic.t_user u,
 			property.t_resident r,

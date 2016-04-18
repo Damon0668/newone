@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
+import com.liefeng.property.vo.household.UserClientIdVo;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 
@@ -71,7 +72,7 @@ public interface PropertyStaffQueryRepository extends BaseRepository<PropertySta
 	 * @param param
 	 * @return
 	 */
-	public List<String> queryByProjectIdAndDeptId(PagingParamVo param);
+	public List<UserClientIdVo> queryByProjectIdAndDeptId(PagingParamVo param);
 	
 	/**
 	 * 通过部门id，获取员工资料（id、name、number、phone、custGloalId、clientId）
