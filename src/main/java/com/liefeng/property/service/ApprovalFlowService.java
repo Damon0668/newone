@@ -118,7 +118,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 				if(pushMsgTemplateVo != null){
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(PushActionConstants.APPROVAL_NEW);
-					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -139,7 +139,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			if(pushMsgTemplateVo != null){
 				SingleUserMsg message = new SingleUserMsg();
 				message.setAction(PushActionConstants.APPROVAL_FINISHED);
-				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 				message.setTitle(pushMsgTemplateVo.getTitle());
 				message.setContent(pushMsgTemplateVo.getContent());
 				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -166,7 +166,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 				if(pushMsgTemplateVo != null){
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(PushActionConstants.APPROVAL_NEW);
-					message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);

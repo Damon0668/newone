@@ -273,7 +273,7 @@ public class ProjectService implements IProjectService {
 				
 				ListUserMsg message = new ListUserMsg();
 				message.setAction(PushActionConstants.PROPERTY_NEW_NOTE);
-				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 				message.setTitle(pushMsgTemplateVo.getTitle());
 				message.setContent(pushMsgTemplateVo.getContent());
 				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -289,7 +289,7 @@ public class ProjectService implements IProjectService {
 				
 				ListUserMsg message = new ListUserMsg();
 				message.setAction(PushActionConstants.PROPERTY_NEW_NOTE);
-				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 				message.setTitle(pushMsgTemplateVo.getTitle());
 				message.setContent(pushMsgTemplateVo.getContent());
 				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -330,7 +330,7 @@ public class ProjectService implements IProjectService {
 				
 				ListUserMsg message = new ListUserMsg();
 				message.setAction(PushActionConstants.PROPERTY_NEW_NOTE);
-				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 				message.setTitle(pushMsgTemplateVo.getTitle());
 				message.setContent(pushMsgTemplateVo.getContent());
 				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -347,7 +347,7 @@ public class ProjectService implements IProjectService {
 				
 				ListUserMsg message = new ListUserMsg();
 				message.setAction(PushActionConstants.PROPERTY_NEW_NOTE);
-				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 				message.setTitle(pushMsgTemplateVo.getTitle());
 				message.setContent(pushMsgTemplateVo.getContent());
 				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);

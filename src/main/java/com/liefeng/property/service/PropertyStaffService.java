@@ -439,7 +439,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 			if(staffArchiveVo != null){
 				SingleUserMsg message = new SingleUserMsg();
 				message.setAction(PushActionConstants.CHANGE_PWD_SUCCESS);
-				message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 				message.setTitle(pushMsgTemplateVo.getTitle());
 				message.setContent(pushMsgTemplateVo.getContent());
 				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -459,7 +459,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 		if(pushMsgTemplateVo != null){
 			SingleUserMsg message = new SingleUserMsg();
 			message.setAction(PushActionConstants.CHANGE_PWD_SUCCESS);
-			message.setMsgCode(pushMsgTemplateVo.getMsgCode());
+			message.setPageUrl(pushMsgTemplateVo.getPageUrl());
 			message.setTitle(pushMsgTemplateVo.getTitle());
 			message.setContent(pushMsgTemplateVo.getContent());
 			message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
