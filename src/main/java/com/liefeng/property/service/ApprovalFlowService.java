@@ -12,10 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.access.QueryFilter;
+import org.snaker.engine.entity.HistoryOrder;
 import org.snaker.engine.entity.HistoryTask;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Process;
+import org.snaker.engine.entity.Task;
 import org.snaker.engine.entity.TaskActor;
+import org.snaker.engine.helper.JsonHelper;
 import org.snaker.engine.model.FieldModel;
 import org.snaker.engine.model.NodeModel;
 import org.snaker.engine.model.ProcessModel;
@@ -36,6 +39,8 @@ import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
 import com.liefeng.property.constant.ApprovalFlowConstants;
 import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.domain.staff.PropertyStaffContext;
+import com.liefeng.property.error.ApprovalFlowErrorCode;
+import com.liefeng.property.exception.ApprovalFlowException;
 import com.liefeng.property.vo.approvalFlow.HistoryTaskVo;
 import com.liefeng.property.vo.approvalFlow.ProcessVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
@@ -46,6 +51,7 @@ import com.liefeng.service.vo.PushMsgTemplateVo;
 import com.liefeng.service.vo.TaskAttachVo;
 import com.liefeng.service.vo.msg.ListUserMsg;
 import com.liefeng.service.vo.msg.SingleUserMsg;
+
 
 /**
  * 审批流程接口
@@ -415,6 +421,42 @@ public class ApprovalFlowService implements IApprovalFlowService{
 	public DataListValue<HistoryTaskVo> getHistTaskByOrderId(String orderId) {
 		List<HistoryTask> historyTasks = workflowService.getHistoryTasks(new QueryFilter().setOrderId(orderId));
 		return DataListValue.success(MyBeanUtil.createList(historyTasks, HistoryTaskVo.class));
+	}
+	
+	@Override
+	public void deleteOrder(String processId,String orderId,String loginId){
+		// 获取流程第一个任务节点
+		Process process = workflowService.findByProcessId(processId);
+		NodeModel nodeModel = process.getModel().getTaskModels().get(0);
+
+		// 获取流程最后一个执行节点
+		List<HistoryTask> historyTasks = workflowService.getHistoryTasks(new QueryFilter().setOrderId(orderId));
+		HistoryTask historyTask = historyTasks.get(0);
+		HistoryOrder historyOrder = workflowService.findHisOrderById(orderId);
+		if(nodeModel.getDisplayName().equals(historyTask.getDisplayName())) {
+			
+			loginId = ApprovalFlowConstants.USER_PREFIXES + loginId;
+			if(loginId.equals(historyOrder.getCreator())) {
+				try {
+					workflowService.cascadeRemove(orderId);
+				} catch (Exception e) {
+					throw new  ApprovalFlowException(ApprovalFlowErrorCode.DELETE_FAILED);
+				}
+			}
+		} else {
+			throw new  ApprovalFlowException(ApprovalFlowErrorCode.CANNOT_DELETE);
+		}
+	}
+	
+	@Override
+	public void backTask(String taskId ,String loginId) {
+			Task task = workflowService.withdrawTask(taskId, ApprovalFlowConstants.USER_PREFIXES + loginId);
+			
+			// 更新task某些字段
+			Map<String, Object> params = task.getVariableMap();
+			params.put("status", ApprovalFlowConstants.ORDER_STATUS_WAIT_SIGN);
+			task.setVariable(JsonHelper.toJson(params));
+			workflowService.updateTask(task);
 	}
 	
 }

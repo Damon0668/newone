@@ -35,7 +35,7 @@ public class MsgCenterController {
 		
 		PushedMsgBo pushedMsgBo = new PushedMsgBo();
 		pushedMsgBo.setUserId(msgHistoryRo.getUserId());
-		pushedMsgBo.setSendStatus(PushMsgConstants.SendStatus.SUCCESS);
+		//pushedMsgBo.setSendStatus(PushMsgConstants.SendStatus.SUCCESS);
 		pushedMsgBo.setTerminalType(PushMsgConstants.TerminalType.MOBILE_PROPERTY);
 		if("sys".equals(msgHistoryRo.getMsgType())){
 			pushedMsgBo.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);

@@ -1441,7 +1441,7 @@ public class WorkbenchService implements IWorkbenchService {
 
 		eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_FINISH);
 		
-		/*//获取推送消息模板
+		//获取推送消息模板
 		PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.EVENT_REPORT_RECEIVE_ONE);
 		SingleUserMsg message = new SingleUserMsg();
 		message.setAction(PushActionConstants.EVENT_REPORT_RECEIVE_ONE);
@@ -1490,7 +1490,7 @@ public class WorkbenchService implements IWorkbenchService {
 				
 			}
 			
-		}*/
+		}
 	}
 
 	@Override
@@ -1719,7 +1719,7 @@ public class WorkbenchService implements IWorkbenchService {
 
 		}
 		
-		/*if(ValidateHelper.isNotEmptyString(nextAccepterId)){
+		if(ValidateHelper.isNotEmptyString(nextAccepterId)){
 			List<String> userIdList = new ArrayList<String>();
 			String[] userIdArray = nextAccepterId.split(",");
 			for(int i = 0; i < userIdArray.length; i++){
@@ -1832,7 +1832,7 @@ public class WorkbenchService implements IWorkbenchService {
 					}
 				}
 			}
-		}*/
+		}
 		
 	}
 

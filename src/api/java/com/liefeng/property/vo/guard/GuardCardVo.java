@@ -6,6 +6,7 @@ import com.liefeng.core.entity.BaseValue;
 
 /**
  * 门禁磁卡视图对象
+ * 
  * @author Huangama
  * @date 2016-2-25
  */
@@ -14,62 +15,61 @@ public class GuardCardVo extends BaseValue {
 	private static final long serialVersionUID = -5697303393169304896L;
 
 	private String id;
-	
+
 	/**
 	 * 磁卡编号
 	 */
 	private String sn;
-	
+
 	/**
 	 * 磁卡类型。0：长期有效；1：临时卡
 	 */
 	private String type;
-	
+
 	/**
 	 * 状态。0：已注销；1：正常；2：已挂失
 	 */
 	private String status;
-	
+
 	/**
 	 * 使用开始日期
 	 */
 	private Date startDate;
-	
+
 	/**
-	 * 临时卡 的有效时长
-	 * 按天
+	 * 临时卡 的有效时长 按天
 	 */
 	private int duration;
-	
+
 	/**
 	 * 使用结束日期
 	 */
 	private Date endDate;
-	
+
 	/**
 	 * 发卡时间
 	 */
 	private Date createTime;
-	
+
 	/**
 	 * 项目ID
 	 */
 	private String projectId;
-	
+
+	/**
+	 * 项目名称
+	 */
+	private String projectName;
+
 	/**
 	 * OEM编码
 	 */
 	private String oemCode;
 	
 	/**
-	 * 项目名称
+	 * 磁卡绑定用户信息
 	 */
-	private String projectName;
-	
-	/**
-	 * 持卡人名字
-	 */
-	private String userName;
+	private GuardCardUserVo guardCardUser;
 
 	public String getId() {
 		return id;
@@ -159,11 +159,12 @@ public class GuardCardVo extends BaseValue {
 		this.projectName = projectName;
 	}
 
-	public String getUserName() {
-		return userName;
+	public GuardCardUserVo getGuardCardUser() {
+		return guardCardUser;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setGuardCardUser(GuardCardUserVo guardCardUser) {
+		this.guardCardUser = guardCardUser;
 	}
+
 }

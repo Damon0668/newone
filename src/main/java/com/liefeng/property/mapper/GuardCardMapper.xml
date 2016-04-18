@@ -6,6 +6,10 @@
 <mapper namespace="com.liefeng.property.repository.mybatis.GuardCardQueryRepository">
 	<!-- Result Map -->
 	<resultMap id="BaseResultMap" type="com.liefeng.property.vo.guard.GuardCardVo">
+		<result column="userName" property="guardCardUser.userName"/>
+		<result column="staffName" property="guardCardUser.staffName"/>
+		<result column="userType" property="guardCardUser.userType"/>
+		<result column="userId" property="guardCardUser.userId"/>
 	</resultMap>
 	
 <!-- 查询条件 -->
@@ -94,7 +98,7 @@ SELECT
 				SELECT
 					ps.name
 				FROM
-					t_property_staff ps
+					property.t_property_staff ps
 				WHERE
 					ps.id = gcu.user_id
 			)
@@ -103,7 +107,7 @@ SELECT
 				SELECT
 					p.name
 				FROM
-					t_proprietor p
+					property.t_proprietor p
 				WHERE
 					p.id = gcu.user_id
 			)
@@ -112,7 +116,7 @@ SELECT
 				SELECT
 					r.name
 				FROM
-					t_resident r
+					property.t_resident r
 				WHERE
 					r.id = gcu.user_id
 			)
@@ -121,7 +125,7 @@ SELECT
 				SELECT
 					v.name
 				FROM
-					t_visitor v
+					property.t_visitor v
 				WHERE
 					v.id = gcu.user_id
 			)
@@ -130,7 +134,7 @@ SELECT
 				SELECT
 					a.name
 				FROM
-					t_attendant a
+					property.t_attendant a
 				WHERE
 					a.id = gcu.user_id
 			)
@@ -138,10 +142,23 @@ SELECT
 	) AS userName,
 	gc.project_id AS projectId,
 	pr.full_name AS projectName,
-	gc.oem_code AS oemCode
+	gc.oem_code AS oemCode,
+	gcu.user_type AS userType,
+	gcu.user_id AS userId,
+	prs.name AS staffName
 FROM
-	t_guard_card gc
-	LEFT JOIN t_guard_card_user gcu ON gcu.card_id = gc.id
-	LEFT JOIN t_project pr ON pr.id = gc.project_id
+	property.t_guard_card gc
+	LEFT JOIN property.t_guard_card_user gcu ON gcu.card_id = gc.id
+	LEFT JOIN property.t_property_staff prs ON prs.id = gcu.staff_id
+	LEFT JOIN property.t_project pr ON pr.id = gc.project_id
 </sql>
+
+<select id="queryById" resultMap="BaseResultMap">
+	SELECT
+           *
+	FROM
+	    (<include refid="card_view"/>) AS cv
+	WHERE
+		cv.id = #{guardCardId}
+</select>
 </mapper>

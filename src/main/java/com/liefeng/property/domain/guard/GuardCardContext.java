@@ -217,6 +217,18 @@ public class GuardCardContext {
 		return returnPage;
 	}
 	
+	/**
+	 * 获取磁卡详细信息
+	 * @return 磁卡详细信息
+	 */
+	public GuardCardVo getCardDetail() {
+		if(ValidateHelper.isNotEmptyString(cardId)) {
+			guardCard = guardCardQueryRepository.queryById(cardId);
+		}
+		
+		return guardCard;
+	}
+	
 	protected void setCardId(String cardId) {
 		this.cardId = cardId;
 	}
