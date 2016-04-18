@@ -251,6 +251,7 @@
 		
 		ep.status as processStatus,
 		ep.id as processId,
+	
 		
 		o.process_Id as processId,
 		t.order_Id as orderId,
@@ -260,8 +261,9 @@
 		t.task_Name AS taskName,
 		
 		<!-- 是否是上一步骤处理人 -->
-		(EXISTS (select t.parent_Task_Id from service.wf_hist_task wht2 left join service.wf_hist_task_actor whta2 on wht2.id = whta2.task_Id where wht2.id = t.parent_Task_Id and whta2.actor_Id in (#{extra.actor}))) as isBack
-		
+		(EXISTS (select t.parent_Task_Id from service.wf_hist_task wht2 left join service.wf_hist_task_actor whta2 on wht2.id = whta2.task_Id where wht2.id = t.parent_Task_Id and whta2.actor_Id in (#{extra.actor}) and (ep.status = 0 or ep.status = null) )) as isBack,
+		<!-- 是否是给我,且能马上办理（已签收） -->
+		(EXISTS (SELECT wt2.id FROM service.wf_task wt2 LEFT JOIN service.wf_task_actor wta2 ON wt2.id = wta2.task_Id WHERE wt2.id = t.id AND wta2.actor_Id IN(#{extra.actor}) and ep.status = 1 ))AS isMe
 		
 		FROM
 		service.wf_task t
