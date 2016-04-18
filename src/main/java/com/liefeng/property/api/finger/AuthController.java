@@ -61,7 +61,7 @@ public class AuthController {
 		
 		UserVo user = userService.login(userLoginBo);
 		
-		//精简信息
+		/*//精简信息
 		loginUser = MyBeanUtil.createBean(user, LoginUserVo.class);
 		
 		loginUser.setId(null);
@@ -82,6 +82,12 @@ public class AuthController {
 		if(!redisService.isKeyExist(key)){
 			redisService.setValue(key, loginUser.getOemCode());
 		}
+		*/
+		loginUser = new LoginUserVo();
+		
+		loginUser.setGlobalId(user.getCustGlobalId());
+		
+		loginUser.setOpenId("default");
 		
 		return DataValue.success(loginUser);
 	}

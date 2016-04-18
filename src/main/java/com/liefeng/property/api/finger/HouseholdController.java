@@ -406,7 +406,7 @@ public class HouseholdController {
 		
 		HouseContext houseContext = HouseContext.build();
 		
-		List<UserHouseVo> dataList = houseContext.getUserHouses(params.getGlobalId(), params.getHouseholdType());
+		List<UserHouseVo> dataList = houseContext.getUserHouses(params.getGlobalId());
 		
 		return DataListValue.success(dataList);
 	}

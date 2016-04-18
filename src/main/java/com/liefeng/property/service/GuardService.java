@@ -24,6 +24,8 @@ import com.liefeng.property.bo.guard.DevicePositionBo;
 import com.liefeng.property.bo.guard.GuardCardBo;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
 import com.liefeng.property.bo.guard.GuardResidentBo;
+import com.liefeng.property.constant.GuardConstants;
+import com.liefeng.property.domain.guard.CameraContext;
 import com.liefeng.property.domain.guard.DevicePositionContext;
 import com.liefeng.property.domain.guard.GuardCardContext;
 import com.liefeng.property.domain.guard.GuardCardPrivilegeContext;
@@ -31,6 +33,7 @@ import com.liefeng.property.domain.guard.GuardCardUserContext;
 import com.liefeng.property.domain.guard.GuardDeviceContext;
 import com.liefeng.property.domain.household.ResidentContext;
 import com.liefeng.property.domain.household.VisitorContext;
+import com.liefeng.property.vo.guard.CameraVo;
 import com.liefeng.property.vo.guard.DevicePositionVo;
 import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
 import com.liefeng.property.vo.guard.GuardCardUserVo;
@@ -61,14 +64,26 @@ public class GuardService implements IGuardService{
 	@Transactional(rollbackOn=Exception.class)
 	@Override
 	public void createGuardDevice(GuardDeviceVo guardDevice) {
-		guardDevice.setType(DeviceConstants.Type.GUARD);
-		
+
 		logger.info("createGuardDevice check GuardDeviceVo = {}", guardDevice);
+		
+		guardDevice.setType(guardDevice.getGuardType());
 		
 		DeviceVo deviceVo = checkService.createDeviceCheck(guardDevice);
 		guardDevice.setDeviceGlobalId(deviceVo.getGlobalId());
 		
 		GuardDeviceContext.build(guardDevice).create();
+		
+		if(DeviceConstants.Type.CAMERA.equals(guardDevice.getType())){
+			//添加摄像头
+			CameraVo camera = new CameraVo();
+			camera.setDeviceGlobalId(deviceVo.getGlobalId());
+			camera.setProjectId(guardDevice.getProjectId());
+			camera.setCameraSn(guardDevice.getGuardNum());
+			camera.setPositionId(guardDevice.getPositionId());
+			camera.setType(GuardConstants.GuardCameraType.ATTACHMENT);
+			CameraContext.build(camera).create();
+		}
 		
 		logger.info("createGuardDevice sendTccMsg GuardDeviceVo = {}", guardDevice);
 		

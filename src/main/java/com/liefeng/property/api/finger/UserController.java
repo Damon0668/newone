@@ -1,8 +1,5 @@
 package com.liefeng.property.api.finger;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 import java.util.Date;
 import java.util.List;
 
@@ -24,10 +21,12 @@ import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
+import com.liefeng.intf.property.api.ILoginUserService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.api.ro.finger.user.AppFriendIdAndStatusRo;
 import com.liefeng.property.api.ro.finger.user.AppMsgSettingRo;
+import com.liefeng.property.api.ro.finger.user.LoginUserRo;
 import com.liefeng.property.api.ro.finger.user.ResidentFeedbackRo;
 import com.liefeng.property.api.ro.finger.user.UserIdConditionRo;
 import com.liefeng.property.api.ro.finger.user.UserIdFriendIdRo;
@@ -35,9 +34,14 @@ import com.liefeng.property.api.ro.finger.user.UserRo;
 import com.liefeng.property.api.ro.id.CustGlobalIdRo;
 import com.liefeng.property.api.ro.id.UserIdRo;
 import com.liefeng.property.constant.HouseholdConstants;
+import com.liefeng.property.domain.api.UserContext;
+import com.liefeng.property.vo.api.LoginUserVo;
 import com.liefeng.property.vo.household.AppFriendVo;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
 import com.liefeng.property.vo.household.ResidentFeedbackVo;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * 用户公共服务类
@@ -60,6 +64,18 @@ public class UserController {
 	
 	@Autowired
 	private IHouseholdService householdService;
+	
+	@Autowired
+	private ILoginUserService loginUserService;
+	
+	@ApiOperation(value="获取登陆账户信息")
+	@RequestMapping(value="/getLoginUser", method=RequestMethod.POST)
+	@ResponseBody
+	public DataValue<LoginUserVo> getLoginUser(@Valid @ModelAttribute LoginUserRo loginUserRo){
+		LoginUserVo loginUser = loginUserService.findLoginUser(loginUserRo.getLoginId(), loginUserRo.getHouseholdType());
+		return DataValue.success(loginUser);
+	}
+	
 	
 	/**
 	 * 获取用户信息
