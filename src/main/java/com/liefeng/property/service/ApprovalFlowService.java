@@ -27,6 +27,7 @@ import org.snaker.engine.model.TransitionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.liefeng.common.util.FreeMarkerUtil;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataListValue;
@@ -103,8 +104,8 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			
 			approvalFlowBo.setOrderId(order.getId());
 			// 设置taskId
-			String taskId = workflowService.getHistoryTasks(new QueryFilter().setOrderId(order.getId())).get(0).getId();
-			approvalFlowBo.setTaskId(taskId);
+			HistoryTask historyTask = workflowService.getHistoryTasks(new QueryFilter().setOrderId(order.getId())).get(0);
+			approvalFlowBo.setTaskId(historyTask.getId());
 		
 			if(ValidateHelper.isNotEmptyString(approvalFlowBo.getNextOperator())){
 				String[] staffIdArray = approvalFlowBo.getNextOperator().split(",");
@@ -117,9 +118,16 @@ public class ApprovalFlowService implements IApprovalFlowService{
 				//获取推送消息模板
 				PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.APPROVAL_NEW);
 				if(pushMsgTemplateVo != null){
+					
+					Map<String,String> data = new HashMap<String,String>();
+					data.put("processId", order.getProcessId());
+					data.put("orderId", historyTask.getOrderId());
+					data.put("taskName", historyTask.getTaskName());
+					String pageUrl = FreeMarkerUtil.parseStringTemplate(pushMsgTemplateVo.getPageUrl(), data);
+					
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(PushActionConstants.APPROVAL_NEW);
-					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
+					message.setPageUrl(pageUrl);
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -138,9 +146,18 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			//获取推送消息模板
 			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.APPROVAL_FINISHED);
 			if(pushMsgTemplateVo != null){
+				
+				Order order = workflowService.findOrderById(approvalFlowBo.getOrderId());
+				
+				Map<String,String> data = new HashMap<String,String>();
+				data.put("processId", order.getProcessId());
+				data.put("orderId", approvalFlowBo.getOrderId());
+				data.put("taskName", approvalFlowBo.getTaskName());
+				String pageUrl = FreeMarkerUtil.parseStringTemplate(pushMsgTemplateVo.getPageUrl(), data);
+				
 				SingleUserMsg message = new SingleUserMsg();
 				message.setAction(PushActionConstants.APPROVAL_FINISHED);
-				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
+				message.setPageUrl(pageUrl);
 				message.setTitle(pushMsgTemplateVo.getTitle());
 				message.setContent(pushMsgTemplateVo.getContent());
 				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -152,7 +169,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			System.out.println("继续执行下去:"+approvalFlowBo.getAssignee()+"||"+addUserPreixes(approvalFlowBo.getNextOperator()));
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
 			approvalFlowBo.getParams().put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
-			workflowService.executeAndJumpTask(approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams(), approvalFlowBo.getTaskName());
+			List<Task> tasks = workflowService.executeAndJumpTask(approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams(), approvalFlowBo.getTaskName());
 			
 			if(ValidateHelper.isNotEmptyString(approvalFlowBo.getNextOperator())){
 				String[] staffIdArray = approvalFlowBo.getNextOperator().split(",");
@@ -165,9 +182,18 @@ public class ApprovalFlowService implements IApprovalFlowService{
 				//获取推送消息模板
 				PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.APPROVAL_NEW);
 				if(pushMsgTemplateVo != null){
+					
+					Order order = workflowService.findOrderById(tasks.get(0).getOrderId());
+					
+					Map<String,String> data = new HashMap<String,String>();
+					data.put("processId", order.getProcessId());
+					data.put("orderId", tasks.get(0).getOrderId());
+					data.put("taskName", tasks.get(0).getTaskName());
+					String pageUrl = FreeMarkerUtil.parseStringTemplate(pushMsgTemplateVo.getPageUrl(), data);
+					
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(PushActionConstants.APPROVAL_NEW);
-					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
+					message.setPageUrl(pageUrl);
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
