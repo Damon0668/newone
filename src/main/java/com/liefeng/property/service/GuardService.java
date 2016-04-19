@@ -25,6 +25,7 @@ import com.liefeng.property.bo.guard.GuardCardBo;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
 import com.liefeng.property.bo.guard.GuardResidentBo;
 import com.liefeng.property.constant.GuardConstants;
+import com.liefeng.property.domain.guard.AttendantContext;
 import com.liefeng.property.domain.guard.CameraContext;
 import com.liefeng.property.domain.guard.DevicePositionContext;
 import com.liefeng.property.domain.guard.GuardCardContext;
@@ -34,6 +35,7 @@ import com.liefeng.property.domain.guard.GuardCardUserContext;
 import com.liefeng.property.domain.guard.GuardDeviceContext;
 import com.liefeng.property.domain.household.ResidentContext;
 import com.liefeng.property.domain.household.VisitorContext;
+import com.liefeng.property.vo.guard.AttendantVo;
 import com.liefeng.property.vo.guard.CameraVo;
 import com.liefeng.property.vo.guard.DevicePositionVo;
 import com.liefeng.property.vo.guard.GuardCardLogVo;
@@ -275,6 +277,22 @@ public class GuardService implements IGuardService{
 	public DataPageValue<GuardCardLogVo> listGuardCardLog(String cardId, Integer currentPage, Integer pageSize) {
 		GuardCardLogContext guardCardLogContext = GuardCardLogContext.build();
 		return guardCardLogContext.listGuardCardLog(cardId, currentPage, pageSize);
+	}
+
+	@Override
+	public AttendantVo createAttendant(AttendantVo attendantVo) {
+		return AttendantContext.build(attendantVo).create();
+	}
+
+	@Override
+	public AttendantVo getAttendant(String id) {
+		return AttendantContext.loadById(id).getAttendantVo();
+	}
+
+	@Override
+	public DataPageValue<AttendantVo> listAttendants(String projectId, String manageProjectIds, String name, String phone,
+			String serviceType, Integer page, Integer size) {
+		return AttendantContext.build().findByPage(projectId, manageProjectIds, name, phone, serviceType, page, size);
 	}
 
 }

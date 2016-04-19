@@ -4,19 +4,21 @@ import com.liefeng.core.entity.BaseValue;
 
 /**
  * 门禁模块
- * 访客信息参数封装类
+ * 服务人员信息参数封装类
  * @author xhw
- * @date 2016年4月14日 下午3:32:07
+ * @date 2016年4月19日 下午4:39:40
  */
-public class GuardVisitorBo extends BaseValue{
+public class GuardAttendantBo extends BaseValue{
 	
-	private static final long serialVersionUID = -3056919127418772367L;
+	private static final long serialVersionUID = 678237757990577588L;
 
 	private String projectId;
 	
 	private String name;
 	
 	private String phone;
+	
+	private String serviceType;
 
 	public String getProjectId() {
 		return projectId;
@@ -40,6 +42,14 @@ public class GuardVisitorBo extends BaseValue{
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public String getServiceType() {
+		return serviceType;
+	}
+
+	public void setServiceType(String serviceType) {
+		this.serviceType = serviceType;
 	}
 	
 }

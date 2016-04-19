@@ -134,14 +134,16 @@ public class AttendantContext {
 	
 	/**
 	 * 分页查询
-	 * @param projectId
-	 * @param name
-	 * @param phone
+	 * @param projectId 项目id
+	 * @param manageProjectIds 员工所管理的项目
+	 * @param name 名称
+	 * @param phone 手机号码
+	 * @param serviceType 服务类型
 	 * @param page
 	 * @param size
 	 * @return 
 	 * @author xhw
-	 * @date 2016年4月14日 下午3:05:01
+	 * @date 2016年4月19日 下午4:03:52
 	 */
 	public DataPageValue<AttendantVo> findByPage(String projectId, String manageProjectIds, String name, String phone, String serviceType, Integer page, Integer size) {
 		String oemCode = ContextManager.getInstance().getOemCode();

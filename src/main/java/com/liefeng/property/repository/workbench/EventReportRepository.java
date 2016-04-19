@@ -27,7 +27,7 @@ public interface EventReportRepository extends JpaRepository<EventReportPo, Stri
 	 * @author xhw
 	 * @date 2016年3月18日 下午4:44:52
 	 */
-	public List<EventReportPo> findByProjectIdAndHouseNumAndPhone(String projectId, String houseNum, String phone);
+	public List<EventReportPo> findByProjectIdAndHouseNumAndPhoneOrderByCreateTimeDesc(String projectId, String houseNum, String phone);
 	
 	/**
 	 * 通过手机号码，获取员工的所有报事
@@ -36,6 +36,6 @@ public interface EventReportRepository extends JpaRepository<EventReportPo, Stri
 	 * @author xhw
 	 * @date 2016年3月25日 下午7:37:49
 	 */
-	public List<EventReportPo> findByPhoneAndOemCode(String phone, String oemCode);
+	public List<EventReportPo> findByPhoneAndOemCodeOrderByCreateTimeDesc(String phone, String oemCode);
 
 }

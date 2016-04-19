@@ -308,7 +308,7 @@ public class EventReportContext {
 	public List<EventReportVo> getHistoryEventReport(String projectId, String houseNum, String phone){
 		List<EventReportVo> eventReportVoList = null;
 		if(ValidateHelper.isNotEmptyString(projectId) && ValidateHelper.isNotEmptyString(houseNum) && ValidateHelper.isNotEmptyString(phone)){
-			List<EventReportPo> eventReportPoList = eventReportRepository.findByProjectIdAndHouseNumAndPhone(projectId, houseNum, phone);
+			List<EventReportPo> eventReportPoList = eventReportRepository.findByProjectIdAndHouseNumAndPhoneOrderByCreateTimeDesc(projectId, houseNum, phone);
 			
 			eventReportVoList = MyBeanUtil.createList(eventReportPoList, EventReportVo.class);
 		}
@@ -364,7 +364,7 @@ public class EventReportContext {
 		List<EventReportVo> eventReportVoList = null;
 		
 		if(ValidateHelper.isNotEmptyString(phone)){
-			List<EventReportPo> eventReportPoList = eventReportRepository.findByPhoneAndOemCode(phone, omeCode);
+			List<EventReportPo> eventReportPoList = eventReportRepository.findByPhoneAndOemCodeOrderByCreateTimeDesc(phone, omeCode);
 			eventReportVoList = MyBeanUtil.createList(eventReportPoList, EventReportVo.class);
 		}
 		
