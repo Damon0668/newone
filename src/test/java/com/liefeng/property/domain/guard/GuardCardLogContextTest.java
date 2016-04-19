@@ -10,7 +10,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.liefeng.Application;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.property.bo.guard.GuardCardBo;
 import com.liefeng.property.constant.SysConstants;
+import com.liefeng.property.vo.guard.GuardCardVo;
 
 /**
  * 门禁磁卡设备
@@ -21,7 +23,7 @@ import com.liefeng.property.constant.SysConstants;
 @SpringApplicationConfiguration(classes = Application.class)
 @ActiveProfiles("dev")
 @WebAppConfiguration
-public class GuardCardContextTest {
+public class GuardCardLogContextTest {
 	
 	@Before
 	public void before(){
@@ -29,8 +31,27 @@ public class GuardCardContextTest {
 	}
 	
 	@Test
-	public void listGuardCardLog() {
-		GuardCardLogContext guardCardLogContext = GuardCardLogContext.build();
-		System.out.println(guardCardLogContext.listGuardCardLog("1", 1, 10));
+	public void create(){
+		GuardCardVo guardCardVo = new GuardCardVo();
+		guardCardVo.setSn("123");
+		guardCardVo.setType("1");
+		GuardCardContext.build(guardCardVo).create();
+	}
+	
+	@Test
+	public void listGuardCard() {
+		GuardCardBo guardCardBo = new GuardCardBo();
+		guardCardBo.setProjectId("0000000052a7943f0152a7943fc00000");
+		guardCardBo.setOemCode("property");
+		
+		GuardCardContext guardCardContext = GuardCardContext.build();
+		System.out.println(guardCardContext.listGuardCard(guardCardBo, 1, 10));
+	}
+	
+	@Test
+	public void getCardDeatil() {
+		GuardCardContext guardCardContext = GuardCardContext.loadById("1");
+		GuardCardVo guardCard = guardCardContext.getCardDetail();
+		System.out.println(guardCard);
 	}
 }

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.GuardCardLogQueryRepository">
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.liefeng.property.vo.guard.GuardCardLogVo">
+		
+	</resultMap>
+	
+<!-- 查询条件 -->
+<sql id="Where_Clause">
+    where 1=1
+    <trim  suffixOverrides="," >
+        <if test="extra.oemCode != null and extra.oemCode != ''" >
+            AND gcl.oem_code = #{extra.oemCode}
+        </if>
+        
+        <if test="extra.cardId != null and extra.cardId != ''" >
+            AND gcl.card_id = #{extra.cardId}
+        </if>
+        
+    </trim>
+</sql>
+
+<select id="queryByCount"  resultType="java.lang.Long">
+	select
+		count(1)
+	from
+		(SELECT
+			gcl.id AS id,
+			gcl.staff_id AS staffId,
+			gcl.card_id AS cardId,
+			gcl.oper_type AS operType,
+			gcl.create_time AS createTime,
+			gcl.oem_code AS oemCode,
+			ps.name AS staffName
+		FROM
+			property.t_guard_card_log gcl
+		LEFT JOIN property.t_property_staff ps ON ps.id = gcl.staff_id
+		<include refid="Where_Clause"/>
+	) as cv
+</select>
+
+<select id="queryByPage" resultMap="BaseResultMap">
+	SELECT
+		gcl.id AS id,
+		gcl.staff_id AS staffId,
+		gcl.card_id AS cardId,
+		gcl.oper_type AS operType,
+		gcl.create_time AS createTime,
+		gcl.oem_code AS oemCode,
+		ps.name AS staffName
+	FROM
+		property.t_guard_card_log gcl
+	LEFT JOIN property.t_property_staff ps ON ps.id = gcl.staff_id
+	<include refid="Where_Clause"/>
+	ORDER BY
+		gcl.create_time DESC
+	<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	</if>
+</select>
+</mapper>
