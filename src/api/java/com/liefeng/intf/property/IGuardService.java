@@ -8,6 +8,7 @@ import com.liefeng.property.bo.guard.DevicePositionBo;
 import com.liefeng.property.bo.guard.GuardCardBo;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
 import com.liefeng.property.bo.guard.GuardResidentBo;
+import com.liefeng.property.vo.guard.AttendantVo;
 import com.liefeng.property.vo.guard.DevicePositionVo;
 import com.liefeng.property.vo.guard.GuardCardLogVo;
 import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
@@ -226,4 +227,37 @@ public interface IGuardService {
 	 * @return 磁卡日志分页数据
 	 */
 	public DataPageValue<GuardCardLogVo> listGuardCardLog(String cardId, Integer currentPage, Integer pageSize);
+	
+	/**
+	 * 创建服务人员
+	 * @param attendantVo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月19日 下午3:44:40
+	 */
+	public AttendantVo createAttendant(AttendantVo attendantVo);
+	
+	/**
+	 * 获取服务人员信息
+	 * @param id
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月19日 下午3:47:50
+	 */
+	public AttendantVo getAttendant(String id);
+	
+	/**
+	 * 获取服务人员列表
+	 * @param projectId 项目id
+	 * @param manageProjectIds 员工所管理的项目
+	 * @param name 名称
+	 * @param phone 手机号码
+	 * @param serviceType 服务类型
+	 * @param page
+	 * @param size
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月19日 下午4:03:52
+	 */
+	public DataPageValue<AttendantVo> listAttendants(String projectId, String manageProjectIds, String name, String phone, String serviceType, Integer page, Integer size);
 }

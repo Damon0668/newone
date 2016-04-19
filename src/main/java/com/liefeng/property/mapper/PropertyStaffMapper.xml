@@ -241,7 +241,7 @@
     <select id="queryByProjectIdAndDeptId" resultMap="UserClientIdResultMap" >
 	  	SELECT
 			c.client_id AS clientId,
-			c.user_id AS userId
+			c.staff_id AS userId
 		FROM
 			t_property_staff s,
 			t_manage_project p,
