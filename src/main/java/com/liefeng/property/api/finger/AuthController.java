@@ -67,7 +67,7 @@ public class AuthController {
 	@ResponseBody
 	public ReturnValue updatePwdByForget(@Valid @ModelAttribute UpdatePwdRo updatePwdRo){
 		
-		userService.updatePwdByForget(updatePwdRo.getMobile(), updatePwdRo.getPassword(), updatePwdRo.getCode());
+		userService.updatePwdByForget(updatePwdRo.getMobile(), updatePwdRo.getPassword(), updatePwdRo.getCode(), updatePwdRo.getAppCode());
 		//个推提醒
 		householdService.pushMsgToUserByPhone(updatePwdRo.getMobile());
 		
@@ -78,9 +78,9 @@ public class AuthController {
 	@RequestMapping(value="/updatePwdAfterLogin", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue updatePwdAfterLogin(@Valid @ModelAttribute UpdatePwdLoginRo updatePwdLoginRo){
-		userService.updatePwdAfterLogin(updatePwdLoginRo.getMobile(), updatePwdLoginRo.getOldpassword(), updatePwdLoginRo.getNewpassword());		
+		userService.updatePwdAfterLogin(updatePwdLoginRo.getUserId(), updatePwdLoginRo.getOldpassword(), updatePwdLoginRo.getNewpassword());		
 		//个推提醒
-		householdService.pushMsgToUserByPhone(updatePwdLoginRo.getMobile());
+		householdService.pushMsgToUserByPhone(updatePwdLoginRo.getUserId());
 		
 		return ReturnValue.success();
 	}

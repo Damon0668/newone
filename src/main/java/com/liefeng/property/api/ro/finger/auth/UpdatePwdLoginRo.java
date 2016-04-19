@@ -15,9 +15,9 @@ public class UpdatePwdLoginRo extends BaseValue{
 	 */
 	private static final long serialVersionUID = 8217696074457161183L;
 
-	@ApiModelProperty(value="手机号码",required=true)
+	@ApiModelProperty(value="用户ID",required=true)
 	@NotNull
-	private String mobile;
+	private String userId;
 	
 	@ApiModelProperty(value="旧密码",required=true)
 	@NotNull
@@ -43,15 +43,12 @@ public class UpdatePwdLoginRo extends BaseValue{
 		this.newpassword = newpassword;
 	}
 
-	public String getMobile() {
-		return mobile;
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
-	
-	
-	
-	
+
 }

@@ -28,13 +28,12 @@
         <if test="extra.projectIds != null and extra.projectIds != ''" >
             AND gd.project_id in ${extra.projectIds}
         </if>
-        <if test="extra.installPosition != null and extra.installPosition != ''" >
-            AND d.install_position like CONCAT('%',#{extra.installPosition},'%')
+        <if test="extra.guardType != null and extra.guardType != ''" >
+            AND gd.guard_type = #{extra.guardType}
         </if>
-        <if test="extra.guardNum != null and extra.guardNum != ''" >
+         <if test="extra.guardNum != null and extra.guardNum != ''" >
             AND gd.guard_num = #{extra.guardNum}
         </if>
-        
         <if test="extra.status != null and extra.status!= ''" >
             AND d.status = #{extra.status}
         </if>

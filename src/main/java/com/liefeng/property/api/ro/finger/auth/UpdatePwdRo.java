@@ -23,6 +23,10 @@ public class UpdatePwdRo extends BaseValue{
 	@ApiModelProperty(value="验证码",required=true)
 	@NotNull
 	private String code;
+	
+	@ApiModelProperty(value="应用编码[property]",required=true)
+	@NotNull
+	private String appCode;
 
 	public String getMobile() {
 		return mobile;
@@ -46,5 +50,13 @@ public class UpdatePwdRo extends BaseValue{
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public String getAppCode() {
+		return appCode;
+	}
+
+	public void setAppCode(String appCode) {
+		this.appCode = appCode;
 	}
 }

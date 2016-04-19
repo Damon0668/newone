@@ -68,6 +68,7 @@ public class FeeController {
 		Boolean result = feeService.isCreateMeterRecordOnProprietor(freeIsCreateRo.getProjectId(), freeIsCreateRo.getHouseNum(), freeIsCreateRo.getMeterType());
 		return DataValue.success(result);
 	}
+	
 	/**
 	 * 
 	 * 获取该房号的所属时间段的费用数据
