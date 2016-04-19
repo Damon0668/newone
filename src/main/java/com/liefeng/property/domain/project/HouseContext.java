@@ -294,13 +294,12 @@ public class HouseContext {
 	
 	/**
 	 * 根据登陆ID和类型查询用户房产
-	 * @param loginId 用户登陆ID
+	 * @param custGlobalId 用户全局ID
 	 * @param type 类型。1:业主，2:住户
 	 * @return 房产列表
 	 */
-	public List<UserHouseVo> getUserHouses(String custGlobalId, String type) {
-		String oemCode = ContextManager.getInstance().getOemCode();
-		List<UserHouseVo> dataList = houseQueryRepository.queryUserHouses(custGlobalId, type, oemCode);
+	public List<UserHouseVo> getUserHouses(String custGlobalId) {
+		List<UserHouseVo> dataList = houseQueryRepository.queryUserHouses(custGlobalId);
 		return dataList;
 	}
 

@@ -67,7 +67,7 @@ public class ProjectController {
 	 * @author xhw
 	 * @2016年3月7日 下午3:58:45
 	 */
-	@ApiOperation(value="通知列表【社区通告、温馨提醒、通知、社区动态公用接口】", notes="通知列表【社区通告、温馨提醒、通知、社区动态公用接口】")
+	@ApiOperation(value="通知列表[社区通告|温馨提醒|通知|社区动态公用接口]")
 	@RequestMapping(value="/getNoticeList", method=RequestMethod.GET)
 	@ResponseBody
 	public DataPageValue<NoticeVo> getNoticeList(@Valid @ModelAttribute NoticeRo noticeRo){

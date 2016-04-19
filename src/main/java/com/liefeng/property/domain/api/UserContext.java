@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.SpringBeanUtil;
+import com.liefeng.property.domain.guard.GuardCardApplyContext;
 import com.liefeng.property.repository.mybatis.api.UserQueryRepository;
 import com.liefeng.property.vo.api.LoginUserVo;
 
@@ -24,27 +25,27 @@ public class UserContext {
 	@Autowired
 	private UserQueryRepository userQueryRepository;
 	
-	private String custGlobalId;
+	private String loginId;
 	
-	protected void setCustGlobalId(String custGlobalId) {
-		this.custGlobalId = custGlobalId;
-	}
-
 	private static UserContext getInstance() {
 		return SpringBeanUtil.getBean(UserContext.class);
 	}
 	
-	public static UserContext loadByCustGlobalId(String custGlobalId) {
+	public static UserContext loadByLoginId(String loginId){
 		UserContext userContext = getInstance();
-		userContext.setCustGlobalId(custGlobalId);
+		userContext.setLoginId(loginId);
 		return userContext;
+		
 	}
-	
 	/**
 	 * 查找登陆用户信息
 	 * @return
 	 */
-	public LoginUserVo findLoginUser(String oemCode){
-		return null;
+	public LoginUserVo findLoginUser(String type, String oemCode){
+		return userQueryRepository.findLoginUser(loginId, type, oemCode);
+	}
+
+	protected void setLoginId(String loginId) {
+		this.loginId = loginId;
 	}
 }

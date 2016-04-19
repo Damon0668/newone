@@ -50,14 +50,16 @@ public class GuardConstants {
 	}
 	
 	/**
-	 * 门禁类型
+	 * 摄像头类型
 	 */
-	public static interface GuardType{
+	public static interface GuardCameraType{
 		
 		/**
 		 * 摄像头
 		 */
-		public String CAMERA = "0";
+		public String ALONE = "0";
+		
+		public String ATTACHMENT = "1";
 	
 	}
 }

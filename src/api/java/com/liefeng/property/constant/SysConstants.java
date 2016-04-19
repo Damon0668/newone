@@ -12,7 +12,7 @@ public class SysConstants {
 	/**
 	 * 默认oem_code
 	 */
-	public static final String DEFAULT_OEM_CODE = "property";
+	public static final String DEFAULT_OEM_CODE = "default_property";
 	
 	/**
 	 * 默认app_code

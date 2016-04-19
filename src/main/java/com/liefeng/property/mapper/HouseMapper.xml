@@ -246,7 +246,7 @@ FROM
 			h.house_num AS houseNum,
 			h.oem_code AS oemCode,
 			"01" AS residentRelation,
-			'proprietor' AS type
+			'1' AS type
 		FROM
 			property.t_house h
 			LEFT JOIN property.t_proprietor_house ph ON ph.house_num = h.house_num AND ph.project_id = h.project_id
@@ -265,25 +265,14 @@ FROM
 			h.house_num AS houseNum,
 			h.oem_code AS oemCode,
 			rh.resident_relation AS residentRelation,
-			'resident' AS type
+			'2' AS type
 		FROM
 			property.t_house h
 			LEFT JOIN property.t_resident_house rh ON rh.house_id = h.id
 			LEFT JOIN property.t_resident r ON r.id = rh.resident_id
 			LEFT JOIN property.t_project pj ON pj.id = h.project_id
 	)) AS v
-WHERE v.custGlobalId = #{custGlobalId} 
-	AND v.oemCode = #{oemCode}
-	<choose>
-		<!-- 业主 -->
-		<when test="type != null and type == '1'">
-			AND v.type = 'proprietor'
-		</when>
-		<!-- 住户 -->
-		<when test="type != null and type == '2'">
-			AND v.type = 'resident'
-		</when>
-	</choose>
+WHERE v.custGlobalId = #{custGlobalId}
 ORDER BY
 	v.houseNum
 </select>

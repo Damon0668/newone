@@ -19,7 +19,7 @@ public class UserHouseVo extends BaseValue {
 	@ApiModelProperty(value = "[业主|住户]ID")
 	private String id;
 	
-	@ApiModelProperty(value = "proprietor[业主]resident[住户]")
+	@ApiModelProperty(value = "[1:业主|2:住户]")
 	private String type;
 	
 	@ApiModelProperty(value="与业主关系[[字典]RESIDENT_RELATION]")

@@ -1,13 +1,12 @@
 package com.liefeng.property.api.finger;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.base.vo.UserVo;
+import com.liefeng.common.util.EncryptionUtil;
 import com.liefeng.common.util.TimeUtil;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataValue;
@@ -24,10 +24,13 @@ import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
+import com.liefeng.intf.property.api.ILoginUserService;
+import com.liefeng.intf.service.cache.IRedisService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.api.ro.finger.user.AppFriendIdAndStatusRo;
 import com.liefeng.property.api.ro.finger.user.AppMsgSettingRo;
+import com.liefeng.property.api.ro.finger.user.LoginUserRo;
 import com.liefeng.property.api.ro.finger.user.ResidentFeedbackRo;
 import com.liefeng.property.api.ro.finger.user.UserIdConditionRo;
 import com.liefeng.property.api.ro.finger.user.UserIdFriendIdRo;
@@ -35,9 +38,13 @@ import com.liefeng.property.api.ro.finger.user.UserRo;
 import com.liefeng.property.api.ro.id.CustGlobalIdRo;
 import com.liefeng.property.api.ro.id.UserIdRo;
 import com.liefeng.property.constant.HouseholdConstants;
+import com.liefeng.property.vo.api.LoginUserVo;
 import com.liefeng.property.vo.household.AppFriendVo;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
 import com.liefeng.property.vo.household.ResidentFeedbackVo;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * 用户公共服务类
@@ -48,6 +55,8 @@ import com.liefeng.property.vo.household.ResidentFeedbackVo;
 @RestController
 @RequestMapping(value = "/api/finger/user")
 public class UserController {
+	
+	private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	private IUserService userService;
@@ -60,6 +69,39 @@ public class UserController {
 	
 	@Autowired
 	private IHouseholdService householdService;
+	
+	@Autowired
+	private ILoginUserService loginUserService;
+	
+	@Autowired
+	private IRedisService redisService;
+	
+	@ApiOperation(value="获取登陆账户信息")
+	@RequestMapping(value="/getLoginUser", method=RequestMethod.POST)
+	@ResponseBody
+	public DataValue<LoginUserVo> getLoginUser(@Valid @ModelAttribute LoginUserRo loginUserRo){
+		
+		LoginUserVo loginUser = loginUserService.findLoginUser(loginUserRo.getLoginId(), loginUserRo.getHouseholdType(), loginUserRo.getOemCode());
+		
+		//openId加密
+		String openId = loginUser.getGlobalId() + "|" + loginUser.getOemCode();
+		
+		logger.info("getLoginUser openId = {}", openId);
+	
+		openId = EncryptionUtil.encrypt(openId, EncryptionUtil.OPEN_ID_PASSWORD);
+		
+		loginUser.setOpenId(openId);
+		
+		//刷新缓存中的oemCode
+		String key = "openId_" + openId;
+		
+		if(!redisService.isKeyExist(key)){
+			redisService.setValue(key, loginUser.getOemCode());
+		}
+				
+		return DataValue.success(loginUser);
+	}
+	
 	
 	/**
 	 * 获取用户信息

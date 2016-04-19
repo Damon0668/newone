@@ -11,14 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.base.bo.UserLoginBo;
 import com.liefeng.base.vo.UserVo;
-import com.liefeng.common.util.EncryptionUtil;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
-import com.liefeng.intf.property.api.ILoginUserService;
-import com.liefeng.intf.service.cache.IRedisService;
 import com.liefeng.property.api.ro.finger.auth.AuthLoginRo;
 import com.liefeng.property.api.ro.finger.auth.UpdatePwdLoginRo;
 import com.liefeng.property.api.ro.finger.auth.UpdatePwdRo;
@@ -38,15 +35,12 @@ public class AuthController {
 	private IUserService userService;
 
 	@Autowired
-	private ILoginUserService loginUserService;
-	
-	@Autowired
-	private IRedisService redisService;
-	
-	@Autowired
 	private IHouseholdService householdService;
 
-	@ApiOperation(value="用户登陆", notes="用户登陆接口,当用户没有激活[USER_UNBIND_MOBILE]或者更换手机[USER_LOGIN_MOBILE_CHANGED]登陆时需要申请验证码并填入,短信事件为SD_LOGIN_MSG")
+	@ApiOperation(value="用户登陆", notes="用户登陆接口,当用户没有激活[USER_UNBIND_MOBILE]或者更换手机[USER_LOGIN_MOBILE_CHANGED]登陆时需要申请验证码并填入,"
+			+ "短信事件为SD_LOGIN_MSG"
+			+ "登陆成功后只返回OPENID和全局ID"
+			+ "需要调用房产列表和getLoginUser获取登陆用户信息")
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<LoginUserVo> userLogin(@Valid @ModelAttribute AuthLoginRo authLogin){
@@ -60,28 +54,10 @@ public class AuthController {
 		userLoginBo.setTerminalType(PushMsgConstants.TerminalType.MOBILE_PROPERTY);
 		
 		UserVo user = userService.login(userLoginBo);
-		
-		//精简信息
-		loginUser = MyBeanUtil.createBean(user, LoginUserVo.class);
-		
-		loginUser.setId(null);
+
+		loginUser = new LoginUserVo();
 		loginUser.setGlobalId(user.getCustGlobalId());
-		loginUser.setPic(user.getAvatarUrl());
-		loginUser.setUserId(user.getId());
-		
-		//openId加密
-		String openId = user.getCustGlobalId() + "|" + loginUser.getOemCode();
-	
-		openId = EncryptionUtil.encrypt(openId, EncryptionUtil.OPEN_ID_PASSWORD);
-		
-		loginUser.setOpenId(openId);
-		
-		//刷新缓存中的oemCode
-		String key = "openId_" + openId;
-		
-		if(!redisService.isKeyExist(key)){
-			redisService.setValue(key, loginUser.getOemCode());
-		}
+		loginUser.setOpenId("default");
 		
 		return DataValue.success(loginUser);
 	}

@@ -22,10 +22,6 @@ public class GetUserHousesRo extends BaseValue {
 	@NotNull
 	private String globalId;
 
-	@ApiModelProperty(value = "用户类型[1：业主，2：住户]", required = true)
-	@NotNull
-	private String householdType;
-
 	public String getGlobalId() {
 		return globalId;
 	}
@@ -33,13 +29,4 @@ public class GetUserHousesRo extends BaseValue {
 	public void setGlobalId(String globalId) {
 		this.globalId = globalId;
 	}
-
-	public String getHouseholdType() {
-		return householdType;
-	}
-
-	public void setHouseholdType(String householdType) {
-		this.householdType = householdType;
-	}
-
 }

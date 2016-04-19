@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,11 +107,7 @@ public class GuardDeviceContext {
 			
 			logger.info("create guardDevice ={}", guardDevice);
 			guardDeviceRepository.save(guardDevicePo);
-			
-			if(GuardConstants.GuardType.CAMERA.equals(guardDevice.getGuardType())){
-				
-			}
-			
+
 			guardDevice = MyBeanUtil.createBean(guardDevicePo, GuardDeviceVo.class);
 		}
 	}

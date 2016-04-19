@@ -1,7 +1,5 @@
 package com.liefeng.property.api.ro.finger.fee;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotNull;
 
 import com.liefeng.core.entity.BaseValue;

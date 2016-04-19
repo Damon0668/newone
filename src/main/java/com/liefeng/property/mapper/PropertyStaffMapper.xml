@@ -61,6 +61,9 @@
         <if test="extra.idOrName != null and extra.idOrName != ''" >
             and ( stf.number = #{extra.idOrName} or stf.name like concat('%',#{extra.idOrName},'%') ) 
         </if>
+        <if test="extra.projectId != null and extra.projectId != ''" >
+            and mp.project_id = #{extra.projectId} 
+        </if>
 	</trim>
 </sql>
 
