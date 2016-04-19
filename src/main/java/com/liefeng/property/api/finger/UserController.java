@@ -143,7 +143,7 @@ public class UserController {
 		customerVo.setHeight(userRo.getHeight());
 		customerVo.setStep(userRo.getStep());
 		customerVo.setWeight(userRo.getWeight());
-		customerVo.setBirthday(TimeUtil.format(userRo.getBirthday(), "yyyy-MM-dd"));
+		customerVo.setBirthday(TimeUtil.format(userRo.getBirthday(), TimeUtil.PATTERN_1));
 		
 		user.setCustomer(customerVo);
 		// 校验用户信息
