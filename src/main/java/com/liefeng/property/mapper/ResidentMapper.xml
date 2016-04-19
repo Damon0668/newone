@@ -67,6 +67,7 @@
 	      r.tel AS tel,
 	      r.status AS status,
 	      r.work_unit as workUnit,
+	      r.pic as pic,
 	      rh.house_id as houseId,
 	      rh.resident_type AS residentType,
 	      rh.resident_relation AS residentRelation,
