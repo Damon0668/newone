@@ -97,6 +97,9 @@ dependencies {
     //snaker
    compile 'com.github.snakerflow:snaker-core:2.5.1'
    
+    //模板
+   compile("org.freemarker:freemarker:2.3.23")
+   
    //api
    compile 'io.springfox:springfox-swagger2:2.2.2'
    compile 'io.springfox:springfox-swagger-ui:2.1.1'
@@ -112,7 +115,7 @@ dependencies {
    apiCompile 'com.liefeng:liefeng-basic-api:1.0.1'
    
    //api
-   apiCompile 'io.springfox:springfox-swagger2:2.2.2'
+   apiCompile 'io.swagger:swagger-annotations:1.5.0'
 
 }
 
