@@ -138,7 +138,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 				}
 			}
 		} else if(approvalFlowBo.getTaskName().equals(ApprovalFlowConstants.NODE_END)) { //结束流程
-			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
+			//workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
 			approvalFlowBo.getParams().put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
 			approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_STATUS, ApprovalFlowConstants.ORDER_COMPLETE);
 			workflowService.complete(approvalFlowBo.getOrderId(),approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
@@ -147,7 +147,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.APPROVAL_FINISHED);
 			if(pushMsgTemplateVo != null){
 				
-				Order order = workflowService.findOrderById(approvalFlowBo.getOrderId());
+				HistoryOrder order = workflowService.findHisOrderById(approvalFlowBo.getOrderId());
 				
 				Map<String,String> data = new HashMap<String,String>();
 				data.put("processId", order.getProcessId());
