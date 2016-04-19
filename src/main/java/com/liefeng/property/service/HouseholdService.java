@@ -147,7 +147,8 @@ public class HouseholdService implements IHouseholdService {
 			houseContext.update();
 
 			// 仅当同个OEM下，同个小区下业主不存在时，才做用户创建
-			// 业主信息存在时，即使传过来的手机号不同也不做用户创建，为了保证同个OEM下，同个小区业主用户信息只有一份
+			// 业主信息存在时，即使传过来的手机号不同也不做用户创建，即customer存在而user不存在情况
+			// 为了保证同个OEM下，同个小区业主用户信息只有一份
 			if (!isExit) {
 				// 后台默认创建的手机用户信息
 				UserVo user = setUpUser4Create(customer, UserConstants.HouseholdType.PROPRIETOR);
@@ -258,7 +259,8 @@ public class HouseholdService implements IHouseholdService {
 			residentHouseContext.create();
 
 			// 仅当同个OEM下，同个小区下住户不存在时，才做用户创建
-			// 住户信息存在时，即使传过来的手机号不同也不做用户创建，为了保证同个OEM下，同个小区住户用户信息只有一份
+			// 住户信息存在时，即使传过来的手机号不同也不做用户创建,即customer存在而user不存在
+			// 为了保证同个OEM下，同个小区住户用户信息只有一份
 			if (!isExit) {
 				if (!ValidateHelper.isNotEmptyString(customer.getMobile())) { // 手机号为空，只保存客户信息，不保存用户信息
 						customer = checkService.createCustomerCheck(customer);
@@ -330,7 +332,7 @@ public class HouseholdService implements IHouseholdService {
 				// 用户更新信息设置
 				UserVo user = setUpUser4Update(customer, UserConstants.HouseholdType.RESIDENT);
 				
-				// 用户ID为空代表保存时没有创建用户信息，即保存的时候住户的手机号为空
+				// 用户ID为空代表新增保存时没有创建用户信息，即保存的时候住户的手机号为空
 				if(!ValidateHelper.isNotEmptyString(user.getId())) {  // 新增住户信息
 					try {
 						// 用户信息校验
@@ -630,8 +632,7 @@ public class HouseholdService implements IHouseholdService {
 	/**
 	 * 校验业主信息
 	 * 
-	 * @param singleHouse
-	 *            业主综合信息值对象
+	 * @param singleHouse 业主综合信息值对象
 	 * @throws PropertyException
 	 */
 	private void validateProprietor(ProprietorSingleHouseVo singleHouse) throws PropertyException {
@@ -651,7 +652,7 @@ public class HouseholdService implements IHouseholdService {
 			UserVo user = userService.getUserByMobile(singleHouse.getPhone());
 			if (user != null && user.getCustomer() != null) {
 				if (!singleHouse.getIdNum().equals(user.getCustomer().getIdNum())) {
-					logger.error("手机号已被其他客户绑定");
+					logger.error("手机号({})已被其他客户绑定", singleHouse.getPhone());
 					throw new PropertyException(HouseholdErrorCode.PHONE_ALREADY_BINDING);
 				}
 			}
@@ -661,8 +662,7 @@ public class HouseholdService implements IHouseholdService {
 	/**
 	 * 校验住户信息
 	 * 
-	 * @param resident
-	 *            住户信息
+	 * @param resident 住户信息
 	 * @throws PropertyException
 	 */
 	private void validateResident(ResidentVo resident) throws PropertyException {
