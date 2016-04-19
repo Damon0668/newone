@@ -147,7 +147,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.APPROVAL_FINISHED);
 			if(pushMsgTemplateVo != null){
 				
-				Order order = workflowService.findOrderById(approvalFlowBo.getOrderId());
+				HistoryOrder order = workflowService.findHisOrderById(approvalFlowBo.getOrderId());
 				
 				Map<String,String> data = new HashMap<String,String>();
 				data.put("processId", order.getProcessId());
@@ -460,6 +460,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 					TaskModel taskModel = new TaskModel();
 					taskModel.setName(ApprovalFlowConstants.NODE_END);
 					taskModel.setDisplayName("结束并归档");
+					taskModel.setAssignee(ApprovalFlowConstants.NODE_END);
 					nextTasks.add(taskModel);
 				}
 			} 
