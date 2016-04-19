@@ -13,6 +13,7 @@
     select
         u.id userId,
         u.nick_name nickName,
+        u.avatar_url pic,
         tt.* 
     from (
 	    SELECT
@@ -22,7 +23,6 @@
 	        t.`name`,
 	        t.phone mobile,
 	        t.`status`,
-	        t.pic_url pic,
 	        t.oem_code oemCode,
 	        t.household_type householdType,
 	        t.resident_relation residentRelation
@@ -35,7 +35,6 @@
 	                p.`name`,
 	                p.phone,
 	                p.`status`,
-	                p.pic_url,
 	                p.oem_code,
 	                "1" household_type,
 	                "01" resident_relation
@@ -49,7 +48,6 @@
 	                    r.`name`,
 	                    r.mobile,
 	                    r.`status`,
-	                    r.pic,
 	                    r.oem_code,
 	                    "2" household_type,
 	                    rh.resident_relation
@@ -70,7 +68,6 @@
 	        </when>
 	    </choose>
     ) tt left join basic.t_user u on tt.globalId = u.cust_global_id 
-    and tt.householdType = u.household_type 
     and u.oem_code = #{oemCode}
 </select>
 
