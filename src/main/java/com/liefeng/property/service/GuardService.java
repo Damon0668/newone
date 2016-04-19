@@ -295,4 +295,9 @@ public class GuardService implements IGuardService{
 		return AttendantContext.build().findByPage(projectId, manageProjectIds, name, phone, serviceType, page, size);
 	}
 
+	@Override
+	public AttendantVo updateAttendant(AttendantVo attendantVo) {
+		return AttendantContext.build(attendantVo).update();
+	}
+
 }

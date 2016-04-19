@@ -62,4 +62,21 @@ public class GuardConstants {
 		public String ATTACHMENT = "1";
 	
 	}
+	
+	/**
+	 * 服务人员状态
+	 */
+	public static interface AttendantStatus{
+		
+		/**
+		 * 正常：1
+		 */
+		public String NORMAL = "1";
+		
+		/**
+		 * 注销:2
+		 */
+		public String CANCEL = "2";
+	
+	}
 }

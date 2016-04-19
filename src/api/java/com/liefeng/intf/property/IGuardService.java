@@ -260,4 +260,13 @@ public interface IGuardService {
 	 * @date 2016年4月19日 下午4:03:52
 	 */
 	public DataPageValue<AttendantVo> listAttendants(String projectId, String manageProjectIds, String name, String phone, String serviceType, Integer page, Integer size);
+	
+	/**
+	 * 更新服务人员信息
+	 * @param attendantVo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月19日 下午5:45:36
+	 */
+	public AttendantVo updateAttendant(AttendantVo attendantVo);
 }
