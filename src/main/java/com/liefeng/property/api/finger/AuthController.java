@@ -49,7 +49,7 @@ public class AuthController {
 		//统一鉴权登陆
 		UserLoginBo userLoginBo = MyBeanUtil.createBean(authLogin, UserLoginBo.class);
 
-		userLoginBo.setAppCode(SysConstants.DEFAULT_APP_CODE);
+		userLoginBo.setAppCode(SysConstants.FINGER_APP_CODE);
 		userLoginBo.setAppType(PushMsgConstants.AppType.MOBILE);
 		userLoginBo.setTerminalType(PushMsgConstants.TerminalType.MOBILE_PROPERTY);
 		
@@ -67,7 +67,7 @@ public class AuthController {
 	@ResponseBody
 	public ReturnValue updatePwdByForget(@Valid @ModelAttribute UpdatePwdRo updatePwdRo){
 		
-		userService.updatePwdByForget(updatePwdRo.getMobile(), updatePwdRo.getPassword(), updatePwdRo.getCode(), updatePwdRo.getAppCode());
+		userService.updatePwdByForget(updatePwdRo.getMobile(), updatePwdRo.getPassword(), updatePwdRo.getCode(), SysConstants.FINGER_APP_CODE);
 		//个推提醒
 		householdService.pushMsgToUserByPhone(updatePwdRo.getMobile());
 		

@@ -5,6 +5,11 @@ package com.liefeng.property.constant;
  * @author Huangama
  * @date 2016-2-20
  */
+/**
+ *
+ * @author 蔡少东
+ * @date 2016年4月19日
+ */
 public class SysConstants {
 
 	private SysConstants() {}
@@ -15,9 +20,14 @@ public class SysConstants {
 	public static final String DEFAULT_OEM_CODE = "default_property";
 	
 	/**
-	 * 默认app_code
+	 * 指点 app_code
 	 */
-	public static final String DEFAULT_APP_CODE = "property";
+	public static final String FINGER_APP_CODE = "property";
+	
+	/**
+	 * 移动工作台 app_code
+	 */
+	public static final String WORKBENCH_APP_CODE = "workbench";
 	
 	
 	/**
