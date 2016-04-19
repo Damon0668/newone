@@ -164,22 +164,28 @@ public class GuardDeviceContext {
 		param.setPageSize(pageSize);
 		
 		Long total = guardDeviceQueryRepository.queryByCount(param);
+		param.getPager().setRowCount(total);
 		
 		List<GuardDeviceVo> guardDeviceList = guardDeviceQueryRepository.queryByPage(param);
 		
 		return new DataPageValue<GuardDeviceVo>(guardDeviceList, total, pageSize, currentPage);
 	}
 	
-	public List<GuardDeviceVo> findGuardDevice(){
+	public List<GuardDeviceVo> findGuardDevice(String type){
 		List<GuardDeviceVo> guardDeviceList = null;
-		if(ValidateHelper.isNotEmptyString(projectId)){
+		if(ValidateHelper.isNotEmptyString(projectId) && ValidateHelper.isNotEmptyString(type)){
 			Map<String, String> extra = new HashMap<String, String>();
 			extra.put("projectId", projectId);
+			extra.put("guardType", type);
 			
 			PagingParamVo param = new PagingParamVo();
 			param.setExtra(extra);
 			param.setPage(1);
 			param.setPageSize(Integer.MAX_VALUE);
+			
+			Long total = guardDeviceQueryRepository.queryByCount(param);
+			// 设置数据总行数，用于计算偏移量
+			param.getPager().setRowCount(total);
 			
 			guardDeviceList = guardDeviceQueryRepository.queryByPage(param);
 			

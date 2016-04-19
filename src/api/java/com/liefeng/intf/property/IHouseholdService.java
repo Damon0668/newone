@@ -521,11 +521,11 @@ public interface IHouseholdService {
 	
 	/**
 	 * 根据手机号码，推送消息给用户（业主、住户）
-	 * @param phone 
+	 * @param 用户ID 
 	 * @author xhw
 	 * @date 2016年4月12日 上午9:44:52
 	 */
-	public void pushMsgToUserByPhone(String phone);
+	public void pushMsgToUserByPhone(String userId);
 	
 	/**
 	 * 根据projectId、houseNum获取用户的cleintId

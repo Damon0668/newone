@@ -1247,13 +1247,13 @@ public class HouseholdService implements IHouseholdService {
 	}
 
 	@Override
-	public void pushMsgToUserByPhone(String phone) {
+	public void pushMsgToUserByPhone(String userId) {
 		//获取推送消息模板
 		PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.CHANGE_PWD_SUCCESS);
 		
 		if(pushMsgTemplateVo != null){
 			//个推给业主、住户
-			UserVo userVo = userService.getUserByMobile(phone);
+			UserVo userVo = userService.getUserById(userId);
 			
 			if(userVo != null){
 				SingleUserMsg message = new SingleUserMsg();

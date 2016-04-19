@@ -70,10 +70,11 @@ public class GuardService implements IGuardService{
 		logger.info("createGuardDevice check GuardDeviceVo = {}", guardDevice);
 		
 		guardDevice.setType(guardDevice.getGuardType());
+		guardDevice.setSn(guardDevice.getGuardNum());
 		
 		DeviceVo deviceVo = checkService.createDeviceCheck(guardDevice);
-		guardDevice.setDeviceGlobalId(deviceVo.getGlobalId());
 		
+		guardDevice.setDeviceGlobalId(deviceVo.getGlobalId());
 		GuardDeviceContext.build(guardDevice).create();
 		
 		if(DeviceConstants.Type.CAMERA.equals(guardDevice.getType())){
@@ -198,9 +199,9 @@ public class GuardService implements IGuardService{
 	}
 
 	@Override
-	public List<GuardDeviceVo> findGuardDeviceByProjectId(String projectId) {
-		logger.info("findGuardDeviceByProjectId projectId = {}", projectId);
-		return GuardDeviceContext.loadByProjectId(projectId).findGuardDevice();
+	public List<GuardDeviceVo> findGuardDevice(String projectId, String type) {
+		logger.info("findGuardDevice projectId = {}, type = {}", projectId, type);
+		return GuardDeviceContext.loadByProjectId(projectId).findGuardDevice(type);
 	}
 
 	@Override
@@ -265,6 +266,11 @@ public class GuardService implements IGuardService{
 		return guardCardContext.getCardDetail();
 	}
 
+	@Override
+	public List<GuardDeviceVo> findGuardDeviceByProjectId(String projectId) {
+		return findGuardDevice(projectId,null);
+	}	
+	
 	@Override
 	public DataPageValue<GuardCardLogVo> listGuardCardLog(String cardId, Integer currentPage, Integer pageSize) {
 		GuardCardLogContext guardCardLogContext = GuardCardLogContext.build();

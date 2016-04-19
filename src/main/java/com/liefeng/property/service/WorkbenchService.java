@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.base.vo.UserVo;
+import com.liefeng.common.util.FreeMarkerUtil;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
@@ -1731,9 +1732,14 @@ public class WorkbenchService implements IWorkbenchService {
 					//获取推送消息模板
 					PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.WORK_ORDER_GRAB_ONE);
 					
+					Map<String,String> data = new HashMap<String,String>();
+					data.put("orderId", tasks.get(0).getOrderId());
+					data.put("taskId", tasks.get(0).getId());
+					String pageUrl = FreeMarkerUtil.parseStringTemplate(pushMsgTemplateVo.getPageUrl(), data);
+					
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(PushActionConstants.WORK_ORDER_GRAB_ONE);
-					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
+					message.setPageUrl(pageUrl);
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -1746,9 +1752,15 @@ public class WorkbenchService implements IWorkbenchService {
 					//获取推送消息模板
 					PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.WORK_ORDER_TO_COLLECT_ONE);
 					
+					//在路径后添加参数
+					Map<String,String> data = new HashMap<String,String>();
+					data.put("orderId", tasks.get(0).getOrderId());
+					data.put("taskId", tasks.get(0).getId());
+					String pageUrl = FreeMarkerUtil.parseStringTemplate(pushMsgTemplateVo.getPageUrl(), data);
+					
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(PushActionConstants.WORK_ORDER_TO_COLLECT_ONE);
-					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
+					message.setPageUrl(pageUrl);
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
 					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
@@ -2024,8 +2036,7 @@ public class WorkbenchService implements IWorkbenchService {
 			}
 		}
 
-		eventReportVo
-				.setStatus(WorkbenchConstants.EventReport.STATUS_UNTREATED);
+		eventReportVo.setStatus(WorkbenchConstants.EventReport.STATUS_UNTREATED);
 		eventReportVo.setReportMode(WorkbenchConstants.EventReportMode.APP);
 		eventReportVo.setId(UUIDGenerator.generate());
 		eventReportVo.setOemCode(ContextManager.getInstance().getOemCode());
@@ -2033,8 +2044,7 @@ public class WorkbenchService implements IWorkbenchService {
 		eventReportVo.setReportTime(new Date());
 		eventReportVo.setEventType(WorkbenchConstants.EventReport.EVENTTYPE_NORMAL);
 
-		EventReportContext eventReportContext = EventReportContext
-				.build(eventReportVo);
+		EventReportContext eventReportContext = EventReportContext.build(eventReportVo);
 		eventReportContext.create();
 		
 		//TODO

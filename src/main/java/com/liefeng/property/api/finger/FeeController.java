@@ -19,6 +19,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IFeeService;
+import com.liefeng.property.api.ro.finger.fee.CreateMeterRecordRo;
 import com.liefeng.property.api.ro.finger.fee.FeeItemByDateRo;
 import com.liefeng.property.api.ro.finger.fee.FreeIsCreateRo;
 import com.liefeng.property.api.ro.finger.fee.MeterRecordRo;
@@ -55,8 +56,9 @@ public class FeeController {
 	@ApiOperation(value="抄表")
 	@RequestMapping(value="/create" , method=RequestMethod.POST)
 	@ResponseBody
-	public ReturnValue create(@Valid @ModelAttribute MeterRecordRo meterRecordRo) throws Exception {
-		MeterRecordVo meterRecordVo = MyBeanUtil.createBean(meterRecordRo, MeterRecordVo.class);
+	public ReturnValue create(@Valid @ModelAttribute CreateMeterRecordRo createMeterRecordRo) throws Exception {
+		MeterRecordVo meterRecordVo = MyBeanUtil.createBean(createMeterRecordRo, MeterRecordVo.class);
+		meterRecordVo.setMeterOwner(FeeConstants.MeterRecord.METEROWNER_YSE);
 		feeService.createMeterRecord(meterRecordVo);
 		return ReturnValue.success();
 	}
@@ -68,6 +70,7 @@ public class FeeController {
 		Boolean result = feeService.isCreateMeterRecordOnProprietor(freeIsCreateRo.getProjectId(), freeIsCreateRo.getHouseNum(), freeIsCreateRo.getMeterType());
 		return DataValue.success(result);
 	}
+	
 	/**
 	 * 
 	 * 获取该房号的所属时间段的费用数据

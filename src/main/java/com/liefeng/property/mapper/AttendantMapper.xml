@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.AttendantQueryRepository" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.guard.AttendantVo" >
+	<result column="id" property="id"/>
+	<result column="name" property="name"/>
+	<result column="id_num" property="idNum"/>
+	<result column="phone" property="phone"/>
+	<result column="project_id" property="projectId"/>
+	<result column="service_type" property="serviceType"/>
+	<result column="full_name" property="fullName"/>
+	<result column="status" property="status"/>
+</resultMap>
+
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+	where t.project_id = p.id
+	<trim  suffixOverrides="," >
+		<if test="extra.projectId != null and extra.projectId != ''" >
+		    and t.project_id = #{extra.projectId}
+		</if>
+		<if test="extra.name != null and extra.name != ''">
+			and t.name like concat('%', #{extra.name},'%')
+		</if>
+		<if test="extra.phone != null and extra.phone != ''">
+			and t.phone like concat('%', #{extra.phone},'%')
+		</if>
+		<if test="extra.manageProjectIds != null and extra.manageProjectIds != ''" >
+		    and FIND_IN_SET(t.project_id, #{extra.manageProjectIds})
+		</if>
+		<if test="extra.oemCode != null and extra.oemCode != ''" >
+		    and t.oem_code = #{extra.oemCode}
+		</if>
+	        order by t.create_time desc
+	</trim>
+</sql>
+
+<select id="queryByPage" resultMap="BaseResultMap">
+   SELECT
+		t.id,
+		t.name,
+		t.id_num,
+		t.phone,
+		t.project_id,
+		t.service_type,
+		t.status,
+		p.full_name
+	FROM
+		t_attendant t,
+		t_project p
+		<include refid="Example_Where_Clause" />
+		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	          ${pager.mysqlQueryCondition}
+	    </if>
+</select>
+
+
+<select id="queryByCount"  resultType="java.lang.Long">
+select 
+	count(1) 
+from(
+		SELECT
+			t.id
+		FROM
+			t_attendant t,
+			t_project p
+	    <include refid="Example_Where_Clause" />
+	) v
+</select>
+
+</mapper>   

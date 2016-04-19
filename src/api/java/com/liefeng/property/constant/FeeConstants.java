@@ -76,6 +76,23 @@ public class FeeConstants {
 		 * 是否可以抄表 不可以
 		 */
 		public static final Integer READ_NO = 0;
+		
+		/**
+		 * 数据来源 web
+		 */
+		public static final String FROM_WEB = "1";
+		
+		/**
+		 * 数据来源 andorid 客户端
+		 */
+		public static final String FROM_ANDROID = "2";
+		
+		/**
+		 * 数据来源 ios 客户端
+		 */
+		public static final String FROM_IOS = "3";
+		
+		
 	}
 
 	

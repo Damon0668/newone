@@ -99,8 +99,14 @@ public interface IGuardService {
 	 */
 	public GuardDeviceVo findGuardDevice(String guardDeviceId);
 	
-	/**
-	 * 
+	/**查找门禁设备
+	 * @param projectId
+	 * @param type
+	 * @return
+	 */
+	public List<GuardDeviceVo> findGuardDevice(String projectId, String type);
+	
+	/**查找门禁设备
 	 * @param projectId
 	 * @return
 	 */
