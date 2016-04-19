@@ -30,11 +30,13 @@
 			FROM
 				basic.t_user
 			WHERE
-				mobile = #{extra.condition}
+			1 = 1 
+			and mobile = #{extra.condition}
 			OR NAME LIKE concat('%', #{extra.condition},'%')
 			OR nick_name LIKE concat('%', #{extra.condition},'%')
 		)a
 	LEFT JOIN property.t_app_friend b ON a.friend_id = b.friend_id
+	AND b.oem_code = #{extra.oemCode}
 	AND b.user_id = #{extra.userId}
 </select>
 

@@ -201,6 +201,7 @@ public class AppFriendContext {
 		HashMap<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("userId", userId);
 		paramMap.put("condition", condition);
+		paramMap.put("oemCode", ContextManager.getInstance().getOemCode());
 
 		PagingParamVo param = new PagingParamVo();
 		param.setExtra(paramMap);
