@@ -89,6 +89,7 @@ public class FeeService implements IFeeService {
 		ProprietorHouseVo proprietorHouseVo = householdService.getProprietorHouse(meterRecordVo.getProjectId(), meterRecordVo.getHouseNum());
 		ProprietorVo proprietorVo = householdService.getProprietorById(proprietorHouseVo.getProprietorId());
 		meterRecordVo.setProprietorName(proprietorVo.getName());
+		meterRecordVo.setPropertyId(proprietorHouseVo.getProprietorId());
 		MeterRecordContext meterRecordContext = MeterRecordContext
 				.build(meterRecordVo);
 		meterRecordContext.create();
