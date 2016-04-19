@@ -43,7 +43,7 @@ public class AppFriendVo extends BaseValue{
 	/**
 	 * 状态。0：等待验证；1：已为好友；2：拒绝
 	 */
-	@ApiModelProperty(value="状态【0：等待验证；1：已为好友；2：已拒绝】")
+	@ApiModelProperty(value="状态【0：等待对方验证{显示：发消息按钮}；1：已为好友{显示：发消息按钮}；2：已拒绝{显示：发消息按钮、添加按钮}；3：等待我验证{显示：同意、拒绝按钮}】")
 	private String status;
 
 	/**

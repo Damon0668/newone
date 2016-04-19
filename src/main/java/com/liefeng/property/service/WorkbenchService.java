@@ -2024,8 +2024,7 @@ public class WorkbenchService implements IWorkbenchService {
 			}
 		}
 
-		eventReportVo
-				.setStatus(WorkbenchConstants.EventReport.STATUS_UNTREATED);
+		eventReportVo.setStatus(WorkbenchConstants.EventReport.STATUS_UNTREATED);
 		eventReportVo.setReportMode(WorkbenchConstants.EventReportMode.APP);
 		eventReportVo.setId(UUIDGenerator.generate());
 		eventReportVo.setOemCode(ContextManager.getInstance().getOemCode());
@@ -2033,8 +2032,7 @@ public class WorkbenchService implements IWorkbenchService {
 		eventReportVo.setReportTime(new Date());
 		eventReportVo.setEventType(WorkbenchConstants.EventReport.EVENTTYPE_NORMAL);
 
-		EventReportContext eventReportContext = EventReportContext
-				.build(eventReportVo);
+		EventReportContext eventReportContext = EventReportContext.build(eventReportVo);
 		eventReportContext.create();
 		
 		//TODO

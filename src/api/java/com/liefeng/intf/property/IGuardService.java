@@ -9,6 +9,7 @@ import com.liefeng.property.bo.guard.GuardCardBo;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
 import com.liefeng.property.bo.guard.GuardResidentBo;
 import com.liefeng.property.vo.guard.DevicePositionVo;
+import com.liefeng.property.vo.guard.GuardCardLogVo;
 import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
 import com.liefeng.property.vo.guard.GuardCardUserVo;
 import com.liefeng.property.vo.guard.GuardCardVo;
@@ -216,4 +217,13 @@ public interface IGuardService {
 	 * @return 磁卡信息
 	 */
 	public GuardCardVo getGuardCardDetail(String cardId);
+	
+	/**
+	 * 分页查询磁卡日志
+	 * @param cardId 磁卡ID
+	 * @param currentPage 分页当前页
+	 * @param pageSize 分页大小
+	 * @return 磁卡日志分页数据
+	 */
+	public DataPageValue<GuardCardLogVo> listGuardCardLog(String cardId, Integer currentPage, Integer pageSize);
 }

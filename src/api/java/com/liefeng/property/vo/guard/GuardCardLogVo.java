@@ -31,6 +31,11 @@ public class GuardCardLogVo extends BaseValue {
 	private String staffId;
 	
 	/**
+	 * 操作员工名字
+	 */
+	private String staffName;
+	
+	/**
 	 * 操作时间
 	 */
 	private Date createTime;
@@ -70,6 +75,14 @@ public class GuardCardLogVo extends BaseValue {
 
 	public void setStaffId(String staffId) {
 		this.staffId = staffId;
+	}
+
+	public String getStaffName() {
+		return staffName;
+	}
+
+	public void setStaffName(String staffName) {
+		this.staffName = staffName;
 	}
 
 	public Date getCreateTime() {

@@ -28,6 +28,7 @@ import com.liefeng.property.constant.GuardConstants;
 import com.liefeng.property.domain.guard.CameraContext;
 import com.liefeng.property.domain.guard.DevicePositionContext;
 import com.liefeng.property.domain.guard.GuardCardContext;
+import com.liefeng.property.domain.guard.GuardCardLogContext;
 import com.liefeng.property.domain.guard.GuardCardPrivilegeContext;
 import com.liefeng.property.domain.guard.GuardCardUserContext;
 import com.liefeng.property.domain.guard.GuardDeviceContext;
@@ -35,6 +36,7 @@ import com.liefeng.property.domain.household.ResidentContext;
 import com.liefeng.property.domain.household.VisitorContext;
 import com.liefeng.property.vo.guard.CameraVo;
 import com.liefeng.property.vo.guard.DevicePositionVo;
+import com.liefeng.property.vo.guard.GuardCardLogVo;
 import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
 import com.liefeng.property.vo.guard.GuardCardUserVo;
 import com.liefeng.property.vo.guard.GuardCardVo;
@@ -267,6 +269,12 @@ public class GuardService implements IGuardService{
 	@Override
 	public List<GuardDeviceVo> findGuardDeviceByProjectId(String projectId) {
 		return findGuardDevice(projectId,null);
+	}	
+	
+	@Override
+	public DataPageValue<GuardCardLogVo> listGuardCardLog(String cardId, Integer currentPage, Integer pageSize) {
+		GuardCardLogContext guardCardLogContext = GuardCardLogContext.build();
+		return guardCardLogContext.listGuardCardLog(cardId, currentPage, pageSize);
 	}
 
 }
