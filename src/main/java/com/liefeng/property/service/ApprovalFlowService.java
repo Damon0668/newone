@@ -138,7 +138,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 				}
 			}
 		} else if(approvalFlowBo.getTaskName().equals(ApprovalFlowConstants.NODE_END)) { //结束流程
-			//workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
+			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
 			approvalFlowBo.getParams().put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
 			approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_STATUS, ApprovalFlowConstants.ORDER_COMPLETE);
 			workflowService.complete(approvalFlowBo.getOrderId(),approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
@@ -460,6 +460,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 					TaskModel taskModel = new TaskModel();
 					taskModel.setName(ApprovalFlowConstants.NODE_END);
 					taskModel.setDisplayName("结束并归档");
+					taskModel.setAssignee(ApprovalFlowConstants.NODE_END);
 					nextTasks.add(taskModel);
 				}
 			} 
