@@ -111,8 +111,8 @@ public class PropertyPushMsgService {
 				
 				if(proprietorList != null && proprietorList.size() > 0){
 					
-					List<String> clientIdList = UserClientIdUtil.getClientIdList(staffList);
-					List<String> userIdList = UserClientIdUtil.getUserIdList(staffList);
+					List<String> clientIdList = UserClientIdUtil.getClientIdList(proprietorList);
+					List<String> userIdList = UserClientIdUtil.getUserIdList(proprietorList);
 					
 					//获取推送消息模板
 					ListUserMsg message = new ListUserMsg();
@@ -168,8 +168,8 @@ public class PropertyPushMsgService {
 				
 				if(proprietorList != null && proprietorList.size() > 0){
 					
-					List<String> clientIdList = UserClientIdUtil.getClientIdList(staffList);
-					List<String> userIdList = UserClientIdUtil.getUserIdList(staffList);
+					List<String> clientIdList = UserClientIdUtil.getClientIdList(proprietorList);
+					List<String> userIdList = UserClientIdUtil.getUserIdList(proprietorList);
 					
 					//获取推送消息模板
 					ListUserMsg message = new ListUserMsg();

@@ -27,15 +27,15 @@
 				avatar_url,
 				mobile AS phone,
 				oem_code,
-			CASE WHEN ISNULL(nick_name) THEN name ELSE nick_name END AS friend_name
+			    nick_name AS friend_name
 			FROM
 				basic.t_user
 			WHERE
 			oem_code = #{extra.oemCode} 
+			and id != #{extra.userId}
 			and 
 			(
 			mobile = #{extra.condition}
-			OR NAME LIKE concat('%', #{extra.condition},'%')
 			OR nick_name LIKE concat('%', #{extra.condition},'%')
 			)
 		)a
@@ -49,7 +49,7 @@
 		a.friend_id,
 		b.mobile AS phone,
 		b.avatar_url,
-	CASE WHEN ISNULL(b.nick_name) THEN b.name ELSE b.nick_name END friend_name
+		b.nick_name AS friend_name
 	FROM
 		property.t_app_friend a,
 		basic.t_user b
@@ -78,7 +78,7 @@
 				b.mobile AS phone,
 				b.avatar_url,
 				a.create_time,
-				CASE WHEN ISNULL(b.nick_name) THEN b.name ELSE b.nick_name END friend_name
+				b.nick_name AS friend_name
 			FROM
 				property.t_app_friend a,
 				basic.t_user b
@@ -95,7 +95,7 @@
 				b.mobile AS phone,
 				b.avatar_url,
 				a.create_time,
-				CASE WHEN ISNULL(b.nick_name) THEN b.name ELSE b.nick_name END friend_name
+				b.nick_name AS friend_name
 			FROM
 				property.t_app_friend a,
 				basic.t_user b
