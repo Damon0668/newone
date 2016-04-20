@@ -54,6 +54,11 @@ public class GuardDeviceVo extends DeviceVo {
 	private String cameraType;
 	
 	/**
+	 * 设备名称
+	 */
+	private String guardName;
+	
+	/**
 	 * 门口机编号
 	 */
 	private String guardType;
@@ -188,5 +193,13 @@ public class GuardDeviceVo extends DeviceVo {
 
 	public void setCameraType(String cameraType) {
 		this.cameraType = cameraType;
+	}
+
+	public String getGuardName() {
+		return guardName;
+	}
+
+	public void setGuardName(String guardName) {
+		this.guardName = guardName;
 	}
 }
