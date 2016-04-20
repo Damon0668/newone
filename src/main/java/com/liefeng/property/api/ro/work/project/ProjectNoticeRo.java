@@ -1,4 +1,4 @@
-package com.liefeng.property.api.ro.finger.project;
+package com.liefeng.property.api.ro.work.project;
 
 import javax.validation.constraints.NotNull;
 
