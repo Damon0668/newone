@@ -1,11 +1,10 @@
 package com.liefeng.property.domain.guard;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +21,6 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
-import com.liefeng.property.constant.GuardConstants;
 import com.liefeng.property.po.guard.GuardDevicePo;
 import com.liefeng.property.repository.guard.GuardDeviceRepository;
 import com.liefeng.property.repository.mybatis.GuardDeviceQueryRepository;
@@ -204,6 +202,17 @@ public class GuardDeviceContext {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * 根据磁卡ID获取授权设备
+	 * @param cardId 磁卡ID
+	 * @return 授权设备列表
+	 */
+	public List<GuardDeviceVo> listPrivilegeDevice(String cardId) {
+		List<GuardDeviceVo> dataList = guardDeviceQueryRepository.queryPrivilegeDevice(cardId);
+		dataList = ValidateHelper.isNotEmptyCollection(dataList) ? dataList : new ArrayList<GuardDeviceVo>();
+		return dataList;
 	}
 
 	protected void setId(String id) {

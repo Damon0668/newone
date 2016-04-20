@@ -52,7 +52,7 @@ public class GuardDevicePo extends BaseValue {
 	 */
 	@Column(name = "camera_id")
 	private String cameraId;
-	
+
 	/**
 	 * 设备编号
 	 */
