@@ -28,7 +28,6 @@ import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.intf.property.IProjectService;
 import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
-import com.liefeng.mq.type.MessageEvent;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.household.CheckinQueueBo;
 import com.liefeng.property.bo.household.ProprietorBo;
@@ -36,7 +35,6 @@ import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.bo.household.ResidentFeedbackBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.ProjectConstants;
-import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.domain.household.AppFriendContext;
 import com.liefeng.property.domain.household.AppMsgSettingContext;
 import com.liefeng.property.domain.household.CheckinMaterialContext;
@@ -52,7 +50,6 @@ import com.liefeng.property.domain.household.VisitorContext;
 import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.error.HouseholdErrorCode;
 import com.liefeng.property.exception.PropertyException;
-import com.liefeng.property.util.UserClientIdUtil;
 import com.liefeng.property.vo.household.AppFriendVo;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
@@ -69,10 +66,6 @@ import com.liefeng.property.vo.household.UserClientIdVo;
 import com.liefeng.property.vo.household.VisitorVo;
 import com.liefeng.property.vo.project.HouseVo;
 import com.liefeng.service.constant.PushActionConstants;
-import com.liefeng.service.constant.PushMsgConstants;
-import com.liefeng.service.vo.PushMsgTemplateVo;
-import com.liefeng.service.vo.msg.ListUserMsg;
-import com.liefeng.service.vo.msg.SingleUserMsg;
 
 /**
  * household包相关表服务类
@@ -99,6 +92,9 @@ public class HouseholdService implements IHouseholdService {
 	
 	@Autowired
 	private IPushMsgService pushMsgService;
+	
+	@Autowired
+	private PropertyPushMsgService propertyPushMsgService;
 	
 	/**
 	 * 保存业主信息
@@ -505,28 +501,8 @@ public class HouseholdService implements IHouseholdService {
 				HouseVo houseVo = projectService.findHouseById(queueReturn.getHouseId());
 				//获取某个房间的所有用户的clientId
 				List<UserClientIdVo> finishedList = listClientIdByProjectIdAndHouseNum(queueReturn.getProjectId(), houseVo.getHouseNum());
-				if(finishedList != null && finishedList.size() > 0){
-					//获取推送消息模板
-					PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.CHECKIN_SUCCESS);
-					
-					//获取clientId、userId的list
-					List<String> clientIdList = UserClientIdUtil.getClientIdList(finishedList);
-					List<String> userIdList = UserClientIdUtil.getUserIdList(finishedList);
-					
-					if(pushMsgTemplateVo != null){
-						ListUserMsg message = new ListUserMsg();
-						message.setAction(PushActionConstants.CHECKIN_SUCCESS);
-						message.setPageUrl(pushMsgTemplateVo.getPageUrl());
-						message.setTitle(pushMsgTemplateVo.getTitle());
-						message.setContent(pushMsgTemplateVo.getContent());
-						message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-						message.setReceiveClientIdList(clientIdList);
-						message.setReceiveUserIdList(userIdList);
-						
-						pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
-						logger.info("入住办理完成号时群推消息{}", message);
-					}
-				}
+				//入住办理完成号时群推消息给当前入住办理用户
+				propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.CHECKIN_SUCCESS, null, finishedList);
 				
 				//大于当前完成的排队号的排队
 			   CheckinQueueVo queueUntreated =getCheckinQueueMoreThanSeq(queueReturn.getProjectId(), HouseholdConstants.CheckinQueueStatus.UNTREATED, queueReturn.getSeq(), TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
@@ -535,28 +511,9 @@ public class HouseholdService implements IHouseholdService {
 				   HouseVo houseUntreated = projectService.findHouseById(queueUntreated.getHouseId());
 					//获取某个房间的所有用户的clientId
 					List<UserClientIdVo> userClientIdList = listClientIdByProjectIdAndHouseNum(queueReturn.getProjectId(), houseUntreated.getHouseNum());
-					if(userClientIdList != null && userClientIdList.size() > 0){
-						//获取推送消息模板
-						PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.CHECKIN_TURN_YOU);
-						
-						//获取clientId、userId的list
-						List<String> clientIdList = UserClientIdUtil.getClientIdList(userClientIdList);
-						List<String> userIdList = UserClientIdUtil.getUserIdList(userClientIdList);
-						
-						if(pushMsgTemplateVo != null){
-							ListUserMsg message = new ListUserMsg();
-							message.setAction(PushActionConstants.CHECKIN_TURN_YOU);
-							message.setPageUrl(pushMsgTemplateVo.getPageUrl());
-							message.setTitle(pushMsgTemplateVo.getTitle());
-							message.setContent(pushMsgTemplateVo.getContent());
-							message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-							message.setReceiveClientIdList(clientIdList);
-							message.setReceiveUserIdList(userIdList);
-							
-							pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
-							logger.info("入住办理提醒前来办理时群推消息{}", message);
-						}
-					}
+					//入住办理完成号时群推消息给下一个入住办理用户
+					propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.CHECKIN_TURN_YOU, null, userClientIdList);
+					
 			   }
 			}
 	
@@ -565,28 +522,10 @@ public class HouseholdService implements IHouseholdService {
 				HouseVo houseVo = projectService.findHouseById(queueReturn.getHouseId());
 				//获取某个房间的所有用户的clientId
 				List<UserClientIdVo> userClientIdList = listClientIdByProjectIdAndHouseNum(queueReturn.getProjectId(), houseVo.getHouseNum());
-				if(userClientIdList != null && userClientIdList.size() > 0){
-					//获取推送消息模板
-					PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.CHECKIN_HANDLING);
-					
-					//获取clientId、userId的list
-					List<String> clientIdList = UserClientIdUtil.getClientIdList(userClientIdList);
-					List<String> userIdList = UserClientIdUtil.getUserIdList(userClientIdList);
-					
-					if(pushMsgTemplateVo != null){
-						ListUserMsg message = new ListUserMsg();
-						message.setAction(PushActionConstants.CHECKIN_HANDLING);
-						message.setPageUrl(pushMsgTemplateVo.getPageUrl());
-						message.setTitle(pushMsgTemplateVo.getTitle());
-						message.setContent(pushMsgTemplateVo.getContent());
-						message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-						message.setReceiveClientIdList(clientIdList);
-						message.setReceiveUserIdList(userIdList);
-						
-						pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
-						logger.info("入住办理开始时群推消息{}", message);
-					}
-				}
+				
+				//入住办理完成号时群推消息给下一个入住办理用户
+				propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.CHECKIN_HANDLING, null, userClientIdList);
+				
 			}
 		}
 	}
@@ -832,26 +771,9 @@ public class HouseholdService implements IHouseholdService {
 					Map<String,String> data = new HashMap<String,String>();
 					data.put("queueNum", String.valueOf(queueVo.getSeq()));
 					data.put("count", String.valueOf(number));
-					//获取推送消息模板
-					PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.CHECKIN_QUEUE_NUM, data);
 					
-					//获取clientId、userId的list
-					List<String> clientIdList = UserClientIdUtil.getClientIdList(userClientIdList);
-					List<String> userIdList = UserClientIdUtil.getUserIdList(userClientIdList);
-					
-					if(pushMsgTemplateVo != null){
-						ListUserMsg message = new ListUserMsg();
-						message.setAction(PushActionConstants.CHECKIN_QUEUE_NUM);
-						message.setPageUrl(pushMsgTemplateVo.getPageUrl());
-						message.setTitle(pushMsgTemplateVo.getTitle());
-						message.setContent(pushMsgTemplateVo.getContent());
-						message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-						message.setReceiveClientIdList(clientIdList);
-						message.setReceiveUserIdList(userIdList);
-						
-						pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
-						logger.info("扫描排队号时群推消息{}", message);
-					}
+					//获取排号，推送工办理用户
+					propertyPushMsgService.pushMsgOfUserIdClientIdAndMap(PushActionConstants.CHECKIN_QUEUE_NUM, data, null, userClientIdList);
 				}
 			}
 		}
@@ -1248,27 +1170,13 @@ public class HouseholdService implements IHouseholdService {
 
 	@Override
 	public void pushMsgToUserByPhone(String userId) {
-		//获取推送消息模板
-		PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.CHANGE_PWD_SUCCESS);
+		//个推给业主、住户
+		UserVo userVo = userService.getUserById(userId);
 		
-		if(pushMsgTemplateVo != null){
-			//个推给业主、住户
-			UserVo userVo = userService.getUserById(userId);
-			
-			if(userVo != null){
-				SingleUserMsg message = new SingleUserMsg();
-				message.setAction(PushActionConstants.CHANGE_PWD_SUCCESS);
-				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
-				message.setTitle(pushMsgTemplateVo.getTitle());
-				message.setContent(pushMsgTemplateVo.getContent());
-				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-				message.setReceiveUserId(userVo.getId());
-				pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
-				logger.info("修改密码时单推消息{}", message);
-			}
-			
+		if(userVo != null){
+			//修改密码时单推消息
+			propertyPushMsgService.pushMsgToUser(PushActionConstants.CHANGE_PWD_SUCCESS, userVo.getId());
 		}
-		
 	}
 
 	@Override

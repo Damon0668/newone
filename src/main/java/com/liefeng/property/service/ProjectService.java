@@ -15,17 +15,14 @@ import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IProjectService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.service.msg.IPushMsgService;
-import com.liefeng.mq.type.MessageEvent;
 import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.bo.project.HouseSpecBo;
-import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.domain.project.AppHomeImageContext;
 import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.domain.project.HouseSpecContext;
 import com.liefeng.property.domain.project.ProjectBuildingContext;
 import com.liefeng.property.domain.project.ProjectContext;
 import com.liefeng.property.domain.project.ProjectNoticeContext;
-import com.liefeng.property.util.UserClientIdUtil;
 import com.liefeng.property.vo.household.HouseGraphVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.UserClientIdVo;
@@ -36,9 +33,6 @@ import com.liefeng.property.vo.project.ProjectBuildingVo;
 import com.liefeng.property.vo.project.ProjectNoticeVo;
 import com.liefeng.property.vo.project.ProjectVo;
 import com.liefeng.service.constant.PushActionConstants;
-import com.liefeng.service.constant.PushMsgConstants;
-import com.liefeng.service.vo.PushMsgTemplateVo;
-import com.liefeng.service.vo.msg.ListUserMsg;
 
 /**
  * 项目服务实现类
@@ -62,6 +56,9 @@ public class ProjectService implements IProjectService {
 	
 	@Autowired
 	private IPushMsgService pushMsgService;
+	
+	@Autowired
+	private PropertyPushMsgService propertyPushMsgService;
 	
 	@Override
 	public ProjectVo findProjectById(String projectId) {
@@ -257,49 +254,14 @@ public class ProjectService implements IProjectService {
 	public ProjectNoticeVo createProjectNotice(ProjectNoticeVo projectNotice) {
 		ProjectNoticeContext projectNoticeContext = ProjectNoticeContext.build(projectNotice);
 		ProjectNoticeVo projectNoticeVo = projectNoticeContext.create();
-		//获取推送消息模板
-		PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.PROPERTY_NEW_NOTE);
 		
-		if(pushMsgTemplateVo != null){
-			//业主、住户clientId
-			List<UserClientIdVo> proprietorClientIdList = householdService.listClientIdByProjectId(projectNoticeVo.getProjectId());
-			//员工clientId
-			List<UserClientIdVo> staffClientIdList = propertyStaffService.findStaffClientIdList("", projectNoticeVo.getProjectId());
+		//业主、住户clientId
+		List<UserClientIdVo> proprietorClientIdList = householdService.listClientIdByProjectId(projectNoticeVo.getProjectId());
+		//员工clientId
+		List<UserClientIdVo> staffClientIdList = propertyStaffService.findStaffClientIdList("", projectNoticeVo.getProjectId());
+		//发布物业须知时群推消息
+		propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.PROPERTY_NEW_NOTE, staffClientIdList, proprietorClientIdList);
 			
-			if(proprietorClientIdList != null && proprietorClientIdList.size() > 0){
-				
-				List<String> clientIdList = UserClientIdUtil.getClientIdList(proprietorClientIdList);
-				List<String> userIdList = UserClientIdUtil.getUserIdList(proprietorClientIdList);
-				
-				ListUserMsg message = new ListUserMsg();
-				message.setAction(PushActionConstants.PROPERTY_NEW_NOTE);
-				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
-				message.setTitle(pushMsgTemplateVo.getTitle());
-				message.setContent(pushMsgTemplateVo.getContent());
-				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-				message.setReceiveClientIdList(clientIdList);
-				message.setReceiveUserIdList(userIdList);
-				pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
-				logger.info("发布物业须知时群推消息{}", message);
-			}
-			
-			if(staffClientIdList != null && staffClientIdList.size() > 0){
-				List<String> clientIdList = UserClientIdUtil.getClientIdList(staffClientIdList);
-				List<String> userIdList = UserClientIdUtil.getUserIdList(staffClientIdList);
-				
-				ListUserMsg message = new ListUserMsg();
-				message.setAction(PushActionConstants.PROPERTY_NEW_NOTE);
-				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
-				message.setTitle(pushMsgTemplateVo.getTitle());
-				message.setContent(pushMsgTemplateVo.getContent());
-				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-				message.setReceiveClientIdList(clientIdList);
-				message.setReceiveUserIdList(userIdList);
-				
-				pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
-				logger.info("发布物业须知时群推消息{}", message);
-			}
-		}
 		return projectNoticeVo;
 	}
 
@@ -314,51 +276,13 @@ public class ProjectService implements IProjectService {
 		ProjectNoticeContext projectNoticeContext = ProjectNoticeContext.build(projectNotice);
 		ProjectNoticeVo projectNoticeVo = projectNoticeContext.update();
 		
-		//获取推送消息模板
-		PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.PROPERTY_NEW_NOTE);
-		
-		if(pushMsgTemplateVo != null){
-			//业主、住户clientId
-			List<UserClientIdVo> proprietorClientIdList = householdService.listClientIdByProjectId(projectNoticeVo.getProjectId());
-			//员工clientId
-			List<UserClientIdVo> staffClientIdList = propertyStaffService.findStaffClientIdList("", projectNoticeVo.getProjectId());
-			
-			if(proprietorClientIdList != null && proprietorClientIdList.size() > 0){
+		//业主、住户clientId
+		List<UserClientIdVo> proprietorClientIdList = householdService.listClientIdByProjectId(projectNoticeVo.getProjectId());
+		//员工clientId
+		List<UserClientIdVo> staffClientIdList = propertyStaffService.findStaffClientIdList("", projectNoticeVo.getProjectId());
+		//发布物业须知时群推消息
+		propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.PROPERTY_NEW_NOTE, staffClientIdList, proprietorClientIdList);
 				
-				List<String> clientIdList = UserClientIdUtil.getClientIdList(proprietorClientIdList);
-				List<String> userIdList = UserClientIdUtil.getUserIdList(proprietorClientIdList);
-				
-				ListUserMsg message = new ListUserMsg();
-				message.setAction(PushActionConstants.PROPERTY_NEW_NOTE);
-				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
-				message.setTitle(pushMsgTemplateVo.getTitle());
-				message.setContent(pushMsgTemplateVo.getContent());
-				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-				message.setReceiveClientIdList(clientIdList);
-				message.setReceiveUserIdList(userIdList);
-				pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_PROPRIETOR, PushMsgConstants.TerminalType.MOBILE_PROPERTY, message);
-				logger.info("（更新）发布物业须知时群推消息{}", message);
-			}
-			
-			if(staffClientIdList != null && staffClientIdList.size() > 0){
-				
-				List<String> clientIdList = UserClientIdUtil.getClientIdList(staffClientIdList);
-				List<String> userIdList = UserClientIdUtil.getUserIdList(staffClientIdList);
-				
-				ListUserMsg message = new ListUserMsg();
-				message.setAction(PushActionConstants.PROPERTY_NEW_NOTE);
-				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
-				message.setTitle(pushMsgTemplateVo.getTitle());
-				message.setContent(pushMsgTemplateVo.getContent());
-				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-				message.setReceiveClientIdList(clientIdList);
-				message.setReceiveUserIdList(userIdList);
-				
-				pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
-				logger.info("（更新）发布物业须知时群推消息{}", message);
-			}
-		}
-		
 		return projectNoticeVo;
 	}
 
