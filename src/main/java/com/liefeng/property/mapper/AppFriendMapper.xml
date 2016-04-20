@@ -26,17 +26,21 @@
 				id AS friend_id,
 				avatar_url,
 				mobile AS phone,
+				oem_code,
 			CASE WHEN ISNULL(nick_name) THEN name ELSE nick_name END AS friend_name
 			FROM
 				basic.t_user
 			WHERE
-			1 = 1 
-			and mobile = #{extra.condition}
+			oem_code = #{extra.oemCode} 
+			and 
+			(
+			mobile = #{extra.condition}
 			OR NAME LIKE concat('%', #{extra.condition},'%')
 			OR nick_name LIKE concat('%', #{extra.condition},'%')
+			)
 		)a
 	LEFT JOIN property.t_app_friend b ON a.friend_id = b.friend_id
-	AND b.oem_code = #{extra.oemCode}
+	AND b.oem_code = a.oem_code
 	AND b.user_id = #{extra.userId}
 </select>
 
