@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.common.util.EncryptionUtil;
-import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
@@ -26,7 +25,6 @@ import com.liefeng.property.api.ro.work.auth.UpdatePwdRo;
 import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.error.PropertyStaffErrorCode;
-import com.liefeng.property.error.SecurityErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffArchiveVo;
