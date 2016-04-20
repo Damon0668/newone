@@ -120,6 +120,9 @@ public class WorkbenchService implements IWorkbenchService {
 	@Autowired
 	private ISysService sysService;
 	
+	@Autowired
+	private PropertyPushMsgService propertyPushMsgService;
+	
 	@Override
 	public TaskVo findTaskById(String taskId) {
 		TaskContext taskContext = TaskContext.loadById(taskId);
@@ -144,40 +147,13 @@ public class WorkbenchService implements IWorkbenchService {
 					createTaskPrivilege(privilegeVo);
 				}
 				
-				//获取推送消息模板
-				PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.MY_TASK_TODO_ONE);
-				
-				if(pushMsgTemplateVo != null){
-					if(privilegeArray.length > 1){
-						
-						List<String> receiveUserIdList = new ArrayList<String>();
-	
-						for (int i = 0; i < privilegeArray.length; i++) {
-							receiveUserIdList.add(privilegeArray[i]);
-						}
-						ListUserMsg message = new ListUserMsg();
-						message.setAction(PushActionConstants.MY_TASK_TODO_ONE);
-						message.setPageUrl(pushMsgTemplateVo.getPageUrl());
-						message.setTitle(pushMsgTemplateVo.getTitle());
-						message.setContent(pushMsgTemplateVo.getContent());
-						message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-						message.setReceiveUserIdList(receiveUserIdList);
-						
-						pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
-						logger.info("派送任务时群推消息{}", message);
-
-					}else{
-						SingleUserMsg message = new SingleUserMsg();
-						message.setAction(PushActionConstants.MY_TASK_TODO_ONE);
-						message.setPageUrl(pushMsgTemplateVo.getPageUrl());
-						message.setTitle(pushMsgTemplateVo.getTitle());
-						message.setContent(pushMsgTemplateVo.getContent());
-						message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-						message.setReceiveUserId(privilegeArray[0]);
-						pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
-						logger.info("派送任务时单推消息{}", message);
-					}
+				//个推范围
+				List<String> receiveUserIdList = new ArrayList<String>();
+				for (int i = 0; i < privilegeArray.length; i++) {
+					receiveUserIdList.add(privilegeArray[i]);
 				}
+				//个推
+				propertyPushMsgService.createTaskPushMsg(PushActionConstants.MY_TASK_TODO_ONE, receiveUserIdList);
 
 			}
 
@@ -1083,7 +1059,7 @@ public class WorkbenchService implements IWorkbenchService {
 	}
 
 	/**
-	 * 创建报事
+	 * 创建报事（后台）
 	 */
 	@Override
 	public void createEventReport(EventReportVo eventReportVo) {
@@ -2016,7 +1992,8 @@ public class WorkbenchService implements IWorkbenchService {
 
 		EventReportContext.loadById(id).delete();
 	}
-
+	
+	//app创建报事
 	@Override
 	public void createAppEventReport(EventReportBo bo) throws LiefengException {
 		EventReportVo eventReportVo = new EventReportVo();
