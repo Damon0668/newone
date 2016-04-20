@@ -38,6 +38,12 @@ public class DevicePositionPo extends BaseValue{
 	private String name;
 	
 	/**
+	 * 该位置放的设备类型
+	 */
+	@Column(name = "deviceType")
+	private String deviceType;
+	
+	/**
 	 * OEM编码
 	 */
 	@Column(name = "oem_code")
@@ -73,5 +79,13 @@ public class DevicePositionPo extends BaseValue{
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getDeviceType() {
+		return deviceType;
+	}
+
+	public void setDeviceType(String deviceType) {
+		this.deviceType = deviceType;
 	}
 }

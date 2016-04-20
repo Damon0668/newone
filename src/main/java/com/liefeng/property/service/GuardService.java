@@ -73,6 +73,12 @@ public class GuardService implements IGuardService{
 		
 		guardDevice.setType(guardDevice.getGuardType());
 		guardDevice.setSn(guardDevice.getGuardNum());
+		guardDevice.setName(guardDevice.getGuardName());
+		guardDevice.setInstallPosition(
+				DevicePositionContext
+				.loadById(guardDevice.getPositionId())
+				.get()
+				.getName());
 		
 		DeviceVo deviceVo = checkService.createDeviceCheck(guardDevice);
 		
