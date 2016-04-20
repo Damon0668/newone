@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.liefeng.common.util.EncryptionUtil;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.core.exception.LiefengException;
@@ -23,6 +24,7 @@ import com.liefeng.property.api.ro.work.auth.StaffLoginRo;
 import com.liefeng.property.api.ro.work.auth.UpdatePwdLoginRo;
 import com.liefeng.property.api.ro.work.auth.UpdatePwdRo;
 import com.liefeng.property.constant.StaffConstants;
+import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.error.PropertyStaffErrorCode;
 import com.liefeng.property.error.SecurityErrorCode;
 import com.liefeng.property.exception.PropertyException;
@@ -50,6 +52,8 @@ public class AuthController {
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<PropertyStaffVo> login(@Valid @ModelAttribute StaffLoginRo staffLoginRo){
+		
+		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
 
 		PropertyStaffVo staff = propertyStaffService.findPropertyStaffByAccount(staffLoginRo.getAccount());
 		
@@ -89,6 +93,8 @@ public class AuthController {
 	@ResponseBody
 	public ReturnValue checkMobileAvailable(@Valid @ModelAttribute CheckMobileRo checkMobileRo){
 		
+		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
+		
 		PropertyStaffVo staff = propertyStaffService.findPropertyStaffByAccount(checkMobileRo.getAccount());
 		
 		if(staff != null){
@@ -107,6 +113,8 @@ public class AuthController {
 	@ResponseBody
 	public ReturnValue updatePwdByForget(@Valid @ModelAttribute UpdatePwdRo updatePwdRo){
 		
+		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
+
 		PropertyStaffVo staff = propertyStaffService.findPropertyStaffByAccount(updatePwdRo.getAccount());
 		
 		if(staff == null ){
