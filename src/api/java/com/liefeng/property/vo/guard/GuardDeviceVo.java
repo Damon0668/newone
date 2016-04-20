@@ -29,6 +29,11 @@ public class GuardDeviceVo extends DeviceVo {
 	private String projectId;
 	
 	/**
+	 * 项目名称
+	 */
+	private String projectName;
+	
+	/**
 	 * 楼栋ID
 	 */
 	private String buildingId;
@@ -110,6 +115,14 @@ public class GuardDeviceVo extends DeviceVo {
 
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 
 	public String getBuildingId() {
