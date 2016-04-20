@@ -58,12 +58,12 @@
 		    gd.id,
 		    p.full_name project_id,
 		    gd.guard_num,
-		    d. NAME,
+		    d.name,
 		    d.type,
-		    dp. NAME positionName,
+		    dp.name positionName,
 		    gd.guard_num,
 		    d.run_status,
-		    d.`status`
+		    d.status
 		FROM
 		    t_guard_device gd
 		LEFT JOIN t_device_position dp ON gd.position_id = dp.id
@@ -76,4 +76,24 @@
 		</if>
 </select>
 
+<!-- 查询磁卡授权设备 -->
+<select id="queryPrivilegeDevice" resultMap="BaseResultMap">
+	SELECT
+		gd.id AS id,
+		gd.guard_name AS guardName, 
+		gd.project_id AS projectId,
+		p.full_name AS projectName,
+		position_id AS positionId,
+		dp.name AS positionName,
+		sd.name AS deviceType
+	FROM
+		property.t_guard_card_privilege gcp
+		LEFT JOIN property.t_guard_device gd ON gd.id = gcp.guard_device_id
+		LEFT JOIN property.t_device_position dp ON dp.id = gd.position_id
+		LEFT JOIN property.t_project p ON p.id = gd.project_id
+		LEFT JOIN property.t_sys_dict sd on sd.group_code = 'DEVICE_TYPE' 
+		AND sd.value = dp.device_type
+	WHERE
+		gcp.card_id = #{cardId}
+</select>
 </mapper>

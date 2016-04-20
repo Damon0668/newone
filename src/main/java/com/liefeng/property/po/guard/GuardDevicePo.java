@@ -54,6 +54,12 @@ public class GuardDevicePo extends BaseValue {
 	private String cameraId;
 	
 	/**
+	 * 设备名称
+	 */
+	@Column(name = "guard_name")
+	private String guardName;
+	
+	/**
 	 * 设备编号
 	 */
 	@Column(name = "guard_num")
@@ -147,6 +153,14 @@ public class GuardDevicePo extends BaseValue {
 
 	public void setCameraId(String cameraId) {
 		this.cameraId = cameraId;
+	}
+
+	public String getGuardName() {
+		return guardName;
+	}
+
+	public void setGuardName(String guardName) {
+		this.guardName = guardName;
 	}
 
 	public String getGuardType() {
