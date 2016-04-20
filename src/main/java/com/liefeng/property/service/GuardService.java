@@ -300,4 +300,9 @@ public class GuardService implements IGuardService{
 		return AttendantContext.build(attendantVo).update();
 	}
 
+	@Override
+	public List<GuardDeviceVo> listPrivilegeDevice(String cardId) {
+		return GuardDeviceContext.build().listPrivilegeDevice(cardId);
+	}
+
 }
