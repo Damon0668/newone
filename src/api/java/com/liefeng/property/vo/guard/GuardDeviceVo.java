@@ -79,6 +79,11 @@ public class GuardDeviceVo extends DeviceVo {
 	private String guardNum;
 	
 	/**
+	 * 二维码URL
+	 */
+	private String qrCodeUrl;
+	
+	/**
 	 * 厂家电话
 	 */
 	private String producerTel;
@@ -195,6 +200,14 @@ public class GuardDeviceVo extends DeviceVo {
 
 	public void setGuardNum(String guardNum) {
 		this.guardNum = guardNum;
+	}
+
+	public String getQrCodeUrl() {
+		return qrCodeUrl;
+	}
+
+	public void setQrCodeUrl(String qrCodeUrl) {
+		this.qrCodeUrl = qrCodeUrl;
 	}
 
 	public String getPositionName() {

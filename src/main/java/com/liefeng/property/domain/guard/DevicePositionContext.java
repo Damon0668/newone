@@ -117,7 +117,15 @@ public class DevicePositionContext {
 	}
 	
 	public DevicePositionVo get(){
-		return null;
+		
+		if(ValidateHelper.isNotEmptyString(positionId)){
+			DevicePositionPo devicePositionPo = devicePositionRepository.getOne(positionId);
+			if(devicePositionPo != null){
+				devicePosition = MyBeanUtil.createBean(devicePositionPo, DevicePositionVo.class);
+			}
+		}
+		
+		return devicePosition;
 	}
 	
 	@Transactional
@@ -140,23 +148,40 @@ public class DevicePositionContext {
 		return null;
 	}
 	
+	public List<DevicePositionVo> findDevicePosition(DevicePositionBo devicePositionBo){
+		if(devicePositionBo != null){
+			devicePositionBo.setOemCode(ContextManager.getInstance().getOemCode());
+			
+			PagingParamVo param = new PagingParamVo();
+			
+			Map<String, String> extra = MyBeanUtil.bean2Map(devicePositionBo);
+			
+			param.setExtra(extra);
+			param.setPage(1);
+			param.setPageSize(Integer.MAX_VALUE);
+			Long total = devicePositionQueryRepository.queryByCount(param);
+			param.getPager().setRowCount(total);
+			
+			List<DevicePositionVo> devicePositionList = devicePositionQueryRepository.queryByPage(param);
+			return devicePositionList;
+		}
+		return null;
+	}
+	
 	public DataPageValue<DevicePositionVo> findPosition4Page(DevicePositionBo devicePositionBo, Integer page, Integer size){
 		
 		devicePositionBo.setOemCode(ContextManager.getInstance().getOemCode());
 		
 		PagingParamVo param = new PagingParamVo();
-		
 		Map<String, String> extra = MyBeanUtil.bean2Map(devicePositionBo);
-
 		if(ValidateHelper.isNotEmptyCollection(devicePositionBo.getProjectIds())){
 			extra.put("projectIds", StringUtil.fmtToSqlInCondition(devicePositionBo.getProjectIds()));
 		}
-
 		param.setExtra(extra);
 		param.setPage(page);
 		param.setPageSize(size);
-		
 		Long total = devicePositionQueryRepository.queryByCount(param);
+		param.getPager().setRowCount(total);
 		
 		List<DevicePositionVo> devicePositionList = devicePositionQueryRepository.queryByPage(param);
 		

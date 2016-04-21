@@ -60,6 +60,12 @@ public class HeadCountVo extends BaseValue {
 	@ApiModelProperty(value="工作流待办理数量")
 	private Long workFlowWaitCount;
 	
+	/**
+	 * 已审批数量
+	 */
+	@ApiModelProperty(value="工作流已审批数量")
+	private Long workFlowAlreadyCount;
+	
 	public Long getWaitSignCount() {
 		return waitSignCount;
 	}
@@ -114,6 +120,14 @@ public class HeadCountVo extends BaseValue {
 
 	public void setWorkFlowWaitCount(Long workFlowWaitCount) {
 		this.workFlowWaitCount = workFlowWaitCount;
+	}
+
+	public Long getWorkFlowAlreadyCount() {
+		return workFlowAlreadyCount;
+	}
+
+	public void setWorkFlowAlreadyCount(Long workFlowAlreadyCount) {
+		this.workFlowAlreadyCount = workFlowAlreadyCount;
 	}
 	
 }

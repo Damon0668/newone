@@ -12,12 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.intf.property.ISysService;
 import com.liefeng.property.api.ro.common.DictGroupRo;
-import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.vo.sys.SysDictVo;
 
 import io.swagger.annotations.Api;

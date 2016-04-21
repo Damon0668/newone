@@ -181,19 +181,14 @@ public class GuardService implements IGuardService{
 	@Transactional(rollbackOn=Exception.class)
 	@Override
 	public void createGuardCard(GuardCardUserVo guardCardUser, GuardCardVo guardCard, List<String> guardDeviceIds) {
-		try{
-			guardCard = GuardCardContext.build(guardCard).create();
-			
-			guardCardUser.setCardId(guardCard.getId());
-			GuardCardUserContext.build(guardCardUser).create();
-			
-			GuardCardPrivilegeContext.loadByCardId(guardCard.getId()).grantGuardCard(guardDeviceIds);
-		}catch(LiefengException e){
-			throw new LiefengException(e.getCode(), e.getMessage());
-		}catch (Exception e) {
-			throw new LiefengException(e);
-		}
 		
+		guardCard = GuardCardContext.build(guardCard).create();
+		
+		guardCardUser.setCardId(guardCard.getId());
+		GuardCardUserContext.build(guardCardUser).create();
+		
+		GuardCardPrivilegeContext.loadByCardId(guardCard.getId()).grantGuardCard(guardDeviceIds);
+
 	}
 
 	@Override
@@ -253,8 +248,8 @@ public class GuardService implements IGuardService{
 	}
 
 	@Override
-	public List<DevicePositionVo> findDevicePosition(String projectId) {
-		return DevicePositionContext.loadByProjectId(projectId).findDevicePosition();
+	public List<DevicePositionVo> findDevicePosition(DevicePositionBo devicePositionBo) {
+		return DevicePositionContext.build().findDevicePosition(devicePositionBo);
 	}
 
 	@Override

@@ -1,10 +1,10 @@
 package com.liefeng.property.api.ro.work.workFlow;
 
-import io.swagger.annotations.ApiModelProperty;
-
 import javax.validation.constraints.NotNull;
 
 import com.liefeng.core.entity.BaseValue;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 获取当前活动人参数类
@@ -13,6 +13,11 @@ import com.liefeng.core.entity.BaseValue;
  */
 public class GetActiveTaskRo extends BaseValue{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7477653235778149623L;
+
 	@ApiModelProperty(value="流程实例id", required=true)
 	@NotNull
 	private String orderId;

@@ -8,7 +8,6 @@
 	<!-- Result Map -->
 	<resultMap id="BaseResultMap" type="com.liefeng.property.vo.guard.GuardDeviceVo">
 		<result column="id" property="id"/>
-		<result column="project_id" property="projectId"/>
 		<result column="install_position" property="installPosition"/>
 		<result column="guard_num" property="guardNum"/>
 		<result column="run_status" property="runStatus"/>
@@ -40,6 +39,9 @@
         <if test="extra.runStatus != null and extra.runStatus != ''" >
             AND d.run_status = #{extra.runStatus}
         </if>
+        <if test="extra.deviceType != null and extra.deviceType != ''">
+        	AND d.type = #{extra.deviceType}
+        </if>
     </trim>
 </sql>
 
@@ -56,19 +58,23 @@
 <select id="queryByPage" resultMap="BaseResultMap">
 		SELECT
 		    gd.id,
-		    p.full_name project_id,
+		    p.full_name AS projectName,
 		    gd.guard_num,
 		    d.name,
 		    d.type,
 		    dp.name positionName,
 		    gd.guard_num,
 		    d.run_status,
-		    d.status
+		    d.status,
+		    gd.qrcode_url AS qrCodeUrl,
+		    sd.name AS deviceType
 		FROM
 		    t_guard_device gd
 		LEFT JOIN t_device_position dp ON gd.position_id = dp.id
 		LEFT JOIN t_project p ON gd.project_id = p.id
 		LEFT JOIN basic.t_device d ON gd.device_global_id = d.global_id
+		LEFT JOIN property.t_sys_dict sd on sd.group_code = 'DEVICE_TYPE' 
+		AND sd.value = d.type
 		<include refid="Example_Where_Clause"/>
 		ORDER BY gd.project_id desc,gd.create_time desc
 		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
