@@ -1487,7 +1487,7 @@ public class WorkbenchService implements IWorkbenchService {
 			//派工后通知报事人
 			if(WorkbenchConstants.EventProcessStatus.DISPATCHING.equals(task.getTaskName())){
 				
-				EventReportVo eventReportVo2 = EventReportContext.build().findByWfOrderId(eventReportVo.getWfOrderId());
+				EventReportVo eventReportVo2 = EventReportContext.loadById(eventReportVo.getId()).get();
 				if(eventReportVo2 != null){
 					//个推给业主、住户
 					UserVo userVo = userService.getUserByMobile(eventReportVo2.getPhone());
@@ -1510,7 +1510,7 @@ public class WorkbenchService implements IWorkbenchService {
 			if(WorkbenchConstants.EventProcessStatus.AUDIT.equals(task.getTaskName()) 
 					&& WorkbenchConstants.EventReport.AUDITSTATUS_YES.equals(eventProcessVo.getAttitude())){
 				
-				EventReportVo eventReportVo2 = EventReportContext.build().findByWfOrderId(eventReportVo.getWfOrderId());
+				EventReportVo eventReportVo2 = EventReportContext.loadById(eventReportVo.getId()).get();
 				if(eventReportVo2 != null){
 					//个推给业主、住户
 					UserVo userVo = userService.getUserByMobile(eventReportVo2.getPhone());
