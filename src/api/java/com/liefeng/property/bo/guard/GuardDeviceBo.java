@@ -11,9 +11,6 @@ import com.liefeng.core.entity.BaseValue;
  */
 public class GuardDeviceBo extends BaseValue{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3534863940338880953L;
 
 	private String projectId;
@@ -32,6 +29,11 @@ public class GuardDeviceBo extends BaseValue{
 	 * 系统标识
 	 */
 	private String oemCode;
+	
+	/**
+	 * 设备类型
+	 */
+	private String deviceType;
 
 	public String getProjectId() {
 		return projectId;
@@ -87,5 +89,13 @@ public class GuardDeviceBo extends BaseValue{
 
 	public void setProjectIds(List<String> projectIds) {
 		this.projectIds = projectIds;
+	}
+
+	public String getDeviceType() {
+		return deviceType;
+	}
+
+	public void setDeviceType(String deviceType) {
+		this.deviceType = deviceType;
 	}
 }
