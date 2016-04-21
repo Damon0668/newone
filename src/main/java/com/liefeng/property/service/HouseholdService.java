@@ -888,7 +888,11 @@ public class HouseholdService implements IHouseholdService {
 				queueReturn.setNumber(number);
 			} else {
 				queueReturn.setNowSeq(0);
-				queueReturn.setNumber(0);
+				Integer number = queueReturn.getSeq() - 1;
+				if(number < 0){
+					number = 0;
+				}
+				queueReturn.setNumber(number);
 			}
 		}
 
