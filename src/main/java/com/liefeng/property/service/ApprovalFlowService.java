@@ -473,6 +473,28 @@ public class ApprovalFlowService implements IApprovalFlowService{
 	@Override
 	public DataListValue<HistoryTaskVo> getHistTaskByOrderId(String orderId) {
 		List<HistoryTask> historyTasks = workflowService.getHistoryTasks(new QueryFilter().setOrderId(orderId));
+		List<HistoryTask> returnTasks = new ArrayList<HistoryTask>();
+
+		for(HistoryTask hTask : historyTasks) {
+			String operator = hTask.getOperator();
+			// 设置名字
+			String staffid = operator.split("_")[1];
+			PropertyStaffVo propertyStaff = propertyStaffService.findPropertyStaffById(staffid);
+			if(propertyStaff != null)
+			hTask.setOperator(propertyStaff.getName());
+			returnTasks.add(hTask);
+		}
+		
+		// 增加当前处理的步骤
+		List<Task> activeTasks = workflowService.getActiveTasks(new QueryFilter().setOrderId(orderId));
+		if(ValidateHelper.isNotEmptyCollection(activeTasks)) {
+			Task task = activeTasks.get(0);
+			String actorsStr = getTaskActor(task.getId());
+			task.setOperator(actorsStr);
+			HistoryTask historyTask = MyBeanUtil.createBean(task, HistoryTask.class);
+			returnTasks.add(historyTask);
+		}
+		
 		return DataListValue.success(MyBeanUtil.createList(historyTasks, HistoryTaskVo.class));
 	}
 	

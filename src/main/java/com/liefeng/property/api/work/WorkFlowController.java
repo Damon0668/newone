@@ -227,9 +227,14 @@ public class WorkFlowController {
 	@RequestMapping(value="/getCountsToHead", method=RequestMethod.GET)
 	@ResponseBody
 	public DataValue<HeadCountVo> getCountsToHead(@Valid @ModelAttribute StaffIdRo staffIdRo) {
-		DataPageValue<WorkItem> pages = workflowService.getWorkItems(new QueryFilter().setOperator(ApprovalFlowConstants.USER_PREFIXES+staffIdRo.getStaffId()),1,1);
 		HeadCountVo headCount = new HeadCountVo();
+
+		DataPageValue<WorkItem> pages = workflowService.getWorkItems(new QueryFilter().setOperator(ApprovalFlowConstants.USER_PREFIXES+staffIdRo.getStaffId()),1,1);
 		headCount.setWorkFlowWaitCount(pages.getMaxCount());
+		
+		DataPageValue<WorkItem> flowing =	workflowService.listFlowingOrder(new QueryFilter().setOperator(ApprovalFlowConstants.USER_PREFIXES), 1, 1);
+		headCount.setWorkFlowAlreadyCount(flowing.getMaxCount());
+		
 		return DataValue.success(headCount);
 	}
 	
