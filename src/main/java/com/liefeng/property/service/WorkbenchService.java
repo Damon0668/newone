@@ -1467,7 +1467,7 @@ public class WorkbenchService implements IWorkbenchService {
 			}
 			
 			//派工
-			if(WorkbenchConstants.EventProcessStatus.DISPATCHING.equals(tasks.get(0).getTaskName()) && userIdList.size() > 1){
+			if(WorkbenchConstants.EventProcessStatus.DISPATCHING.equals(task.getTaskName()) && userIdList.size() > 1){
 					//个推
 					Map<String,String> data = new HashMap<String,String>();
 					data.put("orderId", tasks.get(0).getOrderId());
@@ -1485,7 +1485,7 @@ public class WorkbenchService implements IWorkbenchService {
 				}
 			
 			//派工后通知报事人
-			if(WorkbenchConstants.EventProcessStatus.DISPATCHING.equals(tasks.get(0).getTaskName())){
+			if(WorkbenchConstants.EventProcessStatus.DISPATCHING.equals(task.getTaskName())){
 				
 				EventReportVo eventReportVo2 = EventReportContext.build().findByWfOrderId(eventReportVo.getWfOrderId());
 				if(eventReportVo2 != null){
@@ -1507,7 +1507,7 @@ public class WorkbenchService implements IWorkbenchService {
 			}
 			
 			//审核通过后通知报事人
-			if(WorkbenchConstants.EventProcessStatus.AUDIT.equals(tasks.get(0).getTaskName()) 
+			if(WorkbenchConstants.EventProcessStatus.AUDIT.equals(task.getTaskName()) 
 					&& WorkbenchConstants.EventReport.AUDITSTATUS_YES.equals(eventProcessVo.getAttitude())){
 				
 				EventReportVo eventReportVo2 = EventReportContext.build().findByWfOrderId(eventReportVo.getWfOrderId());
