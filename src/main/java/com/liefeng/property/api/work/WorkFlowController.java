@@ -232,7 +232,7 @@ public class WorkFlowController {
 		DataPageValue<WorkItem> pages = workflowService.getWorkItems(new QueryFilter().setOperator(ApprovalFlowConstants.USER_PREFIXES+staffIdRo.getStaffId()),1,1);
 		headCount.setWorkFlowWaitCount(pages.getMaxCount());
 		
-		DataPageValue<WorkItem> flowing =	workflowService.listFlowingOrder(new QueryFilter().setOperator(ApprovalFlowConstants.USER_PREFIXES), 1, 1);
+		DataPageValue<WorkItem> flowing =	workflowService.listFlowingOrder(new QueryFilter().setOperator(ApprovalFlowConstants.USER_PREFIXES+staffIdRo.getStaffId()), 1, 1);
 		headCount.setWorkFlowAlreadyCount(flowing.getMaxCount());
 		
 		return DataValue.success(headCount);
