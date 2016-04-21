@@ -146,7 +146,7 @@ public class GuardService implements IGuardService{
 	public GuardDeviceVo findGuardDevice(String guardDeviceId) {
 		GuardDeviceVo guardDeviceVo = GuardDeviceContext.loadById(guardDeviceId).get();
 		
-		DeviceVo deviceVo = deviceService.getDeviceByGlobalId(guardDeviceVo.getGlobalId());
+		DeviceVo deviceVo = deviceService.getDeviceByGlobalId(guardDeviceVo.getDeviceGlobalId());
 		//避免拷贝ID
 		deviceVo.setId(null);
 		MyBeanUtil.copyBeanNotNull2Bean(deviceVo, guardDeviceVo);

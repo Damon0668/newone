@@ -84,12 +84,12 @@ public class DevicePositionContext {
 		if(devicePosition != null){
 			String oemCode = ContextManager.getInstance().getOemCode();
 			
-			if(ValidateHelper.isNotEmptyString(devicePosition.getName())){
+			/*if(ValidateHelper.isNotEmptyString(devicePosition.getName())){
 				DevicePositionPo devicePositionPo = devicePositionRepository.findByProjectIdAndName(devicePosition.getProjectId(), devicePosition.getName());
 				if(devicePositionPo != null){
 					throw new LiefengException(GuardErrorCode.DEVICE_POSITION_HAS_EXIST, devicePosition.getName());
 				}
-			}
+			}*/
 			
 			DevicePositionPo devicePositionPo = MyBeanUtil.createBean(devicePosition, DevicePositionPo.class);
 			devicePositionPo.setId(UUIDGenerator.generate());
@@ -101,12 +101,12 @@ public class DevicePositionContext {
 	public void update(){
 		if(devicePosition != null && ValidateHelper.isNotEmptyString(devicePosition.getId())){
 
-			if(ValidateHelper.isNotEmptyString(devicePosition.getName())){
+			/*if(ValidateHelper.isNotEmptyString(devicePosition.getName())){
 				DevicePositionPo devicePositionPo = devicePositionRepository.findByProjectIdAndName(devicePosition.getProjectId(), devicePosition.getName());
 				if(devicePositionPo != null && !devicePosition.getId().equals(devicePositionPo.getId())){
 					throw new LiefengException(GuardErrorCode.DEVICE_POSITION_HAS_EXIST, devicePosition.getName());
 				}
-			}
+			}*/
 			
 			DevicePositionPo devicePositionPo = devicePositionRepository.findOne(devicePosition.getId());
 			if(devicePositionPo != null){
