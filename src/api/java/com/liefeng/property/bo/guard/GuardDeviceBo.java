@@ -80,7 +80,7 @@ public class GuardDeviceBo extends BaseValue{
 	public void setPosition(String position) {
 		this.position = position;
 	}
-	
+
 	public String getDeviceType() {
 		return deviceType;
 	}
