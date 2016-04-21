@@ -470,7 +470,6 @@ public class WorkbenchService implements IWorkbenchService {
 						staffString += "|"+privilegeVo.getGroupId()+",";
 					}else{
 						staffString += "|"+"0"+",";
-						residentString += privilegeVo.getProjectId()+"|"+"0"+",";
 					}
 				}
 				
