@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.liefeng.base.bo.UserLoginBo;
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.base.user.IUserService;
@@ -44,6 +45,9 @@ public class AuthController {
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<LoginUserVo> userLogin(@Valid @ModelAttribute AuthLoginRo authLogin){
+		
+		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
+		
 		LoginUserVo loginUser = null;
 
 		//统一鉴权登陆
@@ -66,6 +70,8 @@ public class AuthController {
 	@RequestMapping(value="/updatePwdByForget", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue updatePwdByForget(@Valid @ModelAttribute UpdatePwdRo updatePwdRo){
+		
+		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
 		
 		userService.updatePwdByForget(updatePwdRo.getMobile(), updatePwdRo.getPassword(), updatePwdRo.getCode(), SysConstants.FINGER_APP_CODE);
 		//个推提醒

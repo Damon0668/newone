@@ -1,4 +1,4 @@
-package com.liefeng.intf.property.api;
+package com.liefeng.property.service.api;
 
 import com.liefeng.property.vo.api.LoginUserVo;
 

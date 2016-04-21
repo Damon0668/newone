@@ -22,10 +22,8 @@ import com.liefeng.intf.property.ISysSecurityService;
 import com.liefeng.intf.property.ISysService;
 import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
-import com.liefeng.mq.type.MessageEvent;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.property.PropertyStaffBo;
-import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.domain.staff.ManageProjectContext;
 import com.liefeng.property.domain.staff.PropertyDepartmentContext;
 import com.liefeng.property.domain.staff.PropertyStaffContext;
@@ -36,8 +34,8 @@ import com.liefeng.property.domain.staff.StaffMsgClientContext;
 import com.liefeng.property.domain.sys.SysRoleContext;
 import com.liefeng.property.error.StaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
-import com.liefeng.property.vo.project.ProjectVo;
 import com.liefeng.property.vo.household.UserClientIdVo;
+import com.liefeng.property.vo.project.ProjectVo;
 import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffDetailInfoVo;
 import com.liefeng.property.vo.staff.PropertyStaffListVo;
@@ -48,9 +46,6 @@ import com.liefeng.property.vo.staff.StaffContactPrivilegeVo;
 import com.liefeng.property.vo.staff.StaffMsgClientVo;
 import com.liefeng.property.vo.staff.StaffWorkFlowUseVo;
 import com.liefeng.service.constant.PushActionConstants;
-import com.liefeng.service.constant.PushMsgConstants;
-import com.liefeng.service.vo.PushMsgTemplateVo;
-import com.liefeng.service.vo.msg.SingleUserMsg;
 
 /**
  * 物业员工服务
@@ -82,6 +77,9 @@ public class PropertyStaffService implements IPropertyStaffService {
 	
 	@Autowired
 	private IPushMsgService pushMsgService;
+	
+	@Autowired
+	private PropertyPushMsgService propertyPushMsgService;
 
 	@Override
 	public DataPageValue<PropertyStaffListVo> listPropertyStaff4Page(PropertyStaffBo propertyStaffBo, int page, int size) {
@@ -432,43 +430,20 @@ public class PropertyStaffService implements IPropertyStaffService {
 	
 	@Override
 	public void pushMsgToStaffByPhone(String phone) {
-		//获取推送消息模板
-		PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.CHANGE_PWD_SUCCESS);
 		
-		if(pushMsgTemplateVo != null){
-			StaffArchiveVo staffArchiveVo = findStaffArchiveByPhone(phone);
-			
-			if(staffArchiveVo != null){
-				SingleUserMsg message = new SingleUserMsg();
-				message.setAction(PushActionConstants.CHANGE_PWD_SUCCESS);
-				message.setPageUrl(pushMsgTemplateVo.getPageUrl());
-				message.setTitle(pushMsgTemplateVo.getTitle());
-				message.setContent(pushMsgTemplateVo.getContent());
-				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-				message.setReceiveUserId(staffArchiveVo.getStaffId());
-				pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
-				logger.info("修改密码时单推消息{}", message);
-			}
+		StaffArchiveVo staffArchiveVo = findStaffArchiveByPhone(phone);
+		
+		if(staffArchiveVo != null){
+			//修改密码时单推消息
+			propertyPushMsgService.pushMsgToStaff(PushActionConstants.CHANGE_PWD_SUCCESS, staffArchiveVo.getStaffId());
 		}
 			
 	}
 
 	@Override
 	public void pushMsgToStaffByStaffId(String staffId) {
-		//获取推送消息模板
-		PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.CHANGE_PWD_SUCCESS);
-		
-		if(pushMsgTemplateVo != null){
-			SingleUserMsg message = new SingleUserMsg();
-			message.setAction(PushActionConstants.CHANGE_PWD_SUCCESS);
-			message.setPageUrl(pushMsgTemplateVo.getPageUrl());
-			message.setTitle(pushMsgTemplateVo.getTitle());
-			message.setContent(pushMsgTemplateVo.getContent());
-			message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-			message.setReceiveUserId(staffId);
-			pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
-			logger.info("修改密码时单推消息{}", message);
-		}
+		//修改密码时单推消息
+		propertyPushMsgService.pushMsgToStaff(PushActionConstants.CHANGE_PWD_SUCCESS, staffId);
 	}
 
 	@Override

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
@@ -22,6 +23,7 @@ import com.liefeng.intf.service.msg.ISmsService;
 import com.liefeng.property.api.ro.common.SmsSendRo;
 import com.liefeng.property.api.ro.common.VerifyCodeRo;
 import com.liefeng.property.api.ro.common.VerifyRo;
+import com.liefeng.property.constant.SysConstants;
 import com.liefeng.service.vo.SMSMsgVo;
 import com.liefeng.service.vo.SmsTemplateVo;
 
@@ -40,6 +42,9 @@ public class SmsController {
 	@RequestMapping(value="/getVerifyCode", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<String> getVerifyCode(@Valid @ModelAttribute VerifyCodeRo verifyCodeRo){
+		
+		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
+		
 		String verifyCode = smsService.getVerifyCode(verifyCodeRo.getPhoneNum(), verifyCodeRo.getAction());
 		return DataValue.success(verifyCode);
 	}
@@ -48,6 +53,9 @@ public class SmsController {
 	@RequestMapping(value="/verifySmsCode", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue verifySmsCode(@Valid @ModelAttribute VerifyRo verifyRo){
+		
+		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
+		
 		smsService.verifySMSCode(verifyRo.getPhoneNum(), verifyRo.getAction(), verifyRo.getCode());
 		return ReturnValue.success();
 	}
@@ -56,6 +64,9 @@ public class SmsController {
 	@RequestMapping(value="/send", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue send(@Valid @ModelAttribute SmsSendRo smsSend) throws Exception{
+		
+		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
+		
 		SMSMsgVo smsMsg = MyBeanUtil.createBean(smsSend, SMSMsgVo.class);
 		Map<String,String> data = JSON.parseObject(smsSend.getParamString(),new TypeReference<Map<String,String>>(){});
 		smsMsg.setData(data);

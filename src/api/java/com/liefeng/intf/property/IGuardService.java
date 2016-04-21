@@ -269,4 +269,13 @@ public interface IGuardService {
 	 * @date 2016年4月19日 下午5:45:36
 	 */
 	public AttendantVo updateAttendant(AttendantVo attendantVo);
+	
+	/**
+	 * 根据磁卡ID查询授权设备
+	 * @param cardId 磁卡ID
+	 * @return 授权设备列表
+	 * @author ZhenTingJun
+	 * @date 2016年4月20日
+	 */
+	public List<GuardDeviceVo> listPrivilegeDevice(String cardId);
 }

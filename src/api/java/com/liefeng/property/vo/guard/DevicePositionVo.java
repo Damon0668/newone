@@ -1,6 +1,7 @@
 package com.liefeng.property.vo.guard;
 
 import com.liefeng.core.entity.BaseValue;
+import com.liefeng.property.annotation.Dict;
 
 /**
  * 设备位置表
@@ -32,6 +33,12 @@ public class DevicePositionVo extends BaseValue{
 	 * 位置名称
 	 */
 	private String name;
+	
+	/**
+	 * 该位置放的设备类型
+	 */
+	@Dict(group="DEVICE_TYPE")
+	private String deviceType;
 	
 	/**
 	 * OEM编码
@@ -76,5 +83,13 @@ public class DevicePositionVo extends BaseValue{
 
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+
+	public String getDeviceType() {
+		return deviceType;
+	}
+
+	public void setDeviceType(String deviceType) {
+		this.deviceType = deviceType;
 	}
 }

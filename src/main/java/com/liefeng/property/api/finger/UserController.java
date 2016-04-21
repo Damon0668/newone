@@ -18,13 +18,13 @@ import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.EncryptionUtil;
 import com.liefeng.common.util.TimeUtil;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
-import com.liefeng.intf.property.api.ILoginUserService;
 import com.liefeng.intf.service.cache.IRedisService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
@@ -38,6 +38,8 @@ import com.liefeng.property.api.ro.finger.user.UserRo;
 import com.liefeng.property.api.ro.id.CustGlobalIdRo;
 import com.liefeng.property.api.ro.id.UserIdRo;
 import com.liefeng.property.constant.HouseholdConstants;
+import com.liefeng.property.constant.SysConstants;
+import com.liefeng.property.service.api.ILoginUserService;
 import com.liefeng.property.vo.api.LoginUserVo;
 import com.liefeng.property.vo.household.AppFriendVo;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
@@ -80,6 +82,8 @@ public class UserController {
 	@RequestMapping(value="/getLoginUser", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<LoginUserVo> getLoginUser(@Valid @ModelAttribute LoginUserRo loginUserRo){
+		
+		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
 		
 		LoginUserVo loginUser = loginUserService.findLoginUser(loginUserRo.getLoginId(), loginUserRo.getHouseholdType(), loginUserRo.getOemCode());
 		

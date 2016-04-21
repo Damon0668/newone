@@ -22,6 +22,10 @@ public class MsgHistoryRo extends BaseValue{
 	@ApiModelProperty(value="消息类型[user:个人;sys:系统]",required=true)
 	@NotNull
 	private String msgType;
+	
+	@ApiModelProperty(value="房子ID",required=true)
+	@NotNull
+	private String houseId;
 
 	@ApiModelProperty(value="当前页【最小值为1】", required=true)
 	@NotNull
@@ -61,5 +65,13 @@ public class MsgHistoryRo extends BaseValue{
 
 	public void setSize(Integer size) {
 		this.size = size;
+	}
+
+	public String getHouseId() {
+		return houseId;
+	}
+
+	public void setHouseId(String houseId) {
+		this.houseId = houseId;
 	}
 }

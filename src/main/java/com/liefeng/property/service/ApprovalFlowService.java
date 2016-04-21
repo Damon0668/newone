@@ -27,7 +27,6 @@ import org.snaker.engine.model.TransitionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.liefeng.common.util.FreeMarkerUtil;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataListValue;
@@ -35,10 +34,8 @@ import com.liefeng.intf.property.IApprovalFlowService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.intf.service.workflow.IWorkflowService;
-import com.liefeng.mq.type.MessageEvent;
 import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
 import com.liefeng.property.constant.ApprovalFlowConstants;
-import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.domain.staff.PropertyStaffContext;
 import com.liefeng.property.error.ApprovalFlowErrorCode;
 import com.liefeng.property.exception.ApprovalFlowException;
@@ -47,12 +44,8 @@ import com.liefeng.property.vo.approvalFlow.ProcessVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffWorkFlowUseVo;
 import com.liefeng.service.constant.PushActionConstants;
-import com.liefeng.service.constant.PushMsgConstants;
 import com.liefeng.service.constant.WorkflowConstants;
-import com.liefeng.service.vo.PushMsgTemplateVo;
 import com.liefeng.service.vo.TaskAttachVo;
-import com.liefeng.service.vo.msg.ListUserMsg;
-import com.liefeng.service.vo.msg.SingleUserMsg;
 
 
 /**
@@ -73,6 +66,9 @@ public class ApprovalFlowService implements IApprovalFlowService{
 	
 	@Autowired
 	private IPushMsgService pushMsgService;
+	
+	@Autowired
+	private PropertyPushMsgService propertyPushMsgService;
 	
 	@Override
 	public void startOrExecute(ApprovalFlowBo approvalFlowBo) {
@@ -115,27 +111,13 @@ public class ApprovalFlowService implements IApprovalFlowService{
 					staffIdList.add(staffIdArray[i]);
 				}
 				
-				//获取推送消息模板
-				PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.APPROVAL_NEW);
-				if(pushMsgTemplateVo != null){
-					
-					Map<String,String> data = new HashMap<String,String>();
-					data.put("processId", order.getProcessId());
-					data.put("orderId", historyTask.getOrderId());
-					data.put("taskName", historyTask.getTaskName());
-					String pageUrl = FreeMarkerUtil.parseStringTemplate(pushMsgTemplateVo.getPageUrl(), data);
-					
-					ListUserMsg message = new ListUserMsg();
-					message.setAction(PushActionConstants.APPROVAL_NEW);
-					message.setPageUrl(pageUrl);
-					message.setTitle(pushMsgTemplateVo.getTitle());
-					message.setContent(pushMsgTemplateVo.getContent());
-					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-					message.setReceiveUserIdList(staffIdList);
-					
-					pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
-					logger.info("有新审批时群推消息{}", message);
-				}
+				Map<String,String> data = new HashMap<String,String>();
+				data.put("processId", order.getProcessId());
+				data.put("orderId", historyTask.getOrderId());
+				data.put("taskName", historyTask.getTaskName());
+				
+				//有新审批时群推消息
+				propertyPushMsgService.pushMsgToStaffListOfMap(PushActionConstants.APPROVAL_NEW, staffIdList, data);
 			}
 		} else if(approvalFlowBo.getTaskName().equals(ApprovalFlowConstants.NODE_END)) { //结束流程
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
@@ -143,28 +125,17 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_STATUS, ApprovalFlowConstants.ORDER_COMPLETE);
 			workflowService.complete(approvalFlowBo.getOrderId(),approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
 			String staffId = workflowService.findHisOrderById(approvalFlowBo.getOrderId()).getCreator();
-			//获取推送消息模板
-			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.APPROVAL_FINISHED);
-			if(pushMsgTemplateVo != null){
-				
-				HistoryOrder order = workflowService.findHisOrderById(approvalFlowBo.getOrderId());
-				
-				Map<String,String> data = new HashMap<String,String>();
-				data.put("processId", order.getProcessId());
-				data.put("orderId", approvalFlowBo.getOrderId());
-				data.put("taskName", approvalFlowBo.getTaskName());
-				String pageUrl = FreeMarkerUtil.parseStringTemplate(pushMsgTemplateVo.getPageUrl(), data);
-				
-				SingleUserMsg message = new SingleUserMsg();
-				message.setAction(PushActionConstants.APPROVAL_FINISHED);
-				message.setPageUrl(pageUrl);
-				message.setTitle(pushMsgTemplateVo.getTitle());
-				message.setContent(pushMsgTemplateVo.getContent());
-				message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-				message.setReceiveUserId(staffId);
-				pushMsgService.push2Single(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
-				logger.info("审批完成时单推消息{}", message);
-			}
+			
+			HistoryOrder order = workflowService.findHisOrderById(approvalFlowBo.getOrderId());
+			
+			Map<String,String> data = new HashMap<String,String>();
+			data.put("processId", order.getProcessId());
+			data.put("orderId", approvalFlowBo.getOrderId());
+			data.put("taskName", approvalFlowBo.getTaskName());
+			
+			//审批完成时单推消息
+			propertyPushMsgService.pushMsgToStaffOfMap(PushActionConstants.APPROVAL_FINISHED, staffId, data);
+			
 		} else { //继续执行下去
 			System.out.println("继续执行下去:"+approvalFlowBo.getAssignee()+"||"+addUserPreixes(approvalFlowBo.getNextOperator()));
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
@@ -179,29 +150,15 @@ public class ApprovalFlowService implements IApprovalFlowService{
 					staffIdList.add(staffIdArray[i]);
 				}
 				
-				//获取推送消息模板
-				PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(PushActionConstants.APPROVAL_NEW);
-				if(pushMsgTemplateVo != null){
-					
-					Order order = workflowService.findOrderById(tasks.get(0).getOrderId());
-					
-					Map<String,String> data = new HashMap<String,String>();
-					data.put("processId", order.getProcessId());
-					data.put("orderId", tasks.get(0).getOrderId());
-					data.put("taskName", tasks.get(0).getTaskName());
-					String pageUrl = FreeMarkerUtil.parseStringTemplate(pushMsgTemplateVo.getPageUrl(), data);
-					
-					ListUserMsg message = new ListUserMsg();
-					message.setAction(PushActionConstants.APPROVAL_NEW);
-					message.setPageUrl(pageUrl);
-					message.setTitle(pushMsgTemplateVo.getTitle());
-					message.setContent(pushMsgTemplateVo.getContent());
-					message.setSendUserId(SysConstants.DEFAULT_SYSTEM_SENDUSER);
-					message.setReceiveUserIdList(staffIdList);
-					
-					pushMsgService.push2List(MessageEvent.PUSH_TO_PROPERTY_STAFF, PushMsgConstants.TerminalType.MOBILE_PROPERTY_WORKBENCH, message);
-					logger.info("有新审批时群推消息{}", message);
-				}
+				Order order = workflowService.findOrderById(tasks.get(0).getOrderId());
+				
+				Map<String,String> data = new HashMap<String,String>();
+				data.put("processId", order.getProcessId());
+				data.put("orderId", tasks.get(0).getOrderId());
+				data.put("taskName", tasks.get(0).getTaskName());
+				
+				//有新审批时群推消息
+				propertyPushMsgService.pushMsgToStaffListOfMap(PushActionConstants.APPROVAL_NEW, staffIdList, data);
 			}
 		}
 		

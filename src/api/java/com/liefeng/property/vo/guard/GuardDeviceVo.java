@@ -29,6 +29,11 @@ public class GuardDeviceVo extends DeviceVo {
 	private String projectId;
 	
 	/**
+	 * 项目名称
+	 */
+	private String projectName;
+	
+	/**
 	 * 楼栋ID
 	 */
 	private String buildingId;
@@ -44,6 +49,11 @@ public class GuardDeviceVo extends DeviceVo {
 	private String positionName;
 	
 	/**
+	 * 位置类型
+	 */
+	private String deviceType;
+	
+	/**
 	 * 摄像头ID
 	 */
 	private String cameraId;
@@ -52,6 +62,11 @@ public class GuardDeviceVo extends DeviceVo {
 	 * 摄像头类型
 	 */
 	private String cameraType;
+	
+	/**
+	 * 设备名称
+	 */
+	private String guardName;
 	
 	/**
 	 * 门口机编号
@@ -100,6 +115,14 @@ public class GuardDeviceVo extends DeviceVo {
 
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 
 	public String getBuildingId() {
@@ -188,5 +211,21 @@ public class GuardDeviceVo extends DeviceVo {
 
 	public void setCameraType(String cameraType) {
 		this.cameraType = cameraType;
+	}
+
+	public String getGuardName() {
+		return guardName;
+	}
+
+	public void setGuardName(String guardName) {
+		this.guardName = guardName;
+	}
+
+	public String getDeviceType() {
+		return deviceType;
+	}
+
+	public void setDeviceType(String deviceType) {
+		this.deviceType = deviceType;
 	}
 }

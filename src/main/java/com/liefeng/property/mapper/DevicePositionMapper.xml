@@ -10,6 +10,7 @@
     <result column="project_id" property="projectId"/>
     <result column="project_name" property="projectName"/>
     <result column="name" property="name"/>
+    <result column="device_type" property="deviceType"/>
     <result column="oem_code" property="oemCode"/>
 </resultMap>
 

@@ -3,6 +3,8 @@ package com.liefeng.property.domain.guard;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import com.liefeng.property.error.GuardErrorCode;
 import com.liefeng.property.po.guard.DevicePositionPo;
 import com.liefeng.property.repository.guard.DevicePositionRepository;
 import com.liefeng.property.repository.mybatis.DevicePositionQueryRepository;
+import com.liefeng.property.util.DictionaryUtil;
 import com.liefeng.property.vo.guard.DevicePositionVo;
 
 /**
@@ -113,7 +116,11 @@ public class DevicePositionContext {
 		}
 	}
 	
-	@javax.transaction.Transactional
+	public DevicePositionVo get(){
+		return null;
+	}
+	
+	@Transactional
 	public void delete(){
 		if(ValidateHelper.isNotEmptyString(positionId)){
 			devicePositionRepository.delete(positionId);
@@ -152,6 +159,8 @@ public class DevicePositionContext {
 		Long total = devicePositionQueryRepository.queryByCount(param);
 		
 		List<DevicePositionVo> devicePositionList = devicePositionQueryRepository.queryByPage(param);
+		
+		devicePositionList = DictionaryUtil.transformDicValueToDicName(devicePositionList);
 		
 		return new DataPageValue<DevicePositionVo>(devicePositionList, total, page, size);
 	}
