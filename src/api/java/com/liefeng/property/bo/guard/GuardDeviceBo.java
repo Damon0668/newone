@@ -17,11 +17,9 @@ public class GuardDeviceBo extends BaseValue{
 	
 	private List<String> projectIds;
 	
-	private String installPosition;
+	private String guardName;
 	
-	private String guardNum;
-	
-	private String status;
+	private String position;
 	
 	private String runStatus;
 	
@@ -41,30 +39,6 @@ public class GuardDeviceBo extends BaseValue{
 
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
-	}
-
-	public String getInstallPosition() {
-		return installPosition;
-	}
-
-	public void setInstallPosition(String installPosition) {
-		this.installPosition = installPosition;
-	}
-
-	public String getGuardNum() {
-		return guardNum;
-	}
-
-	public void setGuardNum(String guardNum) {
-		this.guardNum = guardNum;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
 	}
 
 	public String getRunStatus() {
@@ -89,6 +63,22 @@ public class GuardDeviceBo extends BaseValue{
 
 	public void setProjectIds(List<String> projectIds) {
 		this.projectIds = projectIds;
+	}
+
+	public String getGuardName() {
+		return guardName;
+	}
+
+	public void setGuardName(String guardName) {
+		this.guardName = guardName;
+	}
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
 	}
 
 	public String getDeviceType() {

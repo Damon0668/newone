@@ -8,7 +8,6 @@
 	<!-- Result Map -->
 	<resultMap id="BaseResultMap" type="com.liefeng.property.vo.guard.GuardDeviceVo">
 		<result column="id" property="id"/>
-		<result column="project_id" property="projectId"/>
 		<result column="install_position" property="installPosition"/>
 		<result column="guard_num" property="guardNum"/>
 		<result column="run_status" property="runStatus"/>
@@ -59,7 +58,7 @@
 <select id="queryByPage" resultMap="BaseResultMap">
 		SELECT
 		    gd.id,
-		    p.full_name project_id,
+		    p.full_name AS projectName,
 		    gd.guard_num,
 		    d.name,
 		    d.type,

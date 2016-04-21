@@ -27,6 +27,9 @@
         <if test="extra.projectIds != null and extra.projectIds != ''" >
             AND dp.project_id in ${extra.projectIds}
         </if>
+        <if test="extra.deviceType != null and extra.deviceType != ''" >
+            AND dp.device_type = #{extra.deviceType}
+        </if>
     </trim>
 </sql>
 

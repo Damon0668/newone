@@ -49,10 +49,10 @@ public interface IGuardService {
 	
 	/**
 	 * 查询项目位置
-	 * @param projectId 
+	 * @param devicePositionBo 
 	 * @return
 	 */
-	public List<DevicePositionVo> findDevicePosition(String projectId);
+	public List<DevicePositionVo> findDevicePosition(DevicePositionBo devicePositionBo);
 	
 	/**
 	 * 查询项目位置
