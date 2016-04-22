@@ -339,4 +339,9 @@ public interface IProjectService {
 	 */
 	public List<ProjectBuildingVo> findProjectBuildingByBuildingAndNum(String buildingId, String num);
 	
+	/**
+	 * 获取房产规格信息(项目名称、楼栋名称、楼层名称）
+	 * @return 房产规格值对象
+	 */
+	public HouseSpecVo findHouseSpec(String id);
 }
