@@ -1,5 +1,7 @@
 package com.liefeng.property.vo.staff;
 
+import javax.persistence.Column;
+
 import com.liefeng.core.entity.BaseValue;
 
 /**
@@ -21,10 +23,41 @@ public class PropertyDepartmentVo extends BaseValue {
 	 */
 	private String Id;
 	
+
+	/**
+	 * 父部门ID
+	 */
+	private String parentId;
+	
+	/**
+	 * 父部门名称
+	 */
+	private String parentName;
+	
+	/**
+	 * 项目ID
+	 */
+	private String projectId;
+	
+	/**
+	 * 项目
+	 */
+	private String projectName;
+	
 	/**
 	 * 部门名称
 	 */
 	private String name;
+	
+	/**
+	 * 部门类型
+	 */
+	private String deptType;
+	
+	/**
+	 * 部门类型名字
+	 */
+	private String deptTypeName;
 	
 	/**
 	 * 部门电话
@@ -37,9 +70,19 @@ public class PropertyDepartmentVo extends BaseValue {
 	private String directorId;
 	
 	/**
+	 * 负责人2ID
+	 */
+	private String director2Id;
+	
+	/**
 	 * 负责人
 	 */
 	private PropertyStaffVo director;
+	
+	/**
+	 * 负责人2
+	 */
+	private PropertyStaffVo director2;
 	
 	/**
 	 * OEM编码
@@ -107,4 +150,67 @@ public class PropertyDepartmentVo extends BaseValue {
 		this.director = director;
 	}
 
+	public String getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getDeptType() {
+		return deptType;
+	}
+
+	public void setDeptType(String deptType) {
+		this.deptType = deptType;
+	}
+
+	public String getDirector2Id() {
+		return director2Id;
+	}
+
+	public void setDirector2Id(String director2Id) {
+		this.director2Id = director2Id;
+	}
+
+	public PropertyStaffVo getDirector2() {
+		return director2;
+	}
+
+	public void setDirector2(PropertyStaffVo director2) {
+		this.director2 = director2;
+	}
+
+	public String getDeptTypeName() {
+		return deptTypeName;
+	}
+
+	public void setDeptTypeName(String deptTypeName) {
+		this.deptTypeName = deptTypeName;
+	}
+
+	public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
 }

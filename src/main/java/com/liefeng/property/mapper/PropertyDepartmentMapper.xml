@@ -8,6 +8,7 @@
 
 <resultMap id="BaseResultMap" type="com.liefeng.property.vo.staff.PropertyDepartmentVo" >
     <result column="directorName" property="director.name"/>
+    <result column="director2Name" property="director2.name"/>
 </resultMap>
 
 <!-- 查询条件 -->
@@ -26,7 +27,6 @@ where 1=1
       COUNT(1) 
     FROM
       t_property_department d
-      
       <include refid="Example_Where_Clause"/>
       
 </select>
@@ -34,20 +34,34 @@ where 1=1
 <select id="queryByPage" resultMap="BaseResultMap">
 	SELECT
 	   d.id,
+	   d.parent_id parentId,
+	   pd.name parentName,
+	   d.project_id projectId,
+	   p.full_name projectName,
 	   d.name,
+	   d.dept_type deptType,
 	   d.tel,
 	   d.director_id directorId,
-       d.oem_code oemCode,
-       s.name as directorName
+	   d.director2_id director2Id,
+       s.name as directorName,
+       s2.name as director2Name,
+       sd.name as deptTypeName,
+       d.oem_code oemCode
 	FROM
 	    t_property_department d
 	LEFT JOIN t_property_staff s ON d.director_id = s.id
-    
+	LEFT JOIN t_property_staff s2 ON d.director2_id = s2.id
+	LEFT JOIN t_sys_dict sd on d.dept_type = sd.value and sd.group_code = 'DEPT_TYPE'
+	LEFT JOIN t_property_department pd ON d.parent_id = pd.id
+	LEFT JOIN t_project p ON d.project_id = p.id
     <include refid="Example_Where_Clause"/>
+    
+    order by d.dept_type
 
 	<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
 	    ${pager.mysqlQueryCondition}
 	</if>
+	
 </select>
 
 </mapper>

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.liefeng.property.po.staff.PropertyDepartmentPo;
 
@@ -31,4 +32,9 @@ public interface PropertyDepartmentRepository extends JpaRepository<PropertyDepa
 	 * @return 部门列表
 	 */
 	public List<PropertyDepartmentPo> findDepartmentsByOemCode(String oemCode);
+	
+
+	@Query("select dp from PropertyDepartmentPo dp where dp.deptType=?1 and  dp.oemCode=?2 and dp.parentId='0' and dp.projectId='0'")
+	public PropertyDepartmentPo findParentDept(String deptType, String oemCode);
+	
 }
