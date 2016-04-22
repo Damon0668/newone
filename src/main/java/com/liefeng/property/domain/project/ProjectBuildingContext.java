@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.project;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,9 +18,11 @@ import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.error.ProjectErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.project.ProjectBuildingPo;
+import com.liefeng.property.repository.mybatis.ProjectBuildingQueryRepository;
 import com.liefeng.property.repository.project.ProjectBuildingRepository;
 import com.liefeng.property.vo.project.ProjectBuildingVo;
 
@@ -39,6 +42,9 @@ public class ProjectBuildingContext {
 
 	@Autowired
 	private ProjectBuildingRepository projectBuildingRepository;
+	
+	@Autowired
+	private ProjectBuildingQueryRepository 	projectBuildingQueryRepository;
 
 	/**
 	 * 项目楼栋楼层ID 或 以“,”分隔的项目楼栋楼层ID串
@@ -233,5 +239,32 @@ public class ProjectBuildingContext {
 		List<ProjectBuildingPo> projectBuildingPos = projectBuildingRepository.findByProjectIdAndParentIdIsNull(projectId);
 		
 		return MyBeanUtil.createList(projectBuildingPos, ProjectBuildingVo.class);
+	}
+	
+	/**
+	 * 获取某楼栋的所有楼层，并对某楼层房间是否进行了房型初始化进行标记
+	 * @param buildingId 楼栋id
+	 * @param num 房间号后两位
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月22日 上午11:34:10
+	 */
+	public List<ProjectBuildingVo> findByBuildingAndNum(String buildingId, String num){
+		
+		List<ProjectBuildingVo> projectBuildingList = null;
+		if(ValidateHelper.isNotEmptyString(buildingId) && ValidateHelper.isNotEmptyString(num)){
+			String oemCode = ContextManager.getInstance().getOemCode();
+			HashMap<String, String> paramMap = new HashMap<String, String>();
+			paramMap.put("buildingId", buildingId);
+			paramMap.put("num", num);
+			paramMap.put("oemCode", oemCode);
+
+			PagingParamVo param = new PagingParamVo();
+			param.setExtra(paramMap);
+			
+			projectBuildingList = projectBuildingQueryRepository.queryByBuildingIdAndNum(param);
+		}
+		
+		return projectBuildingList;
 	}
 }

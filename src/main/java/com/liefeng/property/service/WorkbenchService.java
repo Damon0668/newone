@@ -907,7 +907,7 @@ public class WorkbenchService implements IWorkbenchService {
 				.build(eventReportVo);
 		eventReportContext.create();
 		
-		if(WorkbenchConstants.EventReport.STATUS_FILE.equals(eventReportVo.getStatus()) && WorkbenchConstants.DIRECTFEEDBACK.equals(eventReportVo.getDirectFeekback())){
+		if(WorkbenchConstants.EventReport.STATUS_FILE.equals(eventReportVo.getStatus())){
 			
 			//个推给业主、住户
 			UserVo userVo = userService.getUserByMobile(eventReportVo.getPhone());
@@ -933,7 +933,7 @@ public class WorkbenchService implements IWorkbenchService {
 				.build(eventReportVo);
 		eventReportContext.update();
 		
-		if(WorkbenchConstants.EventReport.STATUS_FILE.equals(eventReportVo.getStatus()) && WorkbenchConstants.DIRECTFEEDBACK.equals(eventReportVo.getDirectFeekback())){
+		if(WorkbenchConstants.EventReport.STATUS_FILE.equals(eventReportVo.getStatus())){
 			
 			//个推给业主、住户
 			UserVo userVo = userService.getUserByMobile(eventReportVo.getPhone());
@@ -1218,21 +1218,18 @@ public class WorkbenchService implements IWorkbenchService {
 		propertyPushMsgService.pushMsgToStaff(PushActionConstants.EVENT_REPORT_RECEIVE_ONE, nextAccepterId);
 		
 		//推送给报事人
-		if(WorkbenchConstants.EventReport.STATUS_FILE.equals(eventReportVo.getStatus()) && WorkbenchConstants.DIRECTFEEDBACK.equals(eventReportVo.getDirectFeekback())){
 			
-			//个推给业主、住户
-			UserVo userVo = userService.getUserByMobile(eventReportVo.getPhone());
+		//个推给业主、住户
+		UserVo userVo = userService.getUserByMobile(eventReportVo.getPhone());
+		
+		if(userVo != null){
+			propertyPushMsgService.pushMsgToUser(PushActionConstants.EVENT_REPORT_ACCEPTED, userVo.getId());
+		}else{
+			StaffArchiveVo staffArchiveVo = propertyStaffService.findStaffArchiveByPhone(eventReportVo.getPhone());
 			
-			if(userVo != null){
-				propertyPushMsgService.pushMsgToUser(PushActionConstants.EVENT_REPORT_ACCEPTED, userVo.getId());
-			}else{
-				StaffArchiveVo staffArchiveVo = propertyStaffService.findStaffArchiveByPhone(eventReportVo.getPhone());
-				
-				if(staffArchiveVo != null){
-					propertyPushMsgService.pushMsgToStaff(PushActionConstants.EVENT_REPORT_ACCEPTED, staffArchiveVo.getStaffId());
-				}
+			if(staffArchiveVo != null){
+				propertyPushMsgService.pushMsgToStaff(PushActionConstants.EVENT_REPORT_ACCEPTED, staffArchiveVo.getStaffId());
 			}
-			
 		}
 	}
 
@@ -1470,7 +1467,7 @@ public class WorkbenchService implements IWorkbenchService {
 			}
 			
 			//派工
-			if(WorkbenchConstants.EventProcessStatus.DISPATCHING.equals(tasks.get(0).getTaskName()) && userIdList.size() > 1){
+			if(WorkbenchConstants.EventProcessStatus.DISPATCHING.equals(task.getTaskName()) && userIdList.size() > 1){
 					//个推
 					Map<String,String> data = new HashMap<String,String>();
 					data.put("orderId", tasks.get(0).getOrderId());
@@ -1488,9 +1485,9 @@ public class WorkbenchService implements IWorkbenchService {
 				}
 			
 			//派工后通知报事人
-			if(WorkbenchConstants.EventProcessStatus.DISPATCHING.equals(tasks.get(0).getTaskName())){
+			if(WorkbenchConstants.EventProcessStatus.DISPATCHING.equals(task.getTaskName())){
 				
-				EventReportVo eventReportVo2 = EventReportContext.build().findByWfOrderId(eventReportVo.getWfOrderId());
+				EventReportVo eventReportVo2 = EventReportContext.loadById(eventReportVo.getId()).get();
 				if(eventReportVo2 != null){
 					//个推给业主、住户
 					UserVo userVo = userService.getUserByMobile(eventReportVo2.getPhone());
@@ -1510,9 +1507,10 @@ public class WorkbenchService implements IWorkbenchService {
 			}
 			
 			//审核通过后通知报事人
-			if(WorkbenchConstants.EventProcessStatus.AUDIT.equals(tasks.get(0).getTaskName())){
-
-				EventReportVo eventReportVo2 = EventReportContext.build().findByWfOrderId(eventReportVo.getWfOrderId());
+			if(WorkbenchConstants.EventProcessStatus.AUDIT.equals(task.getTaskName()) 
+					&& WorkbenchConstants.EventReport.AUDITSTATUS_YES.equals(eventProcessVo.getAuditStatus())){
+				
+				EventReportVo eventReportVo2 = EventReportContext.loadById(eventReportVo.getId()).get();
 				if(eventReportVo2 != null){
 					//个推给业主、住户
 					UserVo userVo = userService.getUserByMobile(eventReportVo2.getPhone());

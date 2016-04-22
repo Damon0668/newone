@@ -26,10 +26,28 @@ public class PropertyDepartmentPo extends BaseValue {
 	private String Id;
 	
 	/**
+	 * 父部门ID
+	 */
+	@Column(name = "parent_id")
+	private String parentId;
+	
+	/**
+	 * 项目ID
+	 */
+	@Column(name = "project_id")
+	private String projectId;
+	
+	/**
 	 * 部门名称
 	 */
 	@Column(name = "name")
 	private String name;
+	
+	/**
+	 * 部门类型
+	 */
+	@Column(name = "dept_type")
+	private String deptType;
 	
 	/**
 	 * 部门电话
@@ -42,6 +60,12 @@ public class PropertyDepartmentPo extends BaseValue {
 	 */
 	@Column(name = "director_id")
 	private String directorId;
+	
+	/**
+	 * 负责人2ID
+	 */
+	@Column(name = "director2_id")
+	private String director2Id;
 	
 	/**
 	 * OEM编码
@@ -87,5 +111,37 @@ public class PropertyDepartmentPo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getDeptType() {
+		return deptType;
+	}
+
+	public void setDeptType(String deptType) {
+		this.deptType = deptType;
+	}
+
+	public String getDirector2Id() {
+		return director2Id;
+	}
+
+	public void setDirector2Id(String director2Id) {
+		this.director2Id = director2Id;
 	}
 }

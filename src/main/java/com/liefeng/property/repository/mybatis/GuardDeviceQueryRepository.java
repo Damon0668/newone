@@ -19,4 +19,11 @@ public interface GuardDeviceQueryRepository extends BaseRepository<GuardDeviceVo
 	 * @return 授权设备列表
 	 */
 	public List<GuardDeviceVo> queryPrivilegeDevice(String cardId);
+	
+	/**
+	 * 查询设备
+	 * @param deviceId 设备ID
+	 * @return
+	 */
+	public GuardDeviceVo findOne(String deviceId);
 }

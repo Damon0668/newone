@@ -132,7 +132,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			approvalFlowBo.getParams().put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
 			approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_STATUS, ApprovalFlowConstants.ORDER_COMPLETE);
 			workflowService.complete(approvalFlowBo.getOrderId(),approvalFlowBo.getTaskId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
-			String staffId = workflowService.findHisOrderById(approvalFlowBo.getOrderId()).getCreator();
+			String staffId = workflowService.findHisOrderById(approvalFlowBo.getOrderId()).getCreator().replace( ApprovalFlowConstants.USER_PREFIXES, "");
 			
 			HistoryOrder order = workflowService.findHisOrderById(approvalFlowBo.getOrderId());
 			

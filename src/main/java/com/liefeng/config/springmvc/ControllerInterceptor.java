@@ -53,7 +53,6 @@ public class ControllerInterceptor implements HandlerInterceptor{
 		}
 		
 		if("default".equals(openId)){
-			//ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
 			return Boolean.TRUE;
 		}
 		

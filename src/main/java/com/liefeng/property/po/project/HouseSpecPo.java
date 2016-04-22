@@ -38,6 +38,12 @@ public class HouseSpecPo extends BaseValue {
 	private String buildingId;
 	
 	/**
+	 * 楼层ID
+	 */
+	@Column(name = "floor_id")
+	private String floorId;
+	
+	/**
 	 * 房号（后两位）
 	 */
 	@Column(name = "num")
@@ -186,6 +192,14 @@ public class HouseSpecPo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getFloorId() {
+		return floorId;
+	}
+
+	public void setFloorId(String floorId) {
+		this.floorId = floorId;
 	}
 
 }

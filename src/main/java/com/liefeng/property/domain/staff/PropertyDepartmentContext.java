@@ -16,7 +16,10 @@ import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
+import com.liefeng.property.constant.DeptConstants;
+import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.error.StaffErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.staff.PropertyDepartmentPo;
@@ -116,14 +119,19 @@ public class PropertyDepartmentContext {
 	public void create() {
 		if(propertyDepartment != null) {
 			
-			String departName = propertyDepartment.getName().trim();
-			
-			if (ValidateHelper.isEmptyString(departName)) {
-				throw new PropertyException(StaffErrorCode.DEPARTMENT_NAME_NULL);
+			if(SysConstants.DEFAULT_ID.equals(propertyDepartment.getParentId())){
+				propertyDepartment.setParentId(SysConstants.DEFAULT_ID);
+				propertyDepartment.setProjectId(SysConstants.DEFAULT_ID);
+			}else{
+				PropertyDepartmentPo parent = propertyDepartmentRepository.findParentDept(propertyDepartment.getDeptType(),
+						ContextManager.getInstance().getOemCode());
+				if(parent == null){
+					throw new LiefengException(StaffErrorCode.PARENT_DEPT_NOT_EXIST);
+				}
+				propertyDepartment.setParentId(parent.getId());
+				
 			}
-			
-			isExitByDepartName(propertyDepartment);
-			
+
 			propertyDepartment.setId(UUIDGenerator.generate());
 			
 			propertyDepartment.setOemCode(ContextManager.getInstance().getOemCode());
@@ -141,31 +149,24 @@ public class PropertyDepartmentContext {
 	public void update() {
 		if(propertyDepartment != null) {
 			
-			String departName = propertyDepartment.getName().trim();
-			
-			String oemCode = ContextManager.getInstance().getOemCode();
-			
-			PropertyDepartmentPo propertyDepartmentPo = propertyDepartmentRepository.findDepartmentByNameAndOemCode(departName, oemCode);
-
-			if(propertyDepartmentPo == null){
-				propertyDepartmentPo = propertyDepartmentRepository.findOne(propertyDepartment.getId());
-			}
-			
-			if(propertyDepartmentPo != null){
-				if(!propertyDepartmentPo.getId().equals(propertyDepartment.getId())){
-					throw new PropertyException(StaffErrorCode.DEPARTMENT_ALREADY_EXIST, departName);
+			if(SysConstants.DEFAULT_ID.equals(propertyDepartment.getParentId())){
+				propertyDepartment.setParentId(SysConstants.DEFAULT_ID);
+				propertyDepartment.setProjectId(SysConstants.DEFAULT_ID);
+			}else{
+				PropertyDepartmentPo parent = propertyDepartmentRepository.findParentDept(propertyDepartment.getDeptType(),
+						ContextManager.getInstance().getOemCode());
+				if(parent == null){
+					throw new LiefengException(StaffErrorCode.PARENT_DEPT_NOT_EXIST);
 				}
+				propertyDepartment.setParentId(parent.getId());
+				
 			}
 			
-			if (ValidateHelper.isNotEmptyString(propertyDepartment.getDirectorId())) {
-				propertyDepartmentPo.setDirectorId(propertyDepartment.getDirectorId());
-			}
-			if (ValidateHelper.isNotEmptyString(propertyDepartment.getName())) {
-				propertyDepartmentPo.setName(propertyDepartment.getName());
-			}
-			if (ValidateHelper.isNotEmptyString(propertyDepartment.getTel())) {
-				propertyDepartmentPo.setTel(propertyDepartment.getTel());
-			}
+
+			PropertyDepartmentPo propertyDepartmentPo = propertyDepartmentRepository.findOne(propertyDepartment.getId());
+
+			MyBeanUtil.copyBeanNotNull2Bean(propertyDepartment, propertyDepartmentPo);
+			
 			propertyDepartmentRepository.save(propertyDepartmentPo);
 			
 			logger.info("Update department: '{}' successfully!", propertyDepartment);

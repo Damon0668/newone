@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.project;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -114,15 +115,33 @@ public class HouseSpecContext {
 	}
 	
 	/**
+	 * 获取房产规格信息(项目名称、楼栋名称、楼层名称）
+	 * @return 房产规格值对象
+	 */
+	public HouseSpecVo findHouseSpec() {
+		if(houseSpec == null) {
+			// 根据房产ID查询
+			if(ValidateHelper.isNotEmptyString(houseSpecId)) {
+				String oemCode = ContextManager.getInstance().getOemCode();
+				HashMap<String, String> paramMap = new HashMap<String, String>();
+				paramMap.put("id", houseSpecId);
+				paramMap.put("oemCode", oemCode);
+
+				PagingParamVo param = new PagingParamVo();
+				param.setExtra(paramMap);
+				
+				houseSpec = houseSpecQueryRepository.queryByHouseSpecId(param);
+			} 
+		}
+		
+		return houseSpec;
+	}
+	
+	/**
 	 * 保存房产规格
 	 */
 	public HouseSpecVo create() throws PropertyException {
 		if(houseSpec != null) {
-			
-			if(houseSpecRepository.findByProjectIdAndBuildingIdAndNum(
-			   houseSpec.getProjectId(), houseSpec.getBuildingId(), houseSpec.getNum()) != null) {
-				throw new PropertyException(ProjectErrorCode.HOUSESPEC_ALREADY_EXIST);
-			}
 			
 			houseSpec.setId(UUIDGenerator.generate());
 			houseSpec.setOemCode(ContextManager.getInstance().getOemCode()); 

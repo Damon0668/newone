@@ -70,4 +70,19 @@ public class SysConstants {
 	 * 默认系统发送
 	 */
 	public static final String DEFAULT_SYSTEM_SENDUSER = "-1";
+	
+	/**
+	 * TRUE
+	 */
+	public static final String TRUE = "1";
+	
+	/**
+	 * FALSE
+	 */
+	public static final String FALSE = "0";
+	
+	/**
+	 * 
+	 */
+	public static final String DEFAULT_ID = "0";
 }

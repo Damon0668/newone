@@ -27,7 +27,12 @@ public class DevicePositionBo extends BaseValue{
 	private List<String> projectIds;
 	
 	/**
-	 * 
+	 * 设备类型
+	 */
+	private String deviceType;
+	
+	/**
+	 * OEM编码
 	 */
 	private String oemCode;
 
@@ -53,5 +58,13 @@ public class DevicePositionBo extends BaseValue{
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getDeviceType() {
+		return deviceType;
+	}
+
+	public void setDeviceType(String deviceType) {
+		this.deviceType = deviceType;
 	}
 }

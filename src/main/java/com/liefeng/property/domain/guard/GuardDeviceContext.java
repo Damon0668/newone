@@ -136,10 +136,7 @@ public class GuardDeviceContext {
 	public GuardDeviceVo get(){
 		if(guardDevice == null){
 			if(ValidateHelper.isNotEmptyString(id)){
-				GuardDevicePo guardDevicePo = guardDeviceRepository.findOne(id);
-				if(guardDevicePo != null){
-					guardDevice = MyBeanUtil.createBean(guardDevicePo, GuardDeviceVo.class);
-				}
+				guardDevice = guardDeviceQueryRepository.findOne(id);
 			}
 		}
 		return guardDevice;

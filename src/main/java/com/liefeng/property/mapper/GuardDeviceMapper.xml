@@ -8,11 +8,15 @@
 	<!-- Result Map -->
 	<resultMap id="BaseResultMap" type="com.liefeng.property.vo.guard.GuardDeviceVo">
 		<result column="id" property="id"/>
-		<result column="project_id" property="projectId"/>
+		<result column="device_global_id" property="deviceGlobalId"/>
 		<result column="install_position" property="installPosition"/>
+		<result column="guard_name" property="guardName"/>
 		<result column="guard_num" property="guardNum"/>
 		<result column="run_status" property="runStatus"/>
-		<result column="status" property="status"/>
+		<result column="gurad_name" property="guradName"/>
+		<result column="buy_date" property="buyDate"/>
+		<result column="warranty_date" property="warrantyDate"/>
+		<result column="producer_tel" property="producerTel"/>
 	</resultMap>
 	
 <!-- 查询条件 -->
@@ -31,8 +35,14 @@
         <if test="extra.guardType != null and extra.guardType != ''" >
             AND gd.guard_type = #{extra.guardType}
         </if>
-         <if test="extra.guardNum != null and extra.guardNum != ''" >
+        <if test="extra.guardNum != null and extra.guardNum != ''" >
             AND gd.guard_num = #{extra.guardNum}
+        </if>
+        <if test="extra.guardName != null and extra.guardName != ''" >
+            AND gd.guard_name like concat('%', #{extra.guardName},'%')
+        </if>
+        <if test="extra.position != null and extra.position != ''" >
+            AND dp.name like concat('%', #{extra.position},'%')
         </if>
         <if test="extra.status != null and extra.status!= ''" >
             AND d.status = #{extra.status}
@@ -40,35 +50,45 @@
         <if test="extra.runStatus != null and extra.runStatus != ''" >
             AND d.run_status = #{extra.runStatus}
         </if>
+        <if test="extra.deviceType != null and extra.deviceType != ''">
+        	AND d.type = #{extra.deviceType}
+        </if>
     </trim>
 </sql>
 
 <select id="queryByCount"  resultType="java.lang.Long">
     SELECT
-	    COUNT(1)
-	FROM
-	    t_guard_device gd
-	LEFT JOIN t_project p ON gd.project_id = p.id
-	LEFT JOIN basic.t_device d ON gd.device_global_id = d.global_id
+        COUNT(1)
+    FROM
+        t_guard_device gd
+    LEFT JOIN t_device_position dp ON gd.position_id = dp.id
+    LEFT JOIN t_project p ON gd.project_id = p.id
+    LEFT JOIN basic.t_device d ON gd.device_global_id = d.global_id
+    LEFT JOIN property.t_sys_dict sd on sd.group_code = 'DEVICE_TYPE' 
+    AND sd.value = d.type
 	<include refid="Example_Where_Clause"/>
 </select>
 
 <select id="queryByPage" resultMap="BaseResultMap">
 		SELECT
 		    gd.id,
-		    p.full_name project_id,
+		    p.full_name AS projectName,
 		    gd.guard_num,
 		    d.name,
 		    d.type,
 		    dp.name positionName,
 		    gd.guard_num,
 		    d.run_status,
-		    d.status
+		    d.status,
+		    gd.qrcode_url AS qrCodeUrl,
+		    sd.name AS deviceType
 		FROM
 		    t_guard_device gd
 		LEFT JOIN t_device_position dp ON gd.position_id = dp.id
 		LEFT JOIN t_project p ON gd.project_id = p.id
 		LEFT JOIN basic.t_device d ON gd.device_global_id = d.global_id
+		LEFT JOIN property.t_sys_dict sd on sd.group_code = 'DEVICE_TYPE' 
+		AND sd.value = d.type
 		<include refid="Example_Where_Clause"/>
 		ORDER BY gd.project_id desc,gd.create_time desc
 		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
@@ -96,4 +116,19 @@
 	WHERE
 		gcp.card_id = #{cardId}
 </select>
+
+<select id="findOne" resultMap="BaseResultMap">
+    select p.full_name projectName, dp.name positionName, gd.* 
+    
+    from 
+        t_guard_device gd 
+        
+        LEFT JOIN t_device_position dp ON gd.position_id = dp.id
+        LEFT JOIN t_project p ON gd.project_id = p.id 
+    where
+        1=1
+        AND gd.id = #{extra.deviceId}
+    
+</select>
+
 </mapper>
