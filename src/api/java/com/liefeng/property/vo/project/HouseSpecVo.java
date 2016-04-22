@@ -33,6 +33,16 @@ public class HouseSpecVo extends BaseValue {
 	private String buildingId;
 	
 	/**
+	 * 楼层ID
+	 */
+	private String floorId;
+	
+	/**
+	 * 楼层名称
+	 */
+	private String floorName;
+	
+	/**
 	 * 楼栋名称
 	 */
 	private String buildingName;
@@ -206,6 +216,22 @@ public class HouseSpecVo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getFloorId() {
+		return floorId;
+	}
+
+	public void setFloorId(String floorId) {
+		this.floorId = floorId;
+	}
+
+	public String getFloorName() {
+		return floorName;
+	}
+
+	public void setFloorName(String floorName) {
+		this.floorName = floorName;
 	}
 
 }

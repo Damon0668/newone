@@ -329,4 +329,14 @@ public interface IProjectService {
 	 */
 	public List<ProjectVo> findAllProject();
 	
+	/**
+	 * 获取某楼栋的所有楼层，并对某楼层房间是否进行了房型初始化进行标记
+	 * @param buildingId 楼栋id
+	 * @param num 房间号后两位
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月22日 上午11:34:10
+	 */
+	public List<ProjectBuildingVo> findProjectBuildingByBuildingAndNum(String buildingId, String num);
+	
 }
