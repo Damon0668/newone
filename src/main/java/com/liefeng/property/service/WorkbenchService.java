@@ -1508,7 +1508,7 @@ public class WorkbenchService implements IWorkbenchService {
 			
 			//审核通过后通知报事人
 			if(WorkbenchConstants.EventProcessStatus.AUDIT.equals(task.getTaskName()) 
-					&& WorkbenchConstants.EventReport.AUDITSTATUS_YES.equals(eventProcessVo.getAttitude())){
+					&& WorkbenchConstants.EventReport.AUDITSTATUS_YES.equals(eventProcessVo.getAuditStatus())){
 				
 				EventReportVo eventReportVo2 = EventReportContext.loadById(eventReportVo.getId()).get();
 				if(eventReportVo2 != null){
