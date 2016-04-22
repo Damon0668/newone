@@ -119,11 +119,6 @@ public class HouseSpecContext {
 	public HouseSpecVo create() throws PropertyException {
 		if(houseSpec != null) {
 			
-			if(houseSpecRepository.findByProjectIdAndBuildingIdAndNum(
-			   houseSpec.getProjectId(), houseSpec.getBuildingId(), houseSpec.getNum()) != null) {
-				throw new PropertyException(ProjectErrorCode.HOUSESPEC_ALREADY_EXIST);
-			}
-			
 			houseSpec.setId(UUIDGenerator.generate());
 			houseSpec.setOemCode(ContextManager.getInstance().getOemCode()); 
 			

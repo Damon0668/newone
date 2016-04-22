@@ -424,4 +424,10 @@ public class ProjectService implements IProjectService {
 	public List<ProjectVo> findAllProject(){
 		return ProjectContext.build().findAll();
 	}
+
+	@Override
+	public List<ProjectBuildingVo> findProjectBuildingByBuildingAndNum(String buildingId,
+			String num) {
+		return ProjectBuildingContext.build().findByBuildingAndNum(buildingId, num);
+	}
 }

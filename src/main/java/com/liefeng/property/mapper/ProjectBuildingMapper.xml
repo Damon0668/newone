@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.ProjectBuildingQueryRepository" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.project.ProjectBuildingVo" >
+	<result column="id" property="id"/>
+	<result column="name" property="name"/>
+	<result column="code" property="code"/>
+	<result column="flag" property="flag"/>
+</resultMap>
+
+
+<select id="queryByBuildingIdAndNum" resultMap="BaseResultMap">
+   SELECT
+		b.id AS id,
+		b.code AS code,
+		b.name AS name,
+		CASE WHEN ISNULL(s.num) THEN '1' ELSE '0' END AS flag
+	FROM
+		t_project_building b LEFT JOIN t_house_spec s ON b.id = s.floor_id AND b.oem_code = s.oem_code AND s.num = #{extra.num} 
+	WHERE
+		b.parent_id = #{extra.buildingId} 
+	AND b.oem_code = #{extra.oemCode} 
+</select>
+
+</mapper>   

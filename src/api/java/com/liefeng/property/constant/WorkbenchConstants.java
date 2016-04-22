@@ -439,4 +439,9 @@ public class WorkbenchConstants {
 	 * 系统名称：系统
 	 */
 	public static final String SystemName = "系统";
+	
+	/**
+	 * 换行的数据
+	 */
+	public static final int number = 8;
 }

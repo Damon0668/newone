@@ -46,6 +46,11 @@ public class ProjectBuildingVo extends BaseValue {
 	 * OEM编码
 	 */
 	private String oemCode;
+	
+	/**
+	 * 标记（非表字段）
+	 */
+	private String flag;
 
 	public String getId() {
 		return id;
@@ -101,6 +106,14 @@ public class ProjectBuildingVo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getFlag() {
+		return flag;
+	}
+
+	public void setFlag(String flag) {
+		this.flag = flag;
 	}
 
 }
