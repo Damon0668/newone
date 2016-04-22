@@ -3,7 +3,10 @@ package com.liefeng.property.api.work;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.Task;
 import org.snaker.engine.entity.WorkItem;
+import org.snaker.engine.helper.JsonHelper;
 import org.snaker.engine.model.FieldModel;
 import org.snaker.engine.model.TaskModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +35,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.entity.DataValue;
 import com.liefeng.core.entity.ReturnValue;
 import com.liefeng.intf.property.IApprovalFlowService;
+import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.service.workflow.IWorkflowService;
 import com.liefeng.property.api.ro.id.StaffIdRo;
 import com.liefeng.property.api.ro.work.workFlow.BackTaskRo;
@@ -68,6 +73,9 @@ public class WorkFlowController {
 	
 	@Autowired
 	private IWorkflowService workflowService;
+	
+	@Autowired
+	private IPropertyStaffService propertyStaffService;
 	
 	@ApiOperation(value="获取流程表单的信息")
 	@RequestMapping(value="/getFields", method=RequestMethod.GET)
@@ -172,12 +180,40 @@ public class WorkFlowController {
 		
 		case "1"://待办理
 			dataPageValue = workflowService.getWorkItems(new QueryFilter().setOperator(operator), getListDataRo.getPage(),  getListDataRo.getSize());
+			List<WorkItem> workItems1 = dataPageValue.getDataList();
+			for (WorkItem workItem : workItems1) {
+				Map<String, Object> taskVariable = workItem.getTaskVariableMap();
+				taskVariable.put("stayTime", getStaytime(workItem.getTaskCreateTime()));
+				workItem.setTaskVariable(JsonHelper.toJson(taskVariable));
+			}
 			break;
 		case "2"://已办结
 			dataPageValue = workflowService.listFlowingOrder(new QueryFilter().setOperator(operator), getListDataRo.getPage(),  getListDataRo.getSize());
 			break;
 		case "3"://我发起的
 			dataPageValue = workflowService.listMyCreate(new QueryFilter().setOperator(operator), getListDataRo.getPage(),  getListDataRo.getSize());
+			List<WorkItem> workItems3 = dataPageValue.getDataList();
+			for (WorkItem workItem : workItems3) {
+				Map<String, Object> taskVariable = workItem.getTaskVariableMap();
+				taskVariable.put("stayTime", getStaytime(workItem.getTaskCreateTime()));
+				workItem.setTaskVariable(JsonHelper.toJson(taskVariable));
+				
+				//设置办理人
+				String[] actors = workflowService.getTaskActorsByTaskId(workItem.getTaskId());
+				String actor="";
+				for (String string : actors) {
+					actor += string.replace(ApprovalFlowConstants.USER_PREFIXES, "")+",";
+				}
+				actor = actor.substring(0,actor.length()-1);
+				
+				String operators = "";
+				List<PropertyStaffVo> propertyStaffVos = propertyStaffService.findPropertyStaffById4DPList(actor);
+				for (PropertyStaffVo propertyStaffVo : propertyStaffVos) {
+					operators += propertyStaffVo.getName()+",";
+				}
+				operators = operators.substring(0,operators.length()-1);
+				workItem.setOperator(operators);
+			}
 			break;
 		default:
 			break;
@@ -253,4 +289,29 @@ public class WorkFlowController {
 		approvalFlowService.backTask(backTaskRo.getTaskId(), backTaskRo.getStaffId());
 		return ReturnValue.success();
 	}
+	
+	public static String getStaytime(String tranTime) {
+    	java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	if(ValidateHelper.isEmptyString(tranTime))
+    		return "";
+    	try {
+			Date startTime = sdf.parse(tranTime);
+			Date endTime = Calendar.getInstance().getTime();
+			long diff = endTime.getTime() - startTime.getTime();
+			long time = diff / (1000 * 60 * 60 );
+			if(time<1){
+				return diff / (1000 * 60 ) +"分钟"; 
+			} else if(time>24) {
+				long days = time/24;
+				long hours = time%24;
+				return days+"天"+hours+"小时"; 				
+			} else {
+				return time+"小时"; 				
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} 
+		return null;   	  	
+    }
+
 }

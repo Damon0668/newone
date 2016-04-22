@@ -17,7 +17,17 @@ public enum ApprovalFlowErrorCode implements IErrorCode {
 	/**
 	 * 工作已被其他人处理，无法删除！
 	 */
-	CANNOT_DELETE("工作已被其他人处理，无法删除！"),
+	CANNOT_DELETE("工作已被其他人处理，无法删除！"), 
+	
+	/**
+	 * 当前任务不存在
+	 */
+	CURR_TASK_NULL("当前任务不存在"), 
+	
+	/**
+	 * 历史任务不存在，收回失败
+	 */
+	HISTASK_NULL("历史任务不存在，收回失败"),
 	;
 	private String desc;
 	
