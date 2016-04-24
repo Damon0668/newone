@@ -201,6 +201,7 @@ public class WorkFlowController {
 				//设置办理人
 				String[] actors = workflowService.getTaskActorsByTaskId(workItem.getTaskId());
 				String actor="";
+				if(actors != null)
 				for (String string : actors) {
 					actor += string.replace(ApprovalFlowConstants.USER_PREFIXES, "")+",";
 				}
@@ -208,6 +209,7 @@ public class WorkFlowController {
 				
 				String operators = "";
 				List<PropertyStaffVo> propertyStaffVos = propertyStaffService.findPropertyStaffById4DPList(actor);
+				if( propertyStaffVos != null)
 				for (PropertyStaffVo propertyStaffVo : propertyStaffVos) {
 					operators += propertyStaffVo.getName()+",";
 				}
