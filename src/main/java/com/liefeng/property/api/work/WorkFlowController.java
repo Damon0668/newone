@@ -89,7 +89,7 @@ public class WorkFlowController {
 	@RequestMapping(value="/getValue", method=RequestMethod.GET)
 	@ResponseBody
 	public DataValue<Map<String, Object>> getValue(@Valid @ModelAttribute OrderIdRo orderIdRo){
-		Map<String, Object> variableMap = workflowService.findOrderById(orderIdRo.getOrderId()).getVariableMap();
+		Map<String, Object> variableMap = workflowService.findHisOrderById(orderIdRo.getOrderId()).getVariableMap();
 		return DataValue.success(variableMap);
 	}
 	

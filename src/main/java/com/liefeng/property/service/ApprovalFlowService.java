@@ -426,13 +426,13 @@ public class ApprovalFlowService implements IApprovalFlowService{
 		List<TaskModel> nextTasks = ((TaskModel)nodeModel).getNextTaskModels();
 		List<TransitionModel> endModel = nodeModel.getOutputs();
 		//添加结束节点
-		if (StringUtils.isNotEmpty(taskName)) //添加不显示结束步骤
+		if (StringUtils.isNotEmpty(taskName)) //添加结束步骤
 		if(endModel !=null && endModel.size()>0){
 			for (int i = 0; i < endModel.size(); i++) {
 				if(endModel.get(i).getTarget().getName().equals(ApprovalFlowConstants.NODE_END)){
 					TaskModel taskModel = new TaskModel();
 					taskModel.setName(ApprovalFlowConstants.NODE_END);
-					taskModel.setDisplayName("结束并归档");
+					taskModel.setDisplayName("结束流程");
 					taskModel.setAssignee(ApprovalFlowConstants.NODE_END);
 					nextTasks.add(taskModel);
 				}
