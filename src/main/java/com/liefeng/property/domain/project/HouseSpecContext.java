@@ -184,6 +184,7 @@ public class HouseSpecContext {
 					} else {
 						houseSpec = houseSpecQueryRepository.queryById(ids[i]);
 						message.append(houseSpec.getBuildingName())
+							   .append(houseSpec.getFloorName())
 							   .append("尾号为【")
 							   .append(houseSpec.getNum())
 							   .append("】的房型已关联数据，无法删除")
@@ -239,5 +240,30 @@ public class HouseSpecContext {
 		Long count = houseSpecQueryRepository.queryByCount(param);
 		
 		return count;
+	}
+	
+	/**
+	 * 获取某项目某楼栋中的每一层的房间数
+	 * @param projectId
+	 * @param buildingId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月24日 下午3:53:03
+	 */
+	public List<HouseSpecVo> countByProjectIdAndBuildingId(String projectId, String buildingId){
+		
+		List<HouseSpecVo> houseSpecList = null;
+		
+		if(ValidateHelper.isNotEmptyString(projectId) && ValidateHelper.isNotEmptyString(buildingId)){
+			HashMap<String, String> paramMap = new HashMap<String, String>();
+			paramMap.put("projectId", projectId);
+			paramMap.put("buildingId", buildingId);
+
+			PagingParamVo param = new PagingParamVo();
+			param.setExtra(paramMap);
+			
+			houseSpecList = houseSpecQueryRepository.countByProjectIdAndBuildingId(param);
+		}
+		return houseSpecList;
 	}
 }

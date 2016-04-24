@@ -174,8 +174,12 @@ FROM
 	FROM
 		property.t_project p
 	LEFT JOIN property.t_project_building pb ON pb.project_id = p.id
-	LEFT JOIN property.t_project_building pf ON pf.parent_id = pb.id
+<!-- 	LEFT JOIN property.t_project_building pf ON pf.parent_id = pb.id
+	LEFT JOIN property.t_house_spec hs ON hs.building_id = pb.id -->
+	
 	LEFT JOIN property.t_house_spec hs ON hs.building_id = pb.id
+	LEFT JOIN property.t_project_building pf ON pf.parent_id = pb.id and hs.floor_id = pf.id
+		
 	LEFT JOIN property.t_house h ON h.house_num = CONCAT(pb.code,pf.code,hs.num) AND h.project_id = p.id
 	LEFT JOIN property.t_proprietor_house phs ON phs.house_num = h.house_num AND phs.project_id = h.project_id
 	LEFT JOIN property.t_proprietor pro ON pro.id = phs.proprietor_id

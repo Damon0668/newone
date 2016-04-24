@@ -344,4 +344,14 @@ public interface IProjectService {
 	 * @return 房产规格值对象
 	 */
 	public HouseSpecVo findHouseSpec(String id);
+	
+	/**
+	 * 获取某项目某楼栋中的每一层的房间数
+	 * @param projectId
+	 * @param buildingId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月24日 下午3:53:03
+	 */
+	public List<HouseSpecVo> countHouseSpecList(String projectId, String buildingId);
 }

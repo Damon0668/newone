@@ -31,4 +31,13 @@ public interface HouseSpecQueryRepository extends BaseRepository<HouseSpecVo>{
 	 * @date 2016年4月22日 上午11:15:32
 	 */
 	public HouseSpecVo queryByHouseSpecId(PagingParamVo paramMap);
+	
+	/**
+	 * 获取某项目某楼栋中的每一层的房间数
+	 * @param paramMap
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月24日 下午3:49:38
+	 */
+	public List<HouseSpecVo> countByProjectIdAndBuildingId(PagingParamVo paramMap);
 }
