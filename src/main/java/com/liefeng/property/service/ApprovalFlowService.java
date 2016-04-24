@@ -455,7 +455,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			PropertyStaffVo propertyStaff = propertyStaffService.findPropertyStaffById4DP(staffid);
 			if(propertyStaff != null)
 			hTask.setOperator(propertyStaff.getName());
-			returnTasks.add(hTask);
+			returnTasks.add(0,hTask);
 		}
 		
 		// 增加当前处理的步骤
