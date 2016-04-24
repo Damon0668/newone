@@ -24,6 +24,7 @@
 	<result column="oemCode" property="oemCode"/>
 	<result column="floorId" property="floorId"/>
 	<result column="floorName" property="floorName"/>
+	<result column="floorCode" property="floorCode"/>
 </resultMap>
 
 <!-- 查询条件 -->
@@ -40,6 +41,10 @@ where 1=1
 	
 	<if test="extra.buildingId != null and extra.buildingId != ''" >
 	    AND hs.building_id = #{extra.buildingId}
+	</if>
+	
+	<if test="extra.floorId != null and extra.floorId != ''" >
+	    AND hs.floor_id = #{extra.floorId}
 	</if>
 </trim>
 </sql>
@@ -80,7 +85,8 @@ where 1=1
 	    hs.ownership as ownership,
 	    hs.oem_code as oemCode,
 	    hs.floor_id as floorId,
-		pb2.name as floorName
+		pb2.name as floorName,
+		pb2.code as floorCode
 	  from
 	    property.t_house_spec hs 
 		left join property.t_project p 
@@ -123,11 +129,15 @@ where 1=1
 	    hs.apportion_area as apportionArea,
 	    hs.property_fee as propertyFee,
 	    hs.ownership as ownership,
-	    hs.oem_code as oemCode 
+	    hs.oem_code as oemCode,
+	    hs.floor_id as floorId,
+		pb2.name as floorName 
 	  from
 	  	property.t_house_spec hs 
 		left join property.t_project_building pb 
 		on hs.building_id = pb.id
+		left join property.t_project_building pb2 
+		on hs.floor_id = pb2.id
 	 where
 	 	hs.id = #{houseSpecId}
 </select>
@@ -168,4 +178,26 @@ where 1=1
 		    AND hs.id =  #{extra.id}
 		</if>
 </select>
+
+<select id="countByProjectIdAndBuildingId" resultMap="BaseResultMap">
+	select floorId, number from (
+	SELECT
+		s.floor_id as floorId,
+		count(s.id) as number,
+		b.code
+	FROM
+		t_house_spec s
+	LEFT JOIN t_project_building b ON s.floor_id = b.id
+	WHERE 1=1
+	<if test="extra.projectId != null and extra.projectId != ''" >
+	    AND s.project_id  =  #{extra.projectId}
+	</if>
+	<if test="extra.buildingId != null and extra.buildingId != ''" >
+	    AND s.building_id  =  #{extra.buildingId}
+	</if>
+	GROUP BY
+		(s.floor_id)
+	) v order by code
+</select>
+
 </mapper>   
