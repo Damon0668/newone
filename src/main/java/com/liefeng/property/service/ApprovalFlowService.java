@@ -464,11 +464,20 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			Task task = activeTasks.get(0);
 			String actorsStr = getTaskActor(task.getId());
 			task.setOperator(actorsStr);
+			
+			String actorName = "";
+			String[] actors = workflowService.getTaskActorsByTaskId(task.getId());
+			for (String actor : actors) {
+				PropertyStaffVo propertyStaffVo = propertyStaffService.findPropertyStaffById4DP(actor.replace(ApprovalFlowConstants.USER_PREFIXES, ""));
+				if(propertyStaffVo != null)actorName += propertyStaffVo.getName()+",";
+			}
+			actorName = actorName.substring(0, actorName.length()-1);
 			HistoryTask historyTask = MyBeanUtil.createBean(task, HistoryTask.class);
+			
 			returnTasks.add(historyTask);
 		}
 		
-		return DataListValue.success(MyBeanUtil.createList(historyTasks, HistoryTaskVo.class));
+		return DataListValue.success(MyBeanUtil.createList(returnTasks, HistoryTaskVo.class));
 	}
 	
 	@Override

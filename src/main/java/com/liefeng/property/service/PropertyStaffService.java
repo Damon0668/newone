@@ -467,5 +467,10 @@ public class PropertyStaffService implements IPropertyStaffService {
 		staffWorkFlowUseVo.setSex("未知");
 		return staffWorkFlowUseVo;
 	}
-
+	
+	@Override
+	public List<PropertyDepartmentVo> getDepartments(String project) {
+		PropertyDepartmentContext departContext = PropertyDepartmentContext.build();
+		return departContext.getDepartments(project);
+	}
 }

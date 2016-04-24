@@ -239,6 +239,14 @@ public class PropertyDepartmentContext {
 		return MyBeanUtil.createList(departmentPoList, PropertyDepartmentVo.class);
 	}
 	
+
+	public List<PropertyDepartmentVo> getDepartments(String projectId) {
+		List<PropertyDepartmentPo> departmentPoList = 
+				propertyDepartmentRepository.findDepartmentsByProjectId(projectId);
+		return MyBeanUtil.createList(departmentPoList, PropertyDepartmentVo.class);
+	}
+
+	
 	/**
 	 * 判断部门是否已经存在
 	 * 根据名字判断

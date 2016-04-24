@@ -286,4 +286,11 @@ public interface IPropertyStaffService {
 	 * @return
 	 */
 	public StaffWorkFlowUseVo getStaffWorkFlowUseVo(String staffId);
+	
+	/**
+	 * 根据项目id 获取所有部门
+	 * @param project 项目id 
+	 * @return
+	 */
+	public List<PropertyDepartmentVo> getDepartments(String project);
 }
