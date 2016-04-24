@@ -205,6 +205,7 @@ public class WorkFlowController {
 				for (String string : actors) {
 					actor += string.replace(ApprovalFlowConstants.USER_PREFIXES, "")+",";
 				}
+				if(actor.length() > 0)
 				actor = actor.substring(0,actor.length()-1);
 				
 				String operators = "";
@@ -213,7 +214,9 @@ public class WorkFlowController {
 				for (PropertyStaffVo propertyStaffVo : propertyStaffVos) {
 					operators += propertyStaffVo.getName()+",";
 				}
+				if(operators.length() > 0)
 				operators = operators.substring(0,operators.length()-1);
+				
 				workItem.setOperator(operators);
 			}
 			break;
