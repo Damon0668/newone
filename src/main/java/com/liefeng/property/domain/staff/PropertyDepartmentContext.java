@@ -205,7 +205,8 @@ public class PropertyDepartmentContext {
 				
 				//普通部门需要设置父部门
 				if(parent != null 
-						&& !SysConstants.DEFAULT_ID.equals(propertyDepartment.getProjectId())){
+						&& !SysConstants.DEFAULT_ID.equals(propertyDepartmentPo.getParentId())
+						&& !SysConstants.DEFAULT_ID.equals(propertyDepartmentPo.getProjectId())){
 					propertyDepartmentPo.setParentId(parent.getId());
 				}
 	
@@ -322,6 +323,50 @@ public class PropertyDepartmentContext {
 		return MyBeanUtil.createList(departmentPoList, PropertyDepartmentVo.class);
 	}
 
+	/**
+	 * 获取与项目有关的所有子部门，以及公司的领导部门
+	 * @param projectId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月25日 下午3:37:26
+	 */
+	public List<PropertyDepartmentVo> findAllDepartmentByProjectId(String projectId){
+		List<PropertyDepartmentVo> propertyDepartmentList = null;
+		
+		if(ValidateHelper.isNotEmptyString(projectId)){
+			String oemCode = ContextManager.getInstance().getOemCode();
+			HashMap<String, String> paramMap = new HashMap<String, String>();
+			paramMap.put("projectId", projectId);
+			paramMap.put("oemCode", oemCode);
+			
+			PagingParamVo param = new PagingParamVo();
+			param.setExtra(paramMap);
+			
+			propertyDepartmentList = propertyDepartmentQueryRepository.findAllDepartmentByProjectId(param);
+		}
+		return propertyDepartmentList;
+	}
+	
+	/**
+	 * 通过部门类型，获取某项目的某部门
+	 * @param projectId
+	 * @param deptType
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月25日 下午6:02:59
+	 */
+	public PropertyDepartmentVo findByDeptType(String projectId, String deptType){
+		PropertyDepartmentVo departmentVo = null;
+		if(ValidateHelper.isNotEmptyString(projectId) && ValidateHelper.isNotEmptyString(deptType)){
+			String oemCode = ContextManager.getInstance().getOemCode();
+			PropertyDepartmentPo propertyDepartmentPo = propertyDepartmentRepository.findByProjectIdAndDeptTypeAndOemCode(projectId, deptType, oemCode);
+		
+			departmentVo = MyBeanUtil.createBean(propertyDepartmentPo, PropertyDepartmentVo.class);
+		}
+		
+		return departmentVo;
+	}
+	
 	protected void setPropertyDepartmentId(String propertyDepartmentId) {
 		this.propertyDepartmentId = propertyDepartmentId;
 	}
