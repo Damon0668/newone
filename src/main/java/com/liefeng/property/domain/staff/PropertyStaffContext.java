@@ -434,4 +434,24 @@ public class PropertyStaffContext {
 		return propertyStaffQueryRepository.getStaffWorkFlowUseVo(staffId);
 	}
 	
+	/**
+	 * 根据部门id，获取该部门在职、激活的员工
+	 * @param deptId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月25日 下午4:11:40
+	 */
+	public List<PropertyStaffVo> getStaffByDepartmentId(String deptId){
+		List<PropertyStaffVo> staffVoList = null;
+		if(ValidateHelper.isNotEmptyString(deptId)){
+			String oemCode = ContextManager.getInstance().getOemCode();
+		
+			List<PropertyStaffPo> staffPoList = propertyStaffRepository.findByDepartmentIdAndOemCode(deptId, oemCode);
+			
+			staffVoList = MyBeanUtil.createList(staffPoList, PropertyStaffVo.class);
+			logger.info("【PropertyStaffContext.getStaffByDepartmentId】Query staff:{} by deptId:{}", staffVoList, deptId);
+		}
+		
+		return staffVoList;
+	}
 }

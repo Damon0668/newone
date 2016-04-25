@@ -51,4 +51,15 @@ public interface PropertyDepartmentRepository extends JpaRepository<PropertyDepa
 	 */
 	public List<PropertyDepartmentPo> findDepartmentsByProjectId(String projectId);
 	
+	/**
+	 * 根据部门类型，获取某个部门
+	 * @param projectId
+	 * @param deptType
+	 * @param oemCode
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月25日 下午6:00:06
+	 */
+	public PropertyDepartmentPo findByProjectIdAndDeptTypeAndOemCode(String projectId, String deptType, String oemCode);
+	
 }

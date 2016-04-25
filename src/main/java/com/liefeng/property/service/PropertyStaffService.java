@@ -20,7 +20,6 @@ import com.liefeng.intf.property.IProjectService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.property.ISysSecurityService;
 import com.liefeng.intf.property.ISysService;
-import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.property.PropertyStaffBo;
@@ -468,5 +467,22 @@ public class PropertyStaffService implements IPropertyStaffService {
 	public List<PropertyDepartmentVo> getDepartments(String project) {
 		PropertyDepartmentContext departContext = PropertyDepartmentContext.build();
 		return departContext.getDepartments(project);
+	}
+
+	@Override
+	public List<PropertyDepartmentVo> getAllDepartmentsByProjectId(
+			String projectId) {
+		return PropertyDepartmentContext.build().findAllDepartmentByProjectId(projectId);
+	}
+
+	@Override
+	public List<PropertyStaffVo> getStaffByDepartmentId(String departmentId) {
+		return PropertyStaffContext.build().getStaffByDepartmentId(departmentId);
+	}
+
+	@Override
+	public PropertyDepartmentVo findDepartmentByDeptType(String projectId,
+			String deptType) {
+		return PropertyDepartmentContext.build().findByDeptType(projectId, deptType);
 	}
 }

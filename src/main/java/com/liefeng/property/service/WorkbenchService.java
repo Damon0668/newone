@@ -1732,16 +1732,21 @@ public class WorkbenchService implements IWorkbenchService {
 		EventReportContext eventReportContext = EventReportContext.build(eventReportVo);
 		eventReportContext.create();
 		
-		//TODO
-		List<PropertyStaffVo> propertyStaffVos = propertyStaffService.findPropertyStaff("402820815388d35d015388d35d150000", eventReportVo.getProjectId());
-		if(propertyStaffVos != null && propertyStaffVos.size() > 0){
-			
-			List<String> receiveUserIdList = new ArrayList<String>();
-
-			for (int i = 0; i < propertyStaffVos.size(); i++) {
-				receiveUserIdList.add(propertyStaffVos.get(i).getId());
+		List<String> receiveUserIdList = new ArrayList<String>();
+		//获取客服部
+		PropertyDepartmentVo propertyDepartmentVo = propertyStaffService.findDepartmentByDeptType(eventReportVo.getProjectId(), StaffConstants.DeptType.CUSTOMER_SERVICE);
+		if(propertyDepartmentVo != null){
+			//部门负责人
+			receiveUserIdList.add(propertyDepartmentVo.getDirectorId());
+			//部门员工
+			List<PropertyStaffVo> propertyStaffList = propertyStaffService.getStaffByDepartmentId(propertyDepartmentVo.getId());
+		
+			for(PropertyStaffVo staffVo : propertyStaffList){
+				receiveUserIdList.add(staffVo.getId());
 			}
-			
+		}
+		
+		if(receiveUserIdList != null && receiveUserIdList.size() > 0){
 			//个推通知客服部员工
 			propertyPushMsgService.pushMsgToStaffList(PushActionConstants.EVENT_REPORT_RECEIVE_ONE, receiveUserIdList);
 		}
