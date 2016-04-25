@@ -18,6 +18,7 @@ import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.EncryptionUtil;
 import com.liefeng.common.util.TimeUtil;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataListValue;
 import com.liefeng.core.entity.DataValue;
@@ -138,16 +139,42 @@ public class UserController {
 		UserVo user = userService.getUserByCustGlobalId(userRo.getCustGlobalId());
 		CustomerVo customerVo = user.getCustomer();
 		
-		user.setNickName(userRo.getNickName());
-		user.setAvatarUrl(userRo.getAvatarUrl());
-		user.setEmail(userRo.getEmail());
+		if(ValidateHelper.isNotEmptyString(userRo.getNickName())){
+			user.setNickName(userRo.getNickName());
+		}
 		
-		customerVo.setSex(userRo.getSex());
-		customerVo.setMaritalStatus(userRo.getMaritalStatus());
-		customerVo.setHeight(userRo.getHeight());
-		customerVo.setStep(userRo.getStep());
-		customerVo.setWeight(userRo.getWeight());
-		customerVo.setBirthday(TimeUtil.format(userRo.getBirthday(), TimeUtil.PATTERN_1));
+		if(ValidateHelper.isNotEmptyString(userRo.getAvatarUrl())){
+			user.setAvatarUrl(userRo.getAvatarUrl());
+		}
+
+		if(ValidateHelper.isNotEmptyString(userRo.getEmail())){
+			user.setEmail(userRo.getEmail());
+		}
+
+		if(ValidateHelper.isNotEmptyString(userRo.getSex())){
+			customerVo.setSex(userRo.getSex());
+		}
+		
+		if(ValidateHelper.isNotEmptyString(userRo.getMaritalStatus())){
+			customerVo.setMaritalStatus(userRo.getMaritalStatus());
+		}
+
+		if(userRo.getHeight() != null){
+			customerVo.setHeight(userRo.getHeight());
+		}
+	
+		if(userRo.getStep() != null){
+			customerVo.setStep(userRo.getStep());
+		}
+
+		if(userRo.getWeight() != null){
+			customerVo.setWeight(userRo.getWeight());
+		}
+
+		if(ValidateHelper.isNotEmptyString(userRo.getBirthday())){
+			customerVo.setBirthday(TimeUtil.format(userRo.getBirthday(), TimeUtil.PATTERN_1));
+		}
+
 		
 		user.setCustomer(customerVo);
 		// 校验用户信息
