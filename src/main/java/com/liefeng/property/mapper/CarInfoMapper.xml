@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.CarInfoQueryRepository">
+<!-- Result Map -->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.household.CarInfoVo">
+
+</resultMap>
+	
+<!-- 查询条件 -->
+<sql id="Where_Clause">
+    WHERE 1=1
+    <trim  suffixOverrides="," >
+        <if test="extra.oemCode != null and extra.oemCode != ''" >
+            AND ci.oem_code = #{extra.oemCode}
+        </if>
+        
+        <if test="extra.projectId != null and extra.projectId != ''" >
+            AND ci.project_id = #{extra.projectId}
+        </if>
+        
+        <if test="extra.projectIds != null and extra.projectIds != ''" >
+            AND ci.project_id IN ${extra.projectIds}
+        </if>
+        
+        <if test="extra.plateNum != null and extra.plateNum != ''" >
+            AND ci.plate_num LIKE CONCAT('%',#{extra.plateNum},'%')
+        </if>
+        
+        <if test="extra.vehicleType != null and extra.vehicleType != ''" >
+        	AND ci.vehicle_type = ${extra.vehicleType}
+        </if>
+    </trim>
+</sql>
+
+<select id="queryByCount"  resultType="java.lang.Long">
+	SELECT
+		COUNT(1)
+	FROM 
+	(
+		SELECT
+			ci.id
+		FROM
+			property.t_car_info ci
+			LEFT JOIN property.t_project p ON p.id = ci.project_id
+		<include refid="Where_Clause"/>
+	) AS ttt
+</select>
+
+<select id="queryByPage" resultMap="BaseResultMap">
+    SELECT
+		ci.id AS id,
+		ci.project_id AS projectId,
+		ci.owner_id AS ownerId,
+		ci.owner_name AS ownerName,
+		ci.owner_type AS ownerType,
+		ci.house_num AS houseNum,
+		ci.plate_num AS plateNum,
+		ci.vehicle_type AS vehicleType,
+		ci.brand AS brand,
+		ci.color AS color,
+		ci.oem_code AS oemCode,
+		ci.staff_id AS staffId,
+		ci.create_time AS createTime
+	FROM
+		property.t_car_info ci
+		LEFT JOIN property.t_project p ON p.id = ci.project_id
+	<include refid="Where_Clause"/>
+	<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+          ${pager.mysqlQueryCondition}
+    </if>   
+</select>
+
+<select id="queryById" resultMap="BaseResultMap">
+	SELECT
+		ci.id AS id,
+		ci.project_id AS projectId,
+		ci.owner_id AS ownerId,
+		ci.owner_name AS ownerName,
+		ci.owner_type AS ownerType,
+		ci.house_num AS houseNum,
+		ci.plate_num AS plateNum,
+		ci.vehicle_type AS vehicleType,
+		ci.brand AS brand,
+		ci.color AS color,
+		ci.oem_code AS oemCode,
+		ci.staff_id AS staffId,
+		ps.name AS staffName,
+		ci.create_time AS createTime
+	FROM
+		property.t_car_info ci
+		LEFT JOIN property.t_project p ON p.id = ci.project_id
+		LEFT JOIN property.t_property_staff ps ON ps.id = ci.staff_id
+	WHERE
+		ci.id = #{carInfoId}
+</select>
+</mapper>

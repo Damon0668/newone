@@ -26,7 +26,6 @@ import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.intf.property.IProjectService;
-import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.household.CheckinQueueBo;
@@ -89,9 +88,6 @@ public class HouseholdService implements IHouseholdService {
 
 	@Autowired
 	private IProjectService projectService;
-	
-	@Autowired
-	private IPushMsgService pushMsgService;
 	
 	@Autowired
 	private PropertyPushMsgService propertyPushMsgService;
@@ -248,11 +244,14 @@ public class HouseholdService implements IHouseholdService {
 				logger.info("住户信息已存在，后续将不执行住户、用户创建动作");
 			}
 
-			// 保存住户房屋信息
+			// 判断该住户是否已经关联了该房产，没有关联才做新增操作
 			ResidentHouseVo residentHouse = resident.getResidentHouse();
-			residentHouse.setResidentId(existedResident.getId());
-			ResidentHouseContext residentHouseContext = ResidentHouseContext.build(residentHouse);
-			residentHouseContext.create();
+			if(ResidentHouseContext.build().getResidentHouse(existedResident.getId(), residentHouse.getHouseId()) == null) {
+				// 保存住户房屋信息
+				residentHouse.setResidentId(existedResident.getId());
+				ResidentHouseContext residentHouseContext = ResidentHouseContext.build(residentHouse);
+				residentHouseContext.create();
+			}
 
 			// 仅当同个OEM下，同个小区下住户不存在时，才做用户创建
 			// 住户信息存在时，即使传过来的手机号不同也不做用户创建,即customer存在而user不存在
