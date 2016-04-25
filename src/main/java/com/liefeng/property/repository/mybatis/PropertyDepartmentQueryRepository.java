@@ -10,4 +10,10 @@ import com.liefeng.property.vo.staff.PropertyDepartmentVo;
  */
 public interface PropertyDepartmentQueryRepository extends BaseRepository<PropertyDepartmentVo>{
 	
+	/**
+	 * 查找父部门
+	 * @param deptId 部门ID
+	 * @return
+	 */
+	public PropertyDepartmentVo findParentDept(String deptId);
 }

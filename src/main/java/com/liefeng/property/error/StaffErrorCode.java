@@ -20,9 +20,19 @@ public enum StaffErrorCode implements IErrorCode {
 	PARENT_DEPT_NOT_EXIST("父部门不存在"),
 	
 	/**
+	 * 父部门已存在
+	 */
+	PARENT_DEPT_HAS_EXIST("父部门已存在"),
+	
+	/**
 	 * 部门已存在
 	 */
 	DEPARTMENT_ALREADY_EXIST("部门\"{0}\"已存在"),
+	
+	/**
+	 * 子部门存在
+	 */
+	SUB_DEPT_HAS_EXIST("子部门存在"),
 	
 	/**
 	 * 部门名字为空

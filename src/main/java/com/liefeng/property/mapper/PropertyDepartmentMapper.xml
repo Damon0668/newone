@@ -64,4 +64,13 @@ where 1=1
 	
 </select>
 
+
+<select id="findParentDept" resultMap="BaseResultMap">
+    SELECT
+       d2.*
+    FROM
+        t_property_department d left join t_property_department d2 on d.parent_id = d2.id
+    where d.id = #{deptId}
+</select>
+
 </mapper>

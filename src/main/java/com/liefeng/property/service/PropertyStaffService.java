@@ -74,10 +74,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 	
 	@Autowired
 	private ISysService sysService;
-	
-	@Autowired
-	private IPushMsgService pushMsgService;
-	
+
 	@Autowired
 	private PropertyPushMsgService propertyPushMsgService;
 
@@ -203,7 +200,8 @@ public class PropertyStaffService implements IPropertyStaffService {
 	public PropertyStaffVo findPropertyStaffById(String staffId) {
 		PropertyStaffVo propertyStaffVo = PropertyStaffContext.loadById(staffId).get();
 		if(propertyStaffVo != null){
-			propertyStaffVo.setDepartmentName(getDepartment(propertyStaffVo.getDepartmentId()).getName());
+			
+			propertyStaffVo.setDepartmentName(PropertyDepartmentContext.loadById(propertyStaffVo.getDepartmentId()).getName());
 			
 			propertyStaffVo.setPositionName(sysService.getDictNameByValue("POSITION", propertyStaffVo.getPosition()));
 			
@@ -388,9 +386,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 		StaffMsgClientVo staffMsgClient = StaffMsgClientContext.loadByStaffId(staffId).get();
 		
 		if(staffMsgClient == null){
-			staffMsgClient = new StaffMsgClientVo();
-			staffMsgClient.setStaffId(staffId);
-			staffMsgClient.setClientId(clientId);
+			staffMsgClient = new StaffMsgClientVo(staffId, clientId);
 			StaffMsgClientContext.build(staffMsgClient).create();
 		}else{
 			StaffMsgClientContext.loadByStaffId(staffId).update(clientId);
