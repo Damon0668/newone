@@ -182,37 +182,51 @@ public class PropertyDepartmentContext {
 			//修改为已存在的父部门
 			if(parent != null 
 					&& !parent.getId().equals(propertyDepartment.getId()) 
+					&& ValidateHelper.isEmptyString(propertyDepartment.getParentId())
 					&& ValidateHelper.isEmptyString(propertyDepartment.getProjectId())){
 				throw new LiefengException(StaffErrorCode.PARENT_DEPT_HAS_EXIST);
 			}
 			
-			//修改为不存在的父部门
-			if(parent == null && ValidateHelper.isEmptyString(propertyDepartment.getProjectId())){
-				propertyDepartment.setParentId(SysConstants.DEFAULT_ID);
-				propertyDepartment.setProjectId(SysConstants.DEFAULT_ID);
-			}
-			
 			PropertyDepartmentPo propertyDepartmentPo = propertyDepartmentRepository.findOne(propertyDepartment.getId());
 			
-			//普通部门需要设置父部门
-			if(parent != null 
-					&& !SysConstants.DEFAULT_ID.equals(propertyDepartment.getProjectId())){
-				propertyDepartment.setParentId(parent.getId());
+			if(propertyDepartmentPo != null){
+				
+				MyBeanUtil.copyBeanNotNull2Bean(propertyDepartment, propertyDepartmentPo);
+			
+				//修改为不存在的父部门
+				if(parent == null 
+						&& ValidateHelper.isEmptyString(propertyDepartment.getParentId())
+						&& ValidateHelper.isEmptyString(propertyDepartment.getProjectId())){
+					propertyDepartmentPo.setParentId(SysConstants.DEFAULT_ID);
+					propertyDepartmentPo.setProjectId(SysConstants.DEFAULT_ID);
+				}
+				
+				
+				
+				//普通部门需要设置父部门
+				if(parent != null 
+						&& !SysConstants.DEFAULT_ID.equals(propertyDepartment.getProjectId())){
+					propertyDepartmentPo.setParentId(parent.getId());
+				}
+	
+				propertyDepartmentRepository.save(propertyDepartmentPo);
+				
+				logger.info("Update department: '{}' successfully!", propertyDepartment);
+				
+				/*
+				 * 员工是部门负责人
+				 * 需要更新员工部门为父级部门
+				 */
+				if(ValidateHelper.isNotEmptyString(propertyDepartment.getDirectorId())){
+					PropertyStaffContext.loadById(propertyDepartment.getDirectorId()).updateStaffDept(parent.getId());
+				}
+				
+				if(ValidateHelper.isNotEmptyString(propertyDepartment.getDirector2Id())){
+					PropertyStaffContext.loadById(propertyDepartment.getDirector2Id()).updateStaffDept(parent.getId());
+				}
+			
 			}
-
-			MyBeanUtil.copyBeanNotNull2Bean(propertyDepartment, propertyDepartmentPo);
 			
-			propertyDepartmentRepository.save(propertyDepartmentPo);
-			
-			logger.info("Update department: '{}' successfully!", propertyDepartment);
-			
-			/*
-			 * 员工是部门负责人
-			 * 需要更新员工部门为父级部门
-			 */
-			PropertyStaffContext.loadById(propertyDepartment.getDirectorId()).updateStaffDept(parent.getId());
-			
-			PropertyStaffContext.loadById(propertyDepartment.getDirector2Id()).updateStaffDept(parent.getId());
 		}
 	}
 	

@@ -389,7 +389,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 			staffMsgClient = new StaffMsgClientVo(staffId, clientId);
 			StaffMsgClientContext.build(staffMsgClient).create();
 		}else{
-			StaffMsgClientContext.loadByStaffId(staffId).update(clientId);
+			StaffMsgClientContext.loadByStaffId(staffId).updateClientId(clientId);
 		}
 	}
 	

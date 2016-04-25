@@ -96,7 +96,7 @@ public class StaffMsgClientContext {
 	}
 	
 	@Transactional
-	public void update(String clientId){
+	public void updateClientId(String clientId){
 		if(ValidateHelper.isNotEmptyString(staffId)){
 			StaffMsgClientPo staffMsgClientPo =  staffMsgClientRepository.findByStaffId(staffId);
 			//清除其他绑定此clientId的数据
@@ -131,6 +131,7 @@ public class StaffMsgClientContext {
 		if(ValidateHelper.isNotEmptyCollection(staffList)){
 			for (StaffMsgClientPo staffMsgClient : staffList) {
 				staffMsgClient.setClientId(SysConstants.DEFAULT_ID);
+				staffMsgClient.setUpdateTime(new Date());
 				staffMsgClientRepository.save(staffMsgClient);
 			}
 		}
