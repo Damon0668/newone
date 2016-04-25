@@ -205,7 +205,8 @@ public class PropertyDepartmentContext {
 				
 				//普通部门需要设置父部门
 				if(parent != null 
-						&& !SysConstants.DEFAULT_ID.equals(propertyDepartment.getProjectId())){
+						&& !SysConstants.DEFAULT_ID.equals(propertyDepartmentPo.getParentId())
+						&& !SysConstants.DEFAULT_ID.equals(propertyDepartmentPo.getProjectId())){
 					propertyDepartmentPo.setParentId(parent.getId());
 				}
 	
