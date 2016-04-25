@@ -34,6 +34,7 @@ import com.liefeng.intf.property.IApprovalFlowService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.intf.service.workflow.IWorkflowService;
+import com.liefeng.property.api.ro.work.workFlow.OrderIdRo;
 import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
 import com.liefeng.property.constant.ApprovalFlowConstants;
 import com.liefeng.property.domain.staff.PropertyStaffContext;
@@ -73,7 +74,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 	@Override
 	public void startOrExecute(ApprovalFlowBo approvalFlowBo) {
 		Process process = workflowService.findByProcessId(approvalFlowBo.getProcessId());
-		PropertyStaffVo propertyStaffVo = propertyStaffService.findPropertyStaffById(approvalFlowBo.getStaffId());
+		PropertyStaffVo propertyStaffVo = propertyStaffService.findPropertyStaffById4DP(approvalFlowBo.getStaffId());
 		
 		if(approvalFlowBo.getParams() == null) approvalFlowBo.setParams(new HashMap<String, Object>());
 		
@@ -120,6 +121,13 @@ public class ApprovalFlowService implements IApprovalFlowService{
 				propertyPushMsgService.pushMsgToStaffListOfMap(PushActionConstants.APPROVAL_NEW, staffIdList, data);
 			}
 		} else if(approvalFlowBo.getTaskName().equals(ApprovalFlowConstants.NODE_END)) { //结束流程
+			
+			//判断当前任务存不存在
+			Task currTask = workflowService.findTaskById(approvalFlowBo.getTaskId());
+			if(currTask == null){
+				throw new ApprovalFlowException(ApprovalFlowErrorCode.CURR_TASK_NULL);
+			}
+			
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
 			approvalFlowBo.getParams().put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
 			approvalFlowBo.getParams().put(ApprovalFlowConstants.ORDER_STATUS, ApprovalFlowConstants.ORDER_COMPLETE);
@@ -137,6 +145,13 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			propertyPushMsgService.pushMsgToStaffOfMap(PushActionConstants.APPROVAL_FINISHED, staffId, data);
 			
 		} else { //继续执行下去
+			
+			//判断当前任务存不存在
+			Task currTask = workflowService.findTaskById(approvalFlowBo.getTaskId());
+			if(currTask == null){
+				throw new ApprovalFlowException(ApprovalFlowErrorCode.CURR_TASK_NULL);
+			}
+			
 			System.out.println("继续执行下去:"+approvalFlowBo.getAssignee()+"||"+addUserPreixes(approvalFlowBo.getNextOperator()));
 			workflowService.updateOrderVariableMap(approvalFlowBo.getOrderId(), approvalFlowBo.getParams());
 			approvalFlowBo.getParams().put(approvalFlowBo.getAssignee(), addUserPreixes(approvalFlowBo.getNextOperator()));
@@ -238,7 +253,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			
 			switch (type) {
 			case ApprovalFlowConstants.AssigneeType.USER://直接用户类型
-				PropertyStaffVo userStaffVo = propertyStaffService.findPropertyStaffById(id);
+				PropertyStaffVo userStaffVo = propertyStaffService.findPropertyStaffById4DP(id);
 				if(userStaffVo != null && !ids.containsKey(userStaffVo.getId())) {
 					ids.put(userStaffVo.getId(), userStaffVo.getId());
 					returnPropertyStaffVos.add(userStaffVo);
@@ -278,7 +293,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 				case ApprovalFlowConstants.AssigneeType.ID_DIRECTORALL: //id 为all 则获取所有部门负责人
 					break;
 				case ApprovalFlowConstants.AssigneeType.ID_DIRECTORSELF: //id 为self 自己本部门的负责人
-					PropertyStaffVo propertyStaffVo = propertyStaffService.findPropertyStaffById(staffId);
+					PropertyStaffVo propertyStaffVo = propertyStaffService.findPropertyStaffById4DP(staffId);
 					PropertyStaffVo propertyStaff = propertyStaffService.getDepartmentDirector(propertyStaffVo.getDepartmentId());
 					if(propertyStaff != null && !ids.containsKey(propertyStaff.getId())) {
 						ids.put(propertyStaff.getId(), propertyStaff.getId());
@@ -403,6 +418,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 		if (StringUtils.isNotEmpty(taskName)) {
 			nodeModel = processModel.getNode(taskName);
 		} else {
+			logger.info("添加页面，默认从第一个节点往下");
 			nodeModel = processModel.getTaskModels().get(0);
 		}
 
@@ -410,13 +426,13 @@ public class ApprovalFlowService implements IApprovalFlowService{
 		List<TaskModel> nextTasks = ((TaskModel)nodeModel).getNextTaskModels();
 		List<TransitionModel> endModel = nodeModel.getOutputs();
 		//添加结束节点
-		if (StringUtils.isNotEmpty(taskName)) //添加不显示结束步骤
+		if (StringUtils.isNotEmpty(taskName)) //添加结束步骤
 		if(endModel !=null && endModel.size()>0){
 			for (int i = 0; i < endModel.size(); i++) {
 				if(endModel.get(i).getTarget().getName().equals(ApprovalFlowConstants.NODE_END)){
 					TaskModel taskModel = new TaskModel();
 					taskModel.setName(ApprovalFlowConstants.NODE_END);
-					taskModel.setDisplayName("结束并归档");
+					taskModel.setDisplayName("结束流程");
 					taskModel.setAssignee(ApprovalFlowConstants.NODE_END);
 					nextTasks.add(taskModel);
 				}
@@ -436,10 +452,10 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			String operator = hTask.getOperator();
 			// 设置名字
 			String staffid = operator.split("_")[1];
-			PropertyStaffVo propertyStaff = propertyStaffService.findPropertyStaffById(staffid);
+			PropertyStaffVo propertyStaff = propertyStaffService.findPropertyStaffById4DP(staffid);
 			if(propertyStaff != null)
 			hTask.setOperator(propertyStaff.getName());
-			returnTasks.add(hTask);
+			returnTasks.add(0,hTask);
 		}
 		
 		// 增加当前处理的步骤
@@ -448,11 +464,20 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			Task task = activeTasks.get(0);
 			String actorsStr = getTaskActor(task.getId());
 			task.setOperator(actorsStr);
+			
+			String actorName = "";
+			String[] actors = workflowService.getTaskActorsByTaskId(task.getId());
+			for (String actor : actors) {
+				PropertyStaffVo propertyStaffVo = propertyStaffService.findPropertyStaffById4DP(actor.replace(ApprovalFlowConstants.USER_PREFIXES, ""));
+				if(propertyStaffVo != null)actorName += propertyStaffVo.getName()+",";
+			}
+			actorName = actorName.substring(0, actorName.length()-1);
 			HistoryTask historyTask = MyBeanUtil.createBean(task, HistoryTask.class);
+			
 			returnTasks.add(historyTask);
 		}
 		
-		return DataListValue.success(MyBeanUtil.createList(historyTasks, HistoryTaskVo.class));
+		return DataListValue.success(MyBeanUtil.createList(returnTasks, HistoryTaskVo.class));
 	}
 	
 	@Override
@@ -482,13 +507,17 @@ public class ApprovalFlowService implements IApprovalFlowService{
 	
 	@Override
 	public void backTask(String taskId ,String loginId) {
-			Task task = workflowService.withdrawTask(taskId, ApprovalFlowConstants.USER_PREFIXES + loginId);
-			
-			// 更新task某些字段
-			Map<String, Object> params = task.getVariableMap();
-			params.put("status", ApprovalFlowConstants.ORDER_STATUS_WAIT_SIGN);
-			task.setVariable(JsonHelper.toJson(params));
-			workflowService.updateTask(task);
+		List<HistoryTask> historyTasks = workflowService.getHistoryTasks(new QueryFilter().setTaskId(taskId));
+		if(historyTasks == null || historyTasks.size() <= 0){
+			throw new ApprovalFlowException(ApprovalFlowErrorCode.HISTASK_NULL);
+		}
+		Task task = workflowService.withdrawTask(taskId, ApprovalFlowConstants.USER_PREFIXES + loginId);
+
+		// 更新task某些字段
+		Map<String, Object> params = task.getVariableMap();
+		params.put("status", ApprovalFlowConstants.ORDER_STATUS_WAIT_SIGN);
+		task.setVariable(JsonHelper.toJson(params));
+		workflowService.updateTask(task);
 	}
 	
 }

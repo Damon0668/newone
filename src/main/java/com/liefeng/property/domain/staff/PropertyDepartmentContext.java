@@ -302,6 +302,12 @@ public class PropertyDepartmentContext {
 		return MyBeanUtil.createList(departmentPoList, PropertyDepartmentVo.class);
 	}
 
+	public List<PropertyDepartmentVo> getDepartments(String projectId) {
+		List<PropertyDepartmentPo> departmentPoList = 
+				propertyDepartmentRepository.findDepartmentsByProjectId(projectId);
+		return MyBeanUtil.createList(departmentPoList, PropertyDepartmentVo.class);
+	}
+
 	protected void setPropertyDepartmentId(String propertyDepartmentId) {
 		this.propertyDepartmentId = propertyDepartmentId;
 	}

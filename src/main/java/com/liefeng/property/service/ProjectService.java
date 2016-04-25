@@ -401,16 +401,20 @@ public class ProjectService implements IProjectService {
 		param.setBuildingId(building.getId());
 		List<ProprietorSingleHouseVo> houses = houseContext.getHouseGraphs(param);
 		
-		// 查询楼栋中房产模型数量
+		/*// 查询楼栋中房产模型数量
 		HouseSpecBo houseSpecBo = MyBeanUtil.createBean(param, HouseSpecBo.class);
 		HouseSpecContext houseSpecContext = HouseSpecContext.build();
-		Long houseSpecCount = houseSpecContext.getHouseSpecCount(houseSpecBo);
+		Long houseSpecCount = houseSpecContext.getHouseSpecCount(houseSpecBo);*/
+		
+		//获取每层的房间说
+		List<HouseSpecVo> houseSpecs = countHouseSpecList(param.getProjectId(), param.getBuildingId()); 
 		
 		// 初始化视图模型设值
 		HouseGraphVo houseGraph = new HouseGraphVo();
 		houseGraph.setHouses(houses);
 		houseGraph.setBuildingName(building.getName());
-		houseGraph.setHouseSpecCount(houseSpecCount); 
+		//houseGraph.setHouseSpecCount(houseSpecCount); 
+		houseGraph.setHouseSpecs(houseSpecs);
 		return houseGraph;
 	}
 
@@ -429,5 +433,16 @@ public class ProjectService implements IProjectService {
 	public List<ProjectBuildingVo> findProjectBuildingByBuildingAndNum(String buildingId,
 			String num) {
 		return ProjectBuildingContext.build().findByBuildingAndNum(buildingId, num);
+	}
+
+	@Override
+	public HouseSpecVo findHouseSpec(String id) {
+		return HouseSpecContext.loadById(id).findHouseSpec();
+	}
+
+	@Override
+	public List<HouseSpecVo> countHouseSpecList(String projectId,
+			String buildingId) {
+		return HouseSpecContext.build().countByProjectIdAndBuildingId(projectId, buildingId);
 	}
 }

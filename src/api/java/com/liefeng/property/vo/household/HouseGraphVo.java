@@ -3,6 +3,7 @@ package com.liefeng.property.vo.household;
 import java.util.List;
 
 import com.liefeng.core.entity.BaseValue;
+import com.liefeng.property.vo.project.HouseSpecVo;
 
 /**
  * 房产视图数据值对象
@@ -38,6 +39,8 @@ public class HouseGraphVo extends BaseValue {
 	 * 未初始化房子数量
 	 */
 	private Integer noInitializeCount;
+	
+	private List<HouseSpecVo> houseSpecs;
 
 	public String getBuildingName() {
 		return buildingName;
@@ -79,6 +82,14 @@ public class HouseGraphVo extends BaseValue {
 
 	public void setNoInitializeCount(Integer noInitializeCount) {
 		this.noInitializeCount = noInitializeCount;
+	}
+
+	public List<HouseSpecVo> getHouseSpecs() {
+		return houseSpecs;
+	}
+
+	public void setHouseSpecs(List<HouseSpecVo> houseSpecs) {
+		this.houseSpecs = houseSpecs;
 	}
 	
 	

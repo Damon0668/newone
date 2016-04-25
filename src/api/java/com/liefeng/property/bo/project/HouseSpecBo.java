@@ -20,6 +20,11 @@ public class HouseSpecBo extends BaseValue {
 	 * 楼栋ID
 	 */
 	private String buildingId;
+	
+	/**
+	 * 楼层ID
+	 */
+	private String floorId;
 
 	public String getOemCode() {
 		return oemCode;
@@ -43,5 +48,13 @@ public class HouseSpecBo extends BaseValue {
 
 	public void setBuildingId(String buildingId) {
 		this.buildingId = buildingId;
+	}
+
+	public String getFloorId() {
+		return floorId;
+	}
+
+	public void setFloorId(String floorId) {
+		this.floorId = floorId;
 	}
 }
