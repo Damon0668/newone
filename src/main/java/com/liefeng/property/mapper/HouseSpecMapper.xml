@@ -104,13 +104,25 @@ where 1=1
 <!-- 查询已关联房型的房产数量 -->
 <select id="queryRelatedHouseCount" resultType="java.lang.Long">
 	SELECT
-		COUNT(h.id)
+		count(h.id)
 	FROM
-		property.t_house h
-	LEFT JOIN property.t_house_spec hs ON h.building_id = hs.building_id
-	AND h.house_num LIKE CONCAT('%', hs.num)
-	WHERE 
-		hs.id  = #{houseSpecId}
+		t_house h,
+		(
+			SELECT
+				s.project_id,
+				s.oem_code,
+				concat(b. CODE, c. CODE, s.num)AS house_num
+			FROM
+				t_house_spec s
+			LEFT JOIN t_project_building b ON s.building_id = b.id
+			LEFT JOIN t_project_building c ON s.floor_id = c.id
+			WHERE
+				s.id = #{houseSpecId}
+		)v
+	WHERE
+		h.oem_code = v.oem_code
+	AND h.project_id = v.project_id
+	AND h.house_num = v.house_num
 </select>
 
 <!-- 查询已关联房型的房产数量 -->
