@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import com.liefeng.common.util.StringUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.po.staff.StaffMsgClientPo;
 import com.liefeng.property.repository.mybatis.StaffMsgClientQueryRepository;
 import com.liefeng.property.repository.staff.StaffMsgClientRepository;
@@ -92,9 +95,12 @@ public class StaffMsgClientContext {
 		}
 	}
 	
+	@Transactional
 	public void update(String clientId){
 		if(ValidateHelper.isNotEmptyString(staffId)){
 			StaffMsgClientPo staffMsgClientPo =  staffMsgClientRepository.findByStaffId(staffId);
+			//清除其他绑定此clientId的数据
+			clearOtherClientID(clientId);
 			if(staffMsgClientPo != null){
 				staffMsgClientPo.setClientId(clientId);
 				staffMsgClientPo.setUpdateTime(new Date());
@@ -118,5 +124,15 @@ public class StaffMsgClientContext {
 			return staffMsgClientQueryRepository.findClientIds(StringUtil.fmtToSqlInCondition(staffIds));
 		}
 		return new ArrayList<String>();
+	}
+	
+	private void clearOtherClientID(String clientId){
+		List<StaffMsgClientPo> staffList = staffMsgClientRepository.findByClientId(clientId);
+		if(ValidateHelper.isNotEmptyCollection(staffList)){
+			for (StaffMsgClientPo staffMsgClient : staffList) {
+				staffMsgClient.setClientId(SysConstants.DEFAULT_ID);
+				staffMsgClientRepository.save(staffMsgClient);
+			}
+		}
 	}
 }

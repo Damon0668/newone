@@ -14,4 +14,6 @@ public interface StaffMsgClientRepository extends JpaRepository<StaffMsgClientPo
 	public StaffMsgClientPo findByStaffId(String staffId);
 	
 	public List<StaffMsgClientPo> findByStaffIdIn(List<String> staffIds);
+	
+	public List<StaffMsgClientPo> findByClientId(String clientId);
 }
