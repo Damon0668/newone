@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.HouseCheckitemConfigQueryRepository" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.household.HouseCheckitemConfigVo" >
+</resultMap>
+
+<!-- 查询条件 -->
+<sql id="Where_Clause">
+where 1=1 
+<trim  suffixOverrides="," >
+	<if test="extra.parentId != null and extra.parentId != ''" >
+	    AND parent_id = #{extra.parentId}
+	</if>
+	
+	<if test="extra.oemCode != null and extra.oemCode != ''" >
+	    AND oem_code = #{extra.oemCode}
+	</if>
+	
+	<if test="extra.projectId != null and extra.projectId != ''" >
+	    AND project_id =  #{extra.projectId}
+	</if>
+	order by sortindex desc
+</trim>
+</sql>
+
+<select id="queryByPage" resultMap="BaseResultMap">
+	    SELECT
+			id,
+			parent_id AS parentId,
+			itemname,
+			sortindex,
+			project_id AS projectId
+		FROM
+			t_house_checkitem_config
+		<include refid="Where_Clause" />
+		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	          ${pager.mysqlQueryCondition}
+	    </if>
+</select>
+
+
+<select id="queryByCount"  resultType="java.lang.Long">
+	select 
+		count(1) 
+	from(
+		select 
+			id
+	    from 
+	    	t_house_checkitem_config
+	    <include refid="Where_Clause" />
+		) t
+</select>
+
+</mapper>   
