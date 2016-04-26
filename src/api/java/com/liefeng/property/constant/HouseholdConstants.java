@@ -155,19 +155,19 @@ public class HouseholdConstants {
 	public static interface busitype {
 		
 		/**
-		 * 0：删除
+		 * 1：删除
 		 */
-		public String DELETE = "0";
+		public String DELETE = "1";
 		
 		/**
-		 * 1：迁出
+		 * 2：迁出
 		 */
-		public String  MOVEDOUT = "1";
+		public String  MOVEDOUT = "2";
 		
 		/**
-		 * 2：迁入
+		 * 3：迁入
 		 */
-		public String  MOVEDINTO  = "2";
+		public String  MOVEDINTO  = "3";
 		
 	}
 	

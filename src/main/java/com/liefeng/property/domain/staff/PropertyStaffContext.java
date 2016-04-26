@@ -359,7 +359,11 @@ public class PropertyStaffContext {
 		Map<String, String> param = new  HashMap<String, String>();
 		param.put("projectId", projectId);
 		param.put("departmentId", departmentId);
-		return propertyStaffQueryRepository.getDepartmentDirectorList(param);
+		List<PropertyStaffVo> propertyStaffVos = propertyStaffQueryRepository.getDepartmentDirectorList(param);
+		List<PropertyStaffVo> propertyStaffVos2 = propertyStaffQueryRepository.getDepartmentDirector2List(param);
+		if(propertyStaffVos2 != null && propertyStaffVos2.size() > 0)
+			propertyStaffVos.addAll(propertyStaffVos2);
+		return propertyStaffVos;
 	}
 
 	/**
@@ -454,4 +458,5 @@ public class PropertyStaffContext {
 		
 		return staffVoList;
 	}
+	
 }

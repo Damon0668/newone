@@ -22,6 +22,7 @@ import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
 import com.liefeng.property.vo.household.ResidentCarVo;
 import com.liefeng.property.vo.household.ResidentFeedbackVo;
+import com.liefeng.property.vo.household.ResidentHistoryVo;
 import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
 import com.liefeng.property.vo.household.UserClientIdVo;
@@ -600,8 +601,11 @@ public interface IHouseholdService {
 	/**
 	 * 客户迁出列表
 	 * @param movedOutResidentBo
+	 * @return 
 	 */
-	public void getMovedIntoResident(MovedOutResidentBo movedOutResidentBo);
+	public DataPageValue<ResidentHistoryVo> getMovedOutResident(MovedOutResidentBo movedOutResidentBo,
+			Integer currentPage, Integer pageSize);
+	
 
 	/**
 	 * 保存车辆信息
@@ -661,4 +665,18 @@ public interface IHouseholdService {
 	 */
 	public ResidentHouseVo findByIdNum(String idNum, String projectId, String houseId);
 	
+	/**
+	 * 删除迁出历史
+	 * @param hisId
+	 */
+	public void deleteResidentHis(String hisId);
+	
+	/**
+	 * 住户迁入
+	 * @param residentId
+	 * @param staffId
+	 */
+	public void movedIntoResident(String residentId, String staffId);
+
+
 }

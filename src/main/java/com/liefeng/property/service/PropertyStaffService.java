@@ -485,4 +485,25 @@ public class PropertyStaffService implements IPropertyStaffService {
 			String deptType) {
 		return PropertyDepartmentContext.build().findByDeptType(projectId, deptType);
 	}
+	
+	@Override
+	public List<PropertyDepartmentVo> getDeptAndChildDept(String departmentId,String projectId) {
+		List<PropertyDepartmentVo> departmentVos = new ArrayList<PropertyDepartmentVo>();
+		
+		PropertyDepartmentVo propertyDepartmentVo = PropertyDepartmentContext.loadById(departmentId).get();
+		if(propertyDepartmentVo != null) {
+			departmentVos.add(propertyDepartmentVo);
+			//是否是父部门  父id为 0
+			if(propertyDepartmentVo.getParentId().equals("0")){ 
+				List<PropertyDepartmentVo> childDept = PropertyDepartmentContext.build().findByParentIdAndProjectId(propertyDepartmentVo.getId(),projectId);
+				if(childDept != null && childDept.size() > 0)
+					departmentVos.addAll(childDept);
+			}else{ 
+				PropertyDepartmentVo departmentVo = PropertyDepartmentContext.loadById(propertyDepartmentVo.getParentId()).get();
+				if(departmentVo != null)
+					departmentVos.add(departmentVo);
+			}
+		}
+		return departmentVos;
+	}
 }

@@ -11,14 +11,18 @@
 
 <!-- 查询条件 -->
 <sql id="Example_Where_Clause">
-	WHERE 1=1 
+
 <trim  suffixOverrides="," >
 	<if test="extra.projectId != null and extra.projectId != ''" >
 	    AND r.project_id =  #{extra.projectId}
 	</if>
 
-	<if test="extra.houseNum != null and extra.houseNum != ''" >
+	<if test="extra.housenum != null and extra.housenum != ''" >
 	    AND h.house_num =  #{extra.houseNum}
+	</if>
+	
+	<if test="extra.name != null and extra.name != ''" >
+	    AND r.name =  #{extra.name}
 	</if>
 	
 	<if test="extra.name != null and extra.name != ''" >
@@ -28,9 +32,12 @@
 	<if test="extra.startDate != null and extra.startDate != '' and 
 			extra.endDate != null and extra.endDate != ''">
 				AND rhis.create_time between #{extra.startDate} And
-				#{extra.endDate}/
+				#{extra.endDate}
 	</if>
 	
+	<if test="extra.busitype != null and extra.busitype ">
+				AND rhis.busitype = #{extra.busitype}
+	</if>
 	
 </trim>
 </sql>
@@ -46,7 +53,8 @@
 		rhis.create_time as  createTime,
 		sa.`name` as staffName,
 		r.`status` as status,
-		rhis.busitype as busitype
+		rhis.busitype as busitype,
+		r.id as residentId
 	FROM
 		t_resident_history rhis
 	LEFT JOIN t_staff_archive sa ON sa.staff_id = rhis.staff_id ,
@@ -58,6 +66,7 @@
 		rhis.resident_house_id = rh.id
 		AND r.id = rh.resident_id
 	  <include refid="Example_Where_Clause"/>
+	  ORDER BY rhis.create_time DESC
 	  <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
           ${pager.mysqlQueryCondition}
       </if>

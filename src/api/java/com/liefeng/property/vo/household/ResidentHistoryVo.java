@@ -76,6 +76,10 @@ public class ResidentHistoryVo extends BaseValue {
 	 */
 	private String status;
 	
+	/**
+	 * 住户信息主键
+	 */
+	private String residentId;
 	
 	public String getId() {
 		return id;
@@ -163,5 +167,21 @@ public class ResidentHistoryVo extends BaseValue {
 
 	public void setStaffName(String staffName) {
 		this.staffName = staffName;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getResidentId() {
+		return residentId;
+	}
+
+	public void setResidentId(String residentId) {
+		this.residentId = residentId;
 	}
 }

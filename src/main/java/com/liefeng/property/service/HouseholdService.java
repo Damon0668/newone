@@ -758,16 +758,17 @@ public class HouseholdService implements IHouseholdService {
 					CheckinQueueVo queueHandling = getLatestOfCheckinQueue(projectId, HouseholdConstants.CheckinQueueStatus.HANDLING,
 							TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
 					if (queueHandling != null) {
-						 number = queueVo.getSeq() - queueHandling.getSeq() - 1;
+						 number = queueVo.getSeq() - queueHandling.getSeq();
 						
 					} else {
 						// 以小区为范围，获取最新“已办理”的排队
 						CheckinQueueVo queueFinished = getLatestOfCheckinQueue(projectId, HouseholdConstants.CheckinQueueStatus.FINISHED,
 								TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
 						if (queueFinished != null) {
-							 number = queueVo.getSeq() - queueFinished.getSeq() - 1;
+							 number = queueVo.getSeq() - queueFinished.getSeq();
 						}
 					}
+					
 					if(number < 0){
 						number = 0;
 					}
@@ -874,7 +875,7 @@ public class HouseholdService implements IHouseholdService {
 				TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
 		if (queueVo != null) {
 			queueReturn.setNowSeq(queueVo.getSeq());
-			Integer number = queueReturn.getSeq() - queueReturn.getNowSeq() - 1;
+			Integer number = queueReturn.getSeq() - queueReturn.getNowSeq();
 			if (number < 0) {
 				number = 0;
 			}
@@ -885,7 +886,7 @@ public class HouseholdService implements IHouseholdService {
 					TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
 			if (queueVo != null) {
 				queueReturn.setNowSeq(0);
-				Integer number = queueReturn.getSeq() - queueVo.getSeq() - 1;
+				Integer number = queueReturn.getSeq() - queueVo.getSeq();
 				if (number < 0) {
 					number = 0;
 				}
@@ -1267,12 +1268,42 @@ public class HouseholdService implements IHouseholdService {
 		}
 	}
 	
+	@Transactional
 	@Override
-	public void getMovedIntoResident (MovedOutResidentBo movedOutResidentBo){
+	public void movedIntoResident(String residentId,String staffId){
+	ResidentVo residentVo = ResidentContext.loadById(residentId).get();
 		
+		if(residentVo != null){
+			if(residentVo.getStatus().equals(HouseholdConstants.ResidentStatus.ACTIVE)){
+				throw new PropertyException(HouseholdErrorCode.RESIDENT_ALREADY_ACTIVE);
+			}
+			
+			residentVo.setStatus(HouseholdConstants.ResidentStatus.ACTIVE);
+			ResidentContext.build(residentVo).update();
+			
+			ResidentHistoryVo residentHistoryVo = new ResidentHistoryVo();
+			residentHistoryVo.setName(residentVo.getName());
+			residentHistoryVo.setMobile(residentVo.getMobile());
+			residentHistoryVo.setStaffId(staffId);
+			residentHistoryVo.setBusitype(HouseholdConstants.busitype.MOVEDINTO);
+			ResidentHouseVo residentHouseVo =  ResidentHouseContext.build().findResidentId(residentVo.getId());
+			
+			residentHistoryVo.setResidentHouseId(residentHouseVo.getId());
+			
+			ResidentHistoryContext.build(residentHistoryVo).create();
+		}
 	}
 	
 	@Override
+	public DataPageValue<ResidentHistoryVo> getMovedOutResident(MovedOutResidentBo movedOutResidentBo, Integer currentPage, Integer pageSize){
+		return ResidentHistoryContext.build().list(movedOutResidentBo,currentPage,pageSize);
+	}
+	
+	@Override
+	public void deleteResidentHis(String hisId) {
+		ResidentHistoryContext.loadById(hisId).delete();
+	}
+	
 	public CarInfoVo saveCarInfo(CarInfoVo carInfoVo) {
 		CarInfoContext carInfoContext = CarInfoContext.build(carInfoVo);
 		return carInfoContext.create();
@@ -1307,4 +1338,5 @@ public class HouseholdService implements IHouseholdService {
 			String houseId) {
 		return ResidentHouseContext.build().findByIdNum(idNum, projectId, houseId);
 	}
+
 }

@@ -321,4 +321,12 @@ public interface IPropertyStaffService {
 	 * @date 2016年4月25日 下午6:02:59
 	 */
 	public PropertyDepartmentVo findDepartmentByDeptType(String projectId, String deptType);
+	
+	/**
+	 * 获取部门 包括自身的子部门（子部门有项目id限制）
+	 * @param departmentId
+	 * @return
+	 */
+	public List<PropertyDepartmentVo> getDeptAndChildDept(String departmentId,String projectId);
+
 }
