@@ -86,4 +86,15 @@ public class StaffConstants {
 		public static final String CUSTOMER_SERVICE = "01"; 
 		
 	}
+	
+	/**
+	 * 部门固定id
+	 */
+	public static interface DeptId{
+		/**
+		 * 父id
+		 */
+		public static final String PARENTID = "0"; 
+		
+	}
 }

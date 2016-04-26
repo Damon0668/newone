@@ -11,15 +11,35 @@ public class MovedOutResidentBo extends BaseValue {
 
 	private static final long serialVersionUID = 4955401686568255378L;
 	
+	/**
+	 * 项目id
+	 */
 	private String projectId;
 	
+	/**
+	 * 业主名称
+	 */
 	private String name;
 	
+	/**
+	 * 房号
+	 */
 	private String housenum;
 	
+	/**
+	 * 开始时间
+	 */
 	private String startDate;
 	
+	/**
+	 * 结束时间
+	 */
 	private String endDate;
+	
+	/**
+	 * 业务类型 1：删除 2：迁出 3：迁入
+	 */
+	private String busitype;
 
 	public String getProjectId() {
 		return projectId;
@@ -59,5 +79,13 @@ public class MovedOutResidentBo extends BaseValue {
 
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
+	}
+
+	public String getBusitype() {
+		return busitype;
+	}
+
+	public void setBusitype(String busitype) {
+		this.busitype = busitype;
 	}
 }

@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.staff;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -368,6 +369,18 @@ public class PropertyDepartmentContext {
 		return departmentVo;
 	}
 	
+	/**
+	 * 获取子部门
+	 * @param parentId
+	 * @return
+	 */
+	public List<PropertyDepartmentVo> findByParentIdAndProjectId(
+			String parentId,String projectId) {
+		List<PropertyDepartmentPo> departmentPoList = 
+				propertyDepartmentRepository.findByParentIdAndProjectId(parentId,projectId);
+		return MyBeanUtil.createList(departmentPoList, PropertyDepartmentVo.class);
+	}
+	
 	protected void setPropertyDepartmentId(String propertyDepartmentId) {
 		this.propertyDepartmentId = propertyDepartmentId;
 	}
@@ -375,4 +388,6 @@ public class PropertyDepartmentContext {
 	protected void setPropertyDepartment(PropertyDepartmentVo propertyDepartment) {
 		this.propertyDepartment = propertyDepartment;
 	}
+
+	
 }

@@ -1,19 +1,31 @@
 package com.liefeng.property.domain.household;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
+import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.mybatis.vo.PagingParamVo;
+import com.liefeng.property.bo.household.MovedOutResidentBo;
 import com.liefeng.property.po.household.ResidentHistoryPo;
+import com.liefeng.property.po.project.AppHomeImagePo;
 import com.liefeng.property.repository.household.ResidentHistoryRepository;
+import com.liefeng.property.repository.mybatis.ResidentHistoryQueryRepository;
+import com.liefeng.property.vo.fee.MeterRecordVo;
 import com.liefeng.property.vo.household.ResidentHistoryVo;
+import com.liefeng.property.vo.project.AppHomeImageVo;
 
 /**
  * 住户历史信息领域模型
@@ -30,6 +42,8 @@ public class ResidentHistoryContext {
 	@Autowired
 	private ResidentHistoryRepository residentHistoryRepository;
 	
+	@Autowired
+	private ResidentHistoryQueryRepository residentHistoryQueryRepository;
 	
 	/**
 	 * 住户历史信息ID
@@ -76,9 +90,9 @@ public class ResidentHistoryContext {
 	 * @param residentId 住户信息ID
 	 * @return 住户信息上下文
 	 */
-	public static ResidentHistoryContext loadById(String residentId) {
+	public static ResidentHistoryContext loadById(String id) {
 		ResidentHistoryContext residentContext = getInstance();
-		 residentContext.setId(residentId);
+		 residentContext.setId(id);
 		 
 		 return residentContext;
 	}
@@ -96,6 +110,28 @@ public class ResidentHistoryContext {
 	public ResidentHistoryVo get() {
 		ResidentHistoryPo residentHistoryPo = residentHistoryRepository.findOne(id);
 		return MyBeanUtil.createBean(residentHistoryPo, ResidentHistoryVo.class);
+	}
+	
+	public DataPageValue<ResidentHistoryVo> list(MovedOutResidentBo movedOutResidentBo,Integer currentPage, Integer pageSize){
+		Map<String, String> extra = MyBeanUtil.bean2Map(movedOutResidentBo);
+		
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		param.setPage(currentPage);
+		param.setPageSize(pageSize);
+		
+		Long total = residentHistoryQueryRepository.queryByCount(param);
+		total = (total == null ? 0 : total);
+		logger.info("总数量：total=" + total);
+	
+		param.getPager().setRowCount(total);
+		
+		List<ResidentHistoryVo> residentHistoryVos = residentHistoryQueryRepository.queryByPage(param);
+		return new DataPageValue<ResidentHistoryVo>(residentHistoryVos, total, pageSize, currentPage);
+	}
+	
+	public void delete() {
+		residentHistoryRepository.delete(id);
 	}
 	
 	protected void setId(String id) {

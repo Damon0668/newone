@@ -1265,8 +1265,40 @@ public class HouseholdService implements IHouseholdService {
 		}
 	}
 	
+	@Transactional
 	@Override
-	public void getMovedIntoResident (MovedOutResidentBo movedOutResidentBo){
+	public void movedIntoResident(String residentId,String staffId){
+	ResidentVo residentVo = ResidentContext.loadById(residentId).get();
 		
+		if(residentVo != null){
+			if(residentVo.getStatus().equals(HouseholdConstants.ResidentStatus.ACTIVE)){
+				throw new PropertyException(HouseholdErrorCode.RESIDENT_ALREADY_ACTIVE);
+			}
+			
+			residentVo.setStatus(HouseholdConstants.ResidentStatus.ACTIVE);
+			ResidentContext.build(residentVo).update();
+			
+			ResidentHistoryVo residentHistoryVo = new ResidentHistoryVo();
+			residentHistoryVo.setName(residentVo.getName());
+			residentHistoryVo.setMobile(residentVo.getMobile());
+			residentHistoryVo.setStaffId(staffId);
+			residentHistoryVo.setBusitype(HouseholdConstants.busitype.MOVEDINTO);
+			ResidentHouseVo residentHouseVo =  ResidentHouseContext.build().findResidentId(residentVo.getId());
+			
+			residentHistoryVo.setResidentHouseId(residentHouseVo.getId());
+			
+			ResidentHistoryContext.build(residentHistoryVo).create();
+		}
 	}
+	
+	@Override
+	public DataPageValue<ResidentHistoryVo> getMovedOutResident(MovedOutResidentBo movedOutResidentBo, Integer currentPage, Integer pageSize){
+		return ResidentHistoryContext.build().list(movedOutResidentBo,currentPage,pageSize);
+	}
+	
+	@Override
+	public void deleteResidentHis(String hisId) {
+		ResidentHistoryContext.loadById(hisId).delete();
+	}
+	
 }
