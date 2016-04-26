@@ -64,7 +64,7 @@ public class CarInfoContextTest {
 		params.setProjectId("0000000052a7943f0152a7943fc00000");
 		
 		CarInfoContext carInfoContext = CarInfoContext.build();
-		System.out.println(carInfoContext.listCarInfo(params, 10, 1));
+		System.out.println(carInfoContext.listCarInfo(params, 1, 10));
 		
 	}
 }

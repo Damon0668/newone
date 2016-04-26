@@ -5,6 +5,7 @@ import java.util.List;
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
+import com.liefeng.property.bo.household.CarInfoBo;
 import com.liefeng.property.bo.household.CheckinQueueBo;
 import com.liefeng.property.bo.household.MovedOutResidentBo;
 import com.liefeng.property.bo.household.ProprietorBo;
@@ -12,6 +13,7 @@ import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.bo.household.ResidentFeedbackBo;
 import com.liefeng.property.vo.household.AppFriendVo;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
+import com.liefeng.property.vo.household.CarInfoVo;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
 import com.liefeng.property.vo.household.CheckinQueueVo;
 import com.liefeng.property.vo.household.CheckinScheduleVo;
@@ -601,6 +603,50 @@ public interface IHouseholdService {
 	 */
 	public void getMovedIntoResident(MovedOutResidentBo movedOutResidentBo);
 
-
+	/**
+	 * 保存车辆信息
+	 * @param carInfoVo 车辆信息
+	 * @return 保存后车辆信息
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public CarInfoVo saveCarInfo(CarInfoVo carInfoVo);
+	
+	/**
+	 * 更新车辆信息
+	 * @param carInfoVo 车辆信息
+	 * @return 更新后车辆信息
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public CarInfoVo updateCarInfo(CarInfoVo carInfoVo);
+	
+	/**
+	 * 删除车辆信息
+	 * @param carInfoId 车辆信息ID
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public void deleteCarInfo(String carInfoId);
+	
+	/**
+	 * 查询车辆信息
+	 * @param carInfoId 车辆信息ID
+	 * @return 车辆信息
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public CarInfoVo findCarInfoById(String carInfoId);
+	
+	/**
+	 * 分页查询车辆信息
+	 * @param params 查询过滤参数
+	 * @param currentPage 分页当前页
+	 * @param pageSize 分页大小
+	 * @return 车辆信息列表
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public DataPageValue<CarInfoVo> listCarInfo(CarInfoBo params, Integer currentPage, Integer pageSize);
 	
 }

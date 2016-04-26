@@ -131,7 +131,8 @@ public class CarInfoContext {
 		}
 	}
 	
-	public DataPageValue<CarInfoVo> listCarInfo(CarInfoBo params, Integer pageSize, Integer currentPage) {
+	public DataPageValue<CarInfoVo> listCarInfo(CarInfoBo params, Integer currentPage, Integer pageSize) {
+		logger.info("分页查询车辆信息，查询参数 params = {}, currentPage = {}, pageSize = {}", params, currentPage, pageSize);
 		// 查询参数拷贝
 		Map<String, String> extra = MyBeanUtil.bean2Map(params);
 		
@@ -144,7 +145,7 @@ public class CarInfoContext {
 		count = (count == null ? 0 : count);
 		logger.info("总数量：count=" + count);
 		
-		// 设置数据总行数，用于计算偏移量
+		// 设置数据总行数，用于计算偏移量(必须)
 		pagingParamVo.getPager().setRowCount(count);
 		List<CarInfoVo> dataList = carInfoQueryRepository.queryByPage(pagingParamVo);
 		dataList = (ValidateHelper.isEmptyCollection(dataList) ? new ArrayList<CarInfoVo>() : dataList);
