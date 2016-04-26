@@ -56,6 +56,12 @@ public class CarInfoPo extends BaseValue {
 	 */
 	@Column(name = "house_num")
 	private String houseNum;
+	
+	/**
+	 * 员工工号
+	 */
+	@Column(name = "staff_num")
+	private String staffNum;
 
 	/**
 	 * 车牌号
@@ -145,6 +151,14 @@ public class CarInfoPo extends BaseValue {
 
 	public void setHouseNum(String houseNum) {
 		this.houseNum = houseNum;
+	}
+
+	public String getStaffNum() {
+		return staffNum;
+	}
+
+	public void setStaffNum(String staffNum) {
+		this.staffNum = staffNum;
 	}
 
 	public String getPlateNum() {

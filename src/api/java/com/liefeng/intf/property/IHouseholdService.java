@@ -27,6 +27,7 @@ import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
 import com.liefeng.property.vo.household.UserClientIdVo;
 import com.liefeng.property.vo.household.VisitorVo;
+import com.liefeng.property.vo.staff.PropertyStaffVo;
 
 /**
  * household包相关表接口类
@@ -677,6 +678,35 @@ public interface IHouseholdService {
 	 * @param staffId
 	 */
 	public void movedIntoResident(String residentId, String staffId);
+	
+	/**
+	 * 根据房号查询业主
+	 * @param projectId 项目ID
+	 * @param houseNum 房号
+	 * @return
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public List<ProprietorVo> listProprietorByHouseNum(String projectId, String houseNum);
+	
+	/**
+	 * 根据房号查询住户
+	 * @param projectId 项目ID
+	 * @param houseNum 房号
+	 * @return
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public List<ResidentVo> listResidentByHouseNum(String projectId, String houseNum);
+	
+	/**
+	 * 根据员工工号查询员工
+	 * @param number 员工工号
+	 * @return
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public List<PropertyStaffVo> listPropertyStaffByNumber(String number);
 
 
 }

@@ -459,4 +459,17 @@ public class PropertyStaffContext {
 		return staffVoList;
 	}
 	
+	/**
+	 * 根据员工工号查询员工
+	 * @param number 员工工号
+	 * @return
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public List<PropertyStaffVo> listPropertyStaffByNumber(String number) {
+		String oemCode = ContextManager.getInstance().getOemCode();
+		List<PropertyStaffPo> dataList = propertyStaffRepository.findByNumberAndOemCode(number, oemCode);
+		return MyBeanUtil.createList(dataList, PropertyStaffVo.class);
+	}
+	
 }

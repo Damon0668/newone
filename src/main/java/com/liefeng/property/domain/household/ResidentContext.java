@@ -271,6 +271,18 @@ public class ResidentContext {
 		return residentQueryRepository.queryRelatedHouses(pagingParamVo);
 	}
 	
+	/**
+	 * 根据房号查询住户
+	 * @param projectId 项目ID
+	 * @param houseNum 房号
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public List<ResidentVo> listResidentByHouseNum(String projectId, String houseNum) {
+		String oemCode = ContextManager.getInstance().getOemCode();
+		return residentQueryRepository.queryByHouseNum(projectId, houseNum, oemCode);
+	}
+	
 	public ResidentVo get() {
 		return MyBeanUtil.createBean(residentRepository.findOne(residentId),ResidentVo.class);
 	}

@@ -49,6 +49,11 @@ public class CarInfoVo extends BaseValue {
 	 * 房号
 	 */
 	private String houseNum;
+	
+	/**
+	 * 员工工号
+	 */
+	private String staffNum;
 
 	/**
 	 * 车牌号
@@ -145,6 +150,14 @@ public class CarInfoVo extends BaseValue {
 
 	public void setHouseNum(String houseNum) {
 		this.houseNum = houseNum;
+	}
+
+	public String getStaffNum() {
+		return staffNum;
+	}
+
+	public void setStaffNum(String staffNum) {
+		this.staffNum = staffNum;
 	}
 
 	public String getPlateNum() {

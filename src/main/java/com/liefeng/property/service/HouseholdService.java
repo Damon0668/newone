@@ -51,6 +51,7 @@ import com.liefeng.property.domain.household.ResidentHistoryContext;
 import com.liefeng.property.domain.household.ResidentHouseContext;
 import com.liefeng.property.domain.household.VisitorContext;
 import com.liefeng.property.domain.project.HouseContext;
+import com.liefeng.property.domain.staff.PropertyStaffContext;
 import com.liefeng.property.error.HouseholdErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.vo.household.AppFriendVo;
@@ -70,6 +71,7 @@ import com.liefeng.property.vo.household.ResidentVo;
 import com.liefeng.property.vo.household.UserClientIdVo;
 import com.liefeng.property.vo.household.VisitorVo;
 import com.liefeng.property.vo.project.HouseVo;
+import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.service.constant.PushActionConstants;
 
 /**
@@ -1337,6 +1339,21 @@ public class HouseholdService implements IHouseholdService {
 	public ResidentHouseVo findByIdNum(String idNum, String projectId,
 			String houseId) {
 		return ResidentHouseContext.build().findByIdNum(idNum, projectId, houseId);
+	}
+
+	@Override
+	public List<ProprietorVo> listProprietorByHouseNum(String projectId, String houseNum) {
+		return ProprietorContext.build().listProprietorByHouseNum(projectId, houseNum);
+	}
+
+	@Override
+	public List<ResidentVo> listResidentByHouseNum(String projectId, String houseNum) {
+		return ResidentContext.build().listResidentByHouseNum(projectId, houseNum);
+	}
+
+	@Override
+	public List<PropertyStaffVo> listPropertyStaffByNumber(String number) {
+		return PropertyStaffContext.build().listPropertyStaffByNumber(number);
 	}
 
 }
