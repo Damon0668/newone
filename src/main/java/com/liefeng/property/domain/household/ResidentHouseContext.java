@@ -1,24 +1,30 @@
 package com.liefeng.property.domain.household;
 
+import java.util.HashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.liefeng.common.util.EncryptionUtil;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
+import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.po.household.ResidentHousePo;
 import com.liefeng.property.repository.household.ResidentHouseRepository;
+import com.liefeng.property.repository.mybatis.ResidentHouseQueryRepository;
 import com.liefeng.property.vo.household.ResidentHouseVo;
 
 /**
  * 住户房屋信息领域模型
  * 
  * @author ZhenTingJun
+ * @author xhw
  * @date 2016年3月15日
  */
 @Service
@@ -30,6 +36,8 @@ public class ResidentHouseContext {
 	@Autowired
 	private ResidentHouseRepository residentHouseRepository;
 	
+	@Autowired
+	private ResidentHouseQueryRepository ResidentHouseQueryRepository;
 	
 	/**
 	 * 住户房屋信息ID
@@ -166,6 +174,37 @@ public class ResidentHouseContext {
 		ResidentHousePo residentHousePo = residentHouseRepository.findByResidentId(residentId);
 		return MyBeanUtil.createBean(residentHousePo, ResidentHouseVo.class);
 	}
+	
+	/**
+	 * 根据身份证号码获取住户房屋关系
+	 * @param idNum
+	 * @param projectId
+	 * @param houseId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月26日 上午11:09:53
+	 */
+	public ResidentHouseVo findByIdNum(String idNum, String projectId, String houseId){
+		ResidentHouseVo residentHouseVo = null;
+		
+		if(ValidateHelper.isNotEmptyString(idNum) && ValidateHelper.isNotEmptyString(projectId) && ValidateHelper.isNotEmptyString(houseId)){
+			String oemCode = ContextManager.getInstance().getOemCode();
+			// 身份证号加密
+			String encryptedIdNum = EncryptionUtil.encryptCustIdNum(idNum);
+			HashMap<String, String> paramMap = new HashMap<String, String>();
+			paramMap.put("projectId", projectId);
+			paramMap.put("houseId", houseId);
+			paramMap.put("oemCode", oemCode);
+			paramMap.put("idNum", encryptedIdNum);
+			
+			PagingParamVo param = new PagingParamVo();
+			param.setExtra(paramMap);
+			
+			residentHouseVo = ResidentHouseQueryRepository.queryByIdNum(param);
+		}
+		return residentHouseVo;
+	}
+	
 	
 	protected void setResidentHouseId(String residentHouseId) {
 		this.residentHouseId = residentHouseId;

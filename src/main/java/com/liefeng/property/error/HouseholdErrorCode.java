@@ -41,6 +41,11 @@ public enum HouseholdErrorCode implements IErrorCode {
 	RESIDENT_PHONE_NULL("住户手机号码为空"),
 	
 	/**
+	 * 该住户已经存在
+	 */
+	RESIDENT_EXIST_ALREADY("该住户已经存在"),
+	
+	/**
 	 * 住户名字为空
 	 */
 	RESIDENT_NAME_NULL("业主名字为空"),
