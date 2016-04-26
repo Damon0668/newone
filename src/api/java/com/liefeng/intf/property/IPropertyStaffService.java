@@ -293,4 +293,32 @@ public interface IPropertyStaffService {
 	 * @return
 	 */
 	public List<PropertyDepartmentVo> getDepartments(String project);
+	
+	/**
+	 * 获取与项目有关的所有子部门，以及公司的领导部门
+	 * @param projectId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月25日 下午3:09:50
+	 */
+	public List<PropertyDepartmentVo> getAllDepartmentsByProjectId(String projectId);
+	
+	/**
+	 * 获取部门的在职、激活的员工
+	 * @param departmentId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月25日 下午4:03:52
+	 */
+	public List<PropertyStaffVo> getStaffByDepartmentId(String departmentId);
+	
+	/**
+	 * 通过部门类型，获取某项目的某部门
+	 * @param projectId
+	 * @param deptType
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月25日 下午6:02:59
+	 */
+	public PropertyDepartmentVo findDepartmentByDeptType(String projectId, String deptType);
 }

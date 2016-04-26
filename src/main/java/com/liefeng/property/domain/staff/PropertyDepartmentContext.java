@@ -18,10 +18,8 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
-import com.liefeng.property.constant.DeptConstants;
 import com.liefeng.property.constant.SysConstants;
 import com.liefeng.property.error.StaffErrorCode;
-import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.staff.PropertyDepartmentPo;
 import com.liefeng.property.repository.mybatis.PropertyDepartmentQueryRepository;
 import com.liefeng.property.repository.staff.PropertyDepartmentRepository;
@@ -114,24 +112,47 @@ public class PropertyDepartmentContext {
 	}
 	
 	/**
+	 * 查询部门名称
+	 * @return 部门信息值对象
+	 */
+	public String getName() {
+		String deptName = null;
+		if(ValidateHelper.isNotEmptyString(propertyDepartmentId)){
+			PropertyDepartmentVo dept = get();
+			return dept == null ? null : dept.getName();
+		}
+		return deptName;
+	}
+	
+	/**
 	 * 保存部门信息
 	 */
 	public void create() {
 		if(propertyDepartment != null) {
 			
-			if(SysConstants.DEFAULT_ID.equals(propertyDepartment.getParentId())){
-				propertyDepartment.setParentId(SysConstants.DEFAULT_ID);
-				propertyDepartment.setProjectId(SysConstants.DEFAULT_ID);
-			}else{
-				PropertyDepartmentPo parent = propertyDepartmentRepository.findParentDept(propertyDepartment.getDeptType(),
-						ContextManager.getInstance().getOemCode());
-				if(parent == null){
-					throw new LiefengException(StaffErrorCode.PARENT_DEPT_NOT_EXIST);
+			PropertyDepartmentPo parent = propertyDepartmentRepository.findParentDept(propertyDepartment.getDeptType(),
+					ContextManager.getInstance().getOemCode());
+			//创建父部门，判断 部门是否已存在
+			if(ValidateHelper.isEmptyString(propertyDepartment.getParentId()) 
+					&& ValidateHelper.isEmptyString(propertyDepartment.getProjectId())){
+				if(parent != null){
+					throw new LiefengException(StaffErrorCode.PARENT_DEPT_HAS_EXIST);
+				}else{
+					propertyDepartment.setParentId(SysConstants.DEFAULT_ID);
+					propertyDepartment.setProjectId(SysConstants.DEFAULT_ID);
 				}
-				propertyDepartment.setParentId(parent.getId());
-				
 			}
-
+			
+			if(ValidateHelper.isNotEmptyString(propertyDepartment.getProjectId()) 
+					&& !SysConstants.DEFAULT_ID.equals(propertyDepartment.getProjectId())
+					&& parent == null){
+				throw new LiefengException(StaffErrorCode.PARENT_DEPT_NOT_EXIST);
+			}
+			
+			if(parent != null){
+				propertyDepartment.setParentId(parent.getId());
+			}
+			
 			propertyDepartment.setId(UUIDGenerator.generate());
 			
 			propertyDepartment.setOemCode(ContextManager.getInstance().getOemCode());
@@ -149,27 +170,64 @@ public class PropertyDepartmentContext {
 	public void update() {
 		if(propertyDepartment != null) {
 			
-			if(SysConstants.DEFAULT_ID.equals(propertyDepartment.getParentId())){
-				propertyDepartment.setParentId(SysConstants.DEFAULT_ID);
-				propertyDepartment.setProjectId(SysConstants.DEFAULT_ID);
-			}else{
-				PropertyDepartmentPo parent = propertyDepartmentRepository.findParentDept(propertyDepartment.getDeptType(),
-						ContextManager.getInstance().getOemCode());
-				if(parent == null){
-					throw new LiefengException(StaffErrorCode.PARENT_DEPT_NOT_EXIST);
-				}
-				propertyDepartment.setParentId(parent.getId());
-				
+			PropertyDepartmentPo parent = propertyDepartmentRepository.findParentDept(propertyDepartment.getDeptType(),
+					ContextManager.getInstance().getOemCode());
+			
+			//修改普通部门，判断父部门是否存在
+			if(parent == null 
+					&& ValidateHelper.isNotEmptyString(propertyDepartment.getProjectId())){
+				throw new LiefengException(StaffErrorCode.PARENT_DEPT_NOT_EXIST);
 			}
 			
-
+			//修改为已存在的父部门
+			if(parent != null 
+					&& !parent.getId().equals(propertyDepartment.getId()) 
+					&& ValidateHelper.isEmptyString(propertyDepartment.getParentId())
+					&& ValidateHelper.isEmptyString(propertyDepartment.getProjectId())){
+				throw new LiefengException(StaffErrorCode.PARENT_DEPT_HAS_EXIST);
+			}
+			
 			PropertyDepartmentPo propertyDepartmentPo = propertyDepartmentRepository.findOne(propertyDepartment.getId());
-
-			MyBeanUtil.copyBeanNotNull2Bean(propertyDepartment, propertyDepartmentPo);
 			
-			propertyDepartmentRepository.save(propertyDepartmentPo);
+			if(propertyDepartmentPo != null){
+				
+				MyBeanUtil.copyBeanNotNull2Bean(propertyDepartment, propertyDepartmentPo);
 			
-			logger.info("Update department: '{}' successfully!", propertyDepartment);
+				//修改为不存在的父部门
+				if(parent == null 
+						&& ValidateHelper.isEmptyString(propertyDepartment.getParentId())
+						&& ValidateHelper.isEmptyString(propertyDepartment.getProjectId())){
+					propertyDepartmentPo.setParentId(SysConstants.DEFAULT_ID);
+					propertyDepartmentPo.setProjectId(SysConstants.DEFAULT_ID);
+				}
+				
+				
+				
+				//普通部门需要设置父部门
+				if(parent != null 
+						&& !SysConstants.DEFAULT_ID.equals(propertyDepartmentPo.getParentId())
+						&& !SysConstants.DEFAULT_ID.equals(propertyDepartmentPo.getProjectId())){
+					propertyDepartmentPo.setParentId(parent.getId());
+				}
+	
+				propertyDepartmentRepository.save(propertyDepartmentPo);
+				
+				logger.info("Update department: '{}' successfully!", propertyDepartment);
+				
+				/*
+				 * 员工是部门负责人
+				 * 需要更新员工部门为父级部门
+				 */
+				if(ValidateHelper.isNotEmptyString(propertyDepartment.getDirectorId())){
+					PropertyStaffContext.loadById(propertyDepartment.getDirectorId()).updateStaffDept(parent.getId());
+				}
+				
+				if(ValidateHelper.isNotEmptyString(propertyDepartment.getDirector2Id())){
+					PropertyStaffContext.loadById(propertyDepartment.getDirector2Id()).updateStaffDept(parent.getId());
+				}
+			
+			}
+			
 		}
 	}
 	
@@ -178,10 +236,30 @@ public class PropertyDepartmentContext {
 	 */
 	public void delete() {
 		if(ValidateHelper.isNotEmptyString(propertyDepartmentId)) {
+			
+			PropertyDepartmentPo propertyDepartmentPo = propertyDepartmentRepository.findOne(propertyDepartment.getId());
+			
+			if(propertyDepartmentPo != null 
+					&& SysConstants.DEFAULT_ID.equals(propertyDepartment.getParentId())){
+				List<PropertyDepartmentPo> parentDepts = propertyDepartmentRepository.findDepartmentsByParentId(propertyDepartmentId);
+				
+				if(ValidateHelper.isNotEmptyCollection(parentDepts)){
+					throw new LiefengException(StaffErrorCode.SUB_DEPT_HAS_EXIST);
+				}
+				
+			}
+			
 			propertyDepartmentRepository.delete(propertyDepartmentId);
 			logger.info("Delete department: '{}' successfully!", propertyDepartmentId);
 		}
 	}
+	
+	public PropertyDepartmentVo findParentDept(){
+		if(ValidateHelper.isNotEmptyString(propertyDepartmentId)){
+			return propertyDepartmentQueryRepository.findParentDept(propertyDepartmentId);
+		}
+		return null;
+	} 
 	
 	/**
 	 * 查询多个部门
@@ -238,7 +316,6 @@ public class PropertyDepartmentContext {
 				propertyDepartmentRepository.findDepartmentsByOemCode(oemCode);
 		return MyBeanUtil.createList(departmentPoList, PropertyDepartmentVo.class);
 	}
-	
 
 	public List<PropertyDepartmentVo> getDepartments(String projectId) {
 		List<PropertyDepartmentPo> departmentPoList = 
@@ -247,25 +324,48 @@ public class PropertyDepartmentContext {
 		return MyBeanUtil.createList(departmentPoList, PropertyDepartmentVo.class);
 	}
 
+	/**
+	 * 获取与项目有关的所有子部门，以及公司的领导部门
+	 * @param projectId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月25日 下午3:37:26
+	 */
+	public List<PropertyDepartmentVo> findAllDepartmentByProjectId(String projectId){
+		List<PropertyDepartmentVo> propertyDepartmentList = null;
+		
+		if(ValidateHelper.isNotEmptyString(projectId)){
+			String oemCode = ContextManager.getInstance().getOemCode();
+			HashMap<String, String> paramMap = new HashMap<String, String>();
+			paramMap.put("projectId", projectId);
+			paramMap.put("oemCode", oemCode);
+			
+			PagingParamVo param = new PagingParamVo();
+			param.setExtra(paramMap);
+			
+			propertyDepartmentList = propertyDepartmentQueryRepository.findAllDepartmentByProjectId(param);
+		}
+		return propertyDepartmentList;
+	}
 	
 	/**
-	 * 判断部门是否已经存在
-	 * 根据名字判断
-	 * @param propertyDepartment
+	 * 通过部门类型，获取某项目的某部门
+	 * @param projectId
+	 * @param deptType
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月25日 下午6:02:59
 	 */
-	private void isExitByDepartName(PropertyDepartmentVo propertyDepartment){
+	public PropertyDepartmentVo findByDeptType(String projectId, String deptType){
+		PropertyDepartmentVo departmentVo = null;
+		if(ValidateHelper.isNotEmptyString(projectId) && ValidateHelper.isNotEmptyString(deptType)){
+			String oemCode = ContextManager.getInstance().getOemCode();
+			PropertyDepartmentPo propertyDepartmentPo = propertyDepartmentRepository.findByProjectIdAndDeptTypeAndOemCode(projectId, deptType, oemCode);
 		
-		String departName = propertyDepartment.getName().trim();
-		
-		String oemCode = ContextManager.getInstance().getOemCode();
-		
-		PropertyDepartmentPo departmentWithSameName = 
-				propertyDepartmentRepository.findDepartmentByNameAndOemCode(departName, oemCode);
-		
-		if (departmentWithSameName != null) {
-			throw new PropertyException(StaffErrorCode.DEPARTMENT_ALREADY_EXIST, departName);
+			departmentVo = MyBeanUtil.createBean(propertyDepartmentPo, PropertyDepartmentVo.class);
 		}
 		
+		return departmentVo;
 	}
 	
 	protected void setPropertyDepartmentId(String propertyDepartmentId) {

@@ -25,7 +25,16 @@ public class StaffMsgClientVo extends BaseValue{
 	private Date updateTime;
 	
 	private String oemCode;
+	
+	public StaffMsgClientVo(){
+		
+	}
 
+	public StaffMsgClientVo(String staffId, String clientId){
+		this.staffId = staffId;
+		this.clientId = clientId;
+	} 
+	
 	public String getId() {
 		return id;
 	}

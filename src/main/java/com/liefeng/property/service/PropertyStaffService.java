@@ -20,7 +20,6 @@ import com.liefeng.intf.property.IProjectService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.property.ISysSecurityService;
 import com.liefeng.intf.property.ISysService;
-import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.property.PropertyStaffBo;
@@ -74,10 +73,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 	
 	@Autowired
 	private ISysService sysService;
-	
-	@Autowired
-	private IPushMsgService pushMsgService;
-	
+
 	@Autowired
 	private PropertyPushMsgService propertyPushMsgService;
 
@@ -203,7 +199,8 @@ public class PropertyStaffService implements IPropertyStaffService {
 	public PropertyStaffVo findPropertyStaffById(String staffId) {
 		PropertyStaffVo propertyStaffVo = PropertyStaffContext.loadById(staffId).get();
 		if(propertyStaffVo != null){
-			propertyStaffVo.setDepartmentName(getDepartment(propertyStaffVo.getDepartmentId()).getName());
+			
+			propertyStaffVo.setDepartmentName(PropertyDepartmentContext.loadById(propertyStaffVo.getDepartmentId()).getName());
 			
 			propertyStaffVo.setPositionName(sysService.getDictNameByValue("POSITION", propertyStaffVo.getPosition()));
 			
@@ -388,12 +385,10 @@ public class PropertyStaffService implements IPropertyStaffService {
 		StaffMsgClientVo staffMsgClient = StaffMsgClientContext.loadByStaffId(staffId).get();
 		
 		if(staffMsgClient == null){
-			staffMsgClient = new StaffMsgClientVo();
-			staffMsgClient.setStaffId(staffId);
-			staffMsgClient.setClientId(clientId);
+			staffMsgClient = new StaffMsgClientVo(staffId, clientId);
 			StaffMsgClientContext.build(staffMsgClient).create();
 		}else{
-			StaffMsgClientContext.loadByStaffId(staffId).update(clientId);
+			StaffMsgClientContext.loadByStaffId(staffId).updateClientId(clientId);
 		}
 	}
 	
@@ -472,5 +467,22 @@ public class PropertyStaffService implements IPropertyStaffService {
 	public List<PropertyDepartmentVo> getDepartments(String project) {
 		PropertyDepartmentContext departContext = PropertyDepartmentContext.build();
 		return departContext.getDepartments(project);
+	}
+
+	@Override
+	public List<PropertyDepartmentVo> getAllDepartmentsByProjectId(
+			String projectId) {
+		return PropertyDepartmentContext.build().findAllDepartmentByProjectId(projectId);
+	}
+
+	@Override
+	public List<PropertyStaffVo> getStaffByDepartmentId(String departmentId) {
+		return PropertyStaffContext.build().getStaffByDepartmentId(departmentId);
+	}
+
+	@Override
+	public PropertyDepartmentVo findDepartmentByDeptType(String projectId,
+			String deptType) {
+		return PropertyDepartmentContext.build().findByDeptType(projectId, deptType);
 	}
 }

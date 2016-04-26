@@ -64,4 +64,39 @@ where 1=1
 	
 </select>
 
+
+<select id="findParentDept" resultMap="BaseResultMap">
+    SELECT
+       d2.*
+    FROM
+        t_property_department d left join t_property_department d2 on d.parent_id = d2.id
+    where d.id = #{deptId}
+</select>
+
+<select id="findAllDepartmentByProjectId" resultMap="BaseResultMap">
+    SELECT
+		id,
+		name
+	FROM
+	t_property_department
+	WHERE
+		1=1
+	<if test="extra.oemCode != null and extra.oemCode != ''" >
+        AND oem_code = #{extra.oemCode}
+    </if>
+    <if test="extra.projectId != null and extra.projectId != ''" >
+        AND(
+		(
+			parent_id = '0'
+			AND project_id = '0'
+		)
+		OR(
+			parent_id != '0'
+			AND project_id = #{extra.projectId}
+		)
+	)
+    </if>
+
+</select>
+
 </mapper>
