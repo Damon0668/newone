@@ -28,6 +28,7 @@ import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.intf.property.IProjectService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
+import com.liefeng.property.bo.household.CarInfoBo;
 import com.liefeng.property.bo.household.CheckinQueueBo;
 import com.liefeng.property.bo.household.MovedOutResidentBo;
 import com.liefeng.property.bo.household.ProprietorBo;
@@ -37,6 +38,7 @@ import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.ProjectConstants;
 import com.liefeng.property.domain.household.AppFriendContext;
 import com.liefeng.property.domain.household.AppMsgSettingContext;
+import com.liefeng.property.domain.household.CarInfoContext;
 import com.liefeng.property.domain.household.CheckinMaterialContext;
 import com.liefeng.property.domain.household.CheckinQueueContext;
 import com.liefeng.property.domain.household.CheckinScheduleContext;
@@ -53,6 +55,7 @@ import com.liefeng.property.error.HouseholdErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.vo.household.AppFriendVo;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
+import com.liefeng.property.vo.household.CarInfoVo;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
 import com.liefeng.property.vo.household.CheckinQueueVo;
 import com.liefeng.property.vo.household.CheckinScheduleVo;
@@ -1268,5 +1271,41 @@ public class HouseholdService implements IHouseholdService {
 	@Override
 	public void getMovedIntoResident (MovedOutResidentBo movedOutResidentBo){
 		
+	}
+	
+	@Override
+	public CarInfoVo saveCarInfo(CarInfoVo carInfoVo) {
+		CarInfoContext carInfoContext = CarInfoContext.build(carInfoVo);
+		return carInfoContext.create();
+	}
+
+	@Override
+	public CarInfoVo updateCarInfo(CarInfoVo carInfoVo) {
+		CarInfoContext carInfoContext = CarInfoContext.build(carInfoVo);
+		return carInfoContext.update();
+	}
+
+	@Override
+	public void deleteCarInfo(String carInfoId) {
+		CarInfoContext carInfoContext = CarInfoContext.loadById(carInfoId);
+		carInfoContext.delete();
+	}
+
+	@Override
+	public CarInfoVo findCarInfoById(String carInfoId) {
+		CarInfoContext carInfoContext = CarInfoContext.loadById(carInfoId);
+		return carInfoContext.get();
+	}
+
+	@Override
+	public DataPageValue<CarInfoVo> listCarInfo(CarInfoBo params, Integer currentPage, Integer pageSize) {
+		CarInfoContext carInfoContext = CarInfoContext.build();
+		return carInfoContext.listCarInfo(params, currentPage, pageSize);
+	}
+
+	@Override
+	public ResidentHouseVo findByIdNum(String idNum, String projectId,
+			String houseId) {
+		return ResidentHouseContext.build().findByIdNum(idNum, projectId, houseId);
 	}
 }
