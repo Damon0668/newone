@@ -42,6 +42,8 @@ import com.liefeng.property.api.ro.id.VisitorIdRo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.domain.project.HouseContext;
+import com.liefeng.property.error.HouseholdErrorCode;
+import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.vo.api.UserHouseVo;
 import com.liefeng.property.vo.household.CheckinQueueVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
@@ -228,6 +230,13 @@ public class HouseholdController {
 	public ReturnValue registerResident(@Valid @ModelAttribute ResidentRo residentRo) {
 		
 		ResidentBo residentBo = MyBeanUtil.createBean(residentRo, ResidentBo.class);
+		
+		//验证住户是否已存在
+		ResidentHouseVo houseCheck = householdService.findByIdNum(residentBo.getIdNum(), residentBo.getProjectId(), residentBo.getHouseId());
+		if(houseCheck != null){
+			throw new PropertyException(HouseholdErrorCode.RESIDENT_EXIST_ALREADY);
+		}
+		
 		// 住户信息
 		ResidentVo residentVo = new ResidentVo();
 		// 住户房屋信息

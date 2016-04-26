@@ -53,6 +53,7 @@
     SELECT
 		ci.id AS id,
 		ci.project_id AS projectId,
+		p.full_name AS projectName,
 		ci.owner_id AS ownerId,
 		ci.owner_name AS ownerName,
 		ci.owner_type AS ownerType,
@@ -77,6 +78,7 @@
 	SELECT
 		ci.id AS id,
 		ci.project_id AS projectId,
+		p.full_name AS projectName,
 		ci.owner_id AS ownerId,
 		ci.owner_name AS ownerName,
 		ci.owner_type AS ownerType,

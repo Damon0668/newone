@@ -291,22 +291,22 @@
 			s.name,
 			s.number,
 			a.phone,
-		  	a.cust_global_id,
-			c.client_id
+		  	a.cust_global_id
+<!-- 			c.client_id -->
 		FROM
 			t_property_staff s,
-			t_staff_archive a,
-			t_staff_msg_client c
+			t_staff_archive a
+<!-- 			t_staff_msg_client c -->
 		WHERE
 			s.work_status = '1'
 		AND s. STATUS = '1'
 		AND s.id = a.staff_id
-		AND s.id = c.staff_id
+<!-- 		AND s.id = c.staff_id -->
 		<if test="extra.departmentId != null and extra.departmentId != ''" >
        	AND s.department_id = #{extra.departmentId}
    		</if>
    		<if test="extra.oemCode != null and extra.oemCode != ''" >
-       	AND c.oem_code = #{extra.oemCode }
+       	AND s.oem_code = #{extra.oemCode }
    		</if>
 	</select>
 	
