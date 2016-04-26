@@ -395,6 +395,13 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			Map<String, Object> staffMap = null;
 			fieldModels = ((TaskModel)nodeModel).getFields();
 			for (FieldModel fieldModel : fieldModels) {
+				
+				//null 就读取创建人信息 并转成map 以便直接用key获取
+				if(ValidateHelper.isEmptyMap(staffMap)){
+					StaffWorkFlowUseVo propertyStaffVo = propertyStaffService.getStaffWorkFlowUseVo(staffId);
+					staffMap  = MyBeanUtil.createBean(propertyStaffVo, Map.class);
+				}
+				
 				//是否需要程序来设置默认值
 				if(fieldModel.getAttrMap().containsKey(ApprovalFlowConstants.AttrKey.DEFAULT_VALUE_TYPE)){
 					
@@ -403,14 +410,14 @@ public class ApprovalFlowService implements IApprovalFlowService{
 					String id = defaultValueType.split("_")[1];
 					//默认值为创建人的信息
 					if(type.equals(ApprovalFlowConstants.AttrKeySprit.CREATOR_INFO)){
-						//null 就读取创建人信息 并转成map 以便直接用key获取
-						if(ValidateHelper.isEmptyMap(staffMap)){
-							StaffWorkFlowUseVo propertyStaffVo = propertyStaffService.getStaffWorkFlowUseVo(staffId);
-							staffMap  = MyBeanUtil.createBean(propertyStaffVo, Map.class);
-						}
 						if(staffMap.containsKey(id))
 						fieldModel.getAttrMap().put(ApprovalFlowConstants.AttrKey.DEFAULT_VALUE, staffMap.get(id).toString());
 					}
+					
+				}
+				
+				if(fieldModel.getName().equals("title")){//默认标题，谁的什么流程
+					fieldModel.getAttrMap().put(ApprovalFlowConstants.AttrKey.DEFAULT_VALUE, staffMap.get("name")+"的"+process.getDisplayName());
 				}
 			}
 			

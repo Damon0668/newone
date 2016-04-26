@@ -313,7 +313,7 @@
 	<select id="getStaffWorkFlowUseVo"  resultMap="StaffWorkFlowUseVo" >
 	SELECT
 	pps.`name`,
-	pps.entry_time,
+	pps.entry_time as entryTime,
 	bts.sex,
 	pd.name as departmentName,
 	sd.name as positionName

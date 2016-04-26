@@ -45,6 +45,7 @@ import com.liefeng.property.api.ro.work.workFlow.GetDefaultUserRo;
 import com.liefeng.property.api.ro.work.workFlow.GetFieldsRo;
 import com.liefeng.property.api.ro.work.workFlow.GetListDataRo;
 import com.liefeng.property.api.ro.work.workFlow.GetUserRo;
+import com.liefeng.property.api.ro.work.workFlow.InitProcessRo;
 import com.liefeng.property.api.ro.work.workFlow.OrderIdRo;
 import com.liefeng.property.api.ro.work.workFlow.StartOrExecuteRo;
 import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
@@ -292,6 +293,14 @@ public class WorkFlowController {
 	@ResponseBody
 	public ReturnValue backTask(@Valid @ModelAttribute BackTaskRo backTaskRo){
 		approvalFlowService.backTask(backTaskRo.getTaskId(), backTaskRo.getStaffId());
+		return ReturnValue.success();
+	}
+	
+	@ApiOperation(value="指定流程发布")
+	@RequestMapping(value="/initProcess2", method=RequestMethod.POST)
+	@ResponseBody
+	public ReturnValue initProcess2(@Valid @ModelAttribute InitProcessRo initProcessRo){
+		workflowService.initFlows(initProcessRo.getProcessName(),initProcessRo.getOemCode());
 		return ReturnValue.success();
 	}
 	
