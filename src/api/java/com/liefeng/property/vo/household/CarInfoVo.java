@@ -24,6 +24,11 @@ public class CarInfoVo extends BaseValue {
 	 * 项目ID
 	 */
 	private String projectId;
+	
+	/**
+	 * 项目名称
+	 */
+	private String projectName;
 
 	/**
 	 * 所有人ID。当为业主时，对应业主表ID；当为住户时，对应住户表ID；当为员工时，对应员工表ID
@@ -100,6 +105,14 @@ public class CarInfoVo extends BaseValue {
 
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 
 	public String getOwnerId() {
