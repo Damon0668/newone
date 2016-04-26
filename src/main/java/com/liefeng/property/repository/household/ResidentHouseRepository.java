@@ -25,4 +25,9 @@ public interface ResidentHouseRepository extends JpaRepository<ResidentHousePo, 
 	 * @date 2016年3月17日 下午5:37:21
 	 */
 	public ResidentHousePo findByResidentIdAndHouseId(String residentId, String houseId);
+	
+	/**
+	 * 根据住户id residentHouse
+	 */
+	public ResidentHousePo findByResidentId(String residentId);
 }

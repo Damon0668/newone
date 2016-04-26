@@ -6,6 +6,7 @@ import com.liefeng.base.vo.UserVo;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.household.CheckinQueueBo;
+import com.liefeng.property.bo.household.MovedOutResidentBo;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.bo.household.ResidentFeedbackBo;
@@ -580,5 +581,26 @@ public interface IHouseholdService {
 	 * @date 2016年4月15日 下午6:01:44
 	 */
 	public VisitorVo updateVisitor(VisitorVo visitorVo);
+	
+	/**
+	 * 删除住户（逻辑删除）
+	 * @param residentId
+	 */
+	public void deleteResident(String residentId,String staffId);
+	
+	/**
+	 * 住户迁出
+	 * @param residentId
+	 * @param staffId
+	 */
+	public void movedOutResident(String residentId, String staffId);
+	
+	/**
+	 * 客户迁出列表
+	 * @param movedOutResidentBo
+	 */
+	public void getMovedIntoResident(MovedOutResidentBo movedOutResidentBo);
+
+
 	
 }

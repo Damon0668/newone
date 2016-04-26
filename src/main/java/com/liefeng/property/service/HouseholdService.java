@@ -30,6 +30,7 @@ import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.household.CheckinQueueBo;
+import com.liefeng.property.bo.household.MovedOutResidentBo;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.bo.household.ResidentFeedbackBo;
@@ -45,6 +46,7 @@ import com.liefeng.property.domain.household.ProprietorHouseContext;
 import com.liefeng.property.domain.household.ResidentCarContext;
 import com.liefeng.property.domain.household.ResidentContext;
 import com.liefeng.property.domain.household.ResidentFeedbackContext;
+import com.liefeng.property.domain.household.ResidentHistoryContext;
 import com.liefeng.property.domain.household.ResidentHouseContext;
 import com.liefeng.property.domain.household.VisitorContext;
 import com.liefeng.property.domain.project.HouseContext;
@@ -60,6 +62,7 @@ import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
 import com.liefeng.property.vo.household.ResidentCarVo;
 import com.liefeng.property.vo.household.ResidentFeedbackVo;
+import com.liefeng.property.vo.household.ResidentHistoryVo;
 import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
 import com.liefeng.property.vo.household.UserClientIdVo;
@@ -1211,5 +1214,60 @@ public class HouseholdService implements IHouseholdService {
 	public VisitorVo updateVisitor(VisitorVo visitorVo) {
 		return VisitorContext.build(visitorVo).update();
 	}
+	
+	@Transactional
+	@Override
+	public void deleteResident(String residentId,String staffId){
+		ResidentVo residentVo = ResidentContext.loadById(residentId).get();
 		
+		if(residentVo != null){
+			if(residentVo.getStatus().equals(HouseholdConstants.ResidentStatus.CANCEL)){
+				throw new PropertyException(HouseholdErrorCode.RESIDENT_ALREADY_CANCEL);
+			}
+			residentVo.setStatus(HouseholdConstants.ResidentStatus.CANCEL);
+			ResidentContext.build(residentVo).update();
+			
+			ResidentHistoryVo residentHistoryVo = new ResidentHistoryVo();
+			residentHistoryVo.setName(residentVo.getName());
+			residentHistoryVo.setMobile(residentVo.getMobile());
+			residentHistoryVo.setStaffId(staffId);
+			residentHistoryVo.setBusitype(HouseholdConstants.busitype.DELETE);
+			ResidentHouseVo residentHouseVo =  ResidentHouseContext.build().findResidentId(residentVo.getId());
+			
+			residentHistoryVo.setResidentHouseId(residentHouseVo.getId());
+			
+			ResidentHistoryContext.build(residentHistoryVo).create();
+		}
+	}
+	
+	@Transactional
+	@Override
+	public void movedOutResident(String residentId,String staffId){
+	ResidentVo residentVo = ResidentContext.loadById(residentId).get();
+		
+		if(residentVo != null){
+			if(residentVo.getStatus().equals(HouseholdConstants.ResidentStatus.CANCEL)){
+				throw new PropertyException(HouseholdErrorCode.RESIDENT_ALREADY_CANCEL);
+			}
+			
+			residentVo.setStatus(HouseholdConstants.ResidentStatus.CANCEL);
+			ResidentContext.build(residentVo).update();
+			
+			ResidentHistoryVo residentHistoryVo = new ResidentHistoryVo();
+			residentHistoryVo.setName(residentVo.getName());
+			residentHistoryVo.setMobile(residentVo.getMobile());
+			residentHistoryVo.setStaffId(staffId);
+			residentHistoryVo.setBusitype(HouseholdConstants.busitype.MOVEDOUT);
+			ResidentHouseVo residentHouseVo =  ResidentHouseContext.build().findResidentId(residentVo.getId());
+			
+			residentHistoryVo.setResidentHouseId(residentHouseVo.getId());
+			
+			ResidentHistoryContext.build(residentHistoryVo).create();
+		}
+	}
+	
+	@Override
+	public void getMovedIntoResident (MovedOutResidentBo movedOutResidentBo){
+		
+	}
 }

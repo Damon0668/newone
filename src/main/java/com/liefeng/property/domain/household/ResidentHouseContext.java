@@ -156,6 +156,17 @@ public class ResidentHouseContext {
 		}
 		return residentHouseVo;
 	}
+	
+	/**
+	 * 根据住户id，获取residentHouse
+	 * @param residentId
+	 * @return
+	 */
+	public ResidentHouseVo findResidentId(String residentId) {
+		ResidentHousePo residentHousePo = residentHouseRepository.findByResidentId(residentId);
+		return MyBeanUtil.createBean(residentHousePo, ResidentHouseVo.class);
+	}
+	
 	protected void setResidentHouseId(String residentHouseId) {
 		this.residentHouseId = residentHouseId;
 	}
@@ -163,6 +174,8 @@ public class ResidentHouseContext {
 	protected void setResidentHouse(ResidentHouseVo residentHouse) {
 		this.residentHouse = residentHouse;
 	}
+
+	
 	
 	
 	

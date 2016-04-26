@@ -62,7 +62,10 @@ public enum HouseholdErrorCode implements IErrorCode {
 	
 	CHECKIN_PROPRIETOR_CHECK("业主情况登记"),
 	
-	CHECKIN_PROPRIETOR_MODIFY("修改业主登记资料"),
+	CHECKIN_PROPRIETOR_MODIFY("修改业主登记资料"), 
+	
+	/****************住户历史********************/
+	RESIDENT_ALREADY_CANCEL("该住户已经注销了"),
 	;
 
 	private String desc;

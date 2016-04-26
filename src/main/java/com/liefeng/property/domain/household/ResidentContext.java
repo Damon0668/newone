@@ -270,7 +270,10 @@ public class ResidentContext {
 		
 		return residentQueryRepository.queryRelatedHouses(pagingParamVo);
 	}
-
+	
+	public ResidentVo get() {
+		return MyBeanUtil.createBean(residentRepository.findOne(residentId),ResidentVo.class);
+	}
 	
 	protected void setResidentId(String residentId) {
 		this.residentId = residentId;

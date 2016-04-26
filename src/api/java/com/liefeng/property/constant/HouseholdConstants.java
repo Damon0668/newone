@@ -148,4 +148,27 @@ public class HouseholdConstants {
 		
 	}
 	
+
+	/**
+	 * 住户历史记录 业务类型
+	 */
+	public static interface busitype {
+		
+		/**
+		 * 0：删除
+		 */
+		public String DELETE = "0";
+		
+		/**
+		 * 1：迁出
+		 */
+		public String  MOVEDOUT = "1";
+		
+		/**
+		 * 2：迁入
+		 */
+		public String  MOVEDINTO  = "2";
+		
+	}
+	
 }

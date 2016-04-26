@@ -76,6 +76,11 @@ public class ResidentBo extends BaseValue {
 	 * 项目id
 	 */
 	private String projectId;
+	
+	/**
+	 * 状态。0：未审提交；1：正常；2：已注销
+	 */
+	private String status;
 
 	public String getResidentId() {
 		return residentId;
@@ -179,6 +184,14 @@ public class ResidentBo extends BaseValue {
 
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

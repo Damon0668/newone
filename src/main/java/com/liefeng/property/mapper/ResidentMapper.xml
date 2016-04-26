@@ -56,6 +56,10 @@
 	    AND r.custGlobalId =  #{extra.custGlobalId}
 	</if>
 	
+	<if test="extra.status != null and extra.status != ''" >
+	    AND r.status =  #{extra.status}
+	</if>
+	
 </trim>
 </sql>
 

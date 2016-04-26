@@ -242,7 +242,8 @@ public class PropertyDepartmentContext {
 
 	public List<PropertyDepartmentVo> getDepartments(String projectId) {
 		List<PropertyDepartmentPo> departmentPoList = 
-				propertyDepartmentRepository.findDepartmentsByProjectId(projectId);
+				propertyDepartmentRepository.findDepartments(projectId,
+						ContextManager.getInstance().getOemCode());
 		return MyBeanUtil.createList(departmentPoList, PropertyDepartmentVo.class);
 	}
 
