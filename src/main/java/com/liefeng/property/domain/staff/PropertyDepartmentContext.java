@@ -235,13 +235,13 @@ public class PropertyDepartmentContext {
 	/**
 	 * 删除部门信息
 	 */
-	public void delete() {
+	public void delete(){
 		if(ValidateHelper.isNotEmptyString(propertyDepartmentId)) {
 			
-			PropertyDepartmentPo propertyDepartmentPo = propertyDepartmentRepository.findOne(propertyDepartment.getId());
+			PropertyDepartmentPo propertyDepartmentPo = propertyDepartmentRepository.findOne(propertyDepartmentId);
 			
 			if(propertyDepartmentPo != null 
-					&& SysConstants.DEFAULT_ID.equals(propertyDepartment.getParentId())){
+					&& SysConstants.DEFAULT_ID.equals(propertyDepartmentPo.getParentId())){
 				List<PropertyDepartmentPo> parentDepts = propertyDepartmentRepository.findDepartmentsByParentId(propertyDepartmentId);
 				
 				if(ValidateHelper.isNotEmptyCollection(parentDepts)){
