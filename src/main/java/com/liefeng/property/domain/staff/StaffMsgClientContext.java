@@ -88,7 +88,7 @@ public class StaffMsgClientContext {
 	@Transactional
 	public void create(){
 		if(staffMsgClient != null){
-			clearOtherClientID(clientId);
+			clearOtherClientID(staffMsgClient.getClientId());
 			StaffMsgClientPo staffMsgClientPo = MyBeanUtil.createBean(staffMsgClient, StaffMsgClientPo.class);
 			staffMsgClientPo.setId(UUIDGenerator.generate());
 			staffMsgClientPo.setUpdateTime(new Date());
