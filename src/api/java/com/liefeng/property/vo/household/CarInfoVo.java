@@ -65,6 +65,13 @@ public class CarInfoVo extends BaseValue {
 	 */
 	@Dict(group = "SUITABLE_CAR")
 	private String vehicleType;
+	
+	/**
+	 * 该字段的值与vehicleType字段相同
+	 * 由于返回数据时，vehicleType字段会做字典【值-名】处理
+	 * 故用此字段保留vehicleType字段原值，用于前端页面使用
+	 */
+	private String realValue;
 
 	/**
 	 * 品牌
@@ -174,6 +181,14 @@ public class CarInfoVo extends BaseValue {
 
 	public void setVehicleType(String vehicleType) {
 		this.vehicleType = vehicleType;
+	}
+
+	public String getRealValue() {
+		return realValue;
+	}
+
+	public void setRealValue(String realValue) {
+		this.realValue = realValue;
 	}
 
 	public String getBrand() {
