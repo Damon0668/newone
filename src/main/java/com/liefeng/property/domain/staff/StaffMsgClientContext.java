@@ -87,6 +87,7 @@ public class StaffMsgClientContext {
 	
 	public void create(){
 		if(staffMsgClient != null){
+			clearOtherClientID(clientId);
 			StaffMsgClientPo staffMsgClientPo = MyBeanUtil.createBean(staffMsgClient, StaffMsgClientPo.class);
 			staffMsgClientPo.setId(UUIDGenerator.generate());
 			staffMsgClientPo.setUpdateTime(new Date());
@@ -99,8 +100,8 @@ public class StaffMsgClientContext {
 		if(ValidateHelper.isNotEmptyString(staffId)){
 			StaffMsgClientPo staffMsgClientPo =  staffMsgClientRepository.findByStaffId(staffId);
 			//清除其他绑定此clientId的数据
-			clearOtherClientID(clientId);
 			if(staffMsgClientPo != null){
+				clearOtherClientID(clientId);
 				staffMsgClientPo.setClientId(clientId);
 				staffMsgClientPo.setUpdateTime(new Date());
 				staffMsgClientRepository.save(staffMsgClientPo);
