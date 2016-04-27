@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.ResidentHouseQueryRepository" > 
+
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.household.ResidentHouseVo" >
+</resultMap>
+
+
+<select id="queryByIdNum"  resultMap="BaseResultMap">
+	SELECT
+		h.id,
+		h.resident_id as residentId,
+		h.project_id as projectId,
+		h.proprietor_id as proprietorId,
+		h.resident_type as residentType,
+		h.resident_relation as residentRelation
+	FROM
+		basic.t_customer c,
+		property.t_resident r,
+		property.t_resident_house h
+	WHERE
+		c.global_id = r.cust_global_id
+	<if test="extra.idNum != null and extra.idNum != ''" >
+        AND c.id_num = #{extra.idNum}
+    </if>
+	AND r.id = h.resident_id
+	<if test="extra.projectId != null and extra.projectId != ''" >
+        AND r.project_id = #{extra.projectId}
+    </if>
+    <if test="extra.houseId != null and extra.houseId != ''" >
+        AND h.house_id = #{extra.houseId}
+    </if>
+     <if test="extra.oemCode != null and extra.oemCode != ''" >
+        AND r.oem_code = #{extra.oemCode}
+    </if>
+</select>
+
+
+</mapper>

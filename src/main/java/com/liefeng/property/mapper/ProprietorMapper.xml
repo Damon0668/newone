@@ -19,6 +19,11 @@
 <resultMap id="UserClientIdResultMap" type="com.liefeng.property.vo.household.UserClientIdVo" >
 </resultMap>
 
+<!-- 业主信息 -->
+<resultMap id="proprietorMap" type="com.liefeng.property.vo.household.ProprietorVo">
+
+</resultMap>
+
 <!-- 业主查询条件 -->
 <sql id="Example_Where_Clause">
 	WHERE 1=1 
@@ -501,6 +506,20 @@ UNION
 	<if test="extra.oemCode != null and extra.oemCode != ''" >
 	AND h.oem_code = #{extra.oemCode}
 	</if>
+</select>
+
+<select id="queryByHouseNum" resultMap="proprietorMap">
+	SELECT
+		p.id,
+		p.name
+	FROM
+		property.t_proprietor p
+		LEFT JOIN property.t_proprietor_house ph ON ph.proprietor_id = p.id
+		AND ph.project_id = p.project_id
+	WHERE
+		p.project_id = #{projectId}
+		AND ph.house_num = #{houseNum}
+		AND p.oem_code = #{oemCode}
 </select>
 
 </mapper>   

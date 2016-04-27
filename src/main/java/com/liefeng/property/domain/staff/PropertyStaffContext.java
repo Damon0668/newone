@@ -362,7 +362,11 @@ public class PropertyStaffContext {
 		Map<String, String> param = new  HashMap<String, String>();
 		param.put("projectId", projectId);
 		param.put("departmentId", departmentId);
-		return propertyStaffQueryRepository.getDepartmentDirectorList(param);
+		List<PropertyStaffVo> propertyStaffVos = propertyStaffQueryRepository.getDepartmentDirectorList(param);
+		List<PropertyStaffVo> propertyStaffVos2 = propertyStaffQueryRepository.getDepartmentDirector2List(param);
+		if(propertyStaffVos2 != null && propertyStaffVos2.size() > 0)
+			propertyStaffVos.addAll(propertyStaffVos2);
+		return propertyStaffVos;
 	}
 
 	/**
@@ -435,6 +439,40 @@ public class PropertyStaffContext {
 	 */
 	public StaffWorkFlowUseVo getStaffWorkFlowUseVo(String staffId) {
 		return propertyStaffQueryRepository.getStaffWorkFlowUseVo(staffId);
+	}
+	
+	/**
+	 * 根据部门id，获取该部门在职、激活的员工
+	 * @param deptId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月25日 下午4:11:40
+	 */
+	public List<PropertyStaffVo> getStaffByDepartmentId(String deptId){
+		List<PropertyStaffVo> staffVoList = null;
+		if(ValidateHelper.isNotEmptyString(deptId)){
+			String oemCode = ContextManager.getInstance().getOemCode();
+		
+			List<PropertyStaffPo> staffPoList = propertyStaffRepository.findByDepartmentIdAndOemCode(deptId, oemCode);
+			
+			staffVoList = MyBeanUtil.createList(staffPoList, PropertyStaffVo.class);
+			logger.info("【PropertyStaffContext.getStaffByDepartmentId】Query staff:{} by deptId:{}", staffVoList, deptId);
+		}
+		
+		return staffVoList;
+	}
+	
+	/**
+	 * 根据员工工号查询员工
+	 * @param number 员工工号
+	 * @return
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public List<PropertyStaffVo> listPropertyStaffByNumber(String number) {
+		String oemCode = ContextManager.getInstance().getOemCode();
+		List<PropertyStaffPo> dataList = propertyStaffRepository.findByNumberAndOemCode(number, oemCode);
+		return MyBeanUtil.createList(dataList, PropertyStaffVo.class);
 	}
 	
 }

@@ -51,6 +51,10 @@
 	    AND r.custGlobalId =  #{extra.custGlobalId}
 	</if>
 	
+	<if test="extra.status != null and extra.status != ''" >
+	    AND r.status =  #{extra.status}
+	</if>
+	
 </trim>
 </sql>
 
@@ -220,6 +224,21 @@ ORDER BY
 	WHERE
 		rh.house_id = #{extra.houseId}
 	AND r.status = '1'
+</select>
+
+<select id="queryByHouseNum" resultMap="BaseResultMap">
+	SELECT
+		r.id,
+		r.name
+	FROM
+		property.t_resident r
+		LEFT JOIN property.t_resident_house rh ON rh.resident_id = r.id
+		AND rh.project_id = r.project_id
+		LEFT JOIN property.t_house h ON rh.house_id = h.id
+	WHERE
+		r.project_id = #{projectId}
+		AND r.oem_code = #{oemCode}
+		AND h.house_num = #{houseNum}
 </select>
 
 </mapper>

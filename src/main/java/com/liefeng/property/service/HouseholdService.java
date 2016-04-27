@@ -26,10 +26,11 @@ import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.user.IUserService;
 import com.liefeng.intf.property.IHouseholdService;
 import com.liefeng.intf.property.IProjectService;
-import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
+import com.liefeng.property.bo.household.CarInfoBo;
 import com.liefeng.property.bo.household.CheckinQueueBo;
+import com.liefeng.property.bo.household.MovedOutResidentBo;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.bo.household.ResidentFeedbackBo;
@@ -37,6 +38,7 @@ import com.liefeng.property.constant.HouseholdConstants;
 import com.liefeng.property.constant.ProjectConstants;
 import com.liefeng.property.domain.household.AppFriendContext;
 import com.liefeng.property.domain.household.AppMsgSettingContext;
+import com.liefeng.property.domain.household.CarInfoContext;
 import com.liefeng.property.domain.household.CheckinMaterialContext;
 import com.liefeng.property.domain.household.CheckinQueueContext;
 import com.liefeng.property.domain.household.CheckinScheduleContext;
@@ -45,13 +47,16 @@ import com.liefeng.property.domain.household.ProprietorHouseContext;
 import com.liefeng.property.domain.household.ResidentCarContext;
 import com.liefeng.property.domain.household.ResidentContext;
 import com.liefeng.property.domain.household.ResidentFeedbackContext;
+import com.liefeng.property.domain.household.ResidentHistoryContext;
 import com.liefeng.property.domain.household.ResidentHouseContext;
 import com.liefeng.property.domain.household.VisitorContext;
 import com.liefeng.property.domain.project.HouseContext;
+import com.liefeng.property.domain.staff.PropertyStaffContext;
 import com.liefeng.property.error.HouseholdErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.vo.household.AppFriendVo;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
+import com.liefeng.property.vo.household.CarInfoVo;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
 import com.liefeng.property.vo.household.CheckinQueueVo;
 import com.liefeng.property.vo.household.CheckinScheduleVo;
@@ -60,11 +65,13 @@ import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
 import com.liefeng.property.vo.household.ResidentCarVo;
 import com.liefeng.property.vo.household.ResidentFeedbackVo;
+import com.liefeng.property.vo.household.ResidentHistoryVo;
 import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
 import com.liefeng.property.vo.household.UserClientIdVo;
 import com.liefeng.property.vo.household.VisitorVo;
 import com.liefeng.property.vo.project.HouseVo;
+import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.service.constant.PushActionConstants;
 
 /**
@@ -89,9 +96,6 @@ public class HouseholdService implements IHouseholdService {
 
 	@Autowired
 	private IProjectService projectService;
-	
-	@Autowired
-	private IPushMsgService pushMsgService;
 	
 	@Autowired
 	private PropertyPushMsgService propertyPushMsgService;
@@ -248,11 +252,14 @@ public class HouseholdService implements IHouseholdService {
 				logger.info("住户信息已存在，后续将不执行住户、用户创建动作");
 			}
 
-			// 保存住户房屋信息
+			// 判断该住户是否已经关联了该房产，没有关联才做新增操作
 			ResidentHouseVo residentHouse = resident.getResidentHouse();
-			residentHouse.setResidentId(existedResident.getId());
-			ResidentHouseContext residentHouseContext = ResidentHouseContext.build(residentHouse);
-			residentHouseContext.create();
+			if(ResidentHouseContext.build().getResidentHouse(existedResident.getId(), residentHouse.getHouseId()) == null) {
+				// 保存住户房屋信息
+				residentHouse.setResidentId(existedResident.getId());
+				ResidentHouseContext residentHouseContext = ResidentHouseContext.build(residentHouse);
+				residentHouseContext.create();
+			}
 
 			// 仅当同个OEM下，同个小区下住户不存在时，才做用户创建
 			// 住户信息存在时，即使传过来的手机号不同也不做用户创建,即customer存在而user不存在
@@ -1211,5 +1218,142 @@ public class HouseholdService implements IHouseholdService {
 	public VisitorVo updateVisitor(VisitorVo visitorVo) {
 		return VisitorContext.build(visitorVo).update();
 	}
+	
+	@Transactional
+	@Override
+	public void deleteResident(String residentId,String staffId){
+		ResidentVo residentVo = ResidentContext.loadById(residentId).get();
 		
+		if(residentVo != null){
+			if(residentVo.getStatus().equals(HouseholdConstants.ResidentStatus.CANCEL)){
+				throw new PropertyException(HouseholdErrorCode.RESIDENT_ALREADY_CANCEL);
+			}
+			residentVo.setStatus(HouseholdConstants.ResidentStatus.CANCEL);
+			ResidentContext.build(residentVo).update();
+			
+			ResidentHistoryVo residentHistoryVo = new ResidentHistoryVo();
+			residentHistoryVo.setName(residentVo.getName());
+			residentHistoryVo.setMobile(residentVo.getMobile());
+			residentHistoryVo.setStaffId(staffId);
+			residentHistoryVo.setBusitype(HouseholdConstants.busitype.DELETE);
+			ResidentHouseVo residentHouseVo =  ResidentHouseContext.build().findResidentId(residentVo.getId());
+			
+			residentHistoryVo.setResidentHouseId(residentHouseVo.getId());
+			
+			ResidentHistoryContext.build(residentHistoryVo).create();
+		}
+	}
+	
+	@Transactional
+	@Override
+	public void movedOutResident(String residentId,String staffId){
+	ResidentVo residentVo = ResidentContext.loadById(residentId).get();
+		
+		if(residentVo != null){
+			if(residentVo.getStatus().equals(HouseholdConstants.ResidentStatus.CANCEL)){
+				throw new PropertyException(HouseholdErrorCode.RESIDENT_ALREADY_CANCEL);
+			}
+			
+			residentVo.setStatus(HouseholdConstants.ResidentStatus.CANCEL);
+			ResidentContext.build(residentVo).update();
+			
+			ResidentHistoryVo residentHistoryVo = new ResidentHistoryVo();
+			residentHistoryVo.setName(residentVo.getName());
+			residentHistoryVo.setMobile(residentVo.getMobile());
+			residentHistoryVo.setStaffId(staffId);
+			residentHistoryVo.setBusitype(HouseholdConstants.busitype.MOVEDOUT);
+			ResidentHouseVo residentHouseVo =  ResidentHouseContext.build().findResidentId(residentVo.getId());
+			
+			residentHistoryVo.setResidentHouseId(residentHouseVo.getId());
+			
+			ResidentHistoryContext.build(residentHistoryVo).create();
+		}
+	}
+	
+	@Transactional
+	@Override
+	public void movedIntoResident(String residentId,String staffId){
+	ResidentVo residentVo = ResidentContext.loadById(residentId).get();
+		
+		if(residentVo != null){
+			if(residentVo.getStatus().equals(HouseholdConstants.ResidentStatus.ACTIVE)){
+				throw new PropertyException(HouseholdErrorCode.RESIDENT_ALREADY_ACTIVE);
+			}
+			
+			residentVo.setStatus(HouseholdConstants.ResidentStatus.ACTIVE);
+			ResidentContext.build(residentVo).update();
+			
+			ResidentHistoryVo residentHistoryVo = new ResidentHistoryVo();
+			residentHistoryVo.setName(residentVo.getName());
+			residentHistoryVo.setMobile(residentVo.getMobile());
+			residentHistoryVo.setStaffId(staffId);
+			residentHistoryVo.setBusitype(HouseholdConstants.busitype.MOVEDINTO);
+			ResidentHouseVo residentHouseVo =  ResidentHouseContext.build().findResidentId(residentVo.getId());
+			
+			residentHistoryVo.setResidentHouseId(residentHouseVo.getId());
+			
+			ResidentHistoryContext.build(residentHistoryVo).create();
+		}
+	}
+	
+	@Override
+	public DataPageValue<ResidentHistoryVo> getMovedOutResident(MovedOutResidentBo movedOutResidentBo, Integer currentPage, Integer pageSize){
+		return ResidentHistoryContext.build().list(movedOutResidentBo,currentPage,pageSize);
+	}
+	
+	@Override
+	public void deleteResidentHis(String hisId) {
+		ResidentHistoryContext.loadById(hisId).delete();
+	}
+	
+	public CarInfoVo saveCarInfo(CarInfoVo carInfoVo) {
+		CarInfoContext carInfoContext = CarInfoContext.build(carInfoVo);
+		return carInfoContext.create();
+	}
+
+	@Override
+	public CarInfoVo updateCarInfo(CarInfoVo carInfoVo) {
+		CarInfoContext carInfoContext = CarInfoContext.build(carInfoVo);
+		return carInfoContext.update();
+	}
+
+	@Override
+	public void deleteCarInfo(String carInfoId) {
+		CarInfoContext carInfoContext = CarInfoContext.loadById(carInfoId);
+		carInfoContext.delete();
+	}
+
+	@Override
+	public CarInfoVo findCarInfoById(String carInfoId) {
+		CarInfoContext carInfoContext = CarInfoContext.loadById(carInfoId);
+		return carInfoContext.get();
+	}
+
+	@Override
+	public DataPageValue<CarInfoVo> listCarInfo(CarInfoBo params, Integer currentPage, Integer pageSize) {
+		CarInfoContext carInfoContext = CarInfoContext.build();
+		return carInfoContext.listCarInfo(params, currentPage, pageSize);
+	}
+
+	@Override
+	public ResidentHouseVo findByIdNum(String idNum, String projectId,
+			String houseId) {
+		return ResidentHouseContext.build().findByIdNum(idNum, projectId, houseId);
+	}
+
+	@Override
+	public List<ProprietorVo> listProprietorByHouseNum(String projectId, String houseNum) {
+		return ProprietorContext.build().listProprietorByHouseNum(projectId, houseNum);
+	}
+
+	@Override
+	public List<ResidentVo> listResidentByHouseNum(String projectId, String houseNum) {
+		return ResidentContext.build().listResidentByHouseNum(projectId, houseNum);
+	}
+
+	@Override
+	public List<PropertyStaffVo> listPropertyStaffByNumber(String number) {
+		return PropertyStaffContext.build().listPropertyStaffByNumber(number);
+	}
+
 }

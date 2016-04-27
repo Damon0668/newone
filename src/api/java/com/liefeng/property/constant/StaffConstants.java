@@ -75,4 +75,26 @@ public class StaffConstants {
 	 * 通告审核权限
 	 */
 	public static final String NOTICE_CHECK = "ZXTG_SH";
+	
+	/**
+	 * 部门类型
+	 */
+	public static interface DeptType{
+		/**
+		 * 客服部
+		 */
+		public static final String CUSTOMER_SERVICE = "01"; 
+		
+	}
+	
+	/**
+	 * 部门固定id
+	 */
+	public static interface DeptId{
+		/**
+		 * 父id
+		 */
+		public static final String PARENTID = "0"; 
+		
+	}
 }

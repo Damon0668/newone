@@ -75,12 +75,14 @@
 		t.task_Name as taskName
 		FROM
 		service.wf_task t
+		left join service.wf_task_actor ta on t.id = ta.task_Id
 		left join property.t_event_process ep on t.id = ep.wf_task_id
 		left join property.t_event_report er on ep.event_id = er.id
-		Where t.order_id = #{extra.orderId}
+		Where t.order_id = #{extra.orderId} 
 		<if test="extra.staffid != null and extra.staffid != ''">
 		And ta.actor_Id = #{extra.staffid}
 		</if>
+		group by t.id
 	</select> 
 	
 	<select id="findEventProcess" resultMap="BaseResultMap2" >

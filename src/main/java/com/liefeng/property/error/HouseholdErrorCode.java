@@ -41,6 +41,11 @@ public enum HouseholdErrorCode implements IErrorCode {
 	RESIDENT_PHONE_NULL("住户手机号码为空"),
 	
 	/**
+	 * 该住户已经存在
+	 */
+	RESIDENT_EXIST_ALREADY("该住户已经存在"),
+	
+	/**
 	 * 住户名字为空
 	 */
 	RESIDENT_NAME_NULL("业主名字为空"),
@@ -62,7 +67,11 @@ public enum HouseholdErrorCode implements IErrorCode {
 	
 	CHECKIN_PROPRIETOR_CHECK("业主情况登记"),
 	
-	CHECKIN_PROPRIETOR_MODIFY("修改业主登记资料"),
+	CHECKIN_PROPRIETOR_MODIFY("修改业主登记资料"), 
+	
+	/****************住户历史********************/
+	RESIDENT_ALREADY_CANCEL("该住户已经注销了"),
+	RESIDENT_ALREADY_ACTIVE("该住户已经激活了"),
 	;
 
 	private String desc;

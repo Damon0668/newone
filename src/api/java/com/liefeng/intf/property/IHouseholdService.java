@@ -5,12 +5,15 @@ import java.util.List;
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
+import com.liefeng.property.bo.household.CarInfoBo;
 import com.liefeng.property.bo.household.CheckinQueueBo;
+import com.liefeng.property.bo.household.MovedOutResidentBo;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.bo.household.ResidentFeedbackBo;
 import com.liefeng.property.vo.household.AppFriendVo;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
+import com.liefeng.property.vo.household.CarInfoVo;
 import com.liefeng.property.vo.household.CheckinMaterialVo;
 import com.liefeng.property.vo.household.CheckinQueueVo;
 import com.liefeng.property.vo.household.CheckinScheduleVo;
@@ -19,10 +22,12 @@ import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.ProprietorVo;
 import com.liefeng.property.vo.household.ResidentCarVo;
 import com.liefeng.property.vo.household.ResidentFeedbackVo;
+import com.liefeng.property.vo.household.ResidentHistoryVo;
 import com.liefeng.property.vo.household.ResidentHouseVo;
 import com.liefeng.property.vo.household.ResidentVo;
 import com.liefeng.property.vo.household.UserClientIdVo;
 import com.liefeng.property.vo.household.VisitorVo;
+import com.liefeng.property.vo.staff.PropertyStaffVo;
 
 /**
  * household包相关表接口类
@@ -581,4 +586,127 @@ public interface IHouseholdService {
 	 */
 	public VisitorVo updateVisitor(VisitorVo visitorVo);
 	
+	/**
+	 * 删除住户（逻辑删除）
+	 * @param residentId
+	 */
+	public void deleteResident(String residentId,String staffId);
+	
+	/**
+	 * 住户迁出
+	 * @param residentId
+	 * @param staffId
+	 */
+	public void movedOutResident(String residentId, String staffId);
+	
+	/**
+	 * 客户迁出列表
+	 * @param movedOutResidentBo
+	 * @return 
+	 */
+	public DataPageValue<ResidentHistoryVo> getMovedOutResident(MovedOutResidentBo movedOutResidentBo,
+			Integer currentPage, Integer pageSize);
+	
+
+	/**
+	 * 保存车辆信息
+	 * @param carInfoVo 车辆信息
+	 * @return 保存后车辆信息
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public CarInfoVo saveCarInfo(CarInfoVo carInfoVo);
+	
+	/**
+	 * 更新车辆信息
+	 * @param carInfoVo 车辆信息
+	 * @return 更新后车辆信息
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public CarInfoVo updateCarInfo(CarInfoVo carInfoVo);
+	
+	/**
+	 * 删除车辆信息
+	 * @param carInfoId 车辆信息ID
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public void deleteCarInfo(String carInfoId);
+	
+	/**
+	 * 查询车辆信息
+	 * @param carInfoId 车辆信息ID
+	 * @return 车辆信息
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public CarInfoVo findCarInfoById(String carInfoId);
+	
+	/**
+	 * 分页查询车辆信息
+	 * @param params 查询过滤参数
+	 * @param currentPage 分页当前页
+	 * @param pageSize 分页大小
+	 * @return 车辆信息列表
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public DataPageValue<CarInfoVo> listCarInfo(CarInfoBo params, Integer currentPage, Integer pageSize);
+	
+	
+	/**
+	 * 根据身份证号码获取住户房屋关系
+	 * @param idNum
+	 * @param projectId
+	 * @param houseId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月26日 上午11:09:53
+	 */
+	public ResidentHouseVo findByIdNum(String idNum, String projectId, String houseId);
+	
+	/**
+	 * 删除迁出历史
+	 * @param hisId
+	 */
+	public void deleteResidentHis(String hisId);
+	
+	/**
+	 * 住户迁入
+	 * @param residentId
+	 * @param staffId
+	 */
+	public void movedIntoResident(String residentId, String staffId);
+	
+	/**
+	 * 根据房号查询业主
+	 * @param projectId 项目ID
+	 * @param houseNum 房号
+	 * @return
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public List<ProprietorVo> listProprietorByHouseNum(String projectId, String houseNum);
+	
+	/**
+	 * 根据房号查询住户
+	 * @param projectId 项目ID
+	 * @param houseNum 房号
+	 * @return
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public List<ResidentVo> listResidentByHouseNum(String projectId, String houseNum);
+	
+	/**
+	 * 根据员工工号查询员工
+	 * @param number 员工工号
+	 * @return
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public List<PropertyStaffVo> listPropertyStaffByNumber(String number);
+
+
 }

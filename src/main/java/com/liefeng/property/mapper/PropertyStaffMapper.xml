@@ -165,15 +165,38 @@
 	where ps.id = #{propertyStaffId}
 </select>
 
-
-<select id="getDepartmentDirectorList"  resultMap="PropertyStaffVo" >
+	<!-- 查询负责人1 -->
+	<select id="getDepartmentDirectorList"  resultMap="PropertyStaffVo" >
 	SELECT
 	ts.*,
 	pd.name as departmentName,
 	sd.name as positionName
 	FROM
 	t_property_department pd
-	LEFT JOIN t_property_staff ts ON pd.director_id = ts.id
+	LEFT JOIN t_property_staff ts ON pd.director_id = ts.id 
+	LEFT JOIN t_manage_project mp ON ts.id = mp.staff_id
+	left join t_sys_dict sd on sd.`value`=ts.position and sd.group_code ='POSITION'  
+	WHERE 1=1
+	<if test="projectId != null and projectId != ''">
+		AND mp.project_id = #{projectId}
+	</if>
+	<if test="departmentId != null and departmentId != ''">
+		AND pd.id= #{departmentId}
+	</if>
+	AND ts.id IS NOT NULL
+	GROUP BY
+	ts.id
+	</select>
+	
+	<!-- 查询负责人2 -->
+	<select id="getDepartmentDirector2List"  resultMap="PropertyStaffVo" >
+	SELECT
+	ts.*,
+	pd.name as departmentName,
+	sd.name as positionName
+	FROM
+	t_property_department pd
+	LEFT JOIN t_property_staff ts ON pd.director2_id = ts.id 
 	LEFT JOIN t_manage_project mp ON ts.id = mp.staff_id
 	left join t_sys_dict sd on sd.`value`=ts.position and sd.group_code ='POSITION'  
 	WHERE 1=1
@@ -252,8 +275,7 @@
 		s.id = p.staff_id
 	AND s.id = c.staff_id
 	AND s. STATUS = '1'
-	AND s.work_status = '1'
-	
+	AND s.work_status = '1'	
 	<if test="extra.projectId != null and extra.projectId != ''" >
 	AND p.project_id = #{extra.projectId}
 	</if>
@@ -291,7 +313,7 @@
 <select id="getStaffWorkFlowUseVo"  resultMap="StaffWorkFlowUseVo" >
 	SELECT
 	pps.`name`,
-	pps.entry_time,
+	pps.entry_time as entryTime,
 	bts.sex,
 	pd.name as departmentName,
 	sd.name as positionName

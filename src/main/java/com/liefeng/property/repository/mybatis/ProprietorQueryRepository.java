@@ -2,10 +2,13 @@ package com.liefeng.property.repository.mybatis;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
+import com.liefeng.property.vo.household.ProprietorVo;
 import com.liefeng.property.vo.household.UserClientIdVo;
 
 /**
@@ -72,5 +75,15 @@ public interface ProprietorQueryRepository extends BaseRepository<ProprietorSing
 	 * @date 2016年4月14日 上午10:09:33
 	 */
 	public ProprietorSingleHouseVo queryProprietorByProjectIdAndHouseNum(PagingParamVo param);
+	
+	/**
+	 * 根据房号查询业主
+	 * @param projectId 项目ID
+	 * @param houseNum 房号
+	 * @param oemCode OEM编码
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public List<ProprietorVo> queryByHouseNum(@Param("projectId") String projectId, @Param("houseNum") String houseNum, @Param("oemCode") String oemCode);
 	
 }

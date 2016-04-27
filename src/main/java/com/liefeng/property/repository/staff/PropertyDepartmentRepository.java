@@ -45,10 +45,37 @@ public interface PropertyDepartmentRepository extends JpaRepository<PropertyDepa
 	public PropertyDepartmentPo findParentDept(String deptType, String oemCode);
 	
 	/**
-	 * 根据项目id获取部门
+	 * 根据项目id获取部门 如果是父部门则根据oem来查询
 	 * @param projectId
 	 * @return
 	 */
-	public List<PropertyDepartmentPo> findDepartmentsByProjectId(String projectId);
+	@Query("SELECT dp FROM PropertyDepartmentPo dp WHERE dp.projectId =?1 or (dp.parentId = 0 and dp.oemCode = ?2)")
+	public List<PropertyDepartmentPo> findDepartments(String projectId,String oemCode);
+	
+	/**
+	 * 根据部门类型，获取某个部门
+	 * @param projectId
+	 * @param deptType
+	 * @param oemCode
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月25日 下午6:00:06
+	 */
+	public PropertyDepartmentPo findByProjectIdAndDeptTypeAndOemCode(String projectId, String deptType, String oemCode);
+
+	/**
+	 * 通过父部门id获取子部门
+	 * @param parentId
+	 * @return
+	 */
+	public List<PropertyDepartmentPo> findByParentId(String parentId);
+	
+	/**
+	 * 通过父部门id和项目id获取部门
+	 * @param parentId
+	 * @return
+	 */
+	public List<PropertyDepartmentPo> findByParentIdAndProjectId(
+			String parentId, String projectId);
 	
 }

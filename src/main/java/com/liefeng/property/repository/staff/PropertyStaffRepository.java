@@ -32,4 +32,14 @@ public interface PropertyStaffRepository extends JpaRepository<PropertyStaffPo, 
 	 */
 	@Query("select st from PropertyStaffPo st where st.departmentId = ?1 and st.oemCode = ?2 and  st.workStatus = '1' and st.status = '1' and creatorId != '0' ")
 	public List<PropertyStaffPo> findByDepartmentIdAndOemCode(String departmentId, String oemCode);
+	
+	/**
+	 * 根据员工工号查询员工
+	 * @param number 工号
+	 * @param oemCode OEM编码
+	 * @return
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public List<PropertyStaffPo> findByNumberAndOemCode(String number, String oemCode);
 }

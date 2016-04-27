@@ -2,6 +2,8 @@ package com.liefeng.property.repository.mybatis;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.vo.guard.GuardPRUserVo;
@@ -47,5 +49,15 @@ public interface ResidentQueryRepository extends BaseRepository<ResidentVo> {
 	 * 查询集合总数
 	 */
 	public Long queryGuardPRUserByCount(PagingParamVo param);
+	
+	/**
+	 * 根据房号查询住户
+	 * @param projectId 项目ID
+	 * @param houseNum 房号
+	 * @param oemCode OEM编码
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public List<ResidentVo> queryByHouseNum(@Param("projectId") String projectId, @Param("houseNum") String houseNum, @Param("oemCode") String oemCode);
 	
 }

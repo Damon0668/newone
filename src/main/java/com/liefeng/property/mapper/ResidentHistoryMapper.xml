@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.ResidentHistoryQueryRepository" > 
+
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.household.ResidentHistoryVo" >
+</resultMap>
+
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+
+<trim  suffixOverrides="," >
+	<if test="extra.projectId != null and extra.projectId != ''" >
+	    AND r.project_id =  #{extra.projectId}
+	</if>
+
+	<if test="extra.housenum != null and extra.housenum != ''" >
+	    AND h.house_num =  #{extra.houseNum}
+	</if>
+	
+	<if test="extra.name != null and extra.name != ''" >
+	    AND r.name =  #{extra.name}
+	</if>
+	
+	<if test="extra.name != null and extra.name != ''" >
+	    AND r.name =  #{extra.name}
+	</if>
+	
+	<if test="extra.startDate != null and extra.startDate != '' and 
+			extra.endDate != null and extra.endDate != ''">
+				AND rhis.create_time between #{extra.startDate} And
+				#{extra.endDate}
+	</if>
+	
+	<if test="extra.busitype != null and extra.busitype ">
+				AND rhis.busitype = #{extra.busitype}
+	</if>
+	
+</trim>
+</sql>
+
+<select id="queryByPage"  resultMap="BaseResultMap">
+	 SELECT
+	 	rhis.id as id,
+		p.full_name AS projectName,
+		h.house_num as houseNum,
+		r.`name` as name,
+		rh.resident_relation as relation,
+		r.mobile as mobile,
+		rhis.create_time as  createTime,
+		sa.`name` as staffName,
+		r.`status` as status,
+		rhis.busitype as busitype,
+		r.id as residentId
+	FROM
+		t_resident_history rhis
+	LEFT JOIN t_staff_archive sa ON sa.staff_id = rhis.staff_id ,
+		t_resident r 
+	LEFT JOIN t_project p ON p.id = r.project_id,
+		t_resident_house rh
+	LEFT JOIN t_house h ON h.id = rh.house_id
+	WHERE
+		rhis.resident_house_id = rh.id
+		AND r.id = rh.resident_id
+	  <include refid="Example_Where_Clause"/>
+	  ORDER BY rhis.create_time DESC
+	  <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+          ${pager.mysqlQueryCondition}
+      </if>
+</select>
+
+<select id="queryByCount"  resultType="java.lang.Long">
+	SELECT 
+	  COUNT(1) 
+	FROM
+	(  SELECT
+		rhis.id as id
+	FROM
+		t_resident_history rhis
+	LEFT JOIN t_staff_archive sa ON sa.staff_id = rhis.staff_id ,
+		t_resident r 
+	LEFT JOIN t_project p ON p.id = r.project_id,
+		t_resident_house rh
+	LEFT JOIN t_house h ON h.id = rh.house_id
+	WHERE
+		rhis.resident_house_id = rh.id
+		AND r.id = rh.resident_id
+	  <include refid="Example_Where_Clause"/>
+	  ) AS ttt
+</select>
+
+
+</mapper>

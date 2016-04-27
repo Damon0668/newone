@@ -37,11 +37,13 @@ import com.liefeng.intf.service.workflow.IWorkflowService;
 import com.liefeng.property.api.ro.work.workFlow.OrderIdRo;
 import com.liefeng.property.bo.approvalFlow.ApprovalFlowBo;
 import com.liefeng.property.constant.ApprovalFlowConstants;
+import com.liefeng.property.constant.StaffConstants;
 import com.liefeng.property.domain.staff.PropertyStaffContext;
 import com.liefeng.property.error.ApprovalFlowErrorCode;
 import com.liefeng.property.exception.ApprovalFlowException;
 import com.liefeng.property.vo.approvalFlow.HistoryTaskVo;
 import com.liefeng.property.vo.approvalFlow.ProcessVo;
+import com.liefeng.property.vo.staff.PropertyDepartmentVo;
 import com.liefeng.property.vo.staff.PropertyStaffVo;
 import com.liefeng.property.vo.staff.StaffWorkFlowUseVo;
 import com.liefeng.service.constant.PushActionConstants;
@@ -294,11 +296,27 @@ public class ApprovalFlowService implements IApprovalFlowService{
 					break;
 				case ApprovalFlowConstants.AssigneeType.ID_DIRECTORSELF: //id 为self 自己本部门的负责人
 					PropertyStaffVo propertyStaffVo = propertyStaffService.findPropertyStaffById4DP(staffId);
-					PropertyStaffVo propertyStaff = propertyStaffService.getDepartmentDirector(propertyStaffVo.getDepartmentId());
-					if(propertyStaff != null && !ids.containsKey(propertyStaff.getId())) {
-						ids.put(propertyStaff.getId(), propertyStaff.getId());
-						returnPropertyStaffVos.add(propertyStaff);
+					PropertyDepartmentVo departmentVo = propertyStaffService.getDepartment(propertyStaffVo.getDepartmentId());
+					List<PropertyStaffVo> propertyStaffs = propertyStaffService.getDepartmentDirectorList(null,propertyStaffVo.getDepartmentId());
+					for (PropertyStaffVo deptStaffVo : propertyStaffs) {
+						if(deptStaffVo != null && !ids.containsKey(deptStaffVo.getId())) {
+							ids.put(deptStaffVo.getId(), deptStaffVo.getId());
+							returnPropertyStaffVos.add(deptStaffVo);
+						}
 					}
+					
+					//如果不是父 部门 则查询出父部门的负责人
+					if(!departmentVo.getParentId().equals(StaffConstants.DeptId.PARENTID)){
+						List<PropertyStaffVo> propertyStaffs2 = propertyStaffService.getDepartmentDirectorList(null,propertyStaffVo.getDepartmentId());
+						for (PropertyStaffVo deptStaffVo : propertyStaffs2) {
+							if(deptStaffVo != null && !ids.containsKey(deptStaffVo.getId())) {
+								ids.put(deptStaffVo.getId(), deptStaffVo.getId());
+								returnPropertyStaffVos.add(deptStaffVo);
+							}
+						}
+					}
+					
+					
 					break;
 				default: //默认直接部门id
 					PropertyStaffVo directorStaffVo = propertyStaffService.getDepartmentDirector(id);
@@ -377,6 +395,13 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			Map<String, Object> staffMap = null;
 			fieldModels = ((TaskModel)nodeModel).getFields();
 			for (FieldModel fieldModel : fieldModels) {
+				
+				//null 就读取创建人信息 并转成map 以便直接用key获取
+				if(ValidateHelper.isEmptyMap(staffMap)){
+					StaffWorkFlowUseVo propertyStaffVo = propertyStaffService.getStaffWorkFlowUseVo(staffId);
+					staffMap  = MyBeanUtil.createBean(propertyStaffVo, Map.class);
+				}
+				
 				//是否需要程序来设置默认值
 				if(fieldModel.getAttrMap().containsKey(ApprovalFlowConstants.AttrKey.DEFAULT_VALUE_TYPE)){
 					
@@ -385,14 +410,14 @@ public class ApprovalFlowService implements IApprovalFlowService{
 					String id = defaultValueType.split("_")[1];
 					//默认值为创建人的信息
 					if(type.equals(ApprovalFlowConstants.AttrKeySprit.CREATOR_INFO)){
-						//null 就读取创建人信息 并转成map 以便直接用key获取
-						if(ValidateHelper.isEmptyMap(staffMap)){
-							StaffWorkFlowUseVo propertyStaffVo = propertyStaffService.getStaffWorkFlowUseVo(staffId);
-							staffMap  = MyBeanUtil.createBean(propertyStaffVo, Map.class);
-						}
 						if(staffMap.containsKey(id))
 						fieldModel.getAttrMap().put(ApprovalFlowConstants.AttrKey.DEFAULT_VALUE, staffMap.get(id).toString());
 					}
+					
+				}
+				
+				if(fieldModel.getName().equals("title")){//默认标题，谁的什么流程
+					fieldModel.getAttrMap().put(ApprovalFlowConstants.AttrKey.DEFAULT_VALUE, staffMap.get("name")+"的"+process.getDisplayName());
 				}
 			}
 			

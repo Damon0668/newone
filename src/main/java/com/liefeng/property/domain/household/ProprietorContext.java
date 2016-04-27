@@ -346,6 +346,18 @@ public class ProprietorContext {
 		return proprietorQueryRepository.queryProprietorByProjectIdAndHouseNum(pagingParamVo);
 	}
 	
+	/**
+	 * 根据房号查询业主
+	 * @param projectId 项目ID
+	 * @param houseNum 房号
+	 * @author ZhenTingJun
+	 * @date 2016年4月26日
+	 */
+	public List<ProprietorVo> listProprietorByHouseNum(String projectId, String houseNum) {
+		String oemCode = ContextManager.getInstance().getOemCode();
+		return proprietorQueryRepository.queryByHouseNum(projectId, houseNum, oemCode);
+	}
+	
 	protected void setProprietorId(String proprietorId) {
 		this.proprietorId = proprietorId;
 	}

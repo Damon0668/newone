@@ -1,10 +1,9 @@
 package com.liefeng.property.domain.staff;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -203,6 +202,8 @@ public class PropertyDepartmentContext {
 					propertyDepartmentPo.setProjectId(SysConstants.DEFAULT_ID);
 				}
 				
+				
+				
 				//普通部门需要设置父部门
 				if(parent != null 
 						&& !SysConstants.DEFAULT_ID.equals(propertyDepartmentPo.getParentId())
@@ -234,16 +235,13 @@ public class PropertyDepartmentContext {
 	/**
 	 * 删除部门信息
 	 */
-	@Transactional
 	public void delete() {
 		if(ValidateHelper.isNotEmptyString(propertyDepartmentId)) {
 			
-			PropertyDepartmentPo propertyDepartmentPo = propertyDepartmentRepository.findOne(propertyDepartmentId);
+			PropertyDepartmentPo propertyDepartmentPo = propertyDepartmentRepository.findOne(propertyDepartment.getId());
 			
 			if(propertyDepartmentPo != null 
-					&& SysConstants.DEFAULT_ID.equals(propertyDepartmentPo.getParentId())
-					&& SysConstants.DEFAULT_ID.equals(propertyDepartmentPo.getProjectId())){
-				
+					&& SysConstants.DEFAULT_ID.equals(propertyDepartment.getParentId())){
 				List<PropertyDepartmentPo> parentDepts = propertyDepartmentRepository.findDepartmentsByParentId(propertyDepartmentId);
 				
 				if(ValidateHelper.isNotEmptyCollection(parentDepts)){
@@ -254,8 +252,6 @@ public class PropertyDepartmentContext {
 			
 			propertyDepartmentRepository.delete(propertyDepartmentId);
 			logger.info("Delete department: '{}' successfully!", propertyDepartmentId);
-			
-			StaffContactPrivilegeContext.build().deleteByDeptID(propertyDepartmentId);
 		}
 	}
 	
@@ -324,10 +320,67 @@ public class PropertyDepartmentContext {
 
 	public List<PropertyDepartmentVo> getDepartments(String projectId) {
 		List<PropertyDepartmentPo> departmentPoList = 
-				propertyDepartmentRepository.findDepartmentsByProjectId(projectId);
+				propertyDepartmentRepository.findDepartments(projectId,
+						ContextManager.getInstance().getOemCode());
 		return MyBeanUtil.createList(departmentPoList, PropertyDepartmentVo.class);
 	}
 
+	/**
+	 * 获取与项目有关的所有子部门，以及公司的领导部门
+	 * @param projectId
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月25日 下午3:37:26
+	 */
+	public List<PropertyDepartmentVo> findAllDepartmentByProjectId(String projectId){
+		List<PropertyDepartmentVo> propertyDepartmentList = null;
+		
+		if(ValidateHelper.isNotEmptyString(projectId)){
+			String oemCode = ContextManager.getInstance().getOemCode();
+			HashMap<String, String> paramMap = new HashMap<String, String>();
+			paramMap.put("projectId", projectId);
+			paramMap.put("oemCode", oemCode);
+			
+			PagingParamVo param = new PagingParamVo();
+			param.setExtra(paramMap);
+			
+			propertyDepartmentList = propertyDepartmentQueryRepository.findAllDepartmentByProjectId(param);
+		}
+		return propertyDepartmentList;
+	}
+	
+	/**
+	 * 通过部门类型，获取某项目的某部门
+	 * @param projectId
+	 * @param deptType
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月25日 下午6:02:59
+	 */
+	public PropertyDepartmentVo findByDeptType(String projectId, String deptType){
+		PropertyDepartmentVo departmentVo = null;
+		if(ValidateHelper.isNotEmptyString(projectId) && ValidateHelper.isNotEmptyString(deptType)){
+			String oemCode = ContextManager.getInstance().getOemCode();
+			PropertyDepartmentPo propertyDepartmentPo = propertyDepartmentRepository.findByProjectIdAndDeptTypeAndOemCode(projectId, deptType, oemCode);
+		
+			departmentVo = MyBeanUtil.createBean(propertyDepartmentPo, PropertyDepartmentVo.class);
+		}
+		
+		return departmentVo;
+	}
+	
+	/**
+	 * 获取子部门
+	 * @param parentId
+	 * @return
+	 */
+	public List<PropertyDepartmentVo> findByParentIdAndProjectId(
+			String parentId,String projectId) {
+		List<PropertyDepartmentPo> departmentPoList = 
+				propertyDepartmentRepository.findByParentIdAndProjectId(parentId,projectId);
+		return MyBeanUtil.createList(departmentPoList, PropertyDepartmentVo.class);
+	}
+	
 	protected void setPropertyDepartmentId(String propertyDepartmentId) {
 		this.propertyDepartmentId = propertyDepartmentId;
 	}
@@ -335,4 +388,6 @@ public class PropertyDepartmentContext {
 	protected void setPropertyDepartment(PropertyDepartmentVo propertyDepartment) {
 		this.propertyDepartment = propertyDepartment;
 	}
+
+	
 }
