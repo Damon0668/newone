@@ -307,7 +307,7 @@ public class ApprovalFlowService implements IApprovalFlowService{
 					
 					//如果不是父 部门 则查询出父部门的负责人
 					if(!departmentVo.getParentId().equals(StaffConstants.DeptId.PARENTID)){
-						List<PropertyStaffVo> propertyStaffs2 = propertyStaffService.getDepartmentDirectorList(null,propertyStaffVo.getDepartmentId());
+						List<PropertyStaffVo> propertyStaffs2 = propertyStaffService.getDepartmentDirectorList(null,departmentVo.getParentId());
 						for (PropertyStaffVo deptStaffVo : propertyStaffs2) {
 							if(deptStaffVo != null && !ids.containsKey(deptStaffVo.getId())) {
 								ids.put(deptStaffVo.getId(), deptStaffVo.getId());
