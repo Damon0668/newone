@@ -85,6 +85,7 @@ public class StaffMsgClientContext {
 		return staffMsgClientContext;
 	}
 	
+	@Transactional
 	public void create(){
 		if(staffMsgClient != null){
 			clearOtherClientID(clientId);

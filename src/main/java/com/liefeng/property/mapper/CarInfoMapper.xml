@@ -61,6 +61,7 @@
 		ci.staff_num AS staffNum,
 		ci.plate_num AS plateNum,
 		ci.vehicle_type AS vehicleType,
+		ci.vehicle_type AS realValue,
 		ci.brand AS brand,
 		ci.color AS color,
 		ci.oem_code AS oemCode,
@@ -70,6 +71,8 @@
 		property.t_car_info ci
 		LEFT JOIN property.t_project p ON p.id = ci.project_id
 	<include refid="Where_Clause"/>
+	ORDER BY
+		ci.create_time DESC
 	<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
           ${pager.mysqlQueryCondition}
     </if>   
