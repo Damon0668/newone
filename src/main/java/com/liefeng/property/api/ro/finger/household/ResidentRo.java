@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 
+import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.core.entity.BaseValue;
 
 /**
@@ -17,13 +18,13 @@ public class ResidentRo extends BaseValue {
 	
 	private static final long serialVersionUID = 3329242939253548989L;
 
-	@ApiModelProperty(value="业主ID", required=true)
-	@NotNull
 	private String proprietorId;
 	
-	@ApiModelProperty(value="房间ID", required=true)
-	@NotNull
 	private String houseId;
+	
+	@ApiModelProperty(value="房间号", required=true)
+	@NotNull
+	public String houseNum;
 	
 	@ApiModelProperty(value="头像")
 	private String pic;
@@ -57,6 +58,8 @@ public class ResidentRo extends BaseValue {
 	@ApiModelProperty(value="项目id", required=true)
 	@NotNull
 	private String projectId;
+	
+	private CustomerVo customer;
 
 	public String getProprietorId() {
 		return proprietorId;
@@ -144,6 +147,22 @@ public class ResidentRo extends BaseValue {
 
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
+	}
+
+	public String getHouseNum() {
+		return houseNum;
+	}
+
+	public void setHouseNum(String houseNum) {
+		this.houseNum = houseNum;
+	}
+
+	public CustomerVo getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(CustomerVo customer) {
+		this.customer = customer;
 	}
 
 }
