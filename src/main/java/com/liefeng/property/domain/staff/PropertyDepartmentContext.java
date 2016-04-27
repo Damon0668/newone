@@ -252,6 +252,8 @@ public class PropertyDepartmentContext {
 			
 			propertyDepartmentRepository.delete(propertyDepartmentId);
 			logger.info("Delete department: '{}' successfully!", propertyDepartmentId);
+			
+			StaffContactPrivilegeContext.build().deleteByDeptID(propertyDepartmentId);
 		}
 	}
 	
