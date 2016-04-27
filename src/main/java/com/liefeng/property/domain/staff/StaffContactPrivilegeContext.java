@@ -103,6 +103,13 @@ public class StaffContactPrivilegeContext{
 	}
 	
 	/**
+	 * 根据部门ID 删除
+	 * @param deptID
+	 */
+	public void deleteByDeptID(String deptID){
+		staffContactPrivilegeRepository.deleteByDepartmentId(deptID);
+	}
+	/**
 	 * 查找通讯录权限
 	 * @return
 	 */

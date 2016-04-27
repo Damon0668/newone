@@ -1,5 +1,7 @@
 package com.liefeng.property.bo.property;
 
+import java.util.List;
+
 import com.liefeng.core.entity.BaseValue;
 
 /**
@@ -31,6 +33,11 @@ public class PropertyStaffBo extends BaseValue {
 	 * 项目ID
 	 */
 	private String projectId;
+	
+	/**
+	 * 项目ID
+	 */
+	private List<String> projectIds;
 	
 	/**
 	 * oemCode租户编码
@@ -75,5 +82,13 @@ public class PropertyStaffBo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public List<String> getProjectIds() {
+		return projectIds;
+	}
+
+	public void setProjectIds(List<String> projectIds) {
+		this.projectIds = projectIds;
 	}
 }

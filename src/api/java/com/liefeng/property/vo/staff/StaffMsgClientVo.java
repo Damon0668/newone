@@ -33,6 +33,12 @@ public class StaffMsgClientVo extends BaseValue{
 	public StaffMsgClientVo(String staffId, String clientId){
 		this.staffId = staffId;
 		this.clientId = clientId;
+	}
+	
+	public StaffMsgClientVo(String staffId, String clientId, String oemCode){
+		this.staffId = staffId;
+		this.clientId = clientId;
+		this.oemCode = oemCode;
 	} 
 	
 	public String getId() {

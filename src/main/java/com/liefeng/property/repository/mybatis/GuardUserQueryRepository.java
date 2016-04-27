@@ -13,7 +13,7 @@ import com.liefeng.property.vo.household.ResidentVo;
  * @author ZhenTingJun
  * @date 2015-12-30
  */
-public interface ResidentQueryRepository extends BaseRepository<ResidentVo> {
+public interface GuardUserQueryRepository extends BaseRepository<ResidentVo> {
 	
 	/**
 	 * 根据ID和房屋ID查询住户

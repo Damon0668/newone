@@ -7,7 +7,7 @@ import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.guard.DevicePositionBo;
 import com.liefeng.property.bo.guard.GuardCardBo;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
-import com.liefeng.property.bo.guard.GuardResidentBo;
+import com.liefeng.property.bo.guard.GuardPRUserBo;
 import com.liefeng.property.vo.guard.AttendantVo;
 import com.liefeng.property.vo.guard.DevicePositionVo;
 import com.liefeng.property.vo.guard.GuardCardLogVo;
@@ -15,7 +15,7 @@ import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
 import com.liefeng.property.vo.guard.GuardCardUserVo;
 import com.liefeng.property.vo.guard.GuardCardVo;
 import com.liefeng.property.vo.guard.GuardDeviceVo;
-import com.liefeng.property.vo.guard.GuardResidentVo;
+import com.liefeng.property.vo.guard.GuardPRUserVo;
 import com.liefeng.property.vo.household.VisitorVo;
 
 /**
@@ -201,7 +201,7 @@ public interface IGuardService {
 	 * @param size 每页集合数
 	 * @return
 	 */
-	public DataPageValue<GuardResidentVo> listGuardRedisent(GuardResidentBo guardResidentBo, Integer pageSize, Integer currentPage);
+	public DataPageValue<GuardPRUserVo> listGuardPRUser(GuardPRUserBo guardResidentBo, Integer currentPage, Integer pageSize);
 	
 	/**
 	 * 分页查询磁卡信息列表数据

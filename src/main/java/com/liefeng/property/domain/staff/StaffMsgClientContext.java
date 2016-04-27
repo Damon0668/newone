@@ -90,7 +90,6 @@ public class StaffMsgClientContext {
 			StaffMsgClientPo staffMsgClientPo = MyBeanUtil.createBean(staffMsgClient, StaffMsgClientPo.class);
 			staffMsgClientPo.setId(UUIDGenerator.generate());
 			staffMsgClientPo.setUpdateTime(new Date());
-			staffMsgClientPo.setOemCode(ContextManager.getInstance().getOemCode());
 			staffMsgClientRepository.save(staffMsgClientPo);
 		}
 	}

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -201,8 +203,6 @@ public class PropertyDepartmentContext {
 					propertyDepartmentPo.setProjectId(SysConstants.DEFAULT_ID);
 				}
 				
-				
-				
 				//普通部门需要设置父部门
 				if(parent != null 
 						&& !SysConstants.DEFAULT_ID.equals(propertyDepartmentPo.getParentId())
@@ -234,13 +234,16 @@ public class PropertyDepartmentContext {
 	/**
 	 * 删除部门信息
 	 */
+	@Transactional
 	public void delete() {
 		if(ValidateHelper.isNotEmptyString(propertyDepartmentId)) {
 			
-			PropertyDepartmentPo propertyDepartmentPo = propertyDepartmentRepository.findOne(propertyDepartment.getId());
+			PropertyDepartmentPo propertyDepartmentPo = propertyDepartmentRepository.findOne(propertyDepartmentId);
 			
 			if(propertyDepartmentPo != null 
-					&& SysConstants.DEFAULT_ID.equals(propertyDepartment.getParentId())){
+					&& SysConstants.DEFAULT_ID.equals(propertyDepartmentPo.getParentId())
+					&& SysConstants.DEFAULT_ID.equals(propertyDepartmentPo.getProjectId())){
+				
 				List<PropertyDepartmentPo> parentDepts = propertyDepartmentRepository.findDepartmentsByParentId(propertyDepartmentId);
 				
 				if(ValidateHelper.isNotEmptyCollection(parentDepts)){
@@ -251,6 +254,8 @@ public class PropertyDepartmentContext {
 			
 			propertyDepartmentRepository.delete(propertyDepartmentId);
 			logger.info("Delete department: '{}' successfully!", propertyDepartmentId);
+			
+			StaffContactPrivilegeContext.build().deleteByDeptID(propertyDepartmentId);
 		}
 	}
 	

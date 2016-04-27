@@ -8,7 +8,7 @@ import com.liefeng.property.vo.household.ResidentVo;
  * @author 蔡少东
  * @date 2016年3月6日
  */
-public class GuardResidentVo extends ResidentVo{
+public class GuardPRUserVo extends ResidentVo{
 
 	/**
 	 * 
@@ -34,11 +34,6 @@ public class GuardResidentVo extends ResidentVo{
 	 * 住户类型
 	 */
 	private String userType;
-	
-	/**
-	 * 车牌号
-	 */
-	private String plateNum;
 
 	public String getGuardCardSn() {
 		return guardCardSn;
@@ -46,14 +41,6 @@ public class GuardResidentVo extends ResidentVo{
 
 	public void setGuardCardSn(String guardCardSn) {
 		this.guardCardSn = guardCardSn;
-	}
-
-	public String getPlateNum() {
-		return plateNum;
-	}
-
-	public void setPlateNum(String plateNum) {
-		this.plateNum = plateNum;
 	}
 
 	public String getGuardCardId() {

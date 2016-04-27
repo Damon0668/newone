@@ -158,7 +158,7 @@ public interface IPropertyStaffService {
 	 * @param staffId 员工ID
 	 * @param clientId 个推ID
 	 */
-	public void  settIngStaffMsgClientId(String staffId,String clientId);
+	public void  settIngStaffMsgClientId(String staffId, String clientId, String oemCode);
 	/*********************** 部门相关接口 **********************/
 	
 	/**
@@ -177,7 +177,7 @@ public interface IPropertyStaffService {
 	 * 删除部门
 	 * @param departmentId 部门ID
 	 */
-	public void deleteDepartment(String departmentId);
+	public void deleteDepartment(String departmentId) throws LiefengException;
 	
 	/**
 	 * 查询某个OEM下所有部门列表

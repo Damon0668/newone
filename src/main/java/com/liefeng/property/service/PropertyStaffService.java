@@ -20,7 +20,6 @@ import com.liefeng.intf.property.IProjectService;
 import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.property.ISysSecurityService;
 import com.liefeng.intf.property.ISysService;
-import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.property.PropertyStaffBo;
@@ -274,7 +273,7 @@ public class PropertyStaffService implements IPropertyStaffService {
 	}
 
 	@Override
-	public void deleteDepartment(String departmentId) {
+	public void deleteDepartment(String departmentId) throws LiefengException {
 		PropertyDepartmentContext departContext = PropertyDepartmentContext.loadById(departmentId);
 		departContext.delete();
 	}
@@ -382,11 +381,11 @@ public class PropertyStaffService implements IPropertyStaffService {
 	}
 
 	@Override
-	public void settIngStaffMsgClientId(String staffId, String clientId) {
+	public void settIngStaffMsgClientId(String staffId, String clientId, String oemCode) {
 		StaffMsgClientVo staffMsgClient = StaffMsgClientContext.loadByStaffId(staffId).get();
 		
 		if(staffMsgClient == null){
-			staffMsgClient = new StaffMsgClientVo(staffId, clientId);
+			staffMsgClient = new StaffMsgClientVo(staffId, clientId, oemCode);
 			StaffMsgClientContext.build(staffMsgClient).create();
 		}else{
 			StaffMsgClientContext.loadByStaffId(staffId).updateClientId(clientId);

@@ -23,7 +23,7 @@ import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.guard.DevicePositionBo;
 import com.liefeng.property.bo.guard.GuardCardBo;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
-import com.liefeng.property.bo.guard.GuardResidentBo;
+import com.liefeng.property.bo.guard.GuardPRUserBo;
 import com.liefeng.property.constant.GuardConstants;
 import com.liefeng.property.domain.guard.AttendantContext;
 import com.liefeng.property.domain.guard.CameraContext;
@@ -33,7 +33,7 @@ import com.liefeng.property.domain.guard.GuardCardLogContext;
 import com.liefeng.property.domain.guard.GuardCardPrivilegeContext;
 import com.liefeng.property.domain.guard.GuardCardUserContext;
 import com.liefeng.property.domain.guard.GuardDeviceContext;
-import com.liefeng.property.domain.household.ResidentContext;
+import com.liefeng.property.domain.guard.GuardUserContext;
 import com.liefeng.property.domain.household.VisitorContext;
 import com.liefeng.property.vo.guard.AttendantVo;
 import com.liefeng.property.vo.guard.CameraVo;
@@ -43,7 +43,7 @@ import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
 import com.liefeng.property.vo.guard.GuardCardUserVo;
 import com.liefeng.property.vo.guard.GuardCardVo;
 import com.liefeng.property.vo.guard.GuardDeviceVo;
-import com.liefeng.property.vo.guard.GuardResidentVo;
+import com.liefeng.property.vo.guard.GuardPRUserVo;
 import com.liefeng.property.vo.household.VisitorVo;
 
 /**
@@ -171,9 +171,9 @@ public class GuardService implements IGuardService{
 	}
 
 	@Override
-	public DataPageValue<GuardResidentVo> listGuardRedisent(GuardResidentBo guardResidentBo, Integer pageSize, Integer currentPage) {
+	public DataPageValue<GuardPRUserVo> listGuardPRUser(GuardPRUserBo guardResidentBo, Integer currentPage, Integer pageSize) {
 			
-		DataPageValue<GuardResidentVo> dataPageValue = ResidentContext.build().listGuardResident4Page(guardResidentBo, pageSize, currentPage);
+		DataPageValue<GuardPRUserVo> dataPageValue = GuardUserContext.build().listGuardPRUser4Page(guardResidentBo, currentPage, pageSize);
 
 		return dataPageValue;
 	}
@@ -187,7 +187,7 @@ public class GuardService implements IGuardService{
 		guardCardUser.setCardId(guardCard.getId());
 		GuardCardUserContext.build(guardCardUser).create();
 		
-		GuardCardPrivilegeContext.loadByCardId(guardCard.getId()).grantGuardCard(guardDeviceIds);
+		//GuardCardPrivilegeContext.loadByCardId(guardCard.getId()).grantGuardCard(guardDeviceIds);
 
 	}
 

@@ -68,7 +68,7 @@ public class AuthController {
 		}
 		
 		//更新个推clientId
-		propertyStaffService.settIngStaffMsgClientId(staff.getId(), staffLoginRo.getClientId());
+		propertyStaffService.settIngStaffMsgClientId(staff.getId(), staffLoginRo.getClientId(), staff.getOemCode());
 		
 		String openId = staff.getId() + "|" + staff.getOemCode();
 		

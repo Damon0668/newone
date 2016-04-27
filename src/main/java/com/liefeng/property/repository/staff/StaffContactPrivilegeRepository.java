@@ -25,6 +25,12 @@ public interface StaffContactPrivilegeRepository extends JpaRepository<StaffCont
 	public void deleteByStaffId(String staffId);
 	
 	/**
+	 * 根据部门ID删除
+	 * @param departmentId 部门ID
+	 */
+	public void deleteByDepartmentId(String departmentId);
+	
+	/**
 	 * 根据staffId查找通讯权限
 	 * @param staffId 员工ID
 	 * @return

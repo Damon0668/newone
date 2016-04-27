@@ -187,7 +187,7 @@ public class UserController {
 	
 	/**
 	 * 创建用户反馈
-	 * @param houseId 房屋id
+	 * @param houseId 房屋Id
 	 * @param residentId 住户/业主id
 	 * @param isProprietor 是否为业主。0：否；1：是
 	 * @param content 内容

@@ -61,9 +61,15 @@
         <if test="extra.idOrName != null and extra.idOrName != ''" >
             and ( stf.number = #{extra.idOrName} or stf.name like concat('%',#{extra.idOrName},'%') ) 
         </if>
+        
         <if test="extra.projectId != null and extra.projectId != ''" >
-            and mp.project_id = #{extra.projectId} 
+            and dept.project_id = #{extra.projectId}
         </if>
+        
+        <!-- <if test="extra.projectIds != null and extra.projectIds != ''" >
+            and dept.project_id in ${extra.projectIds}
+        </if> -->
+        
 	</trim>
 </sql>
 
@@ -76,9 +82,7 @@
     LEFT JOIN basic.t_customer cst ON stfarc.cust_global_id = cst.global_id
     LEFT JOIN t_property_department dept on stf.department_id = dept.id
     LEFT JOIN t_sys_dict dict on stf.position = dict.`value` and dict.group_code = 'POSITION'
-    <if test="extra.projectId != null and extra.projectId != ''" >
-         LEFT JOIN t_manage_project mp on stf.id = mp.staff_id and mp.project_id = #{extra.projectId}
-    </if>
+   
     <include refid="Example_Where_Clause"/>
 </select>
 
@@ -100,9 +104,6 @@
 	LEFT JOIN basic.t_customer cst ON stfarc.cust_global_id = cst.global_id
 	LEFT JOIN t_property_department dept on stf.department_id = dept.id
 	LEFT JOIN t_sys_dict dict on stf.position = dict.`value` and dict.group_code = 'POSITION'
-	<if test="extra.projectId != null and extra.projectId != ''" >
-         LEFT JOIN t_manage_project mp on stf.id = mp.staff_id and mp.project_id = #{extra.projectId}
-    </if>
 	<include refid="Example_Where_Clause"/>
 	order by stf.create_time desc
 	<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
@@ -152,20 +153,20 @@
 	    sru.role_id = #{extra.roleId}
 </select>
 
-	<select id="findPropertyStaffById4DP"  resultMap="PropertyStaffVo" >
-	 select 
-	 ps.*,
-	 pd.name as departmentName,
-	 sd.name as positionName
-	 from 
-	 property.t_property_staff ps 
-	 left join property.t_property_department pd on pd.id = ps.department_id 
-	 left join t_sys_dict sd on sd.`value`=ps.position and sd.group_code ='POSITION'  
-	 where ps.id = #{propertyStaffId}
-	</select>
+<select id="findPropertyStaffById4DP"  resultMap="PropertyStaffVo" >
+	select 
+	ps.*,
+	pd.name as departmentName,
+	sd.name as positionName
+	from 
+	property.t_property_staff ps 
+	left join property.t_property_department pd on pd.id = ps.department_id 
+	left join t_sys_dict sd on sd.`value`=ps.position and sd.group_code ='POSITION'  
+	where ps.id = #{propertyStaffId}
+</select>
 
 
-	<select id="getDepartmentDirectorList"  resultMap="PropertyStaffVo" >
+<select id="getDepartmentDirectorList"  resultMap="PropertyStaffVo" >
 	SELECT
 	ts.*,
 	pd.name as departmentName,
@@ -185,109 +186,109 @@
 	AND ts.id IS NOT NULL
 	GROUP BY
 	ts.id
-	</select>
-	
-	<select id="findPropertyStaffById4DPList"  resultMap="PropertyStaffVo" >
-	 select 
-	 ps.*,
-	 pd.name as departmentName,
-	 sd.name as positionName
-	 from 
-	 property.t_property_staff ps 
-	 left join property.t_property_department pd on pd.id = ps.department_id 
-	 left join t_sys_dict sd on sd.`value`=ps.position and sd.group_code ='POSITION'  
-	 where ps.id in
-	 <foreach collection="array" index="index" item="staffId" open="("  separator="," close=")">
-  		#{staffId}
-  	 </foreach>
-	</select>
-	
-	<select id="findPropertyStaffByPosition"  resultMap="PropertyStaffVo" >
-	 select 
-	 ps.*,
-	 pd.name as departmentName,
-	 sd.name as positionName
-	 from 
-	 property.t_property_staff ps 
-	 left join property.t_property_department pd on pd.id = ps.department_id 
-	 left join t_sys_dict sd on sd.`value`=ps.position and sd.group_code ='POSITION'  
-	 where ps.position = #{positionId}
-	</select>
-	
-	<select id="findStaffByMenuCode"  resultMap="PropertyStaffVo" >
-        SELECT
-		    *
-		FROM
-		    t_property_staff ps
-		WHERE
-		    ps.id IN (
-		        SELECT DISTINCT
-		            (ru.user_id)
-		        FROM
-		            t_sys_role_user ru
-		        WHERE
-		            ru.role_id IN (
-		                SELECT
-		                    rm.role_id
-		                FROM
-		                    t_sys_role_menu rm
-		                LEFT JOIN t_sys_menu sm ON rm.menu_id = sm.id
-		                AND sm.code = #{menuCode}
-		            )
-		    )
-		AND ps.oem_code = #{oemCode}
-    </select>
-    
-    <select id="queryByProjectIdAndDeptId" resultMap="UserClientIdResultMap" >
-	  	SELECT
-			c.client_id AS clientId,
-			c.staff_id AS userId
-		FROM
-			t_property_staff s,
-			t_manage_project p,
-			t_staff_msg_client c
-		WHERE
-			s.id = p.staff_id
-		AND s.id = c.staff_id
-		AND s. STATUS = '1'
-		AND s.work_status = '1'
-		<if test="extra.projectId != null and extra.projectId != ''" >
-       	AND p.project_id = #{extra.projectId}
-   		</if>
-   		
-   		<if test="extra.departmentId != null and extra.departmentId != ''" >
-        AND s.department_id = #{extra.departmentId}
-   		</if>
+</select>
 		
+<select id="findPropertyStaffById4DPList"  resultMap="PropertyStaffVo" >
+	select 
+	ps.*,
+	pd.name as departmentName,
+	sd.name as positionName
+	from 
+	property.t_property_staff ps 
+	left join property.t_property_department pd on pd.id = ps.department_id 
+	left join t_sys_dict sd on sd.`value`=ps.position and sd.group_code ='POSITION'  
+	where ps.id in
+	<foreach collection="array" index="index" item="staffId" open="("  separator="," close=")">
+	    #{staffId}
+	</foreach>
+</select>
 	
-	</select>
+<select id="findPropertyStaffByPosition"  resultMap="PropertyStaffVo" >
+	select 
+	ps.*,
+	pd.name as departmentName,
+	sd.name as positionName
+	from 
+	property.t_property_staff ps 
+	left join property.t_property_department pd on pd.id = ps.department_id 
+	left join t_sys_dict sd on sd.`value`=ps.position and sd.group_code ='POSITION'  
+	where ps.position = #{positionId}
+</select>
+	
+<select id="findStaffByMenuCode"  resultMap="PropertyStaffVo" >
     
-      <select id="findPropertyStaffByDepartmentId" resultMap="PropertyStaffVo" >
-	  	SELECT
-			s.id,
-			s.name,
-			s.number,
-			a.phone,
-		  	a.cust_global_id,
-			c.client_id
-		FROM
-			t_property_staff s,
-			t_staff_archive a,
-			t_staff_msg_client c
-		WHERE
-			s.work_status = '1'
-		AND s. STATUS = '1'
-		AND s.id = a.staff_id
-		AND s.id = c.staff_id
-		<if test="extra.departmentId != null and extra.departmentId != ''" >
-       	AND s.department_id = #{extra.departmentId}
-   		</if>
-   		<if test="extra.oemCode != null and extra.oemCode != ''" >
-       	AND c.oem_code = #{extra.oemCode }
-   		</if>
-	</select>
+    SELECT
+	    *
+	FROM
+	    t_property_staff ps
+	WHERE
+	    ps.id IN (
+	        SELECT DISTINCT
+	            (ru.user_id)
+	        FROM
+	            t_sys_role_user ru
+	        WHERE
+	            ru.role_id IN (
+	                SELECT
+	                    rm.role_id
+	                FROM
+	                    t_sys_role_menu rm
+	                LEFT JOIN t_sys_menu sm ON rm.menu_id = sm.id
+	                AND sm.code = #{menuCode}
+	            )
+	    )
+	AND ps.oem_code = #{oemCode}
+</select>
+    
+<select id="queryByProjectIdAndDeptId" resultMap="UserClientIdResultMap" >
+    SELECT
+		c.client_id AS clientId,
+		c.staff_id AS userId
+	FROM
+		t_property_staff s,
+		t_manage_project p,
+		t_staff_msg_client c
+	WHERE
+		s.id = p.staff_id
+	AND s.id = c.staff_id
+	AND s. STATUS = '1'
+	AND s.work_status = '1'
 	
-	<select id="getStaffWorkFlowUseVo"  resultMap="StaffWorkFlowUseVo" >
+	<if test="extra.projectId != null and extra.projectId != ''" >
+	AND p.project_id = #{extra.projectId}
+	</if>
+
+	<if test="extra.departmentId != null and extra.departmentId != ''" >
+	   AND s.department_id = #{extra.departmentId}
+	</if>
+</select>
+    
+<select id="findPropertyStaffByDepartmentId" resultMap="PropertyStaffVo" >
+    SELECT
+		s.id,
+		s.name,
+		s.number,
+		a.phone,
+        a.cust_global_id,
+		c.client_id
+	FROM
+		t_property_staff s,
+		t_staff_archive a,
+		t_staff_msg_client c
+	WHERE
+		s.work_status = '1'
+	AND s. STATUS = '1'
+	AND s.id = a.staff_id
+	AND s.id = c.staff_id
+	<if test="extra.departmentId != null and extra.departmentId != ''" >
+        AND s.department_id = #{extra.departmentId}
+    </if>
+    <if test="extra.oemCode != null and extra.oemCode != ''" >
+        AND c.oem_code = #{extra.oemCode }
+    </if>
+</select>
+	
+<select id="getStaffWorkFlowUseVo"  resultMap="StaffWorkFlowUseVo" >
 	SELECT
 	pps.`name`,
 	pps.entry_time,
@@ -301,6 +302,6 @@
 	LEFT JOIN property.t_staff_archive pta ON pta.staff_id = pps.id
 	LEFT JOIN basic.t_customer bts ON bts.global_id = pta.cust_global_id
 	WHERE pps.id=#{staffId}
-	</select>
+</select>
 	
 </mapper>

@@ -8,7 +8,7 @@ import com.liefeng.core.entity.BaseValue;
  * @author 蔡少东
  * @date 2016年3月7日
  */
-public class GuardResidentBo extends BaseValue{
+public class GuardPRUserBo extends BaseValue{
 	
 	/**
 	 * 

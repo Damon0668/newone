@@ -63,24 +63,7 @@ public class StaffController {
 		}
 		return DataValue.success(staffInfoVo);
 	}
-	
-	/*@ApiOperation(value="获取员工档案", notes="获取员工档案")
-	@RequestMapping(value="/getStaffArchive", method=RequestMethod.POST)
-	@ResponseBody
-	public DataValue<StaffArchiveVo> getStaffArchive(@Valid @ModelAttribute StaffIdRo staffIdRo){
-		StaffArchiveVo staffArchive = propertyStaffService.findStaffArchByStaffId(staffIdRo.getStaffId());
-		return DataValue.success(staffArchive);
-	}
-	
-	@ApiOperation(value="获取员工个人信息", notes="获取员工个人信息")
-	@RequestMapping(value="/getCustomer", method=RequestMethod.POST)
-	@ResponseBody
-	public DataValue<CustomerVo> getCustomer(@Valid @ModelAttribute StaffIdRo staffIdRo){
-		StaffArchiveVo staffArchive = propertyStaffService.findStaffArchByStaffId(staffIdRo.getStaffId());
-		CustomerVo customer = userService.getCustomerByGlobalId(staffArchive.getCustGlobalId());
-		return DataValue.success(customer);
-	}*/
-	
+
 	@ApiOperation(value="更新员工信息", notes="更新员工信息")
 	@RequestMapping(value="/updateStaff", method=RequestMethod.POST)
 	@ResponseBody

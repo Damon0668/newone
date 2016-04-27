@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
+import com.liefeng.common.util.StringUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
@@ -241,12 +242,14 @@ public class PropertyStaffContext {
 		propertyStaffBo.setOemCode(ContextManager.getInstance().getOemCode());
 		
 		Map<String, String> extra = MyBeanUtil.bean2Map(propertyStaffBo);
+		if(ValidateHelper.isNotEmptyCollection(propertyStaffBo.getProjectIds())){
+			extra.put("projectIds", StringUtil.fmtToSqlInCondition(propertyStaffBo.getProjectIds()));
+		}
 		
 		PagingParamVo param = new PagingParamVo();
 		param.setExtra(extra);
 		param.setPage(page);
 		param.setPageSize(size);
-		
 		
 		Long count = propertyStaffQueryRepository.queryByCount(param);
 		
