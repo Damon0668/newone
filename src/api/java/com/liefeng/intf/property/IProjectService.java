@@ -6,6 +6,7 @@ import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.bo.project.HouseSpecBo;
+import com.liefeng.property.vo.household.HouseCheckitemConfigVo;
 import com.liefeng.property.vo.household.HouseGraphVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.project.AppHomeImageVo;
@@ -365,4 +366,58 @@ public interface IProjectService {
 	public ProjectBuildingVo findBuilding(String projectId,String parentId,
 			String name);
 
+	/**
+	 * 分页获取房屋验收项配置
+	 * @param projectId
+	 * @param parentId
+	 * @param page
+	 * @param size
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月26日 下午5:43:56
+	 */
+	public DataPageValue<HouseCheckitemConfigVo> findHouseCheckitemConfigByPage(String projectId, String parentId, Integer page, Integer size);
+	
+	/**
+	 * 创建房屋验收项
+	 * @param houseCheckitemConfigVo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月28日 下午5:59:44
+	 */
+	public HouseCheckitemConfigVo createHouseCheckitemConfig(HouseCheckitemConfigVo houseCheckitemConfigVo);
+	
+	/**
+	 * 更新房屋验收项配置
+	 * @param houseCheckitemConfigVo
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月28日 下午6:01:00
+	 */
+	public HouseCheckitemConfigVo updateHouseCheckitemConfig(HouseCheckitemConfigVo houseCheckitemConfigVo);
+	
+	/**
+	 * 根据id，获取房屋验收项配置
+	 * @param id
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月28日 下午6:02:13
+	 */
+	public HouseCheckitemConfigVo getHouseCheckitemConfig(String id);
+	
+	/**
+	 * 获取默认排序号
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月26日 下午4:52:35
+	 */
+	public Long getSortindex(String projectId, String parentId);
+	
+	/**
+	 * 删除房屋验收配置
+	 * @param id 
+	 * @author xhw
+	 * @date 2016年4月28日 下午6:04:45
+	 */
+	public void deleteHouseCheckitemConfig(String id);
 }

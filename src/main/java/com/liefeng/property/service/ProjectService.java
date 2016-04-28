@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
@@ -17,12 +16,14 @@ import com.liefeng.intf.property.IPropertyStaffService;
 import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.bo.project.HouseSpecBo;
+import com.liefeng.property.domain.household.HouseCheckitemConfigContext;
 import com.liefeng.property.domain.project.AppHomeImageContext;
 import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.domain.project.HouseSpecContext;
 import com.liefeng.property.domain.project.ProjectBuildingContext;
 import com.liefeng.property.domain.project.ProjectContext;
 import com.liefeng.property.domain.project.ProjectNoticeContext;
+import com.liefeng.property.vo.household.HouseCheckitemConfigVo;
 import com.liefeng.property.vo.household.HouseGraphVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.UserClientIdVo;
@@ -450,5 +451,38 @@ public class ProjectService implements IProjectService {
 	public ProjectBuildingVo findBuilding(String projectId, String parentId,
 			String name) {
 		return ProjectBuildingContext.build().findBuilding(projectId,parentId,name);
+	}
+
+	@Override
+	public DataPageValue<HouseCheckitemConfigVo> findHouseCheckitemConfigByPage(String projectId,
+			String parentId, Integer page, Integer size) {
+		return HouseCheckitemConfigContext.build().findByPage(projectId, parentId, page, size);
+	}
+
+	@Override
+	public HouseCheckitemConfigVo createHouseCheckitemConfig(
+			HouseCheckitemConfigVo houseCheckitemConfigVo) {
+		return HouseCheckitemConfigContext.build(houseCheckitemConfigVo).create();
+	}
+
+	@Override
+	public HouseCheckitemConfigVo updateHouseCheckitemConfig(
+			HouseCheckitemConfigVo houseCheckitemConfigVo) {
+		return HouseCheckitemConfigContext.build(houseCheckitemConfigVo).update();
+	}
+
+	@Override
+	public HouseCheckitemConfigVo getHouseCheckitemConfig(String id) {
+		return HouseCheckitemConfigContext.loadById(id).get();
+	}
+
+	@Override
+	public Long getSortindex(String projectId, String parentId) {
+		return HouseCheckitemConfigContext.build().getSortindex(projectId, parentId);
+	}
+
+	@Override
+	public void deleteHouseCheckitemConfig(String id) {
+		HouseCheckitemConfigContext.loadById(id).delete();
 	}
 }
