@@ -15,6 +15,7 @@ import com.liefeng.property.vo.guard.GuardCardLogVo;
 import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
 import com.liefeng.property.vo.guard.GuardCardUserVo;
 import com.liefeng.property.vo.guard.GuardCardVo;
+import com.liefeng.property.vo.guard.GuardDeviceTypeVo;
 import com.liefeng.property.vo.guard.GuardDeviceVo;
 import com.liefeng.property.vo.guard.GuardOpenLogVo;
 import com.liefeng.property.vo.guard.GuardPRUserVo;
@@ -65,6 +66,14 @@ public interface IGuardService {
 	 */
 	public DataPageValue<DevicePositionVo> findDevicePosition(DevicePositionBo devicePositionBo, Integer page, Integer size);
 	
+	/**
+	 * 查询项目位置类型
+	 * 按组分类
+	 * @param projectId
+	 * @return
+	 */
+	public List<GuardDeviceTypeVo> findDevicePositionOnGroup(String projectId);
+
 	/*
 	 * ****************** 门禁设备相关 ******************
 	 */

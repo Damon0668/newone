@@ -57,4 +57,7 @@ public interface ProjectBuildingRepository extends JpaRepository<ProjectBuilding
      */
 	public List<ProjectBuildingPo> findByProjectIdAndParentIdIsNull(
 			String projectId);
+
+	public ProjectBuildingPo findByProjectIdAndParentIdAndName(
+			String projectId, String parentId, String name);
 }

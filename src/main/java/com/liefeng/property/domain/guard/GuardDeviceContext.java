@@ -189,6 +189,16 @@ public class GuardDeviceContext {
 		return guardDeviceList;
 	}
 	
+	public List<GuardDeviceVo> findGuardDeviceByPositions(List<String> positionIds){
+		if(ValidateHelper.isNotEmptyCollection(positionIds)){
+			List<GuardDevicePo> deviceList = guardDeviceRepository.findByPositionIdIn(positionIds);
+			if(ValidateHelper.isNotEmptyCollection(deviceList)){
+				return MyBeanUtil.createList(deviceList, GuardDeviceVo.class);
+			}
+		}
+		return new ArrayList<GuardDeviceVo>();
+	}
+	
 	public Boolean isExistGuardNum(String guardNum){
 		Boolean result = false;
 		String oemCode = ContextManager.getInstance().getOemCode();

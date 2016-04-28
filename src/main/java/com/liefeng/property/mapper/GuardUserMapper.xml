@@ -13,7 +13,9 @@
 	    <if test="extra.projectId != null and extra.projectId != ''" >
 	        AND t.projectId =  #{extra.projectId}
 	    </if>
-	
+	    <if test="extra.projectIds != null and extra.projectIds!= ''" >
+            AND t.projectId in  ${extra.projectIds}
+        </if>
 	    <if test="extra.houseNum != null and extra.houseNum != ''" >
 	        AND t.houseNum =  #{extra.houseNum}
 	    </if>

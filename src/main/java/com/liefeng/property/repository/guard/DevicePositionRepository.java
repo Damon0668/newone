@@ -35,4 +35,12 @@ public interface DevicePositionRepository extends JpaRepository<DevicePositionPo
 	 * @return
 	 */
 	public Page<DevicePositionPo> findByProjectId(String projectId,Pageable pageable);
+	
+	/**
+	 * 查找设备位置
+	 * @param projectId 项目ID
+	 * @param deviceType 设备类型
+	 * @return
+	 */
+	public List<DevicePositionPo> findByProjectIdAndDeviceType(String projectId, String deviceType);
 }
