@@ -121,8 +121,8 @@
     <if test="extra.projectId != null and extra.projectId != ''" >
         left join t_manage_project mp on stf.id = mp.staff_id
     </if>
-    left join property.t_property_department pd on pd.id = stf.department_id 
-	 left join t_sys_dict sd on sd.`value`=stf.position and sd.group_code ='POSITION' 
+        left join property.t_property_department pd on pd.id = stf.department_id 
+        left join t_sys_dict sd on sd.`value`=stf.position and sd.group_code ='POSITION' 
     where 1=1 
     <if test="extra.projectId != null and extra.projectId != ''" >
         AND mp.project_id =  #{extra.projectId}
@@ -325,5 +325,25 @@
 	LEFT JOIN basic.t_customer bts ON bts.global_id = pta.cust_global_id
 	WHERE pps.id=#{staffId}
 </select>
+
+<select id="queryClientIdByAccount" resultMap="UserClientIdResultMap" >
+   SELECT
+		c.client_id AS clientId,
+		c.staff_id AS userId
+	FROM
+		t_property_staff s,
+		t_staff_msg_client c
+	WHERE
+		s.id = c.staff_id
+	AND s. STATUS = '1'
+	AND s.work_status = '1'	
+	<if test="extra.account != null and extra.account != ''" >
+	AND s.account = #{extra.account}
+	</if>
+	<if test="extra.oemCode != null and extra.oemCode != ''" >
+	AND s.oem_code = #{extra.oemCode}
+	</if>
 	
+</select>
+
 </mapper>
