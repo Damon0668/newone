@@ -506,4 +506,9 @@ public class PropertyStaffService implements IPropertyStaffService {
 		}
 		return departmentVos;
 	}
+
+	@Override
+	public UserClientIdVo findClientIdByAccount(String account) {
+		return PropertyStaffContext.build().findClientIdByAccount(account);
+	}
 }

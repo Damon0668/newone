@@ -328,5 +328,15 @@ public interface IPropertyStaffService {
 	 * @return
 	 */
 	public List<PropertyDepartmentVo> getDeptAndChildDept(String departmentId,String projectId);
+	
+	
+	/**
+	 * 根据登陆账号，获取clientId
+	 * @param account
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月28日 下午2:10:34
+	 */
+	public UserClientIdVo findClientIdByAccount(String account);
 
 }

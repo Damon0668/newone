@@ -475,4 +475,25 @@ public class PropertyStaffContext {
 		return MyBeanUtil.createList(dataList, PropertyStaffVo.class);
 	}
 	
+	/**
+	 * 根据登陆账号，获取clientId
+	 * @param account
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月28日 下午2:10:34
+	 */
+	public UserClientIdVo findClientIdByAccount(String account){
+		UserClientIdVo userClientIdVo = null;
+		if(ValidateHelper.isNotEmptyString(account)){
+			String oemCode = ContextManager.getInstance().getOemCode();
+			Map<String, String> extra = new HashMap<String, String>();
+			extra.put("account", account);
+			extra.put("oemCode", oemCode);
+			PagingParamVo pagingParamVo = new PagingParamVo();
+			pagingParamVo.setExtra(extra);
+			
+			userClientIdVo = propertyStaffQueryRepository.queryClientIdByAccount(pagingParamVo);
+		}
+		return userClientIdVo;
+	}
 }

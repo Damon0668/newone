@@ -96,4 +96,13 @@ public interface PropertyStaffQueryRepository extends BaseRepository<PropertySta
 	 * @param projectId
 	 */
 	public List<PropertyStaffVo> getDepartmentDirector2List(Map<String, String> param);
+	
+	/**
+	 * 根据登陆账号，获取clientId
+	 * @param param
+	 * @return 
+	 * @author xhw
+	 * @date 2016年4月28日 下午2:13:24
+	 */
+	public UserClientIdVo queryClientIdByAccount(PagingParamVo param);
 }
