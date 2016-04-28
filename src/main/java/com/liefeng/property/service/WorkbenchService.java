@@ -1765,14 +1765,18 @@ public class WorkbenchService implements IWorkbenchService {
 			String houseNum, String phone) {
 		EventReportContext eventReportContext = EventReportContext.build();
 		List<EventReportVo> eventReportVoList = new ArrayList<EventReportVo>();
+		//获取业主、住户报事
 		if (ValidateHelper.isNotEmptyString(projectId)
 				&& ValidateHelper.isNotEmptyString(houseNum)
 				&& ValidateHelper.isNotEmptyString(phone)) {
 			eventReportVoList = eventReportContext.getHistoryEventReport(
 					projectId, houseNum, phone);
-		} else {
+			logger.info("【获取业主、住户报事】根据参数【projectId:{}，houseNum:{},phone:{}】获取报事数列:{}", 
+					projectId, houseNum, phone, eventReportVoList);
+		} else {//获取员工报事
 			eventReportVoList = eventReportContext
 					.getHistoryEventReportOfPhone(phone);
+			logger.info("【获员工报事】根据参数【phone:{}】获取报事数列:{}", phone, eventReportVoList);
 		}
 
 		for (EventReportVo eventReportVo : eventReportVoList) {
@@ -1788,15 +1792,21 @@ public class WorkbenchService implements IWorkbenchService {
 
 			EventProcessContext eventProcessContext = EventProcessContext
 					.build();
-
-			boolean bool = false;
+			
+			//获取最新的派工
+			boolean newReport= false;
 			// app的“已派工”
-			EventProcessVo eventProcessVo = eventProcessContext.getEventProcess(eventReportVo.getId(), WorkbenchConstants.EventProcessStatus.DISPATCHING);
-			if (eventProcessVo != null && ValidateHelper.isNotEmptyString(eventProcessVo.getNextAccepterId())) {
-				bool = true;
-				eventReportVo.setWorkTime(eventProcessVo.getAcceptTime());
+			EventProcessVo processDispatching = eventProcessContext.getEventProcess(eventReportVo.getId(), 
+					WorkbenchConstants.EventProcessStatus.DISPATCHING);
+			logger.info("获取报事id{}的最新已派工进程{}", eventReportVo.getId(), processDispatching);
+			
+			if (processDispatching != null && ValidateHelper.isNotEmptyString(processDispatching.getNextAccepterId())) {
+				newReport = true;
+				eventReportVo.setWorkTime(processDispatching.getAcceptTime());
 				PropertyStaffDetailInfoVo propertyStaffVo = propertyStaffService
-						.findStaffDetailInfo(eventProcessVo.getNextAccepterId());
+						.findStaffDetailInfo(processDispatching.getNextAccepterId());
+				
+				logger.info("【已派工】根据下一步办理人id：{}获取员工信息：{}", processDispatching.getNextAccepterId(), propertyStaffVo);
 				if (propertyStaffVo != null) {
 					eventReportVo.setWorkerName(propertyStaffVo
 							.getStaffArchiveVo().getName());
@@ -1807,11 +1817,12 @@ public class WorkbenchService implements IWorkbenchService {
 			}
 
 			// app的“未评价”
-			EventProcessVo eventProcessVo2 = eventProcessContext.getEventProcess(eventReportVo.getId(), WorkbenchConstants.EventProcessStatus.AUDIT);
-			if (bool && eventProcessVo2 != null && ValidateHelper.isNotEmptyString(eventProcessVo2.getNextAccepterId()) ) {
-				eventReportVo.setOverTime(eventProcessVo2.getAcceptTime());
-				eventReportVo.setRemark(eventProcessVo2.getResult());
-				eventReportVo.setRebackPic(eventProcessVo2.getPicUrls());
+			EventProcessVo processAudit = eventProcessContext.getEventProcess(eventReportVo.getId(), WorkbenchConstants.EventProcessStatus.AUDIT);
+			logger.info("获取报事id{}的最新已审核进程{}", eventReportVo.getId(), processAudit);
+			if (newReport && processAudit != null && ValidateHelper.isNotEmptyString(processAudit.getNextAccepterId()) ) {
+				eventReportVo.setOverTime(processAudit.getAcceptTime());
+				eventReportVo.setRemark(processAudit.getResult());
+				eventReportVo.setRebackPic(processAudit.getPicUrls());
 				eventReportVo.setStatus(WorkbenchConstants.EventStatusAPP.NOTEVALUATE);
 			}
 
