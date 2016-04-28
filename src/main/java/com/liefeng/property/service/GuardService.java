@@ -1,7 +1,6 @@
 package com.liefeng.property.service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -27,6 +26,7 @@ import com.liefeng.property.bo.guard.DevicePositionBo;
 import com.liefeng.property.bo.guard.GuardCardBo;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
 import com.liefeng.property.bo.guard.GuardPRUserBo;
+import com.liefeng.property.bo.guard.GuardStaffBo;
 import com.liefeng.property.constant.GuardConstants;
 import com.liefeng.property.domain.guard.AttendantContext;
 import com.liefeng.property.domain.guard.CameraContext;
@@ -48,6 +48,7 @@ import com.liefeng.property.vo.guard.GuardCardVo;
 import com.liefeng.property.vo.guard.GuardDeviceTypeVo;
 import com.liefeng.property.vo.guard.GuardDeviceVo;
 import com.liefeng.property.vo.guard.GuardPRUserVo;
+import com.liefeng.property.vo.guard.GuardStaffVo;
 import com.liefeng.property.vo.household.VisitorVo;
 import com.liefeng.property.vo.sys.SysDictVo;
 
@@ -179,7 +180,7 @@ public class GuardService implements IGuardService{
 	}
 
 	@Override
-	public DataPageValue<GuardPRUserVo> listGuardPRUser(GuardPRUserBo guardResidentBo, Integer currentPage, Integer pageSize) {
+	public DataPageValue<GuardPRUserVo> listPRUser(GuardPRUserBo guardResidentBo, Integer currentPage, Integer pageSize) {
 			
 		DataPageValue<GuardPRUserVo> dataPageValue = GuardUserContext.build().listGuardPRUser4Page(guardResidentBo, currentPage, pageSize);
 
@@ -335,6 +336,11 @@ public class GuardService implements IGuardService{
 		}
 		
 		return deviceTypList;
+	}
+
+	@Override
+	public DataPageValue<GuardStaffVo> listStaff(GuardStaffBo guardStaffBo, Integer currentPage, Integer pageSize) {
+		return GuardUserContext.build().listStaff4Page(guardStaffBo, currentPage, pageSize);
 	}
 
 }

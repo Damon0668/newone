@@ -121,8 +121,8 @@
     <if test="extra.projectId != null and extra.projectId != ''" >
         left join t_manage_project mp on stf.id = mp.staff_id
     </if>
-    left join property.t_property_department pd on pd.id = stf.department_id 
-	 left join t_sys_dict sd on sd.`value`=stf.position and sd.group_code ='POSITION' 
+        left join property.t_property_department pd on pd.id = stf.department_id 
+        left join t_sys_dict sd on sd.`value`=stf.position and sd.group_code ='POSITION' 
     where 1=1 
     <if test="extra.projectId != null and extra.projectId != ''" >
         AND mp.project_id =  #{extra.projectId}
