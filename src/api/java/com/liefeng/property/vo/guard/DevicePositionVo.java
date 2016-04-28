@@ -92,4 +92,12 @@ public class DevicePositionVo extends BaseValue{
 	public void setDeviceType(String deviceType) {
 		this.deviceType = deviceType;
 	}
+	
+	public String getText(){
+		return this.name;
+	}
+	
+	public void setText(String text){
+		this.name = text;
+	}
 }

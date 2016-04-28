@@ -75,9 +75,10 @@ public class GuardCardUserContext {
 		if(guardCardUser != null){
 			
 			GuardCardUserPo guardCardUserPo = MyBeanUtil.createBean(guardCardUser, GuardCardUserPo.class);
+			
 			guardCardUserPo.setId(UUIDGenerator.generate());
-			guardCardUserPo.setOemCode(ContextManager.getInstance().getOemCode());
 			guardCardUserPo.setCreateTime(new Date());
+			guardCardUserPo.setOemCode(ContextManager.getInstance().getOemCode());
 			
 			logger.info("create guardCardUserPo = {}", guardCardUserPo);
 			guardCardUserRepository.save(guardCardUserPo);

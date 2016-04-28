@@ -18,10 +18,8 @@ import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
-import com.liefeng.core.exception.LiefengException;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.guard.DevicePositionBo;
-import com.liefeng.property.error.GuardErrorCode;
 import com.liefeng.property.po.guard.DevicePositionPo;
 import com.liefeng.property.repository.guard.DevicePositionRepository;
 import com.liefeng.property.repository.mybatis.DevicePositionQueryRepository;
@@ -188,6 +186,17 @@ public class DevicePositionContext {
 		devicePositionList = DictionaryUtil.transformDicValueToDicName(devicePositionList);
 		
 		return new DataPageValue<DevicePositionVo>(devicePositionList, total, page, size);
+	}
+	
+	
+	public List<DevicePositionVo> findPosition4Type(String projectId, String deviceType){
+		
+		List<DevicePositionPo> positionList = devicePositionRepository.findByProjectIdAndDeviceType(projectId, deviceType);
+		if(ValidateHelper.isNotEmptyCollection(positionList)){
+			return MyBeanUtil.createList(positionList, DevicePositionVo.class);
+		}
+		
+		return null;
 	}
 
 	protected void setDevicePosition(DevicePositionVo devicePosition) {

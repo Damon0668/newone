@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
+import com.liefeng.common.util.StringUtil;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
@@ -66,7 +67,9 @@ public class GuardUserContext {
 		guardPRUserBo.setOemCode(ContextManager.getInstance().getOemCode());
 		
 		Map<String, String> extra = MyBeanUtil.bean2Map(guardPRUserBo);
-		
+		if(ValidateHelper.isNotEmptyCollection(guardPRUserBo.getProjectIds())){
+			extra.put("projectIds", StringUtil.fmtToSqlInCondition(guardPRUserBo.getProjectIds()));
+		}
 		PagingParamVo pagingParam = new PagingParamVo();
 		pagingParam.setExtra(extra);
 		pagingParam.setRows(pageSize);

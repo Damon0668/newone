@@ -1,5 +1,7 @@
 package com.liefeng.property.bo.guard;
 
+import java.util.List;
+
 import com.liefeng.core.entity.BaseValue;
 
 /**
@@ -16,6 +18,8 @@ public class GuardPRUserBo extends BaseValue{
 	private static final long serialVersionUID = -4919861177563696726L;
 
 	public String projectId;
+	
+	public List<String> projectIds;
 	
 	public String buildingId;
 	
@@ -63,5 +67,13 @@ public class GuardPRUserBo extends BaseValue{
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public List<String> getProjectIds() {
+		return projectIds;
+	}
+
+	public void setProjectIds(List<String> projectIds) {
+		this.projectIds = projectIds;
 	}
 }

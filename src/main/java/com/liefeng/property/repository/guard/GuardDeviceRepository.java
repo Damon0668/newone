@@ -30,4 +30,12 @@ public interface GuardDeviceRepository extends JpaRepository<GuardDevicePo, Stri
 	 * @return
 	 */
 	public List<GuardDevicePo> findByProjectId(String projectId);
+	
+	
+	/**
+	 * 查找设备
+	 * @param positionId 位置ID
+	 * @return
+	 */
+	public List<GuardDevicePo> findByPositionIdIn(List<String> positionId);
 }
