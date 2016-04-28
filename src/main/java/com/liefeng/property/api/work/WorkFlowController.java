@@ -195,10 +195,11 @@ public class WorkFlowController {
 			dataPageValue = workflowService.listMyCreate(new QueryFilter().setOperator(operator), getListDataRo.getPage(),  getListDataRo.getSize());
 			List<WorkItem> workItems3 = dataPageValue.getDataList();
 			for (WorkItem workItem : workItems3) {
-				Map<String, Object> taskVariable = workItem.getTaskVariableMap();
-				taskVariable.put("stayTime", getStaytime(workItem.getTaskCreateTime()));
-				workItem.setTaskVariable(JsonHelper.toJson(taskVariable));
-				
+				if(workItem.getTaskCreateTime() != null) {
+					Map<String, Object> taskVariable = workItem.getTaskVariableMap();
+					taskVariable.put("stayTime", getStaytime(workItem.getTaskCreateTime()));
+					workItem.setTaskVariable(JsonHelper.toJson(taskVariable));
+				}
 				//设置办理人
 				String[] actors = workflowService.getTaskActorsByTaskId(workItem.getTaskId());
 				String actor="";
