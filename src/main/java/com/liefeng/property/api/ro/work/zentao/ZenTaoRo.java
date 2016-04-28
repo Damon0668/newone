@@ -2,9 +2,6 @@ package com.liefeng.property.api.ro.work.zentao;
 
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.validation.constraints.NotNull;
 
 import com.liefeng.core.entity.BaseValue;
@@ -18,7 +15,7 @@ public class ZenTaoRo extends BaseValue{
 	
 	private static final long serialVersionUID = 6848588949656287820L;
 
-	@ApiModelProperty(value="模板类型", required=true)
+	@ApiModelProperty(value="模板类型：[ZENTAO_MY_TODO(待办任务)]", required=true)
 	@NotNull
 	private String action;
 
