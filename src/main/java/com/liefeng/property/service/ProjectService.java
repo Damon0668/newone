@@ -445,4 +445,10 @@ public class ProjectService implements IProjectService {
 			String buildingId) {
 		return HouseSpecContext.build().countByProjectIdAndBuildingId(projectId, buildingId);
 	}
+
+	@Override
+	public ProjectBuildingVo findBuilding(String projectId, String parentId,
+			String name) {
+		return ProjectBuildingContext.build().findBuilding(projectId,parentId,name);
+	}
 }

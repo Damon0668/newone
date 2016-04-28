@@ -267,4 +267,10 @@ public class ProjectBuildingContext {
 		
 		return projectBuildingList;
 	}
+
+	public  ProjectBuildingVo findBuilding(String projectId,
+			String parentId, String name) {
+		ProjectBuildingPo projectBuildingPo = projectBuildingRepository.findByProjectIdAndParentIdAndName(projectId,parentId,name);
+		return MyBeanUtil.createBean(projectBuildingPo, ProjectBuildingVo.class);
+	}
 }

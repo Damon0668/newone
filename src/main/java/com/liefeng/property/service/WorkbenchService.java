@@ -149,8 +149,10 @@ public class WorkbenchService implements IWorkbenchService {
 				for (int i = 0; i < privilegeArray.length; i++) {
 					receiveUserIdList.add(privilegeArray[i]);
 				}
-				//个推
-				propertyPushMsgService.pushMsgToStaffList(PushActionConstants.MY_TASK_TODO_ONE, receiveUserIdList);
+				
+				//TODO（暂时屏蔽）
+				/*//个推
+				propertyPushMsgService.pushMsgToStaffList(PushActionConstants.MY_TASK_TODO_ONE, receiveUserIdList);*/
 
 			}
 
@@ -205,7 +207,8 @@ public class WorkbenchService implements IWorkbenchService {
 			}
 		}
 		
-		//办理提交
+		//TODO （暂时屏蔽）
+		/*//办理提交
 		if(WorkbenchConstants.TaskStatus.PROCESSING.equals(taskVo.getStatus())){
 			//个推
 			propertyPushMsgService.pushMsgToStaff(PushActionConstants.MY_TASK_FEEDBACK_ONE, taskVo.getCreatorId());
@@ -221,7 +224,7 @@ public class WorkbenchService implements IWorkbenchService {
 		if(WorkbenchConstants.TaskStatus.PROCESSED.equals(taskVo.getStatus())){
 			//个推
 			propertyPushMsgService.pushMsgToStaff(PushActionConstants.MY_TASK_PASSED, taskVo.getHandlerId());
-		}
+		}*/
 	}
 
 	@Override
@@ -343,7 +346,8 @@ public class WorkbenchService implements IWorkbenchService {
 			}
 		}
 		
-		//获取具有审核权限的员工
+		//TODO（暂时屏蔽）
+	/*	//获取具有审核权限的员工
 		List<PropertyStaffVo> propertyStaffList = propertyStaffService.findStaffByMenuCode(StaffConstants.NOTICE_CHECK);
 		
 		if(propertyStaffList != null){
@@ -354,7 +358,7 @@ public class WorkbenchService implements IWorkbenchService {
 			}
 			//个推
 			propertyPushMsgService.pushMsgToStaffList(PushActionConstants.NOTICE_TO_AUDIT, receiveUserIdList);
-		}
+		}*/
 		
 		return noticeVo;
 	}
@@ -411,8 +415,8 @@ public class WorkbenchService implements IWorkbenchService {
 
 			}
 		}
-
-		//审核不通过
+		//TODO（暂时屏蔽）
+	/*	//审核不通过
 		if(WorkbenchConstants.NoticeStatus.NOTPASS.equals(noticeVo.getStatus())){
 			//个推
 			propertyPushMsgService.pushMsgToStaff(PushActionConstants.NOTICE_RETURNED, noticeVo.getCreatorId());
@@ -422,7 +426,7 @@ public class WorkbenchService implements IWorkbenchService {
 		if(WorkbenchConstants.NoticeStatus.PUBLISHING.equals(noticeVo.getStatus())){
 			//个推
 			propertyPushMsgService.pushMsgToStaff(PushActionConstants.NOTICE_AUDIT_PASS, noticeVo.getCreatorId());
-		}
+		}*/
 		
 		//发布
 		if(WorkbenchConstants.NoticeStatus.ARCHIVING.equals(noticeVo.getStatus())){
@@ -543,7 +547,8 @@ public class WorkbenchService implements IWorkbenchService {
 
 				}
 			}
-			
+			//TODO（暂时屏蔽）
+			staffList = null;
 			//个推
 			propertyPushMsgService.pushMsgOfUserIdClientId(template, staffList, proprietorList);
 		}
@@ -762,8 +767,9 @@ public class WorkbenchService implements IWorkbenchService {
 					createWebsiteMsgPrivilege(websiteMsgPrivilegeVo);
 				}
 				
-			    //个推
-				propertyPushMsgService.createWebsiteMsgPushMsg(PushActionConstants.MSG_CENTER_NEW_MSG, moreList, oneList);
+				//TODO（暂时屏蔽）
+			   /* //个推
+				propertyPushMsgService.createWebsiteMsgPushMsg(PushActionConstants.MSG_CENTER_NEW_MSG, moreList, oneList);*/
 			}
 
 		}
@@ -1214,8 +1220,9 @@ public class WorkbenchService implements IWorkbenchService {
 
 		eventProcessVo.setStatus(WorkbenchConstants.EventReport.SIGNFOR_FINISH);
 		
-		//推送给下一个办理人
-		propertyPushMsgService.pushMsgToStaff(PushActionConstants.EVENT_REPORT_RECEIVE_ONE, nextAccepterId);
+		//TODO（暂时屏蔽）
+		/*//推送给下一个办理人
+		propertyPushMsgService.pushMsgToStaff(PushActionConstants.EVENT_REPORT_RECEIVE_ONE, nextAccepterId);*/
 		
 		//推送给报事人
 			
@@ -1747,8 +1754,9 @@ public class WorkbenchService implements IWorkbenchService {
 		}
 		
 		if(receiveUserIdList != null && receiveUserIdList.size() > 0){
-			//个推通知客服部员工
-			propertyPushMsgService.pushMsgToStaffList(PushActionConstants.EVENT_REPORT_RECEIVE_ONE, receiveUserIdList);
+			//TODO（暂时屏蔽）
+			/*//个推通知客服部员工
+			propertyPushMsgService.pushMsgToStaffList(PushActionConstants.EVENT_REPORT_RECEIVE_ONE, receiveUserIdList);*/
 		}
 	}
 

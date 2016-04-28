@@ -760,14 +760,14 @@ public class HouseholdService implements IHouseholdService {
 					CheckinQueueVo queueHandling = getLatestOfCheckinQueue(projectId, HouseholdConstants.CheckinQueueStatus.HANDLING,
 							TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
 					if (queueHandling != null) {
-						 number = queueVo.getSeq() - queueHandling.getSeq();
+						 number = queueVo.getSeq() - queueHandling.getSeq() - 1;
 						
 					} else {
 						// 以小区为范围，获取最新“已办理”的排队
 						CheckinQueueVo queueFinished = getLatestOfCheckinQueue(projectId, HouseholdConstants.CheckinQueueStatus.FINISHED,
 								TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
 						if (queueFinished != null) {
-							 number = queueVo.getSeq() - queueFinished.getSeq();
+							 number = queueVo.getSeq() - queueFinished.getSeq() - 1;
 						}
 					}
 					
@@ -877,7 +877,7 @@ public class HouseholdService implements IHouseholdService {
 				TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
 		if (queueVo != null) {
 			queueReturn.setNowSeq(queueVo.getSeq());
-			Integer number = queueReturn.getSeq() - queueReturn.getNowSeq();
+			Integer number = queueReturn.getSeq() - queueReturn.getNowSeq() - 1;
 			if (number < 0) {
 				number = 0;
 			}
@@ -888,7 +888,7 @@ public class HouseholdService implements IHouseholdService {
 					TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
 			if (queueVo != null) {
 				queueReturn.setNowSeq(0);
-				Integer number = queueReturn.getSeq() - queueVo.getSeq();
+				Integer number = queueReturn.getSeq() - queueVo.getSeq() - 1;
 				if (number < 0) {
 					number = 0;
 				}

@@ -354,4 +354,15 @@ public interface IProjectService {
 	 * @date 2016年4月24日 下午3:53:03
 	 */
 	public List<HouseSpecVo> countHouseSpecList(String projectId, String buildingId);
+	
+	/**
+	 * 获取楼栋或楼层
+	 * @param projectId	项目id
+	 * @param name 楼栋楼层名称
+	 * @param parentId 楼栋名称 null就查询楼栋 ，非空查询楼层
+	 * @return
+	 */
+	public ProjectBuildingVo findBuilding(String projectId,String parentId,
+			String name);
+
 }
