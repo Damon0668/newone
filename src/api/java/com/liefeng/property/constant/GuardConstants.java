@@ -79,4 +79,42 @@ public class GuardConstants {
 		public String CANCEL = "2";
 	
 	}
+	
+	/**
+	 * 开门方式
+	 * 
+	 * @author ZhenTingJun
+	 * @date 2016年4月28日
+	 */
+	public static interface OpenType {
+		/**
+		 * 密码开门
+		 */
+		public String PASSWORD = "1";
+		
+		/**
+		 * 磁卡开门
+		 */
+		public String CARD = "2";
+		
+		/**
+		 * 二维码开门
+		 */
+		public String QR_CODE = "3";
+		
+		/**
+		 * 无线对讲开门(按房号，手机开门,我的门铃开门)
+		 */
+		public String WIRELESS = "4";
+		
+		/**
+		 * 管理员开门
+		 */
+		public String ADMINISTRATOR = "5";
+		
+		/**
+		 * 异常开门
+		 */
+		public String ABNORMAL = "6";
+	}
 }
