@@ -5,13 +5,13 @@ import java.util.List;
 import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.vo.guard.GuardPRUserVo;
+import com.liefeng.property.vo.guard.GuardStaffVo;
 import com.liefeng.property.vo.household.ResidentVo;
 
 /**
- * 住户信息查询接口
- * 
- * @author ZhenTingJun
- * @date 2015-12-30
+ * 出入管理
+ * 用户管理
+ * 查询接口
  */
 public interface GuardUserQueryRepository extends BaseRepository<ResidentVo> {
 	
@@ -47,5 +47,17 @@ public interface GuardUserQueryRepository extends BaseRepository<ResidentVo> {
 	 * 查询集合总数
 	 */
 	public Long queryGuardPRUserByCount(PagingParamVo param);
+	
+	/**
+	 * 门禁模块
+	 * 查询员工列表
+	 * @return
+	 */
+	public List<GuardStaffVo> queryStaff(PagingParamVo param);
+
+	/**
+	 * 查询员工总数
+	 */
+	public Long queryStaffByCount(PagingParamVo param);
 	
 }

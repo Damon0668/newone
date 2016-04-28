@@ -7,6 +7,8 @@
 
 <resultMap id="GuardPRUserVo" type="com.liefeng.property.vo.guard.GuardPRUserVo" ></resultMap>
 
+<resultMap id="GuardStaffVo" type="com.liefeng.property.vo.guard.GuardStaffVo" ></resultMap>
+
 <sql id="GuardPRUser_Where_Clause">
     WHERE 1=1 
 	<trim  suffixOverrides="," >
@@ -42,7 +44,8 @@
 	            r.`name`,
 	            r.mobile,
 	            gc.id guardCardId,
-	            gc.sn guardCardSn
+	            gc.sn guardCardSn,
+	            gc.status guardCardStatus
 	        FROM
 	            t_resident r 
 	        LEFT JOIN t_resident_house rh on r.id = rh.resident_id
@@ -67,7 +70,8 @@
 	            p.`name`,
 	            p.phone mobile,
 	            gc.id guardCardId,
-	            gc.sn guardCardSn
+	            gc.sn guardCardSn,
+	            gc.status guardCardStatus
 	        FROM
 	            property.t_proprietor p
 	        LEFT JOIN property.t_proprietor_house ph ON p.id = ph.proprietor_id
@@ -142,6 +146,38 @@
 
     <include refid="GuardPRUser_Where_Clause"/>
 
+</select>
+
+<select id="queryStaffByCount"  resultType="java.lang.Long">
+    SELECT
+	    count(1)
+	FROM
+        t_property_staff ps
+    LEFT JOIN t_staff_archive sa on ps.id = sa.staff_id
+    LEFT JOIN t_property_department pd on ps.department_id = pd.id
+    LEFT JOIN t_sys_dict dict on ps.position = dict.`value` and dict.group_code = 'POSITION'
+    LEFT JOIN t_guard_card_user gcu on ps.id = gcu.id and gcu.user_type = '0'
+    LEFT JOIN t_guard_card gc on gc.id = gcu.card_id
+</select>
+
+<select id="queryStaff" resultMap="GuardStaffVo">
+    SELECT
+        ps.id,
+		pd.`name` deptName,
+		dict.name positionName,
+		ps.`name` staffName,
+		ps.work_status workStatus,
+		sa.phone mobile,
+		gc.id carId,
+		gc.sn cardSn,
+		gc.`status` cardStatus
+    FROM
+        t_property_staff ps
+    LEFT JOIN t_staff_archive sa on ps.id = sa.staff_id
+    LEFT JOIN t_property_department pd on ps.department_id = pd.id
+    LEFT JOIN t_sys_dict dict on ps.position = dict.`value` and dict.group_code = 'POSITION'
+    LEFT JOIN t_guard_card_user gcu on ps.id = gcu.id and gcu.user_type = '0'
+    LEFT JOIN t_guard_card gc on gc.id = gcu.card_id
 </select>
 
 </mapper>

@@ -18,8 +18,10 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.guard.GuardPRUserBo;
+import com.liefeng.property.bo.guard.GuardStaffBo;
 import com.liefeng.property.repository.mybatis.GuardUserQueryRepository;
 import com.liefeng.property.vo.guard.GuardPRUserVo;
+import com.liefeng.property.vo.guard.GuardStaffVo;
 
 /**
  * 出入管理
@@ -57,7 +59,6 @@ public class GuardUserContext {
 	/**
 	 * 门禁模块
 	 * 查询业主住户信息
-	 * 
 	 * @param pageSize
 	 * @param currentPage
 	 * @return
@@ -94,4 +95,41 @@ public class GuardUserContext {
 		return guardResidentPage;
 	}
 	
+	/**
+	 * 查询员工信息
+	 * @param guardStaffBo
+	 * @param currentPage
+	 * @param pageSize
+	 * @return
+	 */
+	public DataPageValue<GuardStaffVo> listStaff4Page(GuardStaffBo guardStaffBo, Integer currentPage, Integer pageSize){
+		
+		guardStaffBo.setOemCode(ContextManager.getInstance().getOemCode());
+		
+		Map<String, String> extra = MyBeanUtil.bean2Map(guardStaffBo);
+
+		PagingParamVo pagingParam = new PagingParamVo();
+		pagingParam.setExtra(extra);
+		pagingParam.setRows(pageSize);
+		pagingParam.setPage(currentPage);
+		
+		Long count = guardUserQueryRepository.queryStaffByCount(pagingParam);
+		
+		count = (count == null ? 0 : count);
+		
+		logger.info("总数量：count=" + count);
+		
+		// 设置数据总行数，用于计算偏移量
+		pagingParam.getPager().setRowCount(count);
+		
+		List<GuardStaffVo> guardStaffList = guardUserQueryRepository.queryStaff(pagingParam);
+		
+		guardStaffList = (ValidateHelper.isEmptyCollection(guardStaffList) ? 
+				new ArrayList<GuardStaffVo>() : guardStaffList);
+
+		DataPageValue<GuardStaffVo> guardStaffPage = new DataPageValue<GuardStaffVo>(
+				guardStaffList, count, pageSize, currentPage);
+		
+		return guardStaffPage;
+	}
 }

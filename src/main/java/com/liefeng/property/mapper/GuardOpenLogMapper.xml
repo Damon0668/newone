@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.GuardOpenLogQueryRepository">
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.liefeng.property.vo.guard.GuardOpenLogVo">
+	
+	</resultMap>
+	
+<!-- 查询条件 -->
+<sql id="Where_Clause">
+    WHERE 1=1
+    <trim  suffixOverrides="," >
+    	<if test="extra.openType != null and extra.openType != ''" >
+            AND gol.openType = #{extra.openType}
+        </if>
+    
+        <if test="extra.oemCode != null and extra.oemCode != ''" >
+            AND gol.oemCode = #{extra.oemCode}
+        </if>
+        
+        <if test="extra.projectId != null and extra.projectId != ''" >
+            AND gol.projectId = #{extra.projectId}
+        </if>
+        
+        <if test="extra.projectIds != null and extra.projectIds != ''" >
+            AND gol.projectId in ${extra.projectIds}
+        </if>
+        
+        <if test="extra.guardDeviceType != null and extra.guardDeviceType != ''" >
+            AND cv.guardDeviceType = ${extra.guardDeviceType}
+        </if>
+        
+        <if test="extra.operUserName != null and extra.operUserName != ''" >
+            AND cv.operUserName like CONCAT('%',#{extra.operUserName},'%')
+        </if>
+        
+        <if test="extra.startDate != null and extra.startDate != ''" >
+        	AND DATE_FORMAT(gol.createTime,'%Y-%m-%d') &gt;= FROM_UNIXTIME(#{extra.startDate}/1000,'%Y-%m-%d')
+        </if>
+        
+        <if test="extra.endDate != null and extra.endDate != ''" >
+        	AND DATE_FORMAT(gol.createTime,'%Y-%m-%d') &lt;= FROM_UNIXTIME(#{extra.endDate}/1000,'%Y-%m-%d')
+        </if>
+    </trim>
+</sql>
+
+<select id="queryByCount"  resultType="java.lang.Long">
+	select
+		count(1)
+	from
+		property.v_guard_open_log gol
+	<include refid="Where_Clause"/>
+</select>
+
+<select id="queryByPage" resultMap="BaseResultMap">
+        SELECT
+        	gol.id,
+        	gol.projectName,
+        	gol.operUserName,
+        	gol.mobile,
+        	gol.cardNum,
+        	gol.positionName,
+        	gol.guardDeviceType,
+        	gol.createTime,
+        	gol.action
+        FROM
+        	property.v_guard_open_log gol
+		<include refid="Where_Clause"/>
+		ORDER BY 
+			gol.createTime DESC
+		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+		    ${pager.mysqlQueryCondition}
+		</if>
+</select>
+</mapper>

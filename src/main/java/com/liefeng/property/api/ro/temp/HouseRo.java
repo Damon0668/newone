@@ -87,7 +87,8 @@ public class HouseRo extends BaseValue {
 	 * 销售状态
 	 * 0：未出售 1：待售 2：已售
 	 */
-	@ApiModelProperty(value="销售状态[0：未出售 1：待售 2：已售]")
+	@ApiModelProperty(value="销售状态[0：未出售 1：待售 2：已售]", required=true)
+	@NotNull
 	private String saleStatus;
 
 	/**
