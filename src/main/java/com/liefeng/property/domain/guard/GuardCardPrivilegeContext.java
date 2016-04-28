@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.bouncycastle.jcajce.provider.asymmetric.dsa.DSASigner.detDSA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.guard.GuardCardPrivilegePo;
 import com.liefeng.property.repository.guard.GuardCardPrivilegeRepository;
 import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
+import com.liefeng.property.vo.guard.GuardDeviceVo;
 
 /**
  * 磁卡权限领域模型
@@ -77,16 +77,19 @@ public class GuardCardPrivilegeContext {
 	 * @param guardDeviceId 门口机ID列表
 	 */
 	@Transactional(rollbackOn=Exception.class)
-	public void grantGuardCard(List<String> guardDeviceIds){
+	public void grantGuardCard(List<String> positionIds){
 		if(ValidateHelper.isNotEmptyString(cardId)){
-			if(ValidateHelper.isNotEmptyCollection(guardDeviceIds)){
+			if(ValidateHelper.isNotEmptyCollection(positionIds)){
+				
 				deleteByCardId();
 				
-				for (String guardDeviceId : guardDeviceIds) {
+				List<GuardDeviceVo> deviceList =  GuardDeviceContext.build().findGuardDeviceByPositions(positionIds);
+				
+				for (GuardDeviceVo guardDevice : deviceList) {
 					GuardCardPrivilegePo guardCardPrivilegePo = new GuardCardPrivilegePo();
 					guardCardPrivilegePo.setId(UUIDGenerator.generate());
 					guardCardPrivilegePo.setCardId(cardId);
-					guardCardPrivilegePo.setGuardDeviceId(guardDeviceId);
+					guardCardPrivilegePo.setGuardDeviceId(guardDevice.getId());
 					guardCardPrivilegePo.setOemCode(ContextManager.getInstance().getOemCode());
 					
 					logger.info("grantGuardCard guardCardPrivilegePo = {}", guardCardPrivilegePo);
@@ -95,7 +98,7 @@ public class GuardCardPrivilegeContext {
 			}
 		}
 	}
-	
+
 	public List<GuardCardPrivilegeVo> findAllPrivilege(){
 		List<GuardCardPrivilegeVo> dataList = null;
 		if(ValidateHelper.isNotEmptyString(cardId)){

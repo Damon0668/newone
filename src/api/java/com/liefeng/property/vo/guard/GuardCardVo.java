@@ -2,6 +2,8 @@ package com.liefeng.property.vo.guard;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.liefeng.core.entity.BaseValue;
 
 /**
@@ -34,16 +36,13 @@ public class GuardCardVo extends BaseValue {
 	/**
 	 * 使用开始日期
 	 */
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date startDate;
-
-	/**
-	 * 临时卡 的有效时长 按天
-	 */
-	private int duration;
 
 	/**
 	 * 使用结束日期
 	 */
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date endDate;
 
 	/**
@@ -141,14 +140,6 @@ public class GuardCardVo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
-	}
-
-	public int getDuration() {
-		return duration;
-	}
-
-	public void setDuration(int duration) {
-		this.duration = duration;
 	}
 
 	public String getProjectName() {

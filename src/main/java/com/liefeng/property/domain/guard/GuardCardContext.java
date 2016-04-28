@@ -98,24 +98,22 @@ public class GuardCardContext {
 	}
 	
 	public GuardCardVo create(){
-		
-		GuardCardPo guardCardPo = MyBeanUtil.createBean(guardCard, GuardCardPo.class);
-		guardCardPo.setId(UUIDGenerator.generate());
-		
-		guardCardPo.setStartDate(TimeUtil.getDate(new Date()));
-		if(GuardConstants.GuardCardType.TEMP.equals(guardCard.getType())){
-			guardCardPo.setEndDate(TimeUtil.getDayAfter(TimeUtil.getDate(new Date()), guardCard.getDuration()));
-		}else{
-			guardCardPo.setEndDate(null);
+		if(guardCard != null){
+			GuardCardPo guardCardPo = MyBeanUtil.createBean(guardCard, GuardCardPo.class);
+			guardCardPo.setId(UUIDGenerator.generate());
+			
+			if(GuardConstants.GuardCardType.PERMANENT.equals(guardCard.getType())){
+				guardCardPo.setStartDate(TimeUtil.getDate(new Date()));
+			}
+
+			guardCardPo.setStatus(GuardConstants.GuardCardStatus.NORMAL);
+			guardCardPo.setCreateTime(new Date());
+			guardCardPo.setOemCode(ContextManager.getInstance().getOemCode());
+			
+			logger.info("create guardCard ={}", guardCardPo);
+			guardCardRepository.save(guardCardPo);
+			guardCard = MyBeanUtil.createBean(guardCardPo, GuardCardVo.class);
 		}
-		
-		guardCardPo.setStatus(GuardConstants.GuardCardStatus.NORMAL);
-		guardCardPo.setCreateTime(new Date());
-		guardCardPo.setOemCode(ContextManager.getInstance().getOemCode());
-		
-		logger.info("create guardCard ={}", guardCardPo);
-		guardCardRepository.save(guardCardPo);
-		guardCard = MyBeanUtil.createBean(guardCardPo, GuardCardVo.class);
 		
 		return guardCard;
 	}
@@ -131,15 +129,7 @@ public class GuardCardContext {
 				logger.info("update guardCard ={}", guardCard);
 				
 				MyBeanUtil.copyBeanNotNull2Bean(guardCard, guardCardPo);
-				
-				if(GuardConstants.GuardCardType.TEMP.equals(guardCard.getType())){
-					if(guardCard.getDuration() > 0){
-						guardCardPo.setEndDate(TimeUtil.getDayAfter(TimeUtil.getDate(new Date()), guardCard.getDuration()));
-					}
-				}else{
-					guardCardPo.setEndDate(null);
-				}
-				
+
 				logger.info("update guardCardPo ={}", guardCardPo);
 				guardCardRepository.save(guardCardPo);
 				

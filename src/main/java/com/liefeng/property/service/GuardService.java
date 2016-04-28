@@ -1,5 +1,7 @@
 package com.liefeng.property.service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -18,6 +20,7 @@ import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.ICheckService;
 import com.liefeng.intf.base.device.IDeviceService;
 import com.liefeng.intf.property.IGuardService;
+import com.liefeng.intf.property.ISysService;
 import com.liefeng.intf.service.tcc.ITccMsgService;
 import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.guard.DevicePositionBo;
@@ -42,9 +45,11 @@ import com.liefeng.property.vo.guard.GuardCardLogVo;
 import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
 import com.liefeng.property.vo.guard.GuardCardUserVo;
 import com.liefeng.property.vo.guard.GuardCardVo;
+import com.liefeng.property.vo.guard.GuardDeviceTypeVo;
 import com.liefeng.property.vo.guard.GuardDeviceVo;
 import com.liefeng.property.vo.guard.GuardPRUserVo;
 import com.liefeng.property.vo.household.VisitorVo;
+import com.liefeng.property.vo.sys.SysDictVo;
 
 /**
  * 门禁服务
@@ -64,6 +69,9 @@ public class GuardService implements IGuardService{
 	
 	@Autowired
 	private IDeviceService deviceService;
+	
+	@Autowired
+	private ISysService sysService;
 
 	@Transactional(rollbackOn=Exception.class)
 	@Override
@@ -180,14 +188,15 @@ public class GuardService implements IGuardService{
 
 	@Transactional(rollbackOn=Exception.class)
 	@Override
-	public void createGuardCard(GuardCardUserVo guardCardUser, GuardCardVo guardCard, List<String> guardDeviceIds) {
+	public void createGuardCard(GuardCardUserVo guardCardUser, GuardCardVo guardCard, List<String> positionIds) {
 		
-		guardCard = GuardCardContext.build(guardCard).create();
+		String guardCardId = GuardCardContext.build(guardCard).create().getId();
 		
-		guardCardUser.setCardId(guardCard.getId());
+		guardCardUser.setCardId(guardCardId);
+		
 		GuardCardUserContext.build(guardCardUser).create();
 		
-		//GuardCardPrivilegeContext.loadByCardId(guardCard.getId()).grantGuardCard(guardDeviceIds);
+		GuardCardPrivilegeContext.loadByCardId(guardCardId).grantGuardCard(positionIds);
 
 	}
 
@@ -304,6 +313,28 @@ public class GuardService implements IGuardService{
 	@Override
 	public List<GuardDeviceVo> listPrivilegeDevice(String cardId) {
 		return GuardDeviceContext.build().listPrivilegeDevice(cardId);
+	}
+
+	@Override
+	public List<GuardDeviceTypeVo> findDevicePositionOnGroup(String projectId) {
+		
+		List<SysDictVo> sysDiclist = sysService.getDictByGroupCode("DEVICE_TYPE");
+		
+		List<GuardDeviceTypeVo> deviceTypList = new ArrayList<GuardDeviceTypeVo> ();
+		
+		if(ValidateHelper.isNotEmptyCollection(sysDiclist)){
+			for (int i = 0; i < sysDiclist.size(); i++) {
+				GuardDeviceTypeVo guardDeviceType = MyBeanUtil.createBean(sysDiclist.get(i), GuardDeviceTypeVo.class);
+				
+				List<DevicePositionVo> positionList = DevicePositionContext.build().findPosition4Type(projectId, guardDeviceType.getValue());
+				if(ValidateHelper.isNotEmptyCollection(positionList)){
+					guardDeviceType.setChildren(positionList);
+					deviceTypList.add(guardDeviceType);
+				}
+			}
+		}
+		
+		return deviceTypList;
 	}
 
 }
