@@ -3,10 +3,12 @@ package com.liefeng.property.vo.guard;
 import java.util.Date;
 
 import com.liefeng.core.entity.BaseValue;
+import com.liefeng.property.annotation.Dict;
 
 /**
  * 开门日志视图对象
  * @author Huangama
+ * @author ZhenTingJun
  * @date 2016-2-29
  */
 public class GuardOpenLogVo extends BaseValue {
@@ -59,6 +61,49 @@ public class GuardOpenLogVo extends BaseValue {
 	 * OEM编码
 	 */
 	private String oemCode;
+	
+	/* =================== 冗余字段 =================== */
+	
+	/**
+	 * 操作用户姓名
+	 */
+	private String operUserName;
+	
+	/**
+	 * 操作人手机号
+	 */
+	private String mobile;
+	
+	/**
+	 * 磁卡编号
+	 */
+	private String carNum;
+	
+	/**
+	 * 项目名称
+	 */
+	private String projectName;
+	
+	/**
+	 * 设备类型
+	 */
+	@Dict(group = "DEVICE_TYPE")
+	private String guardDeviceType;
+	
+	/**
+	 * 设备名称
+	 */
+	private String guardDeviceName;
+	
+	/**
+	 * 设备编号
+	 */
+	private String guardDeviceNum;
+	
+	/**
+	 * 位置名称
+	 */
+	private String positionName;
 
 	public String getId() {
 		return id;
@@ -138,6 +183,70 @@ public class GuardOpenLogVo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getOperUserName() {
+		return operUserName;
+	}
+
+	public void setOperUserName(String operUserName) {
+		this.operUserName = operUserName;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getCarNum() {
+		return carNum;
+	}
+
+	public void setCarNum(String carNum) {
+		this.carNum = carNum;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getGuardDeviceType() {
+		return guardDeviceType;
+	}
+
+	public void setGuardDeviceType(String guardDeviceType) {
+		this.guardDeviceType = guardDeviceType;
+	}
+
+	public String getGuardDeviceName() {
+		return guardDeviceName;
+	}
+
+	public void setGuardDeviceName(String guardDeviceName) {
+		this.guardDeviceName = guardDeviceName;
+	}
+
+	public String getGuardDeviceNum() {
+		return guardDeviceNum;
+	}
+
+	public void setGuardDeviceNum(String guardDeviceNum) {
+		this.guardDeviceNum = guardDeviceNum;
+	}
+
+	public String getPositionName() {
+		return positionName;
+	}
+
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
 	}
 
 }

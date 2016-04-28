@@ -7,6 +7,7 @@ import com.liefeng.core.exception.LiefengException;
 import com.liefeng.property.bo.guard.DevicePositionBo;
 import com.liefeng.property.bo.guard.GuardCardBo;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
+import com.liefeng.property.bo.guard.GuardOpenLogBo;
 import com.liefeng.property.bo.guard.GuardPRUserBo;
 import com.liefeng.property.vo.guard.AttendantVo;
 import com.liefeng.property.vo.guard.DevicePositionVo;
@@ -15,6 +16,7 @@ import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
 import com.liefeng.property.vo.guard.GuardCardUserVo;
 import com.liefeng.property.vo.guard.GuardCardVo;
 import com.liefeng.property.vo.guard.GuardDeviceVo;
+import com.liefeng.property.vo.guard.GuardOpenLogVo;
 import com.liefeng.property.vo.guard.GuardPRUserVo;
 import com.liefeng.property.vo.household.VisitorVo;
 
@@ -278,4 +280,15 @@ public interface IGuardService {
 	 * @date 2016年4月20日
 	 */
 	public List<GuardDeviceVo> listPrivilegeDevice(String cardId);
+	
+	/**
+	 * 分页查询开门日志
+	 * @param params 查询过滤参数
+	 * @param currentPage 分页当前页
+	 * @param pageSize 分页大小
+	 * @return 开门日志
+	 * @author ZhenTingJun
+	 * @date 2016年4月28日
+	 */
+	public DataPageValue<GuardOpenLogVo> listGuardOpenLog(GuardOpenLogBo params, Integer currentPage, Integer pageSize);
 }

@@ -23,6 +23,7 @@ import com.liefeng.mq.type.TccBasicEvent;
 import com.liefeng.property.bo.guard.DevicePositionBo;
 import com.liefeng.property.bo.guard.GuardCardBo;
 import com.liefeng.property.bo.guard.GuardDeviceBo;
+import com.liefeng.property.bo.guard.GuardOpenLogBo;
 import com.liefeng.property.bo.guard.GuardPRUserBo;
 import com.liefeng.property.constant.GuardConstants;
 import com.liefeng.property.domain.guard.AttendantContext;
@@ -33,6 +34,7 @@ import com.liefeng.property.domain.guard.GuardCardLogContext;
 import com.liefeng.property.domain.guard.GuardCardPrivilegeContext;
 import com.liefeng.property.domain.guard.GuardCardUserContext;
 import com.liefeng.property.domain.guard.GuardDeviceContext;
+import com.liefeng.property.domain.guard.GuardOpenLogContext;
 import com.liefeng.property.domain.guard.GuardUserContext;
 import com.liefeng.property.domain.household.VisitorContext;
 import com.liefeng.property.vo.guard.AttendantVo;
@@ -43,6 +45,7 @@ import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
 import com.liefeng.property.vo.guard.GuardCardUserVo;
 import com.liefeng.property.vo.guard.GuardCardVo;
 import com.liefeng.property.vo.guard.GuardDeviceVo;
+import com.liefeng.property.vo.guard.GuardOpenLogVo;
 import com.liefeng.property.vo.guard.GuardPRUserVo;
 import com.liefeng.property.vo.household.VisitorVo;
 
@@ -52,7 +55,7 @@ import com.liefeng.property.vo.household.VisitorVo;
  * @date 2016年3月1日
  */
 @Service
-public class GuardService implements IGuardService{
+public class GuardService implements IGuardService {
 	
 	private Logger logger = LoggerFactory.getLogger(GuardService.class);
 	
@@ -304,6 +307,13 @@ public class GuardService implements IGuardService{
 	@Override
 	public List<GuardDeviceVo> listPrivilegeDevice(String cardId) {
 		return GuardDeviceContext.build().listPrivilegeDevice(cardId);
+	}
+
+	@Override
+	public DataPageValue<GuardOpenLogVo> listGuardOpenLog(GuardOpenLogBo params, Integer currentPage,
+			Integer pageSize) {
+		GuardOpenLogContext guardOpenLogContext =  GuardOpenLogContext.build();
+		return guardOpenLogContext.listGuardOpenLog(params, currentPage, pageSize);
 	}
 
 }
