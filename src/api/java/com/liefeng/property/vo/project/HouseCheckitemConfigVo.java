@@ -41,6 +41,8 @@ public class HouseCheckitemConfigVo extends BaseValue {
 	 * 项目id
 	 */
 	private String projectId;
+	
+	private Integer count;
 
 	public String getId() {
 		return id;
@@ -99,6 +101,16 @@ public class HouseCheckitemConfigVo extends BaseValue {
 
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
+	}
+
+
+	public Integer getCount() {
+		return count;
+	}
+
+
+	public void setCount(Integer count) {
+		this.count = count;
 	}
 
 }

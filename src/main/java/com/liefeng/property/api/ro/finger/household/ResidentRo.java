@@ -18,8 +18,12 @@ public class ResidentRo extends BaseValue {
 	
 	private static final long serialVersionUID = 3329242939253548989L;
 
+	@ApiModelProperty(value="业主id", required=true)
+	@NotNull
 	private String proprietorId;
 	
+	@ApiModelProperty(value="房间id", required=true)
+	@NotNull
 	private String houseId;
 	
 	@ApiModelProperty(value="房间号", required=true)
@@ -59,7 +63,7 @@ public class ResidentRo extends BaseValue {
 	@NotNull
 	private String projectId;
 	
-	private CustomerVo customer;
+	//private CustomerVo customer;
 
 	public String getProprietorId() {
 		return proprietorId;
@@ -157,12 +161,12 @@ public class ResidentRo extends BaseValue {
 		this.houseNum = houseNum;
 	}
 
-	public CustomerVo getCustomer() {
+	/*public CustomerVo getCustomer() {
 		return customer;
 	}
 
 	public void setCustomer(CustomerVo customer) {
 		this.customer = customer;
-	}
+	}*/
 
 }

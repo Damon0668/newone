@@ -41,7 +41,7 @@ public interface ProjectBuildingRepository extends JpaRepository<ProjectBuilding
      * @param projectId 项目ID
      * @return
      */
-	Page<ProjectBuildingPo> findBuildingsByProjectIdAndParentIdIsNull(String projectId, Pageable pageable);
+	Page<ProjectBuildingPo> findBuildingsByProjectIdAndParentIdIsNullOrderByCode(String projectId, Pageable pageable);
 	
     /**
      * 分页查询楼栋下的楼层
