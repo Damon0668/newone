@@ -57,6 +57,18 @@ public class OwnerController {
 	@RequestMapping(value="/saveProprietor", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue saveProprietor(@Valid @ModelAttribute ProprietorSingleHouseRo proprietorSingleHouseRo){
+
+		try {
+			if(ValidateHelper.isNotEmptyString(proprietorSingleHouseRo.getName())){
+				proprietorSingleHouseRo.setName(URLDecoder.decode(proprietorSingleHouseRo.getName(),"utf-8"));
+			}
+			if(ValidateHelper.isNotEmptyString(proprietorSingleHouseRo.getAddress())){
+				proprietorSingleHouseRo.setAddress(URLDecoder.decode(proprietorSingleHouseRo.getAddress(),"utf-8"));
+			}
+			proprietorSingleHouseRo.setUseType("1");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		ProprietorSingleHouseVo proprietorSingleHouseVo = MyBeanUtil.createBean(proprietorSingleHouseRo, ProprietorSingleHouseVo.class);
 		householdService.saveProprietor(proprietorSingleHouseVo);
 		return ReturnValue.success();
@@ -99,27 +111,26 @@ public class OwnerController {
 		try {
 		HouseVo houseVo = MyBeanUtil.createBean(houseRo, HouseVo.class);
 		
-		String houseType = sysService.getDictValueByName("HOUSE_TYPE", houseVo.getHouseType());
+		String houseType = sysService.getDictValueByName("HOUSE_TYPE", URLDecoder.decode(houseVo.getHouseType(),"utf-8"));
 		if(ValidateHelper.isEmptyString(houseType)){
-			throw new PropertyException("{}户型不存在",houseVo.getHouseType());
+			throw new PropertyException(houseVo.getHouseType());
 		}
 		houseVo.setHouseType(houseType);
 		if(ValidateHelper.isNotEmptyString(houseRo.getBuildingName())){
-			projectBuildingVo = projectService.findBuilding(houseRo.getProjectId(),null,houseRo.getBuildingName());
+			projectBuildingVo = projectService.findBuilding(houseRo.getProjectId(),null,URLDecoder.decode(houseRo.getBuildingName(),"utf-8"));
 			if(projectBuildingVo == null){
 				projectBuildingVo = new ProjectBuildingVo();
 				projectBuildingVo.setProjectId(houseRo.getProjectId());
-				
 				projectBuildingVo.setName(URLDecoder.decode(houseRo.getBuildingName(),"utf-8"));
 				projectBuildingVo.setCode(houseRo.getBuildingCode());
 				projectService.createProjectBuilding(projectBuildingVo);
-				projectBuildingVo = projectService.findBuilding(houseRo.getProjectId(),null,houseRo.getBuildingName());
+				projectBuildingVo = projectService.findBuilding(houseRo.getProjectId(),null,URLDecoder.decode(houseRo.getBuildingName(),"utf-8"));
 			}
 			houseVo.setBuildingId(projectBuildingVo.getId());
 		}
 		
 		if(ValidateHelper.isNotEmptyString(houseRo.getFloorName())){
-			floorVo = projectService.findBuilding(houseRo.getProjectId(),houseVo.getBuildingId(),houseRo.getFloorName());
+			floorVo = projectService.findBuilding(houseRo.getProjectId(),houseVo.getBuildingId(),URLDecoder.decode(houseRo.getFloorName(),"utf-8"));
 			if(floorVo == null){
 				floorVo = new ProjectBuildingVo();
 				floorVo.setParentId(houseVo.getBuildingId());
@@ -127,7 +138,7 @@ public class OwnerController {
 				floorVo.setName(URLDecoder.decode(houseRo.getFloorName(),"utf-8"));
 				floorVo.setCode(houseRo.getFloorCode());
 				projectService.createProjectBuilding(floorVo);
-				floorVo = projectService.findBuilding(houseRo.getProjectId(),houseVo.getBuildingId(),houseRo.getFloorName());
+				floorVo = projectService.findBuilding(houseRo.getProjectId(),houseVo.getBuildingId(),URLDecoder.decode(houseRo.getFloorName(),"utf-8"));
 			}
 			houseVo.setFloorId(floorVo.getId());
 		}
