@@ -1,10 +1,10 @@
-package com.liefeng.property.repository.household;
+package com.liefeng.property.repository.project;
 
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.liefeng.property.po.household.HouseCheckitemConfigPo;
+import com.liefeng.property.po.project.HouseCheckitemConfigPo;
 
 /**
  * 房屋验收配置项仓储层

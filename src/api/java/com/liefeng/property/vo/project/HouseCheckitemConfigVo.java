@@ -1,9 +1,4 @@
-package com.liefeng.property.po.household;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+package com.liefeng.property.vo.project;
 
 import com.liefeng.core.entity.BaseValue;
 
@@ -12,43 +7,40 @@ import com.liefeng.core.entity.BaseValue;
  * @author xhw
  * @date 2016年4月26日 下午4:19:44
  */
-@Entity
-@Table(name = "t_house_checkitem_config")
-public class HouseCheckitemConfigPo extends BaseValue {
+public class HouseCheckitemConfigVo extends BaseValue {
 
-	private static final long serialVersionUID = -8394151496740761828L;
+	private static final long serialVersionUID = 3680938398990450847L;
 
 	/**
 	 * 主键
 	 */
-	@Id
 	private String id;
 	
 	/**
 	 * 父ID(从0开始) 
 	 */
-	@Column(name = "parent_id")
 	private String parentId;
 	
 	/**
 	 * 项目名称
 	 */
-	@Column(name = "itemname")
 	private String itemname;
 	
 	/**
 	 * 排序
 	 */
-	@Column(name = "sortindex")
 	private String sortindex;
 	
 	
 	/**
 	 * OEM编码
 	 */
-	@Column(name = "oem_code")
 	private String oemCode;
 
+	/**
+	 * 项目id
+	 */
+	private String projectId;
 
 	public String getId() {
 		return id;
@@ -97,6 +89,16 @@ public class HouseCheckitemConfigPo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
 	}
 
 }

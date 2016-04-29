@@ -54,5 +54,8 @@ public class ProjectConstants {
 		public String NO_THROUGH = "2";
 	}
 	
-	
+	/**
+	 * 0:父类
+	 */
+	public static final String ParentType = "0";
 }
