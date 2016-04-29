@@ -25,11 +25,7 @@ public class ResidentRo extends BaseValue {
 	@ApiModelProperty(value="房间id", required=true)
 	@NotNull
 	private String houseId;
-	
-	@ApiModelProperty(value="房间号", required=true)
-	@NotNull
-	public String houseNum;
-	
+
 	@ApiModelProperty(value="头像")
 	private String pic;
 	
@@ -62,8 +58,6 @@ public class ResidentRo extends BaseValue {
 	@ApiModelProperty(value="项目id", required=true)
 	@NotNull
 	private String projectId;
-	
-	//private CustomerVo customer;
 
 	public String getProprietorId() {
 		return proprietorId;
@@ -152,21 +146,4 @@ public class ResidentRo extends BaseValue {
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
 	}
-
-	public String getHouseNum() {
-		return houseNum;
-	}
-
-	public void setHouseNum(String houseNum) {
-		this.houseNum = houseNum;
-	}
-
-	/*public CustomerVo getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(CustomerVo customer) {
-		this.customer = customer;
-	}*/
-
 }

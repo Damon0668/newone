@@ -78,7 +78,7 @@ public class OwnerController {
 	@RequestMapping(value="/saveResident", method=RequestMethod.POST)
 	@ResponseBody
 	public ReturnValue saveResident(@Valid @ModelAttribute ResidentRo resident){
-		ProprietorHouseVo proprietorHouseVo =  householdService.getProprietorHouse(resident.getProjectId(), resident.getHouseNum());
+		ProprietorHouseVo proprietorHouseVo =  householdService.getProprietorHouse(resident.getProjectId(), null /*resident.getHouseNum()*/);
 		if(proprietorHouseVo == null){
 			 throw  new PropertyException("不存在业主");
 		}
