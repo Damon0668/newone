@@ -30,11 +30,11 @@
         </if>
         
         <if test="extra.guardDeviceType != null and extra.guardDeviceType != ''" >
-            AND cv.guardDeviceType = ${extra.guardDeviceType}
+            AND gol.guardDeviceType = #{extra.guardDeviceType}
         </if>
         
         <if test="extra.operUserName != null and extra.operUserName != ''" >
-            AND cv.operUserName like CONCAT('%',#{extra.operUserName},'%')
+            AND gol.operUserName like CONCAT('%',#{extra.operUserName},'%')
         </if>
         
         <if test="extra.startDate != null and extra.startDate != ''" >

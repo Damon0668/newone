@@ -1,4 +1,4 @@
-package com.liefeng.property.vo.household;
+package com.liefeng.property.vo.project;
 
 import com.liefeng.core.entity.BaseValue;
 
@@ -37,6 +37,12 @@ public class HouseCheckitemConfigVo extends BaseValue {
 	 */
 	private String oemCode;
 
+	/**
+	 * 项目id
+	 */
+	private String projectId;
+	
+	private Integer count;
 
 	public String getId() {
 		return id;
@@ -85,6 +91,26 @@ public class HouseCheckitemConfigVo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+
+	public Integer getCount() {
+		return count;
+	}
+
+
+	public void setCount(Integer count) {
+		this.count = count;
 	}
 
 }

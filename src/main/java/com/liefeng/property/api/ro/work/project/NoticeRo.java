@@ -1,4 +1,4 @@
-package com.liefeng.property.api.ro.finger.household;
+package com.liefeng.property.api.ro.work.project;
 
 import javax.validation.constraints.NotNull;
 
@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel
 public class NoticeRo extends BaseValue {
 
-	private static final long serialVersionUID = -6939350928959032246L;
+	private static final long serialVersionUID = 4530749329409948557L;
 
 	@ApiModelProperty(value="接收端裂隙【1：电视； 2：电脑； 3：移动设备】")
 	private String terminal;
@@ -25,13 +25,14 @@ public class NoticeRo extends BaseValue {
 	@NotNull
 	private String noticeType;
 	
-	@ApiModelProperty(value="项目id", required=true)
+	@ApiModelProperty(value="项目id【员工：所管理的项目id字符串】", required=true)
 	@NotNull
 	private String projectId;
 
-	@ApiModelProperty(value="楼栋id", required=true)
+	@ApiModelProperty(value="部门id", required=true)
 	@NotNull
 	private String groupId;
+	
 	
 	@ApiModelProperty(value="当前页【第几页，最小值为1】", required=true)
 	@NotNull
@@ -64,13 +65,6 @@ public class NoticeRo extends BaseValue {
 		this.projectId = projectId;
 	}
 
-	public String getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(String groupId) {
-		this.groupId = groupId;
-	}
 
 	public Integer getPage() {
 		return page;
@@ -87,5 +81,13 @@ public class NoticeRo extends BaseValue {
 	public void setSize(Integer size) {
 		this.size = size;
 	}
-	
+
+	public String getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
+	}
+
 }

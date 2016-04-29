@@ -206,7 +206,7 @@ public class ProjectBuildingContext {
 		Page<ProjectBuildingVo> voPage = null;
 
 		// spring-data 的page从0开始
-		Page<ProjectBuildingPo> poPage = projectBuildingRepository.findBuildingsByProjectIdAndParentIdIsNull(projectId,
+		Page<ProjectBuildingPo> poPage = projectBuildingRepository.findBuildingsByProjectIdAndParentIdIsNullOrderByCode(projectId,
 				new PageRequest(page - 1, size));
 		voPage = poPage.map(new Po2VoConverter<ProjectBuildingPo, ProjectBuildingVo>(ProjectBuildingVo.class));
 

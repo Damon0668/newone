@@ -1,4 +1,4 @@
-package com.liefeng.property.domain.household;
+package com.liefeng.property.domain.project;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,10 +16,10 @@ import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
-import com.liefeng.property.po.household.HouseCheckitemConfigPo;
-import com.liefeng.property.repository.household.HouseCheckitemConfigRepository;
+import com.liefeng.property.po.project.HouseCheckitemConfigPo;
 import com.liefeng.property.repository.mybatis.HouseCheckitemConfigQueryRepository;
-import com.liefeng.property.vo.household.HouseCheckitemConfigVo;
+import com.liefeng.property.repository.project.HouseCheckitemConfigRepository;
+import com.liefeng.property.vo.project.HouseCheckitemConfigVo;
 
 /**
  * 房屋验收项配置上下文对象

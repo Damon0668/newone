@@ -2,6 +2,8 @@ package com.liefeng.property.bo.guard;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.liefeng.core.entity.BaseValue;
 
 /**
@@ -42,11 +44,13 @@ public class GuardOpenLogBo extends BaseValue {
 	/**
 	 * 搜索开始时间
 	 */
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date startDate;
 
 	/**
 	 * 搜索结束时间
 	 */
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date endDate;
 
 	/**

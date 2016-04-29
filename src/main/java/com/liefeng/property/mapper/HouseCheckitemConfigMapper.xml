@@ -5,7 +5,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.liefeng.property.repository.mybatis.HouseCheckitemConfigQueryRepository" > 
 <!-- Result Map-->
-<resultMap id="BaseResultMap" type="com.liefeng.property.vo.household.HouseCheckitemConfigVo" >
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.project.HouseCheckitemConfigVo" >
 </resultMap>
 
 <!-- 查询条件 -->
@@ -13,29 +13,49 @@
 where 1=1 
 <trim  suffixOverrides="," >
 	<if test="extra.parentId != null and extra.parentId != ''" >
-	    AND parent_id = #{extra.parentId}
+	    AND a.parent_id = #{extra.parentId}
 	</if>
 	
 	<if test="extra.oemCode != null and extra.oemCode != ''" >
-	    AND oem_code = #{extra.oemCode}
+	    AND a.oem_code = #{extra.oemCode}
 	</if>
 	
 	<if test="extra.projectId != null and extra.projectId != ''" >
-	    AND project_id =  #{extra.projectId}
+	    AND a.project_id =  #{extra.projectId}
 	</if>
-	order by sortindex desc
+	order by a.sortindex desc
 </trim>
 </sql>
 
 <select id="queryByPage" resultMap="BaseResultMap">
 	    SELECT
-			id,
-			parent_id AS parentId,
-			itemname,
-			sortindex,
-			project_id AS projectId
+			a.id,
+			a.parent_id AS parentId,
+			a.itemname,
+			a.sortindex,
+			a.project_id AS projectId,
+			(
+				SELECT
+					count(b.id)
+				FROM
+					t_house_check b
+				WHERE
+					a.oem_code = b.oem_code
+				AND(
+					(
+						a.parent_id != '0'
+						AND a.parent_id = b.item_id
+						AND a.id = b.result_id
+					)
+					OR(
+						a.parent_id = '0'
+						AND a.id = b.item_id
+					)
+				)
+			)AS count
+			
 		FROM
-			t_house_checkitem_config
+			t_house_checkitem_config a
 		<include refid="Where_Clause" />
 		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
 	          ${pager.mysqlQueryCondition}
@@ -48,9 +68,9 @@ where 1=1
 		count(1) 
 	from(
 		select 
-			id
+			a.id
 	    from 
-	    	t_house_checkitem_config
+	    	t_house_checkitem_config a
 	    <include refid="Where_Clause" />
 		) t
 </select>

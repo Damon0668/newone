@@ -48,69 +48,7 @@
 	select
 		un.*
 	from
-		((select
-			cq.id as id,
-			cq.user_id as userId,
-			ph.project_id as projectId,
-			h.id as houseId,
-			cq.seq as seq,
-			cq.status as status,
-			cq.create_time as createTime,
-			cq.tran_time as tranTime,
-			cq.oem_code as oemCode,
-			ph.id as proprietorHouseId,
-			ph.house_num as houseNum,
-			p.id as proprietorId,
-			p.name as proprietorName,
-			p.phone as mobile
-		from
-			property.t_proprietor_house ph
-			left join property.t_house h
-			on h.project_id = ph.project_id and h.house_num = ph.house_num
-			left join property.t_proprietor p 
-			on p.id = ph.proprietor_id 
-			left join property.t_checkin_queue cq
-			on cq.project_id = h.project_id and cq.house_id = h.id
-		where
-			((TO_DAYS(cq.create_time) = TO_DAYS(NOW()) and cq.status != '2') 
-			or (TO_DAYS(cq.create_time) != TO_DAYS(NOW()) and cq.status = '1'))
-			and cq.project_id = #{extra.projectId} 
-			and cq.oem_code = #{extra.oemCode}
-		order by
-			to_days(cq.create_time) desc, cq.seq asc)
-		union all 
-		(select
-			cq.id as id,
-			u.id as userId,
-			ph.project_id as projectId,
-			h.id as houseId,
-			cq.seq as seq,
-			cq.status as status,
-			cq.create_time as createTime,
-			cq.tran_time as tranTime,
-			cq.oem_code as oemCode,
-			ph.id as proprietorHouseId, 
-			ph.house_num as houseNum,
-			p.id as proprietorId,
-			p.name as proprietorName,
-			p.phone as mobile
-		from
-			property.t_proprietor_house ph
-			left join property.t_house h
-			on h.project_id = ph.project_id and h.house_num = ph.house_num
-			left join property.t_proprietor p 
-			on p.id = ph.proprietor_id 
-			left join basic.t_user u 
-			on u.cust_global_id = p.cust_global_id and u.mobile = p.phone and u.oem_code = p.oem_code
-			left join property.t_checkin_queue cq
-			on cq.project_id = h.project_id and cq.house_id = h.id
-		where
-			(cq.id is not null and cq.status = '2')
-			or (cq.id is null) 
-			and ph.project_id = #{extra.projectId} 
-			and ph.oem_code = #{extra.oemCode}
-		order by
-			cq.tran_time desc)) as un
+		(<include refid="base_sql"/>) as un
 	<include refid="Base_Clause"/>
     <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
         ${pager.mysqlQueryCondition}
@@ -124,52 +62,72 @@
 		(select
 			un.*
 		from
-			((select
-				cq.seq as seq,
-				cq.status as status,
-				cq.create_time as createTime,
-				cq.tran_time as tranTime,
-				ph.house_num as houseNum,
-				p.name as proprietorName,
-				p.phone as mobile
-			 from
-				property.t_proprietor_house ph
-				left join property.t_house h
-				on h.project_id = ph.project_id and h.house_num = ph.house_num
-				left join property.t_proprietor p 
-				on p.id = ph.proprietor_id 
-				left join property.t_checkin_queue cq
-				on cq.project_id = h.project_id and cq.house_id = h.id
-			 where
-				((TO_DAYS(cq.create_time) = TO_DAYS(NOW()) and cq.status != '2') 
-				or (TO_DAYS(cq.create_time) != TO_DAYS(NOW()) and cq.status = '1'))
-				and cq.project_id = #{extra.projectId} 
-				and cq.oem_code = #{extra.oemCode})
-			 union all 
-			 (select
-				cq.seq as seq,
-				cq.status as status,
-				cq.create_time as createTime,
-				cq.tran_time as tranTime,
-				ph.house_num as houseNum,
-				p.name as proprietorName,
-				p.phone as mobile
-			 from
-				property.t_proprietor_house ph
-				left join property.t_house h
-				on h.project_id = ph.project_id and h.house_num = ph.house_num
-				left join property.t_proprietor p 
-				on p.id = ph.proprietor_id 
-				left join property.t_checkin_queue cq
-				on cq.project_id = h.project_id and cq.house_id = h.id
-			 where
-				(cq.id is not null and cq.status = '2')
-				 or (cq.id is null)
-			 	 and cq.project_id = #{extra.projectId} 
-			 	 and cq.oem_code = #{extra.oemCode}
-				 )
-			) as un 
+			(<include refid="base_sql"/>) as un 
 			<include refid="Base_Clause"/>
 		) as ttt
 </select>
+
+<sql id="base_sql">
+(select
+		cq.id as id,
+		cq.user_id as userId,
+		ph.project_id as projectId,
+		h.id as houseId,
+		cq.seq as seq,
+		cq.status as status,
+		cq.create_time as createTime,
+		cq.tran_time as tranTime,
+		cq.oem_code as oemCode,
+		ph.id as proprietorHouseId,
+		ph.house_num as houseNum,
+		p.id as proprietorId,
+		p.name as proprietorName,
+		p.phone as mobile
+	from
+		property.t_proprietor_house ph
+		left join property.t_house h
+		on h.project_id = ph.project_id and h.house_num = ph.house_num
+		left join property.t_proprietor p 
+		on p.id = ph.proprietor_id 
+		left join property.t_checkin_queue cq
+		on cq.project_id = h.project_id and cq.house_id = h.id
+	where
+		((TO_DAYS(cq.create_time) = TO_DAYS(NOW()) and cq.status != '2') 
+		or (TO_DAYS(cq.create_time) != TO_DAYS(NOW()) and cq.status = '1'))
+		and cq.project_id = #{extra.projectId} 
+		and cq.oem_code = #{extra.oemCode}
+	order by
+		to_days(cq.create_time) desc, cq.seq asc)
+	union all 
+	(select
+		cq.id as id,
+		u.id as userId,
+		ph.project_id as projectId,
+		h.id as houseId,
+		cq.seq as seq,
+		cq.status as status,
+		cq.create_time as createTime,
+		cq.tran_time as tranTime,
+		cq.oem_code as oemCode,
+		ph.id as proprietorHouseId, 
+		ph.house_num as houseNum,
+		p.id as proprietorId,
+		p.name as proprietorName,
+		p.phone as mobile
+	from
+		property.t_proprietor_house ph
+		LEFT JOIN property.t_house h ON h.project_id = ph.project_id
+		AND h.house_num = ph.house_num AND h.oem_code = ph.oem_code
+		LEFT JOIN property.t_proprietor p ON p.id = ph.proprietor_id AND p.oem_code = ph.oem_code
+		LEFT JOIN basic.t_user u ON u.cust_global_id = p.cust_global_id
+		AND u.mobile = p.phone 
+		AND u.oem_code = p.oem_code
+		LEFT JOIN property.t_checkin_queue cq ON cq.project_id = h.project_id
+		AND cq.house_id = h.id
+		WHERE
+			(cq.id IS NOT NULL AND cq. STATUS = '2' AND cq.project_id = #{extra.projectId} AND cq.oem_code = #{extra.oemCode})
+			OR (cq.id IS NULL AND ph.project_id = #{extra.projectId} AND ph.oem_code = #{extra.oemCode})
+		ORDER BY
+			cq.tran_time DESC)
+</sql>
 </mapper>   

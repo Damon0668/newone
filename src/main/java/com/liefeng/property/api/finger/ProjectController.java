@@ -23,6 +23,8 @@ import com.liefeng.property.api.ro.finger.project.ProjectNoticeRo;
 import com.liefeng.property.api.ro.id.NoticeIdRo;
 import com.liefeng.property.api.ro.id.ProjectIdRo;
 import com.liefeng.property.bo.workbench.NoticeBo;
+import com.liefeng.property.constant.HouseholdConstants;
+import com.liefeng.property.constant.WorkbenchConstants;
 import com.liefeng.property.vo.project.AppHomeImageVo;
 import com.liefeng.property.vo.project.ProjectNoticeVo;
 import com.liefeng.property.vo.project.ProjectVo;
@@ -72,6 +74,7 @@ public class ProjectController {
 	@ResponseBody
 	public DataPageValue<NoticeVo> getNoticeList(@Valid @ModelAttribute NoticeRo noticeRo){
 		NoticeBo noticeBo = MyBeanUtil.createBean(noticeRo, NoticeBo.class);
+		noticeBo.setPrivilegeType(WorkbenchConstants.NoticePrivilegeType.RESIDENT);
 		DataPageValue<NoticeVo> noticeDataPage = workbenchService.findNoticeOfPublished(noticeBo);
 		return noticeDataPage;
 	}

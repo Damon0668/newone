@@ -1,4 +1,4 @@
-package com.liefeng.property.po.household;
+package com.liefeng.property.po.project;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,7 +49,12 @@ public class HouseCheckitemConfigPo extends BaseValue {
 	@Column(name = "oem_code")
 	private String oemCode;
 
-
+	/**
+	 * 项目id
+	 */
+	@Column(name = "project_id")
+	private String projectId;
+	
 	public String getId() {
 		return id;
 	}
@@ -97,6 +102,16 @@ public class HouseCheckitemConfigPo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
 	}
 
 }
