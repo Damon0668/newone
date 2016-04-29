@@ -39,7 +39,7 @@ public class DevicePositionVo extends BaseValue{
 	 */
 	@Dict(group="DEVICE_TYPE")
 	private String deviceType;
-	
+
 	/**
 	 * OEM编码
 	 */

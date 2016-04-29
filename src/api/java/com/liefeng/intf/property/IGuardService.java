@@ -75,6 +75,20 @@ public interface IGuardService {
 	 * @return
 	 */
 	public List<GuardDeviceTypeVo> findDevicePositionOnGroup(String projectId);
+	
+	/**
+	 * 查询项目位置类型
+	 * 按组分类
+	 * @return
+	 */
+	public List<GuardDeviceTypeVo> findDevicePositionOnGroup();
+	
+	/**
+	 * 查询项目位置类型
+	 * 按组分类
+	 * @return
+	 */
+	public List<DevicePositionVo> findDevicePositionByCardId(String cardId);
 
 	/*
 	 * ****************** 门禁设备相关 ******************

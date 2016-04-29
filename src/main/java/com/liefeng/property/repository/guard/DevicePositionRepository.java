@@ -43,4 +43,11 @@ public interface DevicePositionRepository extends JpaRepository<DevicePositionPo
 	 * @return
 	 */
 	public List<DevicePositionPo> findByProjectIdAndDeviceType(String projectId, String deviceType);
+	
+	/**
+	 * 查找设备位置
+	 * @param deviceType 设备类型
+	 * @return
+	 */
+	public List<DevicePositionPo> findByDeviceTypeAndOemCode(String deviceType, String oemCode);
 }

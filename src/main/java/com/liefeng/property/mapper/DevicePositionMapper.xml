@@ -51,5 +51,18 @@
 	</if>
 </select>
 
+<select id="findByCardId" resultMap="BaseResultMap">
+    SELECT
+        dp.*
+	FROM
+	    t_guard_card gc
+	LEFT JOIN t_guard_card_privilege gcp ON gc.id = gcp.card_id
+	LEFT JOIN t_guard_device gd ON gcp.guard_device_id = gd.id
+	LEFT JOIN t_device_position dp ON gd.position_id = dp.id
+	where 1=1 
+	and gc.id = #{cardId}
+	GROUP BY dp.id
+</select>
+
 
 </mapper>

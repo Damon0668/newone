@@ -32,59 +32,71 @@
 	</trim>
 </sql>
 
+
+<sql id="GuardPRUser_SQL">
+	SELECT
+	    p.id projectId,
+	    p.full_name projectName,
+	    h.building_id buildingId,
+	    h.house_num houseNum,
+	    r.id,
+	    'resident' userType,
+	    r.`name`,
+	    r.mobile,
+	    gc.id cardId,
+        gc.sn cardSn,
+        gc.type cardType,
+        gc.`status` cardStatus,
+        gc.start_date startDate,
+        gc.end_date endDate
+	FROM
+	    t_resident r 
+	LEFT JOIN t_resident_house rh on r.id = rh.resident_id
+	LEFT JOIN t_house h ON rh.house_id = h.id
+	LEFT JOIN t_project p ON h.project_id = p.id
+	LEFT JOIN t_guard_card_user gcu ON r.id = gcu.user_id
+	LEFT JOIN t_guard_card gc ON gcu.card_id = gc.id
+	where 1=1
+	AND NOT EXISTS (SELECT 1 from t_proprietor p where p.cust_global_id = r.cust_global_id and p.project_id = r.project_id)
+	<if test="extra.oemCode != null and extra.oemCode != ''" >
+	    AND r.oem_code =  #{extra.oemCode}
+	</if>
+	
+	UNION
+	
+	SELECT
+	    prj.id projectId,
+	    prj.full_name projectName,
+	    h.building_id buildingId,
+	    ph.house_num houseNum,
+	    p.id,
+	    'proprietor' userType,
+	    p.`name`,
+	    p.phone mobile,
+	    gc.id cardId,
+        gc.sn cardSn,
+        gc.type cardType,
+        gc.`status` cardStatus,
+        gc.start_date startDate,
+        gc.end_date endDate
+	FROM
+	    property.t_proprietor p
+	LEFT JOIN property.t_proprietor_house ph ON p.id = ph.proprietor_id
+	LEFT JOIN property.t_project prj ON ph.project_id = prj.id
+	LEFT JOIN property.t_guard_card_user gcu ON p.id = gcu.user_id
+	LEFT JOIN property.t_guard_card gc ON gcu.card_id = gc.id
+	LEFT JOIN property.t_house h on prj.id = ph.project_id and ph.house_num = h.house_num
+	where 1=1 
+	<if test="extra.oemCode != null and extra.oemCode != ''" >
+	    AND p.oem_code =  #{extra.oemCode}
+	</if>
+</sql>
+
 <select id="queryGuardPRUser" resultMap="GuardPRUserVo">
 	select * from (
-	        SELECT
-	            p.id projectId,
-	            p.full_name projectName,
-	            h.building_id buildingId,
-	            h.house_num houseNum,
-	            r.id,
-	            'resident' userType,
-	            r.`name`,
-	            r.mobile,
-	            gc.id guardCardId,
-	            gc.sn guardCardSn,
-	            gc.status guardCardStatus
-	        FROM
-	            t_resident r 
-	        LEFT JOIN t_resident_house rh on r.id = rh.resident_id
-	        LEFT JOIN t_house h ON rh.house_id = h.id
-	        LEFT JOIN t_project p ON h.project_id = p.id
-	        LEFT JOIN t_guard_card_user gcu ON r.id = gcu.user_id
-	        LEFT JOIN t_guard_card gc ON gcu.card_id = gc.id
-	        where 1=1
-	        <if test="extra.oemCode != null and extra.oemCode != ''" >
-	            AND r.oem_code =  #{extra.oemCode}
-	        </if>
-	        
-	        UNION
-	
-	        SELECT
-	            prj.id projectId,
-	            prj.full_name projectName,
-	            h.building_id buildingId,
-	            ph.house_num houseNum,
-	            p.id,
-	            'proprietor' userType,
-	            p.`name`,
-	            p.phone mobile,
-	            gc.id guardCardId,
-	            gc.sn guardCardSn,
-	            gc.status guardCardStatus
-	        FROM
-	            property.t_proprietor p
-	        LEFT JOIN property.t_proprietor_house ph ON p.id = ph.proprietor_id
-	        LEFT JOIN property.t_project prj ON ph.project_id = prj.id
-	        LEFT JOIN property.t_guard_card_user gcu ON p.id = gcu.user_id
-	        LEFT JOIN property.t_guard_card gc ON gcu.card_id = gc.id
-	        LEFT JOIN property.t_house h on prj.id = ph.project_id and ph.house_num = h.house_num
-	        where 1=1 
-	        <if test="extra.oemCode != null and extra.oemCode != ''" >
-	            AND p.oem_code =  #{extra.oemCode}
-	        </if>
+        <include refid="GuardPRUser_SQL"/>
 	) t 
-
+    
     <include refid="GuardPRUser_Where_Clause"/>
 
 	<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
@@ -95,53 +107,7 @@
 
 <select id="queryGuardPRUserByCount"  resultType="java.lang.Long">
     select count(*) from (
-       SELECT
-                p.id projectId,
-                p.full_name projectName,
-                h.building_id,
-                h.house_num houseNum,
-                r.id,
-                'resident' userType,
-                r.`name`,
-                r.mobile,
-                gc.id guardCardId,
-                gc.sn guardCardSn
-            FROM
-                t_resident r 
-            LEFT JOIN t_resident_house rh on r.id = rh.resident_id
-            LEFT JOIN t_house h ON rh.house_id = h.id
-            LEFT JOIN t_project p ON h.project_id = p.id
-            LEFT JOIN t_guard_card_user gcu ON r.id = gcu.user_id
-            LEFT JOIN t_guard_card gc ON gcu.card_id = gc.id
-            where 1=1
-            <if test="extra.oemCode != null and extra.oemCode != ''" >
-                AND r.oem_code =  #{extra.oemCode}
-            </if>
-            
-            UNION
-    
-            SELECT
-                prj.id projectId,
-                prj.full_name projectName,
-                h.building_id,
-                ph.house_num houseNum,
-                p.id,
-                'proprietor' userType,
-                p.`name`,
-                p.phone mobile,
-                gc.id guardCardId,
-                gc.sn guardCardSn
-            FROM
-                property.t_proprietor p
-            LEFT JOIN property.t_proprietor_house ph ON p.id = ph.proprietor_id
-            LEFT JOIN property.t_project prj ON ph.project_id = prj.id
-            LEFT JOIN property.t_guard_card_user gcu ON p.id = gcu.user_id
-            LEFT JOIN property.t_guard_card gc ON gcu.card_id = gc.id
-            LEFT JOIN property.t_house h on prj.id = ph.project_id and ph.house_num = h.house_num
-            where 1=1 
-            <if test="extra.oemCode != null and extra.oemCode != ''" >
-                AND p.oem_code =  #{extra.oemCode}
-            </if>
+        <include refid="GuardPRUser_SQL"/>
     ) t 
 
     <include refid="GuardPRUser_Where_Clause"/>
@@ -156,8 +122,9 @@
     LEFT JOIN t_staff_archive sa on ps.id = sa.staff_id
     LEFT JOIN t_property_department pd on ps.department_id = pd.id
     LEFT JOIN t_sys_dict dict on ps.position = dict.`value` and dict.group_code = 'POSITION'
-    LEFT JOIN t_guard_card_user gcu on ps.id = gcu.id and gcu.user_type = '0'
+    LEFT JOIN t_guard_card_user gcu on ps.id = gcu.user_id and gcu.user_type = '0'
     LEFT JOIN t_guard_card gc on gc.id = gcu.card_id
+    
 </select>
 
 <select id="queryStaff" resultMap="GuardStaffVo">
@@ -168,16 +135,23 @@
 		ps.`name` staffName,
 		ps.work_status workStatus,
 		sa.phone mobile,
-		gc.id carId,
+		gc.id cardId,
 		gc.sn cardSn,
-		gc.`status` cardStatus
+		gc.type cardType,
+		gc.`status` cardStatus,
+		gc.start_date startDate,
+		gc.end_date endDate
     FROM
         t_property_staff ps
     LEFT JOIN t_staff_archive sa on ps.id = sa.staff_id
     LEFT JOIN t_property_department pd on ps.department_id = pd.id
     LEFT JOIN t_sys_dict dict on ps.position = dict.`value` and dict.group_code = 'POSITION'
-    LEFT JOIN t_guard_card_user gcu on ps.id = gcu.id and gcu.user_type = '0'
+    LEFT JOIN t_guard_card_user gcu on ps.id = gcu.user_id and gcu.user_type = '0'
     LEFT JOIN t_guard_card gc on gc.id = gcu.card_id
+    
+    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+        ${pager.mysqlQueryCondition}
+    </if>
 </select>
 
 </mapper>

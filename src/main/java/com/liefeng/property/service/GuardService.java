@@ -336,8 +336,14 @@ public class GuardService implements IGuardService {
 		if(ValidateHelper.isNotEmptyCollection(sysDiclist)){
 			for (int i = 0; i < sysDiclist.size(); i++) {
 				GuardDeviceTypeVo guardDeviceType = MyBeanUtil.createBean(sysDiclist.get(i), GuardDeviceTypeVo.class);
+				List<DevicePositionVo> positionList = null;
 				
-				List<DevicePositionVo> positionList = DevicePositionContext.build().findPosition4Type(projectId, guardDeviceType.getValue());
+				if(ValidateHelper.isNotEmptyString(projectId)){
+					positionList = DevicePositionContext.build().findPosition4Type(projectId, guardDeviceType.getValue());
+				}else{
+					positionList = DevicePositionContext.build().findPosition4Type(guardDeviceType.getValue());
+				}
+				
 				if(ValidateHelper.isNotEmptyCollection(positionList)){
 					guardDeviceType.setChildren(positionList);
 					deviceTypList.add(guardDeviceType);
@@ -349,8 +355,21 @@ public class GuardService implements IGuardService {
 	}
 
 	@Override
+	public List<GuardDeviceTypeVo> findDevicePositionOnGroup() {
+		return this.findDevicePositionOnGroup(null);
+	}
+	
+	
+	@Override
 	public DataPageValue<GuardStaffVo> listStaff(GuardStaffBo guardStaffBo, Integer currentPage, Integer pageSize) {
 		return GuardUserContext.build().listStaff4Page(guardStaffBo, currentPage, pageSize);
 	}
+
+	@Override
+	public List<DevicePositionVo> findDevicePositionByCardId(String cardId) {
+		return DevicePositionContext.loadByCardId(cardId).findDevicePosition();
+	}
+
+	
 
 }
