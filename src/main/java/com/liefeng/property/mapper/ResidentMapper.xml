@@ -156,6 +156,7 @@ FROM
 	  WHERE
 	      r.cust_global_id = #{extra.custGlobalId} 
 	      AND r.project_id = #{extra.projectId} 
+	      AND r.oem_code = #{extra.oemCode}
 	      AND r.status != '2'
 </select>
 
