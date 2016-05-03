@@ -19,12 +19,10 @@ import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
-import com.liefeng.property.bo.guard.GuardPRUserBo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.po.household.ResidentPo;
 import com.liefeng.property.repository.household.ResidentRepository;
 import com.liefeng.property.repository.mybatis.ResidentQueryRepository;
-import com.liefeng.property.vo.guard.GuardPRUserVo;
 import com.liefeng.property.vo.household.ResidentVo;
 
 /**
@@ -135,6 +133,7 @@ public class ResidentContext {
 		Map<String, String> extra = new HashMap<String ,String>();
 		extra.put("projectId", projectId);
 		extra.put("custGlobalId", custGlobalId);
+		extra.put("oemCode", ContextManager.getInstance().getOemCode());
 		pagingParamVo.setExtra(extra);
 		
 		return residentQueryRepository.queryByCustGlobalIdAndProjectId(pagingParamVo);

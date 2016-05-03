@@ -16,6 +16,7 @@ import com.liefeng.base.constant.UserConstants;
 import com.liefeng.base.exception.UserException;
 import com.liefeng.base.vo.CustomerVo;
 import com.liefeng.base.vo.UserVo;
+import com.liefeng.common.util.MD5Util;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.TimeUtil;
 import com.liefeng.common.util.ValidateHelper;
@@ -187,7 +188,11 @@ public class HouseholdService implements IHouseholdService {
 
 			// 客户信息校验
 			CustomerVo customer = initCustomer(singleHouse);
-			customer = checkService.updateCustomerCheck(customer);
+			
+			/**
+			 * TODO 暂时屏蔽，为配合5月初业主入住，5月9号后恢复
+			 */
+			//customer = checkService.updateCustomerCheck(customer);
 
 			// 业主信息更新
 			ProprietorVo proprietor = MyBeanUtil.createBean(singleHouse, ProprietorVo.class);
@@ -204,11 +209,15 @@ public class HouseholdService implements IHouseholdService {
 			// 用户更新信息设置
 			UserVo newUser = setUpUser4Update(customer, UserConstants.HouseholdType.PROPRIETOR);
 
+			/**
+			 * TODO 暂时屏蔽，为配合5月初业主入住，5月9号后恢复
+			 */
 			// 校验用户信息
-			UserVo user = checkService.updateUserCheck(newUser);
+//			UserVo user = checkService.updateUserCheck(newUser);
 
 			// 发送TCC消息，更新用户信息
-			tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_USER, user.toString());
+//			tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_USER, user.toString());
+			tccMsgService.sendTccMsg(TccBasicEvent.UPDATE_USER, newUser.toString());
 			logger.info("推送“更新用户”TCC消息成功！");
 		} catch (LiefengException e) {
 			logger.error("更新业主信息出现异常,异常码（{}）,异常信息（{}）", e.getCode(), e.getMessage());
@@ -612,11 +621,6 @@ public class HouseholdService implements IHouseholdService {
 	 * @throws PropertyException
 	 */
 	private void validateResident(ResidentVo resident) throws PropertyException {
-//		if (ValidateHelper.isEmptyString(resident.getMobile())) {
-//			logger.error("住户手机信息为空");
-//			throw new PropertyException(HouseholdErrorCode.RESIDENT_PHONE_NULL);
-//		}
-
 		if (ValidateHelper.isEmptyString(resident.getName())) {
 			logger.error("住户名字信息为空");
 			throw new PropertyException(HouseholdErrorCode.RESIDENT_NAME_NULL);
@@ -672,11 +676,23 @@ public class HouseholdService implements IHouseholdService {
 		UserVo user = userService.getUserByCustGlobalId(customer.getGlobalId());
 		UserVo newUser = new UserVo();
 		if (user != null) {
-			newUser.setCustomer(customer);
-			newUser.setId(user.getId());
-			newUser.setName(user.getName());
-			newUser.setMobile(user.getMobile());
-			newUser.setPassword(user.getPassword());
+			/**
+			 * TODO (2)暂时增加逻辑，配合业主、住户修改姓名，手机号和身份证，5月9号后恢复
+			 * 		   手机号码有修改，重新设置账号的账号名、手机号码和密码
+			 */
+			if(user.getCustomer() != null && !user.getCustomer().getMobile().equals(customer.getMobile())) {
+				newUser = setUpUser4Create(customer, householdType);
+				newUser.setId(user.getId());
+				// 用户密码MD5加密
+				String encryptedPwd = MD5Util.eccrypt(newUser.getPassword());
+				newUser.setPassword(encryptedPwd);
+			} else {
+				newUser.setCustomer(customer);
+				newUser.setId(user.getId());
+				newUser.setName(user.getName());
+				newUser.setMobile(user.getMobile());
+				newUser.setPassword(user.getPassword());
+			}
 		} else {
 			newUser = setUpUser4Create(customer, householdType);
 		}
