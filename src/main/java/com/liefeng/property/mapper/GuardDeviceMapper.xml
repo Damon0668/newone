@@ -9,11 +9,14 @@
 	<resultMap id="BaseResultMap" type="com.liefeng.property.vo.guard.GuardDeviceVo">
 		<result column="id" property="id"/>
 		<result column="device_global_id" property="deviceGlobalId"/>
+		<result column="project_id" property="projectId"/>
+		<result column="position_id" property="positionId"/>
+		<result column="camera_id" property="cameraId"/>
 		<result column="install_position" property="installPosition"/>
 		<result column="guard_name" property="guardName"/>
 		<result column="guard_num" property="guardNum"/>
+		<result column="guard_type" property="guardType"/>
 		<result column="run_status" property="runStatus"/>
-		<result column="gurad_name" property="guradName"/>
 		<result column="buy_date" property="buyDate"/>
 		<result column="warranty_date" property="warrantyDate"/>
 		<result column="producer_tel" property="producerTel"/>
@@ -77,7 +80,7 @@
 		    d.name,
 		    d.type,
 		    dp.name positionName,
-		    gd.guard_num,
+		    gd.guard_name,
 		    d.run_status,
 		    d.status,
 		    gd.qrcode_url AS qrCodeUrl,

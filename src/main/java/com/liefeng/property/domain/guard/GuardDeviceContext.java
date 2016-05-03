@@ -201,10 +201,11 @@ public class GuardDeviceContext {
 	
 	public Boolean isExistGuardNum(String guardNum){
 		Boolean result = false;
-		String oemCode = ContextManager.getInstance().getOemCode();
-		GuardDevicePo  guardDevicePo = guardDeviceRepository.findByGuardNumAndOemCode(guardNum, oemCode);
 		
-		if(guardDevicePo != null){
+		String oemCode = ContextManager.getInstance().getOemCode();
+		List<GuardDevicePo>  guardDeviceList = guardDeviceRepository.findByGuardNumAndOemCode(guardNum, oemCode);
+	
+		if(ValidateHelper.isNotEmptyCollection(guardDeviceList)){
 			result = true;
 		}
 		

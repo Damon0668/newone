@@ -114,6 +114,36 @@
 
 </select>
 
+<!-- 查询条件 -->
+<sql id="QueryStaff_Where_Clause">
+    WHERE 1=1 
+    and ps.status = '1'
+    and ps.creator_id != '0'
+    <trim  suffixOverrides="," >
+        <if test="extra.oemCode != null and extra.oemCode != ''" >
+            and ps.oem_code = #{extra.oemCode}
+        </if>
+        
+        <if test="extra.departmentId != null and extra.departmentId != ''" >
+            and ps.department_id = #{extra.departmentId}
+        </if>
+        
+        <if test="extra.workStatus != null and extra.workStatus != ''" >
+            and ps.work_status = #{extra.workStatus}
+        </if>
+        
+        <if test="extra.staffName != null and extra.staffName != ''" >
+            and ( ps.number = #{extra.staffName} or ps.name like concat('%',#{extra.staffName},'%') ) 
+        </if>
+        
+        <if test="extra.projectId != null and extra.projectId != ''" >
+            and pd.project_id = #{extra.projectId}
+        </if>
+
+    </trim>
+</sql>
+
+
 <select id="queryStaffByCount"  resultType="java.lang.Long">
     SELECT
 	    count(1)
@@ -124,7 +154,7 @@
     LEFT JOIN t_sys_dict dict on ps.position = dict.`value` and dict.group_code = 'POSITION'
     LEFT JOIN t_guard_card_user gcu on ps.id = gcu.user_id and gcu.user_type = '0'
     LEFT JOIN t_guard_card gc on gc.id = gcu.card_id
-    
+    <include refid="QueryStaff_Where_Clause"/>
 </select>
 
 <select id="queryStaff" resultMap="GuardStaffVo">
@@ -148,7 +178,7 @@
     LEFT JOIN t_sys_dict dict on ps.position = dict.`value` and dict.group_code = 'POSITION'
     LEFT JOIN t_guard_card_user gcu on ps.id = gcu.user_id and gcu.user_type = '0'
     LEFT JOIN t_guard_card gc on gc.id = gcu.card_id
-    
+    <include refid="QueryStaff_Where_Clause"/>
     <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
         ${pager.mysqlQueryCondition}
     </if>

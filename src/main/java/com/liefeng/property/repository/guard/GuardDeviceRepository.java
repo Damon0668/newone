@@ -22,7 +22,7 @@ public interface GuardDeviceRepository extends JpaRepository<GuardDevicePo, Stri
 	 * @param oemCode
 	 * @return
 	 */
-	public GuardDevicePo findByGuardNumAndOemCode(String guardNum, String oemCode);
+	public List<GuardDevicePo> findByGuardNumAndOemCode(String guardNum, String oemCode);
 	
 	/**
 	 * 根据项目ID查询设备
