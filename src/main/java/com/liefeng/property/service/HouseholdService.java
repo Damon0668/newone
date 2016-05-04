@@ -765,39 +765,38 @@ public class HouseholdService implements IHouseholdService {
 	
 				CheckinQueueContext checkinQueueContext = CheckinQueueContext.build(queue);
 				queueVo = checkinQueueContext.create();
+			}
+			//获取某个房间的所有用户的clientId
+			List<UserClientIdVo> userClientIdList = listClientIdByProjectIdAndHouseNum(projectId, houseVo.getHouseNum());
+			if(userClientIdList != null && userClientIdList.size() > 0){
 				
-				//获取某个房间的所有用户的clientId
-				List<UserClientIdVo> userClientIdList = listClientIdByProjectIdAndHouseNum(projectId, houseVo.getHouseNum());
-				if(userClientIdList != null && userClientIdList.size() > 0){
+				//还差多少人
+				Integer number = 0;
+				// 以小区为范围，获取最新“在办理中”的排队
+				CheckinQueueVo queueHandling = getLatestOfCheckinQueue(projectId, HouseholdConstants.CheckinQueueStatus.HANDLING,
+						TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
+				if (queueHandling != null) {
+					 number = queueVo.getSeq() - queueHandling.getSeq() - 1;
 					
-					//还差多少人
-					Integer number = 0;
-					// 以小区为范围，获取最新“在办理中”的排队
-					CheckinQueueVo queueHandling = getLatestOfCheckinQueue(projectId, HouseholdConstants.CheckinQueueStatus.HANDLING,
+				} else {
+					// 以小区为范围，获取最新“已办理”的排队
+					CheckinQueueVo queueFinished = getLatestOfCheckinQueue(projectId, HouseholdConstants.CheckinQueueStatus.FINISHED,
 							TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
-					if (queueHandling != null) {
-						 number = queueVo.getSeq() - queueHandling.getSeq() - 1;
-						
-					} else {
-						// 以小区为范围，获取最新“已办理”的排队
-						CheckinQueueVo queueFinished = getLatestOfCheckinQueue(projectId, HouseholdConstants.CheckinQueueStatus.FINISHED,
-								TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
-						if (queueFinished != null) {
-							 number = queueVo.getSeq() - queueFinished.getSeq() - 1;
-						}
+					if (queueFinished != null) {
+						 number = queueVo.getSeq() - queueFinished.getSeq() - 1;
 					}
-					
-					if(number < 0){
-						number = 0;
-					}
-					
-					Map<String,String> data = new HashMap<String,String>();
-					data.put("queueNum", String.valueOf(queueVo.getSeq()));
-					data.put("count", String.valueOf(number));
-					
-					//获取排号，推送工办理用户
-					propertyPushMsgService.pushMsgOfUserIdClientIdAndMap(PushActionConstants.CHECKIN_QUEUE_NUM, data, null, userClientIdList);
 				}
+				
+				if(number < 0){
+					number = 0;
+				}
+				
+				Map<String,String> data = new HashMap<String,String>();
+				data.put("queueNum", String.valueOf(queueVo.getSeq()));
+				data.put("count", String.valueOf(number));
+				
+				//获取排号，推送工办理用户
+				propertyPushMsgService.pushMsgOfUserIdClientIdAndMap(PushActionConstants.CHECKIN_QUEUE_NUM, data, null, userClientIdList);
 			}
 		}
 

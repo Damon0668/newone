@@ -18,7 +18,6 @@ import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.project.HouseSpecBo;
-import com.liefeng.property.error.ProjectErrorCode;
 import com.liefeng.property.exception.PropertyException;
 import com.liefeng.property.po.project.HouseSpecPo;
 import com.liefeng.property.repository.mybatis.HouseSpecQueryRepository;
