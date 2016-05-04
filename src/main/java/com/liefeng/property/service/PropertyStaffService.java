@@ -382,14 +382,50 @@ public class PropertyStaffService implements IPropertyStaffService {
 
 	@Override
 	public void settIngStaffMsgClientId(String staffId, String clientId, String oemCode) {
-		StaffMsgClientVo staffMsgClient = StaffMsgClientContext.loadByStaffId(staffId).get();
+		//通过clientID查询此手机是否登录过
+		StaffMsgClientVo staffMsgClientByCli = StaffMsgClientContext.loadByClientId(clientId).get();
 		
-		if(staffMsgClient == null){
-			staffMsgClient = new StaffMsgClientVo(staffId, clientId, oemCode);
-			StaffMsgClientContext.build(staffMsgClient).create();
+		logger.info("settIngStaffMsgClientId staffMsgClientByCli = {}", staffMsgClientByCli);
+		
+		if(staffMsgClientByCli == null){
+			//没有登陆过
+			//查询此用户是否在别的手机登陆过
+			StaffMsgClientVo staffMsgClientByUsr = StaffMsgClientContext.loadByStaffId(staffId).get();
+			
+			logger.info("settIngStaffMsgClientId staffMsgClientByUsr = {}", staffMsgClientByUsr);
+			
+			//没有在别的手机登陆
+			if(staffMsgClientByUsr == null){
+				//插入新记录
+				staffMsgClientByUsr = new StaffMsgClientVo(staffId, clientId, oemCode);
+				StaffMsgClientContext.build(staffMsgClientByUsr).create();
+				
+				logger.info("settIngStaffMsgClientId staffMsgClientByUsr create = {}", staffMsgClientByUsr);
+			}else{
+				
+				//在别的手机登陆过，更新旧记录clientID
+				StaffMsgClientContext.build(staffMsgClientByUsr).updateClientId(clientId);
+				
+				logger.info("settIngStaffMsgClientId staffMsgClientByUsr update = {}", staffMsgClientByUsr);
+			}
+			
 		}else{
-			StaffMsgClientContext.loadByStaffId(staffId).updateClientId(clientId);
+			//登录用户staffId
+			String newStaffId = staffId;
+			//旧推送记录staffId
+			String oldStaffId = staffMsgClientByCli.getStaffId();
+			
+			logger.info("settIngStaffMsgClientId newStaffId = {}, oldStaffId = {}", newStaffId, oldStaffId);
+			
+			if(ValidateHelper.isNotEmptyString(oldStaffId) && !oldStaffId.equals(newStaffId)){
+				//清除自己在别的手机的登陆记录
+				StaffMsgClientContext.loadByStaffId(newStaffId).delete();
+				//更新登陆手机的staffId
+				StaffMsgClientContext.build(staffMsgClientByCli).updateStaffId(newStaffId);
+				logger.info("settIngStaffMsgClientId staffMsgClientByCli update staffId = {}", newStaffId);
+			}
 		}
+
 	}
 	
 	@Override
