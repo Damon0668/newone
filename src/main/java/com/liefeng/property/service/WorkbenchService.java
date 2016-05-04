@@ -547,10 +547,14 @@ public class WorkbenchService implements IWorkbenchService {
 
 				}
 			}
+			
+			Map<String,String> data = new HashMap<String,String>();
+			data.put("noticeId", noticeVo.getId());
+			
 			//TODO（暂时屏蔽）
 			staffList = null;
 			//个推
-			propertyPushMsgService.pushMsgOfUserIdClientId(template, staffList, proprietorList);
+			propertyPushMsgService.pushMsgOfUserIdClientId(template, staffList, proprietorList, data);
 		}
 		return noticeVo;
 	}
@@ -1927,21 +1931,26 @@ public class WorkbenchService implements IWorkbenchService {
 	@Override
 	public List<StaffContactVo> findDispatchingWorker(String projectId,String staffId){
 		
-		logger.info("领导派工获取人员，领导id为："+staffId);
+		
+	logger.info("领导派工获取人员，领导id为："+staffId);
 		
 		PropertyStaffVo propertyStaffVo= propertyStaffService.findPropertyStaffById(staffId);
 		
-		PropertyDepartmentVo departmentVo = propertyStaffService.getDepartment(propertyStaffVo.getDepartmentId());
+		List<PropertyDepartmentVo> departmentVos = propertyStaffService.getDeptAndChildDept(propertyStaffVo.getDepartmentId(),projectId);
 		
 		logger.info("领导派工获取人员，领导的部门id为："+propertyStaffVo.getDepartmentId());
 		
-		StaffContactVo  staffContactVo = new StaffContactVo();
-		staffContactVo.setDepartmentId(departmentVo.getId());
-		staffContactVo.setDepartmentName(departmentVo.getName());
-		staffContactVo.setStaffList(propertyStaffService.findPropertyStaff(propertyStaffVo.getDepartmentId(), projectId));
-		
 		List<StaffContactVo> contactVos = new ArrayList<StaffContactVo>(); 
-		contactVos.add(staffContactVo);
+		for (PropertyDepartmentVo departmentVo : departmentVos) {
+			
+			StaffContactVo  staffContactVo = new StaffContactVo();
+			staffContactVo.setDepartmentId(departmentVo.getId());
+			staffContactVo.setDepartmentName(departmentVo.getName());
+			staffContactVo.setStaffList(propertyStaffService.findPropertyStaff(departmentVo.getId(), projectId));
+			
+			contactVos.add(staffContactVo);
+		}
+		
 		
 		return contactVos ;
 	}

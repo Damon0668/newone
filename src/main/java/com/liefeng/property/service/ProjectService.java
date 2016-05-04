@@ -262,7 +262,7 @@ public class ProjectService implements IProjectService {
 		//员工clientId
 		List<UserClientIdVo> staffClientIdList = propertyStaffService.findStaffClientIdList("", projectNoticeVo.getProjectId());
 		//发布物业须知时群推消息
-		propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.PROPERTY_NEW_NOTE, staffClientIdList, proprietorClientIdList);
+		propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.PROPERTY_NEW_NOTE, staffClientIdList, proprietorClientIdList, null);
 			
 		return projectNoticeVo;
 	}
@@ -283,7 +283,7 @@ public class ProjectService implements IProjectService {
 		//员工clientId
 		List<UserClientIdVo> staffClientIdList = propertyStaffService.findStaffClientIdList("", projectNoticeVo.getProjectId());
 		//发布物业须知时群推消息
-		propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.PROPERTY_NEW_NOTE, staffClientIdList, proprietorClientIdList);
+		propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.PROPERTY_NEW_NOTE, staffClientIdList, proprietorClientIdList, null);
 				
 		return projectNoticeVo;
 	}
