@@ -518,7 +518,7 @@ public class HouseholdService implements IHouseholdService {
 				//获取某个房间的所有用户的clientId
 				List<UserClientIdVo> finishedList = listClientIdByProjectIdAndHouseNum(queueReturn.getProjectId(), houseVo.getHouseNum());
 				//入住办理完成号时群推消息给当前入住办理用户
-				propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.CHECKIN_SUCCESS, null, finishedList);
+				propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.CHECKIN_SUCCESS, null, finishedList, null);
 				
 				//大于当前完成的排队号的排队
 			   CheckinQueueVo queueUntreated =getCheckinQueueMoreThanSeq(queueReturn.getProjectId(), HouseholdConstants.CheckinQueueStatus.UNTREATED, queueReturn.getSeq(), TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
@@ -528,7 +528,7 @@ public class HouseholdService implements IHouseholdService {
 					//获取某个房间的所有用户的clientId
 					List<UserClientIdVo> userClientIdList = listClientIdByProjectIdAndHouseNum(queueReturn.getProjectId(), houseUntreated.getHouseNum());
 					//入住办理完成号时群推消息给下一个入住办理用户
-					propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.CHECKIN_TURN_YOU, null, userClientIdList);
+					propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.CHECKIN_TURN_YOU, null, userClientIdList, null);
 					
 			   }
 			}
@@ -540,7 +540,7 @@ public class HouseholdService implements IHouseholdService {
 				List<UserClientIdVo> userClientIdList = listClientIdByProjectIdAndHouseNum(queueReturn.getProjectId(), houseVo.getHouseNum());
 				
 				//入住办理完成号时群推消息给下一个入住办理用户
-				propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.CHECKIN_HANDLING, null, userClientIdList);
+				propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.CHECKIN_HANDLING, null, userClientIdList, null);
 				
 			}
 		}

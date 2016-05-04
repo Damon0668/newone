@@ -84,12 +84,17 @@ public class PropertyPushMsgService {
 	 * @author xhw
 	 * @date 2016年4月20日 上午11:16:32
 	 */
-	public void pushMsgOfUserIdClientId(String action, List<UserClientIdVo> staffList, List<UserClientIdVo> proprietorList) {
+	public void pushMsgOfUserIdClientId(String action, List<UserClientIdVo> staffList, List<UserClientIdVo> proprietorList, Map<String, String> data) {
 		try {
 			//获取推送消息模板
 			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(action);
 			
 			if(pushMsgTemplateVo != null){
+				String pageUrl = pushMsgTemplateVo.getPageUrl();
+				if(data != null){
+					pageUrl = FreeMarkerUtil.parseStringTemplate(pushMsgTemplateVo.getPageUrl(), data);
+				}
+						
 				if(staffList != null && staffList.size() > 0){
 					
 					List<String> clientIdList = UserClientIdUtil.getClientIdList(staffList);
@@ -97,7 +102,7 @@ public class PropertyPushMsgService {
 					
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(action);
-					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
+					message.setPageUrl(pageUrl);
 					message.setPageType(pushMsgTemplateVo.getPageType());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
@@ -117,7 +122,7 @@ public class PropertyPushMsgService {
 					//获取推送消息模板
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(action);
-					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
+					message.setPageUrl(pageUrl);
 					message.setPageType(pushMsgTemplateVo.getPageType());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());

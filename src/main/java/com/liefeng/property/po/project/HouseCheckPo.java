@@ -27,10 +27,16 @@ public class HouseCheckPo extends BaseValue {
 	private String id;
 	
 	/**
-	 * 房屋ID 
+	 * 项目ID 
 	 */
-	@Column(name = "house_id")
-	private String houseId;
+	@Column(name = "project_id")
+	private String projectId;
+	
+	/**
+	 * 房间号
+	 */
+	@Column(name = "house_num")
+	private String houseNum;
 	
 	/**
 	 * 检查项ID
@@ -75,14 +81,6 @@ public class HouseCheckPo extends BaseValue {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getHouseId() {
-		return houseId;
-	}
-
-	public void setHouseId(String houseId) {
-		this.houseId = houseId;
 	}
 
 	public String getItemId() {
@@ -131,6 +129,22 @@ public class HouseCheckPo extends BaseValue {
 
 	public void setOemCode(String oemCode) {
 		this.oemCode = oemCode;
+	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getHouseNum() {
+		return houseNum;
+	}
+
+	public void setHouseNum(String houseNum) {
+		this.houseNum = houseNum;
 	}
 
 }

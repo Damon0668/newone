@@ -60,6 +60,10 @@ public class StaffMsgClientContext {
 		this.staffId = staffId;
 	}
 
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
+
 	protected void setStaffMsgClientVo(StaffMsgClientVo staffMsgClient) {
 		this.staffMsgClient = staffMsgClient;
 	}
@@ -85,10 +89,14 @@ public class StaffMsgClientContext {
 		return staffMsgClientContext;
 	}
 	
-	@Transactional
+	public static StaffMsgClientContext loadByClientId(String clientId) {
+		StaffMsgClientContext staffMsgClientContext = getInstance();
+		staffMsgClientContext.setClientId(clientId);
+		return staffMsgClientContext;
+	}
+	
 	public void create(){
 		if(staffMsgClient != null){
-			clearOtherClientID(staffMsgClient.getClientId());
 			StaffMsgClientPo staffMsgClientPo = MyBeanUtil.createBean(staffMsgClient, StaffMsgClientPo.class);
 			staffMsgClientPo.setId(UUIDGenerator.generate());
 			staffMsgClientPo.setUpdateTime(new Date());
@@ -96,17 +104,38 @@ public class StaffMsgClientContext {
 		}
 	}
 	
-	@Transactional
 	public void updateClientId(String clientId){
 		if(ValidateHelper.isNotEmptyString(staffId)){
 			StaffMsgClientPo staffMsgClientPo =  staffMsgClientRepository.findByStaffId(staffId);
-			//清除其他绑定此clientId的数据
 			if(staffMsgClientPo != null){
-				clearOtherClientID(clientId);
 				staffMsgClientPo.setClientId(clientId);
 				staffMsgClientPo.setUpdateTime(new Date());
 				staffMsgClientRepository.save(staffMsgClientPo);
 			}
+		}
+		
+		if(staffMsgClient != null){
+			StaffMsgClientPo staffMsgClientPo = MyBeanUtil.createBean(staffMsgClient, StaffMsgClientPo.class);
+			staffMsgClientPo.setClientId(clientId);
+			staffMsgClientPo.setUpdateTime(new Date());
+			staffMsgClientRepository.save(staffMsgClientPo);
+		}
+		
+	}
+	
+	public void updateStaffId(String staffId){
+		if(staffMsgClient != null){
+			StaffMsgClientPo staffMsgClientPo = MyBeanUtil.createBean(staffMsgClient, StaffMsgClientPo.class);
+			staffMsgClientPo.setStaffId(staffId);
+			staffMsgClientPo.setUpdateTime(new Date());
+			staffMsgClientRepository.save(staffMsgClientPo);
+		}
+		
+	}
+	
+	public void delete(){
+		if(ValidateHelper.isNotEmptyString(staffId)){
+			staffMsgClientRepository.deleteByStaffId(staffId);
 		}
 	}
 	
@@ -117,6 +146,14 @@ public class StaffMsgClientContext {
 				staffMsgClient = MyBeanUtil.createBean(staffMsgClientPo, StaffMsgClientVo.class);
 			}
 		}
+		
+		if(ValidateHelper.isNotEmptyString(clientId)){
+			StaffMsgClientPo staffMsgClientPo = staffMsgClientRepository.findByClientId(clientId);
+			if(staffMsgClientPo != null){
+				staffMsgClient = MyBeanUtil.createBean(staffMsgClientPo, StaffMsgClientVo.class);
+			}
+		}
+		
 		return staffMsgClient;
 	}
 	
@@ -125,16 +162,5 @@ public class StaffMsgClientContext {
 			return staffMsgClientQueryRepository.findClientIds(StringUtil.fmtToSqlInCondition(staffIds));
 		}
 		return new ArrayList<String>();
-	}
-	
-	private void clearOtherClientID(String clientId){
-		List<StaffMsgClientPo> staffList = staffMsgClientRepository.findByClientId(clientId);
-		if(ValidateHelper.isNotEmptyCollection(staffList)){
-			for (StaffMsgClientPo staffMsgClient : staffList) {
-				staffMsgClient.setClientId(SysConstants.DEFAULT_ID);
-				staffMsgClient.setUpdateTime(new Date());
-				staffMsgClientRepository.save(staffMsgClient);
-			}
-		}
 	}
 }
