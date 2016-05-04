@@ -56,7 +56,7 @@ public class GuardPRUserVo extends ResidentVo{
 	 */
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date endDate;
-	
+
 	public String getCardId() {
 		return cardId;
 	}

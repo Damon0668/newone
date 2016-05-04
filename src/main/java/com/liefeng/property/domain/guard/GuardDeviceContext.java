@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +60,11 @@ public class GuardDeviceContext {
 	private String projectId;
 	
 	/**
+	 * 位置ID
+	 */
+	private String positionId;
+	
+	/**
 	 * 门禁设备对象
 	 */
 	private GuardDeviceVo guardDevice;
@@ -96,6 +103,13 @@ public class GuardDeviceContext {
 		return guardDeviceContext;
 	}
 	
+	public static GuardDeviceContext loadByPositionId(String positionId) {
+		GuardDeviceContext guardDeviceContext = getInstance();
+		guardDeviceContext.setPositionId(positionId);
+		return guardDeviceContext;
+	}
+	
+	@Transactional
 	public void create(){
 		if(guardDevice != null ){
 			GuardDevicePo guardDevicePo = MyBeanUtil.createBean(guardDevice, GuardDevicePo.class);
@@ -104,9 +118,14 @@ public class GuardDeviceContext {
 			guardDevicePo.setOemCode(ContextManager.getInstance().getOemCode());
 			
 			logger.info("create guardDevice ={}", guardDevice);
+			
 			guardDeviceRepository.save(guardDevicePo);
-
 			guardDevice = MyBeanUtil.createBean(guardDevicePo, GuardDeviceVo.class);
+			
+			//此设备关联的位置，已授权的磁卡需要添加新增设备的授权
+			List<String> cardIdList = GuardCardPrivilegeContext.build().queryCardIdByPositionId(guardDevice.getPositionId());
+			
+			GuardCardPrivilegeContext.build().grantGuardCard(cardIdList, guardDevice.getId());
 		}
 	}
 	
@@ -126,9 +145,11 @@ public class GuardDeviceContext {
 		}
 	}
 	
+	@Transactional
 	public void delete(){
 		logger.info("delete id ={}", id);
 		if(ValidateHelper.isNotEmptyString(id)){
+			GuardCardPrivilegeContext.loadByDeviceId(id).deleteByGuardDeviceId();
 			guardDeviceRepository.delete(id);
 		}
 	}
@@ -199,6 +220,21 @@ public class GuardDeviceContext {
 		return new ArrayList<GuardDeviceVo>();
 	}
 	
+	/**
+	 * 查找门禁设备
+	 * @return
+	 */
+	public List<GuardDeviceVo> findGuardDevice(){
+		if(ValidateHelper.isNotEmptyString(positionId)){
+			List<GuardDevicePo> deviceList = guardDeviceRepository.findByPositionId(positionId);
+			if(ValidateHelper.isNotEmptyCollection(deviceList)){
+				return MyBeanUtil.createList(deviceList, GuardDeviceVo.class);
+			}
+		}
+		return new ArrayList<GuardDeviceVo>();
+	}
+	
+	
 	public Boolean isExistGuardNum(String guardNum){
 		Boolean result = false;
 		
@@ -238,6 +274,12 @@ public class GuardDeviceContext {
 	protected void setGuardDevice(GuardDeviceVo guardDevice) {
 		this.guardDevice = guardDevice;
 	}
-	
-	
+
+	protected String getPositionId() {
+		return positionId;
+	}
+
+	protected void setPositionId(String positionId) {
+		this.positionId = positionId;
+	}
 }

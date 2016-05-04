@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.GuardCardPrivilegeQueryRepository">
+
+	<select id="queryCardIdByPositionId" resultType="java.lang.String">
+	    SELECT
+	        DISTINCT(gcp.card_id)
+	    FROM
+	        t_guard_card_privilege gcp
+	    LEFT JOIN t_guard_device gd ON gcp.guard_device_id = gd.id
+	    WHERE
+	        gd.position_id = #{positionId}
+	</select>
+</mapper>

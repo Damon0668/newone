@@ -11,6 +11,8 @@ import com.liefeng.core.error.IErrorCode;
 public enum GuardErrorCode implements IErrorCode {
 	
 	DEVICE_POSITION_HAS_EXIST("设备位置\"{0}\"已存在"),
+	
+	POSITION_HAS_DEVICE("设备位置存在设备"),
 	;
 	private String desc;
 	

@@ -17,6 +17,7 @@ import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.property.po.guard.GuardCardPrivilegePo;
 import com.liefeng.property.repository.guard.GuardCardPrivilegeRepository;
+import com.liefeng.property.repository.mybatis.GuardCardPrivilegeQueryRepository;
 import com.liefeng.property.vo.guard.GuardCardPrivilegeVo;
 import com.liefeng.property.vo.guard.GuardDeviceVo;
 
@@ -33,6 +34,9 @@ public class GuardCardPrivilegeContext {
 	
 	@Autowired
 	private GuardCardPrivilegeRepository guardCardPrivilegeRepository;
+	
+	@Autowired
+	private GuardCardPrivilegeQueryRepository guardCardPrivilegeQueryRepository;
 	
 	/**
 	 * 磁卡ID
@@ -54,6 +58,11 @@ public class GuardCardPrivilegeContext {
 		return guardCardPrivilegeContext;
 	}
 	
+	public static GuardCardPrivilegeContext build() {
+		GuardCardPrivilegeContext guardCardPrivilegeContext = getInstance();
+		return guardCardPrivilegeContext;
+	}
+	
 	public static GuardCardPrivilegeContext build(GuardCardPrivilegeVo guardCardPrivilege) {
 		GuardCardPrivilegeContext guardCardPrivilegeContext = getInstance();
 		guardCardPrivilegeContext.setGuardCardPrivilege(guardCardPrivilege);
@@ -71,6 +80,30 @@ public class GuardCardPrivilegeContext {
 		guardCardPrivilegeContext.setGuardDeviceId(guardDeviceId);
 		return guardCardPrivilegeContext;
 	}
+	
+	/**
+	 * 磁卡授权（新增）
+	 * @param cardIds 磁卡ID列表
+	 * @param deviceId 设备ID
+	 */
+	@Transactional(rollbackOn=Exception.class)
+	public void grantGuardCard(List<String> cardIds, String deviceId){
+		
+		if(ValidateHelper.isNotEmptyCollection(cardIds)){
+			if(ValidateHelper.isNotEmptyString(deviceId)){
+				for (String cardId : cardIds) {
+					GuardCardPrivilegePo guardCardPrivilegePo = new GuardCardPrivilegePo();
+					guardCardPrivilegePo.setId(UUIDGenerator.generate());
+					guardCardPrivilegePo.setCardId(cardId);
+					guardCardPrivilegePo.setGuardDeviceId(deviceId);
+					guardCardPrivilegePo.setOemCode(ContextManager.getInstance().getOemCode());
+					logger.info("grantGuardCard guardCardPrivilegePo = {}", guardCardPrivilegePo);
+					guardCardPrivilegeRepository.save(guardCardPrivilegePo);
+				}
+			}
+		}
+	}
+	
 	
 	/**
 	 * 磁卡授权
@@ -124,6 +157,10 @@ public class GuardCardPrivilegeContext {
 			logger.info("deleteByGuardDeviceId guardDeviceId = {}", cardId);
 			guardCardPrivilegeRepository.deleteByGuardDeviceId(guardDeviceId);
 		}
+	}
+	
+	public List<String> queryCardIdByPositionId(String positionId){
+		return guardCardPrivilegeQueryRepository.queryCardIdByPositionId(positionId);
 	}
 	
 	protected void setCardId(String cardId) {

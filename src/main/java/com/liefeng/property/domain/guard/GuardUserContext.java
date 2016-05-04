@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.liefeng.common.util.EncryptionUtil;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.StringUtil;
@@ -131,5 +132,19 @@ public class GuardUserContext {
 				guardStaffList, count, pageSize, currentPage);
 		
 		return guardStaffPage;
+	}
+	
+	/**
+	 * 查询住户信息
+	 * @param userId 业主|租户ID
+	 * @param userType 类型
+	 * @return
+	 */
+	public GuardPRUserVo findPRUser(String userId, String userType){
+		String oemCode = ContextManager.getInstance().getOemCode();
+		GuardPRUserVo prUser = guardUserQueryRepository.findPRUser(userId, userType, oemCode);
+		
+		prUser.getCustomer().setIdNum(EncryptionUtil.decryptCustIdNum(prUser.getCustomer().getIdNum()));
+		return prUser;
 	}
 }

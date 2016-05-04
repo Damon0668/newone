@@ -44,7 +44,7 @@ public class HouseCheckitemConfigContext {
 	private String id;
 	
 	/**
-	 * 访客信息值对象
+	 * 验收配置项值对象
 	 */
 	private HouseCheckitemConfigVo houseCheckitemConfigVo;
 	
@@ -115,10 +115,10 @@ public class HouseCheckitemConfigContext {
 	}
 	
 	/**
-	 * 添加访客
+	 * 添加房屋验收项配置
 	 * @return 
 	 * @author xhw
-	 * @date 2016年3月23日 上午11:44:36
+	 * @date 2016年5月4日 上午11:04:53
 	 */
 	public HouseCheckitemConfigVo create() {
 		if(houseCheckitemConfigVo != null) {

@@ -3,7 +3,7 @@ package com.liefeng.property.vo.project;
 import com.liefeng.core.entity.BaseValue;
 
 /**
- * 房屋验收项配置持久化对象
+ * 房屋验收项配置值对象
  * @author xhw
  * @date 2016年4月26日 下午4:19:44
  */

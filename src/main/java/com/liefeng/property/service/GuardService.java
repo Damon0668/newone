@@ -14,6 +14,7 @@ import com.liefeng.base.constant.DeviceConstants;
 import com.liefeng.base.vo.device.DeviceVo;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.base.ICheckService;
@@ -368,6 +369,11 @@ public class GuardService implements IGuardService {
 	@Override
 	public List<DevicePositionVo> findDevicePositionByCardId(String cardId) {
 		return DevicePositionContext.loadByCardId(cardId).findDevicePosition();
+	}
+
+	@Override
+	public GuardPRUserVo findGuardPRUser(String userId, String userType) {
+		return GuardUserContext.build().findPRUser(userId, userType);
 	}
 
 	
