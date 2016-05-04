@@ -444,4 +444,32 @@ public class WorkbenchConstants {
 	 * 换行的数据
 	 */
 	public static final int number = 8;
+	
+	/**
+	 * 接收设备类型
+	 * @author xhw
+	 * @date 2016年5月4日 上午9:31:39
+	 */
+	public static interface TerminalType {
+		/**
+		 * 全部：0
+		 */
+		public static final String ALL = "0";
+		
+		/**
+		 * 电视：1
+		 */
+		public static final String TV = "1";
+		
+		/**
+		 * 电脑:2
+		 */
+		public static final String COMPUTER = "2";
+		
+		/**
+		 * 手机:3
+		 */
+		public static final String MOBILE = "3";
+		
+	}
 }

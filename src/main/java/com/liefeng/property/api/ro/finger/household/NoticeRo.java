@@ -1,11 +1,11 @@
 package com.liefeng.property.api.ro.finger.household;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.NotNull;
 
 import com.liefeng.core.entity.BaseValue;
-
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 工作台
@@ -18,35 +18,25 @@ public class NoticeRo extends BaseValue {
 
 	private static final long serialVersionUID = -6939350928959032246L;
 
-	@ApiModelProperty(value="接收端裂隙【1：电视； 2：电脑； 3：移动设备】")
-	private String terminal;
-	
-	@ApiModelProperty(value="通知类型【1：社区通告；2：温馨提醒；3：通知；4：社区动态】", required=true)
+	@ApiModelProperty(value="通知类型[1：社区通告；2：温馨提醒；3：通知；4：社区动态]", required=true)
 	@NotNull
 	private String noticeType;
 	
-	@ApiModelProperty(value="项目id", required=true)
+	@ApiModelProperty(value="项目Id", required=true)
 	@NotNull
 	private String projectId;
 
-	@ApiModelProperty(value="楼栋id", required=true)
+	@ApiModelProperty(value="楼栋Id", required=true)
 	@NotNull
 	private String groupId;
 	
-	@ApiModelProperty(value="当前页【第几页，最小值为1】", required=true)
+	@ApiModelProperty(value="当前页[第几页，最小值为1]", required=true)
 	@NotNull
 	private Integer page;
 	
-	@ApiModelProperty(value="页大小【每页条数，最小值为0】", required=true)
+	@ApiModelProperty(value="页大小[每页条数，最小值为0]", required=true)
 	@NotNull
 	private Integer size;
-	public String getTerminal() {
-		return terminal;
-	}
-
-	public void setTerminal(String terminal) {
-		this.terminal = terminal;
-	}
 
 	public String getNoticeType() {
 		return noticeType;

@@ -75,6 +75,7 @@ public class ProjectController {
 	public DataPageValue<NoticeVo> getNoticeList(@Valid @ModelAttribute NoticeRo noticeRo){
 		NoticeBo noticeBo = MyBeanUtil.createBean(noticeRo, NoticeBo.class);
 		noticeBo.setPrivilegeType(WorkbenchConstants.NoticePrivilegeType.RESIDENT);
+		noticeBo.setTerminal(WorkbenchConstants.TerminalType.MOBILE);
 		DataPageValue<NoticeVo> noticeDataPage = workbenchService.findNoticeOfPublished(noticeBo);
 		return noticeDataPage;
 	}
