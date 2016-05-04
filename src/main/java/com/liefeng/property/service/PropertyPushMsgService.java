@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.FreeMarkerUtil;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.mq.type.MessageEvent;
 import com.liefeng.property.constant.SysConstants;
@@ -91,7 +92,7 @@ public class PropertyPushMsgService {
 			
 			if(pushMsgTemplateVo != null){
 				String pageUrl = pushMsgTemplateVo.getPageUrl();
-				if(data != null){
+				if(ValidateHelper.isNotEmptyMap(data)){
 					pageUrl = FreeMarkerUtil.parseStringTemplate(pushMsgTemplateVo.getPageUrl(), data);
 				}
 						
