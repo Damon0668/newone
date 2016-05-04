@@ -66,7 +66,7 @@
 	select
 		count(1)
 	from
-		(<include refid="card_view"/>) as cv
+		(<include refid="card_view"/>) AS cv
 	<include refid="Where_Clause"/>
 </select>
 

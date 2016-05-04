@@ -5,7 +5,10 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.liefeng.property.repository.mybatis.GuardUserQueryRepository" > 
 
-<resultMap id="GuardPRUserVo" type="com.liefeng.property.vo.guard.GuardPRUserVo" ></resultMap>
+<resultMap id="GuardPRUserVo" type="com.liefeng.property.vo.guard.GuardPRUserVo" >
+    <result column="id_num" property="customer.idNum"/>
+    <result column="sex" property="customer.sex"/>
+</resultMap>
 
 <resultMap id="GuardStaffVo" type="com.liefeng.property.vo.guard.GuardStaffVo" ></resultMap>
 
@@ -183,5 +186,44 @@
         ${pager.mysqlQueryCondition}
     </if>
 </select>
+
+<select id="findPRUser" resultMap="GuardPRUserVo">
+
+	select * from (
+	    <choose>
+		    <when test="userType == 'proprietor'">
+			    SELECT
+			        pj.full_name projectName,
+			        p.`name`,
+			        p.phone mobile,
+			        c.sex ,
+			        c.id_num,
+			        c.birthday
+			    FROM
+			        t_proprietor p
+			    LEFT JOIN basic.t_customer c ON p.cust_global_id = c.global_id
+			    LEFT JOIN t_project pj ON p.project_id = pj.id
+			    where p.id = #{userId} and p.oem_code = #{oemCode}
+			</when>
+			<when test="userType == 'resident'">
+                SELECT
+                    pj.full_name projectName,
+                    r.`name`,
+                    r.mobile mobile,
+                    c.sex ,
+                    c.id_num,
+                    c.birthday
+                FROM
+                    t_resident r
+                LEFT JOIN basic.t_customer c ON r.cust_global_id = c.global_id
+                LEFT JOIN t_project pj ON r.project_id = pj.id
+                where r.id = #{userId} and r.oem_code = #{oemCode}
+            </when>
+		</choose>
+	) t
+	
+</select>
+
+
 
 </mapper>

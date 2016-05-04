@@ -29,7 +29,6 @@ public interface GuardCardPrivilegeRepository extends JpaRepository<GuardCardPri
 	 */
 	public void deleteByCardId(String cardId);
 	
-	
 	/**
 	 * 删除
 	 * @param guardDeviceId 门禁设备ID

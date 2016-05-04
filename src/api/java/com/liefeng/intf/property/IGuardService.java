@@ -141,7 +141,7 @@ public interface IGuardService {
 	public List<GuardDeviceVo> findGuardDeviceByProjectId(String projectId);
 	
 	/**
-	 * 检测门禁设备号是否存储
+	 * 检测门禁设备号是否存在
 	 * @param guardNum 门禁设备号
 	 * @return true 存在 false 不存在
 	 */
@@ -248,6 +248,14 @@ public interface IGuardService {
 	 * @return 列表数据
 	 */
 	public DataPageValue<GuardCardVo> listGuardCard(GuardCardBo guardCardBo, Integer pageSize, Integer currentPage);
+	
+	/**
+	 * 查询住户信息
+	 * @param userId 业主|租住ID
+	 * @param userType 用户类型
+	 * @return
+	 */
+	public GuardPRUserVo findGuardPRUser(String userId, String userType);
 	
 	/**
 	 * 获取磁卡详细信息

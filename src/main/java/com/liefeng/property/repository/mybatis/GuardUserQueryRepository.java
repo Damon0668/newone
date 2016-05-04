@@ -2,39 +2,20 @@ package com.liefeng.property.repository.mybatis;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+import org.springframework.data.jpa.repository.Query;
+
 import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.vo.guard.GuardPRUserVo;
 import com.liefeng.property.vo.guard.GuardStaffVo;
-import com.liefeng.property.vo.household.ResidentVo;
 
 /**
  * 出入管理
  * 用户管理
  * 查询接口
  */
-public interface GuardUserQueryRepository extends BaseRepository<ResidentVo> {
-	
-	/**
-	 * 根据ID和房屋ID查询住户
-	 * @param param 查询过滤参数
-	 * @return 某房屋某个住户信息
-	 */
-	public ResidentVo queryByIdAndHouseId(PagingParamVo param);
-	
-	/**
-	 * 根据客户全局ID和项目ID查询客户
-	 * @param param 查询过滤参数
-	 * @return 住户信息
-	 */
-	public ResidentVo queryByCustGlobalIdAndProjectId(PagingParamVo param);
-	
-	/**
-	 * 获取账号关联房子中的住户或业主
-	 * @param param 查询过滤参数
-	 * @return 住户列表
-	 */
-	public List<ResidentVo> queryRelatedHouses(PagingParamVo param);
+public interface GuardUserQueryRepository extends BaseRepository {
 
 	/**
 	 * 门禁模块
@@ -43,6 +24,15 @@ public interface GuardUserQueryRepository extends BaseRepository<ResidentVo> {
 	 */
 	public List<GuardPRUserVo> queryGuardPRUser(PagingParamVo param);
 
+	/**
+	 * 查询住户信息
+	 * @param userId 业主|租户ID
+	 * @param userType 用户类型
+	 * @return
+	 */
+	public GuardPRUserVo findPRUser(@Param(value="userId") String userId, 
+			@Param(value="userType") String userType, @Param(value="oemCode") String oemCode);
+	
 	/**
 	 * 查询集合总数
 	 */

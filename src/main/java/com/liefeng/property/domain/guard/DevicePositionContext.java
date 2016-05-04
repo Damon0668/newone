@@ -19,13 +19,16 @@ import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
+import com.liefeng.core.exception.LiefengException;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.bo.guard.DevicePositionBo;
+import com.liefeng.property.error.GuardErrorCode;
 import com.liefeng.property.po.guard.DevicePositionPo;
 import com.liefeng.property.repository.guard.DevicePositionRepository;
 import com.liefeng.property.repository.mybatis.DevicePositionQueryRepository;
 import com.liefeng.property.util.DictionaryUtil;
 import com.liefeng.property.vo.guard.DevicePositionVo;
+import com.liefeng.property.vo.guard.GuardDeviceVo;
 
 /**
  * 设备位置领域
@@ -124,8 +127,14 @@ public class DevicePositionContext {
 	@Transactional
 	public void delete(){
 		if(ValidateHelper.isNotEmptyString(positionId)){
+			
+			List<GuardDeviceVo> guardDeviceList = GuardDeviceContext.loadByPositionId(positionId).findGuardDevice();
+			
+			if(ValidateHelper.isNotEmptyCollection(guardDeviceList)){
+				throw new LiefengException(GuardErrorCode.POSITION_HAS_DEVICE);
+			}
+			
 			devicePositionRepository.delete(positionId);
-			//TODO 删除授权信息表数据
 		}
 	}
 	
