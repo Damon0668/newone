@@ -1,5 +1,8 @@
 package com.liefeng.property.domain.staff;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +11,11 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.SpringBeanUtil;
 import com.liefeng.common.util.UUIDGenerator;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.property.po.staff.ManageProjectPo;
+import com.liefeng.property.repository.mybatis.ManageProjectQueryRepository;
 import com.liefeng.property.repository.staff.ManageProjectRepository;
+import com.liefeng.property.vo.staff.ManageProjectVo;
 
 /**
  * 员工与项目关系
@@ -25,6 +31,9 @@ public class ManageProjectContext {
 	
 	@Autowired
 	private ManageProjectRepository manageProjectRepository;
+	
+	@Autowired
+	private ManageProjectQueryRepository manageProjectQueryRepository;
 	
 	/**
 	 * 员工ID
@@ -81,5 +90,20 @@ public class ManageProjectContext {
 	public  void deleteByProjectId(String projectId){
 		logger.info("deleteByProjectId projectId = {}", projectId);
 		manageProjectRepository.deleteByProjectId(projectId);
+	}
+	
+	public List<String> findManageProjectName(){
+		if(ValidateHelper.isNotEmptyString(staffId)){
+			List<ManageProjectVo> ManageProjectList = manageProjectQueryRepository.findByStaffId(staffId);
+			if(ValidateHelper.isNotEmptyCollection(ManageProjectList)){
+				List<String> projectName = new ArrayList<String>();
+				for (ManageProjectVo manageProjectVo : ManageProjectList) {
+					projectName.add(manageProjectVo.getProjectName());
+				}
+				return projectName;
+			}
+			
+		}
+		return new ArrayList<String>();
 	}
 }

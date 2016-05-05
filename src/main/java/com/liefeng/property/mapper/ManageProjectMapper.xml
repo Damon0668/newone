@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.ManageProjectQueryRepository" >
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.staff.ManageProjectVo" >
+
+</resultMap>
+
+<select id="findByStaffId" resultMap="BaseResultMap">
+    SELECT
+	    p.full_name projectName,
+	    mp.*
+	FROM
+	    t_manage_project mp
+	LEFT JOIN t_project p ON mp.project_id = p.id
+	WHERE
+	    mp.staff_id = #{staffId}
+</select>
+
+</mapper>

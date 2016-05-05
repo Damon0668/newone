@@ -41,6 +41,7 @@ import com.liefeng.property.domain.guard.GuardDeviceContext;
 import com.liefeng.property.domain.guard.GuardOpenLogContext;
 import com.liefeng.property.domain.guard.GuardUserContext;
 import com.liefeng.property.domain.household.VisitorContext;
+import com.liefeng.property.domain.staff.ManageProjectContext;
 import com.liefeng.property.vo.guard.AttendantVo;
 import com.liefeng.property.vo.guard.CameraVo;
 import com.liefeng.property.vo.guard.DevicePositionVo;
@@ -184,9 +185,9 @@ public class GuardService implements IGuardService {
 	}
 
 	@Override
-	public DataPageValue<GuardPRUserVo> listPRUser(GuardPRUserBo guardResidentBo, Integer currentPage, Integer pageSize) {
+	public DataPageValue<GuardPRUserVo> listPRUser(GuardPRUserBo guardPRUserBo, Integer currentPage, Integer pageSize) {
 			
-		DataPageValue<GuardPRUserVo> dataPageValue = GuardUserContext.build().listGuardPRUser4Page(guardResidentBo, currentPage, pageSize);
+		DataPageValue<GuardPRUserVo> dataPageValue = GuardUserContext.build().listGuardPRUser4Page(guardPRUserBo, currentPage, pageSize);
 
 		return dataPageValue;
 	}
@@ -376,6 +377,15 @@ public class GuardService implements IGuardService {
 		return GuardUserContext.build().findPRUser(userId, userType);
 	}
 
-	
+	@Override
+	public GuardStaffVo findGuardStaff(String staffId) {
+		GuardStaffVo guardStaff = GuardUserContext.build().findStaff(staffId);
+		
+		List<String> manageProjects = ManageProjectContext.build(staffId).findManageProjectName();
+		
+		guardStaff.setManageProjects(manageProjects);
+		
+		return guardStaff;
+	}
 
 }

@@ -11,6 +11,7 @@ import com.liefeng.property.bo.household.MovedOutResidentBo;
 import com.liefeng.property.bo.household.ProprietorBo;
 import com.liefeng.property.bo.household.ResidentBo;
 import com.liefeng.property.bo.household.ResidentFeedbackBo;
+import com.liefeng.property.vo.api.UserHouseVo;
 import com.liefeng.property.vo.household.AppFriendVo;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
 import com.liefeng.property.vo.household.CarInfoVo;
@@ -654,7 +655,6 @@ public interface IHouseholdService {
 	 */
 	public DataPageValue<CarInfoVo> listCarInfo(CarInfoBo params, Integer currentPage, Integer pageSize);
 	
-	
 	/**
 	 * 根据身份证号码获取住户房屋关系
 	 * @param idNum
@@ -707,6 +707,14 @@ public interface IHouseholdService {
 	 * @date 2016年4月26日
 	 */
 	public List<PropertyStaffVo> listPropertyStaffByNumber(String number);
+	
+	/**
+	 * 根据全局ID 查询房产
+	 * 区分OEM
+	 * @param custGlobalId
+	 * @return
+	 */
+	public List<UserHouseVo> listUserHousesByOem(String custGlobalId);
 
 
 }

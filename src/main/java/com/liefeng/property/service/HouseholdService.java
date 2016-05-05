@@ -55,6 +55,7 @@ import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.domain.staff.PropertyStaffContext;
 import com.liefeng.property.error.HouseholdErrorCode;
 import com.liefeng.property.exception.PropertyException;
+import com.liefeng.property.vo.api.UserHouseVo;
 import com.liefeng.property.vo.household.AppFriendVo;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
 import com.liefeng.property.vo.household.CarInfoVo;
@@ -1369,6 +1370,11 @@ public class HouseholdService implements IHouseholdService {
 	@Override
 	public List<PropertyStaffVo> listPropertyStaffByNumber(String number) {
 		return PropertyStaffContext.build().listPropertyStaffByNumber(number);
+	}
+
+	@Override
+	public List<UserHouseVo> listUserHousesByOem(String custGlobalId) {
+		return HouseContext.build().getUserHousesByOem(custGlobalId);
 	}
 
 }

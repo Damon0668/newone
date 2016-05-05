@@ -33,6 +33,12 @@ public class UserHouseVo extends BaseValue {
 	
 	@ApiModelProperty(value = "楼栋ID")
 	private String buildingId;
+	
+	@ApiModelProperty(value = "楼栋名称")
+	private String buildingName;
+	
+	@ApiModelProperty(value = "楼层名称")
+	private String floorName;
 
 	@ApiModelProperty(value = "房子ID")
 	private String houseId;
@@ -114,5 +120,20 @@ public class UserHouseVo extends BaseValue {
 	public void setResidentRelation(String residentRelation) {
 		this.residentRelation = residentRelation;
 	}
-	
+
+	public String getBuildingName() {
+		return buildingName;
+	}
+
+	public void setBuildingName(String buildingName) {
+		this.buildingName = buildingName;
+	}
+
+	public String getFloorName() {
+		return floorName;
+	}
+
+	public void setFloorName(String floorName) {
+		this.floorName = floorName;
+	}
 }

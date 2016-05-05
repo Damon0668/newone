@@ -5,7 +5,6 @@ import java.util.List;
 import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.vo.project.HouseSpecVo;
-import com.liefeng.property.vo.project.ProjectBuildingVo;
 
 /**
  * 房产规格Mybatis查询仓储层

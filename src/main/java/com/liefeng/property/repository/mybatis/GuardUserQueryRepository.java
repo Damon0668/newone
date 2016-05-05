@@ -3,7 +3,6 @@ package com.liefeng.property.repository.mybatis;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.data.jpa.repository.Query;
 
 import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
@@ -32,6 +31,13 @@ public interface GuardUserQueryRepository extends BaseRepository {
 	 */
 	public GuardPRUserVo findPRUser(@Param(value="userId") String userId, 
 			@Param(value="userType") String userType, @Param(value="oemCode") String oemCode);
+	
+	/**
+	 * 查询员工信息
+	 * @param staffId 员工ID
+	 * @return
+	 */
+	public GuardStaffVo findStaff(@Param(value="staffId") String staffId);
 	
 	/**
 	 * 查询集合总数
