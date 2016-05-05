@@ -293,7 +293,9 @@ FROM
 		(
 		  <include refid="user_houses_sql"/>
 		) AS v
-	WHERE v.custGlobalId = #{custGlobalId}
+	WHERE v.custGlobalId = #{custGlobalId} AND v.status = '1'
+	GROUP BY
+        v.houseNum
 	ORDER BY
 		v.houseNum
 </select>
@@ -315,10 +317,10 @@ FROM
 	    (
 	       <include refid="user_houses_sql"/>
 	    ) AS v
-	WHERE v.custGlobalId = #{custGlobalId}
+	WHERE v.custGlobalId = #{custGlobalId} AND v.status = '1'
 	AND v.oemCode = #{oemCode}
 	ORDER BY
-	    v.houseNum
+	   v.houseNum
 </select>
 
 </mapper>   
