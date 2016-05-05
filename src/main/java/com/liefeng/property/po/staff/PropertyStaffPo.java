@@ -97,6 +97,12 @@ public class PropertyStaffPo extends BaseValue {
 	private String creatorId;
 	
 	/**
+	 * 用户APP头像
+	 */
+	@Column(name = "avatar_url")
+	private String avatarUrl;
+	
+	/**
 	 * OEM编码
 	 */
 	@Column(name = "oem_code")
@@ -204,5 +210,13 @@ public class PropertyStaffPo extends BaseValue {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
+
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
 	}
 }

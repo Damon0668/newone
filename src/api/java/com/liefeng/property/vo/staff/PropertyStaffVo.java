@@ -141,6 +141,12 @@ public class PropertyStaffVo extends BaseValue {
 	@ApiModelProperty(value="客户全局唯一标识")
 	private String custGlobalId;
 	
+	/**
+	 * 用户APP头像
+	 */
+	@ApiModelProperty(value="用户APP头像")
+	private String avatarUrl;
+	
 	public String getId() {
 		return id;
 	}
@@ -299,5 +305,13 @@ public class PropertyStaffVo extends BaseValue {
 
 	public void setCustGlobalId(String custGlobalId) {
 		this.custGlobalId = custGlobalId;
+	}
+
+	public String getAvatarUrl() {
+		return avatarUrl;
+	}
+
+	public void setAvatarUrl(String avatarUrl) {
+		this.avatarUrl = avatarUrl;
 	}
 }

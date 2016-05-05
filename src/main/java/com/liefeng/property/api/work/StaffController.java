@@ -57,6 +57,7 @@ public class StaffController {
 				MyBeanUtil.copyBeanNotNull2Bean(staffArchive, staffInfoVo);
 				CustomerVo customer = userService.getCustomerByGlobalId(staffArchive.getCustGlobalId());
 				if(customer != null){
+					customer.setPortraitUrl(propertyStaff.getAvatarUrl());
 					MyBeanUtil.copyBeanNotNull2Bean(customer, staffInfoVo);
 				}
 			}
@@ -74,6 +75,7 @@ public class StaffController {
 		StaffArchiveVo staffArchive = propertyStaffDetailInfo.getStaffArchiveVo();
 		CustomerVo customer = propertyStaffDetailInfo.getCustomerVo();
 		if(staff != null){
+			staff.setAvatarUrl(updateStaffRo.getPortraitUrl());
 			staff.setName(updateStaffRo.getName());
 		}
 		
@@ -83,9 +85,7 @@ public class StaffController {
 		}
 	
 		if(customer != null){
-			
-			customer.setPortraitUrl(updateStaffRo.getPortraitUrl());
-			
+
 			customer.setSex(updateStaffRo.getSex());
 			
 			if(ValidateHelper.isNotEmptyString(updateStaffRo.getName())){
