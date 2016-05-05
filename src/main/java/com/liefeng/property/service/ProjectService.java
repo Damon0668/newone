@@ -486,4 +486,10 @@ public class ProjectService implements IProjectService {
 	public void deleteHouseCheckitemConfig(String id) {
 		HouseCheckitemConfigContext.loadById(id).delete();
 	}
+
+	@Override
+	public DataPageValue<HouseSpecVo> findHouseSpecForHouseCheck(
+			HouseSpecBo params, Integer page, Integer size) {
+		return HouseSpecContext.build().findHouseSpecForHouseCheck(params, page, size);
+	}
 }

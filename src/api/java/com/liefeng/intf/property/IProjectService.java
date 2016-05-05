@@ -420,4 +420,15 @@ public interface IProjectService {
 	 * @date 2016年4月28日 下午6:04:45
 	 */
 	public void deleteHouseCheckitemConfig(String id);
+	
+	/**
+	 * 分页查询房屋规格（验收管理专用）
+	 * @param params
+	 * @param page
+	 * @param size
+	 * @return 
+	 * @author xhw
+	 * @date 2016年5月5日 上午10:47:50
+	 */
+	public DataPageValue<HouseSpecVo> findHouseSpecForHouseCheck(HouseSpecBo params, Integer page, Integer size);
 }

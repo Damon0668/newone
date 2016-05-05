@@ -25,6 +25,7 @@
 	<result column="floorId" property="floorId"/>
 	<result column="floorName" property="floorName"/>
 	<result column="floorCode" property="floorCode"/>
+	<result column="flag" property="flag"/>
 </resultMap>
 
 <!-- 查询条件 -->
@@ -211,5 +212,127 @@ where 1=1
 		(s.floor_id)
 	) v order by code
 </select>
+<!-- 验收管理列表专用 -->
+<select id="queryForHouseCheck" resultMap="BaseResultMap">
+	SELECT
+		buildingId,
+		buildingName,
+		buildingCode,
+		floorId,
+		floorName,
+		floorCode,
+		num,
+		flag 
+	FROM 
+	(
+		SELECT
+			hs.building_id AS buildingId,
+			pb. NAME AS buildingName,
+			pb. CODE AS buildingCode,
+			CONCAT(pb2. CODE, hs.num)AS num,
+			hs.floor_id AS floorId,
+			pb2. NAME AS floorName,
+			pb2. CODE AS floorCode,
+			CASE when 	(
+				SELECT
+					count(c.id) as number
+				FROM
+					property.t_house_check c
+				WHERE
+					c.project_id = hs.project_id
+				AND c.house_num = CONCAT(pb. CODE, pb2. CODE, hs.num)
+				AND hs.oem_code = c.oem_code
+			) >= 1 then 1 else 0 end as flag
+		FROM
+			property.t_house_spec hs
+		LEFT JOIN property.t_project p ON hs.project_id = p.id
+		LEFT JOIN property.t_project_building pb ON hs.building_id = pb.id
+		LEFT JOIN property.t_project_building pb2 ON hs.floor_id = pb2.id
+		WHERE
+			1 = 1
+		<if test="extra.projectId != null and extra.projectId != ''" >
+	   		 AND hs.project_id =  #{extra.projectId}
+		</if>
+		
+		<if test="extra.buildingId != null and extra.buildingId != ''" >
+		    AND hs.building_id = #{extra.buildingId}
+		</if>
+		
+		<if test="extra.floorId != null and extra.floorId != ''" >
+		    AND hs.floor_id = #{extra.floorId}
+		</if>
+		<if test="extra.oemCode != null and extra.oemCode != ''" >
+	    AND hs.oem_code = #{extra.oemCode}
+		</if>
+	)a where 1=1
+		<if test="extra.flag != null and extra.flag != ''" >
+	    AND flag = #{extra.flag}
+		</if>
+		order by buildingCode asc, num asc
+     <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+        ${pager.mysqlQueryCondition}
+     </if>
+</select>
 
+<!-- 验收管理专用 -->
+<select id="countForHouseCheck"  resultType="java.lang.Long">
+	select
+	  count(1)
+	from (
+			SELECT
+				buildingId,
+				buildingName,
+				buildingCode,
+				floorId,
+				floorName,
+				floorCode,
+				num,
+				flag 
+			FROM 
+			(
+				SELECT
+					hs.building_id AS buildingId,
+					pb. NAME AS buildingName,
+					pb. CODE AS buildingCode,
+					CONCAT(pb2. CODE, hs.num)AS num,
+					hs.floor_id AS floorId,
+					pb2. NAME AS floorName,
+					pb2. CODE AS floorCode,
+					CASE when 	(
+						SELECT
+							count(c.id) as number
+						FROM
+							property.t_house_check c
+						WHERE
+							c.project_id = hs.project_id
+						AND c.house_num = CONCAT(pb. CODE, pb2. CODE, hs.num)
+						AND hs.oem_code = c.oem_code
+					) >= 1 then 1 else 0 end as flag
+				FROM
+					property.t_house_spec hs
+				LEFT JOIN property.t_project p ON hs.project_id = p.id
+				LEFT JOIN property.t_project_building pb ON hs.building_id = pb.id
+				LEFT JOIN property.t_project_building pb2 ON hs.floor_id = pb2.id
+				WHERE
+					1 = 1
+				<if test="extra.projectId != null and extra.projectId != ''" >
+			   		 AND hs.project_id =  #{extra.projectId}
+				</if>
+				
+				<if test="extra.buildingId != null and extra.buildingId != ''" >
+				    AND hs.building_id = #{extra.buildingId}
+				</if>
+				
+				<if test="extra.floorId != null and extra.floorId != ''" >
+				    AND hs.floor_id = #{extra.floorId}
+				</if>
+				<if test="extra.oemCode != null and extra.oemCode != ''" >
+			    AND hs.oem_code = #{extra.oemCode}
+				</if>
+			)a where 1=1
+				<if test="extra.flag != null and extra.flag != ''" >
+			    AND flag = #{extra.flag}
+				</if>
+	) as ttt
+</select>
 </mapper>   

@@ -108,6 +108,11 @@ public class HouseSpecVo extends BaseValue {
 	 */
 	private int number;
 	
+	/**
+	 * 标记使用
+	 */
+	private String flag;
+	
 
 	public String getId() {
 		return id;
@@ -259,6 +264,14 @@ public class HouseSpecVo extends BaseValue {
 
 	public void setNumber(int number) {
 		this.number = number;
+	}
+
+	public String getFlag() {
+		return flag;
+	}
+
+	public void setFlag(String flag) {
+		this.flag = flag;
 	}
 
 }
