@@ -295,7 +295,6 @@ public class HouseContext {
 	/**
 	 * 根据登陆ID和类型查询用户房产
 	 * @param custGlobalId 用户全局ID
-	 * @param type 类型。1:业主，2:住户
 	 * @return 房产列表
 	 */
 	public List<UserHouseVo> getUserHouses(String custGlobalId) {

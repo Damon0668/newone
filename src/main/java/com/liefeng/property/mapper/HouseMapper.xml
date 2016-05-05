@@ -243,6 +243,7 @@ FROM
 		SELECT
 			p.id AS id,
 			p.cust_global_id AS custGlobalId,
+			p.status AS status,
 			h.project_id AS projectId,
 			pj.full_name AS projectName,
 			h.id AS houseId,
@@ -262,6 +263,7 @@ FROM
 		SELECT
 			r.id AS id,
 			r.cust_global_id AS custGlobalId,
+			r.status AS status,
 			h.project_id AS projectId,
 			pj.full_name AS projectName,
 			h.id AS houseId,
@@ -276,7 +278,9 @@ FROM
 			LEFT JOIN property.t_resident r ON r.id = rh.resident_id
 			LEFT JOIN property.t_project pj ON pj.id = h.project_id
 	)) AS v
-WHERE v.custGlobalId = #{custGlobalId}
+WHERE v.custGlobalId = #{custGlobalId} AND v.status = '1'
+GROUP BY
+	v.houseNum
 ORDER BY
 	v.houseNum
 </select>
