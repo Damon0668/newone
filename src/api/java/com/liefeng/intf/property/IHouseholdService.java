@@ -645,6 +645,22 @@ public interface IHouseholdService {
 	public CarInfoVo findCarInfoById(String carInfoId);
 	
 	/**
+	 * 查询员工车辆信息
+	 * @param staffId 员工ID
+	 * @return
+	 */
+	public List<CarInfoVo> listCarInfoByStaff(String staffId);
+
+	
+	/**
+	 * 查询即是业主又是住户的车辆信息
+	 * @param custGlobalId
+	 * @return
+	 */
+	public List<CarInfoVo> listCarInfoByPRUsr(String custGlobalId);
+	
+	
+	/**
 	 * 分页查询车辆信息
 	 * @param params 查询过滤参数
 	 * @param currentPage 分页当前页

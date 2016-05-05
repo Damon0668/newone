@@ -131,6 +131,24 @@ public class CarInfoContext {
 		}
 	}
 	
+	/**
+	 * 查询员工车辆信息
+	 * @param staffId 员工ID
+	 * @return
+	 */
+	public List<CarInfoVo> listCarInfoByStaff(String staffId){
+		return carInfoQueryRepository.findByStaffId(staffId);
+	}
+	
+	/**
+	 * 查询即是业主又是住户的车辆信息
+	 * @param custGlobalId 全局ID
+	 * @return
+	 */
+	public List<CarInfoVo> listCarInfoByPRUsr(String custGlobalId){
+		return carInfoQueryRepository.findOnPRUsrByCstGlbId(custGlobalId);
+	}
+	
 	public DataPageValue<CarInfoVo> listCarInfo(CarInfoBo params, Integer currentPage, Integer pageSize) {
 		logger.info("分页查询车辆信息，查询参数 params = {}, currentPage = {}, pageSize = {}", params, currentPage, pageSize);
 		// 查询参数拷贝

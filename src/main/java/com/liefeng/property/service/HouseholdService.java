@@ -1377,4 +1377,14 @@ public class HouseholdService implements IHouseholdService {
 		return HouseContext.build().getUserHousesByOem(custGlobalId);
 	}
 
+	@Override
+	public List<CarInfoVo> listCarInfoByStaff(String staffId) {
+		return CarInfoContext.build().listCarInfoByStaff(staffId);
+	}
+
+	@Override
+	public List<CarInfoVo> listCarInfoByPRUsr(String custGlobalId) {
+		return CarInfoContext.build().listCarInfoByPRUsr(custGlobalId);
+	}
+
 }
