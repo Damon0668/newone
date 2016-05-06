@@ -1,9 +1,11 @@
 package com.liefeng.property.vo.guard;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.liefeng.common.util.TimeUtil;
 import com.liefeng.core.entity.BaseValue;
 
 /**
@@ -45,6 +47,26 @@ public class GuardStaffVo extends BaseValue{
 	private String staffName;
 	
 	/**
+	 * 性别
+	 */
+	private String sex;
+	
+	/**
+	 * 身份证
+	 */
+	private String idNum;
+	
+	/**
+	 * 年龄
+	 */
+	private Integer age;
+	
+	/**
+	 * 出生日期
+	 */
+	private Date birthday;
+	
+	/**
 	 * 在职状态。1：在职；2：离职
 	 */
 	private String workStatus;
@@ -53,6 +75,11 @@ public class GuardStaffVo extends BaseValue{
 	 * 手机号
 	 */
 	private String mobile;
+	
+	/**
+	 * 管理的项目
+	 */
+	private List<String> manageProjects;
 	
 	/**
 	 * 磁卡ID
@@ -189,5 +216,48 @@ public class GuardStaffVo extends BaseValue{
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public String getIdNum() {
+		return idNum;
+	}
+
+	public void setIdNum(String idNum) {
+		this.idNum = idNum;
+	}
+
+	public List<String> getManageProjects() {
+		return manageProjects;
+	}
+
+	public void setManageProjects(List<String> manageProjects) {
+		this.manageProjects = manageProjects;
+	}
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+	
+	public Integer getAge() {
+		if(birthday != null){
+			this.age = TimeUtil.getAge(birthday);
+		}
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
 	}
 }

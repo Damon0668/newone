@@ -228,7 +228,7 @@ public interface IGuardService {
 	 * @param size 每页集合数
 	 * @return
 	 */
-	public DataPageValue<GuardPRUserVo> listPRUser(GuardPRUserBo guardResidentBo, Integer currentPage, Integer pageSize);
+	public DataPageValue<GuardPRUserVo> listPRUser(GuardPRUserBo guardPRUserBo, Integer currentPage, Integer pageSize);
 	
 	/**
 	 * 门禁模块
@@ -256,6 +256,13 @@ public interface IGuardService {
 	 * @return
 	 */
 	public GuardPRUserVo findGuardPRUser(String userId, String userType);
+	
+	/**
+	 * 查询员工信息
+	 * @param staffId 员工ID
+	 * @return
+	 */
+	public GuardStaffVo findGuardStaff(String staffId);
 	
 	/**
 	 * 获取磁卡详细信息

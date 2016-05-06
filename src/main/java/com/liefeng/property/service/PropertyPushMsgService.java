@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.liefeng.common.util.FreeMarkerUtil;
+import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.mq.type.MessageEvent;
 import com.liefeng.property.constant.SysConstants;
@@ -84,12 +85,17 @@ public class PropertyPushMsgService {
 	 * @author xhw
 	 * @date 2016年4月20日 上午11:16:32
 	 */
-	public void pushMsgOfUserIdClientId(String action, List<UserClientIdVo> staffList, List<UserClientIdVo> proprietorList) {
+	public void pushMsgOfUserIdClientId(String action, List<UserClientIdVo> staffList, List<UserClientIdVo> proprietorList, Map<String, String> data) {
 		try {
 			//获取推送消息模板
 			PushMsgTemplateVo pushMsgTemplateVo = pushMsgService.getPushMsgByTpl(action);
 			
 			if(pushMsgTemplateVo != null){
+				String pageUrl = pushMsgTemplateVo.getPageUrl();
+				if(ValidateHelper.isNotEmptyMap(data)){
+					pageUrl = FreeMarkerUtil.parseStringTemplate(pushMsgTemplateVo.getPageUrl(), data);
+				}
+						
 				if(staffList != null && staffList.size() > 0){
 					
 					List<String> clientIdList = UserClientIdUtil.getClientIdList(staffList);
@@ -97,7 +103,7 @@ public class PropertyPushMsgService {
 					
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(action);
-					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
+					message.setPageUrl(pageUrl);
 					message.setPageType(pushMsgTemplateVo.getPageType());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());
@@ -117,7 +123,7 @@ public class PropertyPushMsgService {
 					//获取推送消息模板
 					ListUserMsg message = new ListUserMsg();
 					message.setAction(action);
-					message.setPageUrl(pushMsgTemplateVo.getPageUrl());
+					message.setPageUrl(pageUrl);
 					message.setPageType(pushMsgTemplateVo.getPageType());
 					message.setTitle(pushMsgTemplateVo.getTitle());
 					message.setContent(pushMsgTemplateVo.getContent());

@@ -549,10 +549,14 @@ public class WorkbenchService implements IWorkbenchService {
 
 				}
 			}
+			
+			Map<String,String> data = new HashMap<String,String>();
+			data.put("noticeId", noticeVo.getId());
+			
 			//TODO（暂时屏蔽）
 			staffList = null;
 			//个推
-			propertyPushMsgService.pushMsgOfUserIdClientId(template, staffList, proprietorList);
+			propertyPushMsgService.pushMsgOfUserIdClientId(template, staffList, proprietorList, data);
 		}
 		return noticeVo;
 	}
@@ -1801,14 +1805,12 @@ public class WorkbenchService implements IWorkbenchService {
 			EventProcessVo processDispatching = eventProcessContext.getEventProcess(eventReportVo.getId(), 
 					WorkbenchConstants.EventProcessStatus.DISPATCHING);
 			logger.info("获取报事id{}的最新已派工进程{}", eventReportVo.getId(), processDispatching);
-			
 			if (processDispatching != null && ValidateHelper.isNotEmptyString(processDispatching.getNextAccepterId())) {
 				newReport = true;
 				eventReportVo.setWorkTime(processDispatching.getAcceptTime());
-				PropertyStaffDetailInfoVo propertyStaffVo = propertyStaffService
-						.findStaffDetailInfo(processDispatching.getNextAccepterId());
+				PropertyStaffDetailInfoVo propertyStaffVo = propertyStaffService.findStaffDetailInfo(processDispatching.getNextAccepterId().split(",")[0]);
 				
-				logger.info("【已派工】根据下一步办理人id：{}获取员工信息：{}", processDispatching.getNextAccepterId(), propertyStaffVo);
+				logger.info("【已派工】根据下一步办理人id：{}获取员工信息：{}", processDispatching.getNextAccepterId().split(",")[0], propertyStaffVo);
 				if (propertyStaffVo != null) {
 					eventReportVo.setWorkerName(propertyStaffVo
 							.getStaffArchiveVo().getName());
@@ -1915,7 +1917,7 @@ public class WorkbenchService implements IWorkbenchService {
 	public List<StaffContactVo> findDispatchingWorker(String projectId,String staffId){
 		
 		
-		logger.info("领导派工获取人员，领导id为："+staffId);
+	logger.info("领导派工获取人员，领导id为："+staffId);
 		
 		PropertyStaffVo propertyStaffVo= propertyStaffService.findPropertyStaffById(staffId);
 		

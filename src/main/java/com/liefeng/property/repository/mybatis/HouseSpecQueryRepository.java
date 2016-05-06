@@ -5,7 +5,6 @@ import java.util.List;
 import com.liefeng.core.mybatis.repository.BaseRepository;
 import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.vo.project.HouseSpecVo;
-import com.liefeng.property.vo.project.ProjectBuildingVo;
 
 /**
  * 房产规格Mybatis查询仓储层
@@ -40,4 +39,22 @@ public interface HouseSpecQueryRepository extends BaseRepository<HouseSpecVo>{
 	 * @date 2016年4月24日 下午3:49:38
 	 */
 	public List<HouseSpecVo> countByProjectIdAndBuildingId(PagingParamVo paramMap);
+	
+	/**
+	 * "验收管理列表"专用:获取总数
+	 * @param paramMap
+	 * @return 
+	 * @author xhw
+	 * @date 2016年5月5日 上午10:38:09
+	 */
+	public Long countForHouseCheck(PagingParamVo paramMap);
+	
+	/**
+	 * "验收管理列表"专用：获取列表
+	 * @param paramMap
+	 * @return 
+	 * @author xhw
+	 * @date 2016年5月5日 上午10:39:48
+	 */
+	public List<HouseSpecVo> queryForHouseCheck(PagingParamVo paramMap);
 }

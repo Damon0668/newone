@@ -9,6 +9,7 @@ import com.liefeng.property.bo.project.HouseSpecBo;
 import com.liefeng.property.vo.household.HouseGraphVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.project.AppHomeImageVo;
+import com.liefeng.property.vo.project.HouseCheckVo;
 import com.liefeng.property.vo.project.HouseCheckitemConfigVo;
 import com.liefeng.property.vo.project.HouseSpecVo;
 import com.liefeng.property.vo.project.HouseVo;
@@ -420,4 +421,42 @@ public interface IProjectService {
 	 * @date 2016年4月28日 下午6:04:45
 	 */
 	public void deleteHouseCheckitemConfig(String id);
+	
+	/**
+	 * 分页查询房屋规格（验收管理专用）
+	 * @param params
+	 * @param page
+	 * @param size
+	 * @return 
+	 * @author xhw
+	 * @date 2016年5月5日 上午10:47:50
+	 */
+	public DataPageValue<HouseSpecVo> findHouseSpecForHouseCheck(HouseSpecBo params, Integer page, Integer size);
+	
+	/**
+	 * 创建验收单
+	 * @param houseCheckVo 
+	 * @author xhw
+	 * @date 2016年5月5日 下午6:08:10
+	 */
+	public void createHouseCheck(HouseCheckVo houseCheckVo);
+	
+	/**
+	 * 删除验收单
+	 * @param projectId
+	 * @param houseNum 
+	 * @author xhw
+	 * @date 2016年5月6日 上午8:35:37
+	 */
+	public void deleteHouseCheck(String projectId, String houseNum);
+	
+	/**
+	 * 获取房屋验收单
+	 * @param projectId
+	 * @param houseNum
+	 * @return 
+	 * @author xhw
+	 * @date 2016年5月6日 上午9:49:23
+	 */
+	public List<HouseCheckVo> getHouseCheck(String projectId, String houseNum);
 }

@@ -103,4 +103,49 @@
 	WHERE
 		ci.id = #{carInfoId}
 </select>
+
+<select id="findByStaffId" resultMap="BaseResultMap">
+    SELECT
+	    ci.plate_num AS plateNum,
+	    ci.brand AS brand,
+	    ci.color AS color
+	FROM
+	    t_car_info ci
+	LEFT JOIN t_property_staff ps ON ci.owner_id = ps.id
+	AND ci.owner_type = '3'
+	WHERE ci.owner_id = #{staffId}
+</select>
+
+<select id="findOnPRUsrByCstGlbId" resultMap="BaseResultMap">
+select * from (
+    (
+	    SELECT
+	        ci.plate_num AS plateNum,
+	        ci.brand AS brand,
+	        ci.color AS color
+	    FROM
+	        t_car_info ci
+	    LEFT JOIN t_proprietor p ON ci.owner_id = p.id
+	    AND ci.owner_type = '1'
+	    WHERE p.cust_global_id = #{custGlobalId}
+    )
+    
+    union
+    
+    (
+	    SELECT
+	        ci.plate_num AS plateNum,
+	        ci.brand AS brand,
+	        ci.color AS color
+	    FROM
+	        t_car_info ci
+	    LEFT JOIN t_resident p ON ci.owner_id = p.id
+	    AND ci.owner_type = '2'
+	    WHERE p.cust_global_id = #{custGlobalId}
+    )
+) t
+</select>
+
+
+
 </mapper>

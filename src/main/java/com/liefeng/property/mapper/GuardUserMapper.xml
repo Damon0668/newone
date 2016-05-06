@@ -8,6 +8,7 @@
 <resultMap id="GuardPRUserVo" type="com.liefeng.property.vo.guard.GuardPRUserVo" >
     <result column="id_num" property="customer.idNum"/>
     <result column="sex" property="customer.sex"/>
+    <result column="birthday" property="customer.birthday"/>
 </resultMap>
 
 <resultMap id="GuardStaffVo" type="com.liefeng.property.vo.guard.GuardStaffVo" ></resultMap>
@@ -194,6 +195,7 @@
 		    <when test="userType == 'proprietor'">
 			    SELECT
 			        pj.full_name projectName,
+			        p.cust_global_id custGlobalId,
 			        p.`name`,
 			        p.phone mobile,
 			        c.sex ,
@@ -208,6 +210,7 @@
 			<when test="userType == 'resident'">
                 SELECT
                     pj.full_name projectName,
+                    r.cust_global_id custGlobalId,
                     r.`name`,
                     r.mobile mobile,
                     c.sex ,
@@ -223,6 +226,35 @@
 	) t
 	
 </select>
+
+<select id="findStaff" resultMap="GuardStaffVo">
+    SELECT
+        ps.id,
+        pd.`name` deptName,
+        dict.name positionName,
+        ps.`name` staffName,
+        ps.work_status workStatus,
+        sa.phone mobile,
+        gc.id cardId,
+        gc.sn cardSn,
+        gc.type cardType,
+        gc.`status` cardStatus,
+        gc.start_date startDate,
+        gc.end_date endDate,
+        c.sex sex,
+        c.birthday birthday,
+        c.id_num idNum
+    FROM
+        t_property_staff ps
+    LEFT JOIN t_staff_archive sa on ps.id = sa.staff_id
+    LEFT JOIN basic.t_customer c on sa.cust_global_id = c.global_id
+    LEFT JOIN t_property_department pd on ps.department_id = pd.id
+    LEFT JOIN t_sys_dict dict on ps.position = dict.`value` and dict.group_code = 'POSITION'
+    LEFT JOIN t_guard_card_user gcu on ps.id = gcu.user_id and gcu.user_type = '0'
+    LEFT JOIN t_guard_card gc on gc.id = gcu.card_id
+    where ps.id = #{staffId}
+</select>
+
 
 
 

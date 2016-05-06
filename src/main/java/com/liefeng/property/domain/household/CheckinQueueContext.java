@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.liefeng.common.util.MyBeanUtil;
 import com.liefeng.common.util.Po2VoConverter;
 import com.liefeng.common.util.SpringBeanUtil;
+import com.liefeng.common.util.TimeUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
@@ -123,6 +124,17 @@ public class CheckinQueueContext {
 	 */
 	public CheckinQueueVo create() {
 		if(checkinQueue != null) {
+			//查询当天是否存在排队,存在不创建
+			CheckinQueuePo toDayCheckInQueue = checkinQueueRepository.findCheckinQueue(checkinQueue.getUserId(), 
+													checkinQueue.getProjectId(), 
+													checkinQueue.getHouseId(),
+													checkinQueue.getStatus(), 
+													TimeUtil.getNowTime());
+			logger.info("当天排队情况 toDayCheckInQueue = {}",toDayCheckInQueue);
+			if(toDayCheckInQueue != null){
+				return null;
+			}
+			
 			checkinQueue.setId(UUIDGenerator.generate());
 			// 当状态为空时才给状态赋值，默认为0（未处理）
 			if(ValidateHelper.isEmptyString(checkinQueue.getStatus())) {

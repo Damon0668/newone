@@ -55,6 +55,7 @@ import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.domain.staff.PropertyStaffContext;
 import com.liefeng.property.error.HouseholdErrorCode;
 import com.liefeng.property.exception.PropertyException;
+import com.liefeng.property.vo.api.UserHouseVo;
 import com.liefeng.property.vo.household.AppFriendVo;
 import com.liefeng.property.vo.household.AppMsgSettingVo;
 import com.liefeng.property.vo.household.CarInfoVo;
@@ -518,7 +519,7 @@ public class HouseholdService implements IHouseholdService {
 				//获取某个房间的所有用户的clientId
 				List<UserClientIdVo> finishedList = listClientIdByProjectIdAndHouseNum(queueReturn.getProjectId(), houseVo.getHouseNum());
 				//入住办理完成号时群推消息给当前入住办理用户
-				propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.CHECKIN_SUCCESS, null, finishedList);
+				propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.CHECKIN_SUCCESS, null, finishedList, null);
 				
 				//大于当前完成的排队号的排队
 			   CheckinQueueVo queueUntreated =getCheckinQueueMoreThanSeq(queueReturn.getProjectId(), HouseholdConstants.CheckinQueueStatus.UNTREATED, queueReturn.getSeq(), TimeUtil.format(new Date(), TimeUtil.PATTERN_1));
@@ -528,7 +529,7 @@ public class HouseholdService implements IHouseholdService {
 					//获取某个房间的所有用户的clientId
 					List<UserClientIdVo> userClientIdList = listClientIdByProjectIdAndHouseNum(queueReturn.getProjectId(), houseUntreated.getHouseNum());
 					//入住办理完成号时群推消息给下一个入住办理用户
-					propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.CHECKIN_TURN_YOU, null, userClientIdList);
+					propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.CHECKIN_TURN_YOU, null, userClientIdList, null);
 					
 			   }
 			}
@@ -540,7 +541,7 @@ public class HouseholdService implements IHouseholdService {
 				List<UserClientIdVo> userClientIdList = listClientIdByProjectIdAndHouseNum(queueReturn.getProjectId(), houseVo.getHouseNum());
 				
 				//入住办理完成号时群推消息给下一个入住办理用户
-				propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.CHECKIN_HANDLING, null, userClientIdList);
+				propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.CHECKIN_HANDLING, null, userClientIdList, null);
 				
 			}
 		}
@@ -1433,6 +1434,21 @@ public class HouseholdService implements IHouseholdService {
 	@Override
 	public List<PropertyStaffVo> listPropertyStaffByNumber(String number) {
 		return PropertyStaffContext.build().listPropertyStaffByNumber(number);
+	}
+
+	@Override
+	public List<UserHouseVo> listUserHousesByOem(String custGlobalId) {
+		return HouseContext.build().getUserHousesByOem(custGlobalId);
+	}
+
+	@Override
+	public List<CarInfoVo> listCarInfoByStaff(String staffId) {
+		return CarInfoContext.build().listCarInfoByStaff(staffId);
+	}
+
+	@Override
+	public List<CarInfoVo> listCarInfoByPRUsr(String custGlobalId) {
+		return CarInfoContext.build().listCarInfoByPRUsr(custGlobalId);
 	}
 
 }

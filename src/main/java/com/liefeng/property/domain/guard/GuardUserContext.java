@@ -147,4 +147,15 @@ public class GuardUserContext {
 		prUser.getCustomer().setIdNum(EncryptionUtil.decryptCustIdNum(prUser.getCustomer().getIdNum()));
 		return prUser;
 	}
+	
+	/**
+	 * 查询员工信息
+	 * @param staffId 员工ID
+	 * @return
+	 */
+	public GuardStaffVo findStaff(String staffId){
+		GuardStaffVo guardStaff = guardUserQueryRepository.findStaff(staffId);
+		guardStaff.setIdNum(EncryptionUtil.decryptCustIdNum(guardStaff.getIdNum()));
+		return guardStaff;
+	}
 }

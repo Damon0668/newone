@@ -25,6 +25,11 @@ public class HouseSpecBo extends BaseValue {
 	 * 楼层ID
 	 */
 	private String floorId;
+	
+	/**
+	 * 标识
+	 */
+	private String flag;
 
 	public String getOemCode() {
 		return oemCode;
@@ -56,5 +61,13 @@ public class HouseSpecBo extends BaseValue {
 
 	public void setFloorId(String floorId) {
 		this.floorId = floorId;
+	}
+
+	public String getFlag() {
+		return flag;
+	}
+
+	public void setFlag(String flag) {
+		this.flag = flag;
 	}
 }

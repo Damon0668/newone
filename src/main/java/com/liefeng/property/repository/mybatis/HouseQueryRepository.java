@@ -35,9 +35,18 @@ public interface HouseQueryRepository extends BaseRepository<ProprietorSingleHou
 	public Map<String, BigDecimal> queryGraphCount(PagingParamVo param);
 	
 	/**
-	 * 根据登陆ID和类型查询用户房产
+	 * 根据登陆ID查询用户房产
+	 * APP 房产列表
 	 * @param custGlobalId 用户全局ID
 	 * @return 房产列表
 	 */
 	public List<UserHouseVo> queryUserHouses(@Param("custGlobalId") String custGlobalId);
+	
+	/**
+	 * 根据全局ID查询用户房产
+	 * @param custGlobalId 用户全局ID
+	 * @param oemCode 
+	 * @return 房产列表
+	 */
+	public List<UserHouseVo> queryUserHousesByOem(@Param("custGlobalId") String custGlobalId, @Param("oemCode") String oemCode);
 }

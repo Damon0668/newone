@@ -19,7 +19,7 @@ public interface ManageProjectRepository  extends JpaRepository<ManageProjectPo,
 	 * @param staffId 员工ID
 	 */
 	public void deleteByStaffId(String staffId);
-	
+
 	/**
 	 * 根据项目ID删除
 	 * @param projectId 项目ID

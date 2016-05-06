@@ -1,6 +1,7 @@
 package com.liefeng.property.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
+import com.liefeng.core.dubbo.filter.ContextManager;
 import com.liefeng.core.entity.DataPageValue;
 import com.liefeng.core.exception.LiefengException;
 import com.liefeng.intf.property.IProjectService;
@@ -18,6 +22,7 @@ import com.liefeng.intf.service.msg.IPushMsgService;
 import com.liefeng.property.bo.project.HouseBo;
 import com.liefeng.property.bo.project.HouseSpecBo;
 import com.liefeng.property.domain.project.AppHomeImageContext;
+import com.liefeng.property.domain.project.HouseCheckContext;
 import com.liefeng.property.domain.project.HouseCheckitemConfigContext;
 import com.liefeng.property.domain.project.HouseContext;
 import com.liefeng.property.domain.project.HouseSpecContext;
@@ -28,6 +33,7 @@ import com.liefeng.property.vo.household.HouseGraphVo;
 import com.liefeng.property.vo.household.ProprietorSingleHouseVo;
 import com.liefeng.property.vo.household.UserClientIdVo;
 import com.liefeng.property.vo.project.AppHomeImageVo;
+import com.liefeng.property.vo.project.HouseCheckVo;
 import com.liefeng.property.vo.project.HouseCheckitemConfigVo;
 import com.liefeng.property.vo.project.HouseSpecVo;
 import com.liefeng.property.vo.project.HouseVo;
@@ -262,7 +268,7 @@ public class ProjectService implements IProjectService {
 		//员工clientId
 		List<UserClientIdVo> staffClientIdList = propertyStaffService.findStaffClientIdList("", projectNoticeVo.getProjectId());
 		//发布物业须知时群推消息
-		propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.PROPERTY_NEW_NOTE, staffClientIdList, proprietorClientIdList);
+		propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.PROPERTY_NEW_NOTE, staffClientIdList, proprietorClientIdList, null);
 			
 		return projectNoticeVo;
 	}
@@ -283,7 +289,7 @@ public class ProjectService implements IProjectService {
 		//员工clientId
 		List<UserClientIdVo> staffClientIdList = propertyStaffService.findStaffClientIdList("", projectNoticeVo.getProjectId());
 		//发布物业须知时群推消息
-		propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.PROPERTY_NEW_NOTE, staffClientIdList, proprietorClientIdList);
+		propertyPushMsgService.pushMsgOfUserIdClientId(PushActionConstants.PROPERTY_NEW_NOTE, staffClientIdList, proprietorClientIdList, null);
 				
 		return projectNoticeVo;
 	}
@@ -485,5 +491,46 @@ public class ProjectService implements IProjectService {
 	@Override
 	public void deleteHouseCheckitemConfig(String id) {
 		HouseCheckitemConfigContext.loadById(id).delete();
+	}
+
+	@Override
+	public DataPageValue<HouseSpecVo> findHouseSpecForHouseCheck(
+			HouseSpecBo params, Integer page, Integer size) {
+		return HouseSpecContext.build().findHouseSpecForHouseCheck(params, page, size);
+	}
+
+	@Override
+	public void createHouseCheck(HouseCheckVo houseCheckVo) {
+		List<HouseCheckVo> houseCheckVoList = null;
+		if(houseCheckVo != null && ValidateHelper.isNotEmptyString(houseCheckVo.getItemResult())){
+			houseCheckVoList = new ArrayList<HouseCheckVo>();
+			
+			String[] parentResult = houseCheckVo.getItemResult().split("\\|");
+			
+			for(int i = 0; i < parentResult.length; i++){
+				String[] childResult = parentResult[i].split(",");
+				
+				HouseCheckVo houseCheck = new HouseCheckVo();
+				MyBeanUtil.copyBeanNotNull2Bean(houseCheckVo, houseCheck);
+				houseCheck.setCreate_time(new Date());
+				houseCheck.setId(UUIDGenerator.generate());
+				houseCheck.setOemCode(ContextManager.getInstance().getOemCode());
+				houseCheck.setItemId(childResult[0]);
+				houseCheck.setResultId(childResult[1]);
+				
+				houseCheckVoList.add(houseCheck);
+			}
+		}
+	  HouseCheckContext.build().create(houseCheckVoList);
+	}
+
+	@Override
+	public void deleteHouseCheck(String projectId, String houseNum) {
+		HouseCheckContext.build().delete(projectId, houseNum);
+	}
+
+	@Override
+	public List<HouseCheckVo> getHouseCheck(String projectId, String houseNum) {
+		return HouseCheckContext.build().getHouseCheck(projectId, houseNum);
 	}
 }

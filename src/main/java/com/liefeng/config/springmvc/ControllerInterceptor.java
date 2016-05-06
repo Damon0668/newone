@@ -25,8 +25,6 @@ public class ControllerInterceptor implements HandlerInterceptor{
 			throws Exception {
 		IRedisService redisService = SpringBeanUtil.getBean(IRedisService.class);
 		
-		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
-		
 		String openId = request.getHeader("openId");
 		
 		String env = CommonUtil.getActiveProfile().toLowerCase();
@@ -36,6 +34,9 @@ public class ControllerInterceptor implements HandlerInterceptor{
 		//开发环境和测试环境设置。
 		if("test".equals(env) || "dev".equals(env)){
 			if(ValidateHelper.isEmptyString(openId)){
+				
+				ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
+				
 				String oemCode = (String) redisService.getValue("openId_" + env);
 				
 				if(ValidateHelper.isNotEmptyString(oemCode)){
@@ -56,6 +57,9 @@ public class ControllerInterceptor implements HandlerInterceptor{
 			return Boolean.TRUE;
 		}
 		
+		//必须在default后面执行，防止default_oem_code 污染业务代码
+		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
+		
 		String key = "openId_" + openId;
 		
 		String oemCode = (String) redisService.getValue(key);
@@ -65,6 +69,9 @@ public class ControllerInterceptor implements HandlerInterceptor{
 		if(ValidateHelper.isEmptyString(oemCode)){
 			//从openId 解密oemCode
 			openId = EncryptionUtil.decrypt(openId, EncryptionUtil.OPEN_ID_PASSWORD);
+			
+			logger.info("ControllerInterceptor not in cache openId = {}", openId);
+			
 			String[] openIdArray = openId.split("\\|");
 			if(openIdArray.length == 2){
 				oemCode = openIdArray[1];

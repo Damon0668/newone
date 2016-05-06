@@ -265,4 +265,36 @@ public class HouseSpecContext {
 		}
 		return houseSpecList;
 	}
+	
+	/**
+	 * 分页查询房屋规格（验收管理专用）
+	 * @param params
+	 * @param page
+	 * @param size
+	 * @return 
+	 * @author xhw
+	 * @date 2016年5月5日 上午10:47:50
+	 */
+	public DataPageValue<HouseSpecVo> findHouseSpecForHouseCheck(HouseSpecBo params, Integer page, Integer size) {
+		// 参数拷贝
+		Map<String, String> extra = MyBeanUtil.bean2Map(params);
+		String oemCode = ContextManager.getInstance().getOemCode();
+		extra.put("oemCode", oemCode);
+		
+		PagingParamVo param = new PagingParamVo();
+		param.setExtra(extra);
+		param.setPage(page);
+		param.setPageSize(size);
+		
+		Long count = houseSpecQueryRepository.countForHouseCheck(param);
+		count = (count == null ? 0 : count);
+		logger.info("总数量：count=" + count);
+		
+		// 设置数据总行数，用于计算偏移量
+		param.getPager().setRowCount(count);
+		List<HouseSpecVo> list = houseSpecQueryRepository.queryForHouseCheck(param);
+		DataPageValue<HouseSpecVo> returnPage = new DataPageValue<HouseSpecVo>(list, count, size, page);
+		
+		return returnPage;
+	}
 }

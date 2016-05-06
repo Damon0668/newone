@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liefeng.property.repository.mybatis.HouseCheckQueryRepository" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.liefeng.property.vo.project.HouseCheckVo" >
+</resultMap>
+
+
+<select id="queryByProjectIdAndHouseNum" resultMap="BaseResultMap">
+	    SELECT
+			a.id,
+			a.project_id as projectId,
+			a.house_num as houseNum,
+			a.item_id as itemId,
+			a.result_id as resultId,
+			b.itemname as itemName,
+			c.itemname as resultName
+		FROM
+			property.t_house_check a
+		LEFT JOIN property.t_house_checkitem_config b ON a.item_id = b.id
+		LEFT JOIN property.t_house_checkitem_config c ON a.result_id = c.id
+		WHERE
+			1=1
+		<if test="extra.projectId != null and extra.projectId != ''" >
+		AND a.project_id = #{extra.projectId}
+		</if>
+		<if test="extra.houseNum != null and extra.houseNum != ''" >
+		AND a.house_num = #{extra.houseNum}
+		</if>
+		<if test="extra.oemCode != null and extra.oemCode != ''" >
+		AND a.oem_code = #{extra.oemCode}
+		</if>
+		order by b.sortindex, c.sortindex
+</select>
+
+</mapper>   
