@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 
 import com.liefeng.base.vo.UserVo;
 import com.liefeng.common.util.MyBeanUtil;
+import com.liefeng.common.util.RandomNumGenerator;
+import com.liefeng.common.util.TimeUtil;
 import com.liefeng.common.util.UUIDGenerator;
 import com.liefeng.common.util.ValidateHelper;
 import com.liefeng.core.dubbo.filter.ContextManager;
@@ -1844,29 +1846,14 @@ public class WorkbenchService implements IWorkbenchService {
 		StringBuffer orderNo = new StringBuffer("");
 
 		/* 获取当前时间 */
-		SimpleDateFormat dateFormator = new SimpleDateFormat("yyyyMMddHHmmss");
-		orderNo.append(dateFormator.format(new Date()));
+		orderNo.append(TimeUtil.getNowTime(TimeUtil.PATTERN_4));
 
 		/* 获取2位随机数 */
-		String randomNumber = generateRandomNum();
+		String randomNumber = RandomNumGenerator.generate(2);
 
 		orderNo.append(randomNumber);
 
 		return orderNo.toString();
-	}
-
-	/**
-	 * 生成两位随机数
-	 */
-	private static String generateRandomNum() {
-		Random rand = new Random();
-		/* 第一个随机数 */
-		int num1 = rand.nextInt();
-		/* 第二个随机数 */
-		int num2 = rand.nextInt();
-		int tmp = Math.abs(num1 + num2);
-
-		return Integer.valueOf((tmp % 90 + 10)).toString();
 	}
 
 	@Override

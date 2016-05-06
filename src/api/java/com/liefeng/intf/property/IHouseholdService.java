@@ -590,14 +590,14 @@ public interface IHouseholdService {
 	 * 删除住户（逻辑删除）
 	 * @param residentId
 	 */
-	public void deleteResident(String residentId,String staffId);
+	public void deleteResident(String residentId,String houseId,String staffId);
 	
 	/**
 	 * 住户迁出
 	 * @param residentId
 	 * @param staffId
 	 */
-	public void movedOutResident(String residentId, String staffId);
+	public void movedOutResident(String residentId,String houseId,String staffId);
 	
 	/**
 	 * 客户迁出列表

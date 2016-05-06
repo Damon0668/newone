@@ -73,7 +73,7 @@ public class FeeService implements IFeeService {
 	
 	static {
 		String activeProfile = CommonUtil.getActiveProfile();
-		if (SystemConstants.Profile.TEST.equalsIgnoreCase(activeProfile)) {
+		if (SystemConstants.Profile.DEV.equalsIgnoreCase(activeProfile)) {
 			feePeriod = TimeUtil.formatDate(new Date(), TimeUtil.PATTERN_1); //为了方便测试，测试环境定时任务跑本月的费用
 		} else { //开发和生产环境跑上个月的费用
 			feePeriod = TimeUtil.formatDate(TimeUtil.getDayBeforeByMonth(new Date(), 1), TimeUtil.PATTERN_1);
@@ -780,7 +780,9 @@ public class FeeService implements IFeeService {
 							* feeSettingVo.getPrice();
 					price = feeSettingVo.getPrice();
 				}
+				sum = format(sum);
 				logger.info("总金额：" + sum);
+				
 				HouseContext houseContext = HouseContext
 						.loadByProjectIdAndHouseNum(
 								proprietorHouseVo.getProjectId(),
@@ -1085,23 +1087,21 @@ public class FeeService implements IFeeService {
 	@Override
 	public DataPageValue<FeeItemVo> getFeeItem(FeeItemBo feeItemBo,
 			Integer currentPage, Integer pageSize) {
-		FeeSettingContext feeSettingContext = FeeSettingContext
+		/*FeeSettingContext feeSettingContext = FeeSettingContext
 				.loadByProjectId(feeItemBo.getProjectId());
+
 		List<FeeSettingVo> feeSettingVos = feeSettingContext.findByProjectId();
 		// 所有费用项的收费日期一样，所以默认取第一个
 		int cycle = Integer.parseInt(feeSettingVos.get(0).getPeriod());
-		int startMonth = feeSettingVos.get(0).getStartMonth();
-		// 计费期设置
+		int startMonth = feeSettingVos.get(0).getStartMonth();*/
+		
+		// 计费期设置 默认上个月
 		if (feeItemBo.getStartDate() == null) {
-			Date[] dates = DateUtil.getCurrentDate(new Date(), cycle,
-					startMonth);
-			feeItemBo.setStartDate(TimeUtil.getFirstDayOfMonth(dates[0]));
-			feeItemBo.setEndDate(TimeUtil.getLastDayOfMonth(dates[1]));
+			feeItemBo.setStartDate(TimeUtil.getFirstDayOfMonth(TimeUtil.getDayBeforeByMonth(new Date(),1)));
+			feeItemBo.setEndDate(TimeUtil.getLastDayOfMonth(TimeUtil.getDayBeforeByMonth(new Date(),1)));
 		} else {
-			Date[] dates = DateUtil.getCurrentDate(feeItemBo.getStartDate(),
-					cycle, startMonth);
-			feeItemBo.setStartDate(TimeUtil.getFirstDayOfMonth(dates[0]));
-			feeItemBo.setEndDate(TimeUtil.getLastDayOfMonth(dates[1]));
+			feeItemBo.setStartDate(TimeUtil.getFirstDayOfMonth(feeItemBo.getStartDate()));
+			feeItemBo.setEndDate(TimeUtil.getLastDayOfMonth(feeItemBo.getStartDate()));
 		}
 
 		FeeItemContext feeItemContext = FeeItemContext.build();

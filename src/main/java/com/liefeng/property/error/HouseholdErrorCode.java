@@ -71,7 +71,14 @@ public enum HouseholdErrorCode implements IErrorCode {
 	
 	/****************住户历史********************/
 	RESIDENT_ALREADY_CANCEL("该住户已经注销了"),
-	RESIDENT_ALREADY_ACTIVE("该住户已经激活了"),
+	
+	RESIDENT_ALREADY_ACTIVE("该住户已经激活了"), 
+	
+	RESIDENT_HISTORY_IS_NULL("该记录不存在"),
+	
+	HOUSE_IS_NULL("房产不存在"),
+	
+	PROPRIETOR_NOT_EXIST("业主信息不存在"),
 	;
 
 	private String desc;
