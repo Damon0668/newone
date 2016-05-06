@@ -127,7 +127,7 @@ public class CheckinQueueContext {
 			//查询当天是否存在排队,存在不创建
 			CheckinQueuePo toDayCheckInQueue = checkinQueueRepository.findCheckinQueue(checkinQueue.getUserId(), 
 													checkinQueue.getProjectId(), 
-													checkinQueue.getHouseId(), 
+													checkinQueue.getHouseId(),
 													checkinQueue.getStatus(), 
 													TimeUtil.getNowTime());
 			logger.info("当天排队情况 toDayCheckInQueue = {}",toDayCheckInQueue);
