@@ -233,6 +233,7 @@ FROM
 	     SELECT
 	         p.id AS id,
 	         p.cust_global_id AS custGlobalId,
+	         p.status AS status,
 	         h.project_id AS projectId,
 	         pj.full_name AS projectName,
 	         h.id AS houseId,
@@ -256,6 +257,7 @@ FROM
 	     SELECT
 	         r.id AS id,
 	         r.cust_global_id AS custGlobalId,
+	         r.status AS status,
 	         h.project_id AS projectId,
 	         pj.full_name AS projectName,
 	         h.id AS houseId,
