@@ -385,7 +385,7 @@ public class ProjectService implements IProjectService {
 		} else if(ValidateHelper.isNotEmptyString(projectId)) { // 查询所有楼栋的
 			
 			ProjectBuildingContext projectBuildingContext = ProjectBuildingContext.loadByProjectId(projectId);
-			DataPageValue<ProjectBuildingVo> dataPage = projectBuildingContext.findBuildingsByProjectId(1, 1000);
+			DataPageValue<ProjectBuildingVo> dataPage = projectBuildingContext.findBuildingsByProjectId(1, Integer.MAX_VALUE);
 			if(dataPage != null && ValidateHelper.isNotEmptyCollection(dataPage.getDataList())) {
 				for(ProjectBuildingVo building : dataPage.getDataList()) {
 					HouseGraphVo houseGraph = initHouseGraph(param, building);
