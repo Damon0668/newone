@@ -238,10 +238,10 @@ FROM
 	         pj.full_name AS projectName,
 	         h.id AS houseId,
 	         h.building_id AS buildingId,
+	         pb.name AS buildingName,
+             pbf.name AS floorName,
 	         h.house_num AS houseNum,
 	         h.oem_code AS oemCode,
-	         pb.name AS buildingName,
-	         pbf.name AS floorName,
 	         "01" AS residentRelation,
 	         '1' AS type
 	     FROM
