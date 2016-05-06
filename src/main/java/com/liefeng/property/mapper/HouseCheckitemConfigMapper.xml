@@ -23,7 +23,7 @@ where 1=1
 	<if test="extra.projectId != null and extra.projectId != ''" >
 	    AND a.project_id =  #{extra.projectId}
 	</if>
-	order by a.sortindex desc
+	order by a.sortindex
 </trim>
 </sql>
 

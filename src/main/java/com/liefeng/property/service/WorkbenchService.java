@@ -1803,14 +1803,12 @@ public class WorkbenchService implements IWorkbenchService {
 			EventProcessVo processDispatching = eventProcessContext.getEventProcess(eventReportVo.getId(), 
 					WorkbenchConstants.EventProcessStatus.DISPATCHING);
 			logger.info("获取报事id{}的最新已派工进程{}", eventReportVo.getId(), processDispatching);
-			
 			if (processDispatching != null && ValidateHelper.isNotEmptyString(processDispatching.getNextAccepterId())) {
 				newReport = true;
 				eventReportVo.setWorkTime(processDispatching.getAcceptTime());
-				PropertyStaffDetailInfoVo propertyStaffVo = propertyStaffService
-						.findStaffDetailInfo(processDispatching.getNextAccepterId());
+				PropertyStaffDetailInfoVo propertyStaffVo = propertyStaffService.findStaffDetailInfo(processDispatching.getNextAccepterId().split(",")[0]);
 				
-				logger.info("【已派工】根据下一步办理人id：{}获取员工信息：{}", processDispatching.getNextAccepterId(), propertyStaffVo);
+				logger.info("【已派工】根据下一步办理人id：{}获取员工信息：{}", processDispatching.getNextAccepterId().split(",")[0], propertyStaffVo);
 				if (propertyStaffVo != null) {
 					eventReportVo.setWorkerName(propertyStaffVo
 							.getStaffArchiveVo().getName());
