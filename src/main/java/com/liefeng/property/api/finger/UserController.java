@@ -339,6 +339,12 @@ public class UserController {
 	@ResponseBody
 	public DataListValue<AppFriendVo> getUserList(@Valid @ModelAttribute UserIdConditionRo userIdConditionRo) {
 		
+		//接口调错，排除此类情况,
+		//TODO 必须删掉此类代码
+		if(ValidateHelper.isEmptyString(userIdConditionRo.getConditon())){
+			return DataListValue.success(null);
+		}
+		
 		List<AppFriendVo> appFriendVoList = householdService.getUserList(userIdConditionRo.getUserId(), userIdConditionRo.getConditon());
 		
 		return DataListValue.success(appFriendVoList);

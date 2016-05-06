@@ -17,7 +17,7 @@ public class UserIdConditionRo extends BaseValue {
 
 	private static final long serialVersionUID = -4101348702789499892L;
 
-	@ApiModelProperty(value="用户id", required=true)
+	@ApiModelProperty(value="用户Id", required=true)
 	@NotNull
 	private String userId;
 
