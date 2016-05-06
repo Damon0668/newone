@@ -250,6 +250,19 @@ public class ResidentContext {
 		return MyBeanUtil.createBean(residentRepository.findOne(residentId),ResidentVo.class);
 	}
 	
+	/**
+	 * 获取住户信息
+	 * @param projectId
+	 * @param custGlobalId
+	 * @return
+	 */
+	public ResidentVo findByProjectIdAndCustGlobalId(String projectId,
+			String custGlobalId) {
+		ResidentPo residentPo = residentRepository.findByProjectIdAndCustGlobalId(projectId,custGlobalId);
+		return MyBeanUtil.createBean(residentPo,ResidentVo.class);
+	}
+
+	
 	protected void setResidentId(String residentId) {
 		this.residentId = residentId;
 	}
@@ -257,6 +270,6 @@ public class ResidentContext {
 	protected void setResident(ResidentVo resident) {
 		this.resident = resident;
 	}
-	
+
 	
 }

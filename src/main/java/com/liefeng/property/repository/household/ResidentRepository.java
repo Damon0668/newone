@@ -14,5 +14,13 @@ import com.liefeng.property.po.household.ResidentPo;
  */
 @Transactional
 public interface ResidentRepository extends JpaRepository<ResidentPo, String> {
+	
+	/**
+	 * 获取住户信息
+	 * @param projectId
+	 * @param custGlobalId
+	 * @return
+	 */
+	public ResidentPo findByProjectIdAndCustGlobalId(String projectId, String custGlobalId);
 
 }

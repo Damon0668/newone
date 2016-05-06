@@ -2,7 +2,6 @@ package com.liefeng.property.vo.household;
 
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Id;
 
 import com.liefeng.core.entity.BaseValue;
@@ -19,17 +18,33 @@ public class ResidentHistoryVo extends BaseValue {
 	/**
 	 * 主键
 	 */
+	@Id
 	private String id;
 	
 	/**
-	 * 住户房屋信息id
+	 * 项目ID
 	 */
-	private String residentHouseId;
+	private String projectId;
+	
+	/**
+	 * 房号：楼栋编码+楼层编码+房号后缀
+	 */
+	private String houseNum;
+	
+	/**
+	 * 住户信息id
+	 */
+	private String residentId;
 	
 	/**
 	 * 业务类型 1：删除 2：迁出 3：迁入
 	 */
-	private String busitype;
+	private String busiType;
+	
+	/**
+	 * 客户全局唯一标识
+	 */
+	private String custGlobalId;
 	
 	/**
 	 * 住户姓名
@@ -42,6 +57,21 @@ public class ResidentHistoryVo extends BaseValue {
 	private String mobile;
 	
 	/**
+	 * 住户类型。1：常住；2：暂住
+	 */
+	private String residentType;
+	
+	/**
+	 * 与业主关系
+	 */
+	private String residentRelation;
+	
+	/**
+	 * 入住时间
+	 */
+	private Date checkinDate;
+	
+	/**
 	 * 员工ID
 	 */
 	private String staffId;
@@ -52,45 +82,38 @@ public class ResidentHistoryVo extends BaseValue {
 	private Date createTime;
 	
 	/**
-	 * 项目名称
+	 * OEM编码
 	 */
+	private String oemCode;
+	
 	private String projectName;
 	
-	/**
-	 * 房号
-	 */
-	private String houseNum;
-	
-	/**
-	 * 用户关系
-	 */
 	private String relation;
 	
-	/**
-	 * 操作人名称
-	 */
-	private String staffName;
-	
-	/**
-	 * 状态。0：未审提交；1：正常；2：已注销
-	 */
 	private String status;
-	
-	/**
-	 * 住户信息主键
-	 */
-	private String residentId;
 	
 	public String getId() {
 		return id;
 	}
 
-	public String getResidentHouseId() {
-		return residentHouseId;
+	public String getProjectId() {
+		return projectId;
 	}
 
-	public String getBusitype() {
-		return busitype;
+	public String getHouseNum() {
+		return houseNum;
+	}
+
+	public String getResidentId() {
+		return residentId;
+	}
+
+	public String getBusiType() {
+		return busiType;
+	}
+
+	public String getCustGlobalId() {
+		return custGlobalId;
 	}
 
 	public String getName() {
@@ -109,16 +132,32 @@ public class ResidentHistoryVo extends BaseValue {
 		return createTime;
 	}
 
+	public String getOemCode() {
+		return oemCode;
+	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	public void setResidentHouseId(String residentHouseId) {
-		this.residentHouseId = residentHouseId;
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
 	}
 
-	public void setBusitype(String busitype) {
-		this.busitype = busitype;
+	public void setHouseNum(String houseNum) {
+		this.houseNum = houseNum;
+	}
+
+	public void setResidentId(String residentId) {
+		this.residentId = residentId;
+	}
+
+	public void setBusiType(String busiType) {
+		this.busiType = busiType;
+	}
+
+	public void setCustGlobalId(String custGlobalId) {
+		this.custGlobalId = custGlobalId;
 	}
 
 	public void setName(String name) {
@@ -137,36 +176,48 @@ public class ResidentHistoryVo extends BaseValue {
 		this.createTime = createTime;
 	}
 
-	public String getProjectName() {
-		return projectName;
+	public void setOemCode(String oemCode) {
+		this.oemCode = oemCode;
 	}
 
-	public String getHouseNum() {
-		return houseNum;
+	public String getResidentType() {
+		return residentType;
+	}
+
+	public String getResidentRelation() {
+		return residentRelation;
+	}
+
+	public Date getCheckinDate() {
+		return checkinDate;
+	}
+
+	public void setResidentType(String residentType) {
+		this.residentType = residentType;
+	}
+
+	public void setResidentRelation(String residentRelation) {
+		this.residentRelation = residentRelation;
+	}
+
+	public void setCheckinDate(Date checkinDate) {
+		this.checkinDate = checkinDate;
+	}
+
+	public String getProjectName() {
+		return projectName;
 	}
 
 	public String getRelation() {
 		return relation;
 	}
 
-	public String getStaffName() {
-		return staffName;
-	}
-
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
 
-	public void setHouseNum(String houseNum) {
-		this.houseNum = houseNum;
-	}
-
 	public void setRelation(String relation) {
 		this.relation = relation;
-	}
-
-	public void setStaffName(String staffName) {
-		this.staffName = staffName;
 	}
 
 	public String getStatus() {
@@ -175,13 +226,5 @@ public class ResidentHistoryVo extends BaseValue {
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public String getResidentId() {
-		return residentId;
-	}
-
-	public void setResidentId(String residentId) {
-		this.residentId = residentId;
 	}
 }

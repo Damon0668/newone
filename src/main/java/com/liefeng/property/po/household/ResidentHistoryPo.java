@@ -28,16 +28,34 @@ public class ResidentHistoryPo extends BaseValue {
 	private String id;
 	
 	/**
-	 * 住户房屋信息id
+	 * 项目ID
 	 */
-	@Column(name = "resident_house_id")
-	private String residentHouseId;
+	@Column(name = "project_id")
+	private String projectId;
+	
+	/**
+	 * 房号：楼栋编码+楼层编码+房号后缀
+	 */
+	@Column(name = "house_num")
+	private String houseNum;
+	
+	/**
+	 * 住户信息id
+	 */
+	@Column(name = "resident_id")
+	private String residentId;
 	
 	/**
 	 * 业务类型 1：删除 2：迁出 3：迁入
 	 */
-	@Column(name = "busitype")
-	private String busitype;
+	@Column(name = "busi_type")
+	private String busiType;
+	
+	/**
+	 * 客户全局唯一标识
+	 */
+	@Column(name = "cust_global_id")
+	private String custGlobalId;
 	
 	/**
 	 * 住户姓名
@@ -52,6 +70,24 @@ public class ResidentHistoryPo extends BaseValue {
 	private String mobile;
 	
 	/**
+	 * 住户类型。1：常住；2：暂住
+	 */
+	@Column(name = "resident_type")
+	private String residentType;
+	
+	/**
+	 * 与业主关系
+	 */
+	@Column(name = "resident_relation")
+	private String residentRelation;
+	
+	/**
+	 * 入住时间
+	 */
+	@Column(name = "checkin_date")
+	private Date checkinDate;
+	
+	/**
 	 * 员工ID
 	 */
 	@Column(name = "staff_id")
@@ -62,17 +98,23 @@ public class ResidentHistoryPo extends BaseValue {
 	 */
 	@Column(name = "create_time")
 	private Date createTime;
-
+	
+	/**
+	 * OEM编码
+	 */
+	@Column(name = "oem_code")
+	private String oemCode;
+	
 	public String getId() {
 		return id;
 	}
 
-	public String getResidentHouseId() {
-		return residentHouseId;
+	public String getResidentId() {
+		return residentId;
 	}
 
-	public String getBusitype() {
-		return busitype;
+	public String getBusiType() {
+		return busiType;
 	}
 
 	public String getName() {
@@ -95,12 +137,12 @@ public class ResidentHistoryPo extends BaseValue {
 		this.id = id;
 	}
 
-	public void setResidentHouseId(String residentHouseId) {
-		this.residentHouseId = residentHouseId;
+	public void setResidentId(String residentId) {
+		this.residentId = residentId;
 	}
 
-	public void setBusitype(String busitype) {
-		this.busitype = busitype;
+	public void setBusiType(String busiType) {
+		this.busiType = busiType;
 	}
 
 	public void setName(String name) {
@@ -117,6 +159,62 @@ public class ResidentHistoryPo extends BaseValue {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getHouseNum() {
+		return houseNum;
+	}
+
+	public void setHouseNum(String houseNum) {
+		this.houseNum = houseNum;
+	}
+
+	public String getOemCode() {
+		return oemCode;
+	}
+
+	public void setOemCode(String oemCode) {
+		this.oemCode = oemCode;
+	}
+
+	public String getCustGlobalId() {
+		return custGlobalId;
+	}
+
+	public void setCustGlobalId(String custGlobalId) {
+		this.custGlobalId = custGlobalId;
+	}
+
+	public String getResidentType() {
+		return residentType;
+	}
+
+	public String getResidentRelation() {
+		return residentRelation;
+	}
+
+	public Date getCheckinDate() {
+		return checkinDate;
+	}
+
+	public void setResidentType(String residentType) {
+		this.residentType = residentType;
+	}
+
+	public void setResidentRelation(String residentRelation) {
+		this.residentRelation = residentRelation;
+	}
+
+	public void setCheckinDate(Date checkinDate) {
+		this.checkinDate = checkinDate;
 	}
 }
 

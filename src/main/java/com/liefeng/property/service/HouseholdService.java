@@ -1237,32 +1237,51 @@ public class HouseholdService implements IHouseholdService {
 	
 	@Transactional
 	@Override
-	public void deleteResident(String residentId,String staffId){
+	public void deleteResident(String residentId,String houseId,String staffId){
 		ResidentVo residentVo = ResidentContext.loadById(residentId).get();
 		
 		if(residentVo != null){
 			if(residentVo.getStatus().equals(HouseholdConstants.ResidentStatus.CANCEL)){
 				throw new PropertyException(HouseholdErrorCode.RESIDENT_ALREADY_CANCEL);
 			}
-			residentVo.setStatus(HouseholdConstants.ResidentStatus.CANCEL);
-			ResidentContext.build(residentVo).update();
 			
+			//创建记录
 			ResidentHistoryVo residentHistoryVo = new ResidentHistoryVo();
 			residentHistoryVo.setName(residentVo.getName());
+			residentHistoryVo.setCustGlobalId(residentVo.getCustGlobalId());
 			residentHistoryVo.setMobile(residentVo.getMobile());
 			residentHistoryVo.setStaffId(staffId);
-			residentHistoryVo.setBusitype(HouseholdConstants.busitype.DELETE);
-			ResidentHouseVo residentHouseVo =  ResidentHouseContext.build().findResidentId(residentVo.getId());
+			residentHistoryVo.setBusiType(HouseholdConstants.busitype.DELETE);
 			
-			residentHistoryVo.setResidentHouseId(residentHouseVo.getId());
+			ResidentHouseVo residentHouseVo =  ResidentHouseContext.build().getResidentHouse(residentId,houseId);
+			residentHistoryVo.setResidentId(residentHouseVo.getResidentId());
+			residentHistoryVo.setCheckinDate(residentHouseVo.getCheckinDate());
+			residentHistoryVo.setOemCode(residentHouseVo.getOemCode());
+			residentHistoryVo.setProjectId(residentHouseVo.getProjectId());
+			residentHistoryVo.setResidentRelation(residentHouseVo.getResidentRelation());
+			residentHistoryVo.setResidentType(residentHouseVo.getResidentType());
+			
+			HouseVo houseVo = HouseContext.loadById(houseId).get();
+			residentHistoryVo.setHouseNum(houseVo.getHouseNum());
 			
 			ResidentHistoryContext.build(residentHistoryVo).create();
+			
+			//删除房产住户关系
+			ResidentHouseContext.loadById(residentHouseVo.getId()).delete();
+			
+			//该住户如果没有其他房产信息关系，则修改住户状态为注销
+			List<ResidentHouseVo> residentHouseVos =  ResidentHouseContext.build().findResidentIdAndProjectId(residentId,residentVo.getProjectId());
+			if(residentHouseVos.size() == 0) {
+				residentVo.setStatus(HouseholdConstants.ResidentStatus.CANCEL);
+				ResidentContext.build(residentVo).update();
+			}
+
 		}
 	}
 	
 	@Transactional
 	@Override
-	public void movedOutResident(String residentId,String staffId){
+	public void movedOutResident(String residentId,String houseId,String staffId){
 	ResidentVo residentVo = ResidentContext.loadById(residentId).get();
 		
 		if(residentVo != null){
@@ -1270,45 +1289,90 @@ public class HouseholdService implements IHouseholdService {
 				throw new PropertyException(HouseholdErrorCode.RESIDENT_ALREADY_CANCEL);
 			}
 			
-			residentVo.setStatus(HouseholdConstants.ResidentStatus.CANCEL);
-			ResidentContext.build(residentVo).update();
 			
+			//创建记录
 			ResidentHistoryVo residentHistoryVo = new ResidentHistoryVo();
+			residentHistoryVo.setCustGlobalId(residentVo.getCustGlobalId());
 			residentHistoryVo.setName(residentVo.getName());
 			residentHistoryVo.setMobile(residentVo.getMobile());
 			residentHistoryVo.setStaffId(staffId);
-			residentHistoryVo.setBusitype(HouseholdConstants.busitype.MOVEDOUT);
-			ResidentHouseVo residentHouseVo =  ResidentHouseContext.build().findResidentId(residentVo.getId());
+			residentHistoryVo.setBusiType(HouseholdConstants.busitype.MOVEDOUT);
 			
-			residentHistoryVo.setResidentHouseId(residentHouseVo.getId());
+			ResidentHouseVo residentHouseVo =  ResidentHouseContext.build().getResidentHouse(residentId,houseId);
+			residentHistoryVo.setResidentId(residentHouseVo.getResidentId());
+			residentHistoryVo.setCheckinDate(residentHouseVo.getCheckinDate());
+			residentHistoryVo.setOemCode(residentHouseVo.getOemCode());
+			residentHistoryVo.setProjectId(residentHouseVo.getProjectId());
+			residentHistoryVo.setResidentRelation(residentHouseVo.getResidentRelation());
+			residentHistoryVo.setResidentType(residentHouseVo.getResidentType());
+			
+			HouseVo houseVo = HouseContext.loadById(houseId).get();
+			residentHistoryVo.setHouseNum(houseVo.getHouseNum());
 			
 			ResidentHistoryContext.build(residentHistoryVo).create();
+			
+			//删除房产住户关系
+			ResidentHouseContext.loadById(residentHouseVo.getId()).delete();
+			
+			//该住户如果没有其他房产信息关系，则修改住户状态为注销
+			List<ResidentHouseVo> residentHouseVos =  ResidentHouseContext.build().findResidentIdAndProjectId(residentId,residentVo.getProjectId());
+			if(residentHouseVos.size() == 0) {
+				residentVo.setStatus(HouseholdConstants.ResidentStatus.CANCEL);
+				ResidentContext.build(residentVo).update();
+			}
 		}
 	}
 	
 	@Transactional
 	@Override
-	public void movedIntoResident(String residentId,String staffId){
-	ResidentVo residentVo = ResidentContext.loadById(residentId).get();
+	public void movedIntoResident(String residentHisId,String staffId){
+		ResidentHistoryVo residentHisVo = ResidentHistoryContext.loadById(residentHisId).get();
+		if(residentHisVo == null) throw new PropertyException(HouseholdErrorCode.RESIDENT_HISTORY_IS_NULL);
 		
+		HouseVo houseVo = HouseContext.loadByProjectIdAndHouseNum(residentHisVo.getProjectId(), residentHisVo.getHouseNum()).get();
+		if(houseVo == null) throw new PropertyException(HouseholdErrorCode.HOUSE_IS_NULL);
+		
+		ProprietorSingleHouseVo proprietorVo = ProprietorContext.build().findProprietorSingleHouseVo(residentHisVo.getProjectId(), residentHisVo.getHouseNum());
+		if(proprietorVo == null ) throw new PropertyException(HouseholdErrorCode.PROPRIETOR_NOT_EXIST);
+		
+		ResidentVo residentVo = ResidentContext.build().findByProjectIdAndCustGlobalId(residentHisVo.getProjectId(), residentHisVo.getCustGlobalId());
 		if(residentVo != null){
-			if(residentVo.getStatus().equals(HouseholdConstants.ResidentStatus.ACTIVE)){
-				throw new PropertyException(HouseholdErrorCode.RESIDENT_ALREADY_ACTIVE);
-			}
 			
+			//创建住户房产关系
+			ResidentHouseVo residentHouse = new ResidentHouseVo();
+			residentHouse.setResidentId(residentVo.getId());
+			residentHouse.setHouseId(houseVo.getId());
+			residentHouse.setCheckinDate(new Date());
+			residentHouse.setHouseNum(residentHisVo.getHouseNum());
+			residentHouse.setOemCode(residentHisVo.getOemCode());
+			residentHouse.setProjectId(residentHisVo.getProjectId());
+			residentHouse.setResidentRelation(residentHisVo.getResidentRelation());
+			residentHouse.setResidentType(residentHisVo.getResidentType());
+			residentHouse.setProprietorId(proprietorVo.getProprietorId());
+			ResidentHouseContext.build(residentHouse).create();
+			
+			//修改状态为激活
 			residentVo.setStatus(HouseholdConstants.ResidentStatus.ACTIVE);
 			ResidentContext.build(residentVo).update();
 			
+			//创建迁入记录
 			ResidentHistoryVo residentHistoryVo = new ResidentHistoryVo();
+			residentHistoryVo.setCustGlobalId(residentVo.getCustGlobalId());
 			residentHistoryVo.setName(residentVo.getName());
 			residentHistoryVo.setMobile(residentVo.getMobile());
 			residentHistoryVo.setStaffId(staffId);
-			residentHistoryVo.setBusitype(HouseholdConstants.busitype.MOVEDINTO);
-			ResidentHouseVo residentHouseVo =  ResidentHouseContext.build().findResidentId(residentVo.getId());
+			residentHistoryVo.setBusiType(HouseholdConstants.busitype.MOVEDINTO);
 			
-			residentHistoryVo.setResidentHouseId(residentHouseVo.getId());
+			residentHistoryVo.setHouseNum(residentHouse.getHouseNum());
+			residentHistoryVo.setResidentId(residentHouse.getResidentId());
+			residentHistoryVo.setCheckinDate(residentHouse.getCheckinDate());
+			residentHistoryVo.setOemCode(residentHouse.getOemCode());
+			residentHistoryVo.setProjectId(residentHouse.getProjectId());
+			residentHistoryVo.setResidentRelation(residentHouse.getResidentRelation());
+			residentHistoryVo.setResidentType(residentHouse.getResidentType());
 			
 			ResidentHistoryContext.build(residentHistoryVo).create();
+			
 		}
 	}
 	

@@ -1,6 +1,7 @@
 package com.liefeng.property.domain.household;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -176,6 +177,17 @@ public class ResidentHouseContext {
 	}
 	
 	/**
+	 * 获取某个住户某个项目下的住户房产列表
+	 * @param residentId 住户id
+	 * @param projectId 项目id
+	 * @return 
+	 */
+	public List<ResidentHouseVo> findResidentIdAndProjectId(String residentId,String projectId) {
+		List<ResidentHousePo> residentHousePos = residentHouseRepository.findByResidentIdAndProjectId(residentId,projectId);
+		return MyBeanUtil.createList(residentHousePos, ResidentHouseVo.class);
+	}
+	
+	/**
 	 * 根据身份证号码获取住户房屋关系
 	 * @param idNum
 	 * @param projectId
@@ -205,6 +217,12 @@ public class ResidentHouseContext {
 		return residentHouseVo;
 	}
 	
+	/**
+	 * 删除住户房产信息
+	 */
+	public void delete() {
+		residentHouseRepository.delete(residentHouseId);
+	}
 	
 	protected void setResidentHouseId(String residentHouseId) {
 		this.residentHouseId = residentHouseId;
@@ -215,8 +233,5 @@ public class ResidentHouseContext {
 	}
 
 	
-	
-	
-	
-	
+
 }
