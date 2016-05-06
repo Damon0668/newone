@@ -13,5 +13,13 @@ import com.liefeng.property.po.project.HouseCheckPo;
 @Transactional
 public interface HouseCheckRepository extends JpaRepository<HouseCheckPo, String> {
 	
-
+	/**
+	 * 删除房屋验收单
+	 * @param projectId
+	 * @param houseNum
+	 * @param oemCode 
+	 * @author xhw
+	 * @date 2016年5月6日 上午8:31:29
+	 */
+	public void deleteByProjectIdAndHouseNumAndOemCode(String projectId, String houseNum, String oemCode);
 }

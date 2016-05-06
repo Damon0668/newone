@@ -58,6 +58,21 @@ public class HouseCheckVo extends BaseValue {
 	 * OEM编码
 	 */
 	private String oemCode;
+	
+	/**
+	 * 非标字段
+	 */
+	private String itemResult;
+	
+	/**
+	 * 检查项名称
+	 */
+	private String itemName;
+	
+	/**
+	 * 验收结果名称
+	 */
+	private String resultName;
 
 	public String getId() {
 		return id;
@@ -129,6 +144,30 @@ public class HouseCheckVo extends BaseValue {
 
 	public void setHouseNum(String houseNum) {
 		this.houseNum = houseNum;
+	}
+
+	public String getItemResult() {
+		return itemResult;
+	}
+
+	public void setItemResult(String itemResult) {
+		this.itemResult = itemResult;
+	}
+
+	public String getItemName() {
+		return itemName;
+	}
+
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+
+	public String getResultName() {
+		return resultName;
+	}
+
+	public void setResultName(String resultName) {
+		this.resultName = resultName;
 	}
 
 }
