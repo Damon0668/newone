@@ -238,7 +238,7 @@
 		LEFT JOIN property.t_proprietor_house ph ON ph.proprietor_id = p.id
 		LEFT JOIN property.t_house h ON h.project_id = ph.project_id AND h.house_num = ph.house_num
 	WHERE
-		h.house_num IS NOT NULL
+		h.house_num IS NOT NULL AND p.status = '1'
 </sql>
 
 <!-- 住户用户 -->
@@ -266,7 +266,7 @@
 		LEFT JOIN property.t_resident_house rh ON rh.resident_id = r.id
 		LEFT JOIN property.t_house h ON h.id = rh.house_id
 	WHERE
-		h.house_num IS NOT NULL
+		h.house_num IS NOT NULL AND r.status = '1'
 </sql>
 
 <!-- 查询用户列表 -->

@@ -19,7 +19,7 @@ import com.liefeng.property.constant.SysConstants;
 public class ControllerInterceptor implements HandlerInterceptor{
 	
 	private static Logger logger = LoggerFactory.getLogger(ControllerInterceptor.class);
-
+	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -54,6 +54,8 @@ public class ControllerInterceptor implements HandlerInterceptor{
 		}
 		
 		if("default".equals(openId)){
+			//此线程可能被复用，清空原OEM
+			ContextManager.getInstance().setOemCode(null);
 			return Boolean.TRUE;
 		}
 		
