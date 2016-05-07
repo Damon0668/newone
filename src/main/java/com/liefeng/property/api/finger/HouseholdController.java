@@ -206,7 +206,7 @@ public class HouseholdController {
 		ResidentBo params = new ResidentBo();
 		params.setHouseId(houseIdRo.getHouseId());
 		params.setStatus(HouseholdConstants.ResidentStatus.ACTIVE); // 仅查询激活住户
-		DataPageValue<ResidentVo> dataPage = householdService.listResident4Page(params, 1000, 1);
+		DataPageValue<ResidentVo> dataPage = householdService.listResident4Page(params, Integer.MAX_VALUE, 1);
 		List<ResidentVo> residentVoList= dataPage.getDataList();
 		return DataListValue.success(residentVoList);
 	}

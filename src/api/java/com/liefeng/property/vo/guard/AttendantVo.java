@@ -2,10 +2,8 @@ package com.liefeng.property.vo.guard;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-
 import com.liefeng.core.entity.BaseValue;
+import com.liefeng.property.annotation.Dict;
 
 /**
  * 服务人员持久化对象
@@ -46,6 +44,7 @@ public class AttendantVo extends BaseValue {
 	/**
 	 * 服务类型
 	 */
+	@Dict(group = "SERVICE_TYPE")
 	private String serviceType;
 	
 	/**
@@ -87,6 +86,16 @@ public class AttendantVo extends BaseValue {
 	 * 创建时间
 	 */
 	private Date createTime;
+	
+	/**
+	 * 项目名称
+	 */
+	private String fullName;
+	
+	/**
+	 * 服务类型名称
+	 */
+	private String servictTypeName;
 	
 	public String getId() {
 		return id;
@@ -206,5 +215,21 @@ public class AttendantVo extends BaseValue {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public String getServictTypeName() {
+		return servictTypeName;
+	}
+
+	public void setServictTypeName(String servictTypeName) {
+		this.servictTypeName = servictTypeName;
 	}
 }

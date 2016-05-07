@@ -174,7 +174,8 @@ FROM (
 		p.name AS name,
 		'01' AS residentRelation,
 		p.project_id AS projectId,
-		p.cust_global_id AS custGlobalId
+		p.cust_global_id AS custGlobalId,
+		p.status AS status
 	FROM
 		property.t_proprietor p
 		LEFT JOIN property.t_proprietor_house ph 
@@ -190,7 +191,8 @@ FROM (
 		p.name AS name,
 		rh.resident_relation AS residentRelation,
 		r.project_id AS projectId,
-		r.cust_global_id AS custGlobalId
+		r.cust_global_id AS custGlobalId,
+		r.status AS status
 	FROM
 		property.t_resident r 
 		LEFT JOIN property.t_resident_house rh 
@@ -207,6 +209,7 @@ FROM (
 WHERE
 	v.projectId = #{extra.projectId}
 	AND v.custGlobalId = #{extra.custGlobalId}
+	AND v.status = '1'
 ORDER BY
 	v.houseNum
 </select>

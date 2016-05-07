@@ -19,6 +19,7 @@ import com.liefeng.core.mybatis.vo.PagingParamVo;
 import com.liefeng.property.po.guard.AttendantPo;
 import com.liefeng.property.repository.guard.AttendantRepository;
 import com.liefeng.property.repository.mybatis.AttendantQueryRepository;
+import com.liefeng.property.util.DictionaryUtil;
 import com.liefeng.property.vo.guard.AttendantVo;
 import com.liefeng.property.vo.household.VisitorVo;
 
@@ -167,6 +168,7 @@ public class AttendantContext {
 		// 设置数据总行数，用于计算偏移量
 		param.getPager().setRowCount(count);
 		List<AttendantVo> list = attendantQueryRepository.queryByPage(param);
+		list = DictionaryUtil.transformDicValueToDicName(list); // 字典【值-名】转换
 		DataPageValue<AttendantVo> returnPage = new DataPageValue<AttendantVo>(list, count, size, page);
 
 		return returnPage;

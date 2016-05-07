@@ -18,7 +18,7 @@
 
 <!-- 查询条件 -->
 <sql id="Example_Where_Clause">
-	where t.project_id = p.id
+	where 1=1
 	<trim  suffixOverrides="," >
 		<if test="extra.projectId != null and extra.projectId != ''" >
 		    and t.project_id = #{extra.projectId}
@@ -28,6 +28,9 @@
 		</if>
 		<if test="extra.phone != null and extra.phone != ''">
 			and t.phone like concat('%', #{extra.phone},'%')
+		</if>
+		<if test="extra.serviceType != null and extra.serviceType != ''">
+			and t.service_type = #{extra.serviceType}
 		</if>
 		<if test="extra.manageProjectIds != null and extra.manageProjectIds != ''" >
 		    and FIND_IN_SET(t.project_id, #{extra.manageProjectIds})
@@ -50,8 +53,8 @@
 		t.status,
 		p.full_name
 	FROM
-		t_attendant t,
-		t_project p
+		t_attendant t
+		left join t_project p on t.project_id = p.id
 		<include refid="Example_Where_Clause" />
 		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
 	          ${pager.mysqlQueryCondition}
@@ -66,8 +69,8 @@ from(
 		SELECT
 			t.id
 		FROM
-			t_attendant t,
-			t_project p
+			t_attendant t
+			left join t_project p on t.project_id = p.id
 	    <include refid="Example_Where_Clause" />
 	) v
 </select>
