@@ -49,7 +49,7 @@ public class ControllerInterceptor implements HandlerInterceptor{
 			}
 		}
 		
-		if(ValidateHelper.isEmptyString(openId)){
+		if(ValidateHelper.isEmptyString(openId) || "null".equals(openId)){
 			return Boolean.FALSE;
 		}
 		
