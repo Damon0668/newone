@@ -55,7 +55,7 @@ public class ControllerInterceptor implements HandlerInterceptor{
 		
 		if("default".equals(openId)){
 			//此线程可能被复用，清空原OEM
-			ContextManager.getInstance().setOemCode(null);
+			ContextManager.getInstance().setOemCode("");
 			return Boolean.TRUE;
 		}
 		
