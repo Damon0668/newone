@@ -1,5 +1,6 @@
 package com.liefeng.property.api.finger;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -84,7 +85,7 @@ public class UserController {
 	@ResponseBody
 	public DataValue<LoginUserVo> getLoginUser(@Valid @ModelAttribute LoginUserRo loginUserRo){
 		
-		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
+		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
 		
 		LoginUserVo loginUser = loginUserService.findLoginUser(loginUserRo.getLoginId(), loginUserRo.getHouseholdType(), loginUserRo.getOemCode());
 		
@@ -342,7 +343,7 @@ public class UserController {
 		//接口调错，排除此类情况,
 		//TODO 必须删掉此类代码
 		if(ValidateHelper.isEmptyString(userIdConditionRo.getConditon())){
-			return DataListValue.success(null);
+			return DataListValue.success(new ArrayList<AppFriendVo>());
 		}
 		
 		List<AppFriendVo> appFriendVoList = householdService.getUserList(userIdConditionRo.getUserId(), userIdConditionRo.getConditon());
