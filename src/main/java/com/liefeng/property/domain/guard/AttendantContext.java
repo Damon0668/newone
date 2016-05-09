@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.guard;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -125,6 +126,7 @@ public class AttendantContext {
 		if(attendantVo != null) {
 			attendantVo.setId(UUIDGenerator.generate());
 			attendantVo.setOemCode(ContextManager.getInstance().getOemCode());
+			attendantVo.setCreateTime(new Date());
 			AttendantPo attendantPo = MyBeanUtil.createBean(attendantVo, AttendantPo.class);
 			
 			attendantRepository.save(attendantPo);

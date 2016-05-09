@@ -51,10 +51,18 @@
 		t.project_id,
 		t.service_type,
 		t.status,
-		p.full_name
+		p.full_name,
+		gc.id cardId,
+		gc.sn cardSn,
+		gc.type cardType,
+		gc.status cardStatus,
+		gc.start_date startDate,
+		gc.end_date endDate
 	FROM
 		t_attendant t
 		left join t_project p on t.project_id = p.id
+		LEFT JOIN t_guard_card_user gcu on t.id = gcu.user_id and gcu.user_type = '4'
+		LEFT JOIN t_guard_card gc on gc.id = gcu.card_id
 		<include refid="Example_Where_Clause" />
 		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
 	          ${pager.mysqlQueryCondition}

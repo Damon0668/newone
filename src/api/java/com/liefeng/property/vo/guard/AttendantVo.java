@@ -97,6 +97,36 @@ public class AttendantVo extends BaseValue {
 	 */
 	private String servictTypeName;
 	
+	/**
+	 * 磁卡id
+	 */
+	private String cardId;
+	
+	/**
+	 * 磁卡编号
+	 */
+	private String cardSn;
+	
+	/**
+	 * 磁卡类型
+	 */
+	private String cardType;
+	
+	/**
+	 * 磁卡状态
+	 */
+	private String cardStatus;
+	
+	/**
+	 * 开始时间
+	 */
+	private Date startDate;
+	
+	/**
+	 * 结束时间
+	 */
+	private Date endDate;
+	
 	public String getId() {
 		return id;
 	}
@@ -231,5 +261,53 @@ public class AttendantVo extends BaseValue {
 
 	public void setServictTypeName(String servictTypeName) {
 		this.servictTypeName = servictTypeName;
+	}
+
+	public String getCardId() {
+		return cardId;
+	}
+
+	public void setCardId(String cardId) {
+		this.cardId = cardId;
+	}
+
+	public String getCardSn() {
+		return cardSn;
+	}
+
+	public void setCardSn(String cardSn) {
+		this.cardSn = cardSn;
+	}
+
+	public String getCardType() {
+		return cardType;
+	}
+
+	public void setCardType(String cardType) {
+		this.cardType = cardType;
+	}
+
+	public String getCardStatus() {
+		return cardStatus;
+	}
+
+	public void setCardStatus(String cardStatus) {
+		this.cardStatus = cardStatus;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 }
