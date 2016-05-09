@@ -1834,6 +1834,21 @@ public class WorkbenchService implements IWorkbenchService {
 			if (WorkbenchConstants.EventReport.STATUS_ALREADYFEEDBACK
 					.equals(status)) {
 				eventReportVo.setStatus(WorkbenchConstants.EventStatusAPP.OVER);
+				if(!newReport){
+					eventReportVo.setWorkTime(eventReportVo.getAcceptTime());
+					eventReportVo.setOverTime(eventReportVo.getAcceptTime());
+					eventReportVo.setRemark(eventReportVo.getResult());
+					
+					PropertyStaffDetailInfoVo propertyStaffVo = propertyStaffService.findStaffDetailInfo(eventReportVo.getAccepterId());
+					
+					logger.info("【已完成 】根据报事的受理人id：{}获取员工信息：{}", eventReportVo.getAccepterId(), propertyStaffVo);
+					if (propertyStaffVo != null) {
+						eventReportVo.setWorkerName(propertyStaffVo
+								.getStaffArchiveVo().getName());
+						eventReportVo.setWorkerPhone(propertyStaffVo
+								.getStaffArchiveVo().getPhone());
+					}
+				}
 			}
 		}
 
