@@ -51,7 +51,7 @@ public class AuthController {
 	@ResponseBody
 	public DataValue<PropertyStaffVo> login(@Valid @ModelAttribute StaffLoginRo staffLoginRo){
 		
-		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
+		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
 
 		PropertyStaffVo staff = propertyStaffService.findPropertyStaffByAccount(staffLoginRo.getAccount());
 		
@@ -91,7 +91,7 @@ public class AuthController {
 	@ResponseBody
 	public ReturnValue checkMobileAvailable(@Valid @ModelAttribute CheckMobileRo checkMobileRo){
 		
-		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
+		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
 		
 		PropertyStaffVo staff = propertyStaffService.findPropertyStaffByAccount(checkMobileRo.getAccount());
 		
@@ -111,7 +111,7 @@ public class AuthController {
 	@ResponseBody
 	public ReturnValue updatePwdByForget(@Valid @ModelAttribute UpdatePwdRo updatePwdRo){
 		
-		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
+		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
 
 		PropertyStaffVo staff = propertyStaffService.findPropertyStaffByAccount(updatePwdRo.getAccount());
 		

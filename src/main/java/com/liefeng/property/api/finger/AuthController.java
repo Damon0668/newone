@@ -46,7 +46,7 @@ public class AuthController {
 	@ResponseBody
 	public DataValue<LoginUserVo> userLogin(@Valid @ModelAttribute AuthLoginRo authLogin){
 		
-		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
+		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
 		
 		LoginUserVo loginUser = null;
 
@@ -71,7 +71,7 @@ public class AuthController {
 	@ResponseBody
 	public ReturnValue updatePwdByForget(@Valid @ModelAttribute UpdatePwdRo updatePwdRo){
 		
-		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
+		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
 		
 		userService.updatePwdByForget(updatePwdRo.getMobile(), updatePwdRo.getPassword(), updatePwdRo.getCode(), SysConstants.FINGER_APP_CODE);
 		//个推提醒

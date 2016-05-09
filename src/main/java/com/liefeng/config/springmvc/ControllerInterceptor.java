@@ -59,7 +59,7 @@ public class ControllerInterceptor implements HandlerInterceptor{
 			return Boolean.TRUE;
 		}
 		
-		//必须在default后面执行，防止default_oem_code 污染业务代码
+		//必须在default判断后面执行，防止default_oem_code 污染业务代码
 		ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
 		
 		String key = "openId_" + openId;
@@ -83,7 +83,7 @@ public class ControllerInterceptor implements HandlerInterceptor{
 		}
 		
 		ContextManager.getInstance().setOemCode(oemCode);
-			
+
 		return Boolean.TRUE;//只有返回true才会继续向下执行，返回false取消当前请求
 	}
 

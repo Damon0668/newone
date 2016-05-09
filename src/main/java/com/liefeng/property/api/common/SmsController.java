@@ -41,9 +41,9 @@ public class SmsController {
 	@ApiOperation(value="获取验证码", notes="获取验证码")
 	@RequestMapping(value="/getVerifyCode", method=RequestMethod.POST)
 	@ResponseBody
-	public DataValue<String> getVerifyCode(@Valid @ModelAttribute VerifyCodeRo verifyCodeRo){
+	public DataValue<String> getVerifyCode(@Valid @ModelAttribute VerifyCodeRo verifyCodeRo) throws InterruptedException{
 		
-		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
+		ContextManager.getInstance().isExist(SysConstants.DEFAULT_OEM_CODE);
 		
 		String verifyCode = smsService.getVerifyCode(verifyCodeRo.getPhoneNum(), verifyCodeRo.getAction());
 		return DataValue.success(verifyCode);
@@ -52,10 +52,10 @@ public class SmsController {
 	@ApiOperation(value="校验验证码", notes="校验验证码")
 	@RequestMapping(value="/verifySmsCode", method=RequestMethod.POST)
 	@ResponseBody
-	public ReturnValue verifySmsCode(@Valid @ModelAttribute VerifyRo verifyRo){
-		
-		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
-		
+	public ReturnValue verifySmsCode(@Valid @ModelAttribute VerifyRo verifyRo) {
+
+		ContextManager.getInstance().isExist(SysConstants.DEFAULT_OEM_CODE);
+
 		smsService.verifySMSCode(verifyRo.getPhoneNum(), verifyRo.getAction(), verifyRo.getCode());
 		return ReturnValue.success();
 	}
@@ -65,7 +65,7 @@ public class SmsController {
 	@ResponseBody
 	public ReturnValue send(@Valid @ModelAttribute SmsSendRo smsSend) throws Exception{
 		
-		ContextManager.getInstance().check(SysConstants.DEFAULT_OEM_CODE);
+		ContextManager.getInstance().isExist(SysConstants.DEFAULT_OEM_CODE);
 		
 		SMSMsgVo smsMsg = MyBeanUtil.createBean(smsSend, SMSMsgVo.class);
 		Map<String,String> data = JSON.parseObject(smsSend.getParamString(),new TypeReference<Map<String,String>>(){});
