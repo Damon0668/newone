@@ -90,14 +90,18 @@ public class ControllerInterceptor implements HandlerInterceptor{
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		// TODO Auto-generated method stub
 		//请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）
 	}
-
+	
+	/**
+	 * spring mvc 处理请求，会从spring mvc 的线程池中查找一个线程来处理请求，因此避免下个请求复用原来的线程，
+	 * 在渲染视图后（controller执行完成后），需要执行afterCompletion方法来清空线程的oemCode的数据
+	 */
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
 		//在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）
+		ContextManager.getInstance().setOemCode("");
 	}
 
 }
