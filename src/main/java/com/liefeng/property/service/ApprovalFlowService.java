@@ -98,12 +98,9 @@ public class ApprovalFlowService implements IApprovalFlowService{
 			Order order = workflowService.startInstanceById(approvalFlowBo.getProcessId(), addUserPreixes(approvalFlowBo.getStaffId()), approvalFlowBo.getParams());
 			
 			String activeTaskId = workflowService.getActiveTasks(new QueryFilter().setOrderId(order.getId())).get(0).getId();
-			workflowService.executeAndJumpTask(activeTaskId, addUserPreixes(approvalFlowBo.getStaffId()), arg, approvalFlowBo.getTaskName());
+			List<Task> tasks = workflowService.executeAndJumpTask(activeTaskId, addUserPreixes(approvalFlowBo.getStaffId()), arg, approvalFlowBo.getTaskName());
 			
 			approvalFlowBo.setOrderId(order.getId());
-			// 设置taskId
-			HistoryTask historyTask = workflowService.getHistoryTasks(new QueryFilter().setOrderId(order.getId())).get(0);
-			approvalFlowBo.setTaskId(historyTask.getId());
 		
 			if(ValidateHelper.isNotEmptyString(approvalFlowBo.getNextOperator())){
 				String[] staffIdArray = approvalFlowBo.getNextOperator().split(",");
@@ -115,8 +112,8 @@ public class ApprovalFlowService implements IApprovalFlowService{
 				
 				Map<String,String> data = new HashMap<String,String>();
 				data.put("processId", order.getProcessId());
-				data.put("orderId", historyTask.getOrderId());
-				data.put("taskName", historyTask.getTaskName());
+				data.put("orderId", tasks.get(0).getOrderId());
+				data.put("taskName", tasks.get(0).getTaskName());
 				
 				//有新审批时群推消息
 				propertyPushMsgService.pushMsgToStaffListOfMap(PushActionConstants.APPROVAL_NEW, staffIdList, data);
