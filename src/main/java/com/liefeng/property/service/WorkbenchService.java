@@ -1,13 +1,11 @@
 package com.liefeng.property.service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import javax.transaction.Transactional;
 
@@ -1839,14 +1837,16 @@ public class WorkbenchService implements IWorkbenchService {
 					eventReportVo.setOverTime(eventReportVo.getAcceptTime());
 					eventReportVo.setRemark(eventReportVo.getResult());
 					
-					PropertyStaffDetailInfoVo propertyStaffVo = propertyStaffService.findStaffDetailInfo(eventReportVo.getAccepterId());
-					
-					logger.info("【已完成 】根据报事的受理人id：{}获取员工信息：{}", eventReportVo.getAccepterId(), propertyStaffVo);
-					if (propertyStaffVo != null) {
-						eventReportVo.setWorkerName(propertyStaffVo
-								.getStaffArchiveVo().getName());
-						eventReportVo.setWorkerPhone(propertyStaffVo
-								.getStaffArchiveVo().getPhone());
+					if(ValidateHelper.isNotEmptyString(eventReportVo.getAccepterId())){
+						PropertyStaffDetailInfoVo propertyStaffVo = propertyStaffService.findStaffDetailInfo(eventReportVo.getAccepterId());
+						
+						logger.info("【已完成 】根据报事的受理人id：{}获取员工信息：{}", eventReportVo.getAccepterId(), propertyStaffVo);
+						if (propertyStaffVo != null) {
+							eventReportVo.setWorkerName(propertyStaffVo
+									.getStaffArchiveVo().getName());
+							eventReportVo.setWorkerPhone(propertyStaffVo
+									.getStaffArchiveVo().getPhone());
+						}
 					}
 				}
 			}
