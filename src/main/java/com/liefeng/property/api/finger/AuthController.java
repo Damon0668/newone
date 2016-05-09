@@ -38,10 +38,12 @@ public class AuthController {
 	@Autowired
 	private IHouseholdService householdService;
 
-	@ApiOperation(value="用户登陆", notes="用户登陆接口,当用户没有激活[USER_UNBIND_MOBILE]或者更换手机[USER_LOGIN_MOBILE_CHANGED]登陆时需要申请验证码并填入,"
+	@ApiOperation(value="用户登陆", notes="调用此接口前，需要重新初始化，清空所有和用户相关的缓存信息，"
+			+ "用户登陆接口,当用户没有激活[USER_UNBIND_MOBILE]或者更换手机[USER_LOGIN_MOBILE_CHANGED]登陆时需要申请验证码并填入,"
 			+ "短信事件为SD_LOGIN_MSG"
 			+ "登陆成功后只返回OPENID和全局ID"
 			+ "需要调用房产列表和getLoginUser获取登陆用户信息")
+	
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
 	public DataValue<LoginUserVo> userLogin(@Valid @ModelAttribute AuthLoginRo authLogin){

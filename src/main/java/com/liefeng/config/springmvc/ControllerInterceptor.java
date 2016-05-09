@@ -33,6 +33,8 @@ public class ControllerInterceptor implements HandlerInterceptor{
 		
 		//开发环境和测试环境设置。
 		if("test".equals(env) || "dev".equals(env)){
+			
+			//网页端进入
 			if(ValidateHelper.isEmptyString(openId)){
 				
 				ContextManager.getInstance().setOemCode(SysConstants.DEFAULT_OEM_CODE);
