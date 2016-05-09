@@ -37,6 +37,10 @@ public class AuthLoginRo extends BaseValue{
 	@NotNull
 	private String mobileModel;
 	
+	@ApiModelProperty(value="APP版本")
+	@NotNull
+	private String appVersion;
+	
 	@ApiModelProperty(value="个推客户端ID",required=true)
 	@NotNull
 	private String clientId;
@@ -71,6 +75,14 @@ public class AuthLoginRo extends BaseValue{
 
 	public void setMobileModel(String mobileModel) {
 		this.mobileModel = mobileModel;
+	}
+
+	public String getAppVersion() {
+		return appVersion;
+	}
+
+	public void setAppVersion(String appVersion) {
+		this.appVersion = appVersion;
 	}
 
 	public String getClientId() {
