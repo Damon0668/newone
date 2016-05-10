@@ -1,5 +1,6 @@
 package com.liefeng.property.domain.household;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -119,6 +120,9 @@ public class ResidentHouseContext {
 		if(residentHouse != null) {
 			residentHouse.setId(UUIDGenerator.generate());
 			residentHouse.setOemCode(ContextManager.getInstance().getOemCode()); 
+			if(residentHouse.getCheckinDate() == null){
+				residentHouse.setCheckinDate(new Date());
+			}
 			
 			ResidentHousePo residentPo = MyBeanUtil.createBean(residentHouse, ResidentHousePo.class);
 			residentHouseRepository.save(residentPo);
